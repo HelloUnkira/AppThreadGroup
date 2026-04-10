@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgCommon.h"
 #include "tvgSaveModule.h"
@@ -205,5 +205,5 @@ unique_ptr<Saver> Saver::gen() noexcept
     return unique_ptr<Saver>(new Saver);
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

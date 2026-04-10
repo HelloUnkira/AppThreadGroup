@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgMath.h"
 #include "tvgSwCommon.h"
@@ -131,8 +131,8 @@ static bool _updateColorTable(SwFill* fill, const Fill* fdata, const SwSurface* 
     if (fill->solid) return true;
 
     if (!fill->ctable) {
-        fill->ctable = static_cast<uint32_t*>(SCUI_malloc(GRADIENT_STOP_SIZE * sizeof(uint32_t)));
-        SCUI_ASSERT_MALLOC(fill->ctable);
+        fill->ctable = static_cast<uint32_t*>(scui_draw_thorvg_alloc(GRADIENT_STOP_SIZE * sizeof(uint32_t)));
+        scui_draw_thorvg_assert(fill->ctable);
         if (!fill->ctable) return false;
     }
 
@@ -858,7 +858,7 @@ const Fill::ColorStop* fillFetchSolid(const SwFill* fill, const Fill* fdata)
 void fillReset(SwFill* fill)
 {
     if (fill->ctable) {
-        SCUI_free(fill->ctable);
+        scui_draw_thorvg_free(fill->ctable);
         fill->ctable = nullptr;
     }
     fill->translucent = false;
@@ -870,10 +870,10 @@ void fillFree(SwFill* fill)
 {
     if (!fill) return;
 
-    if (fill->ctable) SCUI_free(fill->ctable);
+    if (fill->ctable) scui_draw_thorvg_free(fill->ctable);
 
-    SCUI_free(fill);
+    scui_draw_thorvg_free(fill);
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

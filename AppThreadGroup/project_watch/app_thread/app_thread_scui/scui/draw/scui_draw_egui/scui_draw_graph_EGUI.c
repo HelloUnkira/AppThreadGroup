@@ -107,15 +107,15 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
             
             for (scui_multi_t idx = y + 1; idx < y + src_width; idx++) {
                 dst_ofs = dst_addr + (steep ? x * dst_line + idx * dst_byte : idx * dst_line + x * dst_byte);
-                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                                    dst_surface->format, &src_pixel, src_alpha);
+                scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                    dst_surface->format, &src_pixel, src_alpha);
             }
             dst_ofs = dst_addr + p0_y * dst_line + p0_x * dst_byte;
-            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha_1,
-                                dst_surface->format, &src_pixel, alpha_1);
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                dst_surface->format, &src_pixel, alpha_1);
             dst_ofs = dst_addr + pw_y * dst_line + pw_x * dst_byte;
-            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha_0,
-                                dst_surface->format, &src_pixel, alpha_0);
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                dst_surface->format, &src_pixel, alpha_0);
         }
         itor += grad;
         if (itor >= SCUI_SCALE_COF) {
@@ -289,8 +289,8 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
                 }
                 if (scui_area_point(&draw_area, &point)) {
                     dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                    scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - mix_a,
-                                        dst_surface->format, &src_pixel, mix_a);
+                    scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                        dst_surface->format, &src_pixel, mix_a);
                 }
                 
                 /* 跳过对角线的两次绘制 */
@@ -306,8 +306,8 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
                 }
                 if (scui_area_point(&draw_area, &point)) {
                     dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                    scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - mix_a,
-                                        dst_surface->format, &src_pixel, mix_a);
+                    scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                        dst_surface->format, &src_pixel, mix_a);
                 }
             }
             
@@ -426,8 +426,8 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
                      continue;
                 
                 uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - mix_a,
-                                    dst_surface->format, &src_pixel, mix_a);
+                scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                    dst_surface->format, &src_pixel, mix_a);
             }
         }
     }
@@ -686,8 +686,8 @@ static void scui_draw_arc_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_typ
                  continue;
             
             uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - mix_a,
-                                dst_surface->format, &src_pixel, mix_a);
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                dst_surface->format, &src_pixel, mix_a);
         }
         
         last_s_x = cur_s_x;
@@ -1169,7 +1169,7 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
  *@param draw_dsc 绘制描述符实例
  *@retval 支持度(true:支持;false:不支持;)
  */
-bool scui_draw_dsc_EGUI(scui_draw_dsc_t *draw_dsc)
+bool scui_draw_ctx_graph_EGUI(scui_draw_dsc_t *draw_dsc)
 {
     #if SCUI_DRAW_GRAPH_USE_EGUI
     switch (draw_dsc->type) {

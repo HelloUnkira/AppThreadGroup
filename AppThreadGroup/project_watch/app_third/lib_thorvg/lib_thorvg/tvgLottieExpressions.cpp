@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 
 #include "tvgMath.h"
@@ -63,8 +63,8 @@ static LottieExpressions* exps = nullptr;   //singleton instance engine
 
 static ExpContent* _expcontent(LottieExpression* exp, float frameNo, LottieObject* obj)
 {
-    auto data = (ExpContent*)SCUI_malloc(sizeof(ExpContent));
-    SCUI_ASSERT_MALLOC(ndata);
+    auto data = (ExpContent*)scui_draw_thorvg_alloc(sizeof(ExpContent));
+    scui_draw_thorvg_assert(ndata);
     data->exp = exp;
     data->frameNo = frameNo;
     data->obj = obj;
@@ -74,7 +74,7 @@ static ExpContent* _expcontent(LottieExpression* exp, float frameNo, LottieObjec
 
 static void contentFree(void *native_p, struct jerry_object_native_info_t *info_p)
 {
-    SCUI_free(native_p);
+    scui_draw_thorvg_free(native_p);
 }
 
 static jerry_object_native_info_t freeCb {contentFree, 0, 0};
@@ -85,8 +85,8 @@ static char* _name(jerry_value_t args)
 {
     auto arg0 = jerry_value_to_string(args);
     auto len = jerry_string_length(arg0);
-    auto name = (jerry_char_t*)SCUI_malloc(len * sizeof(jerry_char_t) + 1);
-    SCUI_ASSERT_MALLOC(name);
+    auto name = (jerry_char_t*)scui_draw_thorvg_alloc(len * sizeof(jerry_char_t) + 1);
+    scui_draw_thorvg_assert(name);
     jerry_string_to_buffer(arg0, JERRY_ENCODING_UTF8, name, len);
     name[len] = '\0';
     jerry_value_free(arg0);
@@ -98,7 +98,7 @@ static unsigned long _idByName(jerry_value_t args)
 {
     auto name = _name(args);
     auto id = djb2Encode(name);
-    SCUI_free(name);
+    scui_draw_thorvg_free(name);
     return id;
 }
 
@@ -834,7 +834,7 @@ static bool _loopOutCommon(LottieExpression* exp, const jerry_value_t args[], co
         else if (!strcmp(name, EXP_PINGPONG)) exp->loop.mode = LottieExpression::LoopMode::OutPingPong;
         else if (!strcmp(name, EXP_OFFSET)) exp->loop.mode = LottieExpression::LoopMode::OutOffset;
         else if (!strcmp(name, EXP_CONTINUE)) exp->loop.mode = LottieExpression::LoopMode::OutContinue;
-        SCUI_free(name);
+        scui_draw_thorvg_free(name);
     }
 
     if (exp->loop.mode != LottieExpression::LoopMode::OutCycle && exp->loop.mode != LottieExpression::LoopMode::OutPingPong) {
@@ -886,7 +886,7 @@ static bool _loopInCommon(LottieExpression* exp, const jerry_value_t args[], con
         else if (!strcmp(name, EXP_PINGPONG)) exp->loop.mode = LottieExpression::LoopMode::InPingPong;
         else if (!strcmp(name, EXP_OFFSET)) exp->loop.mode = LottieExpression::LoopMode::InOffset;
         else if (!strcmp(name, EXP_CONTINUE)) exp->loop.mode = LottieExpression::LoopMode::InContinue;
-        SCUI_free(name);
+        scui_draw_thorvg_free(name);
     }
 
     if (exp->loop.mode != LottieExpression::LoopMode::InCycle && exp->loop.mode != LottieExpression::LoopMode::InPingPong) {
@@ -1427,5 +1427,5 @@ void LottieExpressions::retrieve(LottieExpressions* instance)
 
 #endif //THORVG_LOTTIE_EXPRESSIONS_SUPPORT
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

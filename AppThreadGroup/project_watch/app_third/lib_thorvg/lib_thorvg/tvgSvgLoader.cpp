@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 /*
  * Copyright notice for the EFL:
@@ -94,7 +94,7 @@ static char* _copyId(const char* str)
     if (!str) return nullptr;
     if (strlen(str) == 0) return nullptr;
 
-    return SCUI_strdup(str);
+    return scui_draw_thorvg_strdup(str);
 }
 
 
@@ -714,7 +714,7 @@ static bool _toColor(const char* str, uint8_t* r, uint8_t* g, uint8_t* b, char**
         }
         return true;
     } else if (ref && len >= 3 && !strncmp(str, "url", 3)) {
-        if (*ref) SCUI_free(*ref);
+        if (*ref) scui_draw_thorvg_free(*ref);
         *ref = _idFromUrl((const char*)(str + 3));
         return true;
     } else if (len >= 10 && (str[0] == 'h' || str[0] == 'H') && (str[1] == 's' || str[1] == 'S') && (str[2] == 'l' || str[2] == 'L') && str[3] == '(' && str[len - 1] == ')') {
@@ -814,8 +814,8 @@ static Matrix* _parseTransformationMatrix(const char* value)
 {
     const int POINT_CNT = 8;
 
-    auto matrix = (Matrix*)SCUI_malloc(sizeof(Matrix));
-    SCUI_ASSERT_MALLOC(matrix);
+    auto matrix = (Matrix*)scui_draw_thorvg_alloc(sizeof(Matrix));
+    scui_draw_thorvg_assert(matrix);
 
     if (!matrix) return nullptr;
     *matrix = {1, 0, 0, 0, 1, 0, 0, 0, 1};
@@ -900,7 +900,7 @@ static Matrix* _parseTransformationMatrix(const char* value)
     }
     return matrix;
 error:
-    if (matrix) SCUI_free(matrix);
+    if (matrix) scui_draw_thorvg_free(matrix);
     return nullptr;
 }
 
@@ -1138,7 +1138,7 @@ static void _handleClipPathAttr(TVG_UNUSED SvgLoaderData* loader, SvgNode* node,
     SvgStyleProperty* style = node->style;
     int len = strlen(value);
     if (len >= 3 && !strncmp(value, "url", 3)) {
-        if (style->clipPath.url) SCUI_free(style->clipPath.url);
+        if (style->clipPath.url) scui_draw_thorvg_free(style->clipPath.url);
         style->clipPath.url = _idFromUrl((const char*)(value + 3));
     }
 }
@@ -1149,7 +1149,7 @@ static void _handleMaskAttr(TVG_UNUSED SvgLoaderData* loader, SvgNode* node, con
     SvgStyleProperty* style = node->style;
     int len = strlen(value);
     if (len >= 3 && !strncmp(value, "url", 3)) {
-        if (style->mask.url) SCUI_free(style->mask.url);
+        if (style->mask.url) scui_draw_thorvg_free(style->mask.url);
         style->mask.url = _idFromUrl((const char*)(value + 3));
     }
 }
@@ -1184,7 +1184,7 @@ static void _handleCssClassAttr(SvgLoaderData* loader, SvgNode* node, const char
 {
     auto cssClass = &node->style->cssClass;
 
-    if (*cssClass && value) SCUI_free(*cssClass);
+    if (*cssClass && value) scui_draw_thorvg_free(*cssClass);
     *cssClass = _copyId(value);
 
     bool cssClassFound = false;
@@ -1270,7 +1270,7 @@ static bool _parseStyleAttr(void* data, const char* key, const char* value, bool
             }
             if (importance) {
                 node->style->flagsImportance = (node->style->flags | styleTags[i].flag);
-                SCUI_free(const_cast<char*>(value));
+                scui_draw_thorvg_free(const_cast<char*>(value));
             }
             return true;
         }
@@ -1299,7 +1299,7 @@ static bool _attrParseGNode(void* data, const char* key, const char* value)
     } else if (!strcmp(key, "transform")) {
         node->transform = _parseTransformationMatrix(value);
     } else if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -1328,7 +1328,7 @@ static bool _attrParseClipPathNode(void* data, const char* key, const char* valu
     } else if (!strcmp(key, "transform")) {
         node->transform = _parseTransformationMatrix(value);
     } else if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -1352,7 +1352,7 @@ static bool _attrParseMaskNode(void* data, const char* key, const char* value)
     } else if (!strcmp(key, "transform")) {
         node->transform = _parseTransformationMatrix(value);
     } else if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -1373,7 +1373,7 @@ static bool _attrParseCssStyleNode(void* data, const char* key, const char* valu
     SvgNode* node = loader->svgParse->node;
 
     if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else {
         return _parseStyleAttr(loader, key, value, false);
@@ -1412,17 +1412,17 @@ static bool _attrParseSymbolNode(void* data, const char* key, const char* value)
 
 static SvgNode* _createNode(SvgNode* parent, SvgNodeType type)
 {
-    SvgNode* node = (SvgNode*)SCUI_zalloc(sizeof(SvgNode));
-    SCUI_ASSERT_MALLOC(node);
+    SvgNode* node = (SvgNode*)scui_draw_thorvg_zalloc(sizeof(SvgNode));
+    scui_draw_thorvg_assert(node);
 
     if (!node) return nullptr;
 
     //Default fill property
-    node->style = (SvgStyleProperty*)SCUI_zalloc(sizeof(SvgStyleProperty));
-    SCUI_ASSERT_MALLOC(node->style);
+    node->style = (SvgStyleProperty*)scui_draw_thorvg_zalloc(sizeof(SvgStyleProperty));
+    scui_draw_thorvg_assert(node->style);
 
     if (!node->style) {
-        SCUI_free(node);
+        scui_draw_thorvg_free(node);
         return nullptr;
     }
 
@@ -1580,7 +1580,7 @@ static bool _attrParsePathNode(void* data, const char* key, const char* value)
     SvgPathNode* path = &(node->node.path);
 
     if (!strcmp(key, "d")) {
-        if (path->path) SCUI_free(path->path);
+        if (path->path) scui_draw_thorvg_free(path->path);
         //Temporary: need to copy
         path->path = _copyId(value);
     } else if (!strcmp(key, "style")) {
@@ -1590,7 +1590,7 @@ static bool _attrParsePathNode(void* data, const char* key, const char* value)
     } else if (!strcmp(key, "mask")) {
         _handleMaskAttr(loader, node, value);
     } else if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -1652,7 +1652,7 @@ static bool _attrParseCircleNode(void* data, const char* key, const char* value)
     } else if (!strcmp(key, "mask")) {
         _handleMaskAttr(loader, node, value);
     } else if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -1708,7 +1708,7 @@ static bool _attrParseEllipseNode(void* data, const char* key, const char* value
     }
 
     if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -1768,7 +1768,7 @@ static bool _attrParsePolygonNode(void* data, const char* key, const char* value
     } else if (!strcmp(key, "mask")) {
         _handleMaskAttr(loader, node, value);
     } else if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -1844,7 +1844,7 @@ static bool _attrParseRectNode(void* data, const char* key, const char* value)
     }
 
     if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -1909,7 +1909,7 @@ static bool _attrParseLineNode(void* data, const char* key, const char* value)
     }
 
     if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -1941,7 +1941,7 @@ static char* _idFromHref(const char* href)
 {
     href = _skipSpace(href, nullptr);
     if ((*href) == '#') href++;
-    return SCUI_strdup(href);
+    return scui_draw_thorvg_strdup(href);
 }
 
 
@@ -1979,10 +1979,10 @@ static bool _attrParseImageNode(void* data, const char* key, const char* value)
     }
 
     if (!strcmp(key, "href") || !strcmp(key, "xlink:href")) {
-        if (image->href && value) SCUI_free(image->href);
+        if (image->href && value) scui_draw_thorvg_free(image->href);
         image->href = _idFromHref(value);
     } else if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -2104,7 +2104,7 @@ static bool _attrParseUseNode(void* data, const char* key, const char* value)
             } else {
                 TVGLOG("SVG", "%s is ancestor element. This reference is invalid.", id);
             }
-            SCUI_free(id);
+            scui_draw_thorvg_free(id);
         } else {
             //some svg export software include <defs> element at the end of the file
             //if so the 'from' element won't be found now and we have to repeat finding
@@ -2163,8 +2163,8 @@ static bool _attrParseTextNode(void* data, const char* key, const char* value)
     }
 
     if (!strcmp(key, "font-family")) {
-        if (text->fontFamily && value) SCUI_free(text->fontFamily);
-        text->fontFamily = SCUI_strdup(value);
+        if (text->fontFamily && value) scui_draw_thorvg_free(text->fontFamily);
+        text->fontFamily = scui_draw_thorvg_strdup(value);
     } else if (!strcmp(key, "style")) {
         return simpleXmlParseW3CAttribute(value, strlen(value), _parseStyleAttr, loader);
     } else if (!strcmp(key, "clip-path")) {
@@ -2172,7 +2172,7 @@ static bool _attrParseTextNode(void* data, const char* key, const char* value)
     } else if (!strcmp(key, "mask")) {
         _handleMaskAttr(loader, node, value);
     } else if (!strcmp(key, "id")) {
-        if (node->id && value) SCUI_free(node->id);
+        if (node->id && value) scui_draw_thorvg_free(node->id);
         node->id = _copyId(value);
     } else if (!strcmp(key, "class")) {
         _handleCssClassAttr(loader, node, value);
@@ -2499,13 +2499,13 @@ static bool _attrParseRadialGradientNode(void* data, const char* key, const char
     }
 
     if (!strcmp(key, "id")) {
-        if (grad->id && value) SCUI_free(grad->id);
+        if (grad->id && value) scui_draw_thorvg_free(grad->id);
         grad->id = _copyId(value);
     } else if (!strcmp(key, "spreadMethod")) {
         grad->spread = _parseSpreadValue(value);
         grad->flags = (grad->flags | SvgGradientFlags::SpreadMethod);
     } else if (!strcmp(key, "href") || !strcmp(key, "xlink:href")) {
-        if (grad->ref && value) SCUI_free(grad->ref);
+        if (grad->ref && value) scui_draw_thorvg_free(grad->ref);
         grad->ref = _idFromHref(value);
     } else if (!strcmp(key, "gradientUnits")) {
         if (!strcmp(value, "userSpaceOnUse")) grad->userSpace = true;
@@ -2522,18 +2522,18 @@ static bool _attrParseRadialGradientNode(void* data, const char* key, const char
 
 static SvgStyleGradient* _createRadialGradient(SvgLoaderData* loader, const char* buf, unsigned bufLength)
 {
-    auto grad = (SvgStyleGradient*)(SCUI_zalloc(sizeof(SvgStyleGradient)));
-    SCUI_ASSERT_MALLOC(grad);
+    auto grad = (SvgStyleGradient*)(scui_draw_thorvg_zalloc(sizeof(SvgStyleGradient)));
+    scui_draw_thorvg_assert(grad);
     loader->svgParse->styleGrad = grad;
 
     grad->flags = SvgGradientFlags::None;
     grad->type = SvgGradientType::Radial;
     grad->userSpace = false;
-    grad->radial = (SvgRadialGradient*)SCUI_zalloc(sizeof(SvgRadialGradient));
-    SCUI_ASSERT_MALLOC(grad->radial);
+    grad->radial = (SvgRadialGradient*)scui_draw_thorvg_zalloc(sizeof(SvgRadialGradient));
+    scui_draw_thorvg_assert(grad->radial);
     if (!grad->radial) {
         grad->clear();
-        SCUI_free(grad);
+        scui_draw_thorvg_free(grad);
         return nullptr;
     }
     /**
@@ -2769,13 +2769,13 @@ static bool _attrParseLinearGradientNode(void* data, const char* key, const char
     }
 
     if (!strcmp(key, "id")) {
-        if (grad->id && value) SCUI_free(grad->id);
+        if (grad->id && value) scui_draw_thorvg_free(grad->id);
         grad->id = _copyId(value);
     } else if (!strcmp(key, "spreadMethod")) {
         grad->spread = _parseSpreadValue(value);
         grad->flags = (grad->flags | SvgGradientFlags::SpreadMethod);
     } else if (!strcmp(key, "href") || !strcmp(key, "xlink:href")) {
-        if (grad->ref && value) SCUI_free(grad->ref);
+        if (grad->ref && value) scui_draw_thorvg_free(grad->ref);
         grad->ref = _idFromHref(value);
     } else if (!strcmp(key, "gradientUnits")) {
         if (!strcmp(value, "userSpaceOnUse")) grad->userSpace = true;
@@ -2792,18 +2792,18 @@ static bool _attrParseLinearGradientNode(void* data, const char* key, const char
 
 static SvgStyleGradient* _createLinearGradient(SvgLoaderData* loader, const char* buf, unsigned bufLength)
 {
-    auto grad = (SvgStyleGradient*)(SCUI_zalloc(sizeof(SvgStyleGradient)));
-    SCUI_ASSERT_MALLOC(grad);
+    auto grad = (SvgStyleGradient*)(scui_draw_thorvg_zalloc(sizeof(SvgStyleGradient)));
+    scui_draw_thorvg_assert(grad);
     loader->svgParse->styleGrad = grad;
 
     grad->flags = SvgGradientFlags::None;
     grad->type = SvgGradientType::Linear;
     grad->userSpace = false;
-    grad->linear = (SvgLinearGradient*)SCUI_zalloc(sizeof(SvgLinearGradient));
-    SCUI_ASSERT_MALLOC(grad->linear);
+    grad->linear = (SvgLinearGradient*)scui_draw_thorvg_zalloc(sizeof(SvgLinearGradient));
+    scui_draw_thorvg_assert(grad->linear);
     if (!grad->linear) {
         grad->clear();
-        SCUI_free(grad);
+        scui_draw_thorvg_free(grad);
         return nullptr;
     }
     /**
@@ -2880,8 +2880,8 @@ static void _inheritGradient(SvgLoaderData* loader, SvgStyleGradient* to, SvgSty
     }
 
     if (!to->transform && from->transform) {
-        to->transform = (Matrix*)SCUI_malloc(sizeof(Matrix));
-        SCUI_ASSERT_MALLOC(to->transform);
+        to->transform = (Matrix*)scui_draw_thorvg_alloc(sizeof(Matrix));
+        scui_draw_thorvg_assert(to->transform);
         if (to->transform) memcpy(to->transform, from->transform, sizeof(Matrix));
     }
 
@@ -2935,8 +2935,8 @@ static SvgStyleGradient* _cloneGradient(SvgStyleGradient* from)
 {
     if (!from) return nullptr;
 
-    auto grad = (SvgStyleGradient*)(SCUI_zalloc(sizeof(SvgStyleGradient)));
-    SCUI_ASSERT_MALLOC(grad);
+    auto grad = (SvgStyleGradient*)(scui_draw_thorvg_zalloc(sizeof(SvgStyleGradient)));
+    scui_draw_thorvg_assert(grad);
     if (!grad) return nullptr;
 
     grad->type = from->type;
@@ -2947,19 +2947,19 @@ static SvgStyleGradient* _cloneGradient(SvgStyleGradient* from)
     grad->flags = from->flags;
 
     if (from->transform) {
-        grad->transform = (Matrix*)SCUI_zalloc(sizeof(Matrix));
-        SCUI_ASSERT_MALLOC(grad->transform);
+        grad->transform = (Matrix*)scui_draw_thorvg_zalloc(sizeof(Matrix));
+        scui_draw_thorvg_assert(grad->transform);
         if (grad->transform) memcpy(grad->transform, from->transform, sizeof(Matrix));
     }
 
     if (grad->type == SvgGradientType::Linear) {
-        grad->linear = (SvgLinearGradient*)SCUI_zalloc(sizeof(SvgLinearGradient));
-        SCUI_ASSERT_MALLOC(grad->linear);
+        grad->linear = (SvgLinearGradient*)scui_draw_thorvg_zalloc(sizeof(SvgLinearGradient));
+        scui_draw_thorvg_assert(grad->linear);
         if (!grad->linear) goto error_grad_alloc;
         memcpy(grad->linear, from->linear, sizeof(SvgLinearGradient));
     } else if (grad->type == SvgGradientType::Radial) {
-        grad->radial = (SvgRadialGradient*)SCUI_zalloc(sizeof(SvgRadialGradient));
-        SCUI_ASSERT_MALLOC(grad->radial);
+        grad->radial = (SvgRadialGradient*)scui_draw_thorvg_zalloc(sizeof(SvgRadialGradient));
+        scui_draw_thorvg_assert(grad->radial);
         if (!grad->radial) goto error_grad_alloc;
         memcpy(grad->radial, from->radial, sizeof(SvgRadialGradient));
     }
@@ -2971,7 +2971,7 @@ static SvgStyleGradient* _cloneGradient(SvgStyleGradient* from)
     error_grad_alloc:
     if (grad) {
         grad->clear();
-        SCUI_free(grad);
+        scui_draw_thorvg_free(grad);
     }
     return nullptr;
 }
@@ -2994,7 +2994,7 @@ static void _styleInherit(SvgStyleProperty* child, const SvgStyleProperty* paren
         child->fill.paint.none = parent->fill.paint.none;
         child->fill.paint.curColor = parent->fill.paint.curColor;
         if (parent->fill.paint.url) {
-            if (child->fill.paint.url) SCUI_free(child->fill.paint.url);
+            if (child->fill.paint.url) scui_draw_thorvg_free(child->fill.paint.url);
             child->fill.paint.url = _copyId(parent->fill.paint.url);
         }
     }
@@ -3010,7 +3010,7 @@ static void _styleInherit(SvgStyleProperty* child, const SvgStyleProperty* paren
         child->stroke.paint.none = parent->stroke.paint.none;
         child->stroke.paint.curColor = parent->stroke.paint.curColor;
         if (parent->stroke.paint.url) {
-            if (child->stroke.paint.url) SCUI_free(child->stroke.paint.url);
+            if (child->stroke.paint.url) scui_draw_thorvg_free(child->stroke.paint.url);
             child->stroke.paint.url = _copyId(parent->stroke.paint.url);
         }
     }
@@ -3068,7 +3068,7 @@ static void _styleCopy(SvgStyleProperty* to, const SvgStyleProperty* from)
         to->fill.paint.none = from->fill.paint.none;
         to->fill.paint.curColor = from->fill.paint.curColor;
         if (from->fill.paint.url) {
-            if (to->fill.paint.url) SCUI_free(to->fill.paint.url);
+            if (to->fill.paint.url) scui_draw_thorvg_free(to->fill.paint.url);
             to->fill.paint.url = _copyId(from->fill.paint.url);
         }
     }
@@ -3085,7 +3085,7 @@ static void _styleCopy(SvgStyleProperty* to, const SvgStyleProperty* from)
         to->stroke.paint.none = from->stroke.paint.none;
         to->stroke.paint.curColor = from->stroke.paint.curColor;
         if (from->stroke.paint.url) {
-            if (to->stroke.paint.url) SCUI_free(to->stroke.paint.url);
+            if (to->stroke.paint.url) scui_draw_thorvg_free(to->stroke.paint.url);
             to->stroke.paint.url = _copyId(from->stroke.paint.url);
         }
     }
@@ -3123,20 +3123,20 @@ static void _copyAttr(SvgNode* to, const SvgNode* from)
 {
     //Copy matrix attribute
     if (from->transform) {
-        to->transform = (Matrix*)SCUI_malloc(sizeof(Matrix));
-        SCUI_ASSERT_MALLOC(to->transform);
+        to->transform = (Matrix*)scui_draw_thorvg_alloc(sizeof(Matrix));
+        scui_draw_thorvg_assert(to->transform);
         if (to->transform) *to->transform = *from->transform;
     }
     //Copy style attribute
     _styleCopy(to->style, from->style);
     to->style->flags = (to->style->flags | from->style->flags);
     if (from->style->clipPath.url) {
-        if (to->style->clipPath.url) SCUI_free(to->style->clipPath.url);
-        to->style->clipPath.url = SCUI_strdup(from->style->clipPath.url);
+        if (to->style->clipPath.url) scui_draw_thorvg_free(to->style->clipPath.url);
+        to->style->clipPath.url = scui_draw_thorvg_strdup(from->style->clipPath.url);
     }
     if (from->style->mask.url) {
-        if (to->style->mask.url) SCUI_free(to->style->mask.url);
-        to->style->mask.url = SCUI_strdup(from->style->mask.url);
+        if (to->style->mask.url) scui_draw_thorvg_free(to->style->mask.url);
+        to->style->mask.url = scui_draw_thorvg_strdup(from->style->mask.url);
     }
 
     //Copy node attribute
@@ -3174,8 +3174,8 @@ static void _copyAttr(SvgNode* to, const SvgNode* from)
         }
         case SvgNodeType::Path: {
             if (from->node.path.path) {
-                if (to->node.path.path) SCUI_free(to->node.path.path);
-                to->node.path.path = SCUI_strdup(from->node.path.path);
+                if (to->node.path.path) scui_draw_thorvg_free(to->node.path.path);
+                to->node.path.path = scui_draw_thorvg_strdup(from->node.path.path);
             }
             break;
         }
@@ -3197,8 +3197,8 @@ static void _copyAttr(SvgNode* to, const SvgNode* from)
             to->node.image.w = from->node.image.w;
             to->node.image.h = from->node.image.h;
             if (from->node.image.href) {
-                if (to->node.image.href) SCUI_free(to->node.image.href);
-                to->node.image.href = SCUI_strdup(from->node.image.href);
+                if (to->node.image.href) scui_draw_thorvg_free(to->node.image.href);
+                to->node.image.href = scui_draw_thorvg_strdup(from->node.image.href);
             }
             break;
         }
@@ -3217,12 +3217,12 @@ static void _copyAttr(SvgNode* to, const SvgNode* from)
             to->node.text.y = from->node.text.y;
             to->node.text.fontSize = from->node.text.fontSize;
             if (from->node.text.text) {
-                if (to->node.text.text) SCUI_free(to->node.text.text);
-                to->node.text.text = SCUI_strdup(from->node.text.text);
+                if (to->node.text.text) scui_draw_thorvg_free(to->node.text.text);
+                to->node.text.text = scui_draw_thorvg_strdup(from->node.text.text);
             }
             if (from->node.text.fontFamily) {
-                if (to->node.text.fontFamily) SCUI_free(to->node.text.fontFamily);
-                to->node.text.fontFamily = SCUI_strdup(from->node.text.fontFamily);
+                if (to->node.text.fontFamily) scui_draw_thorvg_free(to->node.text.fontFamily);
+                to->node.text.fontFamily = scui_draw_thorvg_strdup(from->node.text.fontFamily);
             }
             break;
         }
@@ -3273,7 +3273,7 @@ static void _clonePostponedNodes(Array<SvgNodeIdPair>* cloneNodes, SvgNode* doc)
         } else {
             TVGLOG("SVG", "%s is ancestor element. This reference is invalid.", nodeIdPair.id);
         }
-        SCUI_free(nodeIdPair.id);
+        scui_draw_thorvg_free(nodeIdPair.id);
     }
 }
 
@@ -3452,8 +3452,8 @@ static void _svgLoaderParserXmlCssStyle(SvgLoaderData* loader, const char* conte
         length -= next - content;
         content = next;
 
-        SCUI_free(tag);
-        SCUI_free(name);
+        scui_draw_thorvg_free(tag);
+        scui_draw_thorvg_free(name);
     }
     loader->openedTag = OpenedTagType::Other;
 }
@@ -3594,7 +3594,7 @@ static void _updateGradient(SvgLoaderData* loader, SvgNode* node, Array<SvgStyle
             if (newGrad) {
                 if (node->style->fill.paint.gradient) {
                     node->style->fill.paint.gradient->clear();
-                    SCUI_free(node->style->fill.paint.gradient);
+                    scui_draw_thorvg_free(node->style->fill.paint.gradient);
                 }
                 node->style->fill.paint.gradient = newGrad;
             }
@@ -3604,7 +3604,7 @@ static void _updateGradient(SvgLoaderData* loader, SvgNode* node, Array<SvgStyle
             if (newGrad) {
                 if (node->style->stroke.paint.gradient) {
                     node->style->stroke.paint.gradient->clear();
-                    SCUI_free(node->style->stroke.paint.gradient);
+                    scui_draw_thorvg_free(node->style->stroke.paint.gradient);
                 }
                 node->style->stroke.paint.gradient = newGrad;
             }
@@ -3637,22 +3637,22 @@ static void _freeNodeStyle(SvgStyleProperty* style)
     if (!style) return;
 
     //style->clipPath.node and style->mask.node has only the addresses of node. Therefore, node is released from _freeNode.
-    SCUI_free(style->clipPath.url);
-    SCUI_free(style->mask.url);
-    SCUI_free(style->cssClass);
+    scui_draw_thorvg_free(style->clipPath.url);
+    scui_draw_thorvg_free(style->mask.url);
+    scui_draw_thorvg_free(style->cssClass);
 
     if (style->fill.paint.gradient) {
         style->fill.paint.gradient->clear();
-        SCUI_free(style->fill.paint.gradient);
+        scui_draw_thorvg_free(style->fill.paint.gradient);
     }
     if (style->stroke.paint.gradient) {
         style->stroke.paint.gradient->clear();
-        SCUI_free(style->stroke.paint.gradient);
+        scui_draw_thorvg_free(style->stroke.paint.gradient);
     }
-    SCUI_free(style->fill.paint.url);
-    SCUI_free(style->stroke.paint.url);
+    scui_draw_thorvg_free(style->fill.paint.url);
+    scui_draw_thorvg_free(style->stroke.paint.url);
     style->stroke.dash.array.reset();
-    SCUI_free(style);
+    scui_draw_thorvg_free(style);
 }
 
 
@@ -3666,20 +3666,20 @@ static void _freeNode(SvgNode* node)
     }
     node->child.reset();
 
-    SCUI_free(node->id);
-    SCUI_free(node->transform);
+    scui_draw_thorvg_free(node->id);
+    scui_draw_thorvg_free(node->transform);
     _freeNodeStyle(node->style);
     switch (node->type) {
          case SvgNodeType::Path: {
-             SCUI_free(node->node.path.path);
+             scui_draw_thorvg_free(node->node.path.path);
              break;
          }
          case SvgNodeType::Polygon: {
-             SCUI_free(node->node.polygon.pts.data);
+             scui_draw_thorvg_free(node->node.polygon.pts.data);
              break;
          }
          case SvgNodeType::Polyline: {
-             SCUI_free(node->node.polyline.pts.data);
+             scui_draw_thorvg_free(node->node.polyline.pts.data);
              break;
          }
          case SvgNodeType::Doc: {
@@ -3691,26 +3691,26 @@ static void _freeNode(SvgNode* node)
              auto gradients = node->node.defs.gradients.data;
              for (size_t i = 0; i < node->node.defs.gradients.count; ++i) {
                  (*gradients)->clear();
-                 SCUI_free(*gradients);
+                 scui_draw_thorvg_free(*gradients);
                  ++gradients;
              }
              node->node.defs.gradients.reset();
              break;
          }
          case SvgNodeType::Image: {
-             SCUI_free(node->node.image.href);
+             scui_draw_thorvg_free(node->node.image.href);
              break;
          }
          case SvgNodeType::Text: {
-             SCUI_free(node->node.text.text);
-             SCUI_free(node->node.text.fontFamily);
+             scui_draw_thorvg_free(node->node.text.text);
+             scui_draw_thorvg_free(node->node.text.fontFamily);
              break;
          }
          default: {
              break;
          }
     }
-    SCUI_free(node);
+    scui_draw_thorvg_free(node);
 }
 
 
@@ -3777,12 +3777,12 @@ static bool _svgLoaderParserForValidCheck(void* data, SimpleXMLType type, const 
 void SvgLoader::clear(bool all)
 {
     //flush out the intermediate data
-    SCUI_free(loaderData.svgParse);
+    scui_draw_thorvg_free(loaderData.svgParse);
     loaderData.svgParse = nullptr;
 
     for (auto gradient = loaderData.gradients.begin(); gradient < loaderData.gradients.end(); ++gradient) {
         (*gradient)->clear();
-        SCUI_free(*gradient);
+        scui_draw_thorvg_free(*gradient);
     }
     loaderData.gradients.reset();
 
@@ -3793,11 +3793,11 @@ void SvgLoader::clear(bool all)
     if (!all) return;
 
     for (auto p = loaderData.images.begin(); p < loaderData.images.end(); ++p) {
-        SCUI_free(*p);
+        scui_draw_thorvg_free(*p);
     }
     loaderData.images.reset();
 
-    if (copy) SCUI_free((char*)content);
+    if (copy) scui_draw_thorvg_free((char*)content);
 
     delete(root);
     root = nullptr;
@@ -3875,8 +3875,8 @@ bool SvgLoader::header()
     //For valid check, only <svg> tag is parsed first.
     //If the <svg> tag is found, the loaded file is valid and stores viewbox information.
     //After that, the remaining content data is parsed in order with async.
-    loaderData.svgParse = (SvgParser*)SCUI_malloc(sizeof(SvgParser));
-    SCUI_ASSERT_MALLOC(loaderData.svgParse);
+    loaderData.svgParse = (SvgParser*)scui_draw_thorvg_alloc(sizeof(SvgParser));
+    scui_draw_thorvg_assert(loaderData.svgParse);
     if (!loaderData.svgParse) return false;
 
     loaderData.svgParse->flags = SvgStopStyleFlags::StopDefault;
@@ -3952,8 +3952,8 @@ bool SvgLoader::open(const char* data, uint32_t size, bool copy)
     clear();
 
     if (copy) {
-        content = (char*)SCUI_malloc(size + 1);
-        SCUI_ASSERT_MALLOC(content);
+        content = (char*)scui_draw_thorvg_alloc(size + 1);
+        scui_draw_thorvg_assert(content);
         if (!content) return false;
         memcpy((char*)content, data, size);
         content[size] = '\0';
@@ -4031,5 +4031,5 @@ Paint* SvgLoader::paint()
     return ret;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

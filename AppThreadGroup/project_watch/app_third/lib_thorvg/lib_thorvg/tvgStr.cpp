@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "config.h"
 #include <cmath>
@@ -215,8 +215,8 @@ char* strDuplicate(const char *str, size_t n)
     auto len = strlen(str);
     if (len < n) n = len;
 
-    auto ret = (char *) SCUI_malloc(n + 1);
-    SCUI_ASSERT_MALLOC(ret);
+    auto ret = (char *) scui_draw_thorvg_alloc(n + 1);
+    scui_draw_thorvg_assert(ret);
     if (!ret) return nullptr;
     ret[n] = '\0';
 
@@ -227,8 +227,8 @@ char* strAppend(char* lhs, const char* rhs, size_t n)
 {
     if (!rhs) return lhs;
     if (!lhs) return strDuplicate(rhs, n);
-    lhs = (char*)SCUI_realloc(lhs, strlen(lhs) + n + 1);
-    SCUI_ASSERT_MALLOC(lhs);
+    lhs = (char*)scui_draw_thorvg_realloc(lhs, strlen(lhs) + n + 1);
+    scui_draw_thorvg_assert(lhs);
     return strncat(lhs, rhs, n);
 }
 
@@ -244,5 +244,5 @@ char* strDirname(const char* path)
 
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

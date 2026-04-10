@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_LOTTIE_MODEL_H_
 #define _TVG_LOTTIE_MODEL_H_
@@ -177,7 +177,7 @@ struct LottieGlyph
     ~LottieGlyph()
     {
         for (auto p = children.begin(); p < children.end(); ++p) delete(*p);
-        SCUI_free(code);
+        scui_draw_thorvg_free(code);
     }
 };
 
@@ -229,9 +229,9 @@ struct LottieFont
     ~LottieFont()
     {
         for (auto c = chars.begin(); c < chars.end(); ++c) delete(*c);
-        SCUI_free(style);
-        SCUI_free(family);
-        SCUI_free(name);
+        scui_draw_thorvg_free(style);
+        scui_draw_thorvg_free(family);
+        scui_draw_thorvg_free(name);
     }
 
     Array<LottieGlyph*> chars;
@@ -250,7 +250,7 @@ struct LottieMarker
 
     ~LottieMarker()
     {
-    	SCUI_free(name);
+    	scui_draw_thorvg_free(name);
     }
 };
 
@@ -836,7 +836,7 @@ struct LottieSlot
 
     ~LottieSlot()
     {
-    	SCUI_free(sid);
+    	scui_draw_thorvg_free(sid);
         if (!overridden) return;
         for (auto pair = pairs.begin(); pair < pairs.end(); ++pair) {
             delete(pair->prop);
@@ -901,5 +901,5 @@ struct LottieComposition
 
 #endif //_TVG_LOTTIE_MODEL_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

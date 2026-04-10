@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 /*
  * Copyright (c) 2020 Samsung Electronics Co., Ltd. All rights reserved.
@@ -126,7 +126,7 @@ const char* LookaheadParserHandler::getString()
 char* LookaheadParserHandler::getStringCopy()
 {
     auto str = getString();
-    if (str) return SCUI_strdup(str);
+    if (str) return scui_draw_thorvg_strdup(str);
     return nullptr;
 }
 
@@ -237,5 +237,5 @@ void LookaheadParserHandler::skip(const char* key)
     }
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

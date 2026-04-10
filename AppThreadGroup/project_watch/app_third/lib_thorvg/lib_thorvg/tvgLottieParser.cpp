@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgStr.h"
 #include "tvgCompressor.h"
@@ -406,8 +406,8 @@ LottieInterpolator* LottieParser::getInterpolator(const char* key, Point& in, Po
 
     //new interpolator
     if (!interpolator) {
-        interpolator = static_cast<LottieInterpolator*>(SCUI_malloc(sizeof(LottieInterpolator)));
-        SCUI_ASSERT_MALLOC(interpolator);
+        interpolator = static_cast<LottieInterpolator*>(scui_draw_thorvg_alloc(sizeof(LottieInterpolator)));
+        scui_draw_thorvg_assert(interpolator);
         interpolator->set(key, in, out);
         comp->interpolators.push(interpolator);
     }
@@ -945,8 +945,8 @@ LottieImage* LottieParser::parseImage(const char* data, const char* subPath, boo
     //external image resource
     } else {
         auto len = strlen(dirName) + strlen(subPath) + strlen(data) + 1;
-        image->path = static_cast<char*>(SCUI_malloc(len));
-        SCUI_ASSERT_MALLOC(image->path);
+        image->path = static_cast<char*>(scui_draw_thorvg_alloc(len));
+        scui_draw_thorvg_assert(image->path);
         snprintf(image->path, len, "%s%s%s", dirName, subPath, data);
     }
 
@@ -1408,8 +1408,8 @@ void LottieParser::postProcess(Array<LottieGlyph*>& glyphs)
             auto& font = comp->fonts[i];
             if (!strcmp(font->family, glyph->family) && !strcmp(font->style, glyph->style)) {
                 font->chars.push(glyph);
-                SCUI_free(glyph->family);
-                SCUI_free(glyph->style);
+                scui_draw_thorvg_free(glyph->family);
+                scui_draw_thorvg_free(glyph->style);
                 break;
             }
         }
@@ -1515,5 +1515,5 @@ bool LottieParser::parse()
     return true;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

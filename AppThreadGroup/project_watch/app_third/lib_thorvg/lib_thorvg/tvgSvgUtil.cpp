@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include <cstring>
 #include "tvgSvgUtil.h"
@@ -49,8 +49,8 @@ size_t svgUtilURLDecode(const char *src, char** dst)
     auto length = strlen(src);
     if (length == 0) return 0;
 
-    char* decoded = (char*)SCUI_malloc(sizeof(char) * length + 1);
-    SCUI_ASSERT_MALLOC(decoded);
+    char* decoded = (char*)scui_draw_thorvg_alloc(sizeof(char) * length + 1);
+    scui_draw_thorvg_assert(decoded);
 
     char a, b;
     int idx =0;
@@ -74,5 +74,5 @@ size_t svgUtilURLDecode(const char *src, char** dst)
 }
 
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

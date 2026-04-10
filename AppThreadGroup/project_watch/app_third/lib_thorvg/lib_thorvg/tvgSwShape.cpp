@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgSwCommon.h"
 #include "tvgMath.h"
@@ -348,8 +348,8 @@ static SwOutline* _genDashOutline(const RenderShape* rshape, const Matrix& trans
 
     if (dash.cnt == 0) {
         if (trimmed) {
-        	dash.pattern = (float*)SCUI_malloc(sizeof(float) * 4);
-			SCUI_ASSERT_MALLOC(dash.pattern);
+        	dash.pattern = (float*)scui_draw_thorvg_alloc(sizeof(float) * 4);
+			scui_draw_thorvg_assert(dash.pattern);
         }
         else return nullptr;
     } else {
@@ -417,7 +417,7 @@ static SwOutline* _genDashOutline(const RenderShape* rshape, const Matrix& trans
 
     _outlineEnd(*dash.outline);
 
-    if (trimmed) SCUI_free(dash.pattern);
+    if (trimmed) scui_draw_thorvg_free(dash.pattern);
 
     return dash.outline;
 }
@@ -584,8 +584,8 @@ void shapeDelStroke(SwShape* shape)
 void shapeResetStroke(SwShape* shape, const RenderShape* rshape, const Matrix& transform)
 {
     if (!shape->stroke) {
-    	shape->stroke = static_cast<SwStroke*>(SCUI_zalloc(sizeof(SwStroke)));
-        SCUI_ASSERT_MALLOC(shape->stroke);
+    	shape->stroke = static_cast<SwStroke*>(scui_draw_thorvg_zalloc(sizeof(SwStroke)));
+        scui_draw_thorvg_assert(shape->stroke);
     }
     auto stroke = shape->stroke;
     if (!stroke) return;
@@ -653,8 +653,8 @@ bool shapeGenStrokeFillColors(SwShape* shape, const Fill* fill, const Matrix& tr
 void shapeResetFill(SwShape* shape)
 {
     if (!shape->fill) {
-        shape->fill = static_cast<SwFill*>(SCUI_zalloc(sizeof(SwFill)));
-        SCUI_ASSERT_MALLOC(shape->fill);
+        shape->fill = static_cast<SwFill*>(scui_draw_thorvg_zalloc(sizeof(SwFill)));
+        scui_draw_thorvg_assert(shape->fill);
         if (!shape->fill) return;
     }
     fillReset(shape->fill);
@@ -664,8 +664,8 @@ void shapeResetFill(SwShape* shape)
 void shapeResetStrokeFill(SwShape* shape)
 {
     if (!shape->stroke->fill) {
-        shape->stroke->fill = static_cast<SwFill*>(SCUI_zalloc(sizeof(SwFill)));
-        SCUI_ASSERT_MALLOC(shape->stroke->fill);
+        shape->stroke->fill = static_cast<SwFill*>(scui_draw_thorvg_zalloc(sizeof(SwFill)));
+        scui_draw_thorvg_assert(shape->stroke->fill);
         if (!shape->stroke->fill) return;
     }
     fillReset(shape->stroke->fill);
@@ -687,5 +687,5 @@ void shapeDelStrokeFill(SwShape* shape)
     shape->stroke->fill = nullptr;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

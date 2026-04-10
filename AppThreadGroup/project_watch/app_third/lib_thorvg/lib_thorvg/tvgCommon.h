@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_COMMON_H_
 #define _TVG_COMMON_H_
@@ -101,5 +101,5 @@ static inline double THORVG_TIMESTAMP()
 
 #endif //_TVG_COMMON_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

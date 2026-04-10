@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgMath.h" /* to include math.h before cstring */
 #include <cstring>
@@ -122,8 +122,8 @@ static unique_ptr<LinearGradient> _applyLinearGradientProperty(SvgStyleGradient*
     //Update the stops
     stopCount = g->stops.count;
     if (stopCount > 0) {
-        stops = (Fill::ColorStop*)SCUI_zalloc(stopCount * sizeof(Fill::ColorStop));
-        SCUI_ASSERT_MALLOC(stops);
+        stops = (Fill::ColorStop*)scui_draw_thorvg_zalloc(stopCount * sizeof(Fill::ColorStop));
+        scui_draw_thorvg_assert(stops);
         if (!stops) return fillGrad;
         auto prevOffset = 0.0f;
         for (uint32_t i = 0; i < g->stops.count; ++i) {
@@ -140,7 +140,7 @@ static unique_ptr<LinearGradient> _applyLinearGradientProperty(SvgStyleGradient*
             prevOffset = stops[i].offset;
         }
         fillGrad->colorStops(stops, stopCount);
-        SCUI_free(stops);
+        scui_draw_thorvg_free(stops);
     }
     return fillGrad;
 }
@@ -182,8 +182,8 @@ static unique_ptr<RadialGradient> _applyRadialGradientProperty(SvgStyleGradient*
     //Update the stops
     stopCount = g->stops.count;
     if (stopCount > 0) {
-        stops = (Fill::ColorStop*)SCUI_zalloc(stopCount * sizeof(Fill::ColorStop));
-        SCUI_ASSERT_MALLOC(stops);
+        stops = (Fill::ColorStop*)scui_draw_thorvg_zalloc(stopCount * sizeof(Fill::ColorStop));
+        scui_draw_thorvg_assert(stops);
         if (!stops) return fillGrad;
         auto prevOffset = 0.0f;
         for (uint32_t i = 0; i < g->stops.count; ++i) {
@@ -200,7 +200,7 @@ static unique_ptr<RadialGradient> _applyRadialGradientProperty(SvgStyleGradient*
             prevOffset = stops[i].offset;
         }
         fillGrad->colorStops(stops, stopCount);
-        SCUI_free(stops);
+        scui_draw_thorvg_free(stops);
     }
     return fillGrad;
 }
@@ -590,14 +590,14 @@ static unique_ptr<Picture> _imageBuildHelper(SvgLoaderData& loaderData, SvgNode*
         if (encoding == imageMimeTypeEncoding::base64) {
             auto size = b64Decode(href, strlen(href), &decoded);
             if (picture->load(decoded, size, mimetype, false) != Result::Success) {
-                SCUI_free(decoded);
+                scui_draw_thorvg_free(decoded);
                 TaskScheduler::async(true);
                 return nullptr;
             }
         } else {
             auto size = svgUtilURLDecode(href, &decoded);
             if (picture->load(decoded, size, mimetype, false) != Result::Success) {
-                SCUI_free(decoded);
+                scui_draw_thorvg_free(decoded);
                 TaskScheduler::async(true);
                 return nullptr;
             }
@@ -946,5 +946,5 @@ Scene* svgSceneBuild(SvgLoaderData& loaderData, Box vBox, float w, float h, Aspe
     return root.release();
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

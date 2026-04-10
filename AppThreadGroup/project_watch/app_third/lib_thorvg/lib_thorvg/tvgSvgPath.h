@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_SVG_PATH_H_
 #define _TVG_SVG_PATH_H_
@@ -32,5 +32,5 @@ bool svgPathToShape(const char* svgPath, Shape* shape);
 
 #endif //_TVG_SVG_PATH_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

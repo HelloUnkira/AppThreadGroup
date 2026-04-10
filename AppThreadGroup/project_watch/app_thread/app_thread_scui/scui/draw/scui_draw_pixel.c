@@ -7,6 +7,29 @@
 
 #include "scui.h"
 
+scui_draw_graph_t scui_draw_graph = {0};
+
+/*@brief 就绪绘制图形
+ */
+void scui_draw_graph_ready(void)
+{
+    /* 矢量绘图引擎资源 */
+    #if SCUI_DRAW_USE_THORVG
+    scui_coord_t tvg_surface_byte = scui_pixel_bits(scui_pixel_cf_bmp8888) / 8;
+    scui_coord_t tvg_surface_rem  = sizeof(scui_color_wt_t) - tvg_surface_byte;
+    scui_multi_t tvg_surface_size = tvg_surface_byte * SCUI_HOR_RES * SCUI_VER_RES + tvg_surface_rem;
+    
+    scui_draw_graph.tvg_surface.pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, tvg_surface_size);
+    scui_draw_graph.tvg_surface.format  = scui_pixel_cf_bmp8888;
+    scui_draw_graph.tvg_surface.hor_res = SCUI_HOR_RES;
+    scui_draw_graph.tvg_surface.ver_res = SCUI_VER_RES;
+    scui_draw_graph.tvg_surface.alpha   = scui_alpha_cover;
+    
+    void scui_draw_thorvg_ready(void);
+    scui_draw_thorvg_ready();
+    #endif
+}
+
 /*@brief 线条绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例
  */
@@ -96,16 +119,16 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
                 alpha = scui_alpha_cover - alpha;
                 if (scui_area_point(dst_clip, &point)) {
                     uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                    scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                        dst_surface->format, &src_pixel, alpha);
+                    scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                        dst_surface->format, &src_pixel, alpha);
                 }
                 
                 point.y = clip_d.y + clip_d.h;
                 alpha = scui_alpha_cover - alpha;
                 if (scui_area_point(dst_clip, &point)) {
                     uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                    scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                        dst_surface->format, &src_pixel, alpha);
+                    scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                        dst_surface->format, &src_pixel, alpha);
                 }
                 
                 scui_area_t dst_area = {0};
@@ -114,8 +137,8 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
                     for (scui_multi_t idx_line = dst_area.y; idx_line < dst_area.y + dst_area.h; idx_line++)
                     for (scui_multi_t idx_item = dst_area.x; idx_item < dst_area.x + dst_area.w; idx_item++) {
                         uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
-                        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                                            dst_surface->format, &src_pixel, src_alpha);
+                        scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                            dst_surface->format, &src_pixel, src_alpha);
                     }
                 }
             }
@@ -154,16 +177,16 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
                 alpha = scui_alpha_cover - alpha;
                 if (scui_area_point(dst_clip, &point)) {
                     uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                    scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                        dst_surface->format, &src_pixel, alpha);
+                    scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                        dst_surface->format, &src_pixel, alpha);
                 }
                 
                 point.x = clip_d.x + clip_d.w;
                 alpha = scui_alpha_cover - alpha;
                 if (scui_area_point(dst_clip, &point)) {
                     uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                    scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                        dst_surface->format, &src_pixel, alpha);
+                    scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                        dst_surface->format, &src_pixel, alpha);
                 }
                 
                 scui_area_t dst_area = {0};
@@ -172,8 +195,8 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
                     for (scui_multi_t idx_line = dst_area.y; idx_line < dst_area.y + dst_area.h; idx_line++)
                     for (scui_multi_t idx_item = dst_area.x; idx_item < dst_area.x + dst_area.w; idx_item++) {
                         uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
-                        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                                            dst_surface->format, &src_pixel, src_alpha);
+                        scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                            dst_surface->format, &src_pixel, src_alpha);
                     }
                 }
             }
@@ -223,8 +246,8 @@ void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
              return;
         
         uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                            dst_surface->format, &src_pixel, src_alpha);
+        scui_pixel_mix_with(dst_surface->format, dst_ofs,
+            dst_surface->format, &src_pixel, src_alpha);
     }
     /* 这里变成了一个区域, 直接填色 */
     if (src_pos_1.x == src_pos_2.x || src_pos_1.y == src_pos_2.y) {
@@ -285,15 +308,18 @@ void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, 
  */
 void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
 {
-    #if SCUI_DRAW_GRAPH_USE_LVGL
-    bool scui_draw_dsc_LVGL(scui_draw_dsc_t *draw_dsc);
-    if (scui_draw_dsc_LVGL(draw_dsc))
+    /* 矢量绘图引擎 */
+    #if SCUI_DRAW_USE_THORVG
+    bool scui_draw_ctx_graph_TVG(scui_draw_dsc_t *draw_dsc);
+    if (scui_draw_ctx_graph_TVG(draw_dsc))
         return;
     #endif
     
+    
+    
     #if SCUI_DRAW_GRAPH_USE_EGUI
-    bool scui_draw_dsc_EGUI(scui_draw_dsc_t *draw_dsc);
-    if (scui_draw_dsc_EGUI(draw_dsc))
+    bool scui_draw_ctx_graph_EGUI(scui_draw_dsc_t *draw_dsc);
+    if (scui_draw_ctx_graph_EGUI(draw_dsc))
         return;
     #endif
     

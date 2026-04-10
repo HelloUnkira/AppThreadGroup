@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifdef THORVG_SW_OPENMP_SUPPORT
     #include <omp.h>
@@ -387,7 +387,7 @@ void SwRenderer::clearCompositors()
 {
     //Free Composite Caches
     for (auto comp = compositors.begin(); comp < compositors.end(); ++comp) {
-        SCUI_free((*comp)->compositor->image.data);
+        scui_draw_thorvg_free((*comp)->compositor->image.data);
         delete((*comp)->compositor);
         delete(*comp);
     }
@@ -566,8 +566,8 @@ SwSurface* SwRenderer::request(int channelSize)
         //Inherits attributes from main surface
         cmp = new SwSurface(surface);
         cmp->compositor = new SwCompositor;
-        cmp->compositor->image.data = (pixel_t*)SCUI_malloc(channelSize * surface->stride * surface->h);
-        SCUI_ASSERT_MALLOC(cmp->compositor->image.data);
+        cmp->compositor->image.data = (pixel_t*)scui_draw_thorvg_alloc(channelSize * surface->stride * surface->h);
+        scui_draw_thorvg_assert(cmp->compositor->image.data);
         cmp->compositor->image.w = surface->w;
         cmp->compositor->image.h = surface->h;
         cmp->compositor->image.stride = surface->stride;
@@ -803,5 +803,5 @@ SwRenderer* SwRenderer::gen()
     return new SwRenderer();
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include <string.h>
 #include <math.h>
@@ -61,10 +61,10 @@ static void _growBorder(SwStrokeBorder* border, uint32_t newPts)
     while (maxCur < maxNew)
         maxCur += (maxCur >> 1) + 16;
     //OPTIMIZE: use mempool!
-    border->pts = static_cast<SwPoint*>(SCUI_realloc(border->pts, maxCur * sizeof(SwPoint)));
-    SCUI_ASSERT_MALLOC(border->pts);
-    border->tags = static_cast<uint8_t*>(SCUI_realloc(border->tags, maxCur * sizeof(uint8_t)));
-    SCUI_ASSERT_MALLOC(border->tags);
+    border->pts = static_cast<SwPoint*>(scui_draw_thorvg_realloc(border->pts, maxCur * sizeof(SwPoint)));
+    scui_draw_thorvg_assert(border->pts);
+    border->tags = static_cast<uint8_t*>(scui_draw_thorvg_realloc(border->tags, maxCur * sizeof(uint8_t)));
+    scui_draw_thorvg_assert(border->tags);
     border->maxPts = maxCur;
 }
 
@@ -808,15 +808,15 @@ void strokeFree(SwStroke* stroke)
     if (!stroke) return;
 
     //free borders
-    if (stroke->borders[0].pts) SCUI_free(stroke->borders[0].pts);
-    if (stroke->borders[0].tags) SCUI_free(stroke->borders[0].tags);
-    if (stroke->borders[1].pts) SCUI_free(stroke->borders[1].pts);
-    if (stroke->borders[1].tags) SCUI_free(stroke->borders[1].tags);
+    if (stroke->borders[0].pts) scui_draw_thorvg_free(stroke->borders[0].pts);
+    if (stroke->borders[0].tags) scui_draw_thorvg_free(stroke->borders[0].tags);
+    if (stroke->borders[1].pts) scui_draw_thorvg_free(stroke->borders[1].pts);
+    if (stroke->borders[1].tags) scui_draw_thorvg_free(stroke->borders[1].tags);
 
     fillFree(stroke->fill);
     stroke->fill = nullptr;
 
-    SCUI_free(stroke);
+    scui_draw_thorvg_free(stroke);
 }
 
 
@@ -910,5 +910,5 @@ SwOutline* strokeExportOutline(SwStroke* stroke, SwMpool* mpool, unsigned tid)
     return outline;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

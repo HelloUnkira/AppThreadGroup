@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include <cstring>
 #include <ctype.h>
@@ -301,8 +301,8 @@ bool isIgnoreUnsupportedLogElements(TVG_UNUSED const char* tagName)
 bool simpleXmlParseAttributes(const char* buf, unsigned bufLength, simpleXMLAttributeCb func, const void* data)
 {
     const char *itr = buf, *itrEnd = buf + bufLength;
-    char* tmpBuf = (char*)SCUI_malloc(bufLength + 1);
-    SCUI_ASSERT_MALLOC(tmpBuf);
+    char* tmpBuf = (char*)scui_draw_thorvg_alloc(bufLength + 1);
+    scui_draw_thorvg_assert(tmpBuf);
 
     if (!buf || !func || !tmpBuf) goto error;
 
@@ -367,11 +367,11 @@ bool simpleXmlParseAttributes(const char* buf, unsigned bufLength, simpleXMLAttr
     }
 
 success:
-    SCUI_free(tmpBuf);
+    scui_draw_thorvg_free(tmpBuf);
     return true;
 
 error:
-    SCUI_free(tmpBuf);
+    scui_draw_thorvg_free(tmpBuf);
     return false;
 }
 
@@ -565,7 +565,7 @@ const char* simpleXmlParseCSSAttribute(const char* buf, unsigned bufLength, char
         if (*p == '.') break;
     }
 
-    if (p == itr) *tag = SCUI_strdup("all");
+    if (p == itr) *tag = scui_draw_thorvg_strdup("all");
     else *tag = strDuplicate(itr, p - itr);
 
     if (p == itrEnd) *name = nullptr;
@@ -593,5 +593,5 @@ const char* simpleXmlFindAttributesTag(const char* buf, unsigned bufLength)
     return nullptr;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

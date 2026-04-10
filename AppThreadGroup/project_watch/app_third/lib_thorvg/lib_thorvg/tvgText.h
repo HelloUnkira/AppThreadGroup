@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_TEXT_H
 #define _TVG_TEXT_H
@@ -47,15 +47,15 @@ struct Text::Impl
 
     ~Impl()
     {
-        SCUI_free(utf8);
+        scui_draw_thorvg_free(utf8);
         LoaderMgr::retrieve(loader);
         delete(shape);
     }
 
     Result text(const char* utf8)
     {
-        SCUI_free(this->utf8);
-        if (utf8) this->utf8 = SCUI_strdup(utf8);
+        scui_draw_thorvg_free(this->utf8);
+        if (utf8) this->utf8 = scui_draw_thorvg_strdup(utf8);
         else this->utf8 = nullptr;
         changed = true;
 
@@ -157,7 +157,7 @@ struct Text::Impl
             ++dup->loader->sharing;
         }
 
-        dup->utf8 = SCUI_strdup(utf8);
+        dup->utf8 = scui_draw_thorvg_strdup(utf8);
         dup->italic = italic;
         dup->fontSize = fontSize;
 
@@ -174,5 +174,5 @@ struct Text::Impl
 
 #endif //_TVG_TEXT_H
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

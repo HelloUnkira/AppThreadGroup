@@ -15,8 +15,8 @@
 *
 */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 #define TVG_BUILD 1
 
 #ifndef __THORVG_CAPI_H__
@@ -2682,5 +2682,5 @@ TVG_API Tvg_Result tvg_lottie_animation_get_marker(Tvg_Animation* animation, uin
 
 #endif //_THORVG_CAPI_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

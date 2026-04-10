@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_RENDER_H_
 #define _TVG_RENDER_H_
@@ -132,10 +132,10 @@ struct RenderStroke
         if (rhs.fill) fill = rhs.fill->duplicate();
         else fill = nullptr;
 
-        SCUI_free(dashPattern);
+        scui_draw_thorvg_free(dashPattern);
         if (rhs.dashCnt > 0) {
-            dashPattern = static_cast<float*>(SCUI_malloc(sizeof(float) * rhs.dashCnt));
-            SCUI_ASSERT_MALLOC(dashPattern);
+            dashPattern = static_cast<float*>(scui_draw_thorvg_alloc(sizeof(float) * rhs.dashCnt));
+            scui_draw_thorvg_assert(dashPattern);
             memcpy(dashPattern, rhs.dashPattern, sizeof(float) * rhs.dashCnt);
         } else {
             dashPattern = nullptr;
@@ -176,7 +176,7 @@ struct RenderStroke
 
     ~RenderStroke()
     {
-    	SCUI_free(dashPattern);
+    	scui_draw_thorvg_free(dashPattern);
         delete(fill);
     }
 };
@@ -276,7 +276,7 @@ struct RenderEffect
 
     virtual ~RenderEffect()
     {
-    	SCUI_free(rd);
+    	scui_draw_thorvg_free(rd);
     }
 };
 
@@ -408,5 +408,5 @@ static inline uint8_t MULTIPLY(uint8_t c, uint8_t a)
 
 #endif //_TVG_RENDER_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

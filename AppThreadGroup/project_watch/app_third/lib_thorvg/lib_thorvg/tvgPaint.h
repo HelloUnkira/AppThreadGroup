@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_PAINT_H_
 #define _TVG_PAINT_H_
@@ -90,7 +90,7 @@ namespace tvg
         {
             if (compData) {
                 if (P(compData->target)->unref() == 0) delete(compData->target);
-                SCUI_free(compData);
+                scui_draw_thorvg_free(compData);
             }
             if (clipper && P(clipper)->unref() == 0) delete(clipper);
             if (renderer && (renderer->unref() == 0)) delete(renderer);
@@ -151,14 +151,14 @@ namespace tvg
                 }
                 //Reset scenario
                 if (!target && method == CompositeMethod::None) {
-                	SCUI_free(compData);
+                	scui_draw_thorvg_free(compData);
                     compData = nullptr;
                     return true;
                 }
             } else {
                 if (!target && method == CompositeMethod::None) return true;
-                compData = static_cast<Composite*>(SCUI_zalloc(sizeof(Composite)));
-                SCUI_ASSERT_MALLOC(compData);
+                compData = static_cast<Composite*>(scui_draw_thorvg_zalloc(sizeof(Composite)));
+                scui_draw_thorvg_assert(compData);
             }
             P(target)->ref();
             compData->target = target;
@@ -182,5 +182,5 @@ namespace tvg
 
 #endif //_TVG_PAINT_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

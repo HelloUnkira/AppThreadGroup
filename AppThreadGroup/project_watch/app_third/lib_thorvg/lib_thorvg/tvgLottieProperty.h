@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_LOTTIE_PROPERTY_H_
 #define _TVG_LOTTIE_PROPERTY_H_
@@ -148,7 +148,7 @@ struct LottieExpression
 
     ~LottieExpression()
     {
-    	SCUI_free(code);
+    	scui_draw_thorvg_free(code);
     }
 };
 
@@ -364,17 +364,17 @@ struct LottiePathSet : LottieProperty
             exp = nullptr;
         }
 
-        SCUI_free(value.cmds);
-        SCUI_free(value.pts);
+        scui_draw_thorvg_free(value.cmds);
+        scui_draw_thorvg_free(value.pts);
 
         if (!frames) return;
 
         for (auto p = frames->begin(); p < frames->end(); ++p) {
-        	SCUI_free((*p).value.cmds);
-        	SCUI_free((*p).value.pts);
+        	scui_draw_thorvg_free((*p).value.cmds);
+        	scui_draw_thorvg_free((*p).value.pts);
         }
-        SCUI_free(frames->data);
-        SCUI_free(frames);
+        scui_draw_thorvg_free(frames->data);
+        scui_draw_thorvg_free(frames);
     }
 
     uint32_t nearest(float frameNo) override
@@ -395,8 +395,8 @@ struct LottiePathSet : LottieProperty
     LottieScalarFrame<PathSet>& newFrame()
     {
         if (!frames) {
-            frames = static_cast<Array<LottieScalarFrame<PathSet>>*>(SCUI_zalloc(sizeof(Array<LottieScalarFrame<PathSet>>)));
-            SCUI_ASSERT_MALLOC(frames);
+            frames = static_cast<Array<LottieScalarFrame<PathSet>>*>(scui_draw_thorvg_zalloc(sizeof(Array<LottieScalarFrame<PathSet>>)));
+            scui_draw_thorvg_assert(frames);
         }
         if (frames->count + 1 >= frames->reserved) {
             auto old = frames->reserved;
@@ -466,8 +466,8 @@ struct LottiePathSet : LottieProperty
             return true;
         }
 
-        auto interpPts = (Point*)SCUI_malloc(frame->value.ptsCnt * sizeof(Point));
-        SCUI_ASSERT_MALLOC(interpPts);
+        auto interpPts = (Point*)scui_draw_thorvg_alloc(frame->value.ptsCnt * sizeof(Point));
+        scui_draw_thorvg_assert(interpPts);
         auto p = interpPts;
         for (auto i = 0; i < frame->value.ptsCnt; ++i, ++s, ++e, ++p) {
             *p = lerp(*s, *e, t);
@@ -483,7 +483,7 @@ struct LottiePathSet : LottieProperty
             } else roundness->modifyPath(frame->value.cmds, frame->value.cmdsCnt, interpPts, frame->value.ptsCnt, cmds, pts, nullptr);
         } else if (offsetPath) offsetPath->modifyPath(frame->value.cmds, frame->value.cmdsCnt, interpPts, frame->value.ptsCnt, cmds, pts);
 
-        SCUI_free(interpPts);
+        scui_draw_thorvg_free(interpPts);
 
         return true;
     }
@@ -522,17 +522,17 @@ struct LottieColorStop : LottieProperty
         }
 
         if (value.data) {
-        	SCUI_free(value.data);
+        	scui_draw_thorvg_free(value.data);
             value.data = nullptr;
         }
 
         if (!frames) return;
 
         for (auto p = frames->begin(); p < frames->end(); ++p) {
-        	SCUI_free((*p).value.data);
+        	scui_draw_thorvg_free((*p).value.data);
         }
-        SCUI_free(frames->data);
-        SCUI_free(frames);
+        scui_draw_thorvg_free(frames->data);
+        scui_draw_thorvg_free(frames);
         frames = nullptr;
     }
 
@@ -554,8 +554,8 @@ struct LottieColorStop : LottieProperty
     LottieScalarFrame<ColorStop>& newFrame()
     {
         if (!frames) {
-            frames = static_cast<Array<LottieScalarFrame<ColorStop>>*>(SCUI_zalloc(sizeof(Array<LottieScalarFrame<ColorStop>>)));
-            SCUI_ASSERT_MALLOC(frames);
+            frames = static_cast<Array<LottieScalarFrame<ColorStop>>*>(scui_draw_thorvg_zalloc(sizeof(Array<LottieScalarFrame<ColorStop>>)));
+            scui_draw_thorvg_assert(frames);
         }
         if (frames->count + 1 >= frames->reserved) {
             auto old = frames->reserved;
@@ -756,19 +756,19 @@ struct LottieTextDoc : LottieProperty
         }
 
         if (value.text) {
-        	SCUI_free(value.text);
+        	scui_draw_thorvg_free(value.text);
             value.text = nullptr;
         }
         if (value.name) {
-        	SCUI_free(value.name);
+        	scui_draw_thorvg_free(value.name);
             value.name = nullptr;
         }
 
         if (!frames) return;
 
         for (auto p = frames->begin(); p < frames->end(); ++p) {
-        	SCUI_free((*p).value.text);
-        	SCUI_free((*p).value.name);
+        	scui_draw_thorvg_free((*p).value.text);
+        	scui_draw_thorvg_free((*p).value.name);
         }
         delete(frames);
         frames = nullptr;
@@ -843,5 +843,5 @@ using LottieCheckbox = LottieGenericProperty<int8_t>;
 
 #endif //_TVG_LOTTIE_PROPERTY_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

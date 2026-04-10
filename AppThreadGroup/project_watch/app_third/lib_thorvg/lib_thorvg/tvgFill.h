@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_FILL_H_
 #define _TVG_FILL_H_
@@ -62,8 +62,8 @@ struct Fill::Impl
     ~Impl()
     {
         delete(dup);
-        SCUI_free(colorStops);
-        SCUI_free(transform);
+        scui_draw_thorvg_free(colorStops);
+        scui_draw_thorvg_free(transform);
     }
 
     void method(DuplicateMethod<Fill>* dup)
@@ -78,12 +78,12 @@ struct Fill::Impl
 
         ret->pImpl->cnt = cnt;
         ret->pImpl->spread = spread;
-        ret->pImpl->colorStops = static_cast<ColorStop*>(SCUI_malloc(sizeof(ColorStop) * cnt));
-        SCUI_ASSERT_MALLOC(ret->pImpl->colorStops);
+        ret->pImpl->colorStops = static_cast<ColorStop*>(scui_draw_thorvg_alloc(sizeof(ColorStop) * cnt));
+        scui_draw_thorvg_assert(ret->pImpl->colorStops);
         memcpy(ret->pImpl->colorStops, colorStops, sizeof(ColorStop) * cnt);
         if (transform) {
-            ret->pImpl->transform = static_cast<Matrix*>(SCUI_malloc(sizeof(Matrix)));
-			SCUI_ASSERT_MALLOC(ret->pImpl->transform);
+            ret->pImpl->transform = static_cast<Matrix*>(scui_draw_thorvg_alloc(sizeof(Matrix)));
+			scui_draw_thorvg_assert(ret->pImpl->transform);
             *ret->pImpl->transform = *transform;
         }
         return ret;
@@ -115,5 +115,5 @@ struct LinearGradient::Impl
 
 #endif  //_TVG_FILL_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

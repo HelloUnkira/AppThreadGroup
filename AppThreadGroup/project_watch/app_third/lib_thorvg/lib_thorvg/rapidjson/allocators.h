@@ -25,7 +25,7 @@
 #include <type_traits>
 #endif
 
-#include "../../../misc/SCUI_assert.h"
+#include "scui_draw_thorvg.h"
 
 RAPIDJSON_NAMESPACE_BEGIN
 
@@ -88,7 +88,7 @@ public:
     void* Malloc(size_t size) {
         if (size) { //  behavior of malloc(0) is implementation defined.
             void * p = RAPIDJSON_MALLOC(size);
-            SCUI_ASSERT_MALLOC(p);
+            scui_draw_thorvg_assert(p);
             return p;
         } else {
             return NULL; // standardize to returning NULL.
@@ -101,7 +101,7 @@ public:
             return NULL;
         }
         void * p = RAPIDJSON_REALLOC(originalPtr, newSize);
-        SCUI_ASSERT_MALLOC(p);
+        scui_draw_thorvg_assert(p);
         return p;
     }
     static void Free(void *ptr) RAPIDJSON_NOEXCEPT { RAPIDJSON_FREE(ptr); }

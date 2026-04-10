@@ -7,5 +7,9 @@ file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/p
 file(GLOB_RECURSE SOURCES *.c)
 add_executable(app_main ${SOURCES})
 # set_target_properties(app_main PROPERTIES LINKER_LANGUAGE C)
-target_link_libraries(app_main PUBLIC app_thread)
+FIND_TARGET_H_PATH(target_path ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(app_ext SYSTEM PUBLIC ${target_path})
+target_include_directories(app_main SYSTEM PUBLIC ${target_path})
+
 set_target_properties(app_main PROPERTIES OUTPUT_NAME main PREFIX "")
+target_link_libraries(app_main PUBLIC app_thread)

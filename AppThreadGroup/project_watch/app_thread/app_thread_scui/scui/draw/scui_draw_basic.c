@@ -190,8 +190,8 @@ void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc)
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
         for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
             uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
-            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                                dst_surface->format, &src_pixel, src_alpha);
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                dst_surface->format, &src_pixel, src_alpha);
         }
     }
 }
@@ -239,17 +239,15 @@ void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc)
         if (src_way == 1) pct_100 = idx_line * 100 / src_clip->h;
         
         /* 这一部分会重复计算多次,这里不做优化,否则对src_way分开 */
-        scui_alpha_t alpha_1 = scui_alpha_pct(100 - pct_100);
-        scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
         scui_color_wt_t src_pixel_a = src_pixel_s;
-        scui_pixel_mix_with(dst_surface->format, &src_pixel_a, alpha_1,
-                            dst_surface->format, &src_pixel_e, alpha_2);
+        scui_pixel_mix_with(dst_surface->format, &src_pixel_a,
+            dst_surface->format, &src_pixel_e, scui_alpha_pct(pct_100));
         
         if (src_alpha == scui_alpha_cover)
             scui_pixel_by_cf(dst_surface->format, dst_ofs, &src_pixel_a);
         else
-            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                                dst_surface->format, &src_pixel_a, src_alpha);
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                dst_surface->format, &src_pixel_a, src_alpha);
         }
     }
 }
@@ -317,12 +315,11 @@ void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc)
         
         scui_multi_t idx_pct = ((pct_scale - (idx_grad << SCUI_SCALE_OFS)) * 100) >> SCUI_SCALE_OFS;
         SCUI_ASSERT(idx_grad >= 0 && idx_grad <= src_grad_n - 2);
-        scui_alpha_t alpha_1 = scui_alpha_pct(100 - idx_pct);
-        scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
         
         scui_color_wt_t src_pixel_a = src_grad_l[idx_grad];
-        scui_pixel_mix_with(dst_surface->format, &src_pixel_a, alpha_1,
-                            dst_surface->format, &src_grad_l[idx_grad + 1], alpha_2);
+        scui_pixel_mix_with(dst_surface->format, &src_pixel_a,
+            dst_surface->format, &src_grad_l[idx_grad + 1], scui_alpha_pct(idx_pct));
+        
         scui_pixel_mix_alpha(dst_surface->format, &src_pixel_a, grey);
         scui_pixel_by_cf(dst_surface->format, dst_ofs, &src_pixel_a);
     }
@@ -460,8 +457,8 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
                     continue;
             }
             
-            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
-                                src_surface->format, src_ofs, src_surface->alpha);
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                src_surface->format, src_ofs, src_surface->alpha);
         }
         return;
     }
@@ -497,12 +494,10 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
             if (grey_table[grey_idx] == 0x00) {
                 uint32_t *pixel_1 = &grey_table[0];
                 uint32_t *pixel_2 = &grey_table[grey_len - 1];
-                scui_alpha_t alpha_1 = grey;
-                scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
                 
                 grey_table[grey_idx] = grey_table[0];
-                scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx], alpha_1,
-                                    dst_surface->format, &grey_table[grey_len - 1], alpha_2);
+                scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx],
+                    dst_surface->format, &grey_table[grey_len - 1], scui_alpha_cover - grey);
             }
             
             scui_color_wt_t grey_color = grey_table[grey_idx];
@@ -512,8 +507,8 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
                 continue;
             
             scui_alpha_t alpha = (uint32_t)src_surface->alpha * grey / scui_alpha_cover;
-            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                dst_surface->format, &grey_table[grey_idx], alpha);
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                dst_surface->format, &grey_table[grey_idx], alpha);
         }
         
         SCUI_MEM_FREE(grey_table);
@@ -702,8 +697,8 @@ void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
         if (scui_area_point(&src_clip_v, &point)) {
             uint8_t *dst_ofs = dst_surface->pixel + idx_line * dst_line + idx_item * dst_byte;
             
-            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                                dst_surface->format, &src_pixel, src_alpha);
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                dst_surface->format, &src_pixel, src_alpha);
             continue;
         }
     }
@@ -861,14 +856,14 @@ void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
                 
                 if (src_surface->format == scui_pixel_cf_bmp565) {
                     scui_color565_t color565 = {.ch.r = del_r,.ch.g = del_g,.ch.b = del_b,};
-                    scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
-                                        src_surface->format, &color565, src_surface->alpha);
+                    scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                        src_surface->format, &color565, src_surface->alpha);
                 }
                 
                 if (src_surface->format == scui_pixel_cf_bmp8565) {
                     scui_color8565_t color8565 = {.ch.a = del_a,.ch.r = del_r,.ch.g = del_g,.ch.b = del_b,};
-                    scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
-                                        src_surface->format, &color8565, src_surface->alpha);
+                    scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                        src_surface->format, &color8565, src_surface->alpha);
                 }
                 continue;
             }
@@ -887,8 +882,8 @@ void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
                         continue;
                 }
                 
-                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
-                                    src_surface->format, src_ofs, src_surface->alpha);
+                scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                    src_surface->format, src_ofs, src_surface->alpha);
                 continue;
             }
         }

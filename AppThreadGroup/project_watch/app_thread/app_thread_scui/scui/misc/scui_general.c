@@ -147,6 +147,14 @@ void scui_pixel_by_color(scui_pixel_cf_t cf, void *pixel, scui_color8888_t color
         color8565->ch.b = (uint8_t)color.ch.b >> 3;
         break;
     }
+    case scui_pixel_cf_bmp8888: {
+        scui_color8888_t *color8888 = pixel;
+        color8888->ch.a = (uint8_t)color.ch.a,
+        color8888->ch.r = (uint8_t)color.ch.r;
+        color8888->ch.g = (uint8_t)color.ch.g;
+        color8888->ch.b = (uint8_t)color.ch.b;
+        break;
+    }
     default:
         SCUI_ASSERT(false);
         break;
@@ -180,30 +188,28 @@ void scui_pixel_mix_alpha(scui_pixel_cf_t cf, void *pixel, scui_alpha_t alpha)
 }
 
 /*@brief 像素点融合(同步作用透明度)
- *@param cf_1    像素点格式
- *@param pixel_1 像素点
- *@param alpha_1 透明度
- *@param cf_2    像素点格式
- *@param pixel_2 像素点
- *@param alpha_2 透明度
+ *@param dst_cf 目标像素点格式
+ *@param dst_p  目标像素点
+ *@param src_cf 源像素点格式
+ *@param src_p  源像素点
+ *@param src_a  源像素点透明度
  */
-void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha_1,
-                         scui_pixel_cf_t cf_2, void *pixel_2, scui_alpha_t alpha_2)
+void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
+                         scui_pixel_cf_t src_cf, void *src_p, scui_alpha_t src_a)
 {
     /* 像素点融合主要处理俩个像素点在一个新像素点中的浓度 */
     /* 所以说此时的透明度可以等价理解为该原始像素点的浓度 */
     /* 这俩个像素点为融合后的像素点稳定的贡献全部的颜色 */
-    SCUI_ASSERT(alpha_1 + alpha_2 == 0xFF);
     
-    if (cf_1 == scui_pixel_cf_bmp565 &&
-        cf_2 == scui_pixel_cf_bmp565) {
-        scui_color565_t *c_1 = pixel_1;
-        scui_color565_t *c_2 = pixel_2;
+    if (dst_cf == scui_pixel_cf_bmp565 &&
+        src_cf == scui_pixel_cf_bmp565) {
+        scui_color565_t *dst_c = dst_p;
+        scui_color565_t *src_c = src_p;
         
-        if (alpha_1 == 0xFF)
+        if (src_a == 0x00)
             return;
-        if (alpha_2 == 0xFF) {
-            c_1->full = c_2->full;
+        if (src_a == 0xFF) {
+            dst_c->full = src_c->full;
             return;
         }
         
@@ -214,73 +220,103 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         /*     into  00000gggggg00000rrrrr000000bbbbb */
         /* with mask 00000111111000001111100000011111 */
         /* This is useful because it makes space for a parallel fixed-point multiply */
-        uint8_t a1 = alpha_1 >> 3; uint32_t p1 = c_1->full;
-        uint8_t a2 = alpha_2 >> 3; uint32_t p2 = c_2->full;
+        uint32_t p1 = dst_c->full; uint8_t dst_ca = (0xFF - src_a) >> 3;
+        uint32_t p2 = src_c->full; uint8_t src_ca = (src_a >> 3);
         p1 = ((p1 | (p1 << 16)) & 0x07e0f81f);
         p2 = ((p2 | (p2 << 16)) & 0x07e0f81f);
-        uint32_t ret = ((p1 * a1 + p2 * a2) >> 5) & 0x07e0f81f;
-        c_1->full = ((ret >> 16) | ret);
+        uint32_t ret = ((p1 * dst_ca + p2 * src_ca) >> 5) & 0x07e0f81f;
+        dst_c->full = ((ret >> 16) | ret);
         #else
-        scui_color_wt_t a2 = alpha_2;
-        scui_color_wt_t a1 = alpha_1;
-        c_1->ch.r = SCUI_DIV_0xFF(c_1->ch.r * a1 + c_2->ch.r * a2);
-        c_1->ch.g = SCUI_DIV_0xFF(c_1->ch.g * a1 + c_2->ch.g * a2);
-        c_1->ch.b = SCUI_DIV_0xFF(c_1->ch.b * a1 + c_2->ch.b * a2);
+        scui_color_wt_t src_ca = src_a;
+        scui_color_wt_t dst_ca = 0xFF - src_a;
+        dst_c->ch.r = SCUI_DIV_0xFF(dst_c->ch.r * dst_ca + src_c->ch.r * src_ca);
+        dst_c->ch.g = SCUI_DIV_0xFF(dst_c->ch.g * dst_ca + src_c->ch.g * src_ca);
+        dst_c->ch.b = SCUI_DIV_0xFF(dst_c->ch.b * dst_ca + src_c->ch.b * src_ca);
         #endif
         
         return;
     }
     
-    if (cf_1 == scui_pixel_cf_bmp565 &&
-        cf_2 == scui_pixel_cf_bmp8565) {
-        scui_color565_t  *c_1 = pixel_1;
-        scui_color8565_t *c_2 = pixel_2;
+    if (dst_cf == scui_pixel_cf_bmp565 &&
+        src_cf == scui_pixel_cf_bmp8565) {
+        scui_color565_t  *dst_c = dst_p;
+        scui_color8565_t *src_c = src_p;
         
-        if (alpha_1 == 0xFF)
+        scui_color_wt_t src_ca = scui_alpha_mix(src_c->ch.a, src_a);
+        scui_color_wt_t dst_ca = 0xFF - src_ca;
+        if (src_ca == 0x00)
             return;
         
-        scui_color_wt_t a2 = scui_alpha_mix(c_2->ch.a, alpha_2);
-        scui_color_wt_t a1 = 0xFF - a2;
-        c_1->ch.r = SCUI_DIV_0xFF(c_1->ch.r * a1 + c_2->ch.r * a2);
-        c_1->ch.g = SCUI_DIV_0xFF(c_1->ch.g * a1 + c_2->ch.g * a2);
-        c_1->ch.b = SCUI_DIV_0xFF(c_1->ch.b * a1 + c_2->ch.b * a2);
+        dst_c->ch.r = SCUI_DIV_0xFF(dst_c->ch.r * dst_ca + src_c->ch.r * src_ca);
+        dst_c->ch.g = SCUI_DIV_0xFF(dst_c->ch.g * dst_ca + src_c->ch.g * src_ca);
+        dst_c->ch.b = SCUI_DIV_0xFF(dst_c->ch.b * dst_ca + src_c->ch.b * src_ca);
         return;
     }
     
-    if (cf_1 == scui_pixel_cf_bmp8565 &&
-        cf_2 == scui_pixel_cf_bmp565) {
-        scui_color8565_t *c_1 = pixel_1;
-        scui_color565_t  *c_2 = pixel_2;
+    if (dst_cf == scui_pixel_cf_bmp565 &&
+        src_cf == scui_pixel_cf_bmp8888) {
+        scui_color565_t  *dst_c = dst_p;
+        scui_color8888_t *src_c = src_p;
         
-        scui_color_wt_t a2 = alpha_2;
-        scui_color_wt_t a1 = 0xFF - a2;
-        
-        if (alpha_1 == 0xFF || a2 == 0x00)
+        scui_color_wt_t src_ca = scui_alpha_mix(src_c->ch.a, src_a);
+        scui_color_wt_t dst_ca = 0xFF - src_ca;
+        if (src_ca == 0x00)
             return;
         
-        c_1->ch.a = a2 + a1;
-        c_1->ch.r = SCUI_DIV_0xFF(c_1->ch.r * a1 + c_2->ch.r * a2);
-        c_1->ch.g = SCUI_DIV_0xFF(c_1->ch.g * a1 + c_2->ch.g * a2);
-        c_1->ch.b = SCUI_DIV_0xFF(c_1->ch.b * a1 + c_2->ch.b * a2);
+        dst_c->ch.r = SCUI_DIV_0xFF((dst_c->ch.r << 3) * dst_ca + src_c->ch.r * src_ca) >> 3;
+        dst_c->ch.g = SCUI_DIV_0xFF((dst_c->ch.g << 2) * dst_ca + src_c->ch.g * src_ca) >> 2;
+        dst_c->ch.b = SCUI_DIV_0xFF((dst_c->ch.b << 3) * dst_ca + src_c->ch.b * src_ca) >> 3;
         return;
     }
     
-    if (cf_1 == scui_pixel_cf_bmp8565 &&
-        cf_2 == scui_pixel_cf_bmp8565) {
-        scui_color8565_t *c_1 = pixel_1;
-        scui_color8565_t *c_2 = pixel_2;
+    if (dst_cf == scui_pixel_cf_bmp8565 &&
+        src_cf == scui_pixel_cf_bmp565) {
+        scui_color8565_t *dst_c = dst_p;
+        scui_color565_t  *src_c = src_p;
         
-        scui_color_wt_t a2 = scui_alpha_mix(c_2->ch.a, alpha_2);
-        scui_color_wt_t a1 = scui_alpha_mix(c_1->ch.a, alpha_1);
-        scui_color_wt_t as = scui_alpha_mix(a1, (0xFF - a2));
-        
-        if (alpha_1 == 0xFF || a2 == 0x00)
+        scui_color_wt_t src_ca = src_a;
+        scui_color_wt_t dst_ca = 0xFF - src_ca;
+        if (src_ca == 0x00)
             return;
         
-        c_1->ch.a = 0xFF - scui_alpha_mix(0xFF - a2, 0xFF - a1);
-        c_1->ch.r = SCUI_DIV_0xFF(c_1->ch.r * as + c_2->ch.r * a2);
-        c_1->ch.g = SCUI_DIV_0xFF(c_1->ch.g * as + c_2->ch.g * a2);
-        c_1->ch.b = SCUI_DIV_0xFF(c_1->ch.b * as + c_2->ch.b * a2);
+        dst_c->ch.a = src_ca + dst_ca;
+        dst_c->ch.r = SCUI_DIV_0xFF(dst_c->ch.r * dst_ca + src_c->ch.r * src_ca);
+        dst_c->ch.g = SCUI_DIV_0xFF(dst_c->ch.g * dst_ca + src_c->ch.g * src_ca);
+        dst_c->ch.b = SCUI_DIV_0xFF(dst_c->ch.b * dst_ca + src_c->ch.b * src_ca);
+        return;
+    }
+    
+    if (dst_cf == scui_pixel_cf_bmp8565 &&
+        src_cf == scui_pixel_cf_bmp8565) {
+        scui_color8565_t *dst_c = dst_p;
+        scui_color8565_t *src_c = src_p;
+        
+        scui_color_wt_t src_ca = scui_alpha_mix(src_c->ch.a, src_a);
+        scui_color_wt_t dst_ca =  0xFF - src_ca;
+        if (src_ca == 0x00)
+            return;
+        
+        dst_c->ch.a = 0xFF - scui_alpha_mix(dst_ca, 0xFF - dst_c->ch.a);
+        dst_c->ch.r = SCUI_DIV_0xFF(dst_c->ch.r * dst_ca + src_c->ch.r * src_ca);
+        dst_c->ch.g = SCUI_DIV_0xFF(dst_c->ch.g * dst_ca + src_c->ch.g * src_ca);
+        dst_c->ch.b = SCUI_DIV_0xFF(dst_c->ch.b * dst_ca + src_c->ch.b * src_ca);
+        return;
+    }
+    
+    if (dst_cf == scui_pixel_cf_bmp8565 &&
+        src_cf == scui_pixel_cf_bmp8888) {
+        scui_color8565_t *dst_c = dst_p;
+        scui_color8888_t *src_c = src_p;
+        
+        scui_color_wt_t src_ca = scui_alpha_mix(src_c->ch.a, src_a);
+        scui_color_wt_t dst_ca =  0xFF - src_ca;
+        if (src_ca == 0x00)
+            return;
+        
+        dst_c->ch.a = 0xFF - scui_alpha_mix(dst_ca, 0xFF - dst_c->ch.a);
+        dst_c->ch.r = SCUI_DIV_0xFF((dst_c->ch.r << 3) * dst_ca + src_c->ch.r * src_ca) >> 3;
+        dst_c->ch.g = SCUI_DIV_0xFF((dst_c->ch.g << 2) * dst_ca + src_c->ch.g * src_ca) >> 2;
+        dst_c->ch.b = SCUI_DIV_0xFF((dst_c->ch.b << 3) * dst_ca + src_c->ch.b * src_ca) >> 3;
         return;
     }
     

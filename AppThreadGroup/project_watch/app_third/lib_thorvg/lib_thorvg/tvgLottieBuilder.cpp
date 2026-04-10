@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include <cstring>
 #include <algorithm>
@@ -182,8 +182,8 @@ void LottieBuilder::updateTransform(LottieGroup* parent, LottieObject** child, f
 
     if (parent->mergeable()) {
         if (!ctx->transform) {
-        	ctx->transform = (Matrix*)SCUI_malloc(sizeof(Matrix));
-            SCUI_ASSERT_MALLOC(ctx->transform);
+        	ctx->transform = (Matrix*)scui_draw_thorvg_alloc(sizeof(Matrix));
+            scui_draw_thorvg_assert(ctx->transform);
         }
         _updateTransform(transform, frameNo, false, *ctx->transform, opacity, exps);
         return;
@@ -1439,5 +1439,5 @@ void LottieBuilder::build(LottieComposition* comp)
     comp->root->scene->clip(std::move(clip));
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

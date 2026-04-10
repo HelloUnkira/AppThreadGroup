@@ -100,8 +100,8 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
         scui_coord_t src_ofs_iy = scui_max(src_clip->y - margin, 0) + idx_line;
         scui_coord_t src_ofs_ix = scui_max(src_clip->x - margin, 0) + idx_item;
         bool bit = qrcodegen_getModule(qrcode, src_ofs_ix / scale, src_ofs_iy / scale);
-        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                            dst_surface->format, bit ? &pixel_l : &pixel_d, src_alpha);
+        scui_pixel_mix_with(dst_surface->format, dst_ofs,
+            dst_surface->format, bit ? &pixel_l : &pixel_d, src_alpha);
         
         SCUI_ASSERT(dst_ofs < dst_surface->pixel + dst_line * dst_surface->ver_res);
     }
@@ -183,8 +183,8 @@ void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc)
         uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
         
         bool bit = out_buf[scui_map(idx_item, 0, draw_area.w, 0, barcode_w)];
-        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                            dst_surface->format, bit ? &pixel_l : &pixel_d, src_alpha);
+        scui_pixel_mix_with(dst_surface->format, dst_ofs,
+            dst_surface->format, bit ? &pixel_l : &pixel_d, src_alpha);
     }
     
     over:

@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 struct Vertex
 {
@@ -831,16 +831,16 @@ static AASpans* _AASpans(float ymin, float ymax, const SwImage* image, const SwB
 
     if (!_arrange(image, region, yStart, yEnd)) return nullptr;
 
-    auto aaSpans = static_cast<AASpans*>(SCUI_malloc(sizeof(AASpans)));
-    SCUI_ASSERT_MALLOC(aaSpans);
+    auto aaSpans = static_cast<AASpans*>(scui_draw_thorvg_alloc(sizeof(AASpans)));
+    scui_draw_thorvg_assert(aaSpans);
     aaSpans->yStart = yStart;
     aaSpans->yEnd = yEnd;
 
     //Initialize X range
     auto height = std::abs(yEnd - yStart);
 
-    aaSpans->lines = static_cast<AALine*>(SCUI_malloc(height * sizeof(AALine)));
-    SCUI_ASSERT_MALLOC(aaSpans->lines);
+    aaSpans->lines = static_cast<AALine*>(scui_draw_thorvg_alloc(height * sizeof(AALine)));
+    scui_draw_thorvg_assert(aaSpans->lines);
 
     for (int32_t i = 0; i < height; i++) {
         aaSpans->lines[i].x[0] = INT32_MAX;
@@ -1096,8 +1096,8 @@ static bool _apply(SwSurface* surface, AASpans* aaSpans)
         y++;
     }
 
-    SCUI_free(aaSpans->lines);
-    SCUI_free(aaSpans);
+    scui_draw_thorvg_free(aaSpans->lines);
+    scui_draw_thorvg_free(aaSpans);
 
     return true;
 }
@@ -1165,5 +1165,5 @@ static bool _rasterTexmapPolygon(SwSurface* surface, const SwImage* image, const
     return _apply(surface, aaSpans);
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

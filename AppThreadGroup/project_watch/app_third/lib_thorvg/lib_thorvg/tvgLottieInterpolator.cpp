@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -130,7 +130,7 @@ float LottieInterpolator::progress(float t)
 
 void LottieInterpolator::set(const char* key, Point& inTangent, Point& outTangent)
 {
-    this->key = SCUI_strdup(key);
+    this->key = scui_draw_thorvg_strdup(key);
     this->inTangent = inTangent;
     this->outTangent = outTangent;
 
@@ -142,5 +142,5 @@ void LottieInterpolator::set(const char* key, Point& inTangent, Point& outTangen
     }
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

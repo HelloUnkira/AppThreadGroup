@@ -291,15 +291,14 @@ void scui_pixel_by_color(scui_pixel_cf_t cf, void *pixel, scui_color8888_t color
 void scui_pixel_mix_alpha(scui_pixel_cf_t cf, void *pixel, scui_alpha_t alpha);
 
 /*@brief 像素点融合(同步作用透明度)
- *@param cf_1    像素点格式
- *@param pixel_1 像素点
- *@param alpha_1 透明度
- *@param cf_2    像素点格式
- *@param pixel_2 像素点
- *@param alpha_2 透明度
+ *@param dst_cf 目标像素点格式
+ *@param dst_p  目标像素点
+ *@param src_cf 源像素点格式
+ *@param src_p  源像素点
+ *@param src_a  源像素点透明度
  */
-void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha_1,
-                         scui_pixel_cf_t cf_2, void *pixel_2, scui_alpha_t alpha_2);
+void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
+                         scui_pixel_cf_t src_cf, void *src_p, scui_alpha_t src_a);
 
 /*@brief 像素点生成灰度值
  *@param cf    像素点格式

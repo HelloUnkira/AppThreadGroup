@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_LOTTIE_BUILDER_H_
 #define _TVG_LOTTIE_BUILDER_H_
@@ -74,7 +74,7 @@ struct RenderContext
     ~RenderContext()
     {
         PP(propagator)->unref();
-        SCUI_free(transform);
+        scui_draw_thorvg_free(transform);
         delete(roundness);
         delete(offsetPath);
     }
@@ -136,5 +136,5 @@ private:
 
 #endif //_TVG_LOTTIE_BUILDER_H
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

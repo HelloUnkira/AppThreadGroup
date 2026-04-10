@@ -260,7 +260,7 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
             string_maker.args.color.color_s.full    = 0xFF404040;
             string_maker.args.color.color_e.full    = 0xFF404040;
             string_maker.args.color.filter          = true;
-            string_maker.args.line_width            = 1;
+            string_maker.args.line_width            = 2;
             string_maker.args.line_under            = 1;
             string_maker.args.line_delete           = 1;
             string_maker.args.lang                  = SCUI_MULTI_LANG_TYPE_A;

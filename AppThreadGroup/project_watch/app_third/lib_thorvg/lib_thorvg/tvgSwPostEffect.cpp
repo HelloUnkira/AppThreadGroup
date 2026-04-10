@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgSwCommon.h"
 
@@ -131,8 +131,8 @@ static int _gaussianInit(int* kernel, float sigma, int level)
 
 bool effectGaussianPrepare(RenderEffectGaussian* params)
 {
-    auto data = (SwGaussianBlur*)SCUI_malloc(sizeof(SwGaussianBlur));
-    SCUI_ASSERT_MALLOC(data);
+    auto data = (SwGaussianBlur*)scui_draw_thorvg_alloc(sizeof(SwGaussianBlur));
+    scui_draw_thorvg_assert(data);
 
     //compute box kernel sizes
     data->level = int(SwGaussianBlur::MAX_LEVEL * ((params->quality - 1) * 0.01f)) + 1;
@@ -141,7 +141,7 @@ bool effectGaussianPrepare(RenderEffectGaussian* params)
     //skip, if the parameters are invalid.
     if (extends == 0) {
         params->invalid = true;
-        SCUI_free(data);
+        scui_draw_thorvg_free(data);
         return false;
     }
 
@@ -211,5 +211,5 @@ bool effectGaussianBlur(SwImage& image, SwImage& buffer, const SwBBox& bbox, con
     return true;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

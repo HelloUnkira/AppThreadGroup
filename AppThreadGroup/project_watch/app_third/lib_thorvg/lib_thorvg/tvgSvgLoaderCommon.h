@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_SVG_LOADER_COMMON_H_
 #define _TVG_SVG_LOADER_COMMON_H_
@@ -459,11 +459,11 @@ struct SvgStyleGradient
     void clear()
     {
         stops.reset();
-        SCUI_free(transform);
-        SCUI_free(radial);
-        SCUI_free(linear);
-        SCUI_free(ref);
-        SCUI_free(id);
+        scui_draw_thorvg_free(transform);
+        scui_draw_thorvg_free(radial);
+        scui_draw_thorvg_free(linear);
+        scui_draw_thorvg_free(ref);
+        scui_draw_thorvg_free(id);
     }
 };
 
@@ -590,5 +590,5 @@ struct Box
 
 #endif
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

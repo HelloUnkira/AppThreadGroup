@@ -71,6 +71,7 @@ void scui_engine_ready(void)
 {
     scui_mem_ready(scui_engine_oom_hit);
     scui_draw_task_ready();
+    scui_draw_graph_ready();
     
     scui_disp_ready();
     scui_indev_ready();

@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 /*
  *                   The FreeType Project LICENSE
@@ -359,8 +359,8 @@ static void _horizLine(RleWorker& rw, SwCoord x, SwCoord y, SwCoord area, SwCoor
         auto newSize = (rle->size > 0) ? (rle->size * 2) : 256;
         if (rle->alloc < newSize) {
             rle->alloc = newSize;
-            rle->spans = static_cast<SwSpan*>(SCUI_realloc(rle->spans, rle->alloc * sizeof(SwSpan)));
-            SCUI_ASSERT_MALLOC(rle->spans);
+            rle->spans = static_cast<SwSpan*>(scui_draw_thorvg_realloc(rle->spans, rle->alloc * sizeof(SwSpan)));
+            scui_draw_thorvg_assert(rle->spans);
         }
     }
 
@@ -843,7 +843,7 @@ static SwSpan* _intersectSpansRect(const SwBBox *bbox, const SwRle *targetRle, S
 
 void _replaceClipSpan(SwRle *rle, SwSpan* clippedSpans, uint32_t size)
 {
-    SCUI_free(rle->spans);
+    scui_draw_thorvg_free(rle->spans);
     rle->spans = clippedSpans;
     rle->size = rle->alloc = size;
 }
@@ -882,8 +882,8 @@ SwRle* rleRender(SwRle* rle, const SwOutline* outline, const SwBBox& renderRegio
     rw.antiAlias = antiAlias;
 
     if (!rle) {
-    	rw.rle = reinterpret_cast<SwRle*>(SCUI_zalloc(sizeof(SwRle)));
-        SCUI_ASSERT_MALLOC(rw.rle);
+    	rw.rle = reinterpret_cast<SwRle*>(scui_draw_thorvg_zalloc(sizeof(SwRle)));
+        scui_draw_thorvg_assert(rw.rle);
     }
     else rw.rle = rle;
 
@@ -970,7 +970,7 @@ SwRle* rleRender(SwRle* rle, const SwOutline* outline, const SwBBox& renderRegio
     return rw.rle;
 
 error:
-    SCUI_free(rw.rle);
+    scui_draw_thorvg_free(rw.rle);
     return nullptr;
 }
 
@@ -980,10 +980,10 @@ SwRle* rleRender(const SwBBox* bbox)
     auto width = static_cast<uint16_t>(bbox->max.x - bbox->min.x);
     auto height = static_cast<uint16_t>(bbox->max.y - bbox->min.y);
 
-    auto rle = static_cast<SwRle*>(SCUI_malloc(sizeof(SwRle)));
-    SCUI_ASSERT_MALLOC(rle);
-    rle->spans = static_cast<SwSpan*>(SCUI_malloc(sizeof(SwSpan) * height));
-    SCUI_ASSERT_MALLOC(rle->spans);
+    auto rle = static_cast<SwRle*>(scui_draw_thorvg_alloc(sizeof(SwRle)));
+    scui_draw_thorvg_assert(rle);
+    rle->spans = static_cast<SwSpan*>(scui_draw_thorvg_alloc(sizeof(SwSpan) * height));
+    scui_draw_thorvg_assert(rle->spans);
     rle->size = height;
     rle->alloc = height;
 
@@ -1009,8 +1009,8 @@ void rleReset(SwRle* rle)
 void rleFree(SwRle* rle)
 {
     if (!rle) return;
-    if (rle->spans) SCUI_free(rle->spans);
-    SCUI_free(rle);
+    if (rle->spans) scui_draw_thorvg_free(rle->spans);
+    scui_draw_thorvg_free(rle);
 }
 
 
@@ -1018,8 +1018,8 @@ void rleClip(SwRle *rle, const SwRle *clip)
 {
     if (rle->size == 0 || clip->size == 0) return;
     auto spanCnt = rle->size > clip->size ? rle->size : clip->size;
-    auto spans = static_cast<SwSpan*>(SCUI_malloc(sizeof(SwSpan) * (spanCnt)));
-    SCUI_ASSERT_MALLOC(spans);
+    auto spans = static_cast<SwSpan*>(scui_draw_thorvg_alloc(sizeof(SwSpan) * (spanCnt)));
+    scui_draw_thorvg_assert(spans);
     auto spansEnd = _intersectSpansRegion(clip, rle, spans, spanCnt);
 
     _replaceClipSpan(rle, spans, spansEnd - spans);
@@ -1031,8 +1031,8 @@ void rleClip(SwRle *rle, const SwRle *clip)
 void rleClip(SwRle *rle, const SwBBox* clip)
 {
     if (rle->size == 0) return;
-    auto spans = static_cast<SwSpan*>(SCUI_malloc(sizeof(SwSpan) * (rle->size)));
-    SCUI_ASSERT_MALLOC(spans);
+    auto spans = static_cast<SwSpan*>(scui_draw_thorvg_alloc(sizeof(SwSpan) * (rle->size)));
+    scui_draw_thorvg_assert(spans);
     auto spansEnd = _intersectSpansRect(clip, rle, spans, rle->size);
 
     _replaceClipSpan(rle, spans, spansEnd - spans);
@@ -1040,5 +1040,5 @@ void rleClip(SwRle *rle, const SwBBox* clip)
     TVGLOG("SW_ENGINE", "Using Box Clipping!");
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

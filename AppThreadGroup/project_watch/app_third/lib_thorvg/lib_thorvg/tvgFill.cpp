@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgFill.h"
 
@@ -103,8 +103,8 @@ Result Fill::colorStops(const ColorStop* colorStops, uint32_t cnt) noexcept
     }
 
     if (pImpl->cnt != cnt) {
-        pImpl->colorStops = static_cast<ColorStop*>(SCUI_realloc(pImpl->colorStops, cnt * sizeof(ColorStop)));
-        SCUI_ASSERT_MALLOC(pImpl->colorStops);
+        pImpl->colorStops = static_cast<ColorStop*>(scui_draw_thorvg_realloc(pImpl->colorStops, cnt * sizeof(ColorStop)));
+        scui_draw_thorvg_assert(pImpl->colorStops);
     }
 
     pImpl->cnt = cnt;
@@ -139,8 +139,8 @@ FillSpread Fill::spread() const noexcept
 Result Fill::transform(const Matrix& m) noexcept
 {
     if (!pImpl->transform) {
-        pImpl->transform = static_cast<Matrix*>(SCUI_malloc(sizeof(Matrix)));
-        SCUI_ASSERT_MALLOC(pImpl->transform);
+        pImpl->transform = static_cast<Matrix*>(scui_draw_thorvg_alloc(sizeof(Matrix)));
+        scui_draw_thorvg_assert(pImpl->transform);
     }
     *pImpl->transform = m;
     return Result::Success;
@@ -263,5 +263,5 @@ Type LinearGradient::type() const noexcept
     return Type::LinearGradient;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

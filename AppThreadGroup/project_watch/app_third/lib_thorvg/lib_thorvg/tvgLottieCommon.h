@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_LOTTIE_COMMON_
 #define _TVG_LOTTIE_COMMON_
@@ -100,5 +100,5 @@ static inline RGB24 operator*(const RGB24& lhs, float rhs)
 
 #endif //_TVG_LOTTIE_COMMON_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

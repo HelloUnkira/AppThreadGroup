@@ -480,8 +480,8 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
                         continue;
                 }
                 
-                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
-                                    src_surface->format, src_ofs, src_surface->alpha);
+                scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                    src_surface->format, src_ofs, src_surface->alpha);
             }
         }
     }
@@ -521,12 +521,10 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
                 if (grey_table[grey_idx] == 0x00) {
                     uint32_t *pixel_1 = &grey_table[0];
                     uint32_t *pixel_2 = &grey_table[grey_len - 1];
-                    scui_alpha_t alpha_1 = grey;
-                    scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
                     
                     grey_table[grey_idx] = grey_table[0];
-                    scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx], alpha_1,
-                                        dst_surface->format, &grey_table[grey_len - 1], alpha_2);
+                    scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx],
+                        dst_surface->format, &grey_table[grey_len - 1], scui_alpha_cover - grey);
                 }
                 
                 scui_color_wt_t grey_color = grey_table[grey_idx];
@@ -536,8 +534,8 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
                     continue;
                 
                 scui_alpha_t alpha = (uint32_t)src_surface->alpha * grey / scui_alpha_cover;
-                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                    dst_surface->format, &grey_table[grey_idx], alpha);
+                scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                    dst_surface->format, &grey_table[grey_idx], alpha);
             }
         }
         SCUI_MEM_FREE(grey_table);

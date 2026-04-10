@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 /*
  * Lempel–Ziv–Welch (LZW) encoder/decoder by Guilherme R. Lampert(guilherme.ronaldo.lampert@gmail.com)
@@ -111,8 +111,8 @@ struct BitStreamWriter
 
     uint8_t* allocBytes(const int bytesWanted, uint8_t * oldPtr, const int oldSize)
     {
-        auto newMemory = static_cast<uint8_t *>(SCUI_malloc(bytesWanted));
-        SCUI_ASSERT_MALLOC(newMemory);
+        auto newMemory = static_cast<uint8_t *>(scui_draw_thorvg_alloc(bytesWanted));
+        scui_draw_thorvg_assert(newMemory);
         memset(newMemory, 0, bytesWanted);
 
         if (oldPtr) {
@@ -349,8 +349,8 @@ uint8_t* lzwDecode(const uint8_t* compressed, uint32_t compressedSizeBytes, uint
     int firstByte = 0;
     int bytesDecoded = 0;
     int codeBitsWidth = StartBits;
-    auto uncompressed = (uint8_t*) SCUI_malloc(sizeof(uint8_t) * uncompressedSizeBytes);
-    SCUI_ASSERT_MALLOC(uncompressed);
+    auto uncompressed = (uint8_t*) scui_draw_thorvg_alloc(sizeof(uint8_t) * uncompressedSizeBytes);
+    scui_draw_thorvg_assert(uncompressed);
     auto ptr = uncompressed;
 
     /* We'll reconstruct the dictionary based on the bit stream codes.
@@ -446,8 +446,8 @@ size_t b64Decode(const char* encoded, const size_t len, char** decoded)
     if (!decoded || !encoded || len == 0) return 0;
 
     auto reserved = 3 * (1 + (len >> 2)) + 1;
-    auto output = static_cast<char*>(SCUI_malloc(reserved * sizeof(char)));
-    SCUI_ASSERT_MALLOC(output);
+    auto output = static_cast<char*>(scui_draw_thorvg_alloc(reserved * sizeof(char)));
+    scui_draw_thorvg_assert(output);
     if (!output) return 0;
     output[reserved - 1] = '\0';
 
@@ -496,5 +496,5 @@ unsigned long djb2Encode(const char* str)
 
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

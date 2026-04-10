@@ -690,18 +690,18 @@ RAPIDJSON_NAMESPACE_END
 
 ///////////////////////////////////////////////////////////////////////////////
 // malloc/realloc/free
-#include "../../../stdlib/SCUI_mem.h"
+#include "scui_draw_thorvg.h"
 #ifndef RAPIDJSON_MALLOC
 ///! customization point for global \c malloc
-#define RAPIDJSON_MALLOC(size) SCUI_malloc(size)
+#define RAPIDJSON_MALLOC(size) scui_draw_thorvg_alloc(size)
 #endif
 #ifndef RAPIDJSON_REALLOC
 ///! customization point for global \c realloc
-#define RAPIDJSON_REALLOC(ptr, new_size) SCUI_realloc(ptr, new_size)
+#define RAPIDJSON_REALLOC(ptr, new_size) scui_draw_thorvg_realloc(ptr, new_size)
 #endif
 #ifndef RAPIDJSON_FREE
 ///! customization point for global \c free
-#define RAPIDJSON_FREE(ptr) SCUI_free(ptr)
+#define RAPIDJSON_FREE(ptr) scui_draw_thorvg_free(ptr)
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////

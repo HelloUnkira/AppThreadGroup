@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgMath.h"
 #include "tvgPaint.h"
@@ -366,7 +366,7 @@ void Paint::Impl::reset()
 
     if (compData) {
         if (P(compData->target)->unref() == 0) delete(compData->target);
-        SCUI_free(compData);
+        scui_draw_thorvg_free(compData);
         compData = nullptr;
     }
 
@@ -530,5 +530,5 @@ Result Paint::blend(BlendMethod method) noexcept
     return Result::Success;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

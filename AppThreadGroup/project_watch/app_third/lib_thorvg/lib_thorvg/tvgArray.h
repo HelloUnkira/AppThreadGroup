@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_ARRAY_H_
 #define _TVG_ARRAY_H_
@@ -59,8 +59,8 @@ struct Array
     {
         if (count + 1 > reserved) {
             reserved = count + (count + 2) / 2;
-            data = static_cast<T*>(SCUI_realloc(data, sizeof(T) * reserved));
-            SCUI_ASSERT_MALLOC(data);
+            data = static_cast<T*>(scui_draw_thorvg_realloc(data, sizeof(T) * reserved));
+            scui_draw_thorvg_assert(data);
         }
         data[count++] = element;
     }
@@ -77,8 +77,8 @@ struct Array
     {
         if (size > reserved) {
             reserved = size;
-            data = static_cast<T*>(SCUI_realloc(data, sizeof(T) * reserved));
-            SCUI_ASSERT_MALLOC(data);
+            data = static_cast<T*>(scui_draw_thorvg_realloc(data, sizeof(T) * reserved));
+            scui_draw_thorvg_assert(data);
         }
         return true;
     }
@@ -145,7 +145,7 @@ struct Array
 
     void reset()
     {
-        SCUI_free(data);
+        scui_draw_thorvg_free(data);
         data = nullptr;
         count = reserved = 0;
     }
@@ -175,7 +175,7 @@ struct Array
 
     ~Array()
     {
-        SCUI_free(data);
+        scui_draw_thorvg_free(data);
     }
 
 private:
@@ -209,5 +209,5 @@ private:
 
 #endif //_TVG_ARRAY_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

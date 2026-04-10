@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgLottieLoader.h"
 #include "tvgLottieModel.h"
@@ -57,10 +57,10 @@ void LottieLoader::run(unsigned tid)
 void LottieLoader::release()
 {
     if (copy) {
-        SCUI_free((char*)content);
+        scui_draw_thorvg_free((char*)content);
         content = nullptr;
     }
-    SCUI_free(dirName);
+    scui_draw_thorvg_free(dirName);
     dirName = nullptr;
 }
 
@@ -201,14 +201,14 @@ bool LottieLoader::header()
 bool LottieLoader::open(const char* data, uint32_t size, bool copy)
 {
     if (copy) {
-        content = (char*)SCUI_malloc(size + 1);
-        SCUI_ASSERT_MALLOC(content);
+        content = (char*)scui_draw_thorvg_alloc(size + 1);
+        scui_draw_thorvg_assert((void *)content);
         if (!content) return false;
         memcpy((char*)content, data, size);
         const_cast<char*>(content)[size] = '\0';
     } else content = data;
 
-    this->dirName = SCUI_strdup(".");
+    this->dirName = scui_draw_thorvg_strdup(".");
 
     this->size = size;
     this->copy = copy;
@@ -230,8 +230,8 @@ bool LottieLoader::open(const string& path)
         return false;
     }
 
-    auto content = (char*)(SCUI_malloc(sizeof(char) * size + 1));
-    SCUI_ASSERT_MALLOC(content);
+    auto content = (char*)(scui_draw_thorvg_alloc(sizeof(char) * size + 1));
+    scui_draw_thorvg_assert(content);
     fseek(f, 0, SEEK_SET);
     auto ret = fread(content, sizeof(char), size, f);
     if (ret < size) {
@@ -300,7 +300,7 @@ bool LottieLoader::override(const char* slot)
     //override slots
     if (slot) {
         //Copy the input data because the JSON parser will encode the data immediately.
-        auto temp = SCUI_strdup(slot);
+        auto temp = scui_draw_thorvg_strdup(slot);
 
         //parsing slot json
         LottieParser parser(temp, dirName);
@@ -317,7 +317,7 @@ bool LottieLoader::override(const char* slot)
         }
 
         if (idx < 1) success = false;
-        SCUI_free(temp);
+        scui_draw_thorvg_free(temp);
         rebuild = overridden = success;
     //reset slots
     } else if (overridden) {
@@ -426,5 +426,5 @@ bool LottieLoader::ready()
     return false;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

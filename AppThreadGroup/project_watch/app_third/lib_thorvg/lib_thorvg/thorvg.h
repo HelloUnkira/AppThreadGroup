@@ -1,9 +1,9 @@
 #ifndef _THORVG_H_
 #define _THORVG_H_
 
-#include "thorvg_scui.h"
+#include "scui_draw_thorvg.h"
 
-#if SCUI_USE_THORVG_SRC
+#if SCUI_DRAW_USE_THORVG_SRC
 #define TVG_BUILD 1
 
 
@@ -2182,5 +2182,5 @@ std::unique_ptr<T> cast(Fill* fill)
 
 #endif //_THORVG_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

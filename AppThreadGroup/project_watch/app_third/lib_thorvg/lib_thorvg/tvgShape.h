@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_SHAPE_H_
 #define _TVG_SHAPE_H_
@@ -310,17 +310,17 @@ struct Shape::Impl
 
         //Reset dash
         if (!pattern && cnt == 0) {
-        	SCUI_free(rs.stroke->dashPattern);
+        	scui_draw_thorvg_free(rs.stroke->dashPattern);
             rs.stroke->dashPattern = nullptr;
         } else {
             if (!rs.stroke) rs.stroke = new RenderStroke();
             if (rs.stroke->dashCnt != cnt) {
-            	SCUI_free(rs.stroke->dashPattern);
+            	scui_draw_thorvg_free(rs.stroke->dashPattern);
                 rs.stroke->dashPattern = nullptr;
             }
             if (!rs.stroke->dashPattern) {
-                rs.stroke->dashPattern = static_cast<float*>(SCUI_malloc(sizeof(float) * cnt));
-                SCUI_ASSERT_MALLOC(rs.stroke->dashPattern);
+                rs.stroke->dashPattern = static_cast<float*>(scui_draw_thorvg_alloc(sizeof(float) * cnt));
+                scui_draw_thorvg_assert(rs.stroke->dashPattern);
                 if (!rs.stroke->dashPattern) return Result::FailedAllocation;
             }
             for (uint32_t i = 0; i < cnt; ++i) {
@@ -412,5 +412,5 @@ struct Shape::Impl
 
 #endif //_TVG_SHAPE_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

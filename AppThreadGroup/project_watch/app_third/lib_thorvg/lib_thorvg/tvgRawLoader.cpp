@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include <fstream>
 #include <string.h>
@@ -44,7 +44,7 @@ RawLoader::RawLoader() : ImageLoader(FileType::Raw)
 
 RawLoader::~RawLoader()
 {
-    if (copy) SCUI_free(surface.buf32);
+    if (copy) scui_draw_thorvg_free(surface.buf32);
 }
 
 
@@ -59,8 +59,8 @@ bool RawLoader::open(const uint32_t* data, uint32_t w, uint32_t h, bool copy)
     this->copy = copy;
 
     if (copy) {
-        surface.buf32 = (uint32_t*)SCUI_malloc(sizeof(uint32_t) * w * h);
-        SCUI_ASSERT_MALLOC(surface.buf32);
+        surface.buf32 = (uint32_t*)scui_draw_thorvg_alloc(sizeof(uint32_t) * w * h);
+        scui_draw_thorvg_assert(surface.buf32);
         if (!surface.buf32) return false;
         memcpy((void*)surface.buf32, data, sizeof(uint32_t) * w * h);
     }
@@ -85,5 +85,5 @@ bool RawLoader::read()
     return true;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 /*
  * Copyright (c) 2020 Samsung Electronics Co., Ltd. All rights reserved.
@@ -202,5 +202,5 @@ struct LookaheadParserHandler
 
 #endif //_TVG_LOTTIE_PARSER_HANDLER_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

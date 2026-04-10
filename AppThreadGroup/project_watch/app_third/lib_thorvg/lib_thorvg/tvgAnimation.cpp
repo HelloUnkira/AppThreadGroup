@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgFrameModule.h"
 #include "tvgAnimation.h"
@@ -128,5 +128,5 @@ unique_ptr<Animation> Animation::gen() noexcept
     return unique_ptr<Animation>(new Animation);
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

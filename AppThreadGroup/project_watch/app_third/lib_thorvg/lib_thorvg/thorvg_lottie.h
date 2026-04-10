@@ -18,8 +18,8 @@ namespace tvg
  * @since 0.15
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 class TVG_API LottieAnimation final : public Animation
 {
 public:
@@ -96,5 +96,5 @@ public:
 
 #endif //_THORVG_LOTTIE_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

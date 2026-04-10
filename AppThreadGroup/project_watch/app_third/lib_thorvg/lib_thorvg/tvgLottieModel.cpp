@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgMath.h"
 #include "tvgPaint.h"
@@ -133,8 +133,8 @@ void LottieTextRange::range(float frameNo, float totalLen, float& start, float& 
 
 LottieImage::~LottieImage()
 {
-    SCUI_free(b64Data);
-    SCUI_free(mimeType);
+    scui_draw_thorvg_free(b64Data);
+    scui_draw_thorvg_free(mimeType);
 }
 
 
@@ -423,7 +423,7 @@ LottieLayer::~LottieLayer()
     }
 
     delete(transform);
-    SCUI_free(name);
+    scui_draw_thorvg_free(name);
 }
 
 
@@ -473,13 +473,13 @@ LottieComposition::~LottieComposition()
     if (!initiated && root) delete(root->scene);
 
     delete(root);
-    SCUI_free(version);
-    SCUI_free(name);
+    scui_draw_thorvg_free(version);
+    scui_draw_thorvg_free(name);
 
     //delete interpolators
     for (auto i = interpolators.begin(); i < interpolators.end(); ++i) {
-    	SCUI_free((*i)->key);
-    	SCUI_free(*i);
+    	scui_draw_thorvg_free((*i)->key);
+    	scui_draw_thorvg_free(*i);
     }
 
     //delete assets
@@ -502,5 +502,5 @@ LottieComposition::~LottieComposition()
     }
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

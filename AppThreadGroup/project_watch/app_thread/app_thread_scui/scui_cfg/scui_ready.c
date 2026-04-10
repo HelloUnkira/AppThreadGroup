@@ -17,6 +17,14 @@ static void scui_stat_info(void)
     float graph_used = scui_mem_size_used(scui_mem_type_graph);
     SCUI_LOG_INFO("scui graph occupy: %.2fM", graph_used / 1024.0f / 1024.0f);
     
+    /* 矢量绘图引擎资源 */
+    #if SCUI_DRAW_USE_THORVG
+    scui_coord_t tvg_surface_byte = scui_pixel_bits(scui_pixel_cf_bmp8888) / 8;
+    scui_coord_t tvg_surface_rem  = sizeof(scui_color_wt_t) - tvg_surface_byte;
+    scui_multi_t tvg_surface_size = tvg_surface_byte * SCUI_HOR_RES * SCUI_VER_RES + tvg_surface_rem;
+    SCUI_LOG_INFO("scui graph thorvg occupy: %.2fM", (float)tvg_surface_size / 1024.0f / 1024.0f);
+    #endif
+    
     SCUI_LOG_INFO("");
     SCUI_LOG_INFO("scui draw dsc size:%4d",   sizeof(scui_draw_dsc_t));
     SCUI_LOG_INFO("scui draw dsc occupy:%4d", sizeof(scui_draw_dsc_t) * SCUI_DRAW_TASK_DSC_NUM);

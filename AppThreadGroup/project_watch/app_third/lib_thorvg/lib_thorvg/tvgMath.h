@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_MATH_H_
 #define _TVG_MATH_H_
@@ -308,5 +308,5 @@ uint8_t lerp(const uint8_t &start, const uint8_t &end, float t);
 
 #endif //_TVG_MATH_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgIteratorAccessor.h"
 #include "tvgCompressor.h"
@@ -110,5 +110,5 @@ unique_ptr<Accessor> Accessor::gen() noexcept
     return unique_ptr<Accessor>(new Accessor);
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

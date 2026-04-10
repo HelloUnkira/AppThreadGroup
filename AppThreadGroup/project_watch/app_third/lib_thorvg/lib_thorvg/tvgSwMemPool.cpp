@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #include "tvgSwCommon.h"
 
@@ -84,14 +84,14 @@ SwMpool* mpoolInit(uint32_t threads)
 {
     auto allocSize = threads + 1;
 
-    auto mpool = static_cast<SwMpool*>(SCUI_zalloc(sizeof(SwMpool)));
-    SCUI_ASSERT_MALLOC(mpool);
-    mpool->outline = static_cast<SwOutline*>(SCUI_zalloc(sizeof(SwOutline) * allocSize));
-    SCUI_ASSERT_MALLOC(mpool->outline);
-    mpool->strokeOutline = static_cast<SwOutline*>(SCUI_zalloc(sizeof(SwOutline) * allocSize));
-    SCUI_ASSERT_MALLOC(mpool->strokeOutline);
-    mpool->dashOutline = static_cast<SwOutline*>(SCUI_zalloc(sizeof(SwOutline) * allocSize));
-    SCUI_ASSERT_MALLOC(mpool->dashOutline);
+    auto mpool = static_cast<SwMpool*>(scui_draw_thorvg_zalloc(sizeof(SwMpool)));
+    scui_draw_thorvg_assert(mpool);
+    mpool->outline = static_cast<SwOutline*>(scui_draw_thorvg_zalloc(sizeof(SwOutline) * allocSize));
+    scui_draw_thorvg_assert(mpool->outline);
+    mpool->strokeOutline = static_cast<SwOutline*>(scui_draw_thorvg_zalloc(sizeof(SwOutline) * allocSize));
+    scui_draw_thorvg_assert(mpool->strokeOutline);
+    mpool->dashOutline = static_cast<SwOutline*>(scui_draw_thorvg_zalloc(sizeof(SwOutline) * allocSize));
+    scui_draw_thorvg_assert(mpool->dashOutline);
     mpool->allocSize = allocSize;
 
     return mpool;
@@ -127,13 +127,13 @@ bool mpoolTerm(SwMpool* mpool)
 
     mpoolClear(mpool);
 
-    SCUI_free(mpool->outline);
-    SCUI_free(mpool->strokeOutline);
-    SCUI_free(mpool->dashOutline);
-    SCUI_free(mpool);
+    scui_draw_thorvg_free(mpool->outline);
+    scui_draw_thorvg_free(mpool->strokeOutline);
+    scui_draw_thorvg_free(mpool->dashOutline);
+    scui_draw_thorvg_free(mpool);
 
     return true;
 }
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 

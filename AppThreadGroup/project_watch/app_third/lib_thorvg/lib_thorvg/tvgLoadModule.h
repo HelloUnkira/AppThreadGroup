@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#include "thorvg_scui.h"
-#if SCUI_USE_THORVG_SRC
+#include "scui_draw_thorvg.h"
+#if SCUI_DRAW_USE_THORVG_SRC
 
 #ifndef _TVG_LOAD_MODULE_H_
 #define _TVG_LOAD_MODULE_H_
@@ -48,7 +48,7 @@ struct LoadModule
     LoadModule(FileType type) : type(type) {}
     virtual ~LoadModule()
     {
-        if (pathcache) SCUI_free(hashpath);
+        if (pathcache) scui_draw_thorvg_free(hashpath);
     }
 
     virtual bool open(const string& path) { return false; }
@@ -110,5 +110,5 @@ struct FontLoader : LoadModule
 
 #endif //_TVG_LOAD_MODULE_H_
 
-#endif /* SCUI_USE_THORVG_SRC */
+#endif /* SCUI_DRAW_USE_THORVG_SRC */
 
