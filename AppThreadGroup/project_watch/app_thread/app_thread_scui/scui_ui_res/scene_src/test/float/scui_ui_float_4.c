@@ -59,7 +59,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         for (uint32_t idx = 0; idx < 100; idx++) {
             vlist_min[idx] =  60 + (uint32_t)scui_rand(0xFF) % 40;   //统一底点就是柱状图,否则为股价图
             vlist_max[idx] = 220 - (uint32_t)scui_rand(0xFF) % 40;
-            vlist[idx] = 60 + (uint32_t)scui_rand(0xFF) % ((220 - 60) / 3);
+            vlist[idx] = 60 + (uint32_t)scui_rand(0xFF) % ((220 - 60));
         }
         
         // chart hist
@@ -112,7 +112,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         xchart2_maker.line.offset.y  = 0;
         xchart2_maker.line.number    = 100;
         xchart2_maker.line.height    = xchart2_maker.widget.clip.h - 10;
-        xchart2_maker.line.space     = 2;
+        xchart2_maker.line.space     = 4;
         
         xchart2_maker.widget.style.fully_bg = true;
         xchart2_maker.line.color.color.full = 0xFFFF0000;
@@ -121,8 +121,8 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         for (uint8_t idx = 0; idx < xchart2_maker.line.number; idx++) {
             int32_t angle = scui_map(idx, 0, xchart2_maker.line.number, 0, 360);
             scui_coord_t base = xchart2_maker.line.value_min;
-            scui_coord_t offset = (xchart2_maker.line.value_max - base) / 2;
-            vlist[idx] = base + offset + (scui_rand(100) * offset / 100);
+            scui_coord_t offset = xchart2_maker.line.value_max - base;
+            vlist[idx] = base + scui_rand(100) * offset / 100;
         }
         scui_xchart_line_data(xchart2_handle, vlist);
         

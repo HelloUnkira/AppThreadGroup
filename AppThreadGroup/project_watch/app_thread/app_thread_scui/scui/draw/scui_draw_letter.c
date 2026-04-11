@@ -45,8 +45,6 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
-    if (scui_area_empty(&draw_area))
-        return;
     
     scui_multi_t dst_pixel_ofs = dst_clip_v.y * dst_surface->hor_res + dst_clip_v.x;
     scui_multi_t src_pixel_ofs = src_clip_v.y * src_surface->hor_res + src_clip_v.x;

@@ -7,6 +7,19 @@
 
 #include "scui.h"
 
+scui_draw_graph_t scui_draw_graph = {0};
+
+/*@brief 就绪绘图资源
+ */
+void scui_draw_graph_ready(void)
+{
+    /* 矢量绘图引擎资源 */
+    #if SCUI_DRAW_USE_THORVG
+    void scui_draw_thorvg_ready(void);
+    scui_draw_thorvg_ready();
+    #endif
+}
+
 /*@brief 绘制上下文加速
  *@param draw_dsc 绘制描述符实例
  *@retval 支持:true;不支持:false;

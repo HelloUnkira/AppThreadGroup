@@ -41,13 +41,6 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
     scui_color_wt_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     
-    /* 变成了一个点, 变成了一个区域, 直接填色 */
-    if ((src_pos_1.x == src_pos_2.x && src_pos_1.y == src_pos_2.y) ||
-        (src_pos_1.x == src_pos_2.x || src_pos_1.y == src_pos_2.y)) {
-         scui_draw_sline(draw_dsc);
-         return;
-    }
-    
     #if 1
     /* EmbeddedGUI移植: egui_canvas_draw_line */
     scui_coord_t x1 = src_pos_1.x;
@@ -892,7 +885,7 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
     #endif
 }
 
-/*@brief 圆角矩形绘制
+/*@brief 圆角矩形阴影绘制
  *@param draw_dsc 绘制描述符实例
  */
 static void scui_draw_shadow(scui_draw_dsc_t *draw_dsc)

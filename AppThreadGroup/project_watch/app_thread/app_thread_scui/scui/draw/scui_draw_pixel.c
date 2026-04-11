@@ -7,30 +7,7 @@
 
 #include "scui.h"
 
-scui_draw_graph_t scui_draw_graph = {0};
-
-/*@brief 就绪绘制图形
- */
-void scui_draw_graph_ready(void)
-{
-    /* 矢量绘图引擎资源 */
-    #if SCUI_DRAW_USE_THORVG
-    scui_coord_t tvg_surface_byte = scui_pixel_bits(scui_pixel_cf_bmp8888) / 8;
-    scui_coord_t tvg_surface_rem  = sizeof(scui_color_wt_t) - tvg_surface_byte;
-    scui_multi_t tvg_surface_size = tvg_surface_byte * SCUI_HOR_RES * SCUI_VER_RES + tvg_surface_rem;
-    
-    scui_draw_graph.tvg_surface.pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, tvg_surface_size);
-    scui_draw_graph.tvg_surface.format  = scui_pixel_cf_bmp8888;
-    scui_draw_graph.tvg_surface.hor_res = SCUI_HOR_RES;
-    scui_draw_graph.tvg_surface.ver_res = SCUI_VER_RES;
-    scui_draw_graph.tvg_surface.alpha   = scui_alpha_cover;
-    
-    void scui_draw_thorvg_ready(void);
-    scui_draw_thorvg_ready();
-    #endif
-}
-
-/*@brief 线条绘制(抗锯齿)
+/*@brief 线条绘制(抗锯齿,效果差)
  *@param draw_dsc 绘制描述符实例
  */
 static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
@@ -58,10 +35,14 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
         src_pos_1.y == src_pos_2.y)
         return;
     
-    scui_area_t draw_area = {0};
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
          return;
+    
+    scui_area_t draw_area = {0};
+    draw_area.w = dst_clip_v.w;
+    draw_area.h = dst_clip_v.h;
     
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
@@ -205,10 +186,10 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
     #endif
 }
 
-/*@brief 线条绘制
+/*@brief 线条绘制(水平垂直线)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
+static void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
@@ -236,8 +217,6 @@ void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel;
-    scui_color_wt_t src_pixel = 0;
-    scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     
     /* 这里变成了一个点, 直接填色 */
     if (src_pos_1.x == src_pos_2.x && src_pos_1.y == src_pos_2.y) {
@@ -245,6 +224,8 @@ void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
         if (!scui_area_point(&draw_area, &point))
              return;
         
+        scui_color_wt_t src_pixel = 0;
+        scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
         uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
         scui_pixel_mix_with(dst_surface->format, dst_ofs,
             dst_surface->format, &src_pixel, src_alpha);
@@ -259,10 +240,8 @@ void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
         };
         scui_area_m_by_s(&src_clip, &src_clip);
         
-        if (src_pos_1.x == src_pos_2.x)
-            src_clip.w  += src_width - 1;
-        if (src_pos_1.y == src_pos_2.y)
-            src_clip.h  += src_width - 1;
+        if (src_pos_1.x == src_pos_2.x) src_clip.w += src_width - 1;
+        if (src_pos_1.y == src_pos_2.y) src_clip.h += src_width - 1;
         
         scui_area_t dst_area = {0};
         if (!scui_area_inter(&dst_area, &draw_area, &src_clip))
@@ -274,7 +253,7 @@ void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
 }
 
 /*@brief 水平线绘制
- *@param draw_dsc      绘制描述符实例
+ *@param draw_dsc 绘制描述符实例
  *@param x,y,len,width 坐标点,坐标点,线长,线宽
  */
 void scui_draw_hline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width)
@@ -289,7 +268,7 @@ void scui_draw_hline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, 
 }
 
 /*@brief 垂直线绘制
- *@param draw_dsc      绘制描述符实例
+ *@param draw_dsc 绘制描述符实例
  *@param x,y,len,width 坐标点,坐标点,线长,线宽
  */
 void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width)
@@ -308,6 +287,34 @@ void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, 
  */
 void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
 {
+    /* 基础填色 */
+    switch (draw_dsc->type) {
+    case scui_draw_type_pixel_line: {
+        scui_point_t src_pos_1 = draw_dsc->graph.src_pos_1;
+        scui_point_t src_pos_2 = draw_dsc->graph.src_pos_2;
+        /* 变成了一个点, 变成了一个区域, 直接填色 */
+        if ((src_pos_1.x == src_pos_2.x && src_pos_1.y == src_pos_2.y) ||
+            (src_pos_1.x == src_pos_2.x || src_pos_1.y == src_pos_2.y)) {
+            /* 外部入口简单调整一下居中对齐 */
+            if (src_pos_1.x == src_pos_2.x) {
+                draw_dsc->graph.src_pos_1.x -= draw_dsc->graph.src_width / 2;
+                draw_dsc->graph.src_pos_2.x -= draw_dsc->graph.src_width / 2;
+            }
+            if (src_pos_1.y == src_pos_2.y) {
+                draw_dsc->graph.src_pos_1.y -= draw_dsc->graph.src_width / 2;
+                draw_dsc->graph.src_pos_2.y -= draw_dsc->graph.src_width / 2;
+            }
+            scui_draw_sline(draw_dsc);
+            return;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    
+    
+    
     /* 矢量绘图引擎 */
     #if SCUI_DRAW_USE_THORVG
     bool scui_draw_ctx_graph_TVG(scui_draw_dsc_t *draw_dsc);
@@ -315,17 +322,20 @@ void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
         return;
     #endif
     
-    
-    
+    /* 外源图形组件 */
     #if SCUI_DRAW_GRAPH_USE_EGUI
     bool scui_draw_ctx_graph_EGUI(scui_draw_dsc_t *draw_dsc);
     if (scui_draw_ctx_graph_EGUI(draw_dsc))
         return;
     #endif
     
+    
+    
+    /* 基础处理(备注:) */
+    /* 原生绘制最多需求斜线绘制 */
+    /* 其余绘制内容都调整成贴图 */
     switch (draw_dsc->type) {
     case scui_draw_type_pixel_line:
-        scui_draw_sline(draw_dsc);
         scui_draw_aline(draw_dsc);
         break;
     default:

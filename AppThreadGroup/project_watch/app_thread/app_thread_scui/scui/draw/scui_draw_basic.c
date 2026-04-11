@@ -34,10 +34,14 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
     /* */
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     
-    scui_area_t draw_area = {0};
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
          return;
+    
+    scui_area_t draw_area = {0};
+    draw_area.w = dst_clip_v.w;
+    draw_area.h = dst_clip_v.h;
     
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
@@ -162,10 +166,14 @@ void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc)
     /* */
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     
-    scui_area_t draw_area = {0};
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
          return;
+    
+    scui_area_t draw_area = {0};
+    draw_area.w = dst_clip_v.w;
+    draw_area.h = dst_clip_v.h;
     
     scui_color_wt_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
@@ -213,10 +221,14 @@ void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_clip != NULL && (src_way == 0 || src_way == 1));
     
-    scui_area_t draw_area = {0};
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
          return;
+    
+    scui_area_t draw_area = {0};
+    draw_area.w = dst_clip_v.w;
+    draw_area.h = dst_clip_v.h;
     
     scui_color_wt_t src_pixel_s = 0;
     scui_color_wt_t src_pixel_e = 0;
@@ -270,10 +282,14 @@ void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_grad_s != NULL && src_grad_n >= 2);
     
-    scui_area_t draw_area = {0};
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
          return;
+    
+    scui_area_t draw_area = {0};
+    draw_area.w = dst_clip_v.w;
+    draw_area.h = dst_clip_v.h;
     
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
@@ -364,8 +380,6 @@ void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc)
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
-    if (scui_area_empty(&draw_area))
-        return;
     
     /* 在dst_surface.clip中的dst_clip_v中拷贝到src_surface.clip中的src_clip_v中 */
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
@@ -422,8 +436,6 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
-    if (scui_area_empty(&draw_area))
-        return;
     
     /* 在dst_surface.clip中的dst_clip_v中每个像素点混合到src_surface.clip中的src_clip_v中 */
     scui_coord_t dst_bits = scui_pixel_bits(dst_surface->format);
@@ -553,8 +565,6 @@ void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc)
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
-    if (scui_area_empty(&draw_area))
-        return;
     
     /* 在dst_surface.clip中的dst_clip_v中每个像素点混合到src_surface.clip中的src_clip_v中 */
     scui_coord_t dst_bits = scui_pixel_bits(dst_surface->format);

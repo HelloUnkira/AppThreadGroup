@@ -34,10 +34,14 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    scui_area_t draw_area = {0};
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
          return;
+    
+    scui_area_t draw_area = {0};
+    draw_area.w = scui_min(dst_clip_v.w, src_clip->w);
+    draw_area.h = scui_min(dst_clip_v.h, src_clip->h);
     
     if (src_size >= qrcodegen_BUFFER_LEN_MAX) {
         SCUI_LOG_ERROR("error");
@@ -75,8 +79,8 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
     
     draw_area.x = scui_max(margin - src_clip->x, 0);
     draw_area.y = scui_max(margin - src_clip->y, 0);
-    draw_area.w = scui_min(scui_min(draw_area.w, src_clip->w), scaled);
-    draw_area.h = scui_min(scui_min(draw_area.h, src_clip->h), scaled);
+    draw_area.w = scui_min(draw_area.w, scaled);
+    draw_area.h = scui_min(draw_area.h, scaled);
     SCUI_ASSERT(dst_clip->x + draw_area.w <= dst_surface->hor_res);
     SCUI_ASSERT(dst_clip->y + draw_area.h <= dst_surface->ver_res);
     if (scui_area_empty(&draw_area))
@@ -132,15 +136,14 @@ void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    scui_area_t draw_area = {0};
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
          return;
     
-    draw_area.w = scui_min(draw_area.w, src_clip->w);
-    draw_area.h = scui_min(draw_area.h, src_clip->h);
-    SCUI_ASSERT(dst_clip->x + draw_area.w <= dst_surface->hor_res);
-    SCUI_ASSERT(dst_clip->y + draw_area.h <= dst_surface->ver_res);
+    scui_area_t draw_area = {0};
+    draw_area.w = scui_min(dst_clip_v.w, src_clip->w);
+    draw_area.h = scui_min(dst_clip_v.h, src_clip->h);
     
     if (src_data == NULL || src_size == 0) {
         SCUI_LOG_ERROR("args invalid");

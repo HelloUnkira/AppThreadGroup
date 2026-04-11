@@ -336,23 +336,29 @@ bool scui_draw_ctx_acc_check(scui_draw_dsc_t *draw_dsc);
 /*****************************************************************************/
 
 typedef struct {
+    void *dummy;
     #if SCUI_DRAW_USE_THORVG
     scui_surface_t tvg_surface;
+    scui_coord_t   tvg_hor_res; /* 原始值 */
+    scui_coord_t   tvg_ver_res; /* 原始值 */
     #endif
-    void *dummy;
 } scui_draw_graph_t;
+
+/*@brief 就绪绘图资源
+ */
+void scui_draw_graph_ready(void);
+
+/* 全局绘图资源(内部资源, 内部使用): */
+extern scui_draw_graph_t scui_draw_graph;
+
+/*****************************************************************************/
 
 /*@brief 线条绘制(简易绘制)
  *@param draw_dsc 绘制描述符实例
  *@param x,y,len,width 坐标点,坐标点,线长,线宽
  */
-void scui_draw_sline(scui_draw_dsc_t *draw_dsc);
 void scui_draw_hline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width);
 void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width);
-
-/*@brief 就绪绘制图形
- */
-void scui_draw_graph_ready(void);
 
 /*****************************************************************************/
 /* 矢量绘图引擎(thorvg): */
@@ -360,13 +366,13 @@ void scui_draw_graph_ready(void);
 #include "scui_draw_graph_TVG.h"
 /*****************************************************************************/
 /*基础图元绘制:
- *    可以自己写(堆工作量)
- *    可以移植第三方的gui中内容
- *    在面向效果的Gui框架中基础图形的绘制不是那么重要
- *    因为随着实验效果表示再好的显示抗锯齿基础图形
- *    它的显示效果是不如图像进行图形变换得来的要好
- *    此外基础图象绘制的效果没有想象中的优秀
- *    它在使用过程中限制较大
+ *可以自己写(堆工作量)
+ *可以移植第三方的gui中内容
+ *在面向效果的Gui框架中基础图形的绘制不是那么重要
+ *因为随着实验效果表示再好的显示抗锯齿基础图形
+ *它的显示效果是不如图像进行图形变换得来的要好
+ *此外基础图象绘制的效果没有想象中的优秀
+ *它在使用过程中限制较大
  */
 #define   SCUI_DRAW_GRAPH_USE_EGUI      1
 #include "scui_draw_graph_EGUI.h"
