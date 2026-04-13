@@ -109,15 +109,6 @@ bool scui_draw_ctx_acc_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
  *@param draw_dsc 绘制描述符实例
  *@retval 支持:true;不支持:false;
  */
-bool scui_draw_ctx_acc_area_convolution(scui_draw_dsc_t *draw_dsc)
-{
-    return false;
-}
-
-/*@brief 绘制上下文
- *@param draw_dsc 绘制描述符实例
- *@retval 支持:true;不支持:false;
- */
 bool scui_draw_ctx_acc_area_dither(scui_draw_dsc_t *draw_dsc)
 {
     return false;

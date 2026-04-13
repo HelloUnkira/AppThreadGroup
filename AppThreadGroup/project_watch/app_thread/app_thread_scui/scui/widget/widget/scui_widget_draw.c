@@ -288,6 +288,39 @@ void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc)
     }
 }
 
+/*@brief 控件在画布绘制抖动
+ *@param draw_graph 绘制参数实例
+ */
+void scui_widget_draw_ctx_dither(scui_widget_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    /* draw dsc args<e> */
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    /* 绘制目标重定向 */
+    if (!scui_widget_draw_target(widget, &target))
+         return;
+    
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
+        
+        /* 子剪切域相对同步偏移 */
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &unit->clip, target))
+             continue;
+        
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
+             continue;
+        #endif
+        
+        scui_draw_area_dither(false, widget->surface, dst_clip);
+    }
+}
+
 /*@brief 控件在画布绘制模糊
  *@param draw_graph 绘制参数实例
  */
@@ -836,6 +869,7 @@ void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
         [scui_widget_draw_type_string] =            scui_widget_draw_ctx_string,
         [scui_widget_draw_type_color] =             scui_widget_draw_ctx_color,
         [scui_widget_draw_type_color_grad] =        scui_widget_draw_ctx_color_grad,
+        [scui_widget_draw_type_dither] =            scui_widget_draw_ctx_dither,
         [scui_widget_draw_type_blur] =              scui_widget_draw_ctx_blur,
         [scui_widget_draw_type_image] =             scui_widget_draw_ctx_image,
         [scui_widget_draw_type_image_scale] =       scui_widget_draw_ctx_image_scale,

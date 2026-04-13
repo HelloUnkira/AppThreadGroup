@@ -115,12 +115,6 @@ typedef struct {
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
-        scui_multi_t       *kernel;         /* 卷积核(静态) */
-        scui_coord_t        scale;          /* 卷积核尺寸 */
-    } area_convolution;
-    struct {
-        scui_surface_t     *dst_surface;    /* 画布实例 */
-        scui_area_t         dst_clip;       /* 画布绘制区域 */
     } area_dither;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */

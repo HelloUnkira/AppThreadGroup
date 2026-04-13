@@ -212,6 +212,7 @@ static void scui_window_move_anima_state(uint8_t type)
             /* 背景窗口虚化 */
             scui_widget_draw(handle_t, NULL, false);
             scui_widget_draw_blur(handle_t, NULL);
+            // scui_widget_draw_blur(handle_t, NULL);
             SCUI_LOG_INFO("");
         }
         break;

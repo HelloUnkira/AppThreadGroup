@@ -8,6 +8,7 @@ typedef enum {
     scui_widget_draw_type_string,
     scui_widget_draw_type_color,
     scui_widget_draw_type_color_grad,
+    scui_widget_draw_type_dither,
     scui_widget_draw_type_blur,
     scui_widget_draw_type_image,
     scui_widget_draw_type_image_scale,
@@ -109,6 +110,17 @@ do {                                                                        \
         .type = scui_widget_draw_type_color_grad,                           \
         .color = color_v,                                                   \
         .way   = way_v,                                                     \
+    };                                                                      \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
+} while (0)                                                                 \
+
+/* scui_widget_draw_type_dither */
+#define scui_widget_draw_dither(handle_v, target_v)                         \
+do {                                                                        \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
+        .handle = handle_v,                                                 \
+        .target = target_v,                                                 \
+        .type = scui_widget_draw_type_dither,                               \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
