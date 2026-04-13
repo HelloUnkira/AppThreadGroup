@@ -41,9 +41,12 @@ endif()
 # /* 屏蔽警告4389:限定符类型不对 */
 # /* 屏蔽警告4456:内部变量屏蔽外部变量 */
 # /* 屏蔽警告4457:内部变量屏蔽外部变量 */
+# /* 屏蔽警告4458:声明隐藏了类成员 */
+# /* 屏蔽警告4459:声明隐藏了类成员 */
 # /* 屏蔽警告4477:格式字符串参数不对 */
 # /* 屏蔽警告4530:使用了C++异常处理程序但未启用展开语义 */
 # /* 屏蔽警告4553:表达式结果未使用 */
+# /* 屏蔽警告4611:对象析构之间的交互是不可移植的 */
 # /* 屏蔽警告4701:使用未初始化全局变量 */
 # /* 屏蔽警告4702:无法执行到的代码 */
 # /* 屏蔽警告4706:表达式内赋值 */
@@ -76,9 +79,12 @@ add_compile_options(/wd4334)
 add_compile_options(/wd4389)
 add_compile_options(/wd4456)
 add_compile_options(/wd4457)
+add_compile_options(/wd4458)
+add_compile_options(/wd4459)
 add_compile_options(/wd4477)
 add_compile_options(/wd4530)
 add_compile_options(/wd4553)
+add_compile_options(/wd4611)
 add_compile_options(/wd4701)
 add_compile_options(/wd4702)
 add_compile_options(/wd4706)

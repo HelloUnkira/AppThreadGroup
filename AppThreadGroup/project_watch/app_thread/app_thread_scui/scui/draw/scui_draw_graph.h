@@ -13,19 +13,24 @@
 typedef enum {
     scui_draw_type_none = 0,
     scui_draw_type_byte_copy,
-    scui_draw_type_area_blur,
     scui_draw_type_area_fill,
-    scui_draw_type_area_fill_grad,
-    scui_draw_type_area_fill_grads,
     scui_draw_type_area_copy,
     scui_draw_type_area_blend,
-    scui_draw_type_area_alpha_filter,
     scui_draw_type_area_matrix_fill,
     scui_draw_type_area_matrix_blend,
+    
+    scui_draw_type_area_convolution,
+    scui_draw_type_area_dither,
+    scui_draw_type_area_blur,
+    scui_draw_type_area_grad,
+    scui_draw_type_area_grads,
+    scui_draw_type_area_afilter,
+    
     scui_draw_type_image,
     scui_draw_type_image_scale,
     scui_draw_type_image_rotate,
     scui_draw_type_image_matrix_blend,
+    
     scui_draw_type_letter,
     scui_draw_type_string,
     scui_draw_type_qrcode,
@@ -70,30 +75,9 @@ typedef struct {
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
-    } area_blur;
-    struct {
-        scui_surface_t     *dst_surface;    /* 画布实例 */
-        scui_area_t         dst_clip;       /* 画布绘制区域 */
         scui_alpha_t        src_alpha;      /* 像素点透明度 */
         scui_color_t        src_color;      /* 像素点协议色 */
     } area_fill;
-    struct {
-        scui_surface_t     *dst_surface;    /* 画布实例 */
-        scui_area_t         dst_clip;       /* 画布绘制区域 */
-        scui_area_t         src_clip;       /* 源剪切域 */
-        scui_alpha_t        src_alpha;      /* 像素点透明度 */
-        scui_color_t        src_color;      /* 像素点协议色 */
-        scui_coord_t        src_way;        /* 渐变方向(0:hor;1:ver;) */
-    } area_fill_grad;
-    struct {
-        scui_surface_t     *dst_surface;    /* 画布实例 */
-        scui_area_t         dst_clip;       /* 画布绘制区域 */
-        scui_alpha_t        src_alpha;      /* 像素点透明度 */
-        scui_color_t       *src_grad_s;     /* 源渐变列表 */
-        scui_coord_t        src_grad_n;     /* 源渐变列表数量 */
-        scui_color_t        src_filter;     /* 源渐变滤色 */
-        scui_coord_t        src_way;        /* 源渐变方向(0:hor;1:ver;) */
-    } area_fill_grads;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
@@ -107,12 +91,6 @@ typedef struct {
         scui_area_t         src_clip;       /* 画布绘制区域 */
         scui_color_t        src_color;      /* 画布协议色 */
     } area_blend;
-    struct {
-        scui_surface_t     *dst_surface;    /* 画布实例 */
-        scui_area_t         dst_clip;       /* 画布绘制区域 */
-        scui_surface_t     *src_surface;    /* 画布实例 */
-        scui_area_t         src_clip;       /* 画布绘制区域 */
-    } area_alpha_filter;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
@@ -131,6 +109,46 @@ typedef struct {
         scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
         scui_matrix_t       src_matrix;     /* 源变换矩阵 */
     } area_matrix_blend;
+    /**************************************************************************
+     * draw complex(HW ACC Perhaps):
+     */
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_multi_t       *kernel;         /* 卷积核(静态) */
+        scui_coord_t        scale;          /* 卷积核尺寸 */
+    } area_convolution;
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+    } area_dither;
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+    } area_blur;
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_clip;       /* 源剪切域 */
+        scui_alpha_t        src_alpha;      /* 像素点透明度 */
+        scui_color_t        src_color;      /* 像素点协议色 */
+        scui_coord_t        src_way;        /* 渐变方向(0:hor;1:ver;) */
+    } area_grad;
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_alpha_t        src_alpha;      /* 像素点透明度 */
+        scui_color_t       *src_grad_s;     /* 源渐变列表 */
+        scui_coord_t        src_grad_n;     /* 源渐变列表数量 */
+        scui_color_t        src_filter;     /* 源渐变滤色 */
+        scui_coord_t        src_way;        /* 源渐变方向(0:hor;1:ver;) */
+    } area_grads;
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_surface_t     *src_surface;    /* 画布实例 */
+        scui_area_t         src_clip;       /* 画布绘制区域 */
+    } area_afilter;
     /**************************************************************************
      * draw image:
      */
@@ -208,8 +226,7 @@ typedef struct {
         scui_color_t        src_color;      /* 图像源色调 */
     } ring;
     /**************************************************************************
-     * draw qrcode:
-     * draw barcode:
+     * draw qrcode, barcode:
      */
      struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
@@ -218,7 +235,7 @@ typedef struct {
         scui_alpha_t        src_alpha;      /* 图像透明度 */
         scui_color_t        src_color;      /* 图像源色调 */
         scui_multi_t        src_size;       /* 字符串长度 */
-        uint8_t            *src_data;       /* url网址链接字符串 */
+        uint8_t            *src_data;       /* url网址链接字符串(静态) */
      } qrcode;
      struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
@@ -227,7 +244,7 @@ typedef struct {
         scui_alpha_t        src_alpha;      /* 图像透明度 */
         scui_color_t        src_color;      /* 图像源色调 */
         scui_multi_t        src_size;       /* 字符串长度 */
-        uint8_t            *src_data;       /* url网址链接字符串 */
+        uint8_t            *src_data;       /* url网址链接字符串(静态) */
      } barcode;
     /**************************************************************************
      * keep adding...

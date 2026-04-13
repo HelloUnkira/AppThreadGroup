@@ -19,18 +19,6 @@ do {                                                                            
     scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
-/* scui_draw_type_area_blur */
-#define scui_draw_area_blur(sync_v, dst_surface_v, dst_clip_v)                      \
-do {                                                                                \
-    scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
-    scui_draw_dsc_ready(&draw_dsc_inst);                                            \
-    draw_dsc_inst->type = scui_draw_type_area_blur;                                 \
-    draw_dsc_inst->sync = sync_v;                                                   \
-    draw_dsc_inst->area_blur.dst_surface = dst_surface_v,                           \
-    draw_dsc_inst->area_blur.dst_clip    = dst_clip_v,                              \
-    scui_draw_dsc_task(draw_dsc_inst);                                              \
-} while (0)                                                                         \
-
 /* scui_draw_type_area_fill */
 #define scui_draw_area_fill(sync_v, dst_surface_v, dst_clip_v,                      \
     src_alpha_v, src_color_v)                                                       \
@@ -43,41 +31,6 @@ do {                                                                            
     draw_dsc_inst->area_fill.dst_clip    = dst_clip_v,                              \
     draw_dsc_inst->area_fill.src_alpha   = src_alpha_v,                             \
     draw_dsc_inst->area_fill.src_color   = src_color_v,                             \
-    scui_draw_dsc_task(draw_dsc_inst);                                              \
-} while (0)                                                                         \
-
-/* scui_draw_type_area_fill_grad */
-#define scui_draw_area_fill_grad(sync_v, dst_surface_v, dst_clip_v,                 \
-    src_clip_v, src_color_v, src_alpha_v, src_way_v)                                \
-do {                                                                                \
-    scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
-    scui_draw_dsc_ready(&draw_dsc_inst);                                            \
-    draw_dsc_inst->type = scui_draw_type_area_fill_grad;                            \
-    draw_dsc_inst->sync = sync_v;                                                   \
-    draw_dsc_inst->area_fill_grad.dst_surface = dst_surface_v,                      \
-    draw_dsc_inst->area_fill_grad.dst_clip    = dst_clip_v,                         \
-    draw_dsc_inst->area_fill_grad.src_clip    = src_clip_v,                         \
-    draw_dsc_inst->area_fill_grad.src_color   = src_color_v,                        \
-    draw_dsc_inst->area_fill_grad.src_alpha   = src_alpha_v,                        \
-    draw_dsc_inst->area_fill_grad.src_way     = src_way_v,                          \
-    scui_draw_dsc_task(draw_dsc_inst);                                              \
-} while (0)                                                                         \
-
-/* scui_draw_type_area_fill_grads */
-#define scui_draw_area_fill_grads(sync_v, dst_surface_v, dst_clip_v,                \
-    src_grad_s_v, src_grad_n_v, src_way_v, src_filter_v, src_alpha_v)               \
-do {                                                                                \
-    scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
-    scui_draw_dsc_ready(&draw_dsc_inst);                                            \
-    draw_dsc_inst->type = scui_draw_type_area_fill_grads;                           \
-    draw_dsc_inst->sync = sync_v;                                                   \
-    draw_dsc_inst->area_fill_grads.dst_surface = dst_surface_v,                     \
-    draw_dsc_inst->area_fill_grads.dst_clip    = dst_clip_v,                        \
-    draw_dsc_inst->area_fill_grads.src_grad_s  = src_grad_s_v,                      \
-    draw_dsc_inst->area_fill_grads.src_grad_n  = src_grad_n_v,                      \
-    draw_dsc_inst->area_fill_grads.src_filter  = src_filter_v,                      \
-    draw_dsc_inst->area_fill_grads.src_alpha   = src_alpha_v,                       \
-    draw_dsc_inst->area_fill_grads.src_way     = src_way_v,                         \
     scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
@@ -109,21 +62,6 @@ do {                                                                            
     draw_dsc_inst->area_blend.src_surface = src_surface_v,                          \
     draw_dsc_inst->area_blend.src_clip    = src_clip_v,                             \
     draw_dsc_inst->area_blend.src_color   = src_color_v,                            \
-    scui_draw_dsc_task(draw_dsc_inst);                                              \
-} while (0)                                                                         \
-
-/* scui_draw_type_area_alpha_filter */
-#define scui_draw_area_alpha_filter(sync_v, dst_surface_v, dst_clip_v,              \
-    src_surface_v, src_clip_v)                                                      \
-do {                                                                                \
-    scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
-    scui_draw_dsc_ready(&draw_dsc_inst);                                            \
-    draw_dsc_inst->type = scui_draw_type_area_alpha_filter;                         \
-    draw_dsc_inst->sync = sync_v;                                                   \
-    draw_dsc_inst->area_alpha_filter.dst_surface = dst_surface_v,                   \
-    draw_dsc_inst->area_alpha_filter.dst_clip    = dst_clip_v,                      \
-    draw_dsc_inst->area_alpha_filter.src_surface = src_surface_v,                   \
-    draw_dsc_inst->area_alpha_filter.src_clip    = src_clip_v,                      \
     scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
@@ -163,6 +101,96 @@ do {                                                                            
     scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
+
+
+/* scui_draw_type_area_convolution */
+#define scui_draw_area_convolution(sync_v, dst_surface_v, dst_clip_v,               \
+    kernel_v, scale_v)                                                              \
+do {                                                                                \
+    scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
+    scui_draw_dsc_ready(&draw_dsc_inst);                                            \
+    draw_dsc_inst->type = scui_draw_type_area_convolution;                          \
+    draw_dsc_inst->sync = sync_v;                                                   \
+    draw_dsc_inst->area_convolution.dst_surface = dst_surface_v,                    \
+    draw_dsc_inst->area_convolution.dst_clip    = dst_clip_v,                       \
+    draw_dsc_inst->area_convolution.kernel      = kernel_v,                         \
+    draw_dsc_inst->area_convolution.scale       = scale_v,                          \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
+} while (0)                                                                         \
+
+/* scui_draw_type_area_dither */
+#define scui_draw_area_dither(sync_v, dst_surface_v, dst_clip_v)                    \
+do {                                                                                \
+    scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
+    scui_draw_dsc_ready(&draw_dsc_inst);                                            \
+    draw_dsc_inst->type = scui_draw_type_area_dither;                               \
+    draw_dsc_inst->sync = sync_v;                                                   \
+    draw_dsc_inst->area_dither.dst_surface = dst_surface_v,                         \
+    draw_dsc_inst->area_dither.dst_clip    = dst_clip_v,                            \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
+} while (0)                                                                         \
+
+/* scui_draw_type_area_blur */
+#define scui_draw_area_blur(sync_v, dst_surface_v, dst_clip_v)                      \
+do {                                                                                \
+    scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
+    scui_draw_dsc_ready(&draw_dsc_inst);                                            \
+    draw_dsc_inst->type = scui_draw_type_area_blur;                                 \
+    draw_dsc_inst->sync = sync_v;                                                   \
+    draw_dsc_inst->area_blur.dst_surface = dst_surface_v,                           \
+    draw_dsc_inst->area_blur.dst_clip    = dst_clip_v,                              \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
+} while (0)                                                                         \
+
+/* scui_draw_type_area_grad */
+#define scui_draw_area_grad(sync_v, dst_surface_v, dst_clip_v,                      \
+    src_clip_v, src_color_v, src_alpha_v, src_way_v)                                \
+do {                                                                                \
+    scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
+    scui_draw_dsc_ready(&draw_dsc_inst);                                            \
+    draw_dsc_inst->type = scui_draw_type_area_grad;                                 \
+    draw_dsc_inst->sync = sync_v;                                                   \
+    draw_dsc_inst->area_grad.dst_surface = dst_surface_v,                           \
+    draw_dsc_inst->area_grad.dst_clip    = dst_clip_v,                              \
+    draw_dsc_inst->area_grad.src_clip    = src_clip_v,                              \
+    draw_dsc_inst->area_grad.src_color   = src_color_v,                             \
+    draw_dsc_inst->area_grad.src_alpha   = src_alpha_v,                             \
+    draw_dsc_inst->area_grad.src_way     = src_way_v,                               \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
+} while (0)                                                                         \
+
+/* scui_draw_type_area_grads */
+#define scui_draw_area_grads(sync_v, dst_surface_v, dst_clip_v,                     \
+    src_grad_s_v, src_grad_n_v, src_way_v, src_filter_v, src_alpha_v)               \
+do {                                                                                \
+    scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
+    scui_draw_dsc_ready(&draw_dsc_inst);                                            \
+    draw_dsc_inst->type = scui_draw_type_area_grads;                                \
+    draw_dsc_inst->sync = sync_v;                                                   \
+    draw_dsc_inst->area_grads.dst_surface = dst_surface_v,                          \
+    draw_dsc_inst->area_grads.dst_clip    = dst_clip_v,                             \
+    draw_dsc_inst->area_grads.src_grad_s  = src_grad_s_v,                           \
+    draw_dsc_inst->area_grads.src_grad_n  = src_grad_n_v,                           \
+    draw_dsc_inst->area_grads.src_filter  = src_filter_v,                           \
+    draw_dsc_inst->area_grads.src_alpha   = src_alpha_v,                            \
+    draw_dsc_inst->area_grads.src_way     = src_way_v,                              \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
+} while (0)                                                                         \
+
+/* scui_draw_type_area_afilter */
+#define scui_draw_area_afilter(sync_v, dst_surface_v, dst_clip_v,                   \
+    src_surface_v, src_clip_v)                                                      \
+do {                                                                                \
+    scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
+    scui_draw_dsc_ready(&draw_dsc_inst);                                            \
+    draw_dsc_inst->type = scui_draw_type_area_afilter;                              \
+    draw_dsc_inst->sync = sync_v;                                                   \
+    draw_dsc_inst->area_afilter.dst_surface = dst_surface_v,                        \
+    draw_dsc_inst->area_afilter.dst_clip    = dst_clip_v,                           \
+    draw_dsc_inst->area_afilter.src_surface = src_surface_v,                        \
+    draw_dsc_inst->area_afilter.src_clip    = src_clip_v,                           \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
+} while (0)                                                                         \
 
 
 

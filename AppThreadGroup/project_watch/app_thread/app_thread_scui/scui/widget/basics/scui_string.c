@@ -551,7 +551,7 @@ void scui_string_invoke(scui_event_t *event)
                 
                 if (string->args.regrad) {
                     /* 如果需要全局渐变,对绘制画布进行渐变 */
-                    scui_draw_area_fill_grads(true, string->draw_surface, draw_clip,
+                    scui_draw_area_grads(true, string->draw_surface, draw_clip,
                         string->args.grads->grad_s, string->args.grads->grad_n,
                         string->args.grads->grad_w, SCUI_COLOR_FILTER_TRANS,
                         scui_alpha_cover);

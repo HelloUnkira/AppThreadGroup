@@ -105,7 +105,7 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
                         &image_surface, src_edge_clip_s);
                 }
                 /* 对edge画布作用edge透明过滤 */
-                scui_draw_area_alpha_filter(true, &edge_surface, edge_clip,
+                scui_draw_area_afilter(true, &edge_surface, edge_clip,
                      &image_e_surface, edge_clip);
                 /* 将edge画布结果绘制 */
                 scui_draw_area_blend(true, dst_surface, dst_edge_clip_s,
@@ -137,7 +137,7 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
                         &image_surface, src_edge_clip_e);
                 }
                 /* 对edge画布作用edge透明过滤 */
-                scui_draw_area_alpha_filter(true, &edge_surface, edge_clip,
+                scui_draw_area_afilter(true, &edge_surface, edge_clip,
                     &image_e_surface, edge_clip);
                 /* 将edge画布结果绘制 */
                 scui_draw_area_blend(true, dst_surface, dst_edge_clip_e,

@@ -283,7 +283,7 @@ void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         #endif
         
-        scui_draw_area_fill_grad(false, widget->surface, dst_clip,
+        scui_draw_area_grad(false, widget->surface, dst_clip,
             *target, color, widget->alpha, way);
     }
 }
