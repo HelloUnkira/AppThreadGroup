@@ -218,7 +218,6 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(false);
 }
 
-
 /*@brief 区域模糊(可以使用GPU-blur加速优化)
  *@param draw_dsc 绘制描述符实例
  */

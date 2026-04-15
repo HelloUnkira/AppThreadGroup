@@ -262,6 +262,13 @@ void scui_ui_scene_6_4_event_proc(scui_event_t *event)
     static scui_coord_t src_angle_e = 30;
     
     switch (event->type) {
+    case scui_event_create:
+    case scui_event_destroy: {
+        rnd = 1;
+        src_angle_s = 0;
+        src_angle_e = 30;
+        break;
+    }
     case scui_event_anima_elapse:
         
         cnt += event->tick;
@@ -323,6 +330,13 @@ void scui_ui_scene_6_5_event_proc(scui_event_t *event)
     static scui_coord_t src_angle_e = 30;
     
     switch (event->type) {
+    case scui_event_create:
+    case scui_event_destroy: {
+        rnd = 1;
+        src_angle_s = 0;
+        src_angle_e = 30;
+        break;
+    }
     case scui_event_anima_elapse:
         
         cnt += event->tick;

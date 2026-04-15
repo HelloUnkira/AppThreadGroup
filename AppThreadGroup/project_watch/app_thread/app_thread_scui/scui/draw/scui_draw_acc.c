@@ -43,9 +43,8 @@ bool scui_draw_ctx_acc_check(scui_draw_dsc_t *draw_dsc)
         
         [scui_draw_type_pixel_line] =               false,
         [scui_draw_type_pixel_circle] =             false,
-        [scui_draw_type_pixel_crect] =              false,
-        [scui_draw_type_pixel_shadow] =             false,
         [scui_draw_type_pixel_arc] =                false,
+        [scui_draw_type_pixel_crect] =              false,
     };
     
     return scui_draw_ctx_acc_check_cb[draw_dsc->type];

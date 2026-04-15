@@ -79,7 +79,7 @@ void scui_canvas_burn(scui_handle_t handle)
 }
 
 /*@brief 画布控件图
- *@param handle 自定义控件句柄
+ *@param handle 画布控件句柄
  *@param image  画布图资源
  */
 void scui_canvas_image(scui_handle_t handle, scui_handle_t *image)
@@ -89,4 +89,55 @@ void scui_canvas_image(scui_handle_t handle, scui_handle_t *image)
     scui_canvas_t *canvas = (void *)widget;
     
     *image = canvas->image;
+}
+
+/*@brief 画布控件取控件树快照
+ *@param handle   画布控件句柄
+ *@param handle_t 目标控件树句柄
+ */
+void scui_canvas_snapshot(scui_handle_t handle, scui_handle_t handle_t)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_canvas));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_canvas_t *canvas = (void *)widget;
+    /* 需要扩展剪切区域参数? */
+    
+    /* 处理一下控件树 */
+    scui_widget_t   *widget_t = scui_handle_source_check(handle_t);
+    scui_surface_t *surface_t = widget_t->surface;
+    scui_handle_t    handle_p = widget_t->parent;
+    scui_point_t     offset_t = {0};
+    scui_area_t        clip_t = widget_t->clip;
+    /* 重调子控件树的相对位置 */
+    offset_t.x = -clip_t.x;
+    offset_t.y = -clip_t.y;
+    scui_widget_clist_move_ofs(widget_t->myself, &offset_t);
+    
+    /* 重调控件树信息 */
+    widget_t->clip.x = 0;
+    widget_t->clip.y = 0;
+    widget_t->parent = widget->myself;
+    /* 重调子控件树的相对位置 */
+    offset_t.x = widget_t->clip.x;
+    offset_t.y = widget_t->clip.y;
+    scui_widget_clist_move_ofs(widget_t->myself, &offset_t);
+    /* 重映射资源到画布 */
+    scui_widget_clip_clear(widget_t, true);
+    scui_widget_surface_remap(widget_t->myself, widget->surface);
+    scui_widget_surface_refr(widget_t->myself, true);
+    /* 控件树绘制到画布 */
+    scui_widget_draw(widget_t->myself, NULL, true);
+    
+    /* 还原子控件树的相对位置 */
+    offset_t.x = +clip_t.x;
+    offset_t.y = +clip_t.y;
+    scui_widget_clist_move_ofs(widget_t->myself, &offset_t);
+    /* 还原控件树信息 */
+    widget_t->clip.x = clip_t.x;
+    widget_t->clip.y = clip_t.y;
+    widget_t->parent = handle_p;
+    /* 还原重映射资源 */
+    scui_widget_clip_clear(widget_t, true);
+    scui_widget_surface_remap(widget_t->myself, surface_t);
+    scui_widget_surface_refr(widget_t->myself, true);
 }

@@ -768,261 +768,6 @@ static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
     #endif
 }
 
-/*@brief 圆角矩形绘制
- *@param draw_dsc 绘制描述符实例
- */
-static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
-{
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
-    scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
-    scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
-    scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
-    /* draw dsc args<e> */
-    /* */
-    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
-    
-    if (src_alpha == scui_alpha_trans)
-        return;
-    
-    if (src_radius <= 0)
-        src_radius  = 1;
-    
-    #if 1
-    /* 绘制四个象限的圆或圆环 */
-    scui_area_t  dst_area = {0};
-    dst_area.w = src_radius * 2 + 1;
-    dst_area.h = src_radius * 2 + 1;
-    scui_draw_dsc_t draw_dsc_circle = {
-        .type = scui_draw_type_pixel_circle,
-        .graph.dst_surface = dst_surface,
-        .graph.dst_clip    = dst_area,
-        .graph.src_color   = src_color,
-        .graph.src_alpha   = src_alpha,
-        .graph.src_width   = src_width,
-        .graph.src_radius  = src_radius,
-    };
-    /* */
-    dst_area.x = dst_clip->x + 0;
-    dst_area.y = dst_clip->y + 0;
-    draw_dsc_circle.graph.dst_clip = dst_area;
-    draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
-    draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
-    scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_lt);
-    dst_area.x = dst_clip->x + dst_clip->w - src_radius * 2 - 1;
-    dst_area.y = dst_clip->y + 0;
-    draw_dsc_circle.graph.dst_clip = dst_area;
-    draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
-    draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
-    scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_rt);
-    dst_area.x = dst_clip->x + 0;
-    dst_area.y = dst_clip->y + dst_clip->h - src_radius * 2 - 1;
-    draw_dsc_circle.graph.dst_clip = dst_area;
-    draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
-    draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
-    scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_lb);
-    dst_area.x = dst_clip->x + dst_clip->w - src_radius * 2 - 1;
-    dst_area.y = dst_clip->y + dst_clip->h - src_radius * 2 - 1;
-    draw_dsc_circle.graph.dst_clip = dst_area;
-    draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
-    draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
-    scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_rb);
-    
-    /* 色块填充 */
-    scui_draw_dsc_t draw_dsc_line = {
-        .type = scui_draw_type_pixel_line,
-        .graph.dst_surface =  dst_surface,
-        .graph.dst_clip    = *dst_clip,
-        .graph.src_color   =  src_color,
-        .graph.src_alpha   =  src_alpha,
-    };
-    scui_coord_t x = 0;
-    scui_coord_t y = 0;
-    scui_coord_t l = 0;
-    scui_coord_t w = 0;
-    
-    /* 完全填充 */
-    if (src_width == 0 || src_width >= src_radius) {
-        /* 绘制中间水平矩形 */
-        x = dst_clip->x + src_radius;
-        l = dst_clip->w - src_radius * 2;
-        y = dst_clip->y;
-        w = dst_clip->h;
-        scui_draw_hline(&draw_dsc_line, x, y, l, w);
-        /* 绘制左右水平矩形 */
-        y = dst_clip->y + src_radius;
-        l = src_radius;
-        w = dst_clip->h - src_radius * 2;
-        /* */
-        x = dst_clip->x;
-        scui_draw_hline(&draw_dsc_line, x, y, l, w);
-        /* */
-        x = dst_clip->x + dst_clip->w - src_radius;
-        scui_draw_hline(&draw_dsc_line, x, y, l, w);
-    } else {
-        /* 绘制上下两条边线 */
-        x = dst_clip->x + src_radius;
-        l = dst_clip->w - src_radius * 2;
-        w = src_width;
-        /* */
-        y = dst_clip->y;
-        scui_draw_hline(&draw_dsc_line, x, y, l, w);
-        y = dst_clip->y + dst_clip->h - src_width;
-        scui_draw_hline(&draw_dsc_line, x, y, l, w);
-        /* 绘制左右两条边线 */
-        y = dst_clip->y + src_radius;
-        l = dst_clip->h - src_radius * 2;
-        w = src_width;
-        /* */
-        x = dst_clip->x;
-        scui_draw_vline(&draw_dsc_line, x, y, l, w);
-        x = dst_clip->x + dst_clip->w - src_width;
-        scui_draw_vline(&draw_dsc_line, x, y, l, w);
-    }
-    
-    #endif
-}
-
-/*@brief 圆角矩形阴影绘制
- *@param draw_dsc 绘制描述符实例
- */
-static void scui_draw_shadow(scui_draw_dsc_t *draw_dsc)
-{
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
-    scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
-    scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
-    scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
-    /* draw dsc args<e> */
-    /* */
-    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
-    
-    if (src_alpha == scui_alpha_trans)
-        return;
-    
-    if (src_radius <= 0)
-        src_radius  = 1;
-    
-    #if 1
-    /* 通过绘制空心圆一点点向内部渐变 */
-    /* 注意: 这是一个投机取巧的办法, 不是优秀的实现逻辑 */
-    
-    /* 绘制四个象限的圆或圆环 */
-    scui_area_t  dst_area = {0};
-    dst_area.w = src_radius * 2 + 1;
-    dst_area.h = src_radius * 2 + 1;
-    scui_draw_dsc_t draw_dsc_circle = {
-        .type = scui_draw_type_pixel_circle,
-        .graph.dst_surface = dst_surface,
-        .graph.dst_clip    = dst_area,
-        .graph.src_color   = src_color,
-        .graph.src_alpha   = src_alpha,
-        .graph.src_width   = src_width,
-        .graph.src_radius  = src_radius,
-    };
-    /* */
-    scui_coord_t lvl_width = src_width * SCUI_SCALE_COF / src_alpha;
-    lvl_width = lvl_width >> SCUI_SCALE_OFS;
-    if (lvl_width < 1)
-        lvl_width = 1;
-    
-    for (scui_coord_t idx_width = 0; idx_width < src_width; idx_width += lvl_width) {
-        
-        draw_dsc_circle.graph.src_alpha  = (uint16_t)idx_width * src_alpha / src_width;
-        draw_dsc_circle.graph.src_width  = src_radius - idx_width < lvl_width ?
-                                                  src_radius - idx_width : lvl_width;
-        draw_dsc_circle.graph.src_radius = src_radius - idx_width;
-        
-        dst_area.x = dst_clip->x + 0;
-        dst_area.y = dst_clip->y + 0;
-        draw_dsc_circle.graph.dst_clip = dst_area;
-        draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
-        draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
-        scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_lt);
-        dst_area.x = dst_clip->x + dst_clip->w - src_radius * 2 - 1;
-        dst_area.y = dst_clip->y + 0;
-        draw_dsc_circle.graph.dst_clip = dst_area;
-        draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
-        draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
-        scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_rt);
-        dst_area.x = dst_clip->x + 0;
-        dst_area.y = dst_clip->y + dst_clip->h - src_radius * 2 - 1;
-        draw_dsc_circle.graph.dst_clip = dst_area;
-        draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
-        draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
-        scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_lb);
-        dst_area.x = dst_clip->x + dst_clip->w - src_radius * 2 - 1;
-        dst_area.y = dst_clip->y + dst_clip->h - src_radius * 2 - 1;
-        draw_dsc_circle.graph.dst_clip = dst_area;
-        draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
-        draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
-        scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_rb);
-        
-    }
-    
-    /* 色块填充 */
-    scui_draw_dsc_t draw_dsc_line = {
-        .type = scui_draw_type_pixel_line,
-        .graph.dst_surface =  dst_surface,
-        .graph.dst_clip    = *dst_clip,
-        .graph.src_color   =  src_color,
-        .graph.src_alpha   =  src_alpha,
-    };
-    scui_coord_t x = 0;
-    scui_coord_t y = 0;
-    scui_coord_t l = 0;
-    scui_coord_t w = 0;
-    
-    scui_coord_t lvl_w = w * SCUI_SCALE_COF / src_alpha;
-    lvl_w = lvl_w >> SCUI_SCALE_OFS;
-    if (lvl_w < 1)
-        lvl_w = 1;
-    /* 绘制上下两条边线 */
-    x = dst_clip->x + src_radius;
-    l = dst_clip->w - src_radius * 2;
-    w = src_width;
-    /* */
-    for (scui_coord_t idx_w = 0; idx_w < w; idx_w += lvl_w) {
-        draw_dsc_line.graph.src_alpha = (uint16_t)idx_w * src_alpha / w;
-        scui_coord_t src_w = w - idx_w < lvl_w ? w - idx_w : lvl_w;
-        
-        y = dst_clip->y + idx_w;
-        scui_draw_hline(&draw_dsc_line, x, y, l, src_w);
-    }
-    for (scui_coord_t idx_w = 0; idx_w < w; idx_w += lvl_w) {
-        draw_dsc_line.graph.src_alpha = (uint16_t)idx_w * src_alpha / w;
-        scui_coord_t src_w = w - idx_w < lvl_w ? w - idx_w : lvl_w;
-        
-        y = dst_clip->y + dst_clip->h - src_width + w - idx_w - 1;
-        scui_draw_hline(&draw_dsc_line, x, y, l, src_w);
-    }
-    /* 绘制左右两条边线 */
-    y = dst_clip->y + src_radius;
-    l = dst_clip->h - src_radius * 2;
-    w = src_width;
-    /* */
-    for (scui_coord_t idx_w = 0; idx_w < w; idx_w += lvl_w) {
-        draw_dsc_line.graph.src_alpha = (uint16_t)idx_w * src_alpha / w;
-        scui_coord_t src_w = w - idx_w < lvl_w ? w - idx_w : lvl_w;
-        
-        x = dst_clip->x + idx_w;
-        scui_draw_vline(&draw_dsc_line, x, y, l, src_w);
-    }
-    for (scui_coord_t idx_w = 0; idx_w < w; idx_w += lvl_w) {
-        draw_dsc_line.graph.src_alpha = (uint16_t)idx_w * src_alpha / w;
-        scui_coord_t src_w = w - idx_w < lvl_w ? w - idx_w : lvl_w;
-        
-        x = dst_clip->x + dst_clip->w - src_width + w - idx_w - 1;
-        scui_draw_vline(&draw_dsc_line, x, y, l, src_w);
-    }
-    
-    #endif
-}
-
 /*@brief 弧绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例
  */
@@ -1158,6 +903,243 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
     #endif
 }
 
+/*@brief 圆角矩形绘制
+ *@param draw_dsc 绘制描述符实例
+ */
+static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
+    scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
+    scui_area_t    *src_area    = &draw_dsc->graph.src_area;
+    scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
+    scui_color_t    src_color   =  draw_dsc->graph.src_color;
+    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
+    scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
+    scui_coord_t    src_shadow  =  draw_dsc->graph.src_shadow;
+    /* draw dsc args<e> */
+    /* */
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    
+    if (src_alpha == scui_alpha_trans)
+        return;
+    
+    if (src_radius <= 0)
+        src_radius  = 1;
+    
+    if (src_shadow) {
+        #if 1
+        /* 通过绘制空心圆一点点向内部渐变 */
+        /* 注意: 这是一个投机取巧的办法, 不是优秀的实现逻辑 */
+        
+        /* 绘制四个象限的圆或圆环 */
+        scui_area_t  dst_area = {0};
+        dst_area.w = src_radius * 2 + 1;
+        dst_area.h = src_radius * 2 + 1;
+        scui_draw_dsc_t draw_dsc_circle = {
+            .type = scui_draw_type_pixel_circle,
+            .graph.dst_surface = dst_surface,
+            .graph.dst_clip    = dst_area,
+            .graph.src_color   = src_color,
+            .graph.src_alpha   = src_alpha,
+            .graph.src_width   = src_width,
+            .graph.src_radius  = src_radius,
+        };
+        /* */
+        scui_coord_t lvl_width = src_width * SCUI_SCALE_COF / src_alpha;
+        lvl_width = lvl_width >> SCUI_SCALE_OFS;
+        if (lvl_width < 1)
+            lvl_width = 1;
+        
+        for (scui_coord_t idx_width = 0; idx_width < src_width; idx_width += lvl_width) {
+            
+            draw_dsc_circle.graph.src_alpha  = (uint16_t)idx_width * src_alpha / src_width;
+            draw_dsc_circle.graph.src_width  = src_radius - idx_width < lvl_width ?
+                                                      src_radius - idx_width : lvl_width;
+            draw_dsc_circle.graph.src_radius = src_radius - idx_width;
+            
+            dst_area.x = src_area->x + 0;
+            dst_area.y = src_area->y + 0;
+            draw_dsc_circle.graph.dst_clip = dst_area;
+            draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
+            draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
+            scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_lt);
+            dst_area.x = src_area->x + src_area->w - src_radius * 2 - 1;
+            dst_area.y = src_area->y + 0;
+            draw_dsc_circle.graph.dst_clip = dst_area;
+            draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
+            draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
+            scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_rt);
+            dst_area.x = src_area->x + 0;
+            dst_area.y = src_area->y + src_area->h - src_radius * 2 - 1;
+            draw_dsc_circle.graph.dst_clip = dst_area;
+            draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
+            draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
+            scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_lb);
+            dst_area.x = src_area->x + src_area->w - src_radius * 2 - 1;
+            dst_area.y = src_area->y + src_area->h - src_radius * 2 - 1;
+            draw_dsc_circle.graph.dst_clip = dst_area;
+            draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
+            draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
+            scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_rb);
+            
+        }
+        
+        /* 色块填充 */
+        scui_draw_dsc_t draw_dsc_line = {
+            .type = scui_draw_type_pixel_line,
+            .graph.dst_surface =  dst_surface,
+            .graph.dst_clip    = *dst_clip,
+            .graph.src_color   =  src_color,
+            .graph.src_alpha   =  src_alpha,
+        };
+        scui_coord_t x = 0;
+        scui_coord_t y = 0;
+        scui_coord_t l = 0;
+        scui_coord_t w = 0;
+        
+        scui_coord_t lvl_w = w * SCUI_SCALE_COF / src_alpha;
+        lvl_w = lvl_w >> SCUI_SCALE_OFS;
+        if (lvl_w < 1)
+            lvl_w = 1;
+        /* 绘制上下两条边线 */
+        x = src_area->x + src_radius;
+        l = src_area->w - src_radius * 2;
+        w = src_width;
+        /* */
+        for (scui_coord_t idx_w = 0; idx_w < w; idx_w += lvl_w) {
+            draw_dsc_line.graph.src_alpha = (uint16_t)idx_w * src_alpha / w;
+            scui_coord_t src_w = w - idx_w < lvl_w ? w - idx_w : lvl_w;
+            
+            y = src_area->y + idx_w;
+            scui_draw_hline(&draw_dsc_line, x, y, l, src_w);
+        }
+        for (scui_coord_t idx_w = 0; idx_w < w; idx_w += lvl_w) {
+            draw_dsc_line.graph.src_alpha = (uint16_t)idx_w * src_alpha / w;
+            scui_coord_t src_w = w - idx_w < lvl_w ? w - idx_w : lvl_w;
+            
+            y = src_area->y + src_area->h - src_width + w - idx_w - 1;
+            scui_draw_hline(&draw_dsc_line, x, y, l, src_w);
+        }
+        /* 绘制左右两条边线 */
+        y = src_area->y + src_radius;
+        l = src_area->h - src_radius * 2;
+        w = src_width;
+        /* */
+        for (scui_coord_t idx_w = 0; idx_w < w; idx_w += lvl_w) {
+            draw_dsc_line.graph.src_alpha = (uint16_t)idx_w * src_alpha / w;
+            scui_coord_t src_w = w - idx_w < lvl_w ? w - idx_w : lvl_w;
+            
+            x = src_area->x + idx_w;
+            scui_draw_vline(&draw_dsc_line, x, y, l, src_w);
+        }
+        for (scui_coord_t idx_w = 0; idx_w < w; idx_w += lvl_w) {
+            draw_dsc_line.graph.src_alpha = (uint16_t)idx_w * src_alpha / w;
+            scui_coord_t src_w = w - idx_w < lvl_w ? w - idx_w : lvl_w;
+            
+            x = src_area->x + src_area->w - src_width + w - idx_w - 1;
+            scui_draw_vline(&draw_dsc_line, x, y, l, src_w);
+        }
+        
+        #endif
+        return;
+    }
+    
+    #if 1
+    /* 绘制四个象限的圆或圆环 */
+    scui_area_t  dst_area = {0};
+    dst_area.w = src_radius * 2 + 1;
+    dst_area.h = src_radius * 2 + 1;
+    scui_draw_dsc_t draw_dsc_circle = {
+        .type = scui_draw_type_pixel_circle,
+        .graph.dst_surface = dst_surface,
+        .graph.dst_clip    = dst_area,
+        .graph.src_color   = src_color,
+        .graph.src_alpha   = src_alpha,
+        .graph.src_width   = src_width,
+        .graph.src_radius  = src_radius,
+    };
+    /* */
+    dst_area.x = src_area->x + 0;
+    dst_area.y = src_area->y + 0;
+    draw_dsc_circle.graph.dst_clip = dst_area;
+    draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
+    draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
+    scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_lt);
+    dst_area.x = src_area->x + src_area->w - src_radius * 2 - 1;
+    dst_area.y = src_area->y + 0;
+    draw_dsc_circle.graph.dst_clip = dst_area;
+    draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
+    draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
+    scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_rt);
+    dst_area.x = src_area->x + 0;
+    dst_area.y = src_area->y + src_area->h - src_radius * 2 - 1;
+    draw_dsc_circle.graph.dst_clip = dst_area;
+    draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
+    draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
+    scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_lb);
+    dst_area.x = src_area->x + src_area->w - src_radius * 2 - 1;
+    dst_area.y = src_area->y + src_area->h - src_radius * 2 - 1;
+    draw_dsc_circle.graph.dst_clip = dst_area;
+    draw_dsc_circle.graph.src_center.x = dst_area.x + src_radius;
+    draw_dsc_circle.graph.src_center.y = dst_area.y + src_radius;
+    scui_draw_circle_corner(&draw_dsc_circle, scui_draw_circle_type_rb);
+    
+    /* 色块填充 */
+    scui_draw_dsc_t draw_dsc_line = {
+        .type = scui_draw_type_pixel_line,
+        .graph.dst_surface =  dst_surface,
+        .graph.dst_clip    = *dst_clip,
+        .graph.src_color   =  src_color,
+        .graph.src_alpha   =  src_alpha,
+    };
+    scui_coord_t x = 0;
+    scui_coord_t y = 0;
+    scui_coord_t l = 0;
+    scui_coord_t w = 0;
+    
+    /* 完全填充 */
+    if (src_width == 0 || src_width >= src_radius) {
+        /* 绘制中间水平矩形 */
+        x = src_area->x + src_radius;
+        l = src_area->w - src_radius * 2;
+        y = src_area->y;
+        w = src_area->h;
+        scui_draw_hline(&draw_dsc_line, x, y, l, w);
+        /* 绘制左右水平矩形 */
+        y = src_area->y + src_radius;
+        l = src_radius;
+        w = src_area->h - src_radius * 2;
+        /* */
+        x = src_area->x;
+        scui_draw_hline(&draw_dsc_line, x, y, l, w);
+        /* */
+        x = src_area->x + src_area->w - src_radius;
+        scui_draw_hline(&draw_dsc_line, x, y, l, w);
+    } else {
+        /* 绘制上下两条边线 */
+        x = src_area->x + src_radius;
+        l = src_area->w - src_radius * 2;
+        w = src_width;
+        /* */
+        y = src_area->y;
+        scui_draw_hline(&draw_dsc_line, x, y, l, w);
+        y = src_area->y + src_area->h - src_width;
+        scui_draw_hline(&draw_dsc_line, x, y, l, w);
+        /* 绘制左右两条边线 */
+        y = src_area->y + src_radius;
+        l = src_area->h - src_radius * 2;
+        w = src_width;
+        /* */
+        x = src_area->x;
+        scui_draw_vline(&draw_dsc_line, x, y, l, w);
+        x = src_area->x + src_area->w - src_width;
+        scui_draw_vline(&draw_dsc_line, x, y, l, w);
+    }
+    
+    #endif
+}
+
 /*@brief 基础图元绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例
  *@retval 支持度(true:支持;false:不支持;)
@@ -1167,19 +1149,16 @@ bool scui_draw_ctx_graph_EGUI(scui_draw_dsc_t *draw_dsc)
     #if SCUI_DRAW_GRAPH_USE_EGUI
     switch (draw_dsc->type) {
     case scui_draw_type_pixel_line:
-        /* scui_draw_line(draw_dsc); */
-        return false; /* return true; */
+        scui_draw_line(draw_dsc);
+        return true;
     case scui_draw_type_pixel_circle:
         scui_draw_circle(draw_dsc);
         return true;
-    case scui_draw_type_pixel_crect:
-        scui_draw_crect(draw_dsc);
-        return true;
-    case scui_draw_type_pixel_shadow:
-        scui_draw_shadow(draw_dsc);
-        return true;
     case scui_draw_type_pixel_arc:
         scui_draw_arc(draw_dsc);
+        return true;
+    case scui_draw_type_pixel_crect:
+        scui_draw_crect(draw_dsc);
         return true;
     /* 继续补充,剩下的不移植了, 一般用不上了 */
     default:

@@ -87,9 +87,8 @@ bool scui_draw_ctx_acc_sched(scui_draw_dsc_t *draw_dsc)
         
         [scui_draw_type_pixel_line] =               scui_draw_ctx_acc_graph,
         [scui_draw_type_pixel_circle] =             scui_draw_ctx_acc_graph,
-        [scui_draw_type_pixel_crect] =              scui_draw_ctx_acc_graph,
-        [scui_draw_type_pixel_shadow] =             scui_draw_ctx_acc_graph,
         [scui_draw_type_pixel_arc] =                scui_draw_ctx_acc_graph,
+        [scui_draw_type_pixel_crect] =              scui_draw_ctx_acc_graph,
     };
     
     return scui_draw_ctx_acc_cb[draw_dsc->type](draw_dsc);
@@ -160,9 +159,8 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
         
         [scui_draw_type_pixel_line] =               scui_draw_ctx_graph,
         [scui_draw_type_pixel_circle] =             scui_draw_ctx_graph,
-        [scui_draw_type_pixel_crect] =              scui_draw_ctx_graph,
-        [scui_draw_type_pixel_shadow] =             scui_draw_ctx_graph,
         [scui_draw_type_pixel_arc] =                scui_draw_ctx_graph,
+        [scui_draw_type_pixel_crect] =              scui_draw_ctx_graph,
     };
     
     scui_draw_ctx_cb[draw_dsc->type](draw_dsc);

@@ -381,6 +381,7 @@ do {                                                                            
     draw_dsc_inst->graph.src_alpha   = src_alpha_v;                                 \
     draw_dsc_inst->graph.src_color   = src_color_v;                                 \
                                                                                     \
+    draw_dsc_inst->graph.src_area    = (draw_dsc_v)->graph.src_area;                \
     draw_dsc_inst->graph.src_center  = (draw_dsc_v)->graph.src_center;              \
     draw_dsc_inst->graph.src_angle_s = (draw_dsc_v)->graph.src_angle_s;             \
     draw_dsc_inst->graph.src_angle_e = (draw_dsc_v)->graph.src_angle_e;             \
@@ -388,6 +389,7 @@ do {                                                                            
     draw_dsc_inst->graph.src_pos_1   = (draw_dsc_v)->graph.src_pos_1;               \
     draw_dsc_inst->graph.src_pos_2   = (draw_dsc_v)->graph.src_pos_2;               \
     draw_dsc_inst->graph.src_radius  = (draw_dsc_v)->graph.src_radius;              \
+    draw_dsc_inst->graph.src_shadow  = (draw_dsc_v)->graph.src_shadow;              \
     scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 

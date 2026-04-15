@@ -24,21 +24,11 @@ void * scui_draw_thorvg_zalloc(int size)
 
 void * scui_draw_thorvg_realloc(void *ptr, int new_size)
 {
-    if (ptr == NULL)
-        return scui_draw_thorvg_alloc(new_size);
-        
-    if (new_size == 0) {
-        scui_draw_thorvg_free(ptr);
-        return NULL;
-    }
-    
-    /* 这种不该出现, 会导致设计多义 */
-    if (scui_mem_size_ptr(ptr) >= new_size + 40)
-        return ptr;
-    
-    void *ptr_new = scui_draw_thorvg_alloc(new_size);
-    memcpy(ptr_new, ptr, new_size);
+    void  *ptr_new = scui_draw_thorvg_alloc(new_size);
+    size_t siz_old = scui_mem_size_ptr(ptr);
+    memcpy(ptr_new, ptr, scui_min(siz_old, new_size));
     scui_draw_thorvg_free(ptr);
+    
     return ptr_new;
 }
 
@@ -53,7 +43,6 @@ char * scui_draw_thorvg_strdup(const char * src)
     char * dst = scui_draw_thorvg_alloc(len);
     if(dst == NULL) return NULL;
     
-    /*memcpy is faster than strncpy when length is known*/
     memcpy(dst, src, len);
     return dst;
 }

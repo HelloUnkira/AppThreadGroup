@@ -40,9 +40,8 @@ typedef enum {
     /* 基础图元放到最后 */
     scui_draw_type_pixel_line,
     scui_draw_type_pixel_circle,
-    scui_draw_type_pixel_crect,
-    scui_draw_type_pixel_shadow,
     scui_draw_type_pixel_arc,
+    scui_draw_type_pixel_crect,
     
     scui_draw_type_num,
 } scui_draw_type_t;
@@ -257,6 +256,7 @@ typedef struct {
         scui_alpha_t        src_alpha;      /* 透明度 */
         scui_color_t        src_color;      /* 源色调 */
         
+        scui_area_t         src_area;       /* 图元区域 */
         scui_point_t        src_center;     /* 旋转中心 */
         scui_coord_t        src_angle_s;    /* 起始角度 */
         scui_coord_t        src_angle_e;    /* 结束角度 */
@@ -264,6 +264,7 @@ typedef struct {
         scui_point_t        src_pos_1;      /* 坐标点 */
         scui_point_t        src_pos_2;      /* 坐标点 */
         scui_coord_t        src_radius;     /* 弧, 圆半径 */
+        scui_coord_t        src_shadow:1;   /* crect阴影标记 */
     } graph;
     /**************************************************************************
      * keep adding...
