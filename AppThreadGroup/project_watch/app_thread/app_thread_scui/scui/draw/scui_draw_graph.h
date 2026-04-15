@@ -38,10 +38,13 @@ typedef enum {
     scui_draw_type_ring,
     
     /* 基础图元放到最后 */
-    scui_draw_type_pixel_line,
-    scui_draw_type_pixel_circle,
     scui_draw_type_pixel_arc,
+    scui_draw_type_pixel_circle,
+    scui_draw_type_pixel_line,
     scui_draw_type_pixel_crect,
+    
+    /* 矢量缩放图形扩展 */
+    scui_draw_type_pixel_tvg,
     
     scui_draw_type_num,
 } scui_draw_type_t;
@@ -265,6 +268,11 @@ typedef struct {
         scui_point_t        src_pos_2;      /* 坐标点 */
         scui_coord_t        src_radius;     /* 弧, 圆半径 */
         scui_coord_t        src_shadow:1;   /* crect阴影标记 */
+        
+        /* 矢量缩放图形扩展 */
+        void               (*src_tvg_cb)(void *draw_dsc);
+        void                *src_tvg_canvas;
+        scui_point_t         src_tvg_offset;
     } graph;
     /**************************************************************************
      * keep adding...

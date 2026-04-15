@@ -73,10 +73,10 @@ static void scui_draw_tvg_canvas_sched(Tvg_Canvas *canvas)
 }
 #endif
 
-/*@brief 线条绘制(抗锯齿)
+/*@brief 弧绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例
  */
-static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
+static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
@@ -84,8 +84,10 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
     scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
     scui_color_t    src_color   =  draw_dsc->graph.src_color;
     scui_coord_t    src_width   =  draw_dsc->graph.src_width;
-    scui_point_t    src_pos_1   =  draw_dsc->graph.src_pos_1;
-    scui_point_t    src_pos_2   =  draw_dsc->graph.src_pos_2;
+    scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
+    scui_point_t    src_center  =  draw_dsc->graph.src_center;
+    scui_coord_t    src_angle_s =  draw_dsc->graph.src_angle_s;
+    scui_coord_t    src_angle_e =  draw_dsc->graph.src_angle_e;
     /* draw dsc args<e> */
     /* */
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -93,8 +95,8 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    if (src_width <= 0)
-        src_width  = 1;
+    if (src_radius <= 0)
+        src_radius  = 1;
     
     scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(dst_surface);
@@ -113,18 +115,34 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
         Tvg_Paint *paint = tvg_shape_new();
         tvg_paint_set_opacity(paint, src_alpha);
         
-        uint8_t s_a = src_color.color.ch.a;
-        uint8_t s_r = src_color.color.ch.r;
-        uint8_t s_g = src_color.color.ch.g;
-        uint8_t s_b = src_color.color.ch.b;
+        uint8_t f_a = 0, f_r = 0, f_g = 0, f_b = 0;
+        uint8_t s_a = 0, s_r = 0, s_g = 0, s_b = 0;
+        scui_coord_t s_width = 0;
         
-        /* 一个线条 */
-        tvg_shape_move_to(paint, src_pos_1.x - dst_clip_v.x, src_pos_1.y - dst_clip_v.y);
-        tvg_shape_line_to(paint, src_pos_2.x - dst_clip_v.x, src_pos_2.y - dst_clip_v.y);
+        if (src_width == 0 || src_width >= src_radius) {
+            f_a = src_color.color.ch.a;
+            f_r = src_color.color.ch.r;
+            f_g = src_color.color.ch.g;
+            f_b = src_color.color.ch.b;
+        } else {
+            s_a = src_color.color.ch.a;
+            s_r = src_color.color.ch.r;
+            s_g = src_color.color.ch.g;
+            s_b = src_color.color.ch.b;
+            s_width = src_width;
+        }
         
-        tvg_shape_set_stroke_cap(paint, TVG_STROKE_CAP_ROUND);
-        tvg_shape_set_stroke_width(paint, src_width);
+        scui_coord_t full = src_width >= src_radius ? 1 : 0;
+        
+        /* 一个弧形扇形 */
+        scui_coord_t a_s = src_angle_s;
+        scui_coord_t a_l = src_angle_e  - src_angle_s;
+        scui_coord_t c_x = src_center.x - dst_clip_v.x;
+        scui_coord_t c_y = src_center.y - dst_clip_v.y;
+        tvg_shape_append_arc(paint, c_x, c_y, src_radius, a_s, a_l, full);
+        tvg_shape_set_fill_color(paint, f_r, f_g, f_b, f_a);
         tvg_shape_set_stroke_color(paint, s_r, s_g, s_b, s_a);
+        tvg_shape_set_stroke_width(paint, s_width);
         tvg_canvas_push(canvas, paint);
         
         /* 固定:画布绘制 */
@@ -213,10 +231,10 @@ static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
     #endif
 }
 
-/*@brief 弧绘制(抗锯齿)
+/*@brief 线条绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例
  */
-static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
+static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
@@ -224,10 +242,8 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
     scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
     scui_color_t    src_color   =  draw_dsc->graph.src_color;
     scui_coord_t    src_width   =  draw_dsc->graph.src_width;
-    scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
-    scui_point_t    src_center  =  draw_dsc->graph.src_center;
-    scui_coord_t    src_angle_s =  draw_dsc->graph.src_angle_s;
-    scui_coord_t    src_angle_e =  draw_dsc->graph.src_angle_e;
+    scui_point_t    src_pos_1   =  draw_dsc->graph.src_pos_1;
+    scui_point_t    src_pos_2   =  draw_dsc->graph.src_pos_2;
     /* draw dsc args<e> */
     /* */
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -235,8 +251,8 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    if (src_radius <= 0)
-        src_radius  = 1;
+    if (src_width <= 0)
+        src_width  = 1;
     
     scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(dst_surface);
@@ -255,34 +271,18 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
         Tvg_Paint *paint = tvg_shape_new();
         tvg_paint_set_opacity(paint, src_alpha);
         
-        uint8_t f_a = 0, f_r = 0, f_g = 0, f_b = 0;
-        uint8_t s_a = 0, s_r = 0, s_g = 0, s_b = 0;
-        scui_coord_t s_width = 0;
+        uint8_t s_a = src_color.color.ch.a;
+        uint8_t s_r = src_color.color.ch.r;
+        uint8_t s_g = src_color.color.ch.g;
+        uint8_t s_b = src_color.color.ch.b;
         
-        if (src_width == 0 || src_width >= src_radius) {
-            f_a = src_color.color.ch.a;
-            f_r = src_color.color.ch.r;
-            f_g = src_color.color.ch.g;
-            f_b = src_color.color.ch.b;
-        } else {
-            s_a = src_color.color.ch.a;
-            s_r = src_color.color.ch.r;
-            s_g = src_color.color.ch.g;
-            s_b = src_color.color.ch.b;
-            s_width = src_width;
-        }
+        /* 一个线条 */
+        tvg_shape_move_to(paint, src_pos_1.x - dst_clip_v.x, src_pos_1.y - dst_clip_v.y);
+        tvg_shape_line_to(paint, src_pos_2.x - dst_clip_v.x, src_pos_2.y - dst_clip_v.y);
         
-        scui_coord_t full = src_width >= src_radius ? 1 : 0;
-        
-        /* 一个弧形扇形 */
-        scui_coord_t a_s = src_angle_s;
-        scui_coord_t a_l = src_angle_e  - src_angle_s;
-        scui_coord_t c_x = src_center.x - dst_clip_v.x;
-        scui_coord_t c_y = src_center.y - dst_clip_v.y;
-        tvg_shape_append_arc(paint, c_x, c_y, src_radius, a_s, a_l, full);
-        tvg_shape_set_fill_color(paint, f_r, f_g, f_b, f_a);
+        tvg_shape_set_stroke_cap(paint, TVG_STROKE_CAP_ROUND);
+        tvg_shape_set_stroke_width(paint, src_width);
         tvg_shape_set_stroke_color(paint, s_r, s_g, s_b, s_a);
-        tvg_shape_set_stroke_width(paint, s_width);
         tvg_canvas_push(canvas, paint);
         
         /* 固定:画布绘制 */
@@ -543,6 +543,51 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
     #endif
 }
 
+/*@brief 矢量引擎回调
+ *@param draw_dsc 绘制描述符实例
+ */
+static void scui_draw_tvg(scui_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
+    scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
+    scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
+    
+    /* draw dsc args<e> */
+    /* */
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    
+    if (src_alpha == scui_alpha_trans)
+        return;
+    
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
+    scui_area_t dst_area = scui_surface_area(dst_surface);
+    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
+         return;
+    
+    scui_area_t draw_area = {0};
+    draw_area.w = dst_clip_v.w;
+    draw_area.h = dst_clip_v.h;
+    
+    #if SCUI_DRAW_USE_THORVG
+    if (scui_draw_tvg_canvas_switch(dst_surface, &dst_clip_v)) {
+        Tvg_Canvas *canvas = scui_draw_tvg_canvas_ready(&draw_area);
+        
+        draw_dsc->graph.src_tvg_canvas = canvas;
+        draw_dsc->graph.src_tvg_offset.x = -dst_clip_v.x;
+        draw_dsc->graph.src_tvg_offset.x = -dst_clip_v.y;
+        draw_dsc->graph.src_tvg_cb(draw_dsc);
+        
+        /* 固定:画布绘制 */
+        scui_draw_tvg_canvas_sched(canvas);
+        
+        /* 固定:资源获取绘制 */
+        scui_draw_area_blend(true, dst_surface, dst_clip_v,
+            &scui_draw_graph.tvg_surface, draw_area, SCUI_COLOR_UNUSED);
+    }
+    #endif
+}
+
 /*@brief 基础图元绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例
  *@retval 支持度(true:支持;false:不支持;)
@@ -551,17 +596,20 @@ bool scui_draw_ctx_graph_TVG(scui_draw_dsc_t *draw_dsc)
 {
     #if SCUI_DRAW_USE_THORVG
     switch (draw_dsc->type) {
-    case scui_draw_type_pixel_line:
-        scui_draw_line(draw_dsc);
+    case scui_draw_type_pixel_arc:
+        scui_draw_arc(draw_dsc);
         return true;
     case scui_draw_type_pixel_circle:
         scui_draw_circle(draw_dsc);
         return true;
-    case scui_draw_type_pixel_arc:
-        scui_draw_arc(draw_dsc);
+    case scui_draw_type_pixel_line:
+        scui_draw_line(draw_dsc);
         return true;
     case scui_draw_type_pixel_crect:
         scui_draw_crect(draw_dsc);
+        return true;
+    case scui_draw_type_pixel_tvg:
+        scui_draw_tvg(draw_dsc);
         return true;
     /* 继续补充,剩下的不移植了, 一般用不上了 */
     default:

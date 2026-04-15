@@ -7,118 +7,6 @@
 
 #include "scui.h"
 
-/*@brief 线条绘制(抗锯齿)
- *@param draw_dsc 绘制描述符实例
- */
-static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
-{
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
-    scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
-    scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
-    scui_point_t    src_pos_1   =  draw_dsc->graph.src_pos_1;
-    scui_point_t    src_pos_2   =  draw_dsc->graph.src_pos_2;
-    /* draw dsc args<e> */
-    /* */
-    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
-    
-    if (src_alpha == scui_alpha_trans)
-        return;
-    
-    if (src_width <= 0)
-        src_width  = 1;
-    
-    scui_area_t draw_area = {0};
-    scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
-         return;
-    
-    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
-    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
-    uint8_t *dst_addr = dst_surface->pixel;
-    scui_color_wt_t src_pixel = 0;
-    scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
-    
-    #if 1
-    /* EmbeddedGUI移植: egui_canvas_draw_line */
-    scui_coord_t x1 = src_pos_1.x;
-    scui_coord_t y1 = src_pos_1.y;
-    scui_coord_t x2 = src_pos_2.x;
-    scui_coord_t y2 = src_pos_2.y;
-    scui_coord_t yinc = 1;
-    scui_coord_t deltax = scui_abs(x2 - x1);
-    scui_coord_t deltay = scui_abs(y2 - y1);
-    bool steep = deltay >= deltax;
-    
-    if (steep) {
-        scui_coord_t t1 = 0, t2 = 0;
-        t1 = x1; x1 = y1; y1 = t1;
-        t2 = x2; x2 = y2; y2 = t2;
-    }
-    if (x1 > x2) {
-        scui_coord_t tx = 0, ty = 0;
-        tx = x1; x1 = x2; x2 = tx;
-        ty = y1; y1 = y2; y2 = ty;
-    }
-    
-    scui_coord_t dx = x2 - x1;
-    scui_coord_t dy = y2 - y1;
-    if (dy < 0) {
-        dy = -dy;
-        yinc = -1;
-    }
-    
-    scui_multi_t grad = dy * SCUI_SCALE_COF / dx;
-    scui_multi_t itor = 0;
-    scui_coord_t x_s  = draw_area.x;
-    scui_coord_t x_e  = draw_area.x + draw_area.w;
-    scui_coord_t y_s  = draw_area.y;
-    scui_coord_t y_e  = draw_area.y + draw_area.h;
-    
-    scui_coord_t y = y1;
-    for (scui_coord_t x = x1; x <= x2; x++) {
-        /* 为了简化代码, 我和并了流程, 为了性能是可以拆分出的 */
-        if (( steep && (x >= y_s && x < y_e && y < x_e && y + src_width >= x_s)) ||
-            (!steep && (x >= x_s && x < x_e && y < y_e && y + src_width >= y_s))) {
-            
-            scui_alpha_t alpha_0 = (yinc > 0 ? itor : SCUI_SCALE_COF - itor) >> (SCUI_SCALE_OFS - 8);
-            scui_alpha_t alpha_1 = scui_alpha_cover - alpha_0;
-            if (src_alpha != scui_alpha_cover) {
-                alpha_0 = scui_alpha_mix(src_alpha, alpha_0);
-                alpha_1 = scui_alpha_mix(src_alpha, alpha_1);
-            }
-            
-            uint8_t *dst_ofs = NULL;
-            scui_multi_t p0_x = x, p0_y = y;
-            scui_multi_t pw_x = x, pw_y = y + src_width;
-            if (steep) {
-                p0_y = x; p0_x = y;
-                pw_y = x; pw_x = y + src_width;
-            }
-            
-            for (scui_multi_t idx = y + 1; idx < y + src_width; idx++) {
-                dst_ofs = dst_addr + (steep ? x * dst_line + idx * dst_byte : idx * dst_line + x * dst_byte);
-                scui_pixel_mix_with(dst_surface->format, dst_ofs,
-                    dst_surface->format, &src_pixel, src_alpha);
-            }
-            dst_ofs = dst_addr + p0_y * dst_line + p0_x * dst_byte;
-            scui_pixel_mix_with(dst_surface->format, dst_ofs,
-                dst_surface->format, &src_pixel, alpha_1);
-            dst_ofs = dst_addr + pw_y * dst_line + pw_x * dst_byte;
-            scui_pixel_mix_with(dst_surface->format, dst_ofs,
-                dst_surface->format, &src_pixel, alpha_0);
-        }
-        itor += grad;
-        if (itor >= SCUI_SCALE_COF) {
-            itor -= SCUI_SCALE_COF;
-            y = yinc > 0 ? y + 1 : y - 1;
-        }
-    }
-    #endif
-}
-
 /* EmbeddedGUI移植 */
 #if 1
 /* EmbeddedGUI移植 */
@@ -691,83 +579,6 @@ static void scui_draw_arc_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_typ
 
 #endif
 
-/*@brief 圆绘制(抗锯齿)
- *@param draw_dsc 绘制描述符实例
- */
-static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
-{
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
-    scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
-    scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
-    scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
-    scui_point_t    src_center  =  draw_dsc->graph.src_center;
-    /* draw dsc args<e> */
-    /* */
-    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
-    
-    if (src_alpha == scui_alpha_trans)
-        return;
-    
-    if (src_radius <= 0)
-        src_radius  = 1;
-    
-    /* EmbeddedGUI移植 */
-    #if 1
-    scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_lt);
-    scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_lb);
-    scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_rt);
-    scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_rb);
-    
-    scui_draw_dsc_t draw_dsc_line = {
-        .type = scui_draw_type_pixel_line,
-        .graph.dst_surface =  dst_surface,
-        .graph.dst_clip    = *dst_clip,
-        .graph.src_color   =  src_color,
-        .graph.src_alpha   =  src_alpha,
-    };
-    scui_coord_t x = 0;
-    scui_coord_t y = 0;
-    scui_coord_t l = 0;
-    
-    /* 完全填充 */
-    if (src_width == 0 || src_width >= src_radius) {
-        x = src_center.x - src_radius;
-        y = src_center.y;
-        l = src_radius;
-        scui_draw_hline(&draw_dsc_line, x, y, l, 1);
-        x = src_center.x + 1;
-        y = src_center.y;
-        l = src_radius;
-        scui_draw_hline(&draw_dsc_line, x, y, l, 1);
-        x = src_center.x;
-        y = src_center.y - src_radius;
-        l = (src_radius << 1) + 1;
-        scui_draw_vline(&draw_dsc_line, x, y, l, 1);
-    } else {
-        x = src_center.x - src_radius;
-        y = src_center.y;
-        l = src_width;
-        scui_draw_hline(&draw_dsc_line, x, y, l, 1);
-        x = src_center.x + src_radius - src_width + 1;
-        y = src_center.y;
-        l = src_width;
-        scui_draw_hline(&draw_dsc_line, x, y, l, 1);
-        
-        x = src_center.x;
-        y = src_center.y - src_radius;
-        l = src_width;
-        scui_draw_vline(&draw_dsc_line, x, y, l, 1);
-        x = src_center.x;
-        y = src_center.y + src_radius - src_width + 1;
-        l = src_width;
-        scui_draw_vline(&draw_dsc_line, x, y, l, 1);
-    }
-    #endif
-}
-
 /*@brief 弧绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例
  */
@@ -898,6 +709,195 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
             scui_coord_t x = src_center.x;
             scui_coord_t y = src_center.y;
             scui_draw_hline(&draw_dsc_line, x, y, 1, 1);
+        }
+    }
+    #endif
+}
+
+/*@brief 圆绘制(抗锯齿)
+ *@param draw_dsc 绘制描述符实例
+ */
+static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
+    scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
+    scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
+    scui_color_t    src_color   =  draw_dsc->graph.src_color;
+    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
+    scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
+    scui_point_t    src_center  =  draw_dsc->graph.src_center;
+    /* draw dsc args<e> */
+    /* */
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    
+    if (src_alpha == scui_alpha_trans)
+        return;
+    
+    if (src_radius <= 0)
+        src_radius  = 1;
+    
+    /* EmbeddedGUI移植 */
+    #if 1
+    scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_lt);
+    scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_lb);
+    scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_rt);
+    scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_rb);
+    
+    scui_draw_dsc_t draw_dsc_line = {
+        .type = scui_draw_type_pixel_line,
+        .graph.dst_surface =  dst_surface,
+        .graph.dst_clip    = *dst_clip,
+        .graph.src_color   =  src_color,
+        .graph.src_alpha   =  src_alpha,
+    };
+    scui_coord_t x = 0;
+    scui_coord_t y = 0;
+    scui_coord_t l = 0;
+    
+    /* 完全填充 */
+    if (src_width == 0 || src_width >= src_radius) {
+        x = src_center.x - src_radius;
+        y = src_center.y;
+        l = src_radius;
+        scui_draw_hline(&draw_dsc_line, x, y, l, 1);
+        x = src_center.x + 1;
+        y = src_center.y;
+        l = src_radius;
+        scui_draw_hline(&draw_dsc_line, x, y, l, 1);
+        x = src_center.x;
+        y = src_center.y - src_radius;
+        l = (src_radius << 1) + 1;
+        scui_draw_vline(&draw_dsc_line, x, y, l, 1);
+    } else {
+        x = src_center.x - src_radius;
+        y = src_center.y;
+        l = src_width;
+        scui_draw_hline(&draw_dsc_line, x, y, l, 1);
+        x = src_center.x + src_radius - src_width + 1;
+        y = src_center.y;
+        l = src_width;
+        scui_draw_hline(&draw_dsc_line, x, y, l, 1);
+        
+        x = src_center.x;
+        y = src_center.y - src_radius;
+        l = src_width;
+        scui_draw_vline(&draw_dsc_line, x, y, l, 1);
+        x = src_center.x;
+        y = src_center.y + src_radius - src_width + 1;
+        l = src_width;
+        scui_draw_vline(&draw_dsc_line, x, y, l, 1);
+    }
+    #endif
+}
+
+/*@brief 线条绘制(抗锯齿)
+ *@param draw_dsc 绘制描述符实例
+ */
+static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
+    scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
+    scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
+    scui_color_t    src_color   =  draw_dsc->graph.src_color;
+    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
+    scui_point_t    src_pos_1   =  draw_dsc->graph.src_pos_1;
+    scui_point_t    src_pos_2   =  draw_dsc->graph.src_pos_2;
+    /* draw dsc args<e> */
+    /* */
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    
+    if (src_alpha == scui_alpha_trans)
+        return;
+    
+    if (src_width <= 0)
+        src_width  = 1;
+    
+    scui_area_t draw_area = {0};
+    scui_area_t dst_area = scui_surface_area(dst_surface);
+    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+         return;
+    
+    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
+    uint8_t *dst_addr = dst_surface->pixel;
+    scui_color_wt_t src_pixel = 0;
+    scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
+    
+    #if 1
+    /* EmbeddedGUI移植: egui_canvas_draw_line */
+    scui_coord_t x1 = src_pos_1.x;
+    scui_coord_t y1 = src_pos_1.y;
+    scui_coord_t x2 = src_pos_2.x;
+    scui_coord_t y2 = src_pos_2.y;
+    scui_coord_t yinc = 1;
+    scui_coord_t deltax = scui_abs(x2 - x1);
+    scui_coord_t deltay = scui_abs(y2 - y1);
+    bool steep = deltay >= deltax;
+    
+    if (steep) {
+        scui_coord_t t1 = 0, t2 = 0;
+        t1 = x1; x1 = y1; y1 = t1;
+        t2 = x2; x2 = y2; y2 = t2;
+    }
+    if (x1 > x2) {
+        scui_coord_t tx = 0, ty = 0;
+        tx = x1; x1 = x2; x2 = tx;
+        ty = y1; y1 = y2; y2 = ty;
+    }
+    
+    scui_coord_t dx = x2 - x1;
+    scui_coord_t dy = y2 - y1;
+    if (dy < 0) {
+        dy = -dy;
+        yinc = -1;
+    }
+    
+    scui_multi_t grad = dy * SCUI_SCALE_COF / dx;
+    scui_multi_t itor = 0;
+    scui_coord_t x_s  = draw_area.x;
+    scui_coord_t x_e  = draw_area.x + draw_area.w;
+    scui_coord_t y_s  = draw_area.y;
+    scui_coord_t y_e  = draw_area.y + draw_area.h;
+    
+    scui_coord_t y = y1;
+    for (scui_coord_t x = x1; x <= x2; x++) {
+        /* 为了简化代码, 我和并了流程, 为了性能是可以拆分出的 */
+        if (( steep && (x >= y_s && x < y_e && y < x_e && y + src_width >= x_s)) ||
+            (!steep && (x >= x_s && x < x_e && y < y_e && y + src_width >= y_s))) {
+            
+            scui_alpha_t alpha_0 = (yinc > 0 ? itor : SCUI_SCALE_COF - itor) >> (SCUI_SCALE_OFS - 8);
+            scui_alpha_t alpha_1 = scui_alpha_cover - alpha_0;
+            if (src_alpha != scui_alpha_cover) {
+                alpha_0 = scui_alpha_mix(src_alpha, alpha_0);
+                alpha_1 = scui_alpha_mix(src_alpha, alpha_1);
+            }
+            
+            uint8_t *dst_ofs = NULL;
+            scui_multi_t p0_x = x, p0_y = y;
+            scui_multi_t pw_x = x, pw_y = y + src_width;
+            if (steep) {
+                p0_y = x; p0_x = y;
+                pw_y = x; pw_x = y + src_width;
+            }
+            
+            for (scui_multi_t idx = y + 1; idx < y + src_width; idx++) {
+                dst_ofs = dst_addr + (steep ? x * dst_line + idx * dst_byte : idx * dst_line + x * dst_byte);
+                scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                    dst_surface->format, &src_pixel, src_alpha);
+            }
+            dst_ofs = dst_addr + p0_y * dst_line + p0_x * dst_byte;
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                dst_surface->format, &src_pixel, alpha_1);
+            dst_ofs = dst_addr + pw_y * dst_line + pw_x * dst_byte;
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                dst_surface->format, &src_pixel, alpha_0);
+        }
+        itor += grad;
+        if (itor >= SCUI_SCALE_COF) {
+            itor -= SCUI_SCALE_COF;
+            y = yinc > 0 ? y + 1 : y - 1;
         }
     }
     #endif
@@ -1148,14 +1148,14 @@ bool scui_draw_ctx_graph_EGUI(scui_draw_dsc_t *draw_dsc)
 {
     #if SCUI_DRAW_GRAPH_USE_EGUI
     switch (draw_dsc->type) {
-    case scui_draw_type_pixel_line:
-        scui_draw_line(draw_dsc);
+    case scui_draw_type_pixel_arc:
+        scui_draw_arc(draw_dsc);
         return true;
     case scui_draw_type_pixel_circle:
         scui_draw_circle(draw_dsc);
         return true;
-    case scui_draw_type_pixel_arc:
-        scui_draw_arc(draw_dsc);
+    case scui_draw_type_pixel_line:
+        scui_draw_line(draw_dsc);
         return true;
     case scui_draw_type_pixel_crect:
         scui_draw_crect(draw_dsc);
