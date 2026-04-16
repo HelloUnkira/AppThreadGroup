@@ -7,9 +7,6 @@
 
 #include "scui.h"
 
-/* 拆分部件,这部分直接引用 */
-extern scui_window_mgr_t scui_window_mgr;
-
 /*@brief 窗口栈检查
  */
 static void scui_window_stack_check(void)

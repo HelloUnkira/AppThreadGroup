@@ -7,9 +7,6 @@
 
 #include "scui.h"
 
-/* 拆分部件,这部分直接引用 */
-extern scui_window_mgr_t scui_window_mgr;
-
 /*@brief 窗口切换风格自动更新
  *@param type 窗口切换风格
  *@param dir  窗口切换方向

@@ -7,9 +7,6 @@
 
 #include "scui.h"
 
-/* 拆分部件,这部分直接引用 */
-extern scui_window_mgr_t scui_window_mgr;
-
 
 
 /* 这里偷个懒不做额外参数配给了 */

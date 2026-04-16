@@ -317,14 +317,12 @@ void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
     
     /* 矢量绘图引擎 */
     #if SCUI_DRAW_USE_THORVG
-    bool scui_draw_ctx_graph_TVG(scui_draw_dsc_t *draw_dsc);
     if (scui_draw_ctx_graph_TVG(draw_dsc))
         return;
     #endif
     
     /* 外源图形组件 */
     #if SCUI_DRAW_GRAPH_USE_EGUI
-    bool scui_draw_ctx_graph_EGUI(scui_draw_dsc_t *draw_dsc);
     if (scui_draw_ctx_graph_EGUI(draw_dsc))
         return;
     #endif

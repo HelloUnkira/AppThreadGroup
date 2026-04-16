@@ -402,4 +402,3 @@ void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(draw_dsc->type < scui_custom_draw_type_num);
     scui_custom_draw_ctx_cb[draw_dsc->type](draw_dsc);
 }
-
