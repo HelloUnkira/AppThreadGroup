@@ -65,17 +65,20 @@
 #include "scui_scroll_inf.h"        /* 控件(滚动)API */
 #include "scui_linear.h"            /* 控件(列表) */
 #include "scui_linear_inf.h"        /* 控件(列表)API */
+/* widget(extend): */
 #include "scui_roller.h"            /* 控件(滚轮) */
 #include "scui_roller_inf.h"        /* 控件(滚轮)API */
 #include "scui_xvedio.h"            /* 控件(图帧) */
 #include "scui_xvedio_inf.h"        /* 控件(图帧)API */
+#include "scui_xwatch.h"            /* 控件(指针) */
+#include "scui_xwatch_inf.h"        /* 控件(指针)API */
 /* widget(custom): */
+#include "scui_menial.h"            /* 控件(仆从) */
+#include "scui_menial_inf.h"        /* 控件(仆从)API */
 #include "scui_button.h"            /* 控件(按钮) */
 #include "scui_button_inf.h"        /* 控件(按钮)API */
 #include "scui_xchart.h"            /* 控件(图表) */
 #include "scui_xchart_inf.h"        /* 控件(图表)API */
-#include "scui_xwatch.h"            /* 控件(指针) */
-#include "scui_xwatch_inf.h"        /* 控件(指针)API */
 
 /* draw,linker: */
 #include "scui_draw_graph.h"

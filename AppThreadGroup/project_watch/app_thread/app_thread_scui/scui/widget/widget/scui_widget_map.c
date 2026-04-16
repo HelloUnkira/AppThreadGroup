@@ -139,6 +139,8 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .inherit = false,
             .name    = "linear_s",
         },
+        
+        /* 扩展控件 */
         [scui_widget_type_roller] = {
             .size    = sizeof(scui_roller_t),
             .maker   = sizeof(scui_roller_maker_t),
@@ -159,8 +161,28 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .inherit = false,
             .name    = "xvedio",
         },
+        [scui_widget_type_xwatch] = {
+            .size    = sizeof(scui_xwatch_t),
+            .maker   = sizeof(scui_xwatch_maker_t),
+            .base    = scui_widget_type_xwatch,
+            .make    = scui_xwatch_make,
+            .burn    = scui_xwatch_burn,
+            .invoke  = scui_xwatch_invoke,
+            .inherit = false,
+            .name    = "xwatch",
+        },
         
-        /* 扩展控件 */
+        /* 可选控件 */
+        [scui_widget_type_menial] = {
+            .size    = sizeof(scui_menial_t),
+            .maker   = sizeof(scui_menial_maker_t),
+            .base    = scui_widget_type_menial,
+            .make    = scui_menial_make,
+            .burn    = scui_menial_burn,
+            .invoke  = scui_menial_invoke,
+            .inherit = false,
+            .name    = "menial",
+        },
         [scui_widget_type_button] = {
             .size    = sizeof(scui_button_t),
             .maker   = sizeof(scui_button_maker_t),
@@ -180,16 +202,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .invoke  = scui_xchart_invoke,
             .inherit = false,
             .name    = "xchart",
-        },
-        [scui_widget_type_xwatch] = {
-            .size    = sizeof(scui_xwatch_t),
-            .maker   = sizeof(scui_xwatch_maker_t),
-            .base    = scui_widget_type_xwatch,
-            .make    = scui_xwatch_make,
-            .burn    = scui_xwatch_burn,
-            .invoke  = scui_xwatch_invoke,
-            .inherit = false,
-            .name    = "xwatch",
         },
     };
     
