@@ -32,6 +32,7 @@
         {
             "annotation":                   "page_1",
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_1_SCROLL_PAGE_1",
@@ -42,6 +43,7 @@
         {
             "annotation":                   "page_2",
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_1_SCROLL_PAGE_2",
@@ -52,6 +54,7 @@
         {
             "annotation":                   "page_3",
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_1_SCROLL_PAGE_3",

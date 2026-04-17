@@ -209,6 +209,8 @@
 /* menial(btn):缩放限制百分比 */
 #define SCUI_WIDGET_MENIAL_BTN_TIME                 (100)
 #define SCUI_WIDGET_MENIAL_BTN_PCT                  (90)
+/* menial(arc):进度动画时间(360度) */
+#define SCUI_WIDGET_MENIAL_ARC_TIME                 (500)
 
 
 

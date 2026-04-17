@@ -31,7 +31,22 @@ typedef union {
     
     /* field(arc): */
     struct {
-        void *occupy;
+        scui_point_t  center;       /* 弧心 */
+        scui_coord_t  width;        /* 弧宽(扇形:<= 0;弧型:> 0) */
+        scui_coord_t  radius;       /* 半径(> 0) */
+        scui_coord3_t angle_s;      /* 起始角度(默认:0.0f) */
+        scui_coord3_t angle_e;      /* 结束角度(默认:360.0f) */
+        scui_color_t  color[2];     /* 弧颜色(背景[0]前景[1]) */
+        scui_sbitfd_t round:1;      /* 端点圆角 */
+        scui_sbitfd_t gradw:1;      /* 渐变方向(水平:0;垂直:1) */
+        scui_sbitfd_t grad:1;       /* 可选渐变(s->e) */
+        scui_sbitfd_t anti:1;       /* 反方向 */
+        /* 内部域: */
+        scui_coord3_t angle_dist;
+        scui_coord3_t angle_cur;
+        scui_coord3_t angle_way;
+        scui_coord_t  time;
+        scui_coord_t  tick;
     } arc;
     
     /* keep add... */

@@ -11,7 +11,7 @@
 /* 矢量绘图引擎(thorvg): */
 #include "thorvg_capi.h"
 
-void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
+static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;

@@ -390,8 +390,11 @@ do {                                                                            
     draw_dsc_inst->graph.src_pos_2   = (draw_dsc_v)->graph.src_pos_2;               \
     draw_dsc_inst->graph.src_radius  = (draw_dsc_v)->graph.src_radius;              \
     draw_dsc_inst->graph.src_shadow  = (draw_dsc_v)->graph.src_shadow;              \
-                                                                                    \
-    draw_dsc_inst->graph.src_tvg_cb  = (draw_dsc_v)->graph.src_tvg_cb;              \
+    /* ThorVG扩展字段: */                                                               \
+    draw_dsc_inst->graph.src_tvg_cb     = (draw_dsc_v)->graph.src_tvg_cb;           \
+    draw_dsc_inst->graph.src_tvg_round  = (draw_dsc_v)->graph.src_tvg_round;        \
+    draw_dsc_inst->graph.src_tvg_gradw  = (draw_dsc_v)->graph.src_tvg_gradw;        \
+    draw_dsc_inst->graph.src_tvg_grad   = (draw_dsc_v)->graph.src_tvg_grad;         \
     scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 

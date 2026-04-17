@@ -1121,6 +1121,7 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_1 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_1_SCROLL_PAGE_1,
@@ -1131,6 +1132,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_1 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_2 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_1_SCROLL_PAGE_2,
@@ -1141,6 +1143,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_2 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_3 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_1_SCROLL_PAGE_3,
