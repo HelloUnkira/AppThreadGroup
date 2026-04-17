@@ -269,6 +269,14 @@ typedef uintptr_t scui_sbitfd_t;
  */
 void scui_color_by_palette(scui_color_t *color, scui_palette_t palette, uint8_t type, uint8_t level);
 
+/*@brief 颜色值混合color32
+ *@param color32   颜色值color32
+ *@param color32_c 颜色值color32
+ *@param color32_t 颜色值color32
+ *@param pct_c     color32_c百分比
+ */
+void scui_color32_mix_with(scui_color32_t *color32, scui_color32_t *color32_c, scui_color32_t *color32_t, scui_coord_t pct_c);
+
 /*@brief 像素点配置
  *@param cf    像素点格式
  *@param pixel 像素点

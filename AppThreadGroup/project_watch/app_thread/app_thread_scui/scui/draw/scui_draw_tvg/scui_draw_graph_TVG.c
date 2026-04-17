@@ -574,8 +574,8 @@ static void scui_draw_tvg(scui_draw_dsc_t *draw_dsc)
         Tvg_Canvas *canvas = scui_draw_tvg_canvas_ready(&draw_area);
         
         draw_dsc->graph.src_tvg_canvas = canvas;
-        draw_dsc->graph.src_tvg_offset.x = -dst_clip_v.x;
-        draw_dsc->graph.src_tvg_offset.x = -dst_clip_v.y;
+        draw_dsc->graph.src_tvg_offset.x = dst_clip_v.x;
+        draw_dsc->graph.src_tvg_offset.y = dst_clip_v.y;
         draw_dsc->graph.src_tvg_cb(draw_dsc);
         
         /* 固定:画布绘制 */

@@ -14,18 +14,18 @@
 static void scui_menial_info_map_find(scui_menial_type_t type, scui_menial_info_t **info)
 {
     static const scui_menial_info_t scui_menial_info[scui_menial_type_num] = {
-        #if 0
         [scui_menial_type_btn] = {
-            .make   = scui_menial_make_btn,
-            .burn   = scui_menial_burn_btn,
-            .invoke = scui_menial_invoke_btn,
+            .maker   = scui_menial_btn_maker,
+            .config  = scui_menial_btn_config,
+            .recycle = scui_menial_btn_recycle,
+            .invoke  = scui_menial_btn_invoke,
         },
         [scui_menial_type_arc] = {
-            .make   = scui_menial_make_arc,
-            .burn   = scui_menial_burn_arc,
-            .invoke = scui_menial_invoke_arc,
+            .maker   = scui_menial_arc_maker,
+            .config  = scui_menial_arc_config,
+            .recycle = scui_menial_arc_recycle,
+            .invoke  = scui_menial_arc_invoke,
         },
-        #endif
     };
     
     SCUI_ASSERT(info != NULL);
@@ -48,6 +48,10 @@ void scui_menial_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_menial_t *menial = widget;
     scui_menial_maker_t *menial_maker = widget_maker;
     
+    scui_menial_info_t *menial_info = NULL;
+    scui_menial_info_map_find(menial_maker->type, &menial_info);
+    menial_info->maker(menial_maker);
+    
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_menial));
@@ -59,16 +63,12 @@ void scui_menial_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(false);
     #endif
     
-    /* 数据类型检查 */
-    SCUI_ASSERT(menial->type > scui_menial_type_none);
-    SCUI_ASSERT(menial->type < scui_menial_type_num);
-    
     /* 资源同步与构造 */
     menial->type = menial_maker->type;
     menial->data = menial_maker->data;
-    scui_menial_info_t *menial_info = NULL;
-    scui_menial_info_map_find(menial->type, &menial_info);
-    menial_info->make(menial);
+    menial_info->config(menial);
+    SCUI_ASSERT(menial->type > scui_menial_type_none);
+    SCUI_ASSERT(menial->type < scui_menial_type_num);
 }
 
 /*@brief 控件析构
@@ -83,7 +83,7 @@ void scui_menial_burn(scui_handle_t handle)
     /* 资源析构 */
     scui_menial_info_t *menial_info = NULL;
     scui_menial_info_map_find(menial->type, &menial_info);
-    menial_info->burn(menial);
+    menial_info->recycle(menial);
     
     /* 析构基础控件实例 */
     scui_widget_burn(widget);

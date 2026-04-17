@@ -255,6 +255,12 @@ void scui_widget_event_add(scui_handle_t handle, scui_event_cb_node_t *node);
  */
 void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node);
 
+/*@brief 控件事件包含检查
+ *@param event 事件
+ *@retval 包含不包含
+ */
+bool scui_widget_event_inside(scui_event_t *event);
+
 /*@brief 控件事件响应转移
  *@param event 事件
  */

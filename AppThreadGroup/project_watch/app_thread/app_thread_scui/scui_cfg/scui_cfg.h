@@ -189,13 +189,10 @@
 
 /* custom:文本绘制的最大缓存条目 */
 #define SCUI_CUSTOM_STR_ITEM_LIMIT                  (32)
-
 /* scroll:按键, 动画速度[ptr, enc, key, auto] */
 #define SCUI_WIDGET_SCROLL_SPD_ANIM                 {1200, 900, 900, 900}
 #define SCUI_WIDGET_SCROLL_KEY_FDIR                 (scui_event_key_val_down)
 #define SCUI_WIDGET_SCROLL_KEY_BDIR                 (scui_event_key_val_up)
-/* roller: */
-#define SCUI_WIDGET_ROLLER_SPD_ANIM                 {1000, 75, 75, 75}
 /* string:行间距,字间距,空字符宽度 */
 #define SCUI_WIDGET_STRING_GAP_LINE                 (0)
 #define SCUI_WIDGET_STRING_GAP_ITEM                 (0)
@@ -206,8 +203,16 @@
 /* string:文本滚动空余间隙 */
 #define SCUI_WIDGET_STRING_SCROLL_ITEM              (75)
 #define SCUI_WIDGET_STRING_SCROLL_LINE              (50)
+/* roller:按键, 动画速度[ptr, enc, key, auto] */
+#define SCUI_WIDGET_ROLLER_SPD_ANIM                 {1000, 75, 75, 75}
+
+/* menial(btn):缩放限制百分比 */
+#define SCUI_WIDGET_MENIAL_BTN_TIME                 (100)
+#define SCUI_WIDGET_MENIAL_BTN_PCT                  (90)
+
+
+
 /* button:按钮1缩放限制百分比 */
-#define SCUI_WIDGET_OBJBTN_PCT                      (90)
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
 
 /* indev猴子测试 */

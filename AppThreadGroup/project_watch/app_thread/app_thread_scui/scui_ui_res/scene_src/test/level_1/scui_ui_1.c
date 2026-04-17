@@ -7,43 +7,87 @@
 
 #include "scui.h"
 
+static struct {
+    void *occupy;
+} * scui_ui_res_local = NULL;
+
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_scene_1_event_proc(scui_event_t *event)
+void scui_ui_scene_1_menial_btn_event_proc(scui_event_t *event)
+{
+    // 转移至控件调度
+    if (!scui_event_type_widget(event->type)) {
+         scui_widget_event_shift(event);
+         return;
+    }
+    
+    SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_anima_elapse:
-        break;
-    case scui_event_create:
-        break;
-    case scui_event_destroy:
-        break;
-    case scui_event_focus_get:
-        scui_ui_scene_link_cfg(event);
-        break;
-    case scui_event_focus_lost:
-        break;
-    case scui_event_key_click: {
-        if (event->key_id != scui_event_key_val_enter)
-            break;
+    case scui_event_create: {
         
-        SCUI_LOG_WARN("scui_event_key_click");
-        static scui_window_switch_type_t switch_type = SCUI_WINDOW_SWITCH_TYPE;
-        switch_type++;
+        scui_menial_maker_t menial_maker = {0};
+        scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
+        menial_maker.widget.type = scui_widget_type_menial;
+        menial_maker.widget.parent = event->object;
         
-        if (switch_type < scui_window_switch_single_s + 1)
-            switch_type = scui_window_switch_single_e - 1;
-        if (switch_type > scui_window_switch_single_e - 1)
-            switch_type = scui_window_switch_single_s + 1;
+        #if 1
+        // menial_btn:
+        menial_maker.widget.clip.w = 120;
+        menial_maker.widget.clip.h = 60;
+        menial_maker.widget.event_cb = scui_ui_scene_1_menial_btn_event_proc;
+        menial_maker.type = scui_menial_type_btn;
+        menial_maker.data.btn.color[0].color_l.full = 0xFF00FF00;
+        menial_maker.data.btn.color[0].color_d.full = 0xFF008000;
+        menial_maker.data.btn.color[1].color_l.full = 0xFFFF0000;
+        menial_maker.data.btn.color[1].color_d.full = 0xFF800000;
+        scui_coord_t btn_w = menial_maker.widget.clip.w;
         
-        SCUI_ASSERT(switch_type > scui_window_switch_single_s);
-        SCUI_ASSERT(switch_type < scui_window_switch_single_e);
-        scui_window_switch_type_t *cfg_type = NULL;
-        scui_window_switch_cfg_type(&cfg_type);
-        *cfg_type = switch_type;
+        menial_maker.data.btn.fixed  = 1;
+        menial_maker.data.btn.check  = 1;
+        menial_maker.data.btn.width  = 0;
+        menial_maker.data.btn.radius = -1;
+        menial_maker.widget.clip.x = (SCUI_HOR_RES - btn_w) / 2;
+        menial_maker.widget.clip.y = 30;
+        scui_widget_create(&menial_maker, &menial_handle);
         
-        scui_event_mask_over(event);
+        menial_maker.data.btn.fixed  = 0;
+        menial_maker.data.btn.check  = 0;
+        menial_maker.data.btn.width  = 0;
+        menial_maker.data.btn.radius = -1;
+        menial_maker.widget.clip.x   = SCUI_HOR_RES * 1 / 4 - btn_w / 2;
+        menial_maker.widget.clip.y   = 30 + 60 + 10;
+        scui_widget_create(&menial_maker, &menial_handle);
+        
+        menial_maker.data.btn.fixed  = 0;
+        menial_maker.data.btn.check  = 1;
+        menial_maker.data.btn.width  = 0;
+        menial_maker.data.btn.radius = 5;
+        menial_maker.widget.clip.x   = SCUI_HOR_RES * 2 / 4 - btn_w / 2;
+        menial_maker.widget.clip.y   = 30 + 60 + 10;
+        scui_widget_create(&menial_maker, &menial_handle);
+        
+        menial_maker.data.btn.fixed  = 0;
+        menial_maker.data.btn.check  = 1;
+        menial_maker.data.btn.width  = 2;
+        menial_maker.data.btn.radius = -1;
+        menial_maker.widget.clip.x   = SCUI_HOR_RES * 3 / 4 - btn_w / 2;
+        menial_maker.widget.clip.y   = 30 + 60 + 10;
+        scui_widget_create(&menial_maker, &menial_handle);
+        #endif
+        
+        
+        
+        
+        
+        
         break;
     }
     default:
@@ -54,53 +98,60 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
+void scui_ui_scene_1_scroll_page_2_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_anima_elapse: {
-        break;
-    }
     case scui_event_create: {
         
-        scui_xvedio_maker_t xvedio_maker = {0};
-        scui_handle_t xvedio_handle = SCUI_HANDLE_INVALID;
-        xvedio_maker.widget.type    = scui_widget_type_xvedio;
-        xvedio_maker.widget.parent  = event->object;
-        
-        xvedio_maker.widget.clip.x   = SCUI_VER_RES / 6;
-        xvedio_maker.widget.clip.y   = SCUI_VER_RES / 5 - 80 / 2;
-        xvedio_maker.widget.clip.w   = 80;
-        xvedio_maker.widget.clip.h   = 80;
-        xvedio_maker.iframe.type     = scui_image_type_gif;
-        xvedio_maker.iframe.handle   = scui_image_prj_image_src_vedio_bulbgif;
-        xvedio_maker.iframe.gif.loop = 100;
-        scui_widget_create(&xvedio_maker, &xvedio_handle);
-        
-        xvedio_maker.widget.clip.x   = SCUI_VER_RES / 6 + 120;
-        xvedio_maker.widget.clip.y   = SCUI_VER_RES / 5 - 100 / 2;
-        xvedio_maker.widget.clip.w   = 100;
-        xvedio_maker.widget.clip.h   = 100;
-        xvedio_maker.iframe.type     = scui_image_type_lottie;
-        xvedio_maker.iframe.handle   = scui_image_prj_image_src_vedio_comfirmlottiejson;
-        scui_widget_create(&xvedio_maker, &xvedio_handle);
-        
-        xvedio_maker.widget.clip.x   = SCUI_VER_RES / 6 + 120 + 120;
-        xvedio_maker.widget.clip.y   = SCUI_VER_RES / 5 - 100 / 2;
-        xvedio_maker.widget.clip.w   = 100;
-        xvedio_maker.widget.clip.h   = 100;
-        xvedio_maker.iframe.type     = scui_image_type_lottie;
-        xvedio_maker.iframe.handle   = scui_image_prj_image_src_vedio_musiclottiejson;
-        scui_widget_create(&xvedio_maker, &xvedio_handle);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_1_scroll_page_3_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_create: {
         
         break;
     }
-    case scui_event_destroy: {
+    default:
         break;
     }
-    case scui_event_draw: {
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_1_scroll_event(scui_event_t *event)
+{
+    scui_widget_event_shift(event);
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_1_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_create:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
         
+        scui_widget_image_set(event->object, scui_image_prj_image_src_08_stopwatch_01_bgbmp);
         break;
-    }
+    case scui_event_destroy:
+        break;
+    case scui_event_focus_get:
+        scui_ui_scene_link_cfg(event);
+        break;
+    case scui_event_focus_lost:
+        break;
     default:
         break;
     }

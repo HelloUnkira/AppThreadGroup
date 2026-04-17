@@ -234,6 +234,36 @@ void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node)
     scui_event_cb_del(&widget->list, node);
 }
 
+/*@brief 控件事件包含检查
+ *@param event 事件
+ *@retval 包含不包含
+ */
+bool scui_widget_event_inside(scui_event_t *event)
+{
+    scui_handle_t  handle_r = scui_widget_root(event->object);
+    scui_widget_t *widget_r = scui_handle_source_check(handle_r);
+    scui_widget_t *widget   = scui_handle_source_check(event->object);
+    
+    if (scui_event_type_ptr(event->type)) {
+        scui_area_t clip = widget->clip;
+        if (widget != widget_r) {
+            clip.x += widget_r->clip.x;
+            clip.y += widget_r->clip.y;
+        }
+        if (scui_area_point(&clip, &event->ptr_c))
+            return true;
+        if (scui_area_point(&clip, &event->ptr_s))
+            return true;
+        if (scui_area_point(&clip, &event->ptr_e))
+            return true;
+        
+        return false;
+    }
+    
+    /* 默认包含 */
+    return true;
+}
+
 /*@brief 控件事件响应转移
  *@param event 事件
  */

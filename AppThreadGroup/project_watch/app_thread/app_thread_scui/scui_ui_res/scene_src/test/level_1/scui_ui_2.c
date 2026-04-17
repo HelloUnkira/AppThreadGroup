@@ -179,13 +179,28 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_lost:
         break;
-    case scui_event_key_click:
+    case scui_event_key_click: {
         if (event->key_id != scui_event_key_val_enter)
             break;
         
-        scui_ui_scene_popup_exec(SCUI_MULTI_LANG_0X002f, NULL);
+        SCUI_LOG_WARN("scui_event_key_click");
+        static scui_window_switch_type_t switch_type = SCUI_WINDOW_SWITCH_TYPE;
+        switch_type++;
+        
+        if (switch_type < scui_window_switch_single_s + 1)
+            switch_type = scui_window_switch_single_e - 1;
+        if (switch_type > scui_window_switch_single_e - 1)
+            switch_type = scui_window_switch_single_s + 1;
+        
+        SCUI_ASSERT(switch_type > scui_window_switch_single_s);
+        SCUI_ASSERT(switch_type < scui_window_switch_single_e);
+        scui_window_switch_type_t *cfg_type = NULL;
+        scui_window_switch_cfg_type(&cfg_type);
+        *cfg_type = switch_type;
+        
         scui_event_mask_over(event);
         break;
+    }
     default:
         break;
     }
