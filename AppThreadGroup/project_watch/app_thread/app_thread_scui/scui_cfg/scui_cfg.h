@@ -211,6 +211,8 @@
 #define SCUI_WIDGET_MENIAL_BTN_PCT                  (90)
 /* menial(arc):进度动画时间(360度) */
 #define SCUI_WIDGET_MENIAL_ARC_TIME                 (500)
+/* menial(bar):进度动画时间(100%) */
+#define SCUI_WIDGET_MENIAL_BAR_TIME                 (500)
 
 
 

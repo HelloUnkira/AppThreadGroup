@@ -358,52 +358,52 @@ bool scui_draw_ctx_acc_check(scui_draw_dsc_t *draw_dsc);
 
 /* 绘制上下文(sw & hw): */
 /*****************************************************************************/
-void scui_draw_ctx_byte_copy(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_byte_copy(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_area_fill(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_area_copy(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_area_blend(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_area_matrix_fill(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_area_matrix_blend(scui_draw_dsc_t *draw_dsc);
-
-void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_grad(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_grads(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_afilter(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_area_dither(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_area_blur(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_area_grad(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_area_grads(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_area_afilter(scui_draw_dsc_t *draw_dsc);
-
-void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_image(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_image_scale(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_image_rotate(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_image_matrix_blend(scui_draw_dsc_t *draw_dsc);
-
-void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_letter(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_string(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_qrcode(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_barcode(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_ring(scui_draw_dsc_t *draw_dsc);
-
-void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc);
-bool scui_draw_ctx_acc_graph(scui_draw_dsc_t *draw_dsc);
+#define SCUI_DRAW_CTX_DECLARE(name)     void name(scui_draw_dsc_t *draw_dsc)
+#define SCUI_DRAW_CTX_ACC_DECLARE(name) bool name(scui_draw_dsc_t *draw_dsc)
+/*****************************************************************************/
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_byte_copy);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_fill);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_copy);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_blend);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_matrix_fill);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_matrix_blend);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_dither);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_blur);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_grad);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_grads);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_afilter);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_scale);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_rotate);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_matrix_blend);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_letter);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_string);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_qrcode);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_barcode);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_ring);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_graph);
+/*****************************************************************************/
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_byte_copy);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_fill);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_copy);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_blend);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_matrix_fill);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_matrix_blend);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_dither);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_blur);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_grad);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_grads);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_afilter);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_scale);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_rotate);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_matrix_blend);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_letter);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_string);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_qrcode);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_barcode);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_ring);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_graph);
 /*****************************************************************************/
 
 typedef struct {

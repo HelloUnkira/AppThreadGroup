@@ -26,6 +26,12 @@ static void scui_menial_info_map_find(scui_menial_type_t type, scui_menial_info_
             .recycle = scui_menial_arc_recycle,
             .invoke  = scui_menial_arc_invoke,
         },
+        [scui_menial_type_bar] = {
+            .maker   = scui_menial_bar_maker,
+            .config  = scui_menial_bar_config,
+            .recycle = scui_menial_bar_recycle,
+            .invoke  = scui_menial_bar_invoke,
+        },
     };
     
     SCUI_ASSERT(info != NULL);

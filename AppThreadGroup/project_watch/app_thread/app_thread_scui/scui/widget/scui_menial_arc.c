@@ -49,9 +49,6 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
     tvg_shape_append_arc(paint, c_x, c_y, src_radius, a_s, a_l, full);
     if (round) tvg_shape_set_stroke_cap(paint, TVG_STROKE_CAP_ROUND);
     
-    uint8_t f_a = 0, f_r = 0, f_g = 0, f_b = 0;
-    uint8_t s_a = 0, s_r = 0, s_g = 0, s_b = 0;
-    
     if (grad) {
         uint8_t g_a[2] = {0}, g_r[2] = {0}, g_g[2] = {0}, g_b[2] = {0};
         g_a[0] = src_color.color_s.ch.a; g_a[1] = src_color.color_e.ch.a;
@@ -71,6 +68,9 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
         else tvg_shape_set_stroke_linear_gradient(paint, p_grad);
         tvg_shape_set_stroke_width(paint, s_width);
     } else {
+        uint8_t f_a = 0, f_r = 0, f_g = 0, f_b = 0;
+        uint8_t s_a = 0, s_r = 0, s_g = 0, s_b = 0;
+        
         if (src_width == 0 || src_width >= src_radius) {
             f_a = src_color.color.ch.a;
             f_r = src_color.color.ch.r;
@@ -151,11 +151,11 @@ void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, boo
     
     /* 动画更新 */
     if (anim) {
+        menial->data.arc.angle_way = menial->data.arc.angle_cur <= angle ? +1.0f : -1.0f;
+        /* 让angle_cur到达angle即可 */
         scui_coord3_t angle_s = menial->data.arc.angle_s;
         scui_coord3_t angle_e = menial->data.arc.angle_e;
         scui_coord3_t angle_d = menial->data.arc.angle_dist;
-        /* 让angle_cur到达angle即可 */
-        menial->data.arc.angle_way = menial->data.arc.angle_cur <= angle ? +1.0f : -1.0f;
         scui_coord3_t angle_c = scui_dist(menial->data.arc.angle_cur, angle);
         menial->data.arc.tick = scui_map(angle_c, 0.0f, angle_d, 0, menial->data.arc.time);
         return;
@@ -185,6 +185,7 @@ void scui_menial_arc_update_value(scui_handle_t handle, scui_coord3_t value, boo
     }
     
     /*  */
+    value = scui_clamp(value, 0.0f, 100.0f);
     scui_coord3_t angle_s = menial->data.arc.angle_s;
     scui_coord3_t angle_e = menial->data.arc.angle_e;
     scui_menial_arc_update_angle(handle, menial->data.arc.anti ?

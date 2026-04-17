@@ -1127,7 +1127,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_1 = {
 	.widget.myself                  = SCUI_UI_SCENE_1_SCROLL_PAGE_1,
 	.widget.parent                  = SCUI_UI_SCENE_1_SCROLL,
 	.widget.event_cb                = scui_ui_scene_1_scroll_page_1_event_proc,
-	.widget.child_num               = 10,
+	.widget.child_num               = 50,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_2 = {
@@ -1138,7 +1138,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_2 = {
 	.widget.myself                  = SCUI_UI_SCENE_1_SCROLL_PAGE_2,
 	.widget.parent                  = SCUI_UI_SCENE_1_SCROLL,
 	.widget.event_cb                = scui_ui_scene_1_scroll_page_2_event_proc,
-	.widget.child_num               = 10,
+	.widget.child_num               = 50,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_3 = {
@@ -1149,7 +1149,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_3 = {
 	.widget.myself                  = SCUI_UI_SCENE_1_SCROLL_PAGE_3,
 	.widget.parent                  = SCUI_UI_SCENE_1_SCROLL,
 	.widget.event_cb                = scui_ui_scene_1_scroll_page_3_event_proc,
-	.widget.child_num               = 10,
+	.widget.child_num               = 50,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_2 = {
