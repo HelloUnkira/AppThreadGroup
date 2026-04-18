@@ -31,8 +31,8 @@ static struct {
     scui_matrix_t matrix_wing[4];       // 翅膀矩阵(左前;左后;右前;右后;)
     };
     scui_matrix_t matrix_list[SCUI_UI_RES_LOCAL_NUM_ELEMENT];
-    scui_matrix_t inv_matrix_list[SCUI_UI_RES_LOCAL_NUM_ELEMENT];
     };
+    scui_matrix_t inv_matrix_list[SCUI_UI_RES_LOCAL_NUM_ELEMENT];
     scui_coord3_t center_z_list[SCUI_UI_RES_LOCAL_NUM_ELEMENT];
     
     /* 蝴蝶的跳动节拍 */
