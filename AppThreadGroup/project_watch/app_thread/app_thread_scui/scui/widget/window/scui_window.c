@@ -77,6 +77,18 @@ void scui_window_burn(scui_handle_t handle)
     scui_widget_burn(widget);
 }
 
+/*@brief 事件处理回调
+ *@param event 事件
+ */
+void scui_window_invoke(scui_event_t *event)
+{
+    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_window_t *window = (void *)widget;
+    
+    /* empty */
+}
+
 /*@brief 窗口配置参数获取
  *@param handle  窗口控件句柄
  *@param sibling 配置参数

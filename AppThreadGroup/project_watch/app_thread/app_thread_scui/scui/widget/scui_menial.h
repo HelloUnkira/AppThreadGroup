@@ -56,7 +56,8 @@ typedef union {
         scui_coord_t  radius;       /* 圆角半径(最大:<0) */
         scui_coord3_t value_lim;    /* 进度限制(默认:100.0f) */
         scui_sbitfd_t value_int:1;  /* 进度单元(可选) */
-        scui_sbitfd_t slider:1;     /* 滑动交互(可选) */
+        scui_sbitfd_t ext_slider:1; /* 滑动交互(扩展:可选) */
+        scui_sbitfd_t ext_switch:1; /* 点击开关(扩展:可选) */
         scui_sbitfd_t grad:1;       /* 渐变(可选)(s->e) */
         scui_sbitfd_t way:1;        /* 方向(水平:0;垂直:1) */
         /* 内部域: */

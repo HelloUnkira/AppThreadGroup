@@ -213,6 +213,8 @@
 #define SCUI_WIDGET_MENIAL_ARC_TIME                 (500)
 /* menial(bar):进度动画时间(100%) */
 #define SCUI_WIDGET_MENIAL_BAR_TIME                 (500)
+#define SCUI_WIDGET_MENIAL_BAR_EXT_SLIDER_TIME      (500)
+#define SCUI_WIDGET_MENIAL_BAR_EXT_SWITCH_TIME      (100)
 
 
 

@@ -117,10 +117,16 @@ void scui_menial_btn_maker(scui_menial_maker_t *menial_maker)
  */
 void scui_menial_btn_config(scui_menial_t *menial)
 {
-    menial->data.btn.time = SCUI_WIDGET_MENIAL_BTN_TIME;
-    menial->data.btn.lim  = SCUI_WIDGET_MENIAL_BTN_PCT;
-    menial->data.btn.pct  = SCUI_WIDGET_MENIAL_BTN_PCT;
-    menial->data.btn.way  = -1;
+    /* 未配置使用默认值 */
+    if (menial->data.btn.time == 0)
+        menial->data.btn.time = SCUI_WIDGET_MENIAL_BTN_TIME;
+    
+    /* 未配置使用默认值 */
+    if (menial->data.btn.lim == 0)
+        menial->data.btn.lim  = SCUI_WIDGET_MENIAL_BTN_PCT;
+    
+    menial->data.btn.pct = menial->data.btn.lim;
+    menial->data.btn.way = -1;
 }
 
 /*@brief 控件反初始化(子类型)

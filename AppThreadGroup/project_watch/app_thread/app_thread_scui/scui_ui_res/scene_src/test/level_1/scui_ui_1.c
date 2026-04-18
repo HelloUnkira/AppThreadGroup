@@ -15,10 +15,7 @@ static struct {
     scui_handle_t menial_arc_3;
     scui_coord_t  menial_bar_w1;
     scui_coord_t  menial_bar_v1;
-    scui_coord_t  menial_bar_w2;
-    scui_coord_t  menial_bar_v2;
     scui_handle_t menial_bar_1;
-    scui_handle_t menial_bar_2;
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -65,22 +62,14 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         #if 1
         // menial_bar:
         scui_ui_res_local->menial_bar_v1 += scui_ui_res_local->menial_bar_w1;
-        scui_ui_res_local->menial_bar_v2 += scui_ui_res_local->menial_bar_w2;
         
         if (scui_ui_res_local->menial_bar_v1 == 0)
             scui_ui_res_local->menial_bar_w1 = +1;
         if (scui_ui_res_local->menial_bar_v1 == 100)
             scui_ui_res_local->menial_bar_w1 = -1;
         
-        if (scui_ui_res_local->menial_bar_v2 == 0)
-            scui_ui_res_local->menial_bar_w2 = +1;
-        if (scui_ui_res_local->menial_bar_v2 == 5)
-            scui_ui_res_local->menial_bar_w2 = -1;
-        
         scui_menial_bar_update_value(scui_ui_res_local->menial_bar_1,
             scui_ui_res_local->menial_bar_v1, true);
-        scui_menial_bar_update_value(scui_ui_res_local->menial_bar_2,
-            scui_ui_res_local->menial_bar_v2, true);
         #endif
         
         break;
@@ -201,9 +190,10 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         menial_maker.widget.clip.y = bar_ofs_y;
         menial_maker.widget.clip.w = 120;
         menial_maker.widget.clip.h = 60;
-        menial_maker.data.bar.radius = -1;
+        menial_maker.data.bar.radius = 7;
         menial_maker.data.bar.value_lim = 0;
-        menial_maker.data.bar.slider = 0;
+        menial_maker.data.bar.ext_slider = 0;
+        menial_maker.data.bar.ext_switch = 0;
         menial_maker.data.bar.grad = 1;
         menial_maker.data.bar.way  = 0;
         scui_widget_create(&menial_maker, &menial_handle);
@@ -213,14 +203,14 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         menial_maker.widget.clip.y = bar_ofs_y;
         menial_maker.widget.clip.w = 120;
         menial_maker.widget.clip.h = 60;
-        menial_maker.data.bar.radius = 7;
-        menial_maker.data.bar.value_lim = 5;
-        menial_maker.data.bar.value_int = 1;
-        menial_maker.data.bar.slider = 0;
+        menial_maker.data.bar.radius = -1;
+        menial_maker.data.bar.value_lim = 0;
+        menial_maker.data.bar.value_int = 0;
+        menial_maker.data.bar.ext_slider = 0;
+        menial_maker.data.bar.ext_switch = 1;
         menial_maker.data.bar.grad = 0;
         menial_maker.data.bar.way  = 0;
         scui_widget_create(&menial_maker, &menial_handle);
-        scui_ui_res_local->menial_bar_2 = menial_handle;
         
         menial_maker.widget.clip.x = SCUI_HOR_RES * 3 / 4 - 120 / 2 + 10;
         menial_maker.widget.clip.y = bar_ofs_y;
@@ -229,7 +219,8 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         menial_maker.data.bar.radius = -1;
         menial_maker.data.bar.value_lim = 0;
         menial_maker.data.bar.value_int = 0;
-        menial_maker.data.bar.slider = 1;
+        menial_maker.data.bar.ext_slider = 1;
+        menial_maker.data.bar.ext_switch = 0;
         menial_maker.data.bar.grad = 1;
         menial_maker.data.bar.way  = 0;
         scui_widget_create(&menial_maker, &menial_handle);
@@ -241,7 +232,8 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         menial_maker.data.bar.radius = 10;
         menial_maker.data.bar.value_lim = 7;
         menial_maker.data.bar.value_int = 1;
-        menial_maker.data.bar.slider = 1;
+        menial_maker.data.bar.ext_slider = 1;
+        menial_maker.data.bar.ext_switch = 0;
         menial_maker.data.bar.grad = 1;
         menial_maker.data.bar.way  = 1;
         scui_widget_create(&menial_maker, &menial_handle);

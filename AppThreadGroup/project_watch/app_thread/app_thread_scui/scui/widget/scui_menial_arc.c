@@ -114,6 +114,10 @@ void scui_menial_arc_config(scui_menial_t *menial)
         menial->data.arc.angle_e = 360.0f;
     }
     
+    /* 未配置使用默认值 */
+    if (menial->data.arc.time == 0)
+        menial->data.arc.time  = SCUI_WIDGET_MENIAL_ARC_TIME;
+    
     /* 默认从零点开始 */
     scui_coord3_t angle_s = menial->data.arc.angle_s;
     scui_coord3_t angle_e = menial->data.arc.angle_e;
@@ -122,7 +126,7 @@ void scui_menial_arc_config(scui_menial_t *menial)
     menial->data.arc.angle_way  = 0;
     
     scui_coord3_t angle_d = menial->data.arc.angle_dist;
-    menial->data.arc.time = SCUI_WIDGET_MENIAL_ARC_TIME * angle_d / 360.0f;
+    menial->data.arc.time = menial->data.arc.time * angle_d / 360.0f;
     menial->data.arc.tick = 0;
 }
 
@@ -158,6 +162,13 @@ void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, boo
         scui_coord3_t angle_d = menial->data.arc.angle_dist;
         scui_coord3_t angle_c = scui_dist(menial->data.arc.angle_cur, angle);
         menial->data.arc.tick = scui_map(angle_c, 0.0f, angle_d, 0, menial->data.arc.time);
+        /* 值过小:直接更新 */
+        if (menial->data.arc.tick < SCUI_ANIMA_TICK) {
+            menial->data.arc.angle_cur = angle;
+            menial->data.arc.angle_way = 0;
+            menial->data.arc.tick = 0;
+            scui_widget_draw(widget->myself, NULL, false);
+        }
         return;
     }
     
@@ -257,6 +268,9 @@ void scui_menial_arc_invoke(scui_event_t *event)
         
         scui_widget_draw_graph(widget->myself, NULL,
             widget->alpha, menial->data.arc.color[1], &draw_dsc);
+        
+        if (menial->data.bar.grad)
+            scui_widget_draw_dither(widget->myself, NULL);
         
         break;
     }

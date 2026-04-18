@@ -61,6 +61,18 @@ void scui_custom_burn(scui_handle_t handle)
     scui_widget_burn(widget);
 }
 
+/*@brief 事件处理回调
+ *@param event 事件
+ */
+void scui_custom_invoke(scui_event_t *event)
+{
+    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_custom_t *custom = (void *)widget;
+    
+    /* empty */
+}
+
 /*@brief 自定义控件文本绘制(不建议使用)
  *       备注:不建议使用,string控件更合适
  *@param handle 控件句柄

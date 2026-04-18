@@ -36,4 +36,9 @@ void scui_canvas_make(void *inst, void *inst_maker, scui_handle_t *handle);
  */
 void scui_canvas_burn(scui_handle_t handle);
 
+/*@brief 事件处理回调
+ *@param event 事件
+ */
+void scui_canvas_invoke(scui_event_t *event);
+
 #endif

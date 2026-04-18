@@ -78,6 +78,18 @@ void scui_canvas_burn(scui_handle_t handle)
     scui_widget_burn(widget);
 }
 
+/*@brief 事件处理回调
+ *@param event 事件
+ */
+void scui_canvas_invoke(scui_event_t *event)
+{
+    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_canvas_t *canvas = (void *)widget;
+    
+    /* empty */
+}
+
 /*@brief 画布控件图
  *@param handle 画布控件句柄
  *@param image  画布图资源

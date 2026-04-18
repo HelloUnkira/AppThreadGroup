@@ -100,10 +100,15 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
  */
 void scui_menial_bar_maker(scui_menial_maker_t *menial_maker)
 {
+    /* 不能同时开启slider和switch */
+    bool ext_slider = menial_maker->data.bar.ext_slider;
+    bool ext_switch = menial_maker->data.bar.ext_switch;
+    SCUI_ASSERT(!(ext_slider && ext_switch));
+    
     /* 必须标记anima事件 */
     /* 条件标记ptr事件 */
     menial_maker->widget.style.sched_anima = true;
-    menial_maker->widget.style.indev_ptr   = menial_maker->data.bar.slider;
+    menial_maker->widget.style.indev_ptr   = ext_slider || ext_switch;
 }
 
 /*@brief 控件初始化(子类型)
@@ -115,8 +120,16 @@ void scui_menial_bar_config(scui_menial_t *menial)
     if (SCUI_IS_ZERO_VAL_F(menial->data.bar.value_lim))
         menial->data.bar.value_lim = 100.0f;
     
+    /* 未配置使用默认值 */
+    if (menial->data.bar.time == 0 && menial->data.bar.ext_slider)
+        menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_EXT_SLIDER_TIME;
+    if (menial->data.bar.time == 0 && menial->data.bar.ext_switch)
+        menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_EXT_SWITCH_TIME;
+    if (menial->data.bar.time == 0)
+        menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_TIME;
+    
     scui_coord3_t value_d = menial->data.bar.value_lim;
-    menial->data.bar.time = SCUI_WIDGET_MENIAL_BAR_TIME * value_d / 100.0f;
+    menial->data.bar.time = menial->data.bar.time * value_d / 100.0f;
     menial->data.bar.tick = 0;
 }
 
@@ -143,11 +156,20 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
         return;
     }
     
-    value = scui_clamp(value, 0.0f, menial->data.bar.value_lim);
-    
     /* 这可以实现丝滑到分段效果 */
-    if (menial->data.bar.value_int)
-        value = (scui_coord_t)value;
+    value = scui_clamp(value, 0.0f, menial->data.bar.value_lim);
+    if (menial->data.bar.value_int) value = (scui_coord_t)value;
+    
+    /* 扩充slider无动画 */
+    if (menial->data.bar.ext_slider)
+        anim = false;
+    /* 扩充switch有动画,端点值 */
+    if (menial->data.bar.ext_switch) {
+        scui_coord3_t value_d = menial->data.bar.value_lim;
+        value = (value < value_d / 2) ? 0.0f : value_d;
+    }
+    
+    
     
     /* 动画更新 */
     if (anim) {
@@ -156,6 +178,13 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
         scui_coord3_t value_d = menial->data.bar.value_lim;
         scui_coord3_t value_c = scui_dist(menial->data.bar.value_cur, value);
         menial->data.bar.tick = scui_map(value_c, 0.0f, value_d, 0, menial->data.bar.time);
+        /* 值过小:直接更新 */
+        if (menial->data.bar.tick < SCUI_ANIMA_TICK) {
+            menial->data.bar.value_cur = value;
+            menial->data.bar.value_way = 0;
+            menial->data.bar.tick = 0;
+            scui_widget_draw(widget->myself, NULL, false);
+        }
         return;
     }
     
@@ -254,21 +283,38 @@ void scui_menial_bar_invoke(scui_event_t *event)
         scui_widget_draw_graph(widget->myself, NULL,
             widget->alpha, menial->data.bar.color[1], &draw_dsc);
         
+        if (menial->data.bar.grad)
+            scui_widget_draw_dither(widget->myself, NULL);
+        
         break;
     }
-    case scui_event_ptr_move: {
-        if (!scui_widget_event_inside(event) &&
-            !widget->state.indev_ptr_hold)
+    case scui_event_ptr_click: {
+        if (!menial->data.bar.ext_switch)
              break;
-        if (!menial->data.bar.slider)
+        if (!scui_widget_event_inside(event))
              break;
         
         scui_event_mask_over(event);
-        widget->state.indev_ptr_hold = true;
         
+        scui_coord3_t value_c = menial->data.bar.value_cur;
+        scui_coord3_t value_d = menial->data.bar.value_lim;
+        value_c = (value_c > value_d / 2) ? 0.0f : value_d;
+        
+        scui_menial_bar_update_value(widget->myself, value_c, true);
+        break;
+    }
+    case scui_event_ptr_move: {
+        if (!menial->data.bar.ext_slider)
+             break;
+        if (!scui_widget_event_inside(event) &&
+            !widget->state.indev_ptr_hold)
+             break;
+        
+        scui_event_mask_over(event);
         scui_point_t ptr_c = event->ptr_e;
         scui_area_t  src_area = widget->clip;
         scui_area_m_to_s(&src_area, &src_area);
+        widget->state.indev_ptr_hold = true;
         
         scui_coord3_t value_c = 0.0f;
         scui_coord3_t value_d = menial->data.bar.value_lim;
