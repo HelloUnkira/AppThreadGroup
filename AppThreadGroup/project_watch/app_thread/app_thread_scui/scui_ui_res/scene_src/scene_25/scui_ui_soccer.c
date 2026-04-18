@@ -20,6 +20,8 @@ static struct {
     scui_handle_t image_fg[4][5];       // 图片(从上至下:4层;每层5个)
     scui_matrix_t matrix_bg[4][5];      // 变换矩阵(从上至下:4层;每层5个)
     scui_matrix_t matrix_fg[4][5];      // 变换矩阵(从上至下:4层;每层5个)
+    scui_matrix_t inv_matrix_bg[4][5];  // 变换矩阵(从上至下:4层;每层5个)
+    scui_matrix_t inv_matrix_fg[4][5];  // 变换矩阵(从上至下:4层;每层5个)
     scui_coord3_t normal_z_bg[4][5];    // 面法线
     scui_coord3_t normal_z_fg[4][5];    // 面法线
     bool          move_lock;            // 移动锁
@@ -219,15 +221,19 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
                 if (normal_z_bg[idx_j][idx_i] < -0.0f) {
                     /* 仿射变换矩阵 */
                     scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
+                    scui_matrix_t (*inv_matrix_bg)[5] = scui_ui_res_local->inv_matrix_bg;
                     scui_size2_t size2_bg = {.w = image_bg_w,.h = image_bg_h,};
                     scui_matrix_affine_blit(&matrix_bg[idx_j][idx_i], &size2_bg, &face3_bg);
-                    scui_matrix_inverse(&matrix_bg[idx_j][idx_i]);
+                    inv_matrix_bg[idx_j][idx_i] = matrix_bg[idx_j][idx_i];
+                    scui_matrix_inverse(&inv_matrix_bg[idx_j][idx_i]);
                 }
                 if (normal_z_fg[idx_j][idx_i] < -0.0f) {
                     scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
+                    scui_matrix_t (*inv_matrix_fg)[5] = scui_ui_res_local->inv_matrix_fg;
                     scui_size2_t size2_fg = {.w = image_fg_w,.h = image_fg_h,};
                     scui_matrix_affine_blit(&matrix_fg[idx_j][idx_i], &size2_fg, &face3_fg);
-                    scui_matrix_inverse(&matrix_fg[idx_j][idx_i]);
+                    inv_matrix_fg[idx_j][idx_i] = matrix_fg[idx_j][idx_i];
+                    scui_matrix_inverse(&inv_matrix_fg[idx_j][idx_i]);
                 }
             }
         }
@@ -244,12 +250,16 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
                 if (normal_z_bg[idx_j][idx_i] < -0.0f) {
                     scui_handle_t   image_bg = scui_ui_res_local->image_bg;
                     scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
-                    scui_widget_draw_image_matrix(event->object, NULL, image_bg, NULL, &matrix_bg[idx_j][idx_i]);
+                    scui_matrix_t (*inv_matrix_bg)[5] = scui_ui_res_local->inv_matrix_bg;
+                    scui_widget_draw_image_matrix(event->object, NULL, image_bg, NULL,
+                        &matrix_bg[idx_j][idx_i], &inv_matrix_bg[idx_j][idx_i]);
                 }
                 if (normal_z_fg[idx_j][idx_i] < -0.0f) {
                     scui_handle_t (*image_fg)[5] = scui_ui_res_local->image_fg;
                     scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
-                    scui_widget_draw_image_matrix(event->object, NULL, image_fg[idx_j][idx_i], NULL, &matrix_fg[idx_j][idx_i]);
+                    scui_matrix_t (*inv_matrix_fg)[5] = scui_ui_res_local->inv_matrix_fg;
+                    scui_widget_draw_image_matrix(event->object, NULL, image_fg[idx_j][idx_i], NULL,
+                        &matrix_fg[idx_j][idx_i], &inv_matrix_fg[idx_j][idx_i]);
                 }
             }
         }

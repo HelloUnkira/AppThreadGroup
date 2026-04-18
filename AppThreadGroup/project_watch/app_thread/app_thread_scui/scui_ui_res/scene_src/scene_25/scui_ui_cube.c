@@ -8,12 +8,13 @@
 #include "scui.h"
 
 static struct {
-    scui_coord_t  size;         // 边长度
-    scui_handle_t image[6];     // 面图标
-    scui_matrix_t matrix[6];    // 仿射矩阵
-    scui_point3_t rotate;       // 三轴偏移旋转
-    scui_coord3_t normal_z[6];  // 面法线(0321,4567,1265,0473,2376,0154)
-    bool          move_lock;    // 移动锁
+    scui_coord_t  size;             // 边长度
+    scui_handle_t image[6];         // 面图标
+    scui_matrix_t matrix[6];        // 仿射矩阵
+    scui_matrix_t inv_matrix[6];    // 仿射矩阵
+    scui_point3_t rotate;           // 三轴偏移旋转
+    scui_coord3_t normal_z[6];      // 面法线(0321,4567,1265,0473,2376,0154)
+    bool          move_lock;        // 移动锁
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -141,13 +142,16 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
                     continue;
                 /* 仿射变换矩阵 */
                 scui_matrix_t *matrix = scui_ui_res_local->matrix;
+                scui_matrix_t *inv_matrix = scui_ui_res_local->inv_matrix;
                 
                 scui_size2_t size2 = {
                     .w = scui_image_w(scui_ui_res_local->image[idx]),
                     .h = scui_image_h(scui_ui_res_local->image[idx]),
                 };
                 scui_matrix_affine_blit(&matrix[idx], &size2, &face3[idx]);
-                scui_matrix_inverse(&matrix[idx]);
+                
+                inv_matrix[idx] = matrix[idx];
+                scui_matrix_inverse(&inv_matrix[idx]);
             }
         }
         
@@ -163,7 +167,9 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
                 
                 scui_handle_t *image  = scui_ui_res_local->image;
                 scui_matrix_t *matrix = scui_ui_res_local->matrix;
-                scui_widget_draw_image_matrix(event->object, NULL, image[idx], NULL, &matrix[idx]);
+                scui_matrix_t *inv_matrix = scui_ui_res_local->inv_matrix;
+                scui_widget_draw_image_matrix(event->object, NULL, image[idx], NULL,
+                    &matrix[idx], &inv_matrix[idx]);
             }
         }
         break;

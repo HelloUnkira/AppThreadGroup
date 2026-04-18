@@ -31,6 +31,7 @@ static struct {
     scui_matrix_t matrix_wing[4];       // 翅膀矩阵(左前;左后;右前;右后;)
     };
     scui_matrix_t matrix_list[SCUI_UI_RES_LOCAL_NUM_ELEMENT];
+    scui_matrix_t inv_matrix_list[SCUI_UI_RES_LOCAL_NUM_ELEMENT];
     };
     scui_coord3_t center_z_list[SCUI_UI_RES_LOCAL_NUM_ELEMENT];
     
@@ -316,10 +317,11 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
         if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            scui_handle_t *image_list    = scui_ui_res_local->image_list;
-            scui_matrix_t *matrix_list   = scui_ui_res_local->matrix_list;
-            scui_handle_t  matrix_num    = SCUI_UI_RES_LOCAL_NUM_ELEMENT;
-            scui_coord3_t *center_z_list = scui_ui_res_local->center_z_list;
+            scui_handle_t *image_list       = scui_ui_res_local->image_list;
+            scui_matrix_t *matrix_list      = scui_ui_res_local->matrix_list;
+            scui_matrix_t *inv_matrix_list  = scui_ui_res_local->inv_matrix_list;
+            scui_handle_t  matrix_num       = SCUI_UI_RES_LOCAL_NUM_ELEMENT;
+            scui_coord3_t *center_z_list    = scui_ui_res_local->center_z_list;
             
             // 测试时，背景填白
             // scui_widget_color_set(event->object, SCUI_COLOR_MAKE32(false, 0x0, 0xFFFFFFFF));
@@ -374,7 +376,9 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
                 
                 scui_area3_center_z(&face3, &center_z_list[idx]);
                 scui_matrix_perspective_view_blit(&matrix_list[idx], &size2, &face3, &view);
-                scui_matrix_inverse(&matrix_list[idx]);
+                
+                inv_matrix_list[idx] = matrix_list[idx];
+                scui_matrix_inverse(&inv_matrix_list[idx]);
             }
         }
         
@@ -382,10 +386,11 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
         if (scui_event_check_execute(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            scui_handle_t *image_list    = scui_ui_res_local->image_list;
-            scui_matrix_t *matrix_list   = scui_ui_res_local->matrix_list;
-            scui_handle_t  matrix_num    = SCUI_UI_RES_LOCAL_NUM_ELEMENT;
-            scui_coord3_t *center_z_list = scui_ui_res_local->center_z_list;
+            scui_handle_t *image_list       = scui_ui_res_local->image_list;
+            scui_matrix_t *matrix_list      = scui_ui_res_local->matrix_list;
+            scui_matrix_t *inv_matrix_list  = scui_ui_res_local->inv_matrix_list;
+            scui_handle_t  matrix_num       = SCUI_UI_RES_LOCAL_NUM_ELEMENT;
+            scui_coord3_t *center_z_list    = scui_ui_res_local->center_z_list;
             
             /* 图列表 */
             scui_handle_t list_image[] = {
@@ -414,7 +419,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
             
             for (uint8_t idx = 0; idx < matrix_num; idx++)
                 scui_widget_draw_image_matrix(event->object, NULL, list_image[draw_i[idx]],
-                    NULL, &matrix_list[draw_i[idx]]);
+                    NULL, &matrix_list[draw_i[idx]], &inv_matrix_list[draw_i[idx]]);
             
         }
         break;

@@ -204,11 +204,12 @@ static void scui_roller_m_event(scui_event_t *event)
             scui_matrix_t matrix = {0};
             scui_size2_t size2 = {.w = scui_image_w(image_s),.h = scui_image_h(image_s),};
             scui_matrix_perspective_view_blit(&matrix, &size2, &face3, &view3);
-            scui_matrix_inverse(&matrix);
+            scui_matrix_t inv_matrix = matrix;
+            scui_matrix_inverse(&inv_matrix);
             
             /* 这里暂时不分为三个步调, 都在execute执行完毕 */
             /* 此外, 这里仅仅替父控件计算绘制的实际内容, 子控件本身不做额外绘制 */
-            scui_widget_draw_image_matrix(widget->myself, NULL, image_s, NULL, &matrix);
+            scui_widget_draw_image_matrix(widget->myself, NULL, image_s, NULL, &matrix, &inv_matrix);
             break;
         }
         default:

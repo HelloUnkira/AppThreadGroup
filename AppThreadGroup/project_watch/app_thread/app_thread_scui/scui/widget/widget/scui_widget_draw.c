@@ -164,17 +164,13 @@ static bool scui_widget_draw_clip_seg(scui_area_t *dst_clip, scui_point_t *dst_o
 /*@brief 控件在画布绘制字符串
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_string(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
-    scui_string_args_t *str_args = draw_dsc->str_args;
-    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
     /* 当前本接口作为控件专用绘制接口: */
+    scui_string_args_t *str_args = draw_dsc->str_args;
     SCUI_ASSERT(widget->type == scui_widget_type_string ||
                 widget->type == scui_widget_type_custom);
     
@@ -221,13 +217,8 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
 /*@brief 控件在画布绘制纯色区域
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_color(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
-    scui_color_t  color  = draw_dsc->color;
-    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -248,21 +239,15 @@ void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         #endif
         
-        scui_draw_area_fill(false, widget->surface, dst_clip, widget->alpha, color);
+        scui_draw_area_fill(false, widget->surface, dst_clip, widget->alpha, draw_dsc->color);
     }
 }
 
 /*@brief 控件在画布绘制渐变纯色区域
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_color_grad(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
-    scui_color_t  color  = draw_dsc->color;
-    scui_coord_t  way    = draw_dsc->way;
-    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -284,19 +269,15 @@ void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc)
         #endif
         
         scui_draw_area_grad(false, widget->surface, dst_clip,
-            *target, color, widget->alpha, way);
+            *target, draw_dsc->color, widget->alpha, draw_dsc->way);
     }
 }
 
 /*@brief 控件在画布绘制抖动
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_dither(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_dither(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
-    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -324,12 +305,8 @@ void scui_widget_draw_ctx_dither(scui_widget_draw_dsc_t *draw_dsc)
 /*@brief 控件在画布绘制模糊
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_blur(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
-    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -357,17 +334,13 @@ void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc)
 /*@brief 控件在画布绘制图像
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_image(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
-    scui_handle_t image  = draw_dsc->image;
-    scui_area_t  *clip   = draw_dsc->clip;
-    scui_color_t  color  = draw_dsc->color;
-    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    scui_handle_t image = draw_dsc->image;
+    scui_area_t  *clip  = draw_dsc->clip;
     
     /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
@@ -448,25 +421,20 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
         #endif
         
         scui_draw_image(false, widget->surface, dst_clip,
-            image_inst, src_clip, widget->alpha, color);
+            image_inst, src_clip, widget->alpha, draw_dsc->color);
     }
 }
 
 /*@brief 控件在画布绘制图像
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
-    scui_handle_t image  = draw_dsc->image;
-    scui_area_t   *clip  = draw_dsc->clip;
-    scui_point_t  scale  = draw_dsc->scale;
-    scui_opt_pos_t pos   = draw_dsc->pos;
-    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    scui_handle_t image = draw_dsc->image;
+    scui_area_t  *clip  = draw_dsc->clip;
     
     /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
@@ -484,22 +452,22 @@ void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
     scui_point_t src_offset = {0};
     scui_point_t dst_offset = {0};
     
-    if (scui_opt_bits_equal(pos, scui_opt_dir_hor)) {
+    if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_dir_hor)) {
         src_offset.x = clip->w / 2;
         dst_offset.x = target->x + target->w / 2;
-    } else if (scui_opt_bits_equal(pos, scui_opt_pos_l)) {
+    } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_l)) {
         dst_offset.x = target->x;
-    } else if (scui_opt_bits_equal(pos, scui_opt_pos_r)) {
+    } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_r)) {
         src_offset.x = clip->w;
         dst_offset.x = target->x + target->w;
     }
     
-    if (scui_opt_bits_equal(pos, scui_opt_pos_ver)) {
+    if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_ver)) {
         src_offset.y = clip->h / 2;
         dst_offset.y = target->y + target->h / 2;
-    } else if (scui_opt_bits_equal(pos, scui_opt_pos_u)) {
+    } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_u)) {
         dst_offset.y = target->y;
-    } else if (scui_opt_bits_equal(pos, scui_opt_pos_d)) {
+    } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_d)) {
         src_offset.y = clip->h;
         dst_offset.y = target->y + target->h;
     }
@@ -522,7 +490,7 @@ void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
         #endif
         
         scui_draw_image_scale(false, widget->surface, dst_clip,
-            image_inst, *clip, widget->alpha, scale,
+            image_inst, *clip, widget->alpha, draw_dsc->scale,
             dst_offset, src_offset);
     }
 }
@@ -530,19 +498,15 @@ void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
 /*@brief 控件在画布绘制图像
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_image_rotate(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
     scui_handle_t image  = draw_dsc->image;
     scui_area_t  *clip   = draw_dsc->clip;
     scui_point_t  anchor = draw_dsc->anchor;
     scui_point_t  center = draw_dsc->center;
-    scui_multi_t  angle  = draw_dsc->angle;
-    /* draw dsc args<e> */
-    SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_source_check(handle);
     
     /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
@@ -578,29 +542,25 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
         #endif
         
         scui_draw_image_rotate(false, widget->surface, dst_clip,
-            image_inst, *clip, widget->alpha, angle, anchor, center);
+            image_inst, *clip, widget->alpha, draw_dsc->angle, anchor, center);
     }
 }
 
 /*@brief 控件在画布绘制图像
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_image_matrix(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    scui_handle_t image = draw_dsc->image;
+    scui_area_t  *clip  = draw_dsc->clip;
+    
     #if SCUI_MEM_FEAT_MINI
     SCUI_ASSERT(false);
     return;
     #endif
-    
-    /* draw dsc args<s> */
-    scui_handle_t handle  = draw_dsc->handle;
-    scui_area_t  *target  = draw_dsc->target;
-    scui_handle_t  image  = draw_dsc->image;
-    scui_area_t   *clip   = draw_dsc->clip;
-    scui_matrix_t *matrix = draw_dsc->matrix;
-    /* draw dsc args<e> */
-    SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_source_check(handle);
     
     /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
@@ -613,10 +573,6 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
         return;
     clip = &image_clip;
     /* step:image<e> */
-    
-    /* 给进来的就是逆矩阵, 这个接口现在不完善, 待定中 */
-    scui_matrix_t reb_matrix = *matrix;
-    scui_matrix_inverse(&reb_matrix);
     
     scui_clip_btra(widget->clip_set, node) {
         scui_clip_unit_t *unit = scui_clip_unit(node);
@@ -633,28 +589,21 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
         
         scui_draw_image_matrix_blend(false, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha, SCUI_COLOR_UNUSED,
-            *matrix, reb_matrix);
+            *draw_dsc->inv_matrix, *draw_dsc->matrix);
     }
 }
 
 /*@brief 控件在画布绘制二维码
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_qrcode(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
     #if SCUI_MEM_FEAT_MINI
     return;
     #endif
-    
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
-    scui_color_t  color  = draw_dsc->color;
-    scui_multi_t  size   = draw_dsc->size;
-    uint8_t      *data   = draw_dsc->data;
-    /* draw dsc args<e> */
-    SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_source_check(handle);
     
     /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
@@ -680,28 +629,22 @@ void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
         #endif
         
         scui_draw_qrcode(false, widget->surface, dst_clip,
-            src_clip, widget->alpha, color, size, data);
+            src_clip, widget->alpha, draw_dsc->color,
+            draw_dsc->size, draw_dsc->data);
     }
 }
 
 /*@brief 控件在画布绘制条形码
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_barcode(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
     #if SCUI_MEM_FEAT_MINI
     return;
     #endif
-    
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
-    scui_color_t  color  = draw_dsc->color;
-    scui_multi_t  size   = draw_dsc->size;
-    uint8_t      *data   = draw_dsc->data;
-    /* draw dsc args<e> */
-    SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_source_check(handle);
     
     /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
@@ -725,49 +668,40 @@ void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
         #endif
         
         scui_draw_barcode(false, widget->surface, dst_clip,
-            src_clip, widget->alpha, color, size, data);
+            src_clip, widget->alpha, draw_dsc->color,
+            draw_dsc->size, draw_dsc->data);
     }
 }
 
 /*@brief 控件在画布绘制圆环
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_ring(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
-    #if SCUI_MEM_FEAT_MINI
-    return;
-    #endif
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
-    /* draw dsc args<s> */
-    scui_handle_t handle  = draw_dsc->handle;
-    scui_area_t  *target  = draw_dsc->target;
     scui_handle_t image   = draw_dsc->image;
     scui_area_t  *clip    = draw_dsc->clip;
-    scui_color_t  color   = draw_dsc->color;
     scui_coord_t  angle_s = draw_dsc->angle_s;
     scui_coord_t  angle_e = draw_dsc->angle_e;
     scui_coord_t  percent = draw_dsc->percent;
     scui_handle_t image_e = draw_dsc->image_e;
-    /* draw dsc args<e> */
-    SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    #if SCUI_MEM_FEAT_MINI
+    return;
+    #endif
     
     /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
-    /* 参数检查: */
-    SCUI_ASSERT(0 <= percent && percent <= 100);
     /* 调整(adjust): */
     scui_coord_t angle_as = angle_s;
     scui_coord_t angle_ae = scui_map(percent, 0, 100, angle_s, angle_e);
-    
-    if (percent == 0)
+    SCUI_ASSERT(0 <= percent && percent <= 100);
+    if (percent == 0 || angle_s == angle_e)
         return;
-    if (angle_s == angle_e) {
-        SCUI_LOG_WARN("ring angle is zero");
-        return;
-    }
     
     scui_image_t *image_e_inst = NULL;
     if (image_e != SCUI_HANDLE_INVALID)
@@ -814,27 +748,21 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
         
         scui_draw_ring(false, widget->surface, dst_clip,
             dst_center, image_e_inst, image_inst, src_clip,
-            angle_as, widget->alpha, angle_ae, color);
+            angle_as, widget->alpha, angle_ae, draw_dsc->color);
     }
 }
 
 /*@brief 控件在画布绘制图形
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_graph(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
     #if SCUI_MEM_FEAT_MINI
     return;
     #endif
-    
-    /* draw dsc args<s> */
-    scui_handle_t handle = draw_dsc->handle;
-    scui_area_t  *target = draw_dsc->target;
-    scui_alpha_t  alpha  = draw_dsc->alpha;
-    scui_color_t  color  = draw_dsc->color;
-    /* draw dsc args<e> */
-    SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_source_check(handle);
     
     /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
@@ -853,35 +781,8 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         #endif
         
-        scui_draw_dsc_t *draw_dsc_graph = draw_dsc->graph_dsc;
+        scui_draw_dsc_t *draw_dsc_graph = draw_dsc->graph;
         scui_draw_graph(false, widget->surface, dst_clip,
-            alpha, color, draw_dsc_graph);
+            draw_dsc->alpha, draw_dsc->color, draw_dsc_graph);
     }
-}
-
-/*@brief 控件绘制上下文
- *@param draw_graph 绘制参数实例
- */
-void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
-{
-    typedef void (*scui_widget_draw_cb_t)(scui_widget_draw_dsc_t *draw_dsc);
-    static const scui_widget_draw_cb_t scui_widget_draw_cb[scui_widget_draw_type_num] = {
-        [scui_widget_draw_type_string] =            scui_widget_draw_ctx_string,
-        [scui_widget_draw_type_color] =             scui_widget_draw_ctx_color,
-        [scui_widget_draw_type_color_grad] =        scui_widget_draw_ctx_color_grad,
-        [scui_widget_draw_type_dither] =            scui_widget_draw_ctx_dither,
-        [scui_widget_draw_type_blur] =              scui_widget_draw_ctx_blur,
-        [scui_widget_draw_type_image] =             scui_widget_draw_ctx_image,
-        [scui_widget_draw_type_image_scale] =       scui_widget_draw_ctx_image_scale,
-        [scui_widget_draw_type_image_rotate] =      scui_widget_draw_ctx_image_rotate,
-        [scui_widget_draw_type_image_matrix] =      scui_widget_draw_ctx_image_matrix,
-        [scui_widget_draw_type_ring] =              scui_widget_draw_ctx_ring,
-        [scui_widget_draw_type_qrcode] =            scui_widget_draw_ctx_qrcode,
-        [scui_widget_draw_type_barcode] =           scui_widget_draw_ctx_barcode,
-        [scui_widget_draw_type_graph] =             scui_widget_draw_ctx_graph,
-    };
-    
-    SCUI_ASSERT(draw_dsc->type > scui_widget_draw_type_none);
-    SCUI_ASSERT(draw_dsc->type < scui_widget_draw_type_num);
-    scui_widget_draw_cb[draw_dsc->type](draw_dsc);
 }

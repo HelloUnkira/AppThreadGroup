@@ -20,18 +20,20 @@ static const char * cwf_json_bin[] = {
 
 static struct {
     scui_handle_t num;
-    scui_handle_t image[20];        // 面图标
-    scui_matrix_t matrix[20];       // 投影矩阵
-    scui_matrix_t matrix_inv[20];   // 投影矩阵
-    scui_coord3_t center_z[20];     // 中心点z
-    scui_coord_t  w_res;            // 水平宽度
-    scui_coord_t  h_res;            // 垂直宽度
-    scui_coord_t  x_span;           // 水平间隙
-    scui_coord_t  scale_c;          // 整体缩放
-    scui_coord_t  angle_a;          // 单位角度
-    scui_coord_t  rotate_x;         // 旋转角度
-    scui_coord_t  rotate_y;         // 旋转角度
-    bool          move_lock;        // 移动锁
+    scui_handle_t image[20];            // 面图标
+    scui_matrix_t matrix[20];           // 投影矩阵
+    scui_matrix_t inv_matrix[20];       // 投影矩阵
+    scui_matrix_t matrix_fake[20];      // 投影矩阵
+    scui_matrix_t inv_matrix_fake[20];  // 投影矩阵
+    scui_coord3_t center_z[20];         // 中心点z
+    scui_coord_t  w_res;                // 水平宽度
+    scui_coord_t  h_res;                // 垂直宽度
+    scui_coord_t  x_span;               // 水平间隙
+    scui_coord_t  scale_c;              // 整体缩放
+    scui_coord_t  angle_a;              // 单位角度
+    scui_coord_t  rotate_x;             // 旋转角度
+    scui_coord_t  rotate_y;             // 旋转角度
+    bool          move_lock;            // 移动锁
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -167,20 +169,23 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
                 scui_area3_offset(&face3_inv, &offset);
                 
                 /* 透视变换矩阵 */
-                scui_matrix_t *matrix     = scui_ui_res_local->matrix;
-                scui_matrix_t *matrix_inv = scui_ui_res_local->matrix_inv;
-                scui_coord3_t *center_z   = scui_ui_res_local->center_z;
+                scui_matrix_t *matrix = scui_ui_res_local->matrix;
+                scui_matrix_t *matrix_fake = scui_ui_res_local->matrix_fake;
                 
                 /* 深度信息计算,后面排序处理 */
+                scui_coord3_t *center_z = scui_ui_res_local->center_z;
                 scui_area3_center_z(&face3, &center_z[idx]);
                 
                 scui_handle_t image = scui_ui_res_local->image[idx];
                 scui_size2_t size2 = {.w = scui_image_w(image),.h = scui_image_h(image),};
                 scui_matrix_perspective_view_blit(&matrix[idx], &size2, &face3, &view3);
-                scui_matrix_perspective_view_blit(&matrix_inv[idx], &size2, &face3_inv, &view3);
+                scui_matrix_perspective_view_blit(&matrix_fake[idx], &size2, &face3_inv, &view3);
                 
-                scui_matrix_inverse(&matrix[idx]);
-                scui_matrix_inverse(&matrix_inv[idx]);
+                scui_matrix_t *inv_matrix = scui_ui_res_local->inv_matrix;
+                scui_matrix_t *inv_matrix_fake = scui_ui_res_local->inv_matrix_fake;
+                inv_matrix[idx] = matrix[idx]; inv_matrix_fake[idx] = matrix_fake[idx];
+                scui_matrix_inverse(&inv_matrix[idx]);
+                scui_matrix_inverse(&inv_matrix_fake[idx]);
             }
         }
         
@@ -210,17 +215,21 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
             
             for (uint8_t idx = 0; idx < scui_ui_res_local->num; idx++) {
                 
-                scui_handle_t *image      = scui_ui_res_local->image;
-                scui_matrix_t *matrix     = scui_ui_res_local->matrix;
-                scui_matrix_t *matrix_inv = scui_ui_res_local->matrix_inv;
+                scui_handle_t *image = scui_ui_res_local->image;
+                scui_matrix_t *matrix = scui_ui_res_local->matrix;
+                scui_matrix_t *inv_matrix = scui_ui_res_local->inv_matrix;
+                scui_matrix_t *matrix_fake = scui_ui_res_local->matrix_fake;
+                scui_matrix_t *inv_matrix_fake = scui_ui_res_local->inv_matrix_fake;
                 
                 scui_alpha_t alpha = scui_alpha_trans;
                 scui_widget_alpha_get(event->object, &alpha);
                 scui_widget_alpha_set(event->object, scui_alpha_pct50, false);
-                scui_widget_draw_image_matrix(event->object, NULL, image[draw_i[idx]], NULL, &matrix_inv[draw_i[idx]]);
+                scui_widget_draw_image_matrix(event->object, NULL, image[draw_i[idx]], NULL,
+                    &matrix_fake[draw_i[idx]], &inv_matrix_fake[draw_i[idx]]);
                 scui_widget_alpha_set(event->object, alpha, false);
                 
-                scui_widget_draw_image_matrix(event->object, NULL, image[draw_i[idx]], NULL, &matrix[draw_i[idx]]);
+                scui_widget_draw_image_matrix(event->object, NULL, image[draw_i[idx]], NULL,
+                    &matrix[draw_i[idx]], &inv_matrix[draw_i[idx]]);
             }
             
             SCUI_MEM_FREE(draw_z);
