@@ -10,7 +10,96 @@
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_scene_2_button_event_proc(scui_event_t *event)
+void scui_ui_scene_float_2_slider_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        scui_custom_data_t *data = NULL;
+        scui_custom_data_inst(event->object, &data);
+        
+        data->slider.cmin = (uint32_t)scui_rand(100) % 45;
+        data->slider.cmax = 100 - (uint32_t)scui_rand(100) % 45;
+        scui_widget_draw(event->object, NULL, false);
+        break;
+    }
+    }
+    
+    scui_widget_event_shift(event);
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_float_2_spinner_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        scui_custom_data_t *data = NULL;
+        scui_custom_data_inst(event->object, &data);
+        
+        static scui_coord_t spinner_cnt  = 0;
+        static scui_coord_t spinner_tick = 750;
+        spinner_cnt += event->tick;
+        if (spinner_cnt >  spinner_tick)
+            spinner_cnt -= spinner_tick;
+        
+        data->spinner.percent = scui_map(spinner_cnt, 0, spinner_tick, 0, 100);
+        scui_widget_draw(event->object, NULL, false);
+        break;
+    }
+    }
+    
+    scui_widget_event_shift(event);
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_float_2_indicator_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        scui_custom_data_t *data = NULL;
+        scui_custom_data_inst(event->object, &data);
+        
+        static uint8_t cnt = 0; cnt++;
+        
+        if (cnt % 10 == 0 || cnt % 11 == 0) {
+            data->indicator.index++;
+            if (data->indicator.index >= 5)
+                data->indicator.index  = 0;
+            scui_widget_draw(event->object, NULL, false);
+        }
+        break;
+    }
+    }
+    
+    scui_widget_event_shift(event);
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_float_2_ring_edge_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        scui_custom_data_t *data = NULL;
+        scui_custom_data_inst(event->object, &data);
+        
+        data->ring_edge.angle += 1;
+        scui_widget_draw(event->object, NULL, false);
+        break;
+    }
+    }
+    
+    scui_widget_event_shift(event);
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_float_2_button_event_proc(scui_event_t *event)
 {
     // 转移至控件调度
     if (!scui_event_type_widget(event->type)) {
@@ -26,170 +115,11 @@ void scui_ui_scene_2_button_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_float_2_event_proc(scui_event_t *event)
 {
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        break;
-    case scui_event_create:
-        break;
-    case scui_event_destroy:
-        break;
-    case scui_event_focus_get:
-        scui_ui_scene_link_cfg(event);
-        break;
-    case scui_event_focus_lost:
-        break;
-    case scui_event_draw:
-        break;
-    default:
-        #if 0   // discard, we don't need this
-        if (scui_event_type_ptr(event->type))
-            scui_window_float_event_grasp_ptr(event);
-        if (scui_event_type_key(event->type))
-            scui_window_float_event_grasp_key(event);
-        #endif
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
-{
-    static scui_coord_t indicator_index = 0;
-    static scui_coord_t progressbar_s = 0;
-    static scui_coord_t progressbar_e = 0;
-    
-    switch (event->type) {
-    case scui_event_anima_elapse: {
-        
-        static uint8_t cnt = 0;
-        cnt++;
-        
-        if (cnt % 10 == 0) {
-            indicator_index++;
-            if (indicator_index >= 5)
-                indicator_index  = 0;
-            progressbar_s = (uint32_t)scui_rand(100) % 45;
-            progressbar_e = 100 - (uint32_t)scui_rand(100) % 45;
-            scui_widget_draw(event->object, NULL, false);
-        }
-        break;
-    }
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
-        
-        scui_area_t clip_hor     = {0};
-        scui_area_t clip_ver     = {0};
-        scui_point_t offset_hor  = {0};
-        scui_point_t offset_ver  = {0};
-        scui_color_t color_black = {0};
-        
-        scui_handle_t wait  = scui_image_prj_image_src_repeat_dot_01_greybmp;
-        scui_handle_t focus = scui_image_prj_image_src_repeat_dot_02_whitebmp;
-        
-        offset_hor.x = 15;
-        offset_hor.y = SCUI_VER_RES - 30;
-        clip_hor = scui_widget_clip(event->object);
-        if (scui_area_limit_offset(&clip_hor, &offset_hor))
-            scui_custom_draw_indicator(event, &clip_hor, wait, color_black, focus, color_black,
-                                             5, indicator_index, 6, false);
-        
-        offset_ver.x = 15;
-        offset_ver.y = SCUI_VER_RES - 150;
-        clip_ver = scui_widget_clip(event->object);
-        if (scui_area_limit_offset(&clip_ver, &offset_ver))
-            scui_custom_draw_indicator(event, &clip_ver, wait, color_black, focus, color_black,
-                                             5, indicator_index, 6, true);
-        
-        scui_handle_t bar  = scui_image_prj_image_src_repeat_03_barbmp;
-        scui_handle_t edge = scui_image_prj_image_src_repeat_05_dotbmp;
-        scui_color_t color_bar  = {.color.full = 0xFF4F4F4F,};
-        scui_color_t color_edge = {.color.full = 0xFFFFFFFF,};
-        
-        #if 0   // 没有水平滚动条背景
-        offset_hor.x = 15;
-        offset_hor.y = SCUI_VER_RES - 40;
-        clip_hor = scui_widget_clip(event->object);
-        if (scui_area_limit_offset(&clip_hor, &offset_hor))
-            scui_custom_draw_slider(event, &clip_hor, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, true);
-        #endif
-        
-        offset_ver.x = 5;
-        offset_ver.y = SCUI_VER_RES - 160;
-        clip_ver = scui_widget_clip(event->object);
-        if (scui_area_limit_offset(&clip_ver, &offset_ver))
-            scui_custom_draw_slider(event, &clip_ver, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, false);
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        break;
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
-        
-        scui_area_t  clip = {0};
-        scui_color_t color_black = {0};
-        scui_color_t color_mix = {
-            .color_s.full = 0xFF00FF00,
-            .color_e.full = 0xFF0000FF,
-        };
-        
-        clip = scui_widget_clip(event->object);
-        clip.x += 10;
-        clip.y += 10;
-        clip.w -= 10 * 2;
-        clip.h -= 10 * 2;
-        scui_widget_draw_color(event->object, &clip, color_black);
-        
-        clip = scui_widget_clip(event->object);
-        clip.x += 15;
-        clip.y += 15;
-        clip.w -= 15 * 2;
-        clip.h -= 15 * 2;
-        clip.h /= 2;
-        clip.h -= 5;
-        scui_widget_draw_color_grad(event->object, &clip, color_mix, false);
-        
-        clip = scui_widget_clip(event->object);
-        clip.x += 15;
-        clip.y += 15;
-        clip.w -= 15 * 2;
-        clip.h -= 15 * 2;
-        clip.h /= 2;
-        clip.y += clip.h + 5;
-        clip.h -= 5;
-        scui_widget_draw_color_grad(event->object, &clip, color_mix, true);
-        
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
-{
     static scui_multi_t image_pct = 0;
     static scui_point_t image_scale = {.x = 1024,.y = 1024,};
     
     switch (event->type) {
-    case scui_event_anima_elapse:
+    case scui_event_anima_elapse: {
         
         image_pct++;
         if (image_pct > 100)
@@ -199,160 +129,121 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
         image_scale.y = scui_map(image_pct, 0, 100, 512, 1536);
         scui_widget_draw(event->object, NULL, false);
         break;
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
-        
-        scui_area_t clip = {0};
-        scui_color_t color_black = {0};
-        
-        clip = scui_widget_clip(event->object);
-        clip.x += 10;
-        clip.y += 10;
-        clip.w -= 10 * 2;
-        clip.h -= 10 * 2;
-        scui_widget_draw_color(event->object, &clip, color_black);
-        
-        scui_handle_t image_handle = scui_image_prj_image_src_repeat_btn_22_retry_heartbmp;
-        
-        scui_point_t scale = image_scale;
-        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, scale, scui_opt_pos_c);
-        
-        break;
     }
-    default:
-        break;
-    }
-}
-
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
-{
-    static scui_coord_t image_ring_angle = 0;
-    
-    switch (event->type) {
-    case scui_event_anima_elapse:
+    case scui_event_create: {
+        scui_area_t widget_clip = scui_widget_clip(event->object);
         
-        image_ring_angle += 1;
-        scui_widget_draw(event->object, NULL, false);
-        break;
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
+        scui_custom_data_t custom_data_zero = {0};
+        scui_custom_maker_t custom_maker = {0};
+        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
+        custom_maker.widget.type = scui_widget_type_custom;
+        custom_maker.widget.parent = event->object;
+        custom_maker.widget.style.fully_bg = true;
         
-        scui_area_t clip = {0};
-        scui_color_t color_black = {0};
-        scui_color_t color_mix = {
-            .color.full = 0xFF00FF00,
-        };
+        #if 1
+        custom_maker.type = scui_custom_type_slider;
+        custom_maker.data = custom_data_zero;
+        custom_maker.data.slider.bar  = scui_image_prj_image_src_repeat_03_barbmp;
+        custom_maker.data.slider.edge = scui_image_prj_image_src_repeat_05_dotbmp;
+        custom_maker.data.slider.color_bar.color.full  = 0xFF4F4F4F;
+        custom_maker.data.slider.color_edge.color.full = 0xFFFFFFFF;
+        custom_maker.data.slider.vmin = 0;
+        custom_maker.data.slider.vmax = 100;
+        custom_maker.data.slider.dist = 152;    // 152 没有水平滚动条背景
+        custom_maker.data.slider.way  = 0;      // 1
+        custom_maker.widget.clip.x = 5;
+        custom_maker.widget.clip.y = SCUI_VER_RES - 160;
+        custom_maker.widget.clip.w = scui_image_w(custom_maker.data.slider.bar);
+        custom_maker.widget.clip.h = scui_image_h(custom_maker.data.slider.bar);
+        custom_maker.widget.event_cb = scui_ui_scene_float_2_slider_event_proc;
+        scui_widget_create(&custom_maker, &custom_handle);
+        #endif
         
-        clip = scui_widget_clip(event->object);
-        clip.x += 10;
-        clip.y += 10;
-        clip.w -= 10 * 2;
-        clip.h -= 10 * 2;
-        scui_widget_draw_color(event->object, &clip, color_black);
+        #if 1
+        custom_maker.widget.clip.x = SCUI_HOR_RES * 1 / 13 + 10;
+        custom_maker.widget.clip.y = SCUI_VER_RES * 5 / 13 + 10;
+        custom_maker.widget.clip.w = SCUI_HOR_RES * 5 / 13 - 10 * 2;
+        custom_maker.widget.clip.h = SCUI_VER_RES * 5 / 13 - 10 * 2;
+        custom_maker.type = scui_custom_type_spinner;
+        custom_maker.data = custom_data_zero;
+        custom_maker.data.spinner.spinner = scui_image_prj_image_src_19_widget_activity_05_ringbmp;
+        custom_maker.data.spinner.edge = scui_image_prj_image_src_19_widget_activity_04_dotbmp;
+        custom_maker.data.spinner.color.color_l.full = 0xFFFFFFFF;
+        custom_maker.data.spinner.color.color_d.full = 0xFF404040;
+        custom_maker.data.spinner.color.filter = true;
+        custom_maker.data.spinner.angle_s = 270;
+        custom_maker.data.spinner.angle_l = 60;
+        custom_maker.data.spinner.way = 1;
+        custom_maker.widget.clip.x += (custom_maker.widget.clip.w - scui_image_w(custom_maker.data.spinner.spinner)) / 2;
+        custom_maker.widget.clip.y += (custom_maker.widget.clip.h - scui_image_h(custom_maker.data.spinner.spinner)) / 2;
+        custom_maker.widget.clip.w = scui_image_w(custom_maker.data.spinner.spinner);
+        custom_maker.widget.clip.h = scui_image_h(custom_maker.data.spinner.spinner);
+        custom_maker.widget.event_cb = scui_ui_scene_float_2_spinner_event_proc;
+        scui_widget_create(&custom_maker, &custom_handle);
+        #endif
         
-        scui_point_t center = {
-            .x = clip.x + clip.w / 2,
-            .y = clip.y + clip.h / 2,
-        };
-        scui_coord_t  radius = clip.w / 2 - 20;
-        scui_coord_t  angle  = image_ring_angle;
-        scui_handle_t image_handle = scui_image_prj_image_src_repeat_dot_02_whitebmp;
-        scui_custom_draw_ring_edge(event, NULL, &center, image_handle, color_mix, radius, angle);
+        #if 1
+        custom_maker.type = scui_custom_type_indicator;
+        custom_maker.data = custom_data_zero;
+        custom_maker.data.indicator.wait = scui_image_prj_image_src_repeat_dot_01_greybmp;
+        custom_maker.data.indicator.focus = scui_image_prj_image_src_repeat_dot_02_whitebmp;
+        custom_maker.data.indicator.count = 5;
+        custom_maker.data.indicator.span = 6;
+        custom_maker.widget.event_cb = scui_ui_scene_float_2_indicator_event_proc;
         
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
-{
-    static scui_coord_t spinner_pct  = 0;
-    static scui_coord_t spinner_cnt  = 0;
-    static scui_coord_t spinner_tick = 750;
-    
-    switch (event->type) {
-    case scui_event_anima_elapse: {
+        custom_maker.data.indicator.way = 0;
+        custom_maker.widget.clip.x  = 15;
+        custom_maker.widget.clip.y  = SCUI_VER_RES - 30;
+        custom_maker.widget.clip.w  = scui_image_w(custom_maker.data.indicator.wait);
+        custom_maker.widget.clip.w += custom_maker.data.indicator.span;
+        custom_maker.widget.clip.w *= custom_maker.data.indicator.count;
+        custom_maker.widget.clip.h  = scui_image_h(custom_maker.data.indicator.wait);
+        scui_widget_create(&custom_maker, &custom_handle);
         
-        spinner_cnt += event->tick;
-        if (spinner_cnt >  spinner_tick)
-            spinner_cnt -= spinner_tick;
+        custom_maker.data.indicator.way = 1;
+        custom_maker.widget.clip.x  = 15;
+        custom_maker.widget.clip.y  = SCUI_VER_RES - 150;
+        custom_maker.widget.clip.w  = scui_image_w(custom_maker.data.indicator.wait);
+        custom_maker.widget.clip.h  = scui_image_h(custom_maker.data.indicator.wait);
+        custom_maker.widget.clip.h += custom_maker.data.indicator.span;
+        custom_maker.widget.clip.h *= custom_maker.data.indicator.count;
+        scui_widget_create(&custom_maker, &custom_handle);
+        #endif
         
-        spinner_pct = scui_map(spinner_cnt, 0, spinner_tick, 0, 100);
-        scui_widget_draw(event->object, NULL, false);
-        break;
-    }
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
+        #if 1
+        custom_maker.widget.clip.x = SCUI_HOR_RES * 9 / 13 + 10;
+        custom_maker.widget.clip.y = SCUI_VER_RES * 1 / 13 + 10;
+        custom_maker.widget.clip.w = SCUI_HOR_RES * 3 / 13 - 10 * 2;
+        custom_maker.widget.clip.h = SCUI_VER_RES * 3 / 13 - 10 * 2;
+        custom_maker.widget.event_cb = scui_ui_scene_float_2_ring_edge_event_proc;
+        custom_maker.type = scui_custom_type_ring_edge;
+        custom_maker.data = custom_data_zero;
+        custom_maker.data.ring_edge.image = scui_image_prj_image_src_repeat_dot_02_whitebmp;
+        custom_maker.data.ring_edge.color.color.full = 0xFF00FF00;
+        custom_maker.data.ring_edge.center.x = custom_maker.widget.clip.x + custom_maker.widget.clip.w / 2;
+        custom_maker.data.ring_edge.center.y = custom_maker.widget.clip.y + custom_maker.widget.clip.h / 2;
+        custom_maker.data.ring_edge.radius = custom_maker.widget.clip.w / 2 - 20;
+        scui_widget_create(&custom_maker, &custom_handle);
+        #endif
         
-        scui_area_t clip = {0};
-        scui_color_t color_black = {0};
         
-        clip = scui_widget_clip(event->object);
-        clip.x += 10;
-        clip.y += 10;
-        clip.w -= 10 * 2;
-        clip.h -= 10 * 2;
-        scui_widget_draw_color(event->object, &clip, color_black);
         
-        scui_handle_t image_edge = scui_image_prj_image_src_19_widget_activity_04_dotbmp;
-        scui_handle_t image_ring = scui_image_prj_image_src_19_widget_activity_05_ringbmp;
-        
-        clip = scui_widget_clip(event->object);
-        clip.x += (clip.w - scui_image_w(image_ring)) / 2;
-        clip.y += (clip.h - scui_image_h(image_ring)) / 2;
-        clip.w = scui_image_w(image_ring);
-        clip.h = scui_image_h(image_ring);
-        
-        scui_color_t color = {
-            .color_l.full = 0xFFFFFFFF,
-            .color_d.full = 0xFF404040,
-            .filter = true,
-        };
-        
-        scui_custom_draw_spinner(event, &clip, image_ring, color, image_edge,
-                                 spinner_pct, 270, 60, +1);
-        
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        break;
-    case scui_event_create:
+        #if 1
         scui_button_maker_t button_maker = {0};
         scui_handle_t button_handle = SCUI_HANDLE_INVALID;
-        button_maker.widget.type    = scui_widget_type_button;
-        button_maker.widget.clip.w  = scui_widget_clip(SCUI_UI_SCENE_FLOAT_2_5).w - 15;
+        button_maker.widget.type = scui_widget_type_button;
+        button_maker.widget.style.fully_bg = true;
+        button_maker.widget.parent = event->object;
+        button_maker.widget.event_cb = scui_ui_scene_float_2_button_event_proc;
+        
+        button_maker.widget.clip.w  = SCUI_HOR_RES * 5 / 13 - 15;
         button_maker.widget.clip.h  = 120;
-        button_maker.widget.clip.x  = (scui_widget_clip(SCUI_UI_SCENE_FLOAT_2_5).w - button_maker.widget.clip.w) / 2;
-        button_maker.widget.clip.y  = 10;
+        button_maker.widget.clip.x  = SCUI_HOR_RES * 7 / 13 + 15 / 2;
+        button_maker.widget.clip.y  = SCUI_VER_RES * 5 / 13 + 10;
         button_maker.widget.clip.x += 10;
         button_maker.widget.clip.y += 10;
         button_maker.widget.clip.w -= 10 * 2;
         button_maker.widget.clip.h -= 10 * 2;
-        button_maker.widget.parent = SCUI_UI_SCENE_FLOAT_2_5;
-        button_maker.widget.event_cb = scui_ui_scene_2_button_event_proc;
         button_maker.type = scui_button_type_pixel;
         button_maker.mode = scui_button_mode_scale;
         button_maker.pixel.color[0].color_s.full = 0xFF00FF00;
@@ -373,27 +264,105 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         button_maker.pixel.radius = 20;
         scui_widget_create(&button_maker, &button_handle);
         /* 该控件未完成,待定中... */
+        #endif
+        
+        
         
         break;
+    }
     case scui_event_destroy:
         break;
+    case scui_event_focus_get:
+        scui_ui_scene_link_cfg(event);
+        break;
+    case scui_event_focus_lost:
+        break;
     case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
-        
+        // 无需叠加widget_clip, 它为0
         scui_area_t clip = {0};
-        scui_color_t color_black = {0};
         
-        clip = scui_widget_clip(event->object);
-        clip.x += 10;
-        clip.y += 10;
-        clip.w -= 10 * 2;
-        clip.h -= 10 * 2;
-        scui_widget_draw_color(event->object, &clip, color_black);
+        #if 1
+        clip.x = SCUI_HOR_RES * 1 / 13;
+        clip.y = SCUI_VER_RES * 1 / 13;
+        clip.w = SCUI_HOR_RES * 3 / 13;
+        clip.h = SCUI_VER_RES * 3 / 13;
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
+        clip.x = SCUI_HOR_RES * 5 / 13;
+        clip.y = SCUI_VER_RES * 1 / 13;
+        clip.w = SCUI_HOR_RES * 3 / 13;
+        clip.h = SCUI_VER_RES * 3 / 13;
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
+        clip.x = SCUI_HOR_RES * 9 / 13;
+        clip.y = SCUI_VER_RES * 1 / 13;
+        clip.w = SCUI_HOR_RES * 3 / 13;
+        clip.h = SCUI_VER_RES * 3 / 13;
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
+        clip.x = SCUI_HOR_RES * 1 / 13;
+        clip.y = SCUI_VER_RES * 5 / 13;
+        clip.w = SCUI_HOR_RES * 5 / 13;
+        clip.h = SCUI_VER_RES * 5 / 13;
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
+        clip.x = SCUI_HOR_RES * 7 / 13;
+        clip.y = SCUI_VER_RES * 5 / 13;
+        clip.w = SCUI_HOR_RES * 5 / 13;
+        clip.h = SCUI_VER_RES * 7 / 13;
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
+        #endif
+        
+        #if 1
+        scui_color_t color_mix = {
+            .color_s.full = 0xFF00FF00,
+            .color_e.full = 0xFF0000FF,
+        };
+        
+        clip.x = SCUI_HOR_RES * 1 / 13 + 10;
+        clip.y = SCUI_VER_RES * 1 / 13 + 10;
+        clip.w = SCUI_HOR_RES * 3 / 13 - 10 * 2;
+        clip.h = SCUI_VER_RES * 3 / 13 - 10 * 2;
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
+        
+        clip.x = SCUI_HOR_RES * 1 / 13 + 15;
+        clip.y = SCUI_HOR_RES * 1 / 13 + 15;
+        clip.w = SCUI_HOR_RES * 3 / 13 - 15 * 2;
+        clip.h = SCUI_HOR_RES * 3 / 13 - 15 * 2;
+        clip.h /= 2;
+        clip.h -= 5;
+        scui_widget_draw_color_grad(event->object, &clip, color_mix, false);
+        scui_widget_draw_dither(event->object, &clip);
+        
+        clip.x = SCUI_HOR_RES * 1 / 13 + 15;
+        clip.y = SCUI_VER_RES * 1 / 13 + 15;
+        clip.w = SCUI_HOR_RES * 3 / 13 - 15 * 2;
+        clip.h = SCUI_HOR_RES * 3 / 13 - 15 * 2;
+        clip.h /= 2;
+        clip.y += clip.h + 5;
+        clip.h -= 5;
+        scui_widget_draw_color_grad(event->object, &clip, color_mix, true);
+        scui_widget_draw_dither(event->object, &clip);
+        #endif
+        
+        #if 1
+        clip.x = SCUI_HOR_RES * 5 / 13 + 10;
+        clip.y = SCUI_VER_RES * 1 / 13 + 10;
+        clip.w = SCUI_HOR_RES * 3 / 13 - 10 * 2;
+        clip.h = SCUI_VER_RES * 3 / 13 - 10 * 2;
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
+        
+        scui_handle_t image_handle = scui_image_prj_image_src_repeat_btn_22_retry_heartbmp;
+        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, image_scale, scui_opt_pos_c);
+        #endif
+        
+        
         
         break;
     }
     default:
+        #if 0   // discard, we don't need this
+        if (scui_event_type_ptr(event->type))
+            scui_window_float_event_grasp_ptr(event);
+        if (scui_event_type_key(event->type))
+            scui_window_float_event_grasp_key(event);
+        #endif
         break;
     }
 }

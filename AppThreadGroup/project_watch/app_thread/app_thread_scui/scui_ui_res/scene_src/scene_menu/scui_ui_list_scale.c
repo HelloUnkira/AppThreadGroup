@@ -137,7 +137,7 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_coord_t  btn_scale_x = (scui_multi_t)btn_clip.w * (1024 - img_scale.x) / 1024;
         btn_clip.x += btn_scale_x / 2;
         btn_clip.w -= btn_scale_x;
-        scui_custom_draw_image_crect4(event, &btn_clip, btn_image_full, btn_color_full, -1);
+        scui_custom_draw_image_crect4_OLD(event, &btn_clip, btn_image_full, btn_color_full, -1);
         scui_widget_draw_image_scale(event->object, NULL, image_s, NULL, img_scale, img_pos);
         
         

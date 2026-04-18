@@ -79,6 +79,14 @@ typedef struct {
 #pragma pack(pop)
 
 /* scui_color_t组合宏(这里用内联函数表出): */
+static inline scui_color_t SCUI_COLOR_MAKE(bool filter, scui_color32_t color_f, scui_color32_t color)
+{return (scui_color_t){ .color = color, .color_f = color_f, .filter = filter, };}
+static inline scui_color_t SCUI_COLOR_MAKE_SE(bool filter, scui_color32_t color_f, scui_color32_t color_s, scui_color32_t color_e)
+{return (scui_color_t){ .color_s = color_s, .color_e = color_e, .color_f = color_f, .filter = filter, };}
+static inline scui_color_t SCUI_COLOR_MAKE_LD(bool filter, scui_color32_t color_f, scui_color32_t color_l, scui_color32_t color_d)
+{return (scui_color_t){ .color_l = color_l, .color_d = color_d, .color_f = color_f, .filter = filter, };}
+
+/* scui_color_t组合宏(这里用内联函数表出): */
 static inline scui_color_t SCUI_COLOR_MAKE32(bool filter, uint32_t color_f, uint32_t color)
 {return (scui_color_t){ .color.full = color, .color_f.full = color_f, .filter = filter, };}
 static inline scui_color_t SCUI_COLOR_MAKE32_SE(bool filter, uint32_t color_f, uint32_t color_s, uint32_t color_e)
@@ -97,6 +105,8 @@ static inline scui_color32_t SCUI_COLOR32_MAKE32(uint32_t color)
 #define SCUI_COLOR_ZEROED           SCUI_COLOR_MAKE32(false, 0x00000000, 0x00000000)
 #define SCUI_COLOR_FILTER_TRANS     SCUI_COLOR_MAKE32(true,  0x00000000, 0x00000000)
 #define SCUI_COLOR_FILTER_BLACK     SCUI_COLOR_MAKE32(true,  0xFF000000, 0xFF000000)
+#define SCUI_COLOR_BLACK            SCUI_COLOR_MAKE32(false, 0x00000000, 0xFF000000)
+#define SCUI_COLOR_WHITE            SCUI_COLOR_MAKE32(false, 0x00000000, 0xFFFFFFFF)
 
 /* scui_color_t常用值: */
 #define SCUI_COLOR32_BLACK          SCUI_COLOR32_MAKE32(0xFF000000)

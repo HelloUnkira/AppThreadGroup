@@ -129,7 +129,7 @@ void scui_button_invoke(scui_event_t *event)
             switch (button->mode) {
             case scui_button_mode_static: {
                 
-                scui_custom_draw_image_crect4(event, &widget->clip,
+                scui_custom_draw_image_crect4_OLD(event, &widget->clip,
                     button->image.image, button->image.color, button->image.delta);
                 break;
             }
@@ -143,7 +143,7 @@ void scui_button_invoke(scui_event_t *event)
                 scale_clip.w -= scale_x * 2;
                 scale_clip.h -= scale_y * 2;
                 
-                scui_custom_draw_image_crect4(event, &scale_clip,
+                scui_custom_draw_image_crect4_OLD(event, &scale_clip,
                     button->image.image, button->image.color, button->image.delta);
                 break;
             }

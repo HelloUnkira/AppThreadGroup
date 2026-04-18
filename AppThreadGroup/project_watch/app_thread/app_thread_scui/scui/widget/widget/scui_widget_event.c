@@ -423,11 +423,39 @@ static void scui_widget_event_process(scui_event_t *event)
         #if SCUI_WIDGET_BORDER_TAG
         /* 控件绘制流程在执行步(最后) */
         if (scui_event_check_execute(event)) {
+            scui_draw_dsc_t draw_dsc = {0};
+            draw_dsc.type = scui_draw_type_pixel_line;
+            draw_dsc.graph.src_width = 1;
+            scui_alpha_t alpha = widget->alpha;
+            scui_color_t color = {
+                .color.ch.a = 0xFF,
+                .color.ch.r = scui_rand(0xFF),
+                .color.ch.g = scui_rand(0xFF),
+                .color.ch.b = scui_rand(0xFF),
+            };
             
-            scui_handle_t  image4[4] = {0};
-            scui_color32_t color32 = SCUI_COLOR32_MAKE8(0xFF, scui_rand(0xFF), scui_rand(0xFF), scui_rand(0xFF));
-            scui_color_t   color   = SCUI_COLOR_MAKE32(false, 0x00000000, color32.full);
-            scui_custom_draw_image_crect4(event, &widget->clip, image4, color, 1);
+            scui_area_t clip = widget->clip;
+            scui_area_m_to_s(&clip, &clip);
+            
+            draw_dsc.graph.src_pos_1.x = clip.x1;
+            draw_dsc.graph.src_pos_2.x = clip.x2;
+            
+            draw_dsc.graph.src_pos_1.y = clip.y1;
+            draw_dsc.graph.src_pos_2.y = clip.y1;
+            scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
+            draw_dsc.graph.src_pos_1.y = clip.y2;
+            draw_dsc.graph.src_pos_2.y = clip.y2;
+            scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
+            
+            draw_dsc.graph.src_pos_1.y = clip.y1;
+            draw_dsc.graph.src_pos_2.y = clip.y2;
+            
+            draw_dsc.graph.src_pos_1.x = clip.x1;
+            draw_dsc.graph.src_pos_2.x = clip.x1;
+            scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
+            draw_dsc.graph.src_pos_1.x = clip.x2;
+            draw_dsc.graph.src_pos_2.x = clip.x2;
+            scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
         }
         #endif
     }
@@ -606,7 +634,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 if (!surface_only && !event->style.sync) return;
                 
                 /* 绘制结束, 产生一次异步刷新 */
-                scui_widget_refr(widget->myself, false);    
+                scui_widget_refr(widget->myself, false);
                 /* 绘制结束, 去除surface剪切域 */
                 scui_widget_clip_clear(widget, true);
                 /* 执行绘制任务序列调度 */

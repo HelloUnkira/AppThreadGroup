@@ -51,7 +51,6 @@
 #include "scui_widget.h"            /* 控件(基础) */
 #include "scui_widget_inf.h"        /* 控件(基础)API */
 #include "scui_widget_draw.h"       /* 控件(绘制上下文)API */
-#include "scui_custom_draw.h"       /* 控件(绘制上下文)API */
 #include "scui_window.h"            /* 控件(窗口) */
 #include "scui_window_inf.h"        /* 控件(窗口)API */
 /* widget(base): */

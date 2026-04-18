@@ -171,4 +171,49 @@ void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event)
 void scui_ui_scene_return(void);
 /*****************************************************************************/
 
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+#if 1
+/* 一些ui用到的旧接口, 懒得批量改了 */
+
+/* Abandoned */
+#define scui_custom_draw_image_text_OLD(event_v, clip_v,                    \
+    image_v, color_v, span_v, num_v, way_v)                                 \
+do {                                                                        \
+    scui_custom_data_t custom_data_inst = {                                 \
+        .image_text.image = image_v,                                        \
+        .image_text.color = color_v,                                        \
+        .image_text.span  = span_v,                                         \
+        .image_text.way   = way_v,                                          \
+        .image_text.num   = num_v,                                          \
+    };                                                                      \
+    scui_custom_draw_image_text(event_v->object,                            \
+        clip_v, &custom_data_inst);                                         \
+} while (0)                                                                 \
+
+/* Abandoned */
+#define scui_custom_draw_image_crect4_OLD(event_v, clip_v,                  \
+    image_v, color_v, delta_v)                                              \
+do {                                                                        \
+    scui_custom_data_t custom_data_inst = {                                 \
+        .image_crect4.image[0] = image_v[0],                                \
+        .image_crect4.image[1] = image_v[1],                                \
+        .image_crect4.image[2] = image_v[2],                                \
+        .image_crect4.image[3] = image_v[3],                                \
+        .image_crect4.color = color_v,                                      \
+        .image_crect4.delta = delta_v,                                      \
+    };                                                                      \
+    scui_custom_draw_image_crect4(event_v->object,                          \
+        clip_v, &custom_data_inst);                                         \
+} while (0)                                                                 \
+
+#endif
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+
+
 #endif

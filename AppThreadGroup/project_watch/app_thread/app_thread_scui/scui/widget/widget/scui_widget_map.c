@@ -86,7 +86,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make    = scui_custom_make,
             .burn    = scui_custom_burn,
             .invoke  = scui_custom_invoke,
-            .invoke  = NULL,
             .inherit = true,
             .name    = "custom",
         },
