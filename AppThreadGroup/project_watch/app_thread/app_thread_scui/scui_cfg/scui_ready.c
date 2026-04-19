@@ -131,8 +131,8 @@ void scui_ready(void)
     scui_window_switch_cfg_dir(&cfg_dir);
     scui_window_switch_cfg_type(&cfg_type);
     scui_window_switch_cfg_args(&cfg_args);
-    *cfg_dir  = SCUI_WINDOW_SWITCH_JUMP_DIR;
-    *cfg_type = SCUI_WINDOW_SWITCH_TYPE;
+    *cfg_type = scui_window_switch_move;    /* 默认切换风格 */
+    *cfg_dir  = scui_opt_dir_to_l;          /* 默认切换方向 */
     
     /* 窗口交互参数 */
     cfg_args->shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;

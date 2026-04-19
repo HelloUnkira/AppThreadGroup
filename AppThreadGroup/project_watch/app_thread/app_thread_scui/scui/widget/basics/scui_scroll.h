@@ -20,10 +20,10 @@ typedef struct {
     scui_coord_t    fling_page;         /* 翻页数量 */
     scui_map_cb_t   anima_path[4];      /* 动画轨迹[ptr,enc,key,auto] */
     scui_coord_t    anima_speed[4];     /* 动画速度[ptr,enc,key,auto](像素点/1s) */
-    scui_coord_t    route_enc;          /* 编码器行程 */
+    scui_coord_t    route_enc;          /* 旋钮行程 */
     scui_coord_t    route_key;          /* 按键行程 */
-    scui_coord_t    keyid_fdir;         /* 按键id,对应编码器事件(clockwise) */
-    scui_coord_t    keyid_bdir;         /* 按键id,对应编码器事件(clockwise_anti) */
+    scui_coord_t    keyid_fdir;         /* 按键id,对应旋钮事件(clockwise) */
+    scui_coord_t    keyid_bdir;         /* 按键id,对应旋钮事件(clockwise_anti) */
     scui_coord_t    springback;         /* 回弹效果 */
     scui_sbitfd_t   freedom:1;          /* 自由布局(默认自动布局) */
     scui_sbitfd_t   loop:1;             /* 滚动循环(自动布局,与回弹效果互斥) */
@@ -70,10 +70,10 @@ typedef struct {
     scui_coord_t    fling_page;         /* 翻页数量 */
     scui_map_cb_t   anima_path[4];      /* 动画轨迹[ptr,enc,key,auto] */
     scui_coord_t    anima_speed[4];     /* 动画速度[ptr,enc,key,auto](像素点/1s) */
-    scui_coord_t    route_enc;          /* 编码器行程 */
+    scui_coord_t    route_enc;          /* 旋钮行程 */
     scui_coord_t    route_key;          /* 按键行程 */
-    scui_coord_t    keyid_fdir;         /* 按键id,对应编码器事件(clockwise) */
-    scui_coord_t    keyid_bdir;         /* 按键id,对应编码器事件(clockwise_anti) */
+    scui_coord_t    keyid_fdir;         /* 按键id,对应旋钮事件(clockwise) */
+    scui_coord_t    keyid_bdir;         /* 按键id,对应旋钮事件(clockwise_anti) */
     scui_coord_t    springback;         /* 回弹效果 */
     scui_sbitfd_t   freedom:1;          /* 自由布局(默认自动布局) */
     scui_sbitfd_t   loop:1;             /* 滚动循环(自动布局,与回弹效果互斥) */

@@ -1,5 +1,5 @@
 /*实现目标:
- *    场景:xxx
+ *    窗口:xxx
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

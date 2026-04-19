@@ -143,11 +143,12 @@ void app_sys_timer_reduce(void)
         /* 先将执行节点从执行队列取出 */
         app_sys_list_sll_remove(&app_sys_timer_list.sl_list_e, NULL, node);
         app_sys_timer_list.number_e--;
+        /* 执行过期回调 */
+        if (timer->expired != NULL)
+            timer->expired(timer);
         /* 检查是否需要重加载 */
         if (timer->reload)
             app_sys_timer_start(timer);
-        /* 执行过期回调 */
-        timer->expired(timer);
     }
 }
 

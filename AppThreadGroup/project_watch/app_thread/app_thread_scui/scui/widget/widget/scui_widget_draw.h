@@ -38,7 +38,7 @@ typedef struct {
  */
 bool scui_widget_draw_empty(scui_handle_t handle);
 
-/*@breaf 计算绘制片段的最小区域
+/*@brief 计算绘制片段的最小区域
  *@param clip 最小绘制区域
  *@param frag 绘制片段区域
  *@param face 图形形状

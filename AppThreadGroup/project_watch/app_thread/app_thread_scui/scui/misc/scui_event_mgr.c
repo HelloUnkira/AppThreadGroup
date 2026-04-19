@@ -184,6 +184,51 @@ static void scui_event_adjust_prior(scui_event_t *event)
     event->style.prior = scui_event_prior_normal;
 }
 
+/*@brief 事件冒泡过滤
+ *@param event 事件包
+ *@retval 吸收与否
+ */
+static bool scui_event_bubble_filter(scui_event_t *event)
+{
+    /* 默认事件无条件传递给窗口管理器 */
+    /* 仅特殊事件按需传递给窗口管理器 */
+    switch (event->type) {
+    case scui_event_ptr_hold:
+    case scui_event_ptr_move:
+    case scui_event_ptr_fling:
+        return true;
+    case scui_event_enc_clockwise:
+    case scui_event_enc_clockwise_anti:
+        return true;
+    case scui_event_key_hold:
+    case scui_event_key_click:
+        return true;
+    }
+    
+    return false;
+}
+
+/*@brief 事件冒泡终止
+ *@param event 事件包
+ *@retval 吸收与否
+ */
+static bool scui_event_bubble_over(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_anima_elapse:
+        return true;
+    }
+    
+    /* 控件事件默认不传递给窗口管理器 */
+    if (scui_event_type_sched(event->type))
+        return false;
+    /* 控件事件默认不传递给窗口管理器 */
+    if (scui_event_type_widget(event->type))
+        return false;
+    
+    return true;
+}
+
 /*@brief 事件响应
  *@param event 事件包
  */
@@ -231,7 +276,7 @@ static void scui_event_respond(scui_event_t *event)
                 return;
             #endif
             
-            /* 系统事件发给所有场景(同步) */
+            /* 系统事件发给所有窗口(同步) */
             event->style.sync = true;
             scui_window_list_event_notify(event);
             return;
@@ -247,7 +292,7 @@ static void scui_event_respond(scui_event_t *event)
             scui_cache_font_rectify();
             scui_cache_glyph_rectify();
             
-            /* 系统事件发给所有场景(同步) */
+            /* 系统事件发给所有窗口(同步) */
             event->style.sync = true;
             scui_window_list_event_notify(event);
             return;
@@ -258,11 +303,11 @@ static void scui_event_respond(scui_event_t *event)
         break;
     }
     
-    /* 系统事件发给活跃场景 */
+    /* 系统事件发给活跃窗口 */
     if (event->object == SCUI_HANDLE_SYSTEM)
         event->object  = scui_window_active_last(0);
     
-    /* 本事件无活跃场景接收 */
+    /* 本事件无活跃窗口接收 */
     if (scui_handle_unmap(event->object)) {
         /* 存在控件树已经被回收的情况 */
         /* 但是事件调度队列还存在控件树的事件未响应 */
@@ -292,15 +337,6 @@ static void scui_event_respond(scui_event_t *event)
     if (event->type >= scui_event_sys_s &&
         event->type <= scui_event_sys_e) {
         
-        bool event_filter = false;
-        /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(ptr) */
-        event_filter = event_filter || event->type == scui_event_ptr_hold;
-        event_filter = event_filter || event->type == scui_event_ptr_move;
-        event_filter = event_filter || event->type == scui_event_ptr_fling;
-        /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(key) */
-        event_filter = event_filter || event->type == scui_event_key_hold;
-        event_filter = event_filter || event->type == scui_event_key_click;
-        
         /* 系统事件调度工步:prepare */
         if (scui_event_order_check(event)) {
             scui_event_mask_prepare(event);
@@ -318,18 +354,11 @@ static void scui_event_respond(scui_event_t *event)
         }
         
         /* 控件树调度结束, 检查事件是否处理完毕 */
-        if (scui_event_check_over(event) && event_filter)
+        if (scui_event_check_over(event) &&
+            scui_event_bubble_filter(event))
             return;
         
-        event_filter = true;
-        /* 有些事件仅仅为控件事件,默认不传递给场景管理器 */
-        if (scui_event_type_sched(event->type) ||
-            scui_event_type_widget(event->type))
-            event_filter = false;
-        /* 有些事件仅仅为控件事件,默认不传递给场景管理器(sched) */
-        event_filter = event_filter || event->type == scui_event_anima_elapse;
-        
-        if (event_filter) {
+        if (scui_event_bubble_over(event)) {
             
             /* 系统事件调度工步:prepare */
             if (scui_event_order_check(event)) {

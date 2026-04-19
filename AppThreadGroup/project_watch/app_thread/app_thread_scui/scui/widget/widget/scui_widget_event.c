@@ -112,7 +112,7 @@ static void scui_widget_show_delay(scui_handle_t handle)
         scui_event_notify(&event);
     }
     
-    /* 将该显示窗口加入到场景管理器中 */
+    /* 将该显示窗口加入到窗口管理器中 */
     if (widget->type == scui_widget_type_window)
         scui_window_list_add(widget->myself);
     
@@ -140,7 +140,7 @@ static void scui_widget_hide_delay(scui_handle_t handle)
         scui_widget_draw(widget->parent, NULL, only);
     }
     
-    /* 窗口移除出场景管理器中 */
+    /* 窗口移除出窗口管理器中 */
     if (widget->type == scui_widget_type_window)
         scui_window_list_del(widget->myself);
     /* 销毁整个控件树 */

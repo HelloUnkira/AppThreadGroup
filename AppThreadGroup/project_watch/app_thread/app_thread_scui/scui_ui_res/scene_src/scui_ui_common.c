@@ -1,5 +1,5 @@
 /*实现目标:
- *    场景:xxx
+ *    窗口:xxx
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
@@ -420,7 +420,7 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
     if (event->type != scui_event_focus_get)
         return;
     
-    /* 窗口属性参数配置(场景管理) */
+    /* 窗口属性参数配置(窗口管理) */
     scui_handle_t window_sibling[4] = {0};
     scui_window_switch_type_t switch_type[4] = {0};
     window_sibling[0] = SCUI_HANDLE_INVALID;
@@ -547,6 +547,18 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
     }
     scui_window_sibling_set(event->object, window_sibling);
     scui_window_switch_type_set(event->object, switch_type);
+    
+    /* 默认支持所有方向 */
+    scui_window_switch_enc_set(event->object, scui_opt_pos_all);
+    scui_window_switch_key_set(event->object, scui_opt_pos_all);
+    
+    /* 默认支持所有方向 */
+    scui_coord_t switch_key_id[4] = {
+        scui_event_key_val_down,  scui_event_key_val_up,
+        scui_event_key_val_right, scui_event_key_val_left,
+    };
+    scui_window_switch_enc_way_set(event->object, scui_opt_dir_ver);
+    scui_window_switch_key_id_set(event->object, switch_key_id);
 }
 
 /*****************************************************************************/

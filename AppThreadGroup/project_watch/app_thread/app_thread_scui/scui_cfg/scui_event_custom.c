@@ -150,7 +150,7 @@ void scui_event_custom_access(scui_event_t *event)
  */
 void scui_event_custom_myself(scui_event_t *event)
 {
-    /* 当前在待机场景时 */
+    /* 当前在待机窗口时 */
     scui_handle_t handle_top = SCUI_HANDLE_INVALID;
     scui_window_stack_top(&handle_top);
     

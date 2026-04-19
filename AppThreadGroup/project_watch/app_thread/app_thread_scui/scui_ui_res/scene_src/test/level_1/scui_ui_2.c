@@ -1,5 +1,5 @@
 /*实现目标:
- *    场景:xxx
+ *    窗口:xxx
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
@@ -232,7 +232,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             break;
         
         SCUI_LOG_WARN("scui_event_key_click");
-        static scui_window_switch_type_t switch_type = SCUI_WINDOW_SWITCH_TYPE;
+        static scui_window_switch_type_t switch_type = scui_window_switch_move;
         switch_type++;
         
         if (switch_type < scui_window_switch_single_s + 1)

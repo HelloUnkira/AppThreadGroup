@@ -7,7 +7,7 @@
 
 #include "scui.h"
 
-/*@brief 编码器事件吸收回调
+/*@brief 旋钮事件吸收回调
  */
 static bool scui_event_enc_absorb(void *evt_old, void *evt_new)
 {
@@ -47,7 +47,7 @@ void scui_indev_enc_notify(scui_indev_data_t *data)
     if (data->enc.enc_diff == 0)
         return;
     scui_event_sys_t type = scui_event_invalid;
-    /* 编码器类型事件无需额外复杂处理 */
+    /* 旋钮类型事件无需额外复杂处理 */
     if (data->enc.enc_diff > 0) {
         type = scui_event_enc_clockwise;
         SCUI_LOG_INFO("scui_event_enc_clockwise:%d", scui_abs(data->enc.enc_diff));

@@ -102,7 +102,7 @@ static void scui_monkey_anima_expire(void *instance)
         case scui_indev_type_enc: {
             indev_data.state = scui_indev_state_release;
             indev_data.enc.enc_diff = scui_rand(1) ? -1 : +1;
-            /* 编码器是瞬时事件 */
+            /* 旋钮是瞬时事件 */
             scui_ui_res_local->idle = true;
             scui_ui_res_local->state = scui_indev_state_release;
             break;

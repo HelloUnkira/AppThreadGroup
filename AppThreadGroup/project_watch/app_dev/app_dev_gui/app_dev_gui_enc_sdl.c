@@ -48,7 +48,7 @@ void app_dev_gui_enc_lv_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * indev
         key = LV_KEY_LEFT;
     if (cfg->enc_diff < 0)
         key = LV_KEY_RIGHT;
-    /* 传递给lvgl的编码器事件 */
+    /* 传递给lvgl的旋钮事件 */
     indev_data->state    = cfg->state ?
                            LV_INDEV_STATE_PRESSED :
                            LV_INDEV_STATE_RELEASED;

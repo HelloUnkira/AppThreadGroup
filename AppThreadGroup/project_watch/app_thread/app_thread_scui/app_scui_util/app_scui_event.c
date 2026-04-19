@@ -56,11 +56,11 @@ void app_scui_drv_update(void)
     app_thread_package_notify(&package);
 }
 
-/*@brief scui 场景启动
+/*@brief scui 窗口启动
  */
 void app_scui_window_start(void)
 {
-    /* 向线程发送场景启动事件 */
+    /* 向线程发送窗口启动事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_scui,
         .module = app_thread_scui_ui,
@@ -69,11 +69,11 @@ void app_scui_window_start(void)
     app_thread_package_notify(&package);
 }
 
-/*@brief scui 场景停止
+/*@brief scui 窗口停止
  */
 void app_scui_window_stop(void)
 {
-    /* 向线程发送场景停止事件 */
+    /* 向线程发送窗口停止事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_scui,
         .module = app_thread_scui_ui,
@@ -82,11 +82,11 @@ void app_scui_window_stop(void)
     app_thread_package_notify(&package);
 }
 
-/*@brief scui 场景低功耗
+/*@brief scui 窗口低功耗
  */
 void app_scui_window_dlps(bool status)
 {
-    /* 向线程发送场景休眠唤醒事件 */
+    /* 向线程发送窗口休眠唤醒事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_scui,
         .module = app_thread_scui_sched,
@@ -98,11 +98,11 @@ void app_scui_window_dlps(bool status)
     app_thread_package_notify(&package);
 }
 
-/*@brief scui 场景停止
+/*@brief scui 窗口停止
  */
 void app_scui_window_shutdown(void)
 {
-    /* 向线程发送场景停止事件 */
+    /* 向线程发送窗口停止事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_scui,
         .module = app_thread_scui_ui,

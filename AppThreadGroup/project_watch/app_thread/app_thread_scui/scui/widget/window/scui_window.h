@@ -7,15 +7,19 @@ typedef struct {
     scui_widget_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_sbitfd_t       level:6;            /* 窗口所在层级(数字越大越高) */
-    scui_sbitfd_t       buffer:1;           /* 窗口是否使用独立画布 */
-    scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
-    scui_pixel_cf_t     format;             /* 窗口独立画布基础像素格式 */
-    /* 内部域: */
     scui_handle_t       sibling[4];         /* 临近界面句柄:0:上;1:下;2:左;3:右; */
     scui_handle_t       switch_type[4];     /* 临近界面交互风格 */
-    void               *local_res;          /* 窗口资源实例 */
+    scui_opt_pos_t      switch_enc;         /* 临近界面旋钮交互(上下左右) */
+    scui_opt_pos_t      switch_key;         /* 临近界面按键交互(上下左右) */
+    scui_opt_dir_t      switch_enc_way;     /* 临近界面旋钮方向(水平垂直) */
+    scui_coord_t        switch_key_id[4];   /* 临近界面按键交互id */
+    scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
+    scui_sbitfd_t       buffer:1;           /* 窗口独立画布(是否使用) */
+    scui_sbitfd_t       level:6;            /* 窗口所在层级(越大越高) */
+    scui_pixel_cf_t     format;             /* 窗口像素格式(独立画布) */
+    /* 内部域: */
     scui_sbitfd_t       draw_lock:1;        /* 窗口绘制锁 */
+    void               *local_res;          /* 窗口资源实例 */
 } scui_window_t;
 
 #pragma pack(push, 1)
@@ -25,10 +29,16 @@ typedef struct {
     scui_widget_maker_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_sbitfd_t       level:6;            /* 窗口所在层级(数字越大越高) */
-    scui_sbitfd_t       buffer:1;           /* 窗口是否使用独立画布 */
+    scui_handle_t       sibling[4];         /* 临近界面句柄:0:上;1:下;2:左;3:右; */
+    scui_handle_t       switch_type[4];     /* 临近界面交互风格 */
+    scui_opt_pos_t      switch_enc;         /* 临近界面旋钮交互(上下左右) */
+    scui_opt_pos_t      switch_key;         /* 临近界面按键交互(上下左右) */
+    scui_opt_dir_t      switch_enc_way;     /* 临近界面旋钮方向(水平垂直) */
+    scui_coord_t        switch_key_id[4];   /* 临近界面按键交互id */
     scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
-    scui_pixel_cf_t     format;             /* 窗口独立画布基础像素格式 */
+    scui_sbitfd_t       buffer:1;           /* 窗口独立画布(是否使用) */
+    scui_sbitfd_t       level:6;            /* 窗口所在层级(越大越高) */
+    scui_pixel_cf_t     format;             /* 窗口像素格式(独立画布) */
 } scui_window_maker_t;
 #pragma pack(pop)
 
@@ -55,7 +65,7 @@ void scui_window_invoke(scui_event_t *event);
 
 typedef enum {
     scui_window_switch_none,            /* 无切换 */
-    scui_window_switch_auto,            /* 自适应(适应部分特效) */
+    scui_window_switch_auto,            /* 自适应(全局特效) */
     scui_window_switch_single_s,
     
     scui_window_switch_move,            /* 常规移动 */
@@ -102,12 +112,12 @@ typedef struct {
     scui_opt_dir_t              dir;                /* 窗口切换方向(当前) */
     scui_opt_pos_t              pos;                /* 窗口切换位置(当前) */
     scui_handle_t               anima;              /* 窗口切换动画 */
-    scui_map_cb_t               anima_path[4];      /* 动画轨迹[ptr,enc,key,auto] */
-    scui_coord_t                anima_speed[4];     /* 动画速度[ptr,enc,key,auto](像素点/1s) */
+    scui_map_cb_t               anima_path[5];      /* 动画轨迹[ptr,enc,key,auto,jump] */
+    scui_coord_t                anima_speed[5];     /* 动画速度[ptr,enc,key,auto,jump](像素点/1s) */
     scui_point_t                point;              /* 窗口切换偏移(坐标点) */
     scui_coord_t                pct;                /* 窗口切换进度(百分比) */
     scui_coord_t                ofs;                /* 窗口切换偏移(像素点) */
-    bool                        anima_tag[4];       /* 动画标记[ptr,enc,key,auto] */
+    bool                        anima_tag[5];       /* 动画标记[ptr,enc,key,auto,jump] */
     scui_sbitfd_t               lock_jump:1;        /* 窗口切换锁 */
     scui_sbitfd_t               lock_move:1;        /* 窗口切换锁 */
     scui_sbitfd_t               mask_fling:1;       /* 窗口切换锁 */

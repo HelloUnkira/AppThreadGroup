@@ -21,7 +21,7 @@ static bool scui_event_ptr_hold_absorb(void *evt_old, void *evt_new)
     return true;
 }
 
-/*@brief 编码器事件吸收回调
+/*@brief 旋钮事件吸收回调
  */
 static bool scui_event_ptr_move_absorb(void *evt_old, void *evt_new)
 {

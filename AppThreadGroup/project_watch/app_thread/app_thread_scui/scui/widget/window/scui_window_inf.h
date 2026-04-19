@@ -25,6 +25,54 @@ void scui_window_switch_type_get(scui_handle_t handle, scui_window_switch_type_t
  */
 void scui_window_switch_type_set(scui_handle_t handle, scui_window_switch_type_t switch_type[4]);
 
+/*@brief 窗口配置参数获取
+ *@param handle     窗口控件句柄
+ *@param switch_enc 配置参数
+ */
+void scui_window_switch_enc_get(scui_handle_t handle, scui_opt_pos_t *switch_enc);
+
+/*@brief 窗口配置参数设置
+ *@param handle     窗口控件句柄
+ *@param switch_enc 配置参数
+ */
+void scui_window_switch_enc_set(scui_handle_t handle, scui_opt_pos_t switch_enc);
+
+/*@brief 窗口配置参数获取
+ *@param handle     窗口控件句柄
+ *@param switch_key 配置参数
+ */
+void scui_window_switch_key_get(scui_handle_t handle, scui_opt_pos_t *switch_key);
+
+/*@brief 窗口配置参数设置
+ *@param handle     窗口控件句柄
+ *@param switch_key 配置参数
+ */
+void scui_window_switch_key_set(scui_handle_t handle, scui_opt_pos_t switch_key);
+
+/*@brief 窗口配置参数获取
+ *@param handle         窗口控件句柄
+ *@param switch_enc_way 配置参数
+ */
+void scui_window_switch_enc_way_get(scui_handle_t handle, scui_opt_dir_t *switch_enc_way);
+
+/*@brief 窗口配置参数设置
+ *@param handle         窗口控件句柄
+ *@param switch_enc_way 配置参数
+ */
+void scui_window_switch_enc_way_set(scui_handle_t handle, scui_opt_dir_t switch_enc_way);
+
+/*@brief 窗口配置参数获取
+ *@param handle        窗口控件句柄
+ *@param switch_key_id 配置参数
+ */
+void scui_window_switch_key_id_get(scui_handle_t handle, scui_coord_t switch_key_id[4]);
+
+/*@brief 窗口配置参数设置
+ *@param handle        窗口控件句柄
+ *@param switch_key_id 配置参数
+ */
+void scui_window_switch_key_id_set(scui_handle_t handle, scui_coord_t switch_key_id[4]);
+
 /*@brief 窗口资源获取
  *@param handle    窗口控件句柄
  *@param local_res 窗口资源

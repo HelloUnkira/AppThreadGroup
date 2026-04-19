@@ -297,7 +297,7 @@ void scui_widget_create_layout_tree(scui_handle_t handle)
     
     do {
         /* 先创建根控件,然后延续依次创建剩下的控件 */
-        /* 静态控件规则为,一个场景为一段连续句柄,父控件在前子控件在后 */
+        /* 静态控件规则为,一个窗口为一段连续句柄,父控件在前子控件在后 */
         scui_widget_create(widget_maker, &handle);
         /* 迭代到下一个句柄 */
         widget_maker = scui_handle_source(++handle);
