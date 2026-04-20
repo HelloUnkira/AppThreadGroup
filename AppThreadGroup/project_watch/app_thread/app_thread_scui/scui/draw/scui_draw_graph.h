@@ -417,9 +417,10 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_graph);
 typedef struct {
     void *dummy;
     #if SCUI_DRAW_USE_THORVG
+    uint8_t       *tvg_pixel_cache;
+    scui_multi_t   tvg_pixel_num;
+    scui_multi_t   tvg_pixel_size;
     scui_surface_t tvg_surface;
-    scui_coord_t   tvg_hor_res; /* 原始值 */
-    scui_coord_t   tvg_ver_res; /* 原始值 */
     #endif
 } scui_draw_graph_t;
 

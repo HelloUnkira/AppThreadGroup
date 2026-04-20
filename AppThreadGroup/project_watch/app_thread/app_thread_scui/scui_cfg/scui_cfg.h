@@ -152,7 +152,10 @@
 #endif
 
 /* 矢量绘图引擎 */
+/* 绘制图形缓存要尽可能大 */
 #define SCUI_DRAW_USE_THORVG                        (1)
+#define SCUI_DRAW_CACHE_THORVG                      (SCUI_HOR_RES * SCUI_VER_RES / 8)
+
 /* 第三方图元库 */
 #define SCUI_DRAW_GRAPH_USE_EGUI                    (1)
 #define SCUI_DRAW_GRAPH_USE_LVGL                    (0) /* unsupport yet */

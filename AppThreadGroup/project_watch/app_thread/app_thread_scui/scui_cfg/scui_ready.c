@@ -19,10 +19,11 @@ static void scui_stat_info(void)
     
     /* 矢量绘图引擎资源 */
     #if SCUI_DRAW_USE_THORVG
-    scui_coord_t tvg_surface_byte = scui_pixel_bits(scui_pixel_cf_bmp8888) / 8;
-    scui_coord_t tvg_surface_rem  = sizeof(scui_color_wt_t) - tvg_surface_byte;
-    scui_multi_t tvg_surface_size = tvg_surface_byte * SCUI_HOR_RES * SCUI_VER_RES + tvg_surface_rem;
-    SCUI_LOG_INFO("scui graph thorvg occupy: %.2fM", (float)tvg_surface_size / 1024.0f / 1024.0f);
+    scui_multi_t tvg_pixel_num  = SCUI_DRAW_CACHE_THORVG;
+    scui_coord_t tvg_pixel_byte = scui_pixel_bits(scui_pixel_cf_bmp8888) / 8;
+    scui_coord_t tvg_pixel_rem  = sizeof(scui_color_wt_t) - tvg_pixel_byte;
+    scui_multi_t tvg_pixel_size = tvg_pixel_byte * tvg_pixel_num + tvg_pixel_rem;
+    SCUI_LOG_INFO("scui graph thorvg occupy: %.2fK", (float)tvg_pixel_size / 1024.0f);
     #endif
     
     SCUI_LOG_INFO("");
