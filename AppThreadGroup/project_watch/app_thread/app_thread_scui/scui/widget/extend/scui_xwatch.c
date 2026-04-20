@@ -248,7 +248,7 @@ void scui_xwatch_invoke(scui_event_t *event)
             /* 临时转移到anima执行一次 */
             event->tick = 0;
             event->type = scui_event_anima_elapse;
-            scui_widget_event_shift(event);
+            scui_xwatch_invoke(event);
             event->type = scui_event_draw;
         }
         

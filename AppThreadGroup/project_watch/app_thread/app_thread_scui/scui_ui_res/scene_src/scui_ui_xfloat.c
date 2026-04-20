@@ -12,9 +12,6 @@
  */
 void scui_ui_scene_xfloat_m_event_proc(scui_event_t * event)
 {
-    // 特殊的固定调用
-    scui_widget_event_shift(event);
-    
     switch (event->type) {
     case scui_event_create:
         break;
@@ -106,9 +103,6 @@ void scui_ui_scene_xfloat_event_proc(scui_event_t * event)
     default:
         break;
     }
-    
-    // 转移至控件调度
-    scui_widget_event_shift(event);
 }
 
 /*@brief 控件事件响应构建

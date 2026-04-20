@@ -52,8 +52,6 @@ typedef struct {
     scui_coord_t        number;         /* 字符数量 */
     uint32_t           *unicode;        /* 字符串(unicode) */
     scui_sbitfd_t       update:1;       /* 更新标记 */
-    scui_sbitfd_t       local:1;        /* 临时布局 */
-    scui_sbitfd_t       nest:12;        /* 临时计数器 */
 } scui_string_args_t;
 
 typedef struct {

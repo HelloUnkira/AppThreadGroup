@@ -124,7 +124,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
     if (scui_area_empty(&draw_area))
-        goto over;
+        return;
     
     scui_point_t offset = {.x = src_clip_v.x,.y = src_clip_v.y,};
     
@@ -411,13 +411,4 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             }
         }
     }
-    
-    /* 如果是本地布局 */
-    if (src_args->local)
-        src_args->nest--;
-    
-    over:
-    /* 如果是本地布局 */
-    if (src_args->nest == 0)
-        src_args->local = false;
 }

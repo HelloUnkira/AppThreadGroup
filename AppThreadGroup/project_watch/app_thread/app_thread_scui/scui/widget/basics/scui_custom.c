@@ -49,25 +49,7 @@ void scui_custom_burn(scui_handle_t handle)
     scui_custom_t *custom = (void *)widget;
     
     /* 回收可能因为文本绘制而存留在控件内的资源 */
-    if (custom->str_args != NULL) {
-        
-        for (scui_coord_t idx = 0; idx < SCUI_CUSTOM_STR_ITEM_LIMIT; idx++) {
-            scui_string_args_t *str_args = custom->str_args[idx];
-            if (str_args == NULL)
-                continue;
-            
-            /* 在回收实例之前回收布局 */
-            str_args->update = true;
-            str_args->utf8   = NULL;
-            str_args->name   = SCUI_HANDLE_INVALID;
-            scui_string_args_process(str_args);
-            
-            SCUI_MEM_FREE(custom->str_args[idx]);
-            SCUI_MEM_FREE(custom->str_utf8[idx]);
-        }
-        SCUI_MEM_FREE(custom->str_args);
-        SCUI_MEM_FREE(custom->str_utf8);
-    }
+    scui_custom_text_recycle(handle);
     
     /* 回收可能存在的自定义参数集实例 */
     SCUI_MEM_FREE(custom->data);
@@ -88,34 +70,74 @@ void scui_custom_invoke(scui_event_t *event)
     /* 其他事件重载实现 */
     switch (event->type) {
     case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             return;
-        
-        switch (custom->type) {
-        case scui_custom_type_slider:
-            scui_custom_draw_slider(widget->myself, &widget->clip, custom->data);
-            break;
-        case scui_custom_type_spinner:
-            scui_custom_draw_spinner(widget->myself, &widget->clip, custom->data);
-            break;
-        case scui_custom_type_indicator:
-            scui_custom_draw_indicator(widget->myself, &widget->clip, custom->data);
-            break;
-        case scui_custom_type_ring_edge:
-            scui_custom_draw_ring_edge(widget->myself, &widget->clip, custom->data);
-            break;
-        case scui_custom_type_image_text:
-            scui_custom_draw_image_text(widget->myself, &widget->clip, custom->data);
-            break;
-        case scui_custom_type_image_crect4:
-            scui_custom_draw_image_crect4(widget->myself, &widget->clip, custom->data);
-            break;
+        if (scui_event_check_execute(event)) {
+            /* 简单打个表整理一下:不是ctx */
+            static const void (*scui_custom_draw_inf[scui_custom_type_num])
+            (scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data) = {
+                [scui_custom_type_slider]       = scui_custom_draw_slider,
+                [scui_custom_type_spinner]      = scui_custom_draw_spinner,
+                [scui_custom_type_indicator]    = scui_custom_draw_indicator,
+                [scui_custom_type_ring_edge]    = scui_custom_draw_ring_edge,
+                [scui_custom_type_image_text]   = scui_custom_draw_image_text,
+                [scui_custom_type_image_crect4] = scui_custom_draw_image_crect4,
+            };
+            
+            if (custom->type > scui_custom_type_none && custom->type < scui_custom_type_num)
+                scui_custom_draw_inf[custom->type](widget->myself, &widget->clip, custom->data);
+        }
+        if (scui_event_check_prepare(event)) {
+            /* 回收可能因为文本绘制而存留在控件内的资源 */
+            scui_custom_text_recycle(widget->myself);
+        }
+        if (scui_event_check_finish(event)) {
+            /* 回收可能因为文本绘制而存留在控件内的资源 */
+            scui_custom_text_recycle(widget->myself);
         }
         break;
     }
+    case scui_event_size_auto:
+    case scui_event_size_adjust:
+    case scui_event_lang_change:
+        /* 回收可能因为文本绘制而存留在控件内的资源 */
+        scui_custom_text_recycle(widget->myself);
+        scui_widget_draw(widget->myself, NULL, false);
+        break;
     default:
         break;
     }
+}
+
+/*@brief 自定义控件文本资源回收
+ *@param handle 控件句柄
+ */
+void scui_custom_text_recycle(scui_handle_t handle)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_custom_t *custom = (void *)widget;
+    
+    /* 回收可能因为文本绘制而存留在控件内的资源 */
+    if (custom->str_args != NULL) {
+        
+        for (scui_coord_t idx = 0; idx < SCUI_CUSTOM_STR_ITEM_LIMIT; idx++) {
+            scui_string_args_t *str_args = custom->str_args[idx];
+            if (str_args == NULL)
+                continue;
+            
+            /* 在回收实例之前回收布局 */
+            str_args->update = true;
+            str_args->utf8   = NULL;
+            str_args->name   = SCUI_HANDLE_INVALID;
+            scui_string_args_process(str_args);
+            
+            SCUI_MEM_FREE(custom->str_args[idx]);
+            SCUI_MEM_FREE(custom->str_utf8[idx]);
+        }
+        SCUI_MEM_FREE(custom->str_args);
+        SCUI_MEM_FREE(custom->str_utf8);
+    }
+    custom->str_args = NULL;
+    custom->str_utf8 = NULL;
 }
 
 /*@brief 自定义控件获得自定义参数集实例
@@ -131,8 +153,8 @@ void scui_custom_data_inst(scui_handle_t handle, scui_custom_data_t **data)
     *data = custom->data;
 }
 
-/*@brief 自定义控件文本绘制(不建议使用)
- *       备注:不建议使用,string控件更合适
+/*@brief 自定义控件文本绘制(string控件更合适)
+ *       备注:偷懒用的,不建议使用,性能低下
  *@param handle 控件句柄
  *@param args   绘制参数(scui_string_args_t)
  *@param text   文本句柄
@@ -143,35 +165,16 @@ void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_custom_t *custom = (void *)widget;
     
+    SCUI_ASSERT(args != NULL);
     /* 在custom申请全局实例空间 */
     /* 以扩充其绘制资源的生命周期 */
-    SCUI_ASSERT(args != NULL);
-    
     if (custom->str_args == NULL) {
-        scui_multi_t str_args_size = sizeof(void*) * SCUI_CUSTOM_STR_ITEM_LIMIT;
-        custom->str_args  = SCUI_MEM_ZALLOC(scui_mem_type_mix, str_args_size);
+        scui_multi_t str_args_size = sizeof(void *) * SCUI_CUSTOM_STR_ITEM_LIMIT;
+        custom->str_args = SCUI_MEM_ZALLOC(scui_mem_type_mix, str_args_size);
     }
     if (custom->str_utf8 == NULL) {
         scui_multi_t str_utf8_size = sizeof(void *) * SCUI_CUSTOM_STR_ITEM_LIMIT;
-        custom->str_utf8  = SCUI_MEM_ZALLOC(scui_mem_type_mix, str_utf8_size);
-    }
-    
-    /* 先回收已经失效的资源集合 */
-    for (scui_coord_t idx = 0; idx < SCUI_CUSTOM_STR_ITEM_LIMIT; idx++) {
-        scui_string_args_t *str_args = custom->str_args[idx];
-        if (str_args == NULL || str_args->local)
-            continue;
-        
-        /* 在回收实例之前回收布局 */
-        str_args->update = true;
-        str_args->utf8   = NULL;
-        str_args->name   = SCUI_HANDLE_INVALID;
-        scui_string_args_process(str_args);
-        
-        SCUI_MEM_FREE(custom->str_args[idx]);
-        SCUI_MEM_FREE(custom->str_utf8[idx]);
-        custom->str_args[idx] = NULL;
-        custom->str_utf8[idx] = NULL;
+        custom->str_utf8 = SCUI_MEM_ZALLOC(scui_mem_type_mix, str_utf8_size);
     }
     
     /* 找到一个空闲的位置, 存放本地资源 */
@@ -199,14 +202,9 @@ void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text)
             str_args->clip = widget->clip;
         
         /* 绘制时本地布局 */
-        str_args->nest   = 0;
-        str_args->local  = true;
         str_args->update = true;
         scui_string_args_process(str_args);
         scui_widget_draw_string(handle, &str_args->clip, str_args);
-        if (str_args->nest == 0)
-            str_args->local = false;
-        
         return;
     }
     

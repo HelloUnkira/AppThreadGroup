@@ -25,16 +25,21 @@ void scui_ui_scene_2_bar_arc_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_2_scroll_event(scui_event_t *event)
 {
-    // 转移至控件调度
-    if (!scui_event_type_widget(event->type)) {
-         scui_widget_event_shift(event);
-         return;
+    switch (event->type) {
+    case scui_event_widget_scroll_layout:
+    case scui_event_widget_scroll_start:
+    case scui_event_widget_scroll_keep:
+    case scui_event_widget_scroll_over: {
+        
+        scui_coord_t scroll_pct = 0;
+        scui_scroll_percent_get(event->object, &scroll_pct);
+        scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
+        scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
+        break;
     }
-    
-    scui_coord_t scroll_pct = 0;
-    scui_scroll_percent_get(event->object, &scroll_pct);
-    scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
-    scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
+    default:
+        break;
+    }
 }
 
 /*@brief 控件事件响应回调
@@ -80,8 +85,6 @@ void scui_ui_scene_2_spinner_event_proc(scui_event_t *event)
         break;
     }
     }
-    
-    scui_widget_event_shift(event);
 }
 
 /*@brief 控件事件响应回调

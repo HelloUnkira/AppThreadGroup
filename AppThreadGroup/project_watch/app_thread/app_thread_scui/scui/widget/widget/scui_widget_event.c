@@ -408,11 +408,27 @@ static void scui_widget_event_process(scui_event_t *event)
     
     
     /* 获取控件事件响应回调, 并且执行它 */
+    scui_widget_map_t *widget_map = NULL;
+    scui_widget_map_find(scui_widget_type(event->object), &widget_map);
+    
+    /* 获取控件事件响应回调, 并且执行它 */
     SCUI_ASSERT(event->object != SCUI_HANDLE_INVALID);
     scui_event_cb_node_t cb_node = {.event = event->type,};
     scui_widget_event_find(event->object, &cb_node);
-    if (cb_node.event_cb != NULL)
-        cb_node.event_cb(event);
+    
+    if (widget->style.event_override) {
+        /* 自定义重载:仅响应event_cb */
+        if (cb_node.event_cb != NULL)
+            cb_node.event_cb(event);
+    } else {
+        /* 默认重载:先响应invoke */
+        if (widget_map->invoke != NULL)
+            widget_map->invoke(event);
+        /* 默认重载:后响应event_cb */
+        if (cb_node.event_cb != NULL &&
+            cb_node.event_cb != widget_map->invoke)
+            cb_node.event_cb(event);
+    }
     
     
     
@@ -633,14 +649,14 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 /* 无独立画布, 异步绘制(此处忽略) */
                 if (!surface_only && !event->style.sync) return;
                 
-                /* 绘制结束, 产生一次异步刷新 */
-                scui_widget_refr(widget->myself, false);
-                /* 绘制结束, 去除surface剪切域 */
-                scui_widget_clip_clear(widget, true);
                 /* 执行绘制任务序列调度 */
                 scui_tick_calc(0x20, NULL, NULL, NULL);
                 scui_draw_task_dispatch();
                 scui_tick_calc(0x21, NULL, NULL, NULL);
+                /* 绘制结束, 产生一次异步刷新 */
+                scui_widget_refr(widget->myself, false);
+                /* 绘制结束, 去除surface剪切域 */
+                scui_widget_clip_clear(widget, true);
             }
             
             /* 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘 */

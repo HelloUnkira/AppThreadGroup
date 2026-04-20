@@ -1,62 +1,40 @@
 #ifndef SCUI_CUSTOM_INF_H
 #define SCUI_CUSTOM_INF_H
 
+/*@brief 自定义控件文本资源回收
+ *@param handle 控件句柄
+ */
+void scui_custom_text_recycle(scui_handle_t handle);
+
 /*@brief 自定义控件获得自定义参数集实例
  *@param handle 控件句柄
  *@param data   自定义参数集实例
  */
 void scui_custom_data_inst(scui_handle_t handle, scui_custom_data_t **data);
 
-/*@brief 自定义控件文本绘制(不建议使用)
- *       备注:不建议使用,string控件更合适
+/*@brief 自定义控件文本绘制(string控件更合适)
+ *       备注:偷懒用的,不建议使用,性能低下
  *@param handle 控件句柄
  *@param args   绘制参数(scui_string_args_t)
  *@param text   文本句柄
  */
 void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text);
 
-/*@brief 自定义控件:插件:进度条,滚动条
+/*@brief 自定义控件
  *@param handle 自定义控件句柄
  *@param clip   绘制区域
  *@param data   自定义参数集
  */
-void scui_custom_draw_slider(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data);
-
-/*@brief 自定义控件:插件:加载圆环
- *@param handle 自定义控件句柄
- *@param clip   绘制区域
- *@param data   自定义参数集
- */
-void scui_custom_draw_spinner(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data);
-
-/*@brief 自定义控件:插件:导航点
- *@param handle 自定义控件句柄
- *@param clip   绘制区域
- *@param data   自定义参数集
- */
-void scui_custom_draw_indicator(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data);
-
-/*@brief 自定义控件:插件:绕圆旋转图像
- *@param handle 自定义控件句柄
- *@param clip   绘制区域
- *@param data   自定义参数集
- */
-void scui_custom_draw_ring_edge(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data);
-
-/*@brief 自定义控件:插件:图像连续绘制
- *       一般主要用于绘制连续数字符号图片
- *@param handle 自定义控件句柄
- *@param clip   绘制区域
- *@param data   自定义参数集
- */
-void scui_custom_draw_image_text(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data);
-
-/*@brief 按钮控件绘制(四个角使用图像绘制)
- *@param handle 自定义控件句柄
- *@param clip   绘制区域
- *@param data   自定义参数集
- */
-void scui_custom_draw_image_crect4(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data);
+#define SCUI_CUSTOM_DRAW_INF_DECLARE(name)  void name(scui_handle_t handle, \
+    scui_area_t *clip, scui_custom_data_t *data)
+/*****************************************************************************/
+SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_slider);
+SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_spinner);
+SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_indicator);
+SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_ring_edge);
+SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_image_text);
+SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_image_crect4);
+/*****************************************************************************/
 
 
 

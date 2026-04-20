@@ -31,9 +31,6 @@ static struct {
  */
 void scui_ui_scene_float_s_event_proc(scui_event_t * event)
 {
-    // 特殊的固定调用
-    scui_widget_event_shift(event);
-    
     switch (event->type) {
     case scui_event_create:
         break;

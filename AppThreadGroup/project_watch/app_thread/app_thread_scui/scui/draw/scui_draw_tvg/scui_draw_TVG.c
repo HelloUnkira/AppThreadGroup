@@ -579,6 +579,7 @@ bool scui_draw_ctx_graph_TVG(scui_draw_dsc_t *draw_dsc)
         return retval;
     }
     
+    SCUI_LOG_INFO("cache block draw");
     /* 分块绘制:根据cache最大资源将dst_clip拆分成多个块 */
     scui_coord_t tvg_items = dst_clip.w / tvg_item + 1;
     scui_coord_t tvg_lines = dst_clip.h / tvg_line + 1;

@@ -12,13 +12,11 @@
  */
 void scui_ui_scene_float_3_button_event(scui_event_t *event)
 {
-    // 转移至控件调度
-    if (!scui_event_type_widget(event->type)) {
-         scui_widget_event_shift(event);
-         return;
+    switch (event->type) {
+    case scui_event_widget_button_click:
+        SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
+        break;
     }
-    
-    SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
 }
 
 /*@brief 控件事件响应回调

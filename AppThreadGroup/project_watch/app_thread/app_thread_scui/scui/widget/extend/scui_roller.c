@@ -67,9 +67,6 @@ void scui_roller_burn(scui_handle_t handle)
  */
 static void scui_roller_s_event(scui_event_t *event)
 {
-    /* 特殊的固定调用 */
-    scui_widget_event_shift(event);
-    
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
@@ -96,9 +93,6 @@ static void scui_roller_s_event(scui_event_t *event)
  */
 static void scui_roller_m_event(scui_event_t *event)
 {
-    /* 特殊的固定调用 */
-    scui_widget_event_shift(event);
-    
     switch (event->type) {
     case scui_event_anima_elapse:
         break;

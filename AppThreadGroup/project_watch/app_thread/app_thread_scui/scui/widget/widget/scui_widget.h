@@ -37,6 +37,7 @@ typedef struct {
     scui_sbitfd_t fully_bg:1;           /* 背景覆盖:1;背景透明:0; */
     scui_sbitfd_t cover_fg:1;           /* 前景覆盖:1;前景透明:0; */
     scui_sbitfd_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
+    scui_sbitfd_t event_override:1;     /* 事件响应重载(0:默认;1:自定义;) */
     scui_sbitfd_t sched_anima:1;        /* 控件调度帧动画标记 */
     scui_sbitfd_t sched_widget:1;       /* 控件专属事件响应标记 */
     scui_sbitfd_t indev_ptr:1;          /* 输入事件响应标记:ptr */
@@ -77,14 +78,14 @@ typedef scui_event_cb_t scui_widget_cb_invoke_t;
 /*@brief 控件处理映射表
  */
 typedef struct {
-    scui_handle_t           size;       /* 控件实例大小 */
-    scui_handle_t           maker;      /* 控件构造器大小 */
-    scui_sbitfd_t           inherit:1;  /* 控件可继承标记 */
-    scui_widget_type_t      base;       /* 控件基类 */
-    scui_widget_cb_make_t   make;       /* 控件构造 */
-    scui_widget_cb_burn_t   burn;       /* 控件析构 */
-    scui_widget_cb_invoke_t invoke;     /* 控件调用 */
-    const char             *name;       /* 控件名称 */
+    scui_handle_t           size;           /* 控件实例大小 */
+    scui_handle_t           maker;          /* 控件构造器大小 */
+    scui_sbitfd_t           inherit:1;      /* 控件可继承标记 */
+    scui_widget_type_t      base;           /* 控件基类 */
+    scui_widget_cb_make_t   make;           /* 控件构造 */
+    scui_widget_cb_burn_t   burn;           /* 控件析构 */
+    scui_widget_cb_invoke_t invoke;         /* 控件调用 */
+    const char             *name;           /* 控件名称 */
 } scui_widget_map_t;
 
 /*@brief 控件基础信息:

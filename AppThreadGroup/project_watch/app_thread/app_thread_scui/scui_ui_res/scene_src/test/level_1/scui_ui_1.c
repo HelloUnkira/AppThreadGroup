@@ -23,13 +23,11 @@ static struct {
  */
 void scui_ui_scene_1_menial_btn_event_proc(scui_event_t *event)
 {
-    // 转移至控件调度
-    if (!scui_event_type_widget(event->type)) {
-         scui_widget_event_shift(event);
-         return;
+    switch (event->type) {
+    case scui_event_widget_button_click:
+        SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
+        break;
     }
-    
-    SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
 }
 
 /*@brief 控件事件响应回调
@@ -271,6 +269,33 @@ void scui_ui_scene_1_scroll_page_3_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
+        #if 0
+        // test tvg cache block draw
+        scui_menial_maker_t menial_maker = {0};
+        scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
+        menial_maker.widget.type = scui_widget_type_menial;
+        menial_maker.widget.parent = event->object;
+        
+        menial_maker.type = scui_menial_type_bar;
+        menial_maker.data.bar.color[0].color_s.full = 0xFF000080;
+        menial_maker.data.bar.color[1].color_s.full = 0xFF0000FF;
+        menial_maker.data.bar.color[0].color_e.full = 0xFF008000;
+        menial_maker.data.bar.color[1].color_e.full = 0xFF00FF00;
+        
+        menial_maker.widget.clip.w = SCUI_HOR_RES * 3 / 4;
+        menial_maker.widget.clip.h = SCUI_VER_RES * 1 / 2;
+        menial_maker.widget.clip.x = (SCUI_HOR_RES - menial_maker.widget.clip.w) / 2;
+        menial_maker.widget.clip.y = (SCUI_VER_RES - menial_maker.widget.clip.h) / 2;
+        menial_maker.data.bar.radius = 23;
+        menial_maker.data.bar.value_lim = 7;
+        menial_maker.data.bar.value_int = 1;
+        menial_maker.data.bar.ext_slider = 1;
+        menial_maker.data.bar.ext_switch = 0;
+        menial_maker.data.bar.grad = 1;
+        menial_maker.data.bar.way  = 1;
+        scui_widget_create(&menial_maker, &menial_handle);
+        #endif
+        
         break;
     }
     default:
@@ -283,7 +308,6 @@ void scui_ui_scene_1_scroll_page_3_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_1_scroll_event(scui_event_t *event)
 {
-    scui_widget_event_shift(event);
 }
 
 /*@brief 控件事件响应回调

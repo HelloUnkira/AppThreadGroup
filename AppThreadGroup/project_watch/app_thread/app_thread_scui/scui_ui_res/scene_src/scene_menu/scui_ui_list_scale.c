@@ -19,9 +19,6 @@ static struct {
  */
 static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
 {
-    // 特殊的固定调用
-    scui_widget_event_shift(event);
-    
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
@@ -72,9 +69,6 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
  */
 static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
 {
-    // 特殊的固定调用
-    scui_widget_event_shift(event);
-    
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
@@ -272,11 +266,6 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
     default:
         break;
     }
-    
-    
-    
-    // 转移至控件调度
-    scui_widget_event_shift(event);
 }
 
 /*@brief 控件事件响应回调

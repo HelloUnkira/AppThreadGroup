@@ -69,11 +69,6 @@ void scui_ui_scene_activity_scroll_event(scui_event_t *event)
     default:
         break;
     }
-    
-    
-    
-    // 转移至控件调度
-    scui_widget_event_shift(event);
 }
 
 /*@brief 控件事件响应回调
@@ -210,9 +205,6 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
         
         break;
     }
-    case scui_event_lang_change:
-        scui_widget_draw(event->object, NULL, false);
-        break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;
@@ -385,9 +377,6 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_xchart_hist_data(xchart_handle, vlist_min, vlist_max);
         break;
     }
-    case scui_event_lang_change:
-        scui_widget_draw(event->object, NULL, false);
-        break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;
@@ -551,9 +540,6 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         scui_xchart_hist_data(xchart_handle, vlist_min, vlist_max);
         break;
     }
-    case scui_event_lang_change:
-        scui_widget_draw(event->object, NULL, false);
-        break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;
@@ -718,9 +704,6 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         scui_xchart_hist_data(xchart_handle, vlist_min, vlist_max);
         break;
     }
-    case scui_event_lang_change:
-        scui_widget_draw(event->object, NULL, false);
-        break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;

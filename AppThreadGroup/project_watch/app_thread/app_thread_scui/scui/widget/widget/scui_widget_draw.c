@@ -207,8 +207,6 @@ void scui_widget_draw_ctx_string(scui_handle_t handle, scui_area_t *target, scui
         src_clip.y -= dst_offset.y;
         #endif
         
-        /* 如果是本地布局 */
-        if (str_args->local) str_args->nest++;
         scui_draw_string(false, widget->surface, dst_clip,
             src_clip, widget->alpha, str_args);
     }

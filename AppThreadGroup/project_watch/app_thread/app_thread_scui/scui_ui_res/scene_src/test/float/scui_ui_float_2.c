@@ -23,8 +23,6 @@ void scui_ui_scene_float_2_slider_event_proc(scui_event_t *event)
         break;
     }
     }
-    
-    scui_widget_event_shift(event);
 }
 
 /*@brief 控件事件响应回调
@@ -48,8 +46,6 @@ void scui_ui_scene_float_2_spinner_event_proc(scui_event_t *event)
         break;
     }
     }
-    
-    scui_widget_event_shift(event);
 }
 
 /*@brief 控件事件响应回调
@@ -73,8 +69,6 @@ void scui_ui_scene_float_2_indicator_event_proc(scui_event_t *event)
         break;
     }
     }
-    
-    scui_widget_event_shift(event);
 }
 
 /*@brief 控件事件响应回调
@@ -92,8 +86,6 @@ void scui_ui_scene_float_2_ring_edge_event_proc(scui_event_t *event)
         break;
     }
     }
-    
-    scui_widget_event_shift(event);
 }
 
 /*@brief 控件事件响应回调
@@ -101,13 +93,11 @@ void scui_ui_scene_float_2_ring_edge_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_float_2_button_event_proc(scui_event_t *event)
 {
-    // 转移至控件调度
-    if (!scui_event_type_widget(event->type)) {
-         scui_widget_event_shift(event);
-         return;
+    switch (event->type) {
+    case scui_event_widget_button_click:
+        SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
+        break;
     }
-    
-    SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
 }
 
 /*@brief 控件事件响应回调

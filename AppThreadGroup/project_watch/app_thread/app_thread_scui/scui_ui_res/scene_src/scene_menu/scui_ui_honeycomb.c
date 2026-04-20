@@ -286,11 +286,6 @@ void scui_ui_scene_honeycomb_scroll_event_proc(scui_event_t *event)
     default:
         break;
     }
-    
-    
-    
-    // 转移至控件调度
-    scui_widget_event_shift(event);
 }
 /*@brief 控件事件响应回调
  *@param event 事件
