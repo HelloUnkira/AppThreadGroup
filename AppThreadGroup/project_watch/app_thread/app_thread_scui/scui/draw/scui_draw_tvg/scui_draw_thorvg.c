@@ -7,6 +7,9 @@
 
 #include "scui.h"
 
+/* 内部专属文件 */
+#include "scui_draw_thorvg.h"
+
 void scui_draw_thorvg_assert(void *ptr)
 {
     SCUI_ASSERT(ptr != NULL);

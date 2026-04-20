@@ -405,6 +405,14 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_barcode);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_ring);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_graph);
 /*****************************************************************************/
+/*基础图元绘制(画线画圆画弧画圆角等等...):
+ *可以自己写或移植第三方的Gui中内容(堆工作量)
+ *在面向效果的Gui框架中基础图形的绘制不是那么重要
+ *因为随着实验效果表示再好的显示抗锯齿基础图形
+ *它的显示效果是不如图像进行图形变换得来的要好
+ *此外基础图象绘制的效果没有想象中的优秀
+ *它在使用过程中限制较大
+ */
 
 typedef struct {
     void *dummy;
@@ -432,23 +440,9 @@ void scui_draw_hline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, 
 void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width);
 
 /*****************************************************************************/
-/* 矢量绘图引擎(thorvg): */
-#include "scui_draw_thorvg.h"
-#include "scui_draw_graph_TVG.h"
-/*****************************************************************************/
-/*基础图元绘制:
- *可以自己写(堆工作量)
- *可以移植第三方的gui中内容
- *在面向效果的Gui框架中基础图形的绘制不是那么重要
- *因为随着实验效果表示再好的显示抗锯齿基础图形
- *它的显示效果是不如图像进行图形变换得来的要好
- *此外基础图象绘制的效果没有想象中的优秀
- *它在使用过程中限制较大
- */
-#define   SCUI_DRAW_GRAPH_USE_EGUI      1
-#include "scui_draw_graph_EGUI.h"
-
 /* 绘制上下文(graph): */
+#include "scui_draw_TVG.h"
+#include "scui_draw_EGUI.h"
 /*****************************************************************************/
 bool scui_draw_ctx_graph_TVG(scui_draw_dsc_t *draw_dsc);
 bool scui_draw_ctx_graph_EGUI(scui_draw_dsc_t *draw_dsc);

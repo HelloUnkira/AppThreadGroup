@@ -8,12 +8,12 @@
 #include "scui.h"
 
 /* EmbeddedGUI移植 */
-#if 1
+#if SCUI_DRAW_GRAPH_USE_EGUI
 /* EmbeddedGUI移植 */
-#if     SCUI_DRAW_CIRCLE_RES_RANGE < SCUI_HOR_RES
+#if SCUI_DRAW_EGUI_CIRCLE_RES_RANGE < SCUI_HOR_RES
 #error "circle res is not enough"
 #endif
-#if     SCUI_DRAW_CIRCLE_RES_RANGE < SCUI_VER_RES
+#if SCUI_DRAW_EGUI_CIRCLE_RES_RANGE < SCUI_VER_RES
 #error "circle res is not enough"
 #endif
 /* EmbeddedGUI移植 */
@@ -47,7 +47,7 @@ typedef enum {
 } scui_draw_circle_type_t;
 
 /* EmbeddedGUI移植 */
-static scui_alpha_t scui_draw_circle_corner_val(scui_coord_t pos_row, scui_coord_t pos_col, const scui_draw_circle_info_t *info)
+static scui_alpha_t scui_draw_circle_corner_val(scui_coord_t pos_row, scui_coord_t pos_col, const scui_draw_egui_circle_info_t *info)
 {
     scui_coord_t min_pos = pos_col;
     scui_coord_t max_pos = pos_row;
@@ -141,8 +141,8 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
     
     #if 1
     /* EmbeddedGUI移植: egui_canvas_draw_circle_corner_fill, egui_canvas_draw_circle_corner */
-    extern scui_draw_circle_info_t scui_draw_circle2c_EGUI_array[];
-    scui_draw_circle_info_t *info = &scui_draw_circle2c_EGUI_array[src_radius - 1];
+    extern scui_draw_egui_circle_info_t scui_draw_EGUI_circle2c_array[];
+    scui_draw_egui_circle_info_t *info = &scui_draw_EGUI_circle2c_array[src_radius - 1];
     SCUI_ASSERT(info->radius == src_radius);
     
     /* 完全填充 */
@@ -150,7 +150,7 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
         
         for (scui_coord_t idx_info = 0; idx_info < info->count; idx_info++) {
             
-            const scui_draw_circle_item_t *item = &info->item[idx_info];
+            const scui_draw_egui_circle_item_t *item = &info->item[idx_info];
             scui_coord_t sel_y = src_radius - idx_info;
             uint8_t *dst_ofs = NULL;
             
@@ -232,7 +232,7 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
         }
     } else {
         scui_coord_t radius_in = src_radius - src_width;
-        scui_draw_circle_info_t *info_in = &scui_draw_circle2c_EGUI_array[radius_in - 1];
+        scui_draw_egui_circle_info_t *info_in = &scui_draw_EGUI_circle2c_array[radius_in - 1];
         SCUI_ASSERT(info_in->radius == radius_in);
         
         scui_coord_t idx_row_s = 0;
@@ -435,13 +435,13 @@ static void scui_draw_arc_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_typ
     
     #if 1
     /* EmbeddedGUI移植: egui_canvas_draw_circle_corner_fill, egui_canvas_draw_circle_corner */
-    extern scui_draw_circle_info_t scui_draw_circle2c_EGUI_array[];
-    scui_draw_circle_info_t *info = &scui_draw_circle2c_EGUI_array[src_radius - 1];
+    extern scui_draw_egui_circle_info_t scui_draw_EGUI_circle2c_array[];
+    scui_draw_egui_circle_info_t *info = &scui_draw_EGUI_circle2c_array[src_radius - 1];
     SCUI_ASSERT(info->radius == src_radius);
     scui_coord_t radius_in = src_radius - src_width;
-    scui_draw_circle_info_t *info_in = NULL;
+    scui_draw_egui_circle_info_t *info_in = NULL;
     if (radius_in != 0) {
-        info_in = &scui_draw_circle2c_EGUI_array[radius_in - 1];
+        info_in = &scui_draw_EGUI_circle2c_array[radius_in - 1];
         SCUI_ASSERT(info_in->radius == radius_in);
     }
     
@@ -632,7 +632,7 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
         return;
     
     /* EmbeddedGUI移植 */
-    #if 1
+    #if SCUI_DRAW_GRAPH_USE_EGUI
     scui_draw_dsc_t draw_dsc_arc = *draw_dsc;
     draw_dsc_arc.graph.src_angle_s = src_angle_s;
     draw_dsc_arc.graph.src_angle_e = src_angle_e;
@@ -738,7 +738,7 @@ static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
         src_radius  = 1;
     
     /* EmbeddedGUI移植 */
-    #if 1
+    #if SCUI_DRAW_GRAPH_USE_EGUI
     scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_lt);
     scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_lb);
     scui_draw_circle_corner(draw_dsc, scui_draw_circle_type_rt);
@@ -825,7 +825,7 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
     scui_color_wt_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     
-    #if 1
+    #if SCUI_DRAW_GRAPH_USE_EGUI
     /* EmbeddedGUI移植: egui_canvas_draw_line */
     scui_coord_t x1 = src_pos_1.x;
     scui_coord_t y1 = src_pos_1.y;
@@ -928,7 +928,7 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
         src_radius  = 1;
     
     if (src_shadow) {
-        #if 1
+        #if SCUI_DRAW_GRAPH_USE_EGUI
         /* 通过绘制空心圆一点点向内部渐变 */
         /* 注意: 这是一个投机取巧的办法, 不是优秀的实现逻辑 */
         
@@ -1045,7 +1045,7 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
         return;
     }
     
-    #if 1
+    #if SCUI_DRAW_GRAPH_USE_EGUI
     /* 绘制四个象限的圆或圆环 */
     scui_area_t  dst_area = {0};
     dst_area.w = src_radius * 2 + 1;

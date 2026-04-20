@@ -8,6 +8,7 @@
 #include "scui.h"
 
 /* 检查配置: */
+#include "scui_draw_thorvg.h"
 #if SCUI_DRAW_USE_THORVG != SCUI_DRAW_USE_THORVG_SRC
 #error "draw engine unmatch config"
 #endif

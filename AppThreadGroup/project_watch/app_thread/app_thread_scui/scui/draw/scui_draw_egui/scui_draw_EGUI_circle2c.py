@@ -364,7 +364,7 @@ def main(argv):
         args.spec = sorted(args.spec) # sort the spec list
         options = "-s " + " ".join(map(str, args.spec))
         
-        name = f"scui_draw_circle_res"
+        name = f"scui_draw_egui_circle_res"
         outfilename = f"{name}.c"
         
         with open(outfilename,"w") as f:
@@ -381,7 +381,7 @@ def main(argv):
                 data_info_array_saved.append(data_info_array)
 
                 
-                print('static const scui_draw_circle_item_t %s_item_sub_%d[%d] = {' % (name, i, len(data_info_array)), file=f)
+                print('static const scui_draw_egui_circle_item_t %s_item_sub_%d[%d] = {' % (name, i, len(data_info_array)), file=f)
                 row_index = 0
                 for info in data_info_array:
                     start_offset, valid_count, data_value_offset = info
@@ -426,7 +426,7 @@ def main(argv):
         # get the options
         options = f"-r {args.range}"
 
-        name = f"scui_draw_circle2c_EGUI"
+        name = f"scui_draw_EGUI_circle2c"
         outfilename = f"{name}.c"
 
         # need add 1.
@@ -446,8 +446,8 @@ def main(argv):
                 data_info_array_saved.append(data_info_array)
 
                 
-                print('#if (SCUI_DRAW_CIRCLE_RES_RANGE >= %d)' % (i), file=f)
-                print('static const scui_draw_circle_item_t %s_item_sub_%d[%d] = {' % (name, i, len(data_info_array)), file=f)
+                print('#if (SCUI_DRAW_EGUI_CIRCLE_RES_RANGE >= %d)' % (i), file=f)
+                print('static const scui_draw_egui_circle_item_t %s_item_sub_%d[%d] = {' % (name, i, len(data_info_array)), file=f)
                 row_index = 0
                 for info in data_info_array:
                     start_offset, valid_count, data_value_offset = info
@@ -473,16 +473,16 @@ def main(argv):
                     lineWidth+=1
                 print('', file=f)
                 print('};', file=f)
-                print('#endif // (SCUI_DRAW_CIRCLE_RES_RANGE >= %d)' % (i), file=f)
+                print('#endif // (SCUI_DRAW_EGUI_CIRCLE_RES_RANGE >= %d)' % (i), file=f)
 
             # insert next line
             print('', file=f)
                 
-            print('const scui_draw_circle_info_t %s_array[SCUI_DRAW_CIRCLE_RES_RANGE + 1] = {' % (name),file=f)
+            print('const scui_draw_egui_circle_info_t %s_array[SCUI_DRAW_EGUI_CIRCLE_RES_RANGE + 1] = {' % (name),file=f)
             for i in range(args.range):
                 if i == 0:
                     continue
-                print('#if (SCUI_DRAW_CIRCLE_RES_RANGE >= %d)' % (i), file=f)
+                print('#if (SCUI_DRAW_EGUI_CIRCLE_RES_RANGE >= %d)' % (i), file=f)
                 f.write(("    {.radius = %4d, .count = %4d, .item = %s_item_sub_%d, .data = %s_data_sub_%d}, \n" % (i, len(data_info_array_saved[i - 1]), name, i, name, i)))
                 print('#endif', file=f)
             print('};', file=f)
