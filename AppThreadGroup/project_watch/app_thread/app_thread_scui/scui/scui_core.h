@@ -72,6 +72,8 @@
 #include "scui_xwatch.h"            /* 控件(指针) */
 #include "scui_xwatch_inf.h"        /* 控件(指针)API */
 /* widget(custom): */
+#include "scui_object.h"            /* 控件(对象) */
+#include "scui_object_inf.h"        /* 控件(对象)API */
 #include "scui_menial.h"            /* 控件(仆从) */
 #include "scui_menial_inf.h"        /* 控件(仆从)API */
 #include "scui_button.h"            /* 控件(按钮) */

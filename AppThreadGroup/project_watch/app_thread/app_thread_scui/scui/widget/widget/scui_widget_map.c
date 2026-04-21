@@ -173,10 +173,20 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
         },
         
         /* 可选控件 */
+        [scui_widget_type_object] = {
+            .size    = sizeof(scui_object_t),
+            .maker   = sizeof(scui_object_maker_t),
+            .base    = scui_widget_type_object,
+            .make    = scui_object_make,
+            .burn    = scui_object_burn,
+            .invoke  = scui_object_invoke,
+            .inherit = true,
+            .name    = "object",
+        },
         [scui_widget_type_menial] = {
             .size    = sizeof(scui_menial_t),
             .maker   = sizeof(scui_menial_maker_t),
-            .base    = scui_widget_type_menial,
+            .base    = scui_widget_type_object,
             .make    = scui_menial_make,
             .burn    = scui_menial_burn,
             .invoke  = scui_menial_invoke,

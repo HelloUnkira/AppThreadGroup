@@ -206,6 +206,9 @@
 /* roller:按键, 动画速度[ptr, enc, key, auto] */
 #define SCUI_WIDGET_ROLLER_SPD_ANIM                 {1000, 75, 75, 75}
 
+/* object:最小属性和过渡数量 */
+#define SCUI_WIDGET_OBJECT_PROP_MIN                 (5)
+#define SCUI_WIDGET_OBJECT_TRAN_MIN                 (10)
 /* menial(btn):缩放限制百分比 */
 #define SCUI_WIDGET_MENIAL_BTN_TIME                 (100)
 #define SCUI_WIDGET_MENIAL_BTN_PCT                  (90)

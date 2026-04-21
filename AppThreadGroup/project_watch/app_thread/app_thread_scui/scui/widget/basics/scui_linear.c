@@ -224,6 +224,9 @@ void scui_linear_invoke(scui_event_t *event)
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_linear_t *linear = (void *)widget;
     
+    /* 事件处理回调 */
+    scui_scroll_invoke(event);
+    
     switch (event->type) {
     case scui_event_draw: {
         
@@ -290,8 +293,6 @@ void scui_linear_invoke(scui_event_t *event)
     default:
         break;
     }
-    
-    scui_scroll_invoke(event);
 }
 
 /*@brief 列表子控件事件响应回调(主)

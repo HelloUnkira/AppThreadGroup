@@ -75,6 +75,7 @@ typedef struct {
     /* 继承域: */
     SCUI_EXTEND_FIELD_S
     scui_widget_t widget;
+    scui_object_t object;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_menial_type_t  type;
@@ -87,6 +88,7 @@ typedef struct {
     /* 继承域: */
     SCUI_EXTEND_FIELD_S
     scui_widget_maker_t widget;
+    scui_object_maker_t object;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_menial_type_t  type;

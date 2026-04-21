@@ -306,6 +306,9 @@ void scui_roller_invoke(scui_event_t *event)
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_roller_t *roller = (void *)widget;
     
+    /* 事件处理回调 */
+    scui_linear_invoke(event);
+    
     switch (event->type) {
     case scui_event_widget_scroll_layout:
     case scui_event_widget_scroll_start:
@@ -322,6 +325,4 @@ void scui_roller_invoke(scui_event_t *event)
     default:
         break;
     }
-    
-    scui_linear_invoke(event);
 }

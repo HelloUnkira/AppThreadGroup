@@ -72,7 +72,7 @@ void scui_custom_invoke(scui_event_t *event)
     case scui_event_draw: {
         if (scui_event_check_execute(event)) {
             /* 简单打个表整理一下:不是ctx */
-            static const void (*scui_custom_draw_inf[scui_custom_type_num])
+            static const void (*scui_custom_draw_cb[scui_custom_type_num])
             (scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data) = {
                 [scui_custom_type_slider]       = scui_custom_draw_slider,
                 [scui_custom_type_spinner]      = scui_custom_draw_spinner,
@@ -83,7 +83,7 @@ void scui_custom_invoke(scui_event_t *event)
             };
             
             if (custom->type > scui_custom_type_none && custom->type < scui_custom_type_num)
-                scui_custom_draw_inf[custom->type](widget->myself, &widget->clip, custom->data);
+                scui_custom_draw_cb[custom->type](widget->myself, &widget->clip, custom->data);
         }
         if (scui_event_check_prepare(event)) {
             /* 回收可能因为文本绘制而存留在控件内的资源 */

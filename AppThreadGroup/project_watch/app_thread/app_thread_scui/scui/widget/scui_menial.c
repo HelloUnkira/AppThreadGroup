@@ -50,6 +50,9 @@ void scui_menial_make(void *inst, void *inst_maker, scui_handle_t *handle)
     /* 基类对象 */
     scui_widget_t *widget = inst;
     scui_widget_maker_t *widget_maker = inst_maker;
+    /* 继承对象 */
+    scui_object_t *object = widget;
+    scui_object_maker_t *object_maker = widget_maker;
     /* 本类对象 */
     scui_menial_t *menial = widget;
     scui_menial_maker_t *menial_maker = widget_maker;
@@ -58,8 +61,8 @@ void scui_menial_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_menial_info_map_find(menial_maker->type, &menial_info);
     menial_info->maker(menial_maker);
     
-    /* 构造基础控件实例 */
-    scui_widget_make(widget, widget_maker, handle);
+    /* 构造派生控件实例 */
+    scui_object_make(widget, widget_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_menial));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
@@ -91,8 +94,8 @@ void scui_menial_burn(scui_handle_t handle)
     scui_menial_info_map_find(menial->type, &menial_info);
     menial_info->recycle(menial);
     
-    /* 析构基础控件实例 */
-    scui_widget_burn(widget);
+    /* 析构派生控件实例 */
+    scui_object_burn(widget->myself);
 }
 
 /*@brief 事件处理回调
@@ -103,6 +106,9 @@ void scui_menial_invoke(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_menial_t *menial = (void *)widget;
+    
+    /* 事件处理回调 */
+    scui_object_invoke(event);
     
     /* 事件处理回调:子控件 */
     scui_menial_info_t *menial_info = NULL;
