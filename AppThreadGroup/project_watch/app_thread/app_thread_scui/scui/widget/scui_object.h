@@ -7,32 +7,34 @@
  */
 
 typedef enum {
+    scui_object_type_none = 0,
+    
     /* field part: */
-    scui_object_part_s,
-    scui_object_part_bg,
-    scui_object_part_fg,
+    scui_object_part_s  = 0x100,
+    scui_object_part_main,
     scui_object_part_item,
-    scui_object_part_e,
+    scui_object_part_e  = 0x199,
     /* field state: */
-    scui_object_state_s,
+    scui_object_state_s = 0x200,
     scui_object_state_def,
     scui_object_state_pre,
     scui_object_state_chk,
-    scui_object_state_e,
+    scui_object_state_e = 0x299,
     /* field style: */
-    scui_object_style_s,
+    scui_object_style_s = 0x300,
     scui_object_style_width,
     scui_object_style_height,
     scui_object_style_radius,
-    scui_object_style_color,
+    scui_object_style_color_bg,
+    scui_object_style_color_fg,
     scui_object_style_alpha,
-    scui_object_style_e,
+    scui_object_style_e = 0x399,
 } scui_object_type_t;
 
 typedef union {
-    scui_multi_t number;
-    scui_color_t color;
-    scui_alpha_t alpha;
+    scui_multi_t   number;
+    scui_alpha_t   alpha;
+    scui_color32_t color32;
 } scui_object_data_t;
 
 /* property */
@@ -56,10 +58,10 @@ typedef struct {
     scui_map_cb_t path;
     scui_coord_t  time;
     scui_coord_t  delay;
-    scui_coord_t  tick_d;
-    scui_coord_t  tick_t;
-    scui_coord_t  pct_c;    /* 百分比 */
-    scui_sbitfd_t use:1;    /* 有效 */
+    scui_coord_t  tick_d;       /* 内部 */
+    scui_coord_t  tick_t;       /* 内部 */
+    scui_coord_t  pct_c;        /* 内部:百分比 */
+    scui_sbitfd_t use:1;        /* 内部:有效 */
 } scui_object_tran_t;
 
 typedef struct {
@@ -70,10 +72,14 @@ typedef struct {
     /* 外部域: */
     scui_coord_t        prop_num;       /* 属性数量 */
     scui_coord_t        tran_num;       /* 过渡数量 */
+    scui_coord_t        check:1;        /* 使用chk状态 */
     /* 内部域: */
-    scui_object_type_t  state;          /* 当前状态 */
+    scui_object_type_t  state_l;        /* 上一状态(last) */
+    scui_object_type_t  state_c;        /* 当前状态(curr) */
     scui_object_prop_t *prop_list;      /* 属性列表 */
     scui_object_tran_t *tran_list;      /* 过渡列表 */
+    scui_coord_t        prop_now;       /* 属性数量 */
+    scui_coord_t        tran_now;       /* 过渡数量 */
 } scui_object_t;
 
 #pragma pack(push, 1)
@@ -85,6 +91,7 @@ typedef struct {
     /* 外部域: */
     scui_coord_t        prop_num;       /* 属性数量 */
     scui_coord_t        tran_num;       /* 过渡数量 */
+    scui_coord_t        check:1;        /* 使用chk状态 */
 } scui_object_maker_t;
 #pragma pack(pop)
 

@@ -101,15 +101,148 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
 }
 #endif
 
+/*@brief 属性过渡配置
+ *@param menial 控件实例
+ */
+static void scui_mem_btn_prop_tran_def_pre(scui_menial_t *menial)
+{
+    scui_widget_t *widget = (void *)menial;
+    
+    scui_object_prop_t prop_def = {0};
+    scui_object_prop_t prop_pre = {0};
+    scui_object_tran_t tran_def = {0};
+    scui_object_tran_t tran_pre = {0};
+    prop_def.part  = scui_object_part_main;
+    prop_pre.part  = scui_object_part_main;
+    prop_def.state = scui_object_state_def;
+    prop_pre.state = scui_object_state_pre;
+    tran_def.state_p = scui_object_state_pre;
+    tran_def.state_n = scui_object_state_def;
+    tran_pre.state_p = scui_object_state_def;
+    tran_pre.state_n = scui_object_state_pre;
+    tran_def.part = scui_object_part_main;
+    tran_pre.part = scui_object_part_main;
+    tran_def.time = menial->data.btn.time;
+    tran_pre.time = menial->data.btn.time;
+    
+    /* color bg prop */
+    prop_def.style = scui_object_style_color_bg;
+    prop_pre.style = scui_object_style_color_bg;
+    prop_def.data.color32 = menial->data.btn.color[0].color_l;
+    prop_pre.data.color32 = menial->data.btn.color[0].color_d;
+    scui_object_prop_add(widget->myself, &prop_def);
+    scui_object_prop_add(widget->myself, &prop_pre);
+    /* color bg tran */
+    tran_def.style = scui_object_style_color_bg;
+    tran_pre.style = scui_object_style_color_bg;
+    scui_object_tran_add_by(widget->myself, &tran_def);
+    scui_object_tran_add_by(widget->myself, &tran_pre);
+    
+    /* width && height prop */
+    prop_def.style = scui_object_style_width;
+    prop_pre.style = scui_object_style_width;
+    prop_def.data.number = menial->data.btn.lim;
+    prop_pre.data.number = 100;
+    scui_object_prop_add(widget->myself, &prop_def);
+    scui_object_prop_add(widget->myself, &prop_pre);
+    prop_def.style = scui_object_style_height;
+    prop_pre.style = scui_object_style_height;
+    prop_def.data.number = menial->data.btn.lim;
+    prop_pre.data.number = 100;
+    scui_object_prop_add(widget->myself, &prop_def);
+    scui_object_prop_add(widget->myself, &prop_pre);
+    
+    if (menial->data.btn.fixed)
+        return;
+    
+    /* width && height tran */
+    tran_def.style = scui_object_style_width;
+    tran_pre.style = scui_object_style_width;
+    scui_object_tran_add_by(widget->myself, &tran_def);
+    scui_object_tran_add_by(widget->myself, &tran_pre);
+    tran_def.style = scui_object_style_height;
+    tran_pre.style = scui_object_style_height;
+    scui_object_tran_add_by(widget->myself, &tran_def);
+    scui_object_tran_add_by(widget->myself, &tran_pre);
+}
+
+/*@brief 属性过渡配置
+ *@param menial 控件实例
+ */
+static void scui_mem_btn_prop_tran_chk_pre(scui_menial_t *menial)
+{
+    scui_widget_t *widget = (void *)menial;
+    
+    scui_object_prop_t prop_chk = {0};
+    scui_object_prop_t prop_pre = {0};
+    scui_object_tran_t tran_chk = {0};
+    scui_object_tran_t tran_pre = {0};
+    prop_chk.part  = scui_object_part_main;
+    prop_pre.part  = scui_object_part_main;
+    prop_chk.state = scui_object_state_chk;
+    prop_pre.state = scui_object_state_pre;
+    tran_chk.state_p = scui_object_state_pre;
+    tran_chk.state_n = scui_object_state_chk;
+    tran_pre.state_p = scui_object_state_chk;
+    tran_pre.state_n = scui_object_state_pre;
+    tran_chk.part = scui_object_part_main;
+    tran_pre.part = scui_object_part_main;
+    tran_chk.time = menial->data.btn.time;
+    tran_pre.time = menial->data.btn.time;
+    
+    /* color bg prop */
+    prop_chk.style = scui_object_style_color_bg;
+    prop_pre.style = scui_object_style_color_bg;
+    prop_chk.data.color32 = menial->data.btn.color[1].color_l;
+    prop_pre.data.color32 = menial->data.btn.color[1].color_d;
+    scui_object_prop_add(widget->myself, &prop_chk);
+    scui_object_prop_add(widget->myself, &prop_pre);
+    /* color bg tran */
+    tran_chk.style = scui_object_style_color_bg;
+    tran_pre.style = scui_object_style_color_bg;
+    scui_object_tran_add_by(widget->myself, &tran_chk);
+    scui_object_tran_add_by(widget->myself, &tran_pre);
+    
+    /* width && height prop */
+    prop_chk.style = scui_object_style_width;
+    prop_pre.style = scui_object_style_width;
+    prop_chk.data.number = menial->data.btn.lim;
+    prop_pre.data.number = 100;
+    scui_object_prop_add(widget->myself, &prop_chk);
+    scui_object_prop_add(widget->myself, &prop_pre);
+    prop_chk.style = scui_object_style_height;
+    prop_pre.style = scui_object_style_height;
+    prop_chk.data.number = menial->data.btn.lim;
+    prop_pre.data.number = 100;
+    scui_object_prop_add(widget->myself, &prop_chk);
+    scui_object_prop_add(widget->myself, &prop_pre);
+    
+    if (menial->data.btn.fixed)
+        return;
+    
+    /* width && height tran */
+    tran_chk.style = scui_object_style_width;
+    tran_pre.style = scui_object_style_width;
+    scui_object_tran_add_by(widget->myself, &tran_chk);
+    scui_object_tran_add_by(widget->myself, &tran_pre);
+    tran_chk.style = scui_object_style_height;
+    tran_pre.style = scui_object_style_height;
+    scui_object_tran_add_by(widget->myself, &tran_chk);
+    scui_object_tran_add_by(widget->myself, &tran_pre);
+}
+
+
 /*@brief 控件构造器初始化(子类型)
  *@param menial_maker 控件构造器实例
  */
 void scui_menial_btn_maker(scui_menial_maker_t *menial_maker)
 {
-    /* 必须标记anima,widget,ptr事件 */
-    menial_maker->widget.style.sched_anima  = true;
+    /* 必须标记widget事件 */
     menial_maker->widget.style.sched_widget = true;
-    menial_maker->widget.style.indev_ptr    = true;
+    
+    menial_maker->object.prop_num = 20;
+    menial_maker->object.tran_num = 40;
+    menial_maker->object.check = menial_maker->data.btn.check;
 }
 
 /*@brief 控件初始化(子类型)
@@ -124,9 +257,12 @@ void scui_menial_btn_config(scui_menial_t *menial)
     /* 未配置使用默认值 */
     if (menial->data.btn.lim == 0)
         menial->data.btn.lim  = SCUI_WIDGET_MENIAL_BTN_PCT;
+    if (menial->data.btn.fixed)
+        menial->data.btn.lim  = 100;
     
-    menial->data.btn.pct = menial->data.btn.lim;
-    menial->data.btn.way = -1;
+    scui_mem_btn_prop_tran_def_pre(menial);
+    if (menial->data.btn.check)
+    scui_mem_btn_prop_tran_chk_pre(menial);
 }
 
 /*@brief 控件反初始化(子类型)
@@ -146,97 +282,32 @@ void scui_menial_btn_invoke(scui_event_t *event)
     scui_menial_t *menial = (void *)widget;
     
     switch (event->type) {
-    case scui_event_anima_elapse: {
-        if (menial->data.btn.fixed)
-            break;
-        
-        /* 按下抬起动画结束, 回到初始状态 */
-        if (menial->data.btn.way == -1 && menial->data.btn.pct <= menial->data.btn.lim) {
-            /* 有点击标记发送点击事件 */
-            if (menial->data.btn.click) {
-                menial->data.btn.click = false;
-                
-                scui_event_define(event, widget->myself, true, scui_event_widget_button_click, NULL);
-                scui_event_notify(&event);
-            }
-            /* 有选中标记且当次未选中 */
-            if (menial->data.btn.check)
-            if (menial->data.btn.check_c) {
-                menial->data.btn.check_c = false;
-                menial->data.btn.state = ~menial->data.btn.state;
-                SCUI_LOG_INFO("state:%d", menial->data.btn.state);
-                scui_widget_draw(event->object, NULL, false);
-            }
-            break;
-        }
-        /* 按下动画pct:[lim->100] */
-        if (menial->data.btn.way == +1 && menial->data.btn.pct < 100) {
-            /* 仅在动画中让tick计时 */
-            menial->data.btn.tick += event->tick;
-            if (menial->data.btn.tick > menial->data.btn.time)
-                menial->data.btn.tick = menial->data.btn.time;
-            /* 将pct根据时间映射到[lim,100] */
-            menial->data.btn.pct = scui_map(menial->data.btn.tick,
-                0, menial->data.btn.time, menial->data.btn.lim, 100);
-            
-            SCUI_LOG_INFO("<%d, %d>", menial->data.btn.pct, menial->data.btn.way);
-            scui_widget_draw(event->object, NULL, false);
-            break;
-        }
-        /* 按下动画无条件跑完 */
-        if (menial->data.btn.way == +1 && menial->data.btn.pct < 100)
-            break;
-        
-        /* 持续按下时最多允许pct:[lim->100] */
-        if (menial->data.btn.hold)
-            break;
-        
-        /* 按下动画跑完且抬起时:切换进动方向 */
-        if (menial->data.btn.way == +1) {
-            menial->data.btn.way  = -1;
-            menial->data.btn.tick = +0;
-            SCUI_ASSERT(menial->data.btn.pct == 100);
-        }
-        
-        /* 抬起动画pct:[lim<-100] */
-        if (menial->data.btn.way == -1 && menial->data.btn.pct > menial->data.btn.lim) {
-            /* 仅在动画中让tick计时 */
-            menial->data.btn.tick += event->tick;
-            if (menial->data.btn.tick > menial->data.btn.time)
-                menial->data.btn.tick = menial->data.btn.time;
-            /* 将pct根据时间映射到[lim,100] */
-            menial->data.btn.pct = scui_map(menial->data.btn.tick,
-                0, menial->data.btn.time, 100, menial->data.btn.lim);
-            
-            SCUI_LOG_INFO("<%d, %d>", menial->data.btn.pct, menial->data.btn.way);
-            scui_widget_draw(event->object, NULL, false);
-            break;
-        }
-        break;
-    }
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              return;
         
-        scui_coord_t pct_l = menial->data.btn.lim;
-        scui_coord_t pct_c = menial->data.btn.pct;
-        if (menial->data.btn.fixed) pct_c = 100;
-        SCUI_LOG_INFO("<%d>", menial->data.btn.pct);
+        scui_object_prop_t prop = {0};
+        prop.part  = scui_object_part_main;
+        prop.style = scui_object_style_color_bg;
+        scui_object_prop_sync(event->object, &prop);
+        scui_color_t src_color = {.color = prop.data.color32};
+        prop.style = scui_object_style_width;
+        scui_object_prop_sync(event->object, &prop);
+        scui_coord_t pct_w = prop.data.number;
+        prop.style = scui_object_style_height;
+        scui_object_prop_sync(event->object, &prop);
+        scui_coord_t pct_h = prop.data.number;
+        SCUI_LOG_INFO("<%d,%d>", pct_w, pct_h);
         
         scui_area_t src_area = widget->clip;
-        scui_coord_t scale_w = src_area.w * pct_c / 100;
-        scui_coord_t scale_h = src_area.h * pct_c / 100;
+        scui_coord_t scale_w = src_area.w * pct_w / 100;
+        scui_coord_t scale_h = src_area.h * pct_h / 100;
         scale_w -= menial->data.btn.width * 2;
         scale_h -= menial->data.btn.width * 2;
         src_area.x += (src_area.w - scale_w) / 2;
         src_area.y += (src_area.h - scale_h) / 2;
         src_area.w  = scale_w;
         src_area.h  = scale_h;
-        
-        scui_color_t src_color = {0};
-        scui_color32_t color_l = menial->data.btn.color[menial->data.btn.state].color_l;
-        scui_color32_t color_d = menial->data.btn.color[menial->data.btn.state].color_d;
-        scui_color32_mix_with(&src_color.color, &color_l, &color_d, scui_map(pct_c, pct_l, 100, 100, 0));
         
         scui_draw_dsc_t draw_dsc = {0};
         draw_dsc.type = scui_draw_type_pixel_tvg;
@@ -247,56 +318,17 @@ void scui_menial_btn_invoke(scui_event_t *event)
         
         scui_widget_draw_graph(widget->myself, NULL,
             widget->alpha, src_color, &draw_dsc);
-        
-        break;
-    }
-    case scui_event_ptr_down: {
-        if (!scui_widget_event_inside(event))
-             break;
-        
-        menial->data.btn.check_c = true;
-        if (menial->data.btn.fixed)
-            break;
-        
-        SCUI_LOG_INFO("");
-        menial->data.btn.hold = true;
-        menial->data.btn.tick = 0;
-        menial->data.btn.pct  = menial->data.btn.lim;
-        menial->data.btn.way  = +1;
         break;
     }
     case scui_event_ptr_move:
-    case scui_event_ptr_up: {
-        if (menial->data.btn.fixed) {
-            
-            /* 有选中标记且当次未选中 */
-            if (menial->data.btn.check)
-            if (menial->data.btn.check_c) {
-                menial->data.btn.check_c = false;
-                menial->data.btn.state = ~menial->data.btn.state;
-                SCUI_LOG_INFO("state:%d", menial->data.btn.state);
-                scui_widget_draw(event->object, NULL, false);
-            }
-            break;
-        }
-        
-        SCUI_LOG_INFO("");
-        menial->data.btn.hold = false;
+        scui_event_mask_over(event);
         break;
-    }
     case scui_event_ptr_click: {
         scui_event_mask_over(event);
         
-        if (menial->data.btn.fixed) {
-            
-            scui_event_define(event, widget->myself, true, scui_event_widget_button_click, NULL);
-            scui_event_notify(&event);
-            break;
-        }
-        
-        SCUI_LOG_INFO("");
-        menial->data.btn.hold  = true;
-        menial->data.btn.click = true;
+        /* 这里是直接响应的,要不要延迟到抬起? */
+        scui_event_define(event, widget->myself, true, scui_event_widget_button_click, NULL);
+        scui_event_notify(&event);
         break;
     }
     default:

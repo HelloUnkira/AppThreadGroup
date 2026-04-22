@@ -18,16 +18,9 @@ typedef union {
         scui_coord_t  radius;       /* 圆角半径(最大:<0) */
         scui_sbitfd_t fixed:1;      /* 无点击动画(可选) */
         scui_sbitfd_t check:1;      /* 选中标记(可选) */
+        scui_coord_t  time;         /* 动画时间(ms) */
+        scui_coord_t  lim;          /* 缩小限制(pct) */
         /* 内部域: */
-        scui_sbitfd_t hold:1;
-        scui_sbitfd_t click:1;
-        scui_sbitfd_t check_c:1;
-        scui_sbitfd_t state:1;
-        scui_coord_t  time;
-        scui_coord_t  tick;
-        scui_coord_t  lim;
-        scui_coord_t  pct;
-        scui_coord_t  way;
     } btn;
     
     /* field(arc): */
