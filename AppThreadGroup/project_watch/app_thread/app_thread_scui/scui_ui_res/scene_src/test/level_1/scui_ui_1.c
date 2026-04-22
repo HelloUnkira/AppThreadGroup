@@ -49,8 +49,8 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         if (scui_ui_res_local->menial_arc_v == 100)
             scui_ui_res_local->menial_arc_w = -1;
         
-        scui_menial_arc_update_value(scui_ui_res_local->menial_arc_1,
-            scui_ui_res_local->menial_arc_v, true);
+        // scui_menial_arc_update_value(scui_ui_res_local->menial_arc_1,
+        //     scui_ui_res_local->menial_arc_v, true);
         scui_menial_arc_update_value(scui_ui_res_local->menial_arc_2,
             scui_ui_res_local->menial_arc_v, true);
         scui_menial_arc_update_value(scui_ui_res_local->menial_arc_3,
@@ -141,34 +141,45 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         menial_maker.data.arc.center.x = 100 / 2;
         menial_maker.data.arc.center.y = 100 / 2;
         menial_maker.data.arc.radius  = 100 / 2;
-        menial_maker.data.arc.angle_s = 0;
-        menial_maker.data.arc.angle_e = 0;
         
         menial_maker.widget.clip.x = SCUI_HOR_RES * 1 / 4 - 100 / 2;
         menial_maker.widget.clip.y = arc_ofs_y;
-        menial_maker.data.arc.width = 8;
-        menial_maker.data.arc.round = 1;
-        menial_maker.data.arc.grad  = 0;
-        menial_maker.data.arc.anti  = 0;
+        menial_maker.data.arc.angle_s = 270;
+        menial_maker.data.arc.angle_e = 270 + 60;
+        menial_maker.data.arc.time    = 1500;
+        menial_maker.data.arc.width   = 8;
+        menial_maker.data.arc.spinner = 1;
+        menial_maker.data.arc.round   = 1;
+        menial_maker.data.arc.gradw   = 0;
+        menial_maker.data.arc.grad    = 1;
+        menial_maker.data.arc.anti    = 1;
         scui_widget_create(&menial_maker, &menial_handle);
         scui_ui_res_local->menial_arc_1 = menial_handle;
         
+        menial_maker.data.arc.angle_s = 0;
+        menial_maker.data.arc.angle_e = 0;
+        menial_maker.data.arc.time    = 0;
+        
         menial_maker.widget.clip.x = SCUI_HOR_RES * 2 / 4 - 100 / 2;
         menial_maker.widget.clip.y = arc_ofs_y;
-        menial_maker.data.arc.width = 0;
-        menial_maker.data.arc.round = 0;
-        menial_maker.data.arc.grad  = 0;
-        menial_maker.data.arc.anti  = 1;
+        menial_maker.data.arc.width   = 0;
+        menial_maker.data.arc.spinner = 0;
+        menial_maker.data.arc.round   = 0;
+        menial_maker.data.arc.gradw   = 1;
+        menial_maker.data.arc.grad    = 0;
+        menial_maker.data.arc.anti    = 1;
         scui_widget_create(&menial_maker, &menial_handle);
         scui_ui_res_local->menial_arc_2 = menial_handle;
         
         menial_maker.widget.clip.x = SCUI_HOR_RES * 3 / 4 - 100 / 2;
         menial_maker.widget.clip.y = arc_ofs_y;
-        menial_maker.data.arc.width = 8;
-        menial_maker.data.arc.round = 1;
-        menial_maker.data.arc.gradw = 1;
-        menial_maker.data.arc.grad  = 1;
-        menial_maker.data.arc.anti  = 0;
+        menial_maker.data.arc.time    = 0;
+        menial_maker.data.arc.width   = 8;
+        menial_maker.data.arc.spinner = 0;
+        menial_maker.data.arc.round   = 1;
+        menial_maker.data.arc.gradw   = 1;
+        menial_maker.data.arc.grad    = 1;
+        menial_maker.data.arc.anti    = 0;
         scui_widget_create(&menial_maker, &menial_handle);
         scui_ui_res_local->menial_arc_3 = menial_handle;
         #endif

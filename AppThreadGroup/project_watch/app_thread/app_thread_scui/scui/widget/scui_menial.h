@@ -31,6 +31,7 @@ typedef union {
         scui_coord3_t angle_s;      /* 起始角度(默认:0.0f) */
         scui_coord3_t angle_e;      /* 结束角度(默认:360.0f) */
         scui_color_t  color[2];     /* 颜色(背景[0]前景[1]) */
+        scui_sbitfd_t spinner:1;    /* 加载圆环(可选) */
         scui_sbitfd_t round:1;      /* 端点圆角(可选) */
         scui_sbitfd_t gradw:1;      /* 渐变方向(水平:0;垂直:1) */
         scui_sbitfd_t grad:1;       /* 渐变(可选)(s->e) */

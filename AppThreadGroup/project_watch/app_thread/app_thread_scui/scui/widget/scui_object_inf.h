@@ -39,13 +39,13 @@ void scui_object_tran_add(scui_handle_t handle, scui_object_tran_t *tran);
  */
 bool scui_object_tran_add_by(scui_handle_t handle, scui_object_tran_t *tran);
 
-/*@brief 对象控件状态更新
+/*@brief 对象控件状态获取
  *@param handle 控件句柄
  *@param state  控件状态
  */
 void scui_object_state_get(scui_handle_t handle, scui_object_type_t *state);
 
-/*@brief 对象控件状态更新
+/*@brief 对象控件状态设置
  *@param handle 控件句柄
  *@param state  控件状态
  */

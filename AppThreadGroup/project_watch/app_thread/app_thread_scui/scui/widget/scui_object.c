@@ -259,7 +259,7 @@ bool scui_object_tran_add_by(scui_handle_t handle, scui_object_tran_t *tran)
     return true;
 }
 
-/*@brief 对象控件状态读取
+/*@brief 对象控件状态获取
  *@param handle 控件句柄
  *@param state  控件状态
  */
