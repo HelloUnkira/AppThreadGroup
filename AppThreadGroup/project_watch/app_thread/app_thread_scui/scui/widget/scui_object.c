@@ -7,7 +7,6 @@
 
 #include "scui.h"
 
-
 /*@brief 控件构造
  *@param inst       控件实例
  *@param inst_maker 控件实例构造器
@@ -55,6 +54,52 @@ void scui_object_burn(scui_handle_t handle)
     scui_widget_burn(widget);
 }
 
+/*@brief 对象控件状态更新
+ *@param handle 控件句柄
+ *@param state  控件状态
+ */
+void scui_object_state_new(scui_handle_t handle, scui_object_type_t state)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_object_t *object = (void *)widget;
+    
+    /* 重复的无效状态切换 */
+    if (object->state == state)
+        return;
+    
+    /* 关闭所有的过渡,仅启用状态到达过渡 */
+    for (scui_coord_t idx = 0; idx < object->tran_num; idx++) {
+        scui_object_tran_t *tran = &object->tran_list[idx];
+        if (!tran->use) continue;
+        
+        if (tran->state_p == object->state &&
+            tran->state_n == state) {
+            
+            tran->tick_d = 0;
+            tran->tick_t = 0;
+            continue;
+        }
+        
+        tran->tick_d = tran->delay + 1;
+        tran->tick_t = tran->time + 1;
+    }
+}
+
+/*@brief 对象控件属性检查
+ *@param prop 控件属性
+ *@retval 有效属性
+ */
+static bool scui_object_prop_check(scui_object_prop_t *prop)
+{
+    if (prop->part  > scui_object_part_s  && prop->part  < scui_object_part_e  &&
+        prop->state > scui_object_state_s && prop->state < scui_object_state_e &&
+        prop->style > scui_object_style_s && prop->style < scui_object_style_e)
+        return true;
+    
+    return false;
+}
+
 /*@brief 对象控件添加属性
  *@param handle 控件句柄
  *@param prop   控件属性
@@ -66,9 +111,10 @@ void scui_object_prop_add(scui_handle_t handle, scui_object_prop_t *prop)
     scui_object_t *object = (void *)widget;
     
     /* 进行一次查重检查: */
+    SCUI_ASSERT(scui_object_prop_check(prop));
     for (scui_coord_t idx = 0; idx < object->prop_num; idx++) {
         scui_object_prop_t *local_prop = &object->prop_list[idx];
-        if (!local_prop->use) continue;
+        if (local_prop->use) continue;
         
         if (local_prop->part  != prop->part  ||
             local_prop->state != prop->state ||
@@ -76,14 +122,13 @@ void scui_object_prop_add(scui_handle_t handle, scui_object_prop_t *prop)
             continue;
         
        *local_prop = *prop;
-        local_prop->use = true;
         scui_widget_draw(handle, NULL, false);
         return;
     }
     
     for (scui_coord_t idx = 0; idx < object->prop_num; idx++) {
         scui_object_prop_t *local_prop = &object->prop_list[idx];
-        if (local_prop->use) continue;
+        if (!local_prop->use) continue;
         
        *local_prop = *prop;
         local_prop->use = true;
@@ -147,6 +192,21 @@ bool scui_object_prop_sync(scui_handle_t handle, scui_object_prop_t *prop)
     return false;
 }
 
+/*@brief 对象控件过渡检查
+ *@param prop 控件过渡
+ *@retval 有效过渡
+ */
+static bool scui_object_tran_check(scui_object_tran_t *tran)
+{
+    if (tran->part    > scui_object_part_s  && tran->part    < scui_object_part_e  &&
+        tran->state_p > scui_object_state_s && tran->state_p < scui_object_state_e &&
+        tran->state_n > scui_object_state_s && tran->state_n < scui_object_state_e &&
+        tran->style   > scui_object_style_s && tran->style   < scui_object_style_e)
+        return true;
+    
+    return false;
+}
+
 /*@brief 对象控件添加过渡(同步添加属性)
  *@param handle 控件句柄
  *@param tran   控件过渡
@@ -167,9 +227,10 @@ void scui_object_tran_add(scui_handle_t handle, scui_object_tran_t *tran)
     scui_object_prop_add(handle, &prop_n);
     
     /* 进行一次查重检查: */
+    SCUI_ASSERT(scui_object_tran_check(tran));
     for (scui_coord_t idx = 0; idx < object->tran_num; idx++) {
         scui_object_tran_t *local_tran = &object->tran_list[idx];
-        if (!local_tran->use) continue;
+        if (local_tran->use) continue;
         
         if (local_tran->part    != tran->part    ||
             local_tran->state_p != tran->state_p ||
@@ -178,16 +239,21 @@ void scui_object_tran_add(scui_handle_t handle, scui_object_tran_t *tran)
             continue;
         
        *local_tran = *tran;
-        local_tran->use = true;
+        scui_map_cb_t path = local_tran->path;
+        if (path == NULL) path = scui_map_ease_in_out;
+        local_tran->path = path;
         return;
     }
     
     for (scui_coord_t idx = 0; idx < object->tran_num; idx++) {
         scui_object_tran_t *local_tran = &object->tran_list[idx];
-        if (local_tran->use) continue;
+        if (!local_tran->use) continue;
         
        *local_tran = *tran;
         local_tran->use = true;
+        scui_map_cb_t path = local_tran->path;
+        if (path == NULL) path = scui_map_ease_in_out;
+        local_tran->path = path;
         return;
     }
     
@@ -296,30 +362,29 @@ void scui_object_invoke(scui_event_t *event)
         scui_object_tran_t tran_zero = {0};
         /* 遍历所有的样式切换节点,检查所有有效目标 */
         for (scui_coord_t idx = 0; idx < object->tran_num; idx++) {
-            scui_object_tran_t *tran = &object->tran_list[idx];
-            if (!tran->use) continue;
+            scui_object_tran_t *local_tran = &object->tran_list[idx];
+            if (!local_tran->use) continue;
             
-            /* 回收旧的样式切换节点(打断) */
-            if (tran->state_n != object->state) {
-                tran->use = false;
+            /* 跳过旧样式切换节点(打断) */
+            if (local_tran->state_n != object->state) {
                 continue;
             }
             
             /* 延时嘀嗒(不精确,有残差) */
-            if (tran->tick_d <  tran->delay) {
-                tran->tick_d += event->tick;
+            if (local_tran->tick_d <= local_tran->delay) {
+                local_tran->tick_d += event->tick;
                 continue;
             }
-            /* 进度嘀嗒 */
-            if (tran->tick_t <= tran->time) {
-                tran->tick_t += event->tick;
+            /* 进度嘀嗒(不精确,有残差) */
+            if (local_tran->tick_t <= local_tran->time) {
+                local_tran->tick_t += event->tick;
                 /* 使用新值更新当前样式 */
-                tran->pct_c = scui_map(tran->tick_t, 0, tran->time, 0, 100);
+                local_tran->pct_c = local_tran->path(local_tran->tick_t,
+                    0, local_tran->time, 0, 100);
+                
                 scui_object_tran_sync(widget->myself, idx);
                 continue;
             }
-            
-            tran->use = false;
         }
         break;
     }

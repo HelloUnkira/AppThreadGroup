@@ -1,6 +1,12 @@
 #ifndef SCUI_OBJECT_INF_H
 #define SCUI_OBJECT_INF_H
 
+/*@brief 对象控件状态更新
+ *@param handle 控件句柄
+ *@param state  控件状态
+ */
+void scui_object_state_new(scui_handle_t handle, scui_object_type_t state);
+
 /*@brief 对象控件添加属性
  *@param handle 控件句柄
  *@param prop   控件属性

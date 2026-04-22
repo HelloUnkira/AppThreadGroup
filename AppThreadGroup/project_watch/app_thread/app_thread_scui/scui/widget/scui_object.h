@@ -8,19 +8,25 @@
 
 typedef enum {
     /* field part: */
+    scui_object_part_s,
     scui_object_part_bg,
     scui_object_part_fg,
     scui_object_part_item,
+    scui_object_part_e,
     /* field state: */
+    scui_object_state_s,
     scui_object_state_def,
     scui_object_state_pre,
     scui_object_state_chk,
+    scui_object_state_e,
     /* field style: */
+    scui_object_style_s,
     scui_object_style_width,
     scui_object_style_height,
     scui_object_style_radius,
     scui_object_style_color,
     scui_object_style_alpha,
+    scui_object_style_e,
 } scui_object_type_t;
 
 typedef union {

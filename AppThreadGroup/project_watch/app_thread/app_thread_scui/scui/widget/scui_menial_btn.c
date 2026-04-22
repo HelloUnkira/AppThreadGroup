@@ -119,7 +119,7 @@ void scui_menial_btn_config(scui_menial_t *menial)
 {
     /* 未配置使用默认值 */
     if (menial->data.btn.time == 0)
-        menial->data.btn.time = SCUI_WIDGET_MENIAL_BTN_TIME;
+        menial->data.btn.time  = SCUI_WIDGET_MENIAL_BTN_TIME;
     
     /* 未配置使用默认值 */
     if (menial->data.btn.lim == 0)
