@@ -86,7 +86,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
     case scui_event_focus_lost:
         break;
     case scui_event_ptr_click: {
-        #if 0
+        #if 1
         // 内部模糊测试使用(内部使用!!!)
         /* 问题:存在之后的窗口重绘失效当前虚化 */
         /* 暂定:锁定窗口绘制, 禁止绘制该控件树 */
@@ -100,7 +100,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
             scui_window_draw_lock_set(event->object, true);
             /* 背景窗口虚化 */
             scui_widget_draw(event->object, NULL, false);
-            // sscui_widget_draw_dither(event->object, NULL);
+            // scui_widget_draw_dither(event->object, NULL);
             scui_widget_draw_blur(event->object, NULL);
             scui_widget_refr(event->object, false);
         }

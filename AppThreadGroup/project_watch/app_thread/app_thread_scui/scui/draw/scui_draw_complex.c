@@ -33,7 +33,7 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
     scui_multi_t dis_line = draw_area.w * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
     
-    #define DITHER_STATIC     1    /* 静态抖动 */
+    #define DITHER_STATIC     0    /* 静态抖动 */
     #define DITHER_DYNAMIC    1    /* 动态误差扩散抖动 */
     
     #if 0
@@ -108,9 +108,6 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
     scui_coord_t *err_n_ch_g = error_color_n + draw_area.w * 2;
     scui_coord_t *err_n_ch_b = error_color_n + draw_area.w * 3;
     
-    err_c_ch_a[0] = 32; err_c_ch_r[1] = 8;
-    err_c_ch_g[2] = 16; err_c_ch_b[3] = 8;
-    
     for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++) {
     for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
          uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
@@ -133,6 +130,11 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
             ch_r = color565->ch.r;
             ch_g = color565->ch.g;
             ch_b = color565->ch.b;
+            /* 强制添加微小抖动 */
+            ch_r += (idx_item ^ idx_line) % 3 - 1;
+            ch_g += (idx_item * 3 ^ idx_line) % 3 - 1;
+            ch_b += (idx_item ^ idx_line * 5) % 3 - 1;
+            /*  */
             color565->ch.r = scui_clamp(ch_r + e_ch_r, 0, (1 << 5) - 1);
             color565->ch.g = scui_clamp(ch_g + e_ch_g, 0, (1 << 6) - 1);
             color565->ch.b = scui_clamp(ch_b + e_ch_b, 0, (1 << 5) - 1);
@@ -148,6 +150,12 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
             ch_r = color8565->ch.r;
             ch_g = color8565->ch.g;
             ch_b = color8565->ch.b;
+            /* 强制添加微小抖动 */
+            ch_a += (idx_item * 5 ^ idx_line * 3) % 3 - 1;
+            ch_r += (idx_item ^ idx_line) % 3 - 1;
+            ch_g += (idx_item * 3 ^ idx_line) % 3 - 1;
+            ch_b += (idx_item ^ idx_line * 5) % 3 - 1;
+            /*  */
             color8565->ch.a = scui_clamp(ch_a + e_ch_a, 0, (1 << 8) - 1);
             color8565->ch.r = scui_clamp(ch_r + e_ch_r, 0, (1 << 5) - 1);
             color8565->ch.g = scui_clamp(ch_g + e_ch_g, 0, (1 << 6) - 1);
@@ -212,10 +220,9 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
     SCUI_MEM_FREE(error_color_n);
     return;
     #else
-    #endif
-    
     SCUI_LOG_ERROR("unknown dither");
     SCUI_ASSERT(false);
+    #endif
 }
 
 /*@brief 区域模糊(可以使用GPU-blur加速优化)
@@ -244,7 +251,11 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
     scui_multi_t dis_line = draw_area.w * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
     
-    #if 1
+    #define BLUR_IIR        0   // IIR双向滤波
+    #define BLUR_GAUSS      1   // 高斯卷积核
+    
+    #if 0
+    #elif BLUR_IIR
     /* 启用IIR模糊实现 */
     /* 豆包根据lv_draw_sw_blur改出,我简单整理 */
     
@@ -302,18 +313,18 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
                 sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.r * intensity_inv);
                 sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.g * intensity_inv);
                 sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.b * intensity_inv);
-                color565_t->ch.r = sum[0] >> SCUI_SCALE_OFS;
-                color565_t->ch.g = sum[1] >> SCUI_SCALE_OFS;
-                color565_t->ch.b = sum[2] >> SCUI_SCALE_OFS;
+                color565_t->ch.r = (sum[0] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color565_t->ch.g = (sum[1] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color565_t->ch.b = (sum[2] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
             }
             if (dst_surface->format == scui_pixel_cf_bmp8565) {
                 scui_color8565_t *color8565_t = dst_cur;
                 sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.r * intensity_inv);
                 sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.g * intensity_inv);
                 sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.b * intensity_inv);
-                color8565_t->ch.r = (sum[0] >> SCUI_SCALE_OFS) << 3;
-                color8565_t->ch.g = (sum[1] >> SCUI_SCALE_OFS) << 2;
-                color8565_t->ch.b = (sum[2] >> SCUI_SCALE_OFS) << 3;
+                color8565_t->ch.r = (sum[0] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color8565_t->ch.g = (sum[1] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color8565_t->ch.b = (sum[2] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
             }
             
             dst_cur += dst_line * BLUR_SKIP;
@@ -348,18 +359,18 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
                 sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.r * intensity_inv);
                 sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.g * intensity_inv);
                 sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.b * intensity_inv);
-                color565_t->ch.r = sum[0] >> SCUI_SCALE_OFS;
-                color565_t->ch.g = sum[1] >> SCUI_SCALE_OFS;
-                color565_t->ch.b = sum[2] >> SCUI_SCALE_OFS;
+                color565_t->ch.r = (sum[0] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color565_t->ch.g = (sum[1] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color565_t->ch.b = (sum[2] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
             }
             if (dst_surface->format == scui_pixel_cf_bmp8565) {
                 scui_color8565_t *color8565_t = dst_cur;
                 sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.r * intensity_inv);
                 sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.g * intensity_inv);
                 sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.b * intensity_inv);
-                color8565_t->ch.r = (sum[0] >> SCUI_SCALE_OFS) << 3;
-                color8565_t->ch.g = (sum[1] >> SCUI_SCALE_OFS) << 2;
-                color8565_t->ch.b = (sum[2] >> SCUI_SCALE_OFS) << 3;
+                color8565_t->ch.r = (sum[0] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color8565_t->ch.g = (sum[1] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color8565_t->ch.b = (sum[2] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
             }
             
             dst_cur -= dst_line * BLUR_SKIP;
@@ -400,18 +411,18 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
                 sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.r * intensity_inv);
                 sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.g * intensity_inv);
                 sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.b * intensity_inv);
-                color565_t->ch.r = sum[0] >> SCUI_SCALE_OFS;
-                color565_t->ch.g = sum[1] >> SCUI_SCALE_OFS;
-                color565_t->ch.b = sum[2] >> SCUI_SCALE_OFS;
+                color565_t->ch.r = (sum[0] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color565_t->ch.g = (sum[1] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color565_t->ch.b = (sum[2] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
             }
             if (dst_surface->format == scui_pixel_cf_bmp8565) {
                 scui_color8565_t *color8565_t = dst_cur;
                 sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.r * intensity_inv);
                 sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.g * intensity_inv);
                 sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.b * intensity_inv);
-                color8565_t->ch.r = (sum[0] >> SCUI_SCALE_OFS) << 3;
-                color8565_t->ch.g = (sum[1] >> SCUI_SCALE_OFS) << 2;
-                color8565_t->ch.b = (sum[2] >> SCUI_SCALE_OFS) << 3;
+                color8565_t->ch.r = (sum[0] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color8565_t->ch.g = (sum[1] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color8565_t->ch.b = (sum[2] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
             }
             
             /* 填充跳过的像素 */
@@ -451,18 +462,18 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
                 sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.r * intensity_inv);
                 sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.g * intensity_inv);
                 sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.b * intensity_inv);
-                color565_t->ch.r = sum[0] >> SCUI_SCALE_OFS;
-                color565_t->ch.g = sum[1] >> SCUI_SCALE_OFS;
-                color565_t->ch.b = sum[2] >> SCUI_SCALE_OFS;
+                color565_t->ch.r = (sum[0] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color565_t->ch.g = (sum[1] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color565_t->ch.b = (sum[2] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
             }
             if (dst_surface->format == scui_pixel_cf_bmp8565) {
                 scui_color8565_t *color8565_t = dst_cur;
                 sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.r * intensity_inv);
                 sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.g * intensity_inv);
                 sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.b * intensity_inv);
-                color8565_t->ch.r = (sum[0] >> SCUI_SCALE_OFS) << 3;
-                color8565_t->ch.g = (sum[1] >> SCUI_SCALE_OFS) << 2;
-                color8565_t->ch.b = (sum[2] >> SCUI_SCALE_OFS) << 3;
+                color8565_t->ch.r = (sum[0] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color8565_t->ch.g = (sum[1] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
+                color8565_t->ch.b = (sum[2] + (SCUI_SCALE_COF >> 1)) >> SCUI_SCALE_OFS;
             }
             
             /* 填充跳过的像素 */
@@ -474,7 +485,7 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
             dst_cur -= skip_byte;
         }
     }
-    #else
+    #elif BLUR_GAUSS
     #define BLUR_SCALE 5
     static const scui_multi_t blur_kernel[BLUR_SCALE][BLUR_SCALE] = {
         #if 0
@@ -589,6 +600,9 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
     
     SCUI_MEM_FREE(pixel_buf);
     SCUI_MEM_FREE(kernel);
+    #else
+    SCUI_LOG_ERROR("unknown blur");
+    SCUI_ASSERT(false);
     #endif
 }
 
