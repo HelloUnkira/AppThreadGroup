@@ -281,6 +281,32 @@ void scui_window_switch_key_id_set(scui_handle_t handle, scui_coord_t switch_key
         window->switch_key_id[idx] = switch_key_id[idx];
 }
 
+/*@brief 窗口绘制锁获取
+ *@param handle    窗口控件句柄
+ *@param draw_lock 窗口绘制锁
+ */
+void scui_window_draw_lock_get(scui_handle_t handle, bool *draw_lock)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_window_t *window = (void *)widget;
+    
+    *draw_lock = window->draw_lock;
+}
+
+/*@brief 窗口绘制锁设置
+ *@param handle    窗口控件句柄
+ *@param draw_lock 窗口绘制锁
+ */
+void scui_window_draw_lock_set(scui_handle_t handle, bool draw_lock)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_window_t *window = (void *)widget;
+    
+    window->draw_lock = draw_lock;
+}
+
 /*@brief 窗口资源获取
  *@param handle    窗口控件句柄
  *@param local_res 窗口资源

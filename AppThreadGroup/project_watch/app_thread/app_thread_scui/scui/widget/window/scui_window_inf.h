@@ -73,6 +73,18 @@ void scui_window_switch_key_id_get(scui_handle_t handle, scui_coord_t switch_key
  */
 void scui_window_switch_key_id_set(scui_handle_t handle, scui_coord_t switch_key_id[4]);
 
+/*@brief 窗口绘制锁获取
+ *@param handle    窗口控件句柄
+ *@param draw_lock 窗口绘制锁
+ */
+void scui_window_draw_lock_get(scui_handle_t handle, bool *draw_lock);
+
+/*@brief 窗口绘制锁设置
+ *@param handle    窗口控件句柄
+ *@param draw_lock 窗口绘制锁
+ */
+void scui_window_draw_lock_set(scui_handle_t handle, bool draw_lock);
+
 /*@brief 窗口资源获取
  *@param handle    窗口控件句柄
  *@param local_res 窗口资源

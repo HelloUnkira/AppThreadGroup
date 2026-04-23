@@ -90,14 +90,14 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         // 内部模糊测试使用(内部使用!!!)
         /* 问题:存在之后的窗口重绘失效当前虚化 */
         /* 暂定:锁定窗口绘制, 禁止绘制该控件树 */
-        scui_widget_t *widget = scui_handle_source_assert(event->object);
-        scui_window_t *window = (void *)widget;
+        bool draw_lock = false;
+        scui_window_draw_lock_get(event->object, &draw_lock);
         
-        if (window->draw_lock) {
-            window->draw_lock = false;
+        if (draw_lock) {
+            scui_window_draw_lock_set(event->object, false);
             scui_widget_draw(event->object, NULL, false);
         } else {
-            window->draw_lock = true;
+            scui_window_draw_lock_set(event->object, true);
             /* 背景窗口虚化 */
             scui_widget_draw(event->object, NULL, false);
             // sscui_widget_draw_dither(event->object, NULL);

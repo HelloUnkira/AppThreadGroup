@@ -104,9 +104,7 @@ static void scui_window_move_anima_state(uint8_t type)
             
             /* 问题:存在之后的窗口重绘失效当前虚化 */
             /* 暂定:锁定窗口绘制, 禁止绘制该控件树 */
-            scui_widget_t *widget = scui_handle_source_assert(handle_t);
-            scui_window_t *window = (void *)widget;
-            window->draw_lock = true;
+            scui_window_draw_lock_set(handle_t, true);
             
             /* 背景窗口虚化 */
             scui_widget_draw(handle_t, NULL, false);
@@ -133,10 +131,8 @@ static void scui_window_move_anima_state(uint8_t type)
             for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
                 if (scui_window_mgr.list_args.curr[idx] == SCUI_HANDLE_INVALID)
                     continue;
-                scui_handle_t  handle = scui_window_mgr.list_args.curr[idx];
-                scui_widget_t *widget = scui_handle_source_assert(handle);
-                scui_window_t *window = (void *)widget;
-                window->draw_lock = false;
+                scui_handle_t handle = scui_window_mgr.list_args.curr[idx];
+                scui_window_draw_lock_set(handle, false);
             }
             
             scui_widget_draw(handle_t, NULL, false);

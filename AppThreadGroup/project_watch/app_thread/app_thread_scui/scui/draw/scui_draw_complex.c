@@ -244,6 +244,237 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
     scui_multi_t dis_line = draw_area.w * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
     
+    #if 1
+    /* 启用IIR模糊实现 */
+    /* 豆包根据lv_draw_sw_blur改出,我简单整理 */
+    
+    #define BLUR_RADIUS   8     /* 模糊半径,可根据需求调整 */
+    #define BLUR_SKIP     1     /* 像素跳过计数,平衡性能与精度 */
+    
+    /* 适配裁剪区域为BLUR_SKIP的整数倍 */
+    draw_area.x = ((dst_clip_v.x + (BLUR_SKIP - 1)) / BLUR_SKIP) * BLUR_SKIP;
+    draw_area.y = ((dst_clip_v.y + (BLUR_SKIP - 1)) / BLUR_SKIP) * BLUR_SKIP;
+    draw_area.w = ((dst_clip_v.w - (BLUR_SKIP - 1)) / BLUR_SKIP) * BLUR_SKIP;
+    draw_area.h = ((dst_clip_v.h - (BLUR_SKIP - 1)) / BLUR_SKIP) * BLUR_SKIP;
+    if (scui_area_empty(&draw_area))
+        return;
+    
+    /* 计算IIR滤波器强度系数,样本长度,跳跃像素点 */
+    uint8_t *dst_col = NULL, *dst_row = NULL, *dst_cur = NULL;
+    scui_coord_t intensity = (SCUI_SCALE_COF * BLUR_RADIUS) / (BLUR_RADIUS + 4);
+    scui_coord_t intensity_inv = SCUI_SCALE_COF - intensity;
+    scui_coord_t sample_len = scui_max(BLUR_RADIUS / 2, 1);
+    scui_coord_t skip_byte = BLUR_SKIP * dst_byte;
+    scui_multi_t x_ofs = 0, y_ofs = 0;
+    
+    /* 1. 垂直方向模糊: 从上到下 + 从下到上 */
+    for (scui_coord_t x = draw_area.x; x < draw_area.x + draw_area.w; x += BLUR_SKIP) {
+        x_ofs = (x - dst_clip_v.x) * dst_byte;
+        dst_col = dst_addr + x_ofs + draw_area.y * dst_line;
+        scui_color_wt_t sum[3] = {0}, s0 = 0, s1 = 0, s2 = 0;
+        
+        s0 = s1 = s2 = 0;   /* 初始化采样和 */
+        for (scui_coord_t s = 0; s < sample_len; s++) {
+            y_ofs = scui_clamp(s * BLUR_SKIP, 0, draw_area.h - 1) * dst_line;
+            
+            if (dst_surface->format == scui_pixel_cf_bmp565) {
+                scui_color565_t *color565_t = (dst_col + y_ofs);
+                s0 += color565_t->ch.r;
+                s1 += color565_t->ch.g;
+                s2 += color565_t->ch.b;
+            }
+            if (dst_surface->format == scui_pixel_cf_bmp8565) {
+                scui_color8565_t *color8565_t = (dst_col + y_ofs);
+                s0 += color8565_t->ch.r;
+                s1 += color8565_t->ch.g;
+                s2 += color8565_t->ch.b;
+            }
+        }
+        sum[0] = (s0 << SCUI_SCALE_OFS) / sample_len;
+        sum[1] = (s1 << SCUI_SCALE_OFS) / sample_len;
+        sum[2] = (s2 << SCUI_SCALE_OFS) / sample_len;
+        
+        /* 从上到下处理列 */
+        dst_cur = dst_col;
+        for (scui_coord_t y = draw_area.y; y < draw_area.y + draw_area.h; y += BLUR_SKIP) {
+            if (dst_surface->format == scui_pixel_cf_bmp565) {
+                scui_color565_t *color565_t = dst_cur;
+                sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.r * intensity_inv);
+                sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.g * intensity_inv);
+                sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.b * intensity_inv);
+                color565_t->ch.r = sum[0] >> SCUI_SCALE_OFS;
+                color565_t->ch.g = sum[1] >> SCUI_SCALE_OFS;
+                color565_t->ch.b = sum[2] >> SCUI_SCALE_OFS;
+            }
+            if (dst_surface->format == scui_pixel_cf_bmp8565) {
+                scui_color8565_t *color8565_t = dst_cur;
+                sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.r * intensity_inv);
+                sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.g * intensity_inv);
+                sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.b * intensity_inv);
+                color8565_t->ch.r = (sum[0] >> SCUI_SCALE_OFS) << 3;
+                color8565_t->ch.g = (sum[1] >> SCUI_SCALE_OFS) << 2;
+                color8565_t->ch.b = (sum[2] >> SCUI_SCALE_OFS) << 3;
+            }
+            
+            dst_cur += dst_line * BLUR_SKIP;
+        }
+        
+        s0 = s1 = s2 = 0;   /* 初始化采样和 */
+        for (scui_coord_t s = 0; s < sample_len; s++) {
+            y_ofs = scui_clamp((draw_area.h - 1 - s * BLUR_SKIP), 0, draw_area.h - 1) * dst_line;
+            
+            if (dst_surface->format == scui_pixel_cf_bmp565) {
+                scui_color565_t *color565_t = (dst_col + y_ofs);
+                s0 += color565_t->ch.r;
+                s1 += color565_t->ch.g;
+                s2 += color565_t->ch.b;
+            }
+            if (dst_surface->format == scui_pixel_cf_bmp8565) {
+                scui_color8565_t *color8565_t = (dst_col + y_ofs);
+                s0 += color8565_t->ch.r;
+                s1 += color8565_t->ch.g;
+                s2 += color8565_t->ch.b;
+            }
+        }
+        sum[0] = (s0 << SCUI_SCALE_OFS) / sample_len;
+        sum[1] = (s1 << SCUI_SCALE_OFS) / sample_len;
+        sum[2] = (s2 << SCUI_SCALE_OFS) / sample_len;
+        
+        /* 从下到上处理列 */
+        dst_cur = dst_addr + x_ofs + (draw_area.y + draw_area.h - BLUR_SKIP) * dst_line;
+        for (scui_coord_t y = draw_area.y + draw_area.h - BLUR_SKIP; y >= draw_area.y; y -= BLUR_SKIP) {
+            if (dst_surface->format == scui_pixel_cf_bmp565) {
+                scui_color565_t *color565_t = dst_cur;
+                sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.r * intensity_inv);
+                sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.g * intensity_inv);
+                sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.b * intensity_inv);
+                color565_t->ch.r = sum[0] >> SCUI_SCALE_OFS;
+                color565_t->ch.g = sum[1] >> SCUI_SCALE_OFS;
+                color565_t->ch.b = sum[2] >> SCUI_SCALE_OFS;
+            }
+            if (dst_surface->format == scui_pixel_cf_bmp8565) {
+                scui_color8565_t *color8565_t = dst_cur;
+                sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.r * intensity_inv);
+                sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.g * intensity_inv);
+                sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.b * intensity_inv);
+                color8565_t->ch.r = (sum[0] >> SCUI_SCALE_OFS) << 3;
+                color8565_t->ch.g = (sum[1] >> SCUI_SCALE_OFS) << 2;
+                color8565_t->ch.b = (sum[2] >> SCUI_SCALE_OFS) << 3;
+            }
+            
+            dst_cur -= dst_line * BLUR_SKIP;
+        }
+    }
+    
+    /* 2. 水平方向模糊: 从左到右 + 从右到左 */
+    for (scui_coord_t y = draw_area.y; y < draw_area.y + draw_area.h; y += BLUR_SKIP) {
+        y_ofs = (y - dst_clip_v.y) * dst_line;
+        dst_row = dst_addr + y_ofs + draw_area.x * dst_byte;
+        scui_color_wt_t sum[3] = {0}, s0 = 0, s1 = 0, s2 = 0;
+        
+        s0 = s1 = s2 = 0;   /* 初始化采样和 */
+        for (scui_coord_t s = 0; s < sample_len; s++) {
+            x_ofs = scui_clamp(s * BLUR_SKIP, 0, draw_area.w - 1) * dst_byte;
+            if (dst_surface->format == scui_pixel_cf_bmp565) {
+                scui_color565_t *color565_t = (dst_row + x_ofs);
+                s0 += color565_t->ch.r;
+                s1 += color565_t->ch.g;
+                s2 += color565_t->ch.b;
+            }
+            if (dst_surface->format == scui_pixel_cf_bmp8565) {
+                scui_color8565_t *color8565_t = (dst_row + x_ofs);
+                s0 += color8565_t->ch.r;
+                s1 += color8565_t->ch.g;
+                s2 += color8565_t->ch.b;
+            }
+        }
+        sum[0] = (s0 << SCUI_SCALE_OFS) / sample_len;
+        sum[1] = (s1 << SCUI_SCALE_OFS) / sample_len;
+        sum[2] = (s2 << SCUI_SCALE_OFS) / sample_len;
+        
+        /* 从左到右处理行 */
+        uint8_t *dst_cur = dst_row;
+        for (scui_coord_t x = draw_area.x; x < draw_area.x + draw_area.w; x += BLUR_SKIP) {
+            if (dst_surface->format == scui_pixel_cf_bmp565) {
+                scui_color565_t *color565_t = dst_cur;
+                sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.r * intensity_inv);
+                sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.g * intensity_inv);
+                sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.b * intensity_inv);
+                color565_t->ch.r = sum[0] >> SCUI_SCALE_OFS;
+                color565_t->ch.g = sum[1] >> SCUI_SCALE_OFS;
+                color565_t->ch.b = sum[2] >> SCUI_SCALE_OFS;
+            }
+            if (dst_surface->format == scui_pixel_cf_bmp8565) {
+                scui_color8565_t *color8565_t = dst_cur;
+                sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.r * intensity_inv);
+                sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.g * intensity_inv);
+                sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.b * intensity_inv);
+                color8565_t->ch.r = (sum[0] >> SCUI_SCALE_OFS) << 3;
+                color8565_t->ch.g = (sum[1] >> SCUI_SCALE_OFS) << 2;
+                color8565_t->ch.b = (sum[2] >> SCUI_SCALE_OFS) << 3;
+            }
+            
+            /* 填充跳过的像素 */
+            if (BLUR_SKIP > 1) {
+                for (scui_coord_t idx = 1; idx < BLUR_SKIP && (x + idx) < (draw_area.x + draw_area.w); idx++)
+                    scui_draw_byte_copy(true, dst_cur + idx * dst_byte, dst_cur, dst_byte);
+            }
+            
+            dst_cur += skip_byte;
+        }
+        
+        s0 = s1 = s2 = 0;   /* 初始化采样和 */
+        for (scui_coord_t s = 0; s < sample_len; s++) {
+            x_ofs = scui_clamp((draw_area.w - 1 - s * BLUR_SKIP), 0, draw_area.w - 1) * dst_byte;
+            if (dst_surface->format == scui_pixel_cf_bmp565) {
+                scui_color565_t *color565_t = (dst_row + x_ofs);
+                s0 += color565_t->ch.r;
+                s1 += color565_t->ch.g;
+                s2 += color565_t->ch.b;
+            }
+            if (dst_surface->format == scui_pixel_cf_bmp8565) {
+                scui_color8565_t *color8565_t = (dst_row + x_ofs);
+                s0 += color8565_t->ch.r;
+                s1 += color8565_t->ch.g;
+                s2 += color8565_t->ch.b;
+            }
+        }
+        sum[0] = (s0 << SCUI_SCALE_OFS) / sample_len;
+        sum[1] = (s1 << SCUI_SCALE_OFS) / sample_len;
+        sum[2] = (s2 << SCUI_SCALE_OFS) / sample_len;
+        
+        /* 从右到左处理行 */
+        dst_cur = dst_row + (draw_area.w - BLUR_SKIP) * dst_byte;
+        for (scui_coord_t x = draw_area.x + draw_area.w - BLUR_SKIP; x >= draw_area.x; x -= BLUR_SKIP) {
+            if (dst_surface->format == scui_pixel_cf_bmp565) {
+                scui_color565_t *color565_t = dst_cur;
+                sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.r * intensity_inv);
+                sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.g * intensity_inv);
+                sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color565_t->ch.b * intensity_inv);
+                color565_t->ch.r = sum[0] >> SCUI_SCALE_OFS;
+                color565_t->ch.g = sum[1] >> SCUI_SCALE_OFS;
+                color565_t->ch.b = sum[2] >> SCUI_SCALE_OFS;
+            }
+            if (dst_surface->format == scui_pixel_cf_bmp8565) {
+                scui_color8565_t *color8565_t = dst_cur;
+                sum[0] = ((sum[0] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.r * intensity_inv);
+                sum[1] = ((sum[1] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.g * intensity_inv);
+                sum[2] = ((sum[2] * intensity) >> SCUI_SCALE_OFS) + (color8565_t->ch.b * intensity_inv);
+                color8565_t->ch.r = (sum[0] >> SCUI_SCALE_OFS) << 3;
+                color8565_t->ch.g = (sum[1] >> SCUI_SCALE_OFS) << 2;
+                color8565_t->ch.b = (sum[2] >> SCUI_SCALE_OFS) << 3;
+            }
+            
+            /* 填充跳过的像素 */
+            if (BLUR_SKIP > 1) {
+                for (int idx = 1; idx < BLUR_SKIP && (x - idx) >= draw_area.x; idx++)
+                    scui_draw_byte_copy(true, dst_cur - idx * dst_byte, dst_cur, dst_byte);
+            }
+            
+            dst_cur -= skip_byte;
+        }
+    }
+    #else
     #define BLUR_SCALE 5
     static const scui_multi_t blur_kernel[BLUR_SCALE][BLUR_SCALE] = {
         #if 0
@@ -307,9 +538,9 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
                 pixel_ofs += scui_clamp(idx_i + idx_item - scale / 2, 0, draw_area.w - 1) * dst_byte;
                 
                 scui_color565_t *color565_t = &pixel_buf[pixel_ofs];
-                ch_r += (uint32_t)color565_t->ch.r * kernel[idx_j * scale + idx_i];
-                ch_g += (uint32_t)color565_t->ch.g * kernel[idx_j * scale + idx_i];
-                ch_b += (uint32_t)color565_t->ch.b * kernel[idx_j * scale + idx_i];
+                ch_r += (scui_color_wt_t)color565_t->ch.r * kernel[idx_j * scale + idx_i];
+                ch_g += (scui_color_wt_t)color565_t->ch.g * kernel[idx_j * scale + idx_i];
+                ch_b += (scui_color_wt_t)color565_t->ch.b * kernel[idx_j * scale + idx_i];
             }
             scui_color565_t *color565 = &pixel;
             color565->ch.r = ch_r / kernel_cof;
@@ -324,10 +555,10 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
                 pixel_ofs += scui_clamp(idx_i + idx_item - scale / 2, 0, draw_area.w - 1) * dst_byte;
                 
                 scui_color8565_t *color8565_t = &pixel_buf[pixel_ofs];
-                ch_a += (uint32_t)color8565_t->ch.a * kernel[idx_j * scale + idx_i];
-                ch_r += (uint32_t)color8565_t->ch.r * kernel[idx_j * scale + idx_i];
-                ch_g += (uint32_t)color8565_t->ch.g * kernel[idx_j * scale + idx_i];
-                ch_b += (uint32_t)color8565_t->ch.b * kernel[idx_j * scale + idx_i];
+                ch_a += (scui_color_wt_t)color8565_t->ch.a * kernel[idx_j * scale + idx_i];
+                ch_r += (scui_color_wt_t)color8565_t->ch.r * kernel[idx_j * scale + idx_i];
+                ch_g += (scui_color_wt_t)color8565_t->ch.g * kernel[idx_j * scale + idx_i];
+                ch_b += (scui_color_wt_t)color8565_t->ch.b * kernel[idx_j * scale + idx_i];
             }
             scui_color8565_t *color8565 = &pixel;
             color8565->ch.a = ch_a / kernel_sum;
@@ -358,6 +589,7 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
     
     SCUI_MEM_FREE(pixel_buf);
     SCUI_MEM_FREE(kernel);
+    #endif
 }
 
 /*@brief 区域填充渐变像素点(可以使用DMA-fill-grad加速优化)
