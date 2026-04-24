@@ -7,6 +7,85 @@
 
 #include "scui.h"
 
+/*@brief 图像格式转换(就地转换)
+ *@param image 图像实例
+ *@param rev 通道颠倒
+ *@retval 是否支持
+ */
+bool scui_image_cf_cvt(scui_image_t *image, bool rev)
+{
+    scui_coord_t image_w = image->pixel.width;
+    scui_coord_t image_h = image->pixel.height;
+    scui_multi_t image_s = image_w * image_h;
+    uint8_t *image_pixel = image->pixel.data_bin;
+    
+    if (image->format == SCUI_PIXEL_CF_DEF ||
+        image->format == SCUI_PIXEL_CF_DEF_A)
+        return true;
+    
+    if (SCUI_PIXEL_CF_DEF == scui_pixel_cf_bmp565 &&
+        image->format == scui_pixel_cf_bmp888) {
+        image->format  = scui_pixel_cf_bmp565;
+        
+        scui_color565_t  bmp565_t = {0};
+        scui_color565_t *bmp565 = image_pixel;
+        scui_color888_t *bmp888 = image_pixel;
+        
+        if (rev) {
+            for(uint32_t idx = 0; idx < image_s; idx++) {
+                bmp565_t.ch.b = bmp888[idx].ch.r >> 3;
+                bmp565_t.ch.g = bmp888[idx].ch.g >> 2;
+                bmp565_t.ch.r = bmp888[idx].ch.b >> 3;
+                bmp565 = image_pixel + 2 * idx;
+               *bmp565 = bmp565_t;
+            }
+        } else {
+            for(uint32_t idx = 0; idx < image_s; idx++) {
+                bmp565_t.ch.r = bmp888[idx].ch.r >> 3;
+                bmp565_t.ch.g = bmp888[idx].ch.g >> 2;
+                bmp565_t.ch.b = bmp888[idx].ch.b >> 3;
+                bmp565 = image_pixel + 2 * idx;
+               *bmp565 = bmp565_t;
+            }
+        }
+        
+        return true;
+    }
+    if (SCUI_PIXEL_CF_DEF_A == scui_pixel_cf_bmp8565 &&
+        image->format == scui_pixel_cf_bmp8888) {
+        image->format  = scui_pixel_cf_bmp8565;
+        
+        scui_color8565_t  bmp8565_t = {0};
+        scui_color8565_t *bmp8565 = image_pixel;
+        scui_color8888_t *bmp8888 = image_pixel;
+        
+        if (rev) {
+            for(uint32_t idx = 0; idx < image_s; idx++) {
+                bmp8565_t.ch.a = bmp8888[idx].ch.a;
+                bmp8565_t.ch.b = bmp8888[idx].ch.r >> 3;
+                bmp8565_t.ch.g = bmp8888[idx].ch.g >> 2;
+                bmp8565_t.ch.r = bmp8888[idx].ch.b >> 3;
+                bmp8565 = image_pixel + 3 * idx;
+               *bmp8565 = bmp8565_t;
+            }
+        } else {
+            for(uint32_t idx = 0; idx < image_s; idx++) {
+                bmp8565_t.ch.a = bmp8888[idx].ch.a;
+                bmp8565_t.ch.r = bmp8888[idx].ch.r >> 3;
+                bmp8565_t.ch.g = bmp8888[idx].ch.g >> 2;
+                bmp8565_t.ch.b = bmp8888[idx].ch.b >> 3;
+                bmp8565 = image_pixel + 3 * idx;
+               *bmp8565 = bmp8565_t;
+            }
+        }
+        
+        return true;
+    }
+    
+    SCUI_LOG_ERROR("unsupprot format convert");
+    return false;
+}
+
 /*@brief 图像格式
  *@param handle 图像句柄
  *@retval 图像格式

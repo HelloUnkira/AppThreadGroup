@@ -89,22 +89,6 @@ void *lodepng_realloc(void* ptr, size_t new_size)
     
     return ptr_new;
 }
-static void scui_lodepng_cvt_cf(void *png_dec, uint32_t pixel_cnt)
-{
-    scui_color8888_t *png_argb8888 = png_dec;
-    
-    for(uint32_t idx = 0; idx < pixel_cnt; idx++) {
-        
-        scui_color8565_t  png_pixel = {0};
-        png_pixel.ch.a = png_argb8888[idx].ch.a;
-        png_pixel.ch.r = png_argb8888[idx].ch.b >> 3;
-        png_pixel.ch.g = png_argb8888[idx].ch.g >> 2;
-        png_pixel.ch.b = png_argb8888[idx].ch.r >> 3;
-        
-        scui_color8565_t *pixel = (void *)((uint8_t *)png_dec + 3 * idx);
-        *pixel = png_pixel;
-    }
-}
 
 /*************************************************************************************************/
 /*************************************************************************************************/
@@ -255,9 +239,13 @@ void scui_image_src_read(scui_image_t *image, void *data)
         SCUI_ASSERT(png_data_dec != NULL);
         
         /* 这个库只能解出ARGB8888格式,所以还需要流处理 */
-        scui_lodepng_cvt_cf(png_data_dec, png_h_dec * png_w_dec);
-        scui_draw_byte_copy(true, data, png_data_dec, scui_image_size(image));
+        scui_image_t image_t = *image;
+        image_t.format = scui_pixel_cf_bmp8888;
+        image_t.pixel.data_bin = png_data_dec;
+        scui_image_cf_cvt(&image_t, true);
         
+        SCUI_ASSERT(image_t.format == image->format);
+        scui_draw_byte_copy(true, data, png_data_dec, scui_image_size(image));
         lodepng_free(png_data_dec);
         lodepng_free(png_data);
         

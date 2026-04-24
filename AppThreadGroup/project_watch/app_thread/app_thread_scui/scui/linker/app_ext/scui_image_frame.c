@@ -25,25 +25,6 @@ typedef union {
     } rlottie;
 } scui_image_frame_local_t;
 
-/*@brief 帧数据格式转换(就地转换)
- */
-static void scui_image_frame_ARGB32_cvt_cf(void *dec, uint32_t pixel_cnt)
-{
-    scui_color8888_t *argb8888 = dec;
-    
-    for(uint32_t idx = 0; idx < pixel_cnt; idx++) {
-        
-        scui_color8565_t  png_pixel = {0};
-        png_pixel.ch.a = argb8888[idx].byte[3];
-        png_pixel.ch.r = argb8888[idx].byte[2] >> 3;
-        png_pixel.ch.g = argb8888[idx].byte[1] >> 2;
-        png_pixel.ch.b = argb8888[idx].byte[0] >> 3;
-        
-        scui_color8565_t *pixel = (void *)((uint8_t *)dec + 3 * idx);
-        *pixel = png_pixel;
-    }
-}
-
 /*@brief 图像帧数据销毁
  *@param image_frame 图像帧实例
  */
@@ -127,7 +108,7 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
         uintptr_t size_bin = 4 * local->gif->width * local->gif->height;
         uintptr_t data_bin = SCUI_MEM_ALLOC(scui_mem_type_graph, size_bin);
         image_frame->image.type = scui_image_type_mem;
-        image_frame->image.format = scui_pixel_cf_bmp8565;
+        image_frame->image.format = scui_pixel_cf_bmp8888;
         image_frame->image.pixel.width  = local->gif->width;
         image_frame->image.pixel.height = local->gif->height;
         image_frame->image.pixel.data_bin = data_bin;
@@ -161,7 +142,7 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
         uintptr_t size_bin = 4 * rlottie_width * rlottie_height;
         uintptr_t data_bin = SCUI_MEM_ALLOC(scui_mem_type_graph, size_bin);
         image_frame->image.type = scui_image_type_mem;
-        image_frame->image.format = scui_pixel_cf_bmp8565;
+        image_frame->image.format = scui_pixel_cf_bmp8888;
         image_frame->image.pixel.width  = rlottie_width;
         image_frame->image.pixel.height = rlottie_height;
         image_frame->image.pixel.data_bin = data_bin;
@@ -209,9 +190,11 @@ bool scui_image_frame_data(scui_image_frame_t *image_frame)
         uintptr_t data_bin = image_frame->image.pixel.data_bin;
         memcpy((void *)data_bin, local->gif->canvas, size_bin);
         
-        /* 帧数据转为本地设备格式 */
-        uint32_t pixel_cnt = local->gif->width * local->gif->height;
-        scui_image_frame_ARGB32_cvt_cf((void *)data_bin, pixel_cnt);
+        #if 0
+        /* 帧数据转为本地设备格式(可选) */
+        image_frame->image.format = scui_pixel_cf_bmp8888;
+        scui_image_cf_cvt(&image_frame->image, false);
+        #endif
         
         return true;
         break;
@@ -226,9 +209,11 @@ bool scui_image_frame_data(scui_image_frame_t *image_frame)
         lottie_animation_render(local->rlottie.Animation, image_frame->lottie.index,
             (void *)data_bin, rlottie_width, rlottie_height, rlottie_width * 4);
         
-        /* 帧数据转为本地设备格式 */
-        uint32_t pixel_cnt = rlottie_width * rlottie_height;
-        scui_image_frame_ARGB32_cvt_cf((void *)data_bin, pixel_cnt);
+        #if 0
+        /* 帧数据转为本地设备格式(可选) */
+        image_frame->image.format = scui_pixel_cf_bmp8888;
+        scui_image_cf_cvt(&image_frame->image, false);
+        #endif
         
         return true;
         break;

@@ -33,6 +33,13 @@ typedef struct {
     scui_handle_t       from;       /* 图库来源 */
 } scui_image_t;
 
+/*@brief 图像格式转换(就地转换)
+ *@param image 图像实例
+ *@param rev 通道颠倒
+ *@retval 是否支持
+ */
+bool scui_image_cf_cvt(scui_image_t *image, bool rev);
+
 /*@brief 图像格式
  *@param handle 图像句柄
  *@retval 图像格式
