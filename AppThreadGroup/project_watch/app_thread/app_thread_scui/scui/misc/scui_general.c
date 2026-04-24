@@ -251,6 +251,35 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
     /* 所以说此时的透明度可以等价理解为该原始像素点的浓度 */
     /* 这俩个像素点为融合后的像素点稳定的贡献全部的颜色 */
     
+    /* 像素缓存机制: */
+    /* 像素缓存机制利用一个基本的图形特性 */
+    /* 任何图形在绘制时真正有效像素点混合 */
+    /* 主要发生在图形中轮廓变化附近的过程 */
+    /* 大部分像素点混合的结果是长期不变的 */
+    /* 仅一个缓存资源静态量与几次判断赋值 */
+    /* 即可获得相对更高结果复用与图形性能 */
+    #define SCUI_PIXEL_MIX_CACHE            1
+    #define SCUI_PIXEL_MIX_CACHE_CHECK      0
+    #if     SCUI_PIXEL_MIX_CACHE
+    #if     SCUI_PIXEL_MIX_CACHE_CHECK
+    static uint64_t cache_hit   = 0;
+    static uint64_t cache_unhit = 0;
+    static uint64_t cache_total = 0;
+    static uint64_t pixel_total = 0; pixel_total++;
+    const  uint64_t cache_limit = SCUI_HOR_RES * SCUI_VER_RES;
+    if (cache_total > cache_limit) {
+        SCUI_LOG_WARN("pixel pct:%.2f, hit:%u, unhit:%u",
+            (float)cache_total / pixel_total, cache_total, pixel_total);
+        SCUI_LOG_WARN("cache pct:%.2f, hit:%u, unhit:%u",
+            (float)cache_hit / cache_total, cache_hit, cache_unhit);
+        cache_hit   = 0;
+        cache_unhit = 0;
+        cache_total = 0;
+        pixel_total = 0;
+    }
+    #endif
+    #endif
+    
     if (dst_cf == scui_pixel_cf_bmp565 &&
         src_cf == scui_pixel_cf_bmp565) {
         scui_color565_t *dst_c = dst_p;
@@ -262,6 +291,31 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
             return;
         }
         
+        #if SCUI_PIXEL_MIX_CACHE
+        static scui_color565_t dst_pco = {0};
+        static scui_color565_t dst_pci = {0};
+        static scui_color565_t src_pci = {0};
+        static scui_alpha_t    src_pca =  0;
+        if (dst_pci.full == dst_c->full &&
+            src_pci.full == src_c->full &&
+            src_pca == src_a) {
+            
+            dst_c->full = dst_pco.full;
+            #if SCUI_PIXEL_MIX_CACHE_CHECK
+            cache_total++;
+            cache_hit++;
+            #endif
+            return;
+        }
+        #if SCUI_PIXEL_MIX_CACHE_CHECK
+        cache_total++;
+        cache_unhit++;
+        #endif
+        dst_pci.full = dst_c->full;
+        src_pci.full = src_c->full;
+        src_pca = src_a;
+        #endif
+        
         #if 1
         scui_pixel_mix_with_bmp565(dst_c, src_c, src_a);
         #else
@@ -272,6 +326,9 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
         dst_c->ch.b = SCUI_DIV_0xFF(dst_c->ch.b * dst_ca + src_c->ch.b * src_ca);
         #endif
         
+        #if SCUI_PIXEL_MIX_CACHE
+        dst_pco.full = dst_c->full;
+        #endif
         return;
     }
     
@@ -290,6 +347,35 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
             return;
         }
         
+        #if SCUI_PIXEL_MIX_CACHE
+        static scui_color565_t  dst_pco = {0};
+        static scui_color565_t  dst_pci = {0};
+        static scui_color8565_t src_pci = {0};
+        static scui_alpha_t     src_pca =  0;
+        if (dst_pci.full == dst_c->full &&
+            src_pci.byte[0] == src_c->byte[0] &&
+            src_pci.byte[1] == src_c->byte[1] &&
+            src_pci.byte[2] == src_c->byte[2] &&
+            src_pca == src_a) {
+            
+            dst_c->full = dst_pco.full;
+            #if SCUI_PIXEL_MIX_CACHE_CHECK
+            cache_total++;
+            cache_hit++;
+            #endif
+            return;
+        }
+        #if SCUI_PIXEL_MIX_CACHE_CHECK
+        cache_total++;
+        cache_unhit++;
+        #endif
+        dst_pci.full = dst_c->full;
+        src_pci.byte[0] = src_c->byte[0];
+        src_pci.byte[1] = src_c->byte[1];
+        src_pci.byte[2] = src_c->byte[2];
+        src_pca = src_a;
+        #endif
+        
         #if 0
         dst_c->ch.r = SCUI_DIV_0xFF(dst_c->ch.r * dst_ca + src_c->ch.r * src_ca);
         dst_c->ch.g = SCUI_DIV_0xFF(dst_c->ch.g * dst_ca + src_c->ch.g * src_ca);
@@ -298,6 +384,10 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
         /* 拆alpha通道合成基础像素格式 */
         scui_color565_t *src_c565 = src_c;  /* 字段继承可以强转 */
         scui_pixel_mix_with_bmp565(dst_c, src_c565, src_ca);
+        #endif
+        
+        #if SCUI_PIXEL_MIX_CACHE
+        dst_pco.full = dst_c->full;
         #endif
         return;
     }
@@ -317,6 +407,31 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
             return;
         }
         
+        #if SCUI_PIXEL_MIX_CACHE
+        static scui_color565_t  dst_pco = {0};
+        static scui_color565_t  dst_pci = {0};
+        static scui_color8888_t src_pci = {0};
+        static scui_alpha_t     src_pca =  0;
+        if (dst_pci.full == dst_c->full &&
+            src_pci.full == src_c->full &&
+            src_pca == src_a) {
+            
+            dst_c->full = dst_pco.full;
+            #if SCUI_PIXEL_MIX_CACHE_CHECK
+            cache_total++;
+            cache_hit++;
+            #endif
+            return;
+        }
+        #if SCUI_PIXEL_MIX_CACHE_CHECK
+        cache_total++;
+        cache_unhit++;
+        #endif
+        dst_pci.full = dst_c->full;
+        src_pci.full = src_c->full;
+        src_pca = src_a;
+        #endif
+        
         #if 0
         dst_c->ch.r = SCUI_DIV_0xFF((dst_c->ch.r << 3) * dst_ca + src_c->ch.r * src_ca) >> 3;
         dst_c->ch.g = SCUI_DIV_0xFF((dst_c->ch.g << 2) * dst_ca + src_c->ch.g * src_ca) >> 2;
@@ -329,6 +444,10 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
             .ch.b = src_c->ch.b >> 3,
         };
         scui_pixel_mix_with_bmp565(dst_c, &src_c565, src_ca);
+        #endif
+        
+        #if SCUI_PIXEL_MIX_CACHE
+        dst_pco.full = dst_c->full;
         #endif
         return;
     }
@@ -349,6 +468,37 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
             return;
         }
         
+        #if SCUI_PIXEL_MIX_CACHE
+        static scui_color8565_t dst_pco = {0};
+        static scui_color8565_t dst_pci = {0};
+        static scui_color565_t  src_pci = {0};
+        static scui_alpha_t     src_pca =  0;
+        if (dst_pci.byte[0] == dst_c->byte[0] &&
+            dst_pci.byte[1] == dst_c->byte[1] &&
+            dst_pci.byte[2] == dst_c->byte[2] &&
+            src_pci.full == src_c->full &&
+            src_pca == src_a) {
+            
+            dst_c->byte[0] = dst_pco.byte[0];
+            dst_c->byte[1] = dst_pco.byte[1];
+            dst_c->byte[2] = dst_pco.byte[2];
+            #if SCUI_PIXEL_MIX_CACHE_CHECK
+            cache_total++;
+            cache_hit++;
+            #endif
+            return;
+        }
+        #if SCUI_PIXEL_MIX_CACHE_CHECK
+        cache_total++;
+        cache_unhit++;
+        #endif
+        dst_pci.byte[0] = dst_c->byte[0];
+        dst_pci.byte[1] = dst_c->byte[1];
+        dst_pci.byte[2] = dst_c->byte[2];
+        src_pci.full = src_c->full;
+        src_pca = src_a;
+        #endif
+        
         #if 0
         dst_c->ch.a = 0xFF;
         dst_c->ch.r = SCUI_DIV_0xFF(dst_c->ch.r * dst_ca + src_c->ch.r * src_ca);
@@ -359,6 +509,12 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
         /* 拆alpha通道合成基础像素格式 */
         scui_color565_t *dst_c565 = dst_c;  /* 字段继承可以强转 */
         scui_pixel_mix_with_bmp565(dst_c565, src_c, src_ca);
+        #endif
+        
+        #if SCUI_PIXEL_MIX_CACHE
+        dst_pco.byte[0] = dst_c->byte[0];
+        dst_pco.byte[1] = dst_c->byte[1];
+        dst_pco.byte[2] = dst_c->byte[2];
         #endif
         return;
     }
@@ -379,6 +535,41 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
             return;
         }
         
+        #if SCUI_PIXEL_MIX_CACHE
+        static scui_color8565_t dst_pco = {0};
+        static scui_color8565_t dst_pci = {0};
+        static scui_color8565_t src_pci = {0};
+        static scui_alpha_t     src_pca =  0;
+        if (dst_pci.byte[0] == dst_c->byte[0] &&
+            dst_pci.byte[1] == dst_c->byte[1] &&
+            dst_pci.byte[2] == dst_c->byte[2] &&
+            src_pci.byte[0] == src_c->byte[0] &&
+            src_pci.byte[1] == src_c->byte[1] &&
+            src_pci.byte[2] == src_c->byte[2] &&
+            src_pca == src_a) {
+            
+            dst_c->byte[0] = dst_pco.byte[0];
+            dst_c->byte[1] = dst_pco.byte[1];
+            dst_c->byte[2] = dst_pco.byte[2];
+            #if SCUI_PIXEL_MIX_CACHE_CHECK
+            cache_total++;
+            cache_hit++;
+            #endif
+            return;
+        }
+        #if SCUI_PIXEL_MIX_CACHE_CHECK
+        cache_total++;
+        cache_unhit++;
+        #endif
+        dst_pci.byte[0] = dst_c->byte[0];
+        dst_pci.byte[1] = dst_c->byte[1];
+        dst_pci.byte[2] = dst_c->byte[2];
+        src_pci.byte[0] = src_c->byte[0];
+        src_pci.byte[1] = src_c->byte[1];
+        src_pci.byte[2] = src_c->byte[2];
+        src_pca = src_a;
+        #endif
+        
         #if 0
         dst_c->ch.a = 0xFF - scui_alpha_mix(dst_ca, 0xFF - dst_c->ch.a);
         dst_c->ch.r = SCUI_DIV_0xFF(dst_c->ch.r * dst_ca + src_c->ch.r * src_ca);
@@ -390,6 +581,12 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
         scui_color565_t *dst_c565 = dst_c;  /* 字段继承可以强转 */
         scui_color565_t *src_c565 = src_c;  /* 字段继承可以强转 */
         scui_pixel_mix_with_bmp565(dst_c565, src_c565, src_ca);
+        #endif
+        
+        #if SCUI_PIXEL_MIX_CACHE
+        dst_pco.byte[0] = dst_c->byte[0];
+        dst_pco.byte[1] = dst_c->byte[1];
+        dst_pco.byte[2] = dst_c->byte[2];
         #endif
         return;
     }
@@ -411,6 +608,37 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
             return;
         }
         
+        #if SCUI_PIXEL_MIX_CACHE
+        static scui_color8565_t dst_pco = {0};
+        static scui_color8565_t dst_pci = {0};
+        static scui_color8888_t src_pci = {0};
+        static scui_alpha_t     src_pca =  0;
+        if (dst_pci.byte[0] == dst_c->byte[0] &&
+            dst_pci.byte[1] == dst_c->byte[1] &&
+            dst_pci.byte[2] == dst_c->byte[2] &&
+            src_pci.full    == src_c->full &&
+            src_pca == src_a) {
+            
+            dst_c->byte[0] = dst_pco.byte[0];
+            dst_c->byte[1] = dst_pco.byte[1];
+            dst_c->byte[2] = dst_pco.byte[2];
+            #if SCUI_PIXEL_MIX_CACHE_CHECK
+            cache_total++;
+            cache_hit++;
+            #endif
+            return;
+        }
+        #if SCUI_PIXEL_MIX_CACHE_CHECK
+        cache_total++;
+        cache_unhit++;
+        #endif
+        dst_pci.byte[0] = dst_c->byte[0];
+        dst_pci.byte[1] = dst_c->byte[1];
+        dst_pci.byte[2] = dst_c->byte[2];
+        src_pci.full = src_c->full;
+        src_pca = src_a;
+        #endif
+        
         #if 0
         dst_c->ch.a = 0xFF - scui_alpha_mix(dst_ca, 0xFF - dst_c->ch.a);
         dst_c->ch.r = SCUI_DIV_0xFF((dst_c->ch.r << 3) * dst_ca + src_c->ch.r * src_ca) >> 3;
@@ -426,6 +654,12 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
             .ch.b = src_c->ch.b >> 3,
         };
         scui_pixel_mix_with_bmp565(dst_c565, &src_c565, src_ca);
+        #endif
+        
+        #if SCUI_PIXEL_MIX_CACHE
+        dst_pco.byte[0] = dst_c->byte[0];
+        dst_pco.byte[1] = dst_c->byte[1];
+        dst_pco.byte[2] = dst_c->byte[2];
         #endif
         return;
     }
