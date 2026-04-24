@@ -10,7 +10,7 @@ typedef enum {
     scui_image_type_png,        /* PNG压缩图片(原图) */
     scui_image_type_gif,        /* GIF压缩序列图片(原图) */
     scui_image_type_lottie,     /* Lottie压缩序列图片(原图) */
-    scui_image_type_mp4,        /* MP4压缩序列图片(原图) */
+    scui_image_type_mp4,        /* MP4压缩序列图片(原图,不支持) */
     scui_image_type_mem,        /* 内存图片(bmp) */
     scui_image_type_num,
 } scui_image_type_t;
@@ -84,12 +84,11 @@ uintptr_t scui_image_size(scui_image_t *image);
 
 /*@brief 统计图像列表排列尺寸
  *       统计图像按水平或垂直排列时的宽度或高度
- *@param image 图像列表
- *@param num   图像列表数量
- *@param dist  尺寸
- *@param way   方向(0:水平方向;1:垂直方向)
+ *@param handle 图像列表
+ *@param num    图像列表数量
+ *@param dist   尺寸
+ *@param way    方向(0:水平方向;1:垂直方向)
  */
-void scui_image_list_calc(scui_handle_t *image, scui_coord_t num,
-                          scui_coord_t  *dist,  bool way);
+void scui_image_list_calc(scui_handle_t *handle, scui_coord_t num, scui_coord_t *dist, bool way);
 
 #endif

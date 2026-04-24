@@ -91,7 +91,7 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
     scui_pixel_by_color(dst_surface->format, &pixel_d, src_color.color_d);
     
     /* 在dst_surface.clip中的draw_area中填满pixel */
-    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
     scui_multi_t dis_line = draw_area.w * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
@@ -175,7 +175,7 @@ void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc)
     scui_pixel_by_color(dst_surface->format, &pixel_d, src_color.color_d);
     
     /* 在dst_surface.clip中的draw_area中填满pixel */
-    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
     scui_multi_t dis_line = draw_area.w * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;

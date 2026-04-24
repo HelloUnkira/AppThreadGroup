@@ -20,7 +20,7 @@ static void scui_stat_info(void)
     /* 矢量绘图引擎资源 */
     #if SCUI_DRAW_USE_THORVG
     scui_multi_t tvg_pixel_num  = SCUI_DRAW_CACHE_THORVG;
-    scui_coord_t tvg_pixel_byte = scui_pixel_bits(scui_pixel_cf_bmp8888) / 8;
+    scui_coord_t tvg_pixel_byte = scui_pixel_byte(scui_pixel_cf_bmp8888);
     scui_coord_t tvg_pixel_rem  = sizeof(scui_color_wt_t) - tvg_pixel_byte;
     scui_multi_t tvg_pixel_size = tvg_pixel_byte * tvg_pixel_num + tvg_pixel_rem;
     SCUI_LOG_INFO("scui graph thorvg occupy: %.2fK", (float)tvg_pixel_size / 1024.0f);
@@ -62,7 +62,7 @@ void scui_ready(void)
     surface.hor_res = SCUI_HOR_RES;
     surface.ver_res = SCUI_VER_RES;
     surface.alpha   = scui_alpha_cover;
-    scui_coord_t surface_byte = scui_pixel_bits(surface.format) / 8;
+    scui_coord_t surface_byte = scui_pixel_byte(surface.format);
     scui_coord_t surface_rem  = sizeof(scui_color_wt_t) - surface_byte;
     scui_coord_t surface_line = surface.hor_res * surface_byte;
     scui_multi_t surface_size = surface.ver_res * surface_line + surface_rem;

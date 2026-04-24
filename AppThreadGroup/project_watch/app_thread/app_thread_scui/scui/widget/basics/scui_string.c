@@ -515,7 +515,7 @@ void scui_string_invoke(scui_event_t *event)
                 hor_res = string->args.line_multi ? hor_res : scui_max(hor_res, string->args.width);
                 ver_res = string->args.line_multi ? scui_max(ver_res, string->args.height) : ver_res;
                 
-                scui_coord_t surface_byte     = scui_pixel_bits(string->draw_surface->format) / 8;
+                scui_coord_t surface_byte     = scui_pixel_byte(string->draw_surface->format);
                 scui_coord_t surface_remain   = sizeof(scui_color_wt_t) - surface_byte;
                 scui_multi_t surface_size     = hor_res * ver_res * surface_byte + surface_remain;
                 string->draw_surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_size);

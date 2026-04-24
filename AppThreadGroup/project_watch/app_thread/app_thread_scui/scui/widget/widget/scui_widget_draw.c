@@ -357,7 +357,7 @@ void scui_widget_draw_ctx_image(scui_handle_t handle, scui_area_t *target, scui_
     #if SCUI_WIDGET_IMAGE_DIRECT
     /* 图片的大小有个阈值,且类型要匹配 */
     if (image_inst->type != scui_image_type_mem &&
-       !scui_pixel_have_alpha(image_inst->format) &&
+       !scui_pixel_alpha_in(image_inst->format) &&
         image_inst->format == widget->surface->format)
     if (SCUI_WIDGET_IMAGE_DIRECT_LIMIT <= scui_image_size(image_inst)) {
         scui_area_t clip_surface = scui_surface_area(widget->surface);
@@ -366,7 +366,7 @@ void scui_widget_draw_ctx_image(scui_handle_t handle, scui_area_t *target, scui_
         if (target->w == clip_surface.w && scui_area_equal(&clip_image, clip) &&
             target->w == clip_image.w && scui_area_inside(target, &clip_image)) {
             /* 折算y偏移量, 到达图片的对齐点 */
-            uint32_t byte = scui_pixel_bits(widget->surface->format) / 8;
+            uint32_t byte = scui_pixel_byte(widget->surface->format);
             uint32_t line = target->y * target->w * byte;
             uint8_t *data = widget->surface->pixel + line;
             #if 1

@@ -44,7 +44,7 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
     draw_area.w = dst_clip_v.w;
     draw_area.h = dst_clip_v.h;
     
-    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel;
     scui_color_wt_t src_pixel = 0;
@@ -214,7 +214,7 @@ static void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
     if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
          return;
     
-    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel;
     

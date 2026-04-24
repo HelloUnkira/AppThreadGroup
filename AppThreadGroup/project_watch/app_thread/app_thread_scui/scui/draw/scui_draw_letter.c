@@ -49,7 +49,7 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
     scui_multi_t dst_pixel_ofs = dst_clip_v.y * dst_surface->hor_res + dst_clip_v.x;
     scui_multi_t src_pixel_ofs = src_clip_v.y * src_surface->hor_res + src_clip_v.x;
     
-    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
     uint8_t *dst_addr = dst_surface->pixel + dst_pixel_ofs * dst_byte;
     uint8_t *src_addr = src_surface->pixel;
     /* 调色板数组(为空时计算,有时直接取): */
@@ -67,7 +67,7 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
         uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * dst_byte;
         uint32_t idx_ofs = src_pixel_ofs + idx_line * src_surface->hor_res + idx_item;
         uint8_t *src_ofs = src_addr + idx_ofs / (8 / src_glyph->bpp);
-        uint8_t  grey = scui_grey_bpp_x(*src_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
+        uint8_t  grey = scui_pixel_grey_bpp_x(*src_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
         uint8_t  grey_idx = pixel_no_grad ? 0 : (uint16_t)grey * (grey_len - 1) / 0xFF;
         
         if (grey_idx != 0 && grey_idx != grey_len - 1)

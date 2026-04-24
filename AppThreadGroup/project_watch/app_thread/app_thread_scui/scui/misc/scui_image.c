@@ -163,24 +163,20 @@ uintptr_t scui_image_size(scui_image_t *image)
 
 /*@brief 统计图像列表排列尺寸
  *       统计图像按水平或垂直排列时的宽度或高度
- *@param image 图像列表
- *@param num   图像列表数量
- *@param dist  尺寸
- *@param way   方向(0:水平方向;1:垂直方向)
+ *@param handle 图像列表
+ *@param num    图像列表数量
+ *@param dist   尺寸
+ *@param way    方向(0:水平方向;1:垂直方向)
  */
-void scui_image_list_calc(scui_handle_t *image, scui_coord_t num,
-                          scui_coord_t  *dist,  bool way)
+void scui_image_list_calc(scui_handle_t *handle, scui_coord_t num, scui_coord_t *dist, bool way)
 {
     SCUI_ASSERT(dist != NULL);
     
     for (scui_coord_t idx = 0; idx < num; idx++) {
-        if (image[idx] == SCUI_HANDLE_INVALID)
+        if (handle[idx] == SCUI_HANDLE_INVALID)
             continue;
-        scui_image_t *image_inst = scui_handle_source_check(image[idx]);
-        
-        if (way)
-           *dist += image_inst->pixel.height;
-        else
-           *dist += image_inst->pixel.width;
+        scui_image_t *image = scui_handle_source_check(handle[idx]);
+        if (way) *dist += image->pixel.height;
+        else *dist += image->pixel.width;
     }
 }

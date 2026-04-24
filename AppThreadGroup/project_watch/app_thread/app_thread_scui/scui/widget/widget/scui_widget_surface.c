@@ -115,7 +115,7 @@ bool scui_widget_clip_cover(scui_widget_t *widget)
         if (widget->alpha != scui_alpha_cover)
             return false;
         /* 画布有透明度, 不是全覆盖 */
-        if (scui_pixel_have_alpha(widget->surface->format))
+        if (scui_pixel_alpha_in(widget->surface->format))
             return false;
         
         /* 控件标记完全覆盖 */
@@ -127,7 +127,7 @@ bool scui_widget_clip_cover(scui_widget_t *widget)
             if (widget->image == SCUI_HANDLE_INVALID)
                 return true;
             /* 图片背景,看是否自带透明度 */
-            if (!scui_pixel_have_alpha(scui_image_cf(widget->image)))
+            if (!scui_pixel_alpha_in(scui_image_cf(widget->image)))
                 return true;
         }
     }
@@ -228,7 +228,7 @@ void scui_widget_surface_create(scui_handle_t handle, scui_surface_t *surface)
     if (widget->surface->format == scui_pixel_cf_def)
         widget->surface->format  = SCUI_PIXEL_CF_DEF;
     
-    scui_coord_t res_byte = scui_pixel_bits(widget->surface->format) / 8;
+    scui_coord_t res_byte = scui_pixel_byte(widget->surface->format);
     scui_coord_t res_rem  = sizeof(scui_color_wt_t) - res_byte;
     scui_multi_t res_size = surface->hor_res * surface->ver_res * res_byte + res_rem;
     widget->surface->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, res_size);

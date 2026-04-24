@@ -8,6 +8,20 @@
 
 #include "scui.h"
 
+/*@brief 颜色值混合color32
+ *@param color32   颜色值color32
+ *@param color32_c 颜色值color32
+ *@param color32_t 颜色值color32
+ *@param pct_c     color32_c百分比
+ */
+void scui_color32_mix_with(scui_color32_t *color32, scui_color32_t *color32_c, scui_color32_t *color32_t, scui_coord_t pct_c)
+{
+    color32->ch.a = scui_map(pct_c, 100, 0, (scui_coord_t)color32_c->ch.a, (scui_coord_t)color32_t->ch.a);
+    color32->ch.r = scui_map(pct_c, 100, 0, (scui_coord_t)color32_c->ch.r, (scui_coord_t)color32_t->ch.r);
+    color32->ch.g = scui_map(pct_c, 100, 0, (scui_coord_t)color32_c->ch.g, (scui_coord_t)color32_t->ch.g);
+    color32->ch.b = scui_map(pct_c, 100, 0, (scui_coord_t)color32_c->ch.b, (scui_coord_t)color32_t->ch.b);
+}
+
 /*@brief 调色板生成颜色值
  *@param color   颜色值
  *@param palette 调色板
@@ -82,20 +96,6 @@ void scui_color_by_palette(scui_color_t *color, scui_palette_t palette, uint8_t 
         break;
     }
     }
-}
-
-/*@brief 颜色值混合color32
- *@param color32   颜色值color32
- *@param color32_c 颜色值color32
- *@param color32_t 颜色值color32
- *@param pct_c     color32_c百分比
- */
-void scui_color32_mix_with(scui_color32_t *color32, scui_color32_t *color32_c, scui_color32_t *color32_t, scui_coord_t pct_c)
-{
-    color32->ch.a = scui_map(pct_c, 100, 0, (scui_coord_t)color32_c->ch.a, (scui_coord_t)color32_t->ch.a);
-    color32->ch.r = scui_map(pct_c, 100, 0, (scui_coord_t)color32_c->ch.r, (scui_coord_t)color32_t->ch.r);
-    color32->ch.g = scui_map(pct_c, 100, 0, (scui_coord_t)color32_c->ch.g, (scui_coord_t)color32_t->ch.g);
-    color32->ch.b = scui_map(pct_c, 100, 0, (scui_coord_t)color32_c->ch.b, (scui_coord_t)color32_t->ch.b);
 }
 
 /*@brief 像素点配置
@@ -175,6 +175,21 @@ void scui_pixel_by_color(scui_pixel_cf_t cf, void *pixel, scui_color8888_t color
     }
 }
 
+/*@brief 像素点是否有透明度
+ *@param cf 像素点格式
+ *@retval 是否有透明度
+ */
+bool scui_pixel_alpha_in(scui_pixel_cf_t cf)
+{
+    switch (cf) {
+    case scui_pixel_cf_bmp565:
+    case scui_pixel_cf_bmp888:
+        return false;
+    default:
+        return true;
+    }
+}
+
 /*@brief 像素点作用透明度
  *@param cf    像素点格式
  *@param pixel 像素点
@@ -202,6 +217,27 @@ void scui_pixel_mix_alpha(scui_pixel_cf_t cf, void *pixel, scui_alpha_t alpha)
 }
 
 /*@brief 像素点融合(同步作用透明度)
+ *@param dst_p 目标像素点
+ *@param src_p 源像素点
+ *@param src_a 源像素点透明度
+ */
+static inline void scui_pixel_mix_with_bmp565(scui_color565_t *dst_c, scui_color565_t *src_c, scui_alpha_t src_a)
+{
+    /* 这是一种加速像素点混合的方式 */
+    /* Alpha converted from [0..255] to [0..31] */
+    /* Converts  0000000000000000rrrrrggggggbbbbb */
+    /*     into  00000gggggg00000rrrrr000000bbbbb */
+    /* with mask 00000111111000001111100000011111 */
+    /* This is useful because it makes space for a parallel fixed-point multiply */
+    uint32_t p1 = dst_c->full; uint8_t dst_ca = (0xFF - src_a) >> 3;
+    uint32_t p2 = src_c->full; uint8_t src_ca = (src_a >> 3);
+    p1 = ((p1 | (p1 << 16)) & 0x07e0f81f);
+    p2 = ((p2 | (p2 << 16)) & 0x07e0f81f);
+    uint32_t ret = ((p1 * dst_ca + p2 * src_ca) >> 5) & 0x07e0f81f;
+    dst_c->full = ((ret >> 16) | ret);
+}
+
+/*@brief 像素点融合(同步作用透明度)
  *@param dst_cf 目标像素点格式
  *@param dst_p  目标像素点
  *@param src_cf 源像素点格式
@@ -220,26 +256,14 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
         scui_color565_t *dst_c = dst_p;
         scui_color565_t *src_c = src_p;
         
-        if (src_a == 0x00)
-            return;
+        if (src_a == 0x00) return;
         if (src_a == 0xFF) {
             dst_c->full = src_c->full;
             return;
         }
         
         #if 1
-        /* 这是一种加速像素点混合的方式 */
-        /* Alpha converted from [0..255] to [0..31] */
-        /* Converts  0000000000000000rrrrrggggggbbbbb */
-        /*     into  00000gggggg00000rrrrr000000bbbbb */
-        /* with mask 00000111111000001111100000011111 */
-        /* This is useful because it makes space for a parallel fixed-point multiply */
-        uint32_t p1 = dst_c->full; uint8_t dst_ca = (0xFF - src_a) >> 3;
-        uint32_t p2 = src_c->full; uint8_t src_ca = (src_a >> 3);
-        p1 = ((p1 | (p1 << 16)) & 0x07e0f81f);
-        p2 = ((p2 | (p2 << 16)) & 0x07e0f81f);
-        uint32_t ret = ((p1 * dst_ca + p2 * src_ca) >> 5) & 0x07e0f81f;
-        dst_c->full = ((ret >> 16) | ret);
+        scui_pixel_mix_with_bmp565(dst_c, src_c, src_a);
         #else
         scui_color_wt_t src_ca = src_a;
         scui_color_wt_t dst_ca = 0xFF - src_a;
@@ -258,12 +282,23 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
         
         scui_color_wt_t src_ca = scui_alpha_mix(src_c->ch.a, src_a);
         scui_color_wt_t dst_ca = 0xFF - src_ca;
-        if (src_ca == 0x00)
-            return;
         
+        if (src_ca == 0x00) return;
+        if (src_ca == 0xFF) {
+            scui_color565_t *src_c565 = src_c;  /* 字段继承可以强转 */
+            dst_c->full = src_c565->full;
+            return;
+        }
+        
+        #if 0
         dst_c->ch.r = SCUI_DIV_0xFF(dst_c->ch.r * dst_ca + src_c->ch.r * src_ca);
         dst_c->ch.g = SCUI_DIV_0xFF(dst_c->ch.g * dst_ca + src_c->ch.g * src_ca);
         dst_c->ch.b = SCUI_DIV_0xFF(dst_c->ch.b * dst_ca + src_c->ch.b * src_ca);
+        #else
+        /* 拆alpha通道合成基础像素格式 */
+        scui_color565_t *src_c565 = src_c;  /* 字段继承可以强转 */
+        scui_pixel_mix_with_bmp565(dst_c, src_c565, src_ca);
+        #endif
         return;
     }
     
@@ -274,12 +309,27 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
         
         scui_color_wt_t src_ca = scui_alpha_mix(src_c->ch.a, src_a);
         scui_color_wt_t dst_ca = 0xFF - src_ca;
-        if (src_ca == 0x00)
+        if (src_ca == 0x00) return;
+        if (src_ca == 0xFF) {
+            dst_c->ch.r = src_c->ch.r >> 3;
+            dst_c->ch.g = src_c->ch.g >> 2;
+            dst_c->ch.b = src_c->ch.b >> 3;
             return;
+        }
         
+        #if 0
         dst_c->ch.r = SCUI_DIV_0xFF((dst_c->ch.r << 3) * dst_ca + src_c->ch.r * src_ca) >> 3;
         dst_c->ch.g = SCUI_DIV_0xFF((dst_c->ch.g << 2) * dst_ca + src_c->ch.g * src_ca) >> 2;
         dst_c->ch.b = SCUI_DIV_0xFF((dst_c->ch.b << 3) * dst_ca + src_c->ch.b * src_ca) >> 3;
+        #else
+        /* 拆alpha通道合成基础像素格式 */
+        scui_color565_t src_c565 = {
+            .ch.r = src_c->ch.r >> 3,
+            .ch.g = src_c->ch.g >> 2,
+            .ch.b = src_c->ch.b >> 3,
+        };
+        scui_pixel_mix_with_bmp565(dst_c, &src_c565, src_ca);
+        #endif
         return;
     }
     
@@ -292,11 +342,24 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
         scui_color_wt_t dst_ca = 0xFF - src_ca;
         if (src_ca == 0x00)
             return;
+        if (src_ca == 0xFF) {
+            scui_color565_t *dst_c565 = dst_c;  /* 字段继承可以强转 */
+            dst_c565->full = src_c->full;
+            dst_c->ch.a = 0xFF;
+            return;
+        }
         
-        dst_c->ch.a = src_ca + dst_ca;
+        #if 0
+        dst_c->ch.a = 0xFF;
         dst_c->ch.r = SCUI_DIV_0xFF(dst_c->ch.r * dst_ca + src_c->ch.r * src_ca);
         dst_c->ch.g = SCUI_DIV_0xFF(dst_c->ch.g * dst_ca + src_c->ch.g * src_ca);
         dst_c->ch.b = SCUI_DIV_0xFF(dst_c->ch.b * dst_ca + src_c->ch.b * src_ca);
+        #else
+        dst_c->ch.a = 0xFF;
+        /* 拆alpha通道合成基础像素格式 */
+        scui_color565_t *dst_c565 = dst_c;  /* 字段继承可以强转 */
+        scui_pixel_mix_with_bmp565(dst_c565, src_c, src_ca);
+        #endif
         return;
     }
     
@@ -309,11 +372,25 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
         scui_color_wt_t dst_ca =  0xFF - src_ca;
         if (src_ca == 0x00)
             return;
+        if (src_ca == 0xFF) {
+            dst_c->byte[0] = src_c->byte[0];
+            dst_c->byte[1] = src_c->byte[1];
+            dst_c->byte[2] = src_c->byte[2];
+            return;
+        }
         
+        #if 0
         dst_c->ch.a = 0xFF - scui_alpha_mix(dst_ca, 0xFF - dst_c->ch.a);
         dst_c->ch.r = SCUI_DIV_0xFF(dst_c->ch.r * dst_ca + src_c->ch.r * src_ca);
         dst_c->ch.g = SCUI_DIV_0xFF(dst_c->ch.g * dst_ca + src_c->ch.g * src_ca);
         dst_c->ch.b = SCUI_DIV_0xFF(dst_c->ch.b * dst_ca + src_c->ch.b * src_ca);
+        #else
+        dst_c->ch.a = 0xFF - scui_alpha_mix(dst_ca, 0xFF - dst_c->ch.a);
+        /* 拆alpha通道合成基础像素格式 */
+        scui_color565_t *dst_c565 = dst_c;  /* 字段继承可以强转 */
+        scui_color565_t *src_c565 = src_c;  /* 字段继承可以强转 */
+        scui_pixel_mix_with_bmp565(dst_c565, src_c565, src_ca);
+        #endif
         return;
     }
     
@@ -326,11 +403,30 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
         scui_color_wt_t dst_ca =  0xFF - src_ca;
         if (src_ca == 0x00)
             return;
+        if (src_ca == 0xFF) {
+            dst_c->ch.a = src_c->ch.a;
+            dst_c->ch.r = src_c->ch.r >> 3;
+            dst_c->ch.g = src_c->ch.g >> 2;
+            dst_c->ch.b = src_c->ch.b >> 3;
+            return;
+        }
         
+        #if 0
         dst_c->ch.a = 0xFF - scui_alpha_mix(dst_ca, 0xFF - dst_c->ch.a);
         dst_c->ch.r = SCUI_DIV_0xFF((dst_c->ch.r << 3) * dst_ca + src_c->ch.r * src_ca) >> 3;
         dst_c->ch.g = SCUI_DIV_0xFF((dst_c->ch.g << 2) * dst_ca + src_c->ch.g * src_ca) >> 2;
         dst_c->ch.b = SCUI_DIV_0xFF((dst_c->ch.b << 3) * dst_ca + src_c->ch.b * src_ca) >> 3;
+        #else
+        dst_c->ch.a = 0xFF - scui_alpha_mix(dst_ca, 0xFF - dst_c->ch.a);
+        /* 拆alpha通道合成基础像素格式 */
+        scui_color565_t *dst_c565 = dst_c;  /* 字段继承可以强转 */
+        scui_color565_t  src_c565 = {
+            .ch.r = src_c->ch.r >> 3,
+            .ch.g = src_c->ch.g >> 2,
+            .ch.b = src_c->ch.b >> 3,
+        };
+        scui_pixel_mix_with_bmp565(dst_c565, &src_c565, src_ca);
+        #endif
         return;
     }
     
@@ -342,7 +438,7 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
  *@param pixel 像素点
  *@retval grey 灰度值
  */
-uint8_t scui_grey_by_pixel(scui_pixel_cf_t cf, void *pixel)
+uint8_t scui_pixel_grey_by(scui_pixel_cf_t cf, void *pixel)
 {
     switch (cf) {
     case scui_pixel_cf_bmp565: {
@@ -383,7 +479,7 @@ uint8_t scui_grey_by_pixel(scui_pixel_cf_t cf, void *pixel)
  *@param bpp_x  偏移值
  *@retval 灰度值
  */
-uint8_t scui_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
+uint8_t scui_pixel_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
 {
     /* 只支持1,2,4,8的bpp, 在字库加载时检查 */
     SCUI_ASSERT(bpp * bpp_x < 8);
@@ -410,16 +506,6 @@ uint8_t scui_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
     }
 }
 
-/*@brief 透明度混合
- *@param alpha1 透明度1
- *@param alpha2 透明度2
- *@retval 混合后的透明度
- */
-scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2)
-{
-    return SCUI_DIV_0xFF(((uint16_t)alpha1 * (uint16_t)alpha2));
-}
-
 /*@brief 透明度混合撤销
  *@param alpha1 透明度1
  *@param alpha2 透明度2
@@ -434,49 +520,3 @@ scui_alpha_t scui_alpha_undo(scui_alpha_t alpha1, scui_alpha_t alpha2)
     return scui_clamp((uint16_t)alpha1 * alpha_e / alpha2, alpha_s, alpha_e);
 }
 
-/*@brief 计算透明度通过百分比值
- *@param pct 透明度百分比值[0, 100]
- *@retval 透明度
- */
-scui_alpha_t scui_alpha_pct(uint8_t pct)
-{
-    const scui_alpha_t alpha_s = scui_alpha_trans;
-    const scui_alpha_t alpha_e = scui_alpha_cover;
-    return scui_map(pct, 0, 100, alpha_s, alpha_e);
-}
-
-/*@brief 像素点比特位数
- *@param cf 像素点格式
- *@retval 比特位数
- */
-scui_coord_t scui_pixel_bits(scui_pixel_cf_t cf)
-{
-    return cf & scui_pixel_cf_bits_mask;
-}
-
-/*@brief 像素点是否有透明度
- *@param cf 像素点格式
- *@retval 是否有透明度
- */
-bool scui_pixel_have_alpha(scui_pixel_cf_t cf)
-{
-    switch (cf) {
-    case scui_pixel_cf_bmp565:
-    case scui_pixel_cf_bmp888:
-        return false;
-    default:
-        return true;
-    }
-}
-
-/*@brief 画布有效区域
- *@param surface 画布实例
- *@retval 区域
- */
-scui_area_t scui_surface_area(scui_surface_t *surface)
-{
-    return (scui_area_t){
-        .w = surface->hor_res,
-        .h = surface->ver_res,
-    };
-}

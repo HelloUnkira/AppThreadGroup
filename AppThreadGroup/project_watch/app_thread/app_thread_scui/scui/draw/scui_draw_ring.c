@@ -76,7 +76,7 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
         scui_coord_t hor_res = src_image_e->pixel.width;
         scui_coord_t ver_res = src_image_e->pixel.height;
         /* 开辟一个底图画布 */
-        scui_coord_t surface_byte   = scui_pixel_bits(src_image->format) / 8;
+        scui_coord_t surface_byte   = scui_pixel_byte(src_image->format);
         scui_coord_t surface_remain = sizeof(scui_color_wt_t) - surface_byte;
         scui_multi_t surface_size   = hor_res * ver_res * surface_byte + surface_remain;
         edge_surface.pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_size);
@@ -440,8 +440,8 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     
     scui_coord_t dst_bits = scui_pixel_bits(dst_surface->format);
     scui_coord_t src_bits = scui_pixel_bits(src_surface->format);
-    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
-    scui_coord_t src_byte = scui_pixel_bits(src_surface->format) / 8;
+    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
+    scui_coord_t src_byte = scui_pixel_byte(src_surface->format);
     scui_multi_t dst_pixel_ofs = dst_offset.y * dst_surface->hor_res + dst_offset.x;
     scui_multi_t src_pixel_ofs = 0;
     uint8_t *dst_addr = dst_surface->pixel + dst_pixel_ofs * dst_byte;
@@ -514,7 +514,7 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
                 uint8_t *dst_ofs = dst_addr + ((src_area.y + idx_line) * dst_surface->hor_res + (src_area.x + idx_item)) * dst_byte;
                 uint32_t idx_ofs = src_pixel_ofs + (src_area.y + idx_line) * src_surface->hor_res + (src_area.x + idx_item);
                 uint8_t *src_ofs = src_addr + idx_ofs / (8 / src_bits);
-                uint8_t  grey = scui_grey_bpp_x(*src_ofs, src_bits, idx_ofs % (8 / src_bits));
+                uint8_t  grey = scui_pixel_grey_bpp_x(*src_ofs, src_bits, idx_ofs % (8 / src_bits));
                 uint8_t  grey_idx = pixel_no_grad ? 0 : (uint16_t)grey * (grey_len - 1) / 0xFF;
                 
                 if (grey_idx != 0 && grey_idx != grey_len - 1)

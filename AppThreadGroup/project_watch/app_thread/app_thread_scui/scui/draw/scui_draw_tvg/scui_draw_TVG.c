@@ -618,7 +618,7 @@ void scui_draw_thorvg_ready(void)
     /* tvg_engine_term(TVG_ENGINE_SW); */
     
     scui_multi_t tvg_pixel_num  = SCUI_DRAW_CACHE_THORVG;
-    scui_coord_t tvg_pixel_byte = scui_pixel_bits(scui_pixel_cf_bmp8888) / 8;
+    scui_coord_t tvg_pixel_byte = scui_pixel_byte(scui_pixel_cf_bmp8888);
     scui_coord_t tvg_pixel_rem  = sizeof(scui_color_wt_t) - tvg_pixel_byte;
     scui_multi_t tvg_pixel_size = tvg_pixel_byte * tvg_pixel_num + tvg_pixel_rem;
     

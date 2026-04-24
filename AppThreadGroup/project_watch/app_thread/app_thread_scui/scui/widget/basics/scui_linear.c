@@ -264,7 +264,7 @@ void scui_linear_invoke(scui_event_t *event)
                 if (linear_s->surface_s != NULL) {
                     scui_coord_t hor_res   = linear_s->surface_s->hor_res;
                     scui_coord_t ver_res   = linear_s->surface_s->ver_res;
-                    scui_coord_t cf_byte   = scui_pixel_bits(linear_s->surface_s->format) / 8;
+                    scui_coord_t cf_byte   = scui_pixel_byte(linear_s->surface_s->format);
                     scui_coord_t cf_remain = sizeof(scui_color_wt_t) - cf_byte;
                     surface_size = hor_res * ver_res * cf_byte + cf_remain;
                 }

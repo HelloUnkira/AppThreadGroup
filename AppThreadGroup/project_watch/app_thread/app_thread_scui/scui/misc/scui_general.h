@@ -161,6 +161,13 @@ typedef enum {
 } scui_alpha_t;
 #pragma pack(pop)
 
+/* 透明度百分比 */
+static inline scui_alpha_t scui_alpha_pct(uint8_t pct)
+{return scui_map(pct, 0, 100, scui_alpha_pct0, scui_alpha_pct100);}
+/* 透明度混合 */
+static inline scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2)
+{return SCUI_DIV_0xFF(((uint16_t)alpha1 * (uint16_t)alpha2));}
+
 /*@brief: 设备像素点格式:
  *        设备像素点格式是直达显示器的帧缓冲或画布
  *        无需额外携带透明度是因为在渲染的过程中
@@ -184,6 +191,12 @@ typedef enum {
     scui_pixel_cf_all,
 } scui_pixel_cf_t;
 
+/* 像素点比特位,字节数 */
+static inline scui_coord_t scui_pixel_bits(scui_pixel_cf_t cf)
+{return (cf & scui_pixel_cf_bits_mask);}
+static inline scui_coord_t scui_pixel_byte(scui_pixel_cf_t cf)
+{return (cf & scui_pixel_cf_bits_mask) >> 3;}
+
 /*@brief 实体抽象:画布
  *       画布是块独立缓冲区或共享绘制画布的缓冲区
  */
@@ -194,6 +207,10 @@ typedef struct {
     scui_coord_t    ver_res;    /* 画布像素流高度 */
     scui_alpha_t    alpha;      /* 画布全局透明度 */
 } scui_surface_t;
+
+/* 画布区域 */
+static inline scui_area_t scui_surface_area(scui_surface_t *surface)
+{return (scui_area_t){.w = surface->hor_res,.h = surface->ver_res,};}
 
 /*@brief 操作方向(与操作位置透明切换)
  */
@@ -271,6 +288,14 @@ typedef uintptr_t scui_sbitfd_t;
 #define scui_opt_bits_equal(bits, mask)     (((bits) & (mask)) == (mask))
 #define scui_opt_bits_check(bits, mask)     (((bits) & (mask)) != (0))
 
+/*@brief 颜色值混合color32
+ *@param color32   颜色值color32
+ *@param color32_c 颜色值color32
+ *@param color32_t 颜色值color32
+ *@param pct_c     color32_c百分比
+ */
+void scui_color32_mix_with(scui_color32_t *color32, scui_color32_t *color32_c, scui_color32_t *color32_t, scui_coord_t pct_c);
+
 /*@brief 调色板生成颜色值
  *@param color   颜色值
  *@param palette 调色板
@@ -279,13 +304,11 @@ typedef uintptr_t scui_sbitfd_t;
  */
 void scui_color_by_palette(scui_color_t *color, scui_palette_t palette, uint8_t type, uint8_t level);
 
-/*@brief 颜色值混合color32
- *@param color32   颜色值color32
- *@param color32_c 颜色值color32
- *@param color32_t 颜色值color32
- *@param pct_c     color32_c百分比
+/*@brief 像素点是否有透明度
+ *@param cf 像素点格式
+ *@retval 是否有透明度
  */
-void scui_color32_mix_with(scui_color32_t *color32, scui_color32_t *color32_c, scui_color32_t *color32_t, scui_coord_t pct_c);
+bool scui_pixel_alpha_in(scui_pixel_cf_t cf);
 
 /*@brief 像素点配置
  *@param cf    像素点格式
@@ -323,21 +346,14 @@ void scui_pixel_mix_with(scui_pixel_cf_t dst_cf, void *dst_p,
  *@param pixel 像素点
  *@retval grey 灰度值
  */
-uint8_t scui_grey_by_pixel(scui_pixel_cf_t cf, void *pixel);
+uint8_t scui_pixel_grey_by(scui_pixel_cf_t cf, void *pixel);
 
 /*@brief 计算灰度值
  *@param bitmap 位图
  *@param bpp_x  偏移值
  *@retval 灰度值
  */
-uint8_t scui_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x);
-
-/*@brief 透明度混合
- *@param alpha1 透明度1
- *@param alpha2 透明度2
- *@retval 混合后的透明度
- */
-scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2);
+uint8_t scui_pixel_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x);
 
 /*@brief 透明度混合撤销
  *@param alpha1 透明度1
@@ -345,29 +361,5 @@ scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2);
  *@retval 混合撤销后的透明度
  */
 scui_alpha_t scui_alpha_undo(scui_alpha_t alpha1, scui_alpha_t alpha2);
-
-/*@brief 计算透明度通过百分比值
- *@param pct 透明度百分比值[0, 100]
- *@retval 透明度
- */
-scui_alpha_t scui_alpha_pct(uint8_t pct);
-
-/*@brief 像素点比特位数
- *@param cf 像素点格式
- *@retval 比特位数
- */
-scui_coord_t scui_pixel_bits(scui_pixel_cf_t cf);
-
-/*@brief 像素点是否有透明度
- *@param cf 像素点格式
- *@retval 是否有透明度
- */
-bool scui_pixel_have_alpha(scui_pixel_cf_t cf);
-
-/*@brief 画布有效区域
- *@param surface 画布实例
- *@retval 区域
- */
-scui_area_t scui_surface_area(scui_surface_t *surface);
 
 #endif

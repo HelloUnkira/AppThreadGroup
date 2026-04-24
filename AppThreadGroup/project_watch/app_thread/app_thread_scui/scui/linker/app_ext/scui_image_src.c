@@ -122,7 +122,7 @@ int scui_tjpgd_out_func_cb(JDEC *jd, void *bitmap, JRECT *rect)
     SCUI_ASSERT(scui_tjpgd_image != NULL);
     
     /* JPG输出格式: */
-    uint8_t  jpg_bytes  = scui_pixel_bits(scui_pixel_cf_bmp565) / 8;
+    uint8_t  jpg_bytes  = scui_pixel_byte(scui_pixel_cf_bmp565);
     uint32_t jpg_data_w = scui_tjpgd_image->pixel.width;
     uint32_t jpg_rect_w = rect->right - rect->left + 1;
     uint32_t jpg_offset = jpg_data_w * rect->top + rect->left;
