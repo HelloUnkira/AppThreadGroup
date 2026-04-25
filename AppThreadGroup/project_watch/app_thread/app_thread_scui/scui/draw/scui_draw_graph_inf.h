@@ -65,21 +65,43 @@ do {                                                                            
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
 
-/* scui_draw_type_area_matrix_fill */
-#define scui_draw_area_matrix_fill(sync_v, dst_surface_v, dst_clip_v,               \
-    src_clip_v, src_alpha_v, src_color_v, inv_matrix_v, src_matrix_v)               \
+/* scui_draw_type_area_scale_blend */
+#define scui_draw_area_scale_blend(sync_v, dst_surface_v, dst_clip_v,               \
+    src_surface_v, src_clip_v, src_color_v, src_scale_v,                            \
+    dst_offset_v, src_offset_v)                                                     \
 do {                                                                                \
     scui_draw_dsc_t *scui_dd_i = NULL;                                              \
     scui_draw_dsc_ready(&scui_dd_i);                                                \
-    scui_dd_i->type = scui_draw_type_area_matrix_fill;                              \
+    scui_dd_i->type = scui_draw_type_area_scale_blend;                              \
     scui_dd_i->sync = sync_v;                                                       \
-    scui_dd_i->area_matrix_fill.dst_surface = dst_surface_v,                        \
-    scui_dd_i->area_matrix_fill.dst_clip    = dst_clip_v,                           \
-    scui_dd_i->area_matrix_fill.src_clip    = src_clip_v,                           \
-    scui_dd_i->area_matrix_fill.src_alpha   = src_alpha_v,                          \
-    scui_dd_i->area_matrix_fill.src_color   = src_color_v,                          \
-    scui_dd_i->area_matrix_fill.inv_matrix  = inv_matrix_v,                         \
-    scui_dd_i->area_matrix_fill.src_matrix  = src_matrix_v,                         \
+    scui_dd_i->area_scale_blend.dst_surface = dst_surface_v,                        \
+    scui_dd_i->area_scale_blend.dst_clip    = dst_clip_v,                           \
+    scui_dd_i->area_scale_blend.src_surface = src_surface_v,                        \
+    scui_dd_i->area_scale_blend.src_clip    = src_clip_v,                           \
+    scui_dd_i->area_scale_blend.src_color   = src_color_v,                          \
+    scui_dd_i->area_scale_blend.src_scale   = src_scale_v,                          \
+    scui_dd_i->area_scale_blend.dst_offset  = dst_offset_v,                         \
+    scui_dd_i->area_scale_blend.src_offset  = src_offset_v,                         \
+    scui_draw_dsc_task(scui_dd_i);                                                  \
+} while (0)                                                                         \
+
+/* scui_draw_type_area_rotate_blend */
+#define scui_draw_area_rotate_blend(sync_v, dst_surface_v, dst_clip_v,              \
+    src_surface_v, src_clip_v, src_color_v, src_angle_v,                            \
+    src_anchor_v, src_center_v)                                                     \
+do {                                                                                \
+    scui_draw_dsc_t *scui_dd_i = NULL;                                              \
+    scui_draw_dsc_ready(&scui_dd_i);                                                \
+    scui_dd_i->type = scui_draw_type_area_rotate_blend;                             \
+    scui_dd_i->sync = sync_v;                                                       \
+    scui_dd_i->area_rotate_blend.dst_surface = dst_surface_v,                       \
+    scui_dd_i->area_rotate_blend.dst_clip    = dst_clip_v,                          \
+    scui_dd_i->area_rotate_blend.src_surface = src_surface_v,                       \
+    scui_dd_i->area_rotate_blend.src_clip    = src_clip_v,                          \
+    scui_dd_i->area_rotate_blend.src_color   = src_color_v,                         \
+    scui_dd_i->area_rotate_blend.src_angle   = src_angle_v,                         \
+    scui_dd_i->area_rotate_blend.src_anchor  = src_anchor_v,                        \
+    scui_dd_i->area_rotate_blend.src_center  = src_center_v,                        \
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
 
@@ -101,22 +123,25 @@ do {                                                                            
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
 
-
-
-/* scui_draw_type_area_convolution */
-#define scui_draw_area_convolution(sync_v, dst_surface_v, dst_clip_v,               \
-    kernel_v, scale_v)                                                              \
+/* scui_draw_type_area_matrix_fill */
+#define scui_draw_area_matrix_fill(sync_v, dst_surface_v, dst_clip_v,               \
+    src_clip_v, src_alpha_v, src_color_v, inv_matrix_v, src_matrix_v)               \
 do {                                                                                \
     scui_draw_dsc_t *scui_dd_i = NULL;                                              \
     scui_draw_dsc_ready(&scui_dd_i);                                                \
-    scui_dd_i->type = scui_draw_type_area_convolution;                              \
+    scui_dd_i->type = scui_draw_type_area_matrix_fill;                              \
     scui_dd_i->sync = sync_v;                                                       \
-    scui_dd_i->area_convolution.dst_surface = dst_surface_v,                        \
-    scui_dd_i->area_convolution.dst_clip    = dst_clip_v,                           \
-    scui_dd_i->area_convolution.kernel      = kernel_v,                             \
-    scui_dd_i->area_convolution.scale       = scale_v,                              \
+    scui_dd_i->area_matrix_fill.dst_surface = dst_surface_v,                        \
+    scui_dd_i->area_matrix_fill.dst_clip    = dst_clip_v,                           \
+    scui_dd_i->area_matrix_fill.src_clip    = src_clip_v,                           \
+    scui_dd_i->area_matrix_fill.src_alpha   = src_alpha_v,                          \
+    scui_dd_i->area_matrix_fill.src_color   = src_color_v,                          \
+    scui_dd_i->area_matrix_fill.inv_matrix  = inv_matrix_v,                         \
+    scui_dd_i->area_matrix_fill.src_matrix  = src_matrix_v,                         \
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
+
+
 
 /* scui_draw_type_area_dither */
 #define scui_draw_area_dither(sync_v, dst_surface_v, dst_clip_v)                    \

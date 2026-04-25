@@ -91,15 +91,13 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
     scui_pixel_by_color(dst_surface->format, &pixel_d, src_color.color_d);
     
     /* 在dst_surface.clip中的draw_area中填满pixel */
-    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
-    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
-    scui_multi_t dis_line = draw_area.w * dst_byte;
-    uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
-    dst_addr += draw_area.y * dst_line + draw_area.x * dst_byte;
+    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip->y, dst_clip->x);
+    dst_addr += scui_surface_pbyte_ofs(dst_surface, draw_area.y, draw_area.x);
+    scui_multi_t dis_line = draw_area.w * dst_surface->pbyte;
     
     for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
     for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-        uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
+        uint8_t *dst_ofs = dst_addr + scui_surface_pbyte_ofs(dst_surface, idx_line, idx_item);
         
         scui_coord_t src_ofs_iy = scui_max(src_clip->y - margin, 0) + idx_line;
         scui_coord_t src_ofs_ix = scui_max(src_clip->x - margin, 0) + idx_item;
@@ -107,7 +105,7 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
         scui_pixel_mix_with(dst_surface->format, dst_ofs,
             dst_surface->format, bit ? &pixel_l : &pixel_d, src_alpha);
         
-        SCUI_ASSERT(dst_ofs < dst_surface->pixel + dst_line * dst_surface->ver_res);
+        SCUI_ASSERT(dst_ofs < dst_surface->pixel + dst_surface->stride * dst_surface->ver_res);
     }
     
     over:
@@ -175,15 +173,13 @@ void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc)
     scui_pixel_by_color(dst_surface->format, &pixel_d, src_color.color_d);
     
     /* 在dst_surface.clip中的draw_area中填满pixel */
-    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
-    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
-    scui_multi_t dis_line = draw_area.w * dst_byte;
-    uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
-    dst_addr += draw_area.y * dst_line + draw_area.x * dst_byte;
+    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip->y, dst_clip->x);
+    dst_addr += scui_surface_pbyte_ofs(dst_surface, draw_area.y, draw_area.x);
+    scui_multi_t dis_line = draw_area.w * dst_surface->pbyte;
     
     for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
     for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-        uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
+        uint8_t *dst_ofs = dst_addr + scui_surface_pbyte_ofs(dst_surface, idx_line, idx_item);
         
         bool bit = out_buf[scui_map(idx_item, 0, draw_area.w, 0, barcode_w)];
         scui_pixel_mix_with(dst_surface->format, dst_ofs,

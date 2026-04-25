@@ -567,8 +567,10 @@ bool scui_draw_ctx_graph_TVG(scui_draw_dsc_t *draw_dsc)
     tvg_line = scui_min(tvg_line, dst_clip.h);
     
     /* 更新绘制画布的实际宽高 */
-    scui_draw_graph.tvg_surface.hor_res = tvg_item;
-    scui_draw_graph.tvg_surface.ver_res = tvg_line;
+    scui_surface_t *tvg_surface = &scui_draw_graph.tvg_surface;
+    tvg_surface->hor_res = tvg_item;
+    tvg_surface->ver_res = tvg_line;
+    tvg_surface->stride  = tvg_surface->hor_res * tvg_surface->pbyte;
     
     /* 完全绘制: */
     bool retval = true;
@@ -617,21 +619,18 @@ void scui_draw_thorvg_ready(void)
     /* 一旦启用, 则永恒常驻, 无需释放 */
     /* tvg_engine_term(TVG_ENGINE_SW); */
     
+    scui_surface_t *tvg_surface = &scui_draw_graph.tvg_surface;
+    tvg_surface->format = scui_pixel_cf_bmp8888;
+    tvg_surface->pbyte  = scui_pixel_byte(tvg_surface->format);
+    tvg_surface->alpha  = scui_alpha_cover;
+    
     scui_multi_t tvg_pixel_num  = SCUI_DRAW_CACHE_THORVG;
-    scui_coord_t tvg_pixel_byte = scui_pixel_byte(scui_pixel_cf_bmp8888);
-    scui_coord_t tvg_pixel_rem  = sizeof(scui_color_wt_t) - tvg_pixel_byte;
-    scui_multi_t tvg_pixel_size = tvg_pixel_byte * tvg_pixel_num + tvg_pixel_rem;
-    
-    scui_draw_graph.tvg_pixel_cache = SCUI_MEM_ALLOC(scui_mem_type_graph, tvg_pixel_size);
-    scui_draw_graph.tvg_pixel_num   = tvg_pixel_num;
-    scui_draw_graph.tvg_pixel_size  = tvg_pixel_size;
-    
-    scui_draw_graph.tvg_surface.pixel  = scui_draw_graph.tvg_pixel_cache;
-    scui_draw_graph.tvg_surface.format = scui_pixel_cf_bmp8888;
-    scui_draw_graph.tvg_surface.alpha  = scui_alpha_cover;
+    scui_coord_t tvg_pixel_rem  = sizeof(scui_color_wt_t) - tvg_surface->pbyte;
+    scui_multi_t tvg_pixel_size = tvg_pixel_num * tvg_surface->pbyte + tvg_pixel_rem;
+    tvg_surface->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, tvg_pixel_size);
     
     /* 画布宽高在绘制过程中决定 */
-    scui_draw_graph.tvg_surface.hor_res = 0;
-    scui_draw_graph.tvg_surface.ver_res = 0;
+    tvg_surface->hor_res = 0;
+    tvg_surface->ver_res = 0;
     #endif
 }

@@ -59,18 +59,18 @@ void scui_ready(void)
     scui_surface_t  surface = {0};
     scui_surface_t *surface_fb = NULL;
     surface.format  = SCUI_PIXEL_CF_DEF;
+    surface.pbyte   = scui_pixel_byte(surface.format);
     surface.hor_res = SCUI_HOR_RES;
     surface.ver_res = SCUI_VER_RES;
+    surface.stride  = surface.hor_res * surface.pbyte;
     surface.alpha   = scui_alpha_cover;
-    scui_coord_t surface_byte = scui_pixel_byte(surface.format);
-    scui_coord_t surface_rem  = sizeof(scui_color_wt_t) - surface_byte;
-    scui_coord_t surface_line = surface.hor_res * surface_byte;
-    scui_multi_t surface_size = surface.ver_res * surface_line + surface_rem;
+    scui_coord_t surface_rem  = sizeof(scui_color_wt_t) - surface.pbyte;
+    scui_multi_t surface_size = surface.ver_res * surface.stride + surface_rem;
     
     #if SCUI_MEM_FEAT_MINI
     clip.h = SCUI_FRAME_BUFFER_SEG;
     surface.ver_res = SCUI_FRAME_BUFFER_SEG;
-    surface_size = surface.ver_res * surface_line + surface_rem;
+    surface_size = surface.ver_res * surface.stride + surface_rem;
     #endif
     
     /* 为绘制画布配置参数信息并且开辟资源 */

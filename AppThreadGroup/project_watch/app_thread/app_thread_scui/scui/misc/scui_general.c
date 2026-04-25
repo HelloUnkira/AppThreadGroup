@@ -175,21 +175,6 @@ void scui_pixel_by_color(scui_pixel_cf_t cf, void *pixel, scui_color8888_t color
     }
 }
 
-/*@brief 像素点是否有透明度
- *@param cf 像素点格式
- *@retval 是否有透明度
- */
-bool scui_pixel_alpha_in(scui_pixel_cf_t cf)
-{
-    switch (cf) {
-    case scui_pixel_cf_bmp565:
-    case scui_pixel_cf_bmp888:
-        return false;
-    default:
-        return true;
-    }
-}
-
 /*@brief 像素点作用透明度
  *@param cf    像素点格式
  *@param pixel 像素点

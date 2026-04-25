@@ -507,20 +507,21 @@ void scui_string_invoke(scui_event_t *event)
             /* 绘制缓存块,在第一次全局重绘时进行 */
             if (string->draw_surface == NULL) {
                 string->draw_surface  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t));
-                string->draw_surface->format = SCUI_PIXEL_CF_DEF_A;
-                string->draw_surface->alpha  = scui_alpha_cover;
                 
                 scui_coord_t hor_res = string->widget.clip.w;
                 scui_coord_t ver_res = string->widget.clip.h;
                 hor_res = string->args.line_multi ? hor_res : scui_max(hor_res, string->args.width);
                 ver_res = string->args.line_multi ? scui_max(ver_res, string->args.height) : ver_res;
                 
-                scui_coord_t surface_byte     = scui_pixel_byte(string->draw_surface->format);
-                scui_coord_t surface_remain   = sizeof(scui_color_wt_t) - surface_byte;
-                scui_multi_t surface_size     = hor_res * ver_res * surface_byte + surface_remain;
-                string->draw_surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_size);
+                string->draw_surface->format  = SCUI_PIXEL_CF_DEF_A;
+                string->draw_surface->pbyte   = scui_pixel_byte(string->draw_surface->format);
+                string->draw_surface->alpha   = scui_alpha_cover;
                 string->draw_surface->hor_res = hor_res;
                 string->draw_surface->ver_res = ver_res;
+                string->draw_surface->stride  = hor_res * string->draw_surface->pbyte;
+                scui_coord_t surface_rem      = sizeof(scui_color_wt_t) - string->draw_surface->pbyte;
+                scui_multi_t surface_size     = ver_res * string->draw_surface->stride + surface_rem;
+                string->draw_surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_size);
                 
                 /* 先填充透明背景 */
                 scui_area_t draw_clip = scui_surface_area(string->draw_surface);

@@ -16,10 +16,11 @@ typedef enum {
     scui_draw_type_area_fill,
     scui_draw_type_area_copy,
     scui_draw_type_area_blend,
-    scui_draw_type_area_matrix_fill,
+    scui_draw_type_area_scale_blend,
+    scui_draw_type_area_rotate_blend,
     scui_draw_type_area_matrix_blend,
+    scui_draw_type_area_matrix_fill,
     
-    scui_draw_type_area_convolution,
     scui_draw_type_area_dither,
     scui_draw_type_area_blur,
     scui_draw_type_area_grad,
@@ -96,12 +97,23 @@ typedef struct {
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_surface_t     *src_surface;    /* 画布实例 */
         scui_area_t         src_clip;       /* 画布绘制区域 */
-        scui_alpha_t        src_alpha;      /* 像素点透明度 */
         scui_color_t        src_color;      /* 画布协议色 */
-        scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
-        scui_matrix_t       src_matrix;     /* 源变换矩阵 */
-    } area_matrix_fill;
+        scui_point_t        src_scale;      /* 图形缩放比例 */
+        scui_point_t        dst_offset;     /* 缩放锚点 */
+        scui_point_t        src_offset;     /* 缩放锚点 */
+    } area_scale_blend;
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_surface_t     *src_surface;    /* 画布实例 */
+        scui_area_t         src_clip;       /* 画布绘制区域 */
+        scui_color_t        src_color;      /* 画布协议色 */
+        scui_multi_t        src_angle;      /* 图形旋转角度(顺时针:+,逆时针:-) */
+        scui_point_t        src_anchor;     /* 图像旋转轴心 */
+        scui_point_t        src_center;     /* 图像旋转中心 */
+    } area_rotate_blend;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
@@ -111,6 +123,15 @@ typedef struct {
         scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
         scui_matrix_t       src_matrix;     /* 源变换矩阵 */
     } area_matrix_blend;
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_clip;       /* 画布绘制区域 */
+        scui_alpha_t        src_alpha;      /* 像素点透明度 */
+        scui_color_t        src_color;      /* 画布协议色 */
+        scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
+        scui_matrix_t       src_matrix;     /* 源变换矩阵 */
+    } area_matrix_fill;
     /**************************************************************************
      * draw complex(HW ACC Perhaps):
      */
@@ -365,8 +386,10 @@ SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_byte_copy);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_fill);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_copy);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_blend);
-SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_matrix_fill);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_scale_blend);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_rotate_blend);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_matrix_blend);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_matrix_fill);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_dither);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_blur);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_grad);
@@ -387,8 +410,10 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_byte_copy);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_fill);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_copy);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_blend);
-SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_matrix_fill);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_scale_blend);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_rotate_blend);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_matrix_blend);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_matrix_fill);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_dither);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_blur);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_grad);
@@ -417,9 +442,6 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_graph);
 typedef struct {
     void *dummy;
     #if SCUI_DRAW_USE_THORVG
-    uint8_t       *tvg_pixel_cache;
-    scui_multi_t   tvg_pixel_num;
-    scui_multi_t   tvg_pixel_size;
     scui_surface_t tvg_surface;
     #endif
 } scui_draw_graph_t;

@@ -30,6 +30,10 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
         .hor_res = src_glyph->box_w,
         .ver_res = src_glyph->box_h,
     };
+    glyph_surface.pbyte   = scui_pixel_byte(glyph_surface.format);
+    glyph_surface.stride  = glyph_surface.hor_res;
+    glyph_surface.stride *= scui_pixel_bits(glyph_surface.format);
+    glyph_surface.stride /= 8;
     scui_surface_t *src_surface = &glyph_surface;
     
     scui_area_t dst_clip_v = {0};   /* v:vaild */
@@ -46,15 +50,14 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
     
-    scui_multi_t dst_pixel_ofs = dst_clip_v.y * dst_surface->hor_res + dst_clip_v.x;
-    scui_multi_t src_pixel_ofs = src_clip_v.y * src_surface->hor_res + src_clip_v.x;
-    
-    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
-    uint8_t *dst_addr = dst_surface->pixel + dst_pixel_ofs * dst_byte;
+    scui_multi_t dst_ofs_p = scui_surface_point_ofs(dst_surface, dst_clip_v.y, dst_clip_v.x);
+    scui_multi_t src_ofs_p = scui_surface_point_ofs(src_surface, src_clip_v.y, src_clip_v.x);
+    uint8_t *dst_addr = dst_surface->pixel + dst_ofs_p * dst_surface->pbyte;
     uint8_t *src_addr = src_surface->pixel;
     /* 调色板数组(为空时计算,有时直接取): */
     scui_multi_t grey_len = 1 << src_glyph->bpp;
-    scui_color_wt_t *grey_table = SCUI_MEM_ZALLOC(scui_mem_type_mix, grey_len * sizeof(scui_color_wt_t));
+    scui_multi_t grey_size = sizeof(scui_color_wt_t) * grey_len;
+    scui_color_wt_t *grey_table = SCUI_MEM_ZALLOC(scui_mem_type_mix, grey_size);
     scui_color_wt_t  filter = 0;
     /* 起始色调和结束色调固定 */
     scui_pixel_by_color(src_surface->format, &grey_table[0], src_color.color_e);
@@ -64,9 +67,9 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
     
     for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
     for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-        uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * dst_byte;
-        uint32_t idx_ofs = src_pixel_ofs + idx_line * src_surface->hor_res + idx_item;
-        uint8_t *src_ofs = src_addr + idx_ofs / (8 / src_glyph->bpp);
+        uint8_t *dst_ofs = dst_addr  + scui_surface_pbyte_ofs(dst_surface, idx_line, idx_item);
+        uint32_t idx_ofs = src_ofs_p + scui_surface_point_ofs(src_surface, idx_line, idx_item);
+        uint8_t *src_ofs = src_addr  + idx_ofs / (8 / src_glyph->bpp);
         uint8_t  grey = scui_pixel_grey_bpp_x(*src_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
         uint8_t  grey_idx = pixel_no_grad ? 0 : (uint16_t)grey * (grey_len - 1) / 0xFF;
         

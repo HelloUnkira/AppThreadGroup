@@ -20,10 +20,11 @@ bool scui_draw_ctx_acc_check(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_area_fill] =                true,
         [scui_draw_type_area_copy] =                true,
         [scui_draw_type_area_blend] =               true,
-        [scui_draw_type_area_matrix_fill] =         true,
+        [scui_draw_type_area_scale_blend] =         true,
+        [scui_draw_type_area_rotate_blend] =        true,
         [scui_draw_type_area_matrix_blend] =        true,
+        [scui_draw_type_area_matrix_fill] =         true,
         
-        [scui_draw_type_area_convolution] =         false,
         [scui_draw_type_area_dither] =              false,
         [scui_draw_type_area_blur] =                false,
         [scui_draw_type_area_grad] =                false,
@@ -88,11 +89,27 @@ bool scui_draw_ctx_acc_area_blend(scui_draw_dsc_t *draw_dsc)
     return false;
 }
 
+/*@brief 图形变换迁移(可以使用DMA2D-blend加速优化)
+ *@param draw_dsc 绘制描述符实例
+ */
+bool scui_draw_ctx_acc_area_scale_blend(scui_draw_dsc_t *draw_dsc)
+{
+    
+}
+
+/*@brief 图形变换迁移(可以使用DMA2D-blend加速优化)
+ *@param draw_dsc 绘制描述符实例
+ */
+bool scui_draw_ctx_acc_area_rotate_blend(scui_draw_dsc_t *draw_dsc)
+{
+    
+}
+
 /*@brief 绘制上下文
  *@param draw_dsc 绘制描述符实例
  *@retval 支持:true;不支持:false;
  */
-bool scui_draw_ctx_acc_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
+bool scui_draw_ctx_acc_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
 {
     return false;
 }
@@ -101,7 +118,7 @@ bool scui_draw_ctx_acc_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
  *@param draw_dsc 绘制描述符实例
  *@retval 支持:true;不支持:false;
  */
-bool scui_draw_ctx_acc_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
+bool scui_draw_ctx_acc_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
 {
     return false;
 }

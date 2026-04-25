@@ -38,6 +38,10 @@ void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc)
         .ver_res = src_image->pixel.height,
         .alpha   = src_alpha,
     };
+    image_surface.pbyte   = scui_pixel_byte(image_surface.format);
+    image_surface.stride  = image_surface.hor_res;
+    image_surface.stride *= scui_pixel_bits(image_surface.format);
+    image_surface.stride /= 8;
     
     scui_draw_area_blend(true, dst_surface, *dst_clip,
         &image_surface, *src_clip, src_color);
@@ -79,6 +83,9 @@ void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc)
         .ver_res = src_image->pixel.height,
         .alpha   = src_alpha,
     };
+    image_surface.pbyte  = scui_pixel_byte(image_surface.format);
+    image_surface.stride = image_surface.hor_res * image_surface.pbyte;
+    
     scui_point2_t src_scale2 = {
         .x = (scui_coord3_t)src_scale->x / SCUI_SCALE_COF,
         .y = (scui_coord3_t)src_scale->y / SCUI_SCALE_COF,
@@ -132,6 +139,8 @@ void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
         .ver_res = src_image->pixel.height,
         .alpha   = src_alpha,
     };
+    image_surface.pbyte  = scui_pixel_byte(image_surface.format);
+    image_surface.stride = image_surface.hor_res * image_surface.pbyte;
     
     scui_matrix_t src_matrix = {0};
     scui_matrix_identity(&src_matrix);
@@ -180,6 +189,8 @@ void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc)
         .ver_res = src_image->pixel.height,
         .alpha   = src_alpha,
     };
+    image_surface.pbyte  = scui_pixel_byte(image_surface.format);
+    image_surface.stride = image_surface.hor_res * image_surface.pbyte;
     
     scui_draw_area_matrix_blend(true, dst_surface, *dst_clip,
         &image_surface, *src_clip, src_color, *inv_matrix, *src_matrix);

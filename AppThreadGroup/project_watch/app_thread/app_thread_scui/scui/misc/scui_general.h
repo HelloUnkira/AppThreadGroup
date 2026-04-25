@@ -196,17 +196,46 @@ static inline scui_coord_t scui_pixel_bits(scui_pixel_cf_t cf)
 {return (cf & scui_pixel_cf_bits_mask);}
 static inline scui_coord_t scui_pixel_byte(scui_pixel_cf_t cf)
 {return (cf & scui_pixel_cf_bits_mask) >> 3;}
+static inline bool scui_pixel_type_bmp(scui_pixel_cf_t cf)
+{return (cf & scui_pixel_cf_type_mask) != 0x0100;}
+static inline bool scui_pixel_alpha_in(scui_pixel_cf_t cf)
+{return (cf & scui_pixel_cf_type_mask) != 0x0200;}
 
 /*@brief 实体抽象:画布
  *       画布是块独立缓冲区或共享绘制画布的缓冲区
  */
 typedef struct {
-    uint8_t        *pixel;      /* 画布像素流地址 */
-    scui_pixel_cf_t format;     /* 画布像素流类型 */
-    scui_coord_t    hor_res;    /* 画布像素流宽度 */
-    scui_coord_t    ver_res;    /* 画布像素流高度 */
-    scui_alpha_t    alpha;      /* 画布全局透明度 */
+    uint8_t        *pixel;      /* 像素流地址 */
+    scui_coord_t    pbyte;      /* 像素字节数 */
+    scui_pixel_cf_t format;     /* 像素流类型 */
+    scui_coord_t    hor_res;    /* 像素流宽度 */
+    scui_coord_t    ver_res;    /* 像素流高度 */
+    scui_multi_t    stride;     /* 像素流跨度 */
+    scui_alpha_t    alpha;      /* 全局透明度 */
 } scui_surface_t;
+
+/* 画布偏移地址,画布坐标偏移地址 */
+#if 0
+#define scui_surface_point_ofs(surface, y, x)   ((y) * (surface)->hor_res + (x))
+#define scui_surface_pbyte_ofs(surface, y, x)   ((y) * (surface)->stride  + (x) * (surface)->pbyte)
+#define scui_surface_pixel_ofs(surface, y, x)   ((surface)->pixel + scui_surface_pbyte_ofs(surface, y, x))
+#else
+static inline scui_multi_t scui_surface_point_ofs(scui_surface_t *surface, scui_coord_t y, scui_coord_t x)
+{
+    return y * surface->hor_res + x;
+}
+static inline scui_multi_t scui_surface_pbyte_ofs(scui_surface_t *surface, scui_coord_t y, scui_coord_t x)
+{
+    SCUI_ASSERT(surface->pbyte == scui_pixel_bits(surface->format) / 8);
+    SCUI_ASSERT(surface->stride == surface->hor_res * scui_pixel_bits(surface->format) / 8);
+    return y * surface->stride + x * surface->pbyte;
+}
+static inline uint8_t * scui_surface_pixel_ofs(scui_surface_t *surface, scui_coord_t y, scui_coord_t x)
+{
+    return surface->pixel + scui_surface_pbyte_ofs(surface, y, x);
+}
+#endif
+
 
 /* 画布区域 */
 static inline scui_area_t scui_surface_area(scui_surface_t *surface)

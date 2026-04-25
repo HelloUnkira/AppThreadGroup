@@ -125,9 +125,6 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
     if (!scui_area_inter2(&draw_area, &src_clip))
          return;
     
-    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
-    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
-    uint8_t *dst_addr = dst_surface->pixel;
     scui_color_wt_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     
@@ -152,7 +149,6 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
             
             const scui_draw_egui_circle_item_t *item = &info->item[idx_info];
             scui_coord_t sel_y = src_radius - idx_info;
-            uint8_t *dst_ofs = NULL;
             
             for (scui_coord_t idx_item = 0; idx_item < item->count; idx_item++) {
                 
@@ -169,7 +165,7 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
                 case scui_draw_circle_type_rb: point.x += sel_x; point.y += sel_y; break;
                 }
                 if (scui_area_point(&draw_area, &point)) {
-                    dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
+                    uint8_t *dst_ofs = scui_surface_pixel_ofs(dst_surface, point.y, point.x);
                     scui_pixel_mix_with(dst_surface->format, dst_ofs,
                         dst_surface->format, &src_pixel, mix_a);
                 }
@@ -186,7 +182,7 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
                 case scui_draw_circle_type_rb: point.x += sel_y; point.y += sel_x; break;
                 }
                 if (scui_area_point(&draw_area, &point)) {
-                    dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
+                    uint8_t *dst_ofs = scui_surface_pixel_ofs(dst_surface, point.y, point.x);
                     scui_pixel_mix_with(dst_surface->format, dst_ofs,
                         dst_surface->format, &src_pixel, mix_a);
                 }
@@ -306,7 +302,7 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
                 if (!scui_area_point(&draw_area, &point))
                      continue;
                 
-                uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
+                uint8_t *dst_ofs = scui_surface_pixel_ofs(dst_surface, point.y, point.x);
                 scui_pixel_mix_with(dst_surface->format, dst_ofs,
                     dst_surface->format, &src_pixel, mix_a);
             }
@@ -427,9 +423,6 @@ static void scui_draw_arc_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_typ
     if (!scui_area_inter2(&draw_area, &src_clip))
          return;
     
-    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
-    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
-    uint8_t *dst_addr = dst_surface->pixel;
     scui_color_wt_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     
@@ -566,7 +559,7 @@ static void scui_draw_arc_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_typ
             if (!scui_area_point(&draw_area, &point))
                  continue;
             
-            uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
+            uint8_t *dst_ofs = scui_surface_pixel_ofs(dst_surface, point.y, point.x);
             scui_pixel_mix_with(dst_surface->format, dst_ofs,
                 dst_surface->format, &src_pixel, mix_a);
         }
@@ -819,9 +812,6 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
     if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
          return;
     
-    scui_coord_t dst_byte = scui_pixel_byte(dst_surface->format);
-    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
-    uint8_t *dst_addr = dst_surface->pixel;
     scui_color_wt_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     
@@ -883,14 +873,17 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
             }
             
             for (scui_multi_t idx = y + 1; idx < y + src_width; idx++) {
-                dst_ofs = dst_addr + (steep ? x * dst_line + idx * dst_byte : idx * dst_line + x * dst_byte);
+                uint8_t *dst_ofs = steep ? scui_surface_pixel_ofs(dst_surface, x, idx) :
+                    scui_surface_pixel_ofs(dst_surface, idx, x);
+                
                 scui_pixel_mix_with(dst_surface->format, dst_ofs,
                     dst_surface->format, &src_pixel, src_alpha);
             }
-            dst_ofs = dst_addr + p0_y * dst_line + p0_x * dst_byte;
+            dst_ofs = scui_surface_pixel_ofs(dst_surface, p0_y, p0_x);
             scui_pixel_mix_with(dst_surface->format, dst_ofs,
                 dst_surface->format, &src_pixel, alpha_1);
-            dst_ofs = dst_addr + pw_y * dst_line + pw_x * dst_byte;
+            
+            dst_ofs = scui_surface_pixel_ofs(dst_surface, pw_y, pw_x);
             scui_pixel_mix_with(dst_surface->format, dst_ofs,
                 dst_surface->format, &src_pixel, alpha_0);
         }

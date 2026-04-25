@@ -34,8 +34,10 @@ bool scui_draw_ctx_acc_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_area_fill] =                scui_draw_ctx_acc_area_fill,
         [scui_draw_type_area_copy] =                scui_draw_ctx_acc_area_copy,
         [scui_draw_type_area_blend] =               scui_draw_ctx_acc_area_blend,
-        [scui_draw_type_area_matrix_fill] =         scui_draw_ctx_acc_area_matrix_fill,
+        [scui_draw_type_area_scale_blend] =         scui_draw_ctx_acc_area_scale_blend,
+        [scui_draw_type_area_rotate_blend] =        scui_draw_ctx_acc_area_rotate_blend,
         [scui_draw_type_area_matrix_blend] =        scui_draw_ctx_acc_area_matrix_blend,
+        [scui_draw_type_area_matrix_fill] =         scui_draw_ctx_acc_area_matrix_fill,
         
         [scui_draw_type_area_dither] =              scui_draw_ctx_acc_area_dither,
         [scui_draw_type_area_blur] =                scui_draw_ctx_acc_area_blur,
@@ -78,8 +80,10 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_area_fill] =                scui_draw_ctx_area_fill,
         [scui_draw_type_area_copy] =                scui_draw_ctx_area_copy,
         [scui_draw_type_area_blend] =               scui_draw_ctx_area_blend,
-        [scui_draw_type_area_matrix_fill] =         scui_draw_ctx_area_matrix_fill,
+        [scui_draw_type_area_scale_blend] =         scui_draw_ctx_area_scale_blend,
+        [scui_draw_type_area_rotate_blend] =        scui_draw_ctx_area_rotate_blend,
         [scui_draw_type_area_matrix_blend] =        scui_draw_ctx_area_matrix_blend,
+        [scui_draw_type_area_matrix_fill] =         scui_draw_ctx_area_matrix_fill,
         
         [scui_draw_type_area_dither] =              scui_draw_ctx_area_dither,
         [scui_draw_type_area_blur] =                scui_draw_ctx_area_blur,
