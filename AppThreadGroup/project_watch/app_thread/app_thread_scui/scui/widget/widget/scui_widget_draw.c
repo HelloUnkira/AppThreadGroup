@@ -447,27 +447,27 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
     /* step:image<e> */
     
     /* step:align<s> */
-    scui_point_t src_offset = {0};
-    scui_point_t dst_offset = {0};
+    scui_point_t src_center = {0};
+    scui_point_t dst_anchor = {0};
     
     if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_dir_hor)) {
-        src_offset.x = clip->w / 2;
-        dst_offset.x = target->x + target->w / 2;
+        src_center.x = clip->w / 2;
+        dst_anchor.x = target->x + target->w / 2;
     } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_l)) {
-        dst_offset.x = target->x;
+        dst_anchor.x = target->x;
     } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_r)) {
-        src_offset.x = clip->w;
-        dst_offset.x = target->x + target->w;
+        src_center.x = clip->w;
+        dst_anchor.x = target->x + target->w;
     }
     
     if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_ver)) {
-        src_offset.y = clip->h / 2;
-        dst_offset.y = target->y + target->h / 2;
+        src_center.y = clip->h / 2;
+        dst_anchor.y = target->y + target->h / 2;
     } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_u)) {
-        dst_offset.y = target->y;
+        dst_anchor.y = target->y;
     } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_d)) {
-        src_offset.y = clip->h;
-        dst_offset.y = target->y + target->h;
+        src_center.y = clip->h;
+        dst_anchor.y = target->y + target->h;
     }
     /* step:align<e> */
     
@@ -483,13 +483,13 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
         scui_point_t seg_offset = {0};
         if (!scui_widget_draw_clip_seg(&dst_clip, NULL, &seg_offset))
              continue;
-        dst_offset.x -= seg_offset.x;
-        dst_offset.y -= seg_offset.y;
+        dst_anchor.x -= seg_offset.x;
+        dst_anchor.y -= seg_offset.y;
         #endif
         
         scui_draw_image_scale(false, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha, draw_dsc->scale,
-            dst_offset, src_offset);
+            dst_anchor, src_center);
     }
 }
 

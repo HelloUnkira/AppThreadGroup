@@ -68,7 +68,7 @@ do {                                                                            
 /* scui_draw_type_area_scale_blend */
 #define scui_draw_area_scale_blend(sync_v, dst_surface_v, dst_clip_v,               \
     src_surface_v, src_clip_v, src_color_v, src_scale_v,                            \
-    dst_offset_v, src_offset_v)                                                     \
+    dst_anchor_v, src_center_v)                                                     \
 do {                                                                                \
     scui_draw_dsc_t *scui_dd_i = NULL;                                              \
     scui_draw_dsc_ready(&scui_dd_i);                                                \
@@ -80,15 +80,15 @@ do {                                                                            
     scui_dd_i->area_scale_blend.src_clip    = src_clip_v,                           \
     scui_dd_i->area_scale_blend.src_color   = src_color_v,                          \
     scui_dd_i->area_scale_blend.src_scale   = src_scale_v,                          \
-    scui_dd_i->area_scale_blend.dst_offset  = dst_offset_v,                         \
-    scui_dd_i->area_scale_blend.src_offset  = src_offset_v,                         \
+    scui_dd_i->area_scale_blend.dst_anchor  = dst_anchor_v,                         \
+    scui_dd_i->area_scale_blend.src_center  = src_center_v,                         \
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
 
 /* scui_draw_type_area_rotate_blend */
 #define scui_draw_area_rotate_blend(sync_v, dst_surface_v, dst_clip_v,              \
     src_surface_v, src_clip_v, src_color_v, src_angle_v,                            \
-    src_anchor_v, src_center_v)                                                     \
+    dst_anchor_v, src_center_v)                                                     \
 do {                                                                                \
     scui_draw_dsc_t *scui_dd_i = NULL;                                              \
     scui_draw_dsc_ready(&scui_dd_i);                                                \
@@ -100,7 +100,7 @@ do {                                                                            
     scui_dd_i->area_rotate_blend.src_clip    = src_clip_v,                          \
     scui_dd_i->area_rotate_blend.src_color   = src_color_v,                         \
     scui_dd_i->area_rotate_blend.src_angle   = src_angle_v,                         \
-    scui_dd_i->area_rotate_blend.src_anchor  = src_anchor_v,                        \
+    scui_dd_i->area_rotate_blend.dst_anchor  = dst_anchor_v,                        \
     scui_dd_i->area_rotate_blend.src_center  = src_center_v,                        \
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
@@ -239,7 +239,7 @@ do {                                                                            
 /* scui_draw_type_image_scale */
 #define scui_draw_image_scale(sync_v, dst_surface_v, dst_clip_v,                    \
     src_image_v, src_clip_v, src_alpha_v, src_scale_v,                              \
-    dst_offset_v, src_offset_v)                                                     \
+    dst_anchor_v, src_center_v)                                                     \
 do {                                                                                \
     scui_draw_dsc_t *scui_dd_i = NULL;                                              \
     scui_draw_dsc_ready(&scui_dd_i);                                                \
@@ -251,15 +251,15 @@ do {                                                                            
     scui_dd_i->image_scale.src_clip    = src_clip_v,                                \
     scui_dd_i->image_scale.src_alpha   = src_alpha_v,                               \
     scui_dd_i->image_scale.src_scale   = src_scale_v,                               \
-    scui_dd_i->image_scale.dst_offset  = dst_offset_v,                              \
-    scui_dd_i->image_scale.src_offset  = src_offset_v,                              \
+    scui_dd_i->image_scale.dst_anchor  = dst_anchor_v,                              \
+    scui_dd_i->image_scale.src_center  = src_center_v,                              \
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
 
 /* scui_draw_type_image_rotate */
 #define scui_draw_image_rotate(sync_v, dst_surface_v, dst_clip_v,                   \
     src_image_v, src_clip_v, src_alpha_v, src_angle_v,                              \
-    src_anchor_v, src_center_v)                                                     \
+    dst_anchor_v, src_center_v)                                                     \
 do {                                                                                \
     scui_draw_dsc_t *scui_dd_i = NULL;                                              \
     scui_draw_dsc_ready(&scui_dd_i);                                                \
@@ -271,7 +271,7 @@ do {                                                                            
     scui_dd_i->image_rotate.src_clip    = src_clip_v,                               \
     scui_dd_i->image_rotate.src_alpha   = src_alpha_v,                              \
     scui_dd_i->image_rotate.src_angle   = src_angle_v,                              \
-    scui_dd_i->image_rotate.src_anchor  = src_anchor_v,                             \
+    scui_dd_i->image_rotate.dst_anchor  = dst_anchor_v,                             \
     scui_dd_i->image_rotate.src_center  = src_center_v,                             \
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \

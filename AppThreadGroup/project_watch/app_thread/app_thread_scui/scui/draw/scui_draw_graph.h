@@ -101,8 +101,8 @@ typedef struct {
         scui_area_t         src_clip;       /* 画布绘制区域 */
         scui_color_t        src_color;      /* 画布协议色 */
         scui_point_t        src_scale;      /* 图形缩放比例 */
-        scui_point_t        dst_offset;     /* 缩放锚点 */
-        scui_point_t        src_offset;     /* 缩放锚点 */
+        scui_point_t        dst_anchor;     /* 缩放锚点 */
+        scui_point_t        src_center;     /* 缩放锚点 */
     } area_scale_blend;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
@@ -111,7 +111,7 @@ typedef struct {
         scui_area_t         src_clip;       /* 画布绘制区域 */
         scui_color_t        src_color;      /* 画布协议色 */
         scui_multi_t        src_angle;      /* 图形旋转角度(顺时针:+,逆时针:-) */
-        scui_point_t        src_anchor;     /* 图像旋转轴心 */
+        scui_point_t        dst_anchor;     /* 图像旋转轴心 */
         scui_point_t        src_center;     /* 图像旋转中心 */
     } area_rotate_blend;
     struct {
@@ -185,8 +185,8 @@ typedef struct {
         scui_alpha_t        src_alpha;      /* 图像透明度 */
         scui_color_t        src_color;      /* 图像源色调 */
         scui_point_t        src_scale;      /* 图形缩放比例 */
-        scui_point_t        dst_offset;     /* 缩放锚点 */
-        scui_point_t        src_offset;     /* 缩放锚点 */
+        scui_point_t        dst_anchor;     /* 缩放锚点 */
+        scui_point_t        src_center;     /* 缩放锚点 */
     } image_scale;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
@@ -196,7 +196,7 @@ typedef struct {
         scui_alpha_t        src_alpha;      /* 图像透明度 */
         scui_color_t        src_color;      /* 图像源色调 */
         scui_multi_t        src_angle;      /* 图形旋转角度(顺时针:+,逆时针:-) */
-        scui_point_t        src_anchor;     /* 图像旋转轴心 */
+        scui_point_t        dst_anchor;     /* 图像旋转轴心 */
         scui_point_t        src_center;     /* 图像旋转中心 */
     } image_rotate;
     struct {

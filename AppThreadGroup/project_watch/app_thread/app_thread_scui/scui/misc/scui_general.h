@@ -215,27 +215,9 @@ typedef struct {
 } scui_surface_t;
 
 /* 画布偏移地址,画布坐标偏移地址 */
-#if 0
 #define scui_surface_point_ofs(surface, y, x)   ((y) * (surface)->hor_res + (x))
 #define scui_surface_pbyte_ofs(surface, y, x)   ((y) * (surface)->stride  + (x) * (surface)->pbyte)
 #define scui_surface_pixel_ofs(surface, y, x)   ((surface)->pixel + scui_surface_pbyte_ofs(surface, y, x))
-#else
-static inline scui_multi_t scui_surface_point_ofs(scui_surface_t *surface, scui_coord_t y, scui_coord_t x)
-{
-    return y * surface->hor_res + x;
-}
-static inline scui_multi_t scui_surface_pbyte_ofs(scui_surface_t *surface, scui_coord_t y, scui_coord_t x)
-{
-    SCUI_ASSERT(surface->pbyte == scui_pixel_bits(surface->format) / 8);
-    SCUI_ASSERT(surface->stride == surface->hor_res * scui_pixel_bits(surface->format) / 8);
-    return y * surface->stride + x * surface->pbyte;
-}
-static inline uint8_t * scui_surface_pixel_ofs(scui_surface_t *surface, scui_coord_t y, scui_coord_t x)
-{
-    return surface->pixel + scui_surface_pbyte_ofs(surface, y, x);
-}
-#endif
-
 
 /* 画布区域 */
 static inline scui_area_t scui_surface_area(scui_surface_t *surface)
