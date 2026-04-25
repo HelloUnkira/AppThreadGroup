@@ -215,8 +215,8 @@ void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
         
         scui_alpha_t alpha = src_surface->alpha;
         src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));
-        scui_draw_area_matrix_blend(true, dst_surface, dst_clip, src_surface, src_clip,
-                                    SCUI_COLOR_UNUSED, inv_matrix, (scui_matrix_t){0});
+        scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+            SCUI_COLOR_UNUSED, inv_matrix, (scui_matrix_t){0});
         src_surface->alpha = alpha;
         continue;
     }
@@ -287,8 +287,8 @@ void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
         
         scui_alpha_t alpha = src_surface->alpha;
         src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));
-        scui_draw_area_matrix_blend(true, dst_surface, dst_clip, src_surface, src_clip,
-                                    SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
+        scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+            SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
         src_surface->alpha = alpha;
     }
 }
@@ -334,8 +334,8 @@ void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
         
         scui_alpha_t alpha = src_surface->alpha;
         src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));
-        scui_draw_area_matrix_blend(true, dst_surface, dst_clip, src_surface, src_clip,
-                                    SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
+        scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+            SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
         src_surface->alpha = alpha;
     }
 }
@@ -388,8 +388,8 @@ void scui_window_transform_rotate1(scui_widget_t **list, scui_handle_t num)
         scui_matrix_t src_matrix = inv_matrix;
         scui_matrix_inverse(&inv_matrix);
         
-        scui_draw_area_matrix_blend(true, dst_surface, dst_clip, src_surface, src_clip,
-                                    SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
+        scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+            SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
     }
 }
 
@@ -613,7 +613,7 @@ void scui_window_transform_flip1(scui_widget_t **list, scui_handle_t num)
         scui_matrix_t src_matrix = inv_matrix;
         scui_matrix_inverse(&inv_matrix);
         
-        scui_draw_area_matrix_blend(true, dst_surface, dst_clip,
+        scui_draw_area_3d_blend(true, dst_surface, dst_clip,
             src_surface, src_clip, SCUI_COLOR_UNUSED,
             inv_matrix, src_matrix);
     }
@@ -839,14 +839,14 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
             /* 绘制俩个窗口面 */
             scui_surface_t *src_surface = face_idx[idx] == 1 ? src_surface_a : src_surface_i;
             scui_area_t src_clip = scui_surface_area(src_surface);
-            scui_draw_area_matrix_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+            scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
                 SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
         } else {
             #if 1
             /* 没有窗口面, 则填背景灰色 */
             scui_area_t  src_clip  = dst_clip;
             scui_color_t src_color = SCUI_COLOR_MAKE32(false, 0x0, 0xFF1F1F1F);
-            scui_draw_area_matrix_fill(true, dst_surface, dst_clip, src_clip,
+            scui_draw_area_3d_fill(true, dst_surface, dst_clip, src_clip,
                 scui_alpha_cover, src_color, inv_matrix, src_matrix);
             #endif
         }
@@ -869,7 +869,7 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
             scui_color_t src_color = SCUI_COLOR_MAKE32(true, 0xFF000000, 0x0);
             src_clip.x = scui_window_mgr.switch_args.pct * size2.w / 100;
             
-            scui_draw_image_matrix_blend(true, dst_surface, dst_clip, shadow, src_clip,
+            scui_draw_image_3d(true, dst_surface, dst_clip, shadow, src_clip,
                 scui_alpha_pct100, src_color, inv_matrix, src_matrix);
         } while (0);
         #endif
@@ -1025,7 +1025,7 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
                 scui_area_t src_clip = scui_surface_area(src_surface);
                 src_clip.h  = src_clip.h / seg_num;
                 src_clip.y += src_clip.h * seg_idx;
-                scui_draw_area_matrix_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+                scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
                     SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
             } else {
                 #if 1
@@ -1034,7 +1034,7 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
                 src_clip.h  = src_clip.h / seg_num;
                 /* src_clip.y += src_clip.h * seg_idx; */
                 scui_color_t src_color = SCUI_COLOR_MAKE32(false, 0x0, 0xFF1F1F1F);
-                scui_draw_area_matrix_fill(true, dst_surface, dst_clip, src_clip,
+                scui_draw_area_3d_fill(true, dst_surface, dst_clip, src_clip,
                     scui_alpha_cover, src_color, inv_matrix, src_matrix);
                 #endif
             }
@@ -1058,7 +1058,7 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
                 src_clip.x = scui_window_mgr.switch_args.pct * size2.w / 100;
                 src_clip.y = size2.h * seg_idx;
                 
-                scui_draw_image_matrix_blend(true, dst_surface, dst_clip, shadow, src_clip,
+                scui_draw_image_3d(true, dst_surface, dst_clip, shadow, src_clip,
                     scui_alpha_pct100, src_color, inv_matrix, src_matrix);
             } while (0);
             #endif
@@ -1220,7 +1220,7 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
         /* 绘制俩个窗口面 */
         scui_surface_t *src_surface = face_idx[idx] == 1 ? src_surface_a : src_surface_i;
         scui_area_t src_clip = scui_surface_area(src_surface);
-        scui_draw_area_matrix_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+        scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
             SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
         
         
@@ -1241,7 +1241,7 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
             scui_color_t src_color = SCUI_COLOR_MAKE32(true, 0xFF000000, 0x0);
             src_clip.x = scui_window_mgr.switch_args.pct * size2.w / 100;
             
-            scui_draw_image_matrix_blend(true, dst_surface, dst_clip, shadow, src_clip, 
+            scui_draw_image_3d(true, dst_surface, dst_clip, shadow, src_clip, 
                 scui_alpha_pct100, src_color, inv_matrix, src_matrix);
         } while (0);
         #endif

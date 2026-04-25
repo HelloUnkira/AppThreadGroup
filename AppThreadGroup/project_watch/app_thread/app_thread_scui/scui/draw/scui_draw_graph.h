@@ -16,10 +16,9 @@ typedef enum {
     scui_draw_type_area_fill,
     scui_draw_type_area_copy,
     scui_draw_type_area_blend,
-    scui_draw_type_area_scale_blend,
-    scui_draw_type_area_rotate_blend,
-    scui_draw_type_area_matrix_blend,
-    scui_draw_type_area_matrix_fill,
+    scui_draw_type_area_2d_blend,
+    scui_draw_type_area_3d_blend,
+    scui_draw_type_area_3d_fill,
     
     scui_draw_type_area_dither,
     scui_draw_type_area_blur,
@@ -28,9 +27,8 @@ typedef enum {
     scui_draw_type_area_afilter,
     
     scui_draw_type_image,
-    scui_draw_type_image_scale,
-    scui_draw_type_image_rotate,
-    scui_draw_type_image_matrix_blend,
+    scui_draw_type_image_2d,
+    scui_draw_type_image_3d,
     
     scui_draw_type_letter,
     scui_draw_type_string,
@@ -101,19 +99,10 @@ typedef struct {
         scui_area_t         src_clip;       /* 画布绘制区域 */
         scui_color_t        src_color;      /* 画布协议色 */
         scui_point_t        src_scale;      /* 图形缩放比例 */
-        scui_point_t        dst_anchor;     /* 缩放锚点 */
-        scui_point_t        src_center;     /* 缩放锚点 */
-    } area_scale_blend;
-    struct {
-        scui_surface_t     *dst_surface;    /* 画布实例 */
-        scui_area_t         dst_clip;       /* 画布绘制区域 */
-        scui_surface_t     *src_surface;    /* 画布实例 */
-        scui_area_t         src_clip;       /* 画布绘制区域 */
-        scui_color_t        src_color;      /* 画布协议色 */
         scui_multi_t        src_angle;      /* 图形旋转角度(顺时针:+,逆时针:-) */
-        scui_point_t        dst_anchor;     /* 图像旋转轴心 */
-        scui_point_t        src_center;     /* 图像旋转中心 */
-    } area_rotate_blend;
+        scui_point_t        dst_anchor;     /* 图像缩放旋转轴心 */
+        scui_point_t        src_center;     /* 图像缩放旋转中心 */
+    } area_2d_blend;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
@@ -122,7 +111,7 @@ typedef struct {
         scui_color_t        src_color;      /* 画布协议色 */
         scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
         scui_matrix_t       src_matrix;     /* 源变换矩阵 */
-    } area_matrix_blend;
+    } area_3d_blend;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
@@ -131,7 +120,7 @@ typedef struct {
         scui_color_t        src_color;      /* 画布协议色 */
         scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
         scui_matrix_t       src_matrix;     /* 源变换矩阵 */
-    } area_matrix_fill;
+    } area_3d_fill;
     /**************************************************************************
      * draw complex(HW ACC Perhaps):
      */
@@ -185,20 +174,10 @@ typedef struct {
         scui_alpha_t        src_alpha;      /* 图像透明度 */
         scui_color_t        src_color;      /* 图像源色调 */
         scui_point_t        src_scale;      /* 图形缩放比例 */
-        scui_point_t        dst_anchor;     /* 缩放锚点 */
-        scui_point_t        src_center;     /* 缩放锚点 */
-    } image_scale;
-    struct {
-        scui_surface_t     *dst_surface;    /* 画布实例 */
-        scui_area_t         dst_clip;       /* 画布绘制区域 */
-        scui_image_t       *src_image;      /* 图像源 */
-        scui_area_t         src_clip;       /* 图像源绘制区域 */
-        scui_alpha_t        src_alpha;      /* 图像透明度 */
-        scui_color_t        src_color;      /* 图像源色调 */
         scui_multi_t        src_angle;      /* 图形旋转角度(顺时针:+,逆时针:-) */
-        scui_point_t        dst_anchor;     /* 图像旋转轴心 */
-        scui_point_t        src_center;     /* 图像旋转中心 */
-    } image_rotate;
+        scui_point_t        dst_anchor;     /* 图像缩放旋转轴心 */
+        scui_point_t        src_center;     /* 图像缩放旋转中心 */
+    } image_2d;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
@@ -208,7 +187,7 @@ typedef struct {
         scui_color_t        src_color;      /* 图像源色调 */
         scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
         scui_matrix_t       src_matrix;     /* 源变换矩阵 */
-    } image_matrix_blend;
+    } image_3d;
     /**************************************************************************
      * draw letter & string:
      */
@@ -386,19 +365,17 @@ SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_byte_copy);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_fill);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_copy);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_blend);
-SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_scale_blend);
-SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_rotate_blend);
-SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_matrix_blend);
-SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_matrix_fill);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_2d_blend);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_3d_blend);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_3d_fill);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_dither);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_blur);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_grad);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_grads);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_afilter);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image);
-SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_scale);
-SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_rotate);
-SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_matrix_blend);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_2d);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_3d);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_letter);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_string);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_qrcode);
@@ -410,19 +387,17 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_byte_copy);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_fill);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_copy);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_blend);
-SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_scale_blend);
-SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_rotate_blend);
-SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_matrix_blend);
-SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_matrix_fill);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_2d_blend);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_3d_blend);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_3d_fill);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_dither);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_blur);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_grad);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_grads);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_afilter);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image);
-SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_scale);
-SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_rotate);
-SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_matrix_blend);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_2d);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_3d);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_letter);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_string);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_qrcode);

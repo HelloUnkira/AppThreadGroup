@@ -487,8 +487,9 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
         dst_anchor.y -= seg_offset.y;
         #endif
         
-        scui_draw_image_scale(false, widget->surface, dst_clip,
-            image_inst, *clip, widget->alpha, draw_dsc->scale,
+        scui_multi_t angle = 0;
+        scui_draw_image_2d(false, widget->surface, dst_clip,
+            image_inst, *clip, widget->alpha, draw_dsc->scale, angle,
             dst_anchor, src_center);
     }
 }
@@ -539,8 +540,13 @@ void scui_widget_draw_ctx_image_rotate(scui_handle_t handle, scui_area_t *target
         anchor.y -= seg_offset.y;
         #endif
         
-        scui_draw_image_rotate(false, widget->surface, dst_clip,
-            image_inst, *clip, widget->alpha, draw_dsc->angle, anchor, center);
+        scui_point_t scale = {
+            .x = SCUI_SCALE_COF,
+            .y = SCUI_SCALE_COF,
+        };
+        scui_draw_image_2d(false, widget->surface, dst_clip,
+            image_inst, *clip, widget->alpha, scale, draw_dsc->angle,
+            anchor, center);
     }
 }
 
@@ -585,7 +591,7 @@ void scui_widget_draw_ctx_image_matrix(scui_handle_t handle, scui_area_t *target
              continue;
         #endif
         
-        scui_draw_image_matrix_blend(false, widget->surface, dst_clip,
+        scui_draw_image_3d(false, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha, SCUI_COLOR_UNUSED,
             *draw_dsc->inv_matrix, *draw_dsc->matrix);
     }

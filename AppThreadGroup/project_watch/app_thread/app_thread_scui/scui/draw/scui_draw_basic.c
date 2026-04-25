@@ -359,17 +359,18 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
 /*@brief 图形变换迁移(可以使用DMA2D-blend加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_ctx_area_scale_blend(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_2d_blend(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->area_scale_blend.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->area_scale_blend.dst_clip;
-    scui_surface_t *src_surface =  draw_dsc->area_scale_blend.src_surface;
-    scui_area_t    *src_clip    = &draw_dsc->area_scale_blend.src_clip;
-    scui_color_t    src_color   =  draw_dsc->area_scale_blend.src_color;
-    scui_point_t   *src_scale   = &draw_dsc->area_scale_blend.src_scale;
-    scui_point_t   *dst_anchor  = &draw_dsc->area_scale_blend.dst_anchor;
-    scui_point_t   *src_center  = &draw_dsc->area_scale_blend.src_center;
+    scui_surface_t *dst_surface =  draw_dsc->area_2d_blend.dst_surface;
+    scui_area_t    *dst_clip    = &draw_dsc->area_2d_blend.dst_clip;
+    scui_surface_t *src_surface =  draw_dsc->area_2d_blend.src_surface;
+    scui_area_t    *src_clip    = &draw_dsc->area_2d_blend.src_clip;
+    scui_color_t    src_color   =  draw_dsc->area_2d_blend.src_color;
+    scui_point_t   *src_scale   = &draw_dsc->area_2d_blend.src_scale;
+    scui_multi_t    src_angle   =  draw_dsc->area_2d_blend.src_angle;
+    scui_point_t   *dst_anchor  = &draw_dsc->area_2d_blend.dst_anchor;
+    scui_point_t   *src_center  = &draw_dsc->area_2d_blend.src_center;
     /* draw dsc args<e> */
     /* */
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -386,127 +387,16 @@ void scui_draw_ctx_area_scale_blend(scui_draw_dsc_t *draw_dsc)
     if (!scui_area_inter(&src_clip_v, &src_area, src_clip))
          return;
     
+    scui_coord3_t src_angle3 = (scui_coord3_t)src_angle / SCUI_SCALE_COF;
     scui_point2_t src_scale2 = {
         .x = (scui_coord3_t)src_scale->x / SCUI_SCALE_COF,
         .y = (scui_coord3_t)src_scale->y / SCUI_SCALE_COF,
     };
+    scui_coord3_t sin_a = scui_sin(SCUI_RAD_BY_A(src_angle3));
+    scui_coord3_t cos_a = scui_cos(SCUI_RAD_BY_A(src_angle3));
     
     /* 利用原图进行一次源初变换,以修饰限制目标区域 */
     if (1) {
-        scui_area_m_by_s(&src_area, &src_area);
-        dst_area.x1 = (src_area.x1 - src_center->x) * src_scale2.x + dst_anchor->x - 1.5f;
-        dst_area.y1 = (src_area.y1 - src_center->y) * src_scale2.y + dst_anchor->y - 1.5f;
-        dst_area.x2 = (src_area.x2 - src_center->x) * src_scale2.x + dst_anchor->x + 1.5f;
-        dst_area.y2 = (src_area.y2 - src_center->y) * src_scale2.y + dst_anchor->y + 1.5f;
-        scui_area_m_by_s(&dst_area, &dst_area);
-        
-        if (!scui_area_inter2(&dst_clip_v, &dst_area))
-             return;
-    }
-    
-    /* 在src_surface.clip中的src_clip_v中每个像素点混合到dst_surface.clip中的dst_clip_v中 */
-    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip_v.y, dst_clip_v.x);
-    uint8_t *src_addr = scui_surface_pixel_ofs(src_surface, src_clip_v.y, src_clip_v.x);
-    
-    if (scui_pixel_type_bmp(dst_surface->format) && scui_pixel_type_bmp(src_surface->format)) {
-        
-        scui_color_wt_t filter = 0;
-        scui_pixel_by_color(src_surface->format, &filter, src_color.color_f);
-        
-        /* 注意区域对齐坐标 */
-        for (scui_multi_t idx_line = dst_clip_v.y; idx_line < dst_clip_v.y + dst_clip_v.h; idx_line++)
-        for (scui_multi_t idx_item = dst_clip_v.x; idx_item < dst_clip_v.x + dst_clip_v.w; idx_item++) {
-            scui_point2_t point2 = {0};
-            /* 反扫描结果坐标对每一个坐标进行逆变换 */
-            point2.y = (idx_line - dst_anchor->y) / src_scale2.y + src_center->y;
-            point2.x = (idx_item - dst_anchor->x) / src_scale2.x + src_center->x;
-            point2.y += src_clip_v.y;
-            point2.x += src_clip_v.x;
-            
-            scui_color_wt_t sample_color = 0;
-            uint8_t *dst_ofs = scui_surface_pixel_ofs(dst_surface, idx_line, idx_item);
-            if (scui_draw_ctx_sample(src_surface, &src_clip_v, &point2, &sample_color)) {
-                
-                if (src_color.filter) {
-                    scui_color_wt_t color = 0;
-                    scui_pixel_by_cf(src_surface->format, &color, &sample_color);
-                    if (color == filter)
-                        continue;
-                }
-                
-                scui_pixel_mix_with(dst_surface->format, dst_ofs,
-                    src_surface->format, &sample_color, src_surface->alpha);
-                
-                continue;
-            }
-            
-            /* 这里使用点对点上色 */
-            scui_point_t point = {
-                .y = (scui_coord_t)point2.y,
-                .x = (scui_coord_t)point2.x,
-            };
-            /* 逆变换的结果落在的源区域, 取样上色 */
-            if (scui_area_point(&src_clip_v, &point)) {
-                uint8_t *src_ofs = scui_surface_pixel_ofs(src_surface, point.y, point.x);
-                
-                if (src_color.filter) {
-                    scui_color_wt_t color = 0;
-                    scui_pixel_by_cf(src_surface->format, &color, src_ofs);
-                    if (color == filter)
-                        continue;
-                }
-                
-                scui_pixel_mix_with(dst_surface->format, dst_ofs,
-                    src_surface->format, src_ofs, src_surface->alpha);
-                continue;
-            }
-        }
-        return;
-    }
-    
-    SCUI_LOG_ERROR("unsupported scale blend:");
-    SCUI_LOG_ERROR("dst_surface format:%x", dst_surface->format);
-    SCUI_LOG_ERROR("src_surface format:%x", src_surface->format);
-    SCUI_ASSERT(false);
-}
-
-/*@brief 图形变换迁移(可以使用DMA2D-blend加速优化)
- *@param draw_dsc 绘制描述符实例
- */
-void scui_draw_ctx_area_rotate_blend(scui_draw_dsc_t *draw_dsc)
-{
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->area_rotate_blend.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->area_rotate_blend.dst_clip;
-    scui_surface_t *src_surface =  draw_dsc->area_rotate_blend.src_surface;
-    scui_area_t    *src_clip    = &draw_dsc->area_rotate_blend.src_clip;
-    scui_color_t    src_color   =  draw_dsc->area_rotate_blend.src_color;
-    scui_multi_t    src_angle   =  draw_dsc->area_rotate_blend.src_angle;
-    scui_point_t   *dst_anchor  = &draw_dsc->area_rotate_blend.dst_anchor;
-    scui_point_t   *src_center  = &draw_dsc->area_rotate_blend.src_center;
-    /* draw dsc args<e> */
-    /* */
-    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
-    SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
-    
-    /* 按俩个画布的透明度进行像素点混合 */
-    scui_area_t dst_clip_v = {0};   /* v:vaild */
-    scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
-         return;
-    
-    scui_area_t src_clip_v = {0};   /* v:vaild */
-    scui_area_t src_area = scui_surface_area(src_surface);
-    if (!scui_area_inter(&src_clip_v, &src_area, src_clip))
-         return;
-    
-    scui_coord3_t angle = (scui_coord3_t)src_angle / SCUI_SCALE_COF;
-    
-    /* 利用原图进行一次源初变换,以修饰限制目标区域 */
-    if (1) {
-        scui_coord3_t sin_a = scui_sin(SCUI_RAD_BY_A(angle));
-        scui_coord3_t cos_a = scui_cos(SCUI_RAD_BY_A(angle));
-        
         scui_face2_t face2 = {0};
         scui_area2_by_area(&face2, &src_area);
         
@@ -516,15 +406,19 @@ void scui_draw_ctx_area_rotate_blend(scui_draw_dsc_t *draw_dsc)
         dst_area.y2 = scui_coord_min;
         /* 对四个图像的角进行一次正变换 */
         for (scui_coord_t idx = 0; idx < 4; idx++) {
-            scui_coord3_t y = face2.point2[idx].y - src_center->y;
-            scui_coord3_t x = face2.point2[idx].x - src_center->x;
-            scui_coord3_t ry = + x * sin_a + y * cos_a + dst_anchor->y;
-            scui_coord3_t rx = + x * cos_a - y * sin_a + dst_anchor->x;
+            scui_coord3_t ty = face2.point2[idx].y - src_center->y;
+            scui_coord3_t tx = face2.point2[idx].x - src_center->x;
+            scui_coord3_t sy = ty * src_scale2.y;
+            scui_coord3_t sx = tx * src_scale2.x;
+            scui_coord3_t ry = + sx * sin_a + sy * cos_a;
+            scui_coord3_t rx = + sx * cos_a - sy * sin_a;
+            ty = ry + dst_anchor->y;
+            tx = rx + dst_anchor->x;
             
-            dst_area.x1 = scui_min(dst_area.x1, rx - 1.5f);
-            dst_area.y1 = scui_min(dst_area.y1, ry - 1.5f);
-            dst_area.x2 = scui_max(dst_area.x2, rx + 1.5f);
-            dst_area.y2 = scui_max(dst_area.y2, ry + 1.5f);
+            dst_area.x1 = scui_min(dst_area.x1, tx - 1.5f);
+            dst_area.y1 = scui_min(dst_area.y1, ty - 1.5f);
+            dst_area.x2 = scui_max(dst_area.x2, tx + 1.5f);
+            dst_area.y2 = scui_max(dst_area.y2, ty + 1.5f);
         }
         
         scui_area_m_by_s(&dst_area, &dst_area);
@@ -546,12 +440,14 @@ void scui_draw_ctx_area_rotate_blend(scui_draw_dsc_t *draw_dsc)
         for (scui_multi_t idx_item = dst_clip_v.x; idx_item < dst_clip_v.x + dst_clip_v.w; idx_item++) {
             scui_point2_t point2 = {0};
             /* 反扫描结果坐标对每一个坐标进行逆变换 */
-            scui_coord3_t sin_a = scui_sin(SCUI_RAD_BY_A(angle));
-            scui_coord3_t cos_a = scui_cos(SCUI_RAD_BY_A(angle));
             scui_coord3_t y = idx_line - dst_anchor->y;
             scui_coord3_t x = idx_item - dst_anchor->x;
-            point2.y = - x * sin_a + y * cos_a + src_center->y;
-            point2.x = + x * cos_a + y * sin_a + src_center->x;
+            point2.y = - x * sin_a + y * cos_a;
+            point2.x = + x * cos_a + y * sin_a;
+            point2.y /= src_scale2.y;
+            point2.x /= src_scale2.x;
+            point2.y += src_center->y;
+            point2.x += src_center->x;
             point2.y += src_clip_v.y;
             point2.x += src_clip_v.x;
             
@@ -604,16 +500,16 @@ void scui_draw_ctx_area_rotate_blend(scui_draw_dsc_t *draw_dsc)
 /*@brief 图形变换迁移(可以使用VGLITE-blit加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_3d_blend(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->area_matrix_blend.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->area_matrix_blend.dst_clip;
-    scui_surface_t *src_surface =  draw_dsc->area_matrix_blend.src_surface;
-    scui_area_t    *src_clip    = &draw_dsc->area_matrix_blend.src_clip;
-    scui_color_t    src_color   =  draw_dsc->area_matrix_blend.src_color;
-    scui_matrix_t  *inv_matrix  = &draw_dsc->area_matrix_blend.inv_matrix;
-    scui_matrix_t  *src_matrix  = &draw_dsc->area_matrix_blend.src_matrix;
+    scui_surface_t *dst_surface =  draw_dsc->area_3d_blend.dst_surface;
+    scui_area_t    *dst_clip    = &draw_dsc->area_3d_blend.dst_clip;
+    scui_surface_t *src_surface =  draw_dsc->area_3d_blend.src_surface;
+    scui_area_t    *src_clip    = &draw_dsc->area_3d_blend.src_clip;
+    scui_color_t    src_color   =  draw_dsc->area_3d_blend.src_color;
+    scui_matrix_t  *inv_matrix  = &draw_dsc->area_3d_blend.inv_matrix;
+    scui_matrix_t  *src_matrix  = &draw_dsc->area_3d_blend.src_matrix;
     /* draw dsc args<e> */
     /* */
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -732,16 +628,16 @@ void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
 /*@brief 图形变换填色(可以使用VGLITE-blit加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_3d_fill(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->area_matrix_fill.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->area_matrix_fill.dst_clip;
-    scui_area_t    *src_clip    = &draw_dsc->area_matrix_fill.src_clip;
-    scui_alpha_t    src_alpha   =  draw_dsc->area_matrix_fill.src_alpha;
-    scui_color_t    src_color   =  draw_dsc->area_matrix_fill.src_color;
-    scui_matrix_t  *inv_matrix  = &draw_dsc->area_matrix_fill.inv_matrix;
-    scui_matrix_t  *src_matrix  = &draw_dsc->area_matrix_fill.src_matrix;
+    scui_surface_t *dst_surface =  draw_dsc->area_3d_fill.dst_surface;
+    scui_area_t    *dst_clip    = &draw_dsc->area_3d_fill.dst_clip;
+    scui_area_t    *src_clip    = &draw_dsc->area_3d_fill.src_clip;
+    scui_alpha_t    src_alpha   =  draw_dsc->area_3d_fill.src_alpha;
+    scui_color_t    src_color   =  draw_dsc->area_3d_fill.src_color;
+    scui_matrix_t  *inv_matrix  = &draw_dsc->area_3d_fill.inv_matrix;
+    scui_matrix_t  *src_matrix  = &draw_dsc->area_3d_fill.src_matrix;
     /* draw dsc args<e> */
     /* */
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
