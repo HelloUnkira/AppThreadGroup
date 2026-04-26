@@ -489,7 +489,8 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
         
         scui_multi_t angle = 0;
         scui_draw_image_2d(false, widget->surface, dst_clip,
-            image_inst, *clip, widget->alpha, draw_dsc->scale, angle,
+            image_inst, *clip, widget->alpha,
+            draw_dsc->scale, angle,
             dst_anchor, src_center);
     }
 }
@@ -545,7 +546,8 @@ void scui_widget_draw_ctx_image_rotate(scui_handle_t handle, scui_area_t *target
             .y = SCUI_SCALE_COF,
         };
         scui_draw_image_2d(false, widget->surface, dst_clip,
-            image_inst, *clip, widget->alpha, scale, draw_dsc->angle,
+            image_inst, *clip, widget->alpha,
+            scale, draw_dsc->angle,
             anchor, center);
     }
 }
@@ -553,7 +555,60 @@ void scui_widget_draw_ctx_image_rotate(scui_handle_t handle, scui_area_t *target
 /*@brief 控件在画布绘制图像
  *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ctx_image_matrix(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
+void scui_widget_draw_ctx_image_2d(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
+{
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    scui_handle_t image  = draw_dsc->image;
+    scui_area_t  *clip   = draw_dsc->clip;
+    scui_point_t  anchor = draw_dsc->anchor;
+    scui_point_t  center = draw_dsc->center;
+    
+    /* 绘制目标重定向 */
+    if (!scui_widget_draw_target(widget, &target))
+         return;
+    
+    /* step:image<s> */
+    scui_image_t *image_inst = scui_handle_source_check(image);
+    scui_area_t   image_clip = scui_image_area(image);
+    if (clip != NULL && !scui_area_inter2(&image_clip, clip))
+        return;
+    clip = &image_clip;
+    /* step:image<e> */
+    
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
+        
+        /* 子剪切域相对同步偏移 */
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &unit->clip, target))
+             continue;
+        /* 子剪切域相对同步偏移 */
+        scui_point_t src_offset = {
+            .x = dst_clip.x - target->x,
+            .y = dst_clip.y - target->y,
+        };
+        
+        #if SCUI_MEM_FEAT_MINI
+        scui_point_t seg_offset = {0};
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, &seg_offset))
+             continue;
+        anchor.x -= seg_offset.x;
+        anchor.y -= seg_offset.y;
+        #endif
+        
+        scui_draw_image_2d(false, widget->surface, dst_clip,
+            image_inst, *clip, widget->alpha,
+            draw_dsc->scale, draw_dsc->angle,
+            anchor, center);
+    }
+}
+
+/*@brief 控件在画布绘制图像
+ *@param draw_graph 绘制参数实例
+ */
+void scui_widget_draw_ctx_image_3d(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);

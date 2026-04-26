@@ -93,18 +93,15 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
     return;
     #elif DITHER_DYNAMIC
     /* 动态误差扩散抖动 */
-    scui_coord_t  error_color_l = sizeof(scui_coord_t) * draw_area.w;
-    scui_coord_t *error_color_c = SCUI_MEM_ZALLOC(scui_mem_type_graph, error_color_l * 4);
-    scui_coord_t *error_color_n = SCUI_MEM_ZALLOC(scui_mem_type_graph, error_color_l * 4);
+    scui_coord_t  err_ch_w = draw_area.w;
+    scui_coord_t  err_ch_l = sizeof(scui_coord_t) * err_ch_w;
+    scui_coord_t *err_ch_c = SCUI_MEM_ZALLOC(scui_mem_type_graph, err_ch_l * 4);
+    scui_coord_t *err_ch_n = SCUI_MEM_ZALLOC(scui_mem_type_graph, err_ch_l * 4);
     
-    scui_coord_t *err_c_ch_a = error_color_c + draw_area.w * 0;
-    scui_coord_t *err_c_ch_r = error_color_c + draw_area.w * 1;
-    scui_coord_t *err_c_ch_g = error_color_c + draw_area.w * 2;
-    scui_coord_t *err_c_ch_b = error_color_c + draw_area.w * 3;
-    scui_coord_t *err_n_ch_a = error_color_n + draw_area.w * 0;
-    scui_coord_t *err_n_ch_r = error_color_n + draw_area.w * 1;
-    scui_coord_t *err_n_ch_g = error_color_n + draw_area.w * 2;
-    scui_coord_t *err_n_ch_b = error_color_n + draw_area.w * 3;
+    scui_coord_t *err_ch_ca = err_ch_c + err_ch_w * 0, *err_ch_na = err_ch_n + err_ch_w * 0;
+    scui_coord_t *err_ch_cr = err_ch_c + err_ch_w * 1, *err_ch_nr = err_ch_n + err_ch_w * 1;
+    scui_coord_t *err_ch_cg = err_ch_c + err_ch_w * 2, *err_ch_ng = err_ch_n + err_ch_w * 2;
+    scui_coord_t *err_ch_cb = err_ch_c + err_ch_w * 3, *err_ch_nb = err_ch_n + err_ch_w * 3;
     
     for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++) {
     for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
@@ -112,10 +109,10 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
          scui_coord_t ch_a = 0, ch_r = 0, ch_g = 0, ch_b = 0;
         
         /* 抖动<s> */
-        scui_coord_t e_ch_a = err_c_ch_a[idx_item] + err_n_ch_a[idx_item];
-        scui_coord_t e_ch_r = err_c_ch_r[idx_item] + err_n_ch_r[idx_item];
-        scui_coord_t e_ch_g = err_c_ch_g[idx_item] + err_n_ch_g[idx_item];
-        scui_coord_t e_ch_b = err_c_ch_b[idx_item] + err_n_ch_b[idx_item];
+        scui_coord_t e_ch_a = err_ch_ca[idx_item] + err_ch_na[idx_item];
+        scui_coord_t e_ch_r = err_ch_cr[idx_item] + err_ch_nr[idx_item];
+        scui_coord_t e_ch_g = err_ch_cg[idx_item] + err_ch_ng[idx_item];
+        scui_coord_t e_ch_b = err_ch_cb[idx_item] + err_ch_nb[idx_item];
         /* 抖动<e> */
         
         /* 取原始像素 */
@@ -129,16 +126,16 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
             ch_g = color565->ch.g;
             ch_b = color565->ch.b;
             /* 强制添加微小抖动 */
-            ch_r += (idx_item ^ idx_line) % 3 - 1;
-            ch_g += (idx_item * 3 ^ idx_line) % 3 - 1;
-            ch_b += (idx_item ^ idx_line * 5) % 3 - 1;
+            ch_r += (idx_item ^ idx_line) % 3 - 2;
+            ch_g += (idx_item * 3 ^ idx_line) % 3 - 2;
+            ch_b += (idx_item ^ idx_line * 5) % 3 - 2;
             /*  */
             color565->ch.r = scui_clamp(ch_r + e_ch_r, 0, (1 << 5) - 1);
             color565->ch.g = scui_clamp(ch_g + e_ch_g, 0, (1 << 6) - 1);
             color565->ch.b = scui_clamp(ch_b + e_ch_b, 0, (1 << 5) - 1);
-            ch_r = color565->ch.r - ch_r;
-            ch_g = color565->ch.g - ch_g;
-            ch_b = color565->ch.b - ch_b;
+            ch_r = (color565->ch.r - ch_r) * 2;
+            ch_g = (color565->ch.g - ch_g) * 2;
+            ch_b = (color565->ch.b - ch_b) * 2;
         }
         
         if (dst_surface->format == scui_pixel_cf_bmp8565) {
@@ -149,51 +146,51 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
             ch_g = color8565->ch.g;
             ch_b = color8565->ch.b;
             /* 强制添加微小抖动 */
-            ch_a += (idx_item * 5 ^ idx_line * 3) % 3 - 1;
-            ch_r += (idx_item ^ idx_line) % 3 - 1;
-            ch_g += (idx_item * 3 ^ idx_line) % 3 - 1;
-            ch_b += (idx_item ^ idx_line * 5) % 3 - 1;
+            ch_a += (idx_item * 5 ^ idx_line * 3) % 3 - 2;
+            ch_r += (idx_item ^ idx_line) % 3 - 2;
+            ch_g += (idx_item * 3 ^ idx_line) % 3 - 2;
+            ch_b += (idx_item ^ idx_line * 5) % 3 - 2;
             /*  */
             color8565->ch.a = scui_clamp(ch_a + e_ch_a, 0, (1 << 8) - 1);
             color8565->ch.r = scui_clamp(ch_r + e_ch_r, 0, (1 << 5) - 1);
             color8565->ch.g = scui_clamp(ch_g + e_ch_g, 0, (1 << 6) - 1);
             color8565->ch.b = scui_clamp(ch_b + e_ch_b, 0, (1 << 5) - 1);
-            ch_a = color8565->ch.a - ch_a;
-            ch_r = color8565->ch.r - ch_r;
-            ch_g = color8565->ch.g - ch_g;
-            ch_b = color8565->ch.b - ch_b;
+            ch_a = (color8565->ch.a - ch_a) * 2;
+            ch_r = (color8565->ch.r - ch_r) * 2;
+            ch_g = (color8565->ch.g - ch_g) * 2;
+            ch_b = (color8565->ch.b - ch_b) * 2;
         }
         
         /* 误差扩散 */
         
         // (x+1,y):7/16
         if (idx_item + 1 < draw_area.w) {
-            err_c_ch_a[idx_item + 1] += ch_a * 7 / 16;
-            err_c_ch_r[idx_item + 1] += ch_r * 7 / 16;
-            err_c_ch_g[idx_item + 1] += ch_g * 7 / 16;
-            err_c_ch_b[idx_item + 1] += ch_b * 7 / 16;
+            err_ch_ca[idx_item + 1] += ch_a * 7 / 16;
+            err_ch_cr[idx_item + 1] += ch_r * 7 / 16;
+            err_ch_cg[idx_item + 1] += ch_g * 7 / 16;
+            err_ch_cb[idx_item + 1] += ch_b * 7 / 16;
         }
         if (idx_line + 1 < draw_area.h) {
             // (x,y+1):5/16
             if (idx_item + 0 < draw_area.w) {
-                err_n_ch_a[idx_item + 0] += ch_a * 5 / 16;
-                err_n_ch_r[idx_item + 0] += ch_r * 5 / 16;
-                err_n_ch_g[idx_item + 0] += ch_g * 5 / 16;
-                err_n_ch_b[idx_item + 0] += ch_b * 5 / 16;
+                err_ch_na[idx_item + 0] += ch_a * 5 / 16;
+                err_ch_nr[idx_item + 0] += ch_r * 5 / 16;
+                err_ch_ng[idx_item + 0] += ch_g * 5 / 16;
+                err_ch_nb[idx_item + 0] += ch_b * 5 / 16;
             }
             // (x-1,y+1):3/16
             if (idx_item - 1 >= 0) {
-                err_n_ch_a[idx_item - 1] += ch_a * 3 / 16;
-                err_n_ch_r[idx_item - 1] += ch_r * 3 / 16;
-                err_n_ch_g[idx_item - 1] += ch_g * 3 / 16;
-                err_n_ch_b[idx_item - 1] += ch_b * 3 / 16;
+                err_ch_na[idx_item - 1] += ch_a * 3 / 16;
+                err_ch_nr[idx_item - 1] += ch_r * 3 / 16;
+                err_ch_ng[idx_item - 1] += ch_g * 3 / 16;
+                err_ch_nb[idx_item - 1] += ch_b * 3 / 16;
             }
             // (x+1,y+1):1/16
             if (idx_item + 1 < draw_area.w) {
-                err_n_ch_a[idx_item + 1] += ch_a * 1 / 16;
-                err_n_ch_r[idx_item + 1] += ch_r * 1 / 16;
-                err_n_ch_g[idx_item + 1] += ch_g * 1 / 16;
-                err_n_ch_b[idx_item + 1] += ch_b * 1 / 16;
+                err_ch_na[idx_item + 1] += ch_a * 1 / 16;
+                err_ch_nr[idx_item + 1] += ch_r * 1 / 16;
+                err_ch_ng[idx_item + 1] += ch_g * 1 / 16;
+                err_ch_nb[idx_item + 1] += ch_b * 1 / 16;
             }
         }
         
@@ -204,18 +201,18 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
             continue;
         
         /* 同步误差到上一行 */
-        scui_draw_byte_copy(true, err_c_ch_a, err_n_ch_a, error_color_l);
-        scui_draw_byte_copy(true, err_c_ch_r, err_n_ch_r, error_color_l);
-        scui_draw_byte_copy(true, err_c_ch_g, err_n_ch_g, error_color_l);
-        scui_draw_byte_copy(true, err_c_ch_b, err_n_ch_b, error_color_l);
-        memset(err_n_ch_a, 0, error_color_l);
-        memset(err_n_ch_r, 0, error_color_l);
-        memset(err_n_ch_g, 0, error_color_l);
-        memset(err_n_ch_b, 0, error_color_l);
+        scui_draw_byte_copy(true, err_ch_ca, err_ch_na, err_ch_l);
+        scui_draw_byte_copy(true, err_ch_cr, err_ch_nr, err_ch_l);
+        scui_draw_byte_copy(true, err_ch_cg, err_ch_ng, err_ch_l);
+        scui_draw_byte_copy(true, err_ch_cb, err_ch_nb, err_ch_l);
+        memset(err_ch_na, 0, err_ch_l);
+        memset(err_ch_nr, 0, err_ch_l);
+        memset(err_ch_ng, 0, err_ch_l);
+        memset(err_ch_nb, 0, err_ch_l);
     }
     
-    SCUI_MEM_FREE(error_color_c);
-    SCUI_MEM_FREE(error_color_n);
+    SCUI_MEM_FREE(err_ch_c);
+    SCUI_MEM_FREE(err_ch_n);
     return;
     #else
     SCUI_LOG_ERROR("unknown dither");
@@ -247,7 +244,7 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
     uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip->y, dst_clip->x);
     scui_multi_t dis_line = draw_area.w * dst_surface->pbyte;
     
-    #define BLUR_IIR        0   // IIR双向滤波
+    #define BLUR_IIR        1   // IIR双向滤波
     #define BLUR_GAUSS      1   // 高斯卷积核
     
     #if 0

@@ -58,7 +58,8 @@ SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_blur);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_scale);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_rotate);
-SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_matrix);
+SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_2d);
+SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_3d);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_ring);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_qrcode);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_barcode);
@@ -121,12 +122,21 @@ do {                                                                            
     scui_widget_draw_ctx_image_rotate(handle_v, target_v, &scui_wdc_i);         \
 } while (0)                                                                     \
 
-#define scui_widget_draw_image_matrix(handle_v, target_v,                       \
+#define scui_widget_draw_image_2d(handle_v, target_v,                           \
+    image_v, clip_v, anchor_v, center_v, scale_v, angle_v)                      \
+do {                                                                            \
+    scui_widget_draw_dsc_t scui_wdc_i = {.image = image_v,.clip = clip_v,       \
+        .anchor = anchor_v,.center = center_v,                                  \
+        .scale = scale_v,.angle = angle_v,};                                    \
+    scui_widget_draw_ctx_image_rotate(handle_v, target_v, &scui_wdc_i);         \
+} while (0)                                                                     \
+
+#define scui_widget_draw_image_3d(handle_v, target_v,                           \
     image_v, clip_v, matrix_v, inv_matrix_v)                                    \
 do {                                                                            \
     scui_widget_draw_dsc_t scui_wdc_i = {.image = image_v,.clip = clip_v,       \
         .matrix = matrix_v,.inv_matrix = inv_matrix_v,};                        \
-    scui_widget_draw_ctx_image_matrix(handle_v, target_v, &scui_wdc_i);         \
+    scui_widget_draw_ctx_image_3d(handle_v, target_v, &scui_wdc_i);             \
 } while (0)                                                                     \
 
 #define scui_widget_draw_qrcode(handle_v, target_v,                             \

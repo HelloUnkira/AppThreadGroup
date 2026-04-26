@@ -296,12 +296,12 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
             {1.0, .r = f_r, .g = f_g, .b = f_b, .a = 0},
         };
         
+        scui_coord_t sw = src_width;
         scui_coord_t x = src_area->x - dst_clip->x;
         scui_coord_t y = src_area->y - dst_clip->y;
         scui_coord_t w = src_area->w;
         scui_coord_t h = src_area->h;
         scui_coord_t r = src_radius;
-        scui_coord_t sw = src_width;
         
         Tvg_Paint *paint_r1 = tvg_shape_new();
         tvg_paint_set_opacity(paint_r1, src_alpha);
@@ -532,8 +532,8 @@ static bool scui_draw_ctx_graph_part_TVG(scui_draw_dsc_t *draw_dsc)
         scui_draw_line(draw_dsc);
         return true;
     case scui_draw_type_pixel_crect:
-        scui_draw_crect(draw_dsc);
-        return true;
+        // scui_draw_crect(draw_dsc);
+        return false;
     case scui_draw_type_pixel_tvg:
         scui_draw_tvg(draw_dsc);
         return true;

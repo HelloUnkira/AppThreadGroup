@@ -414,12 +414,13 @@ void scui_custom_draw_ring_edge(scui_handle_t handle, scui_area_t *clip, scui_cu
     scui_color_t  color         = data->ring_edge.color;
     scui_point_t  center        = data->ring_edge.center;
     scui_coord_t  radius        = data->ring_edge.radius;
-    scui_coord_t  angle         = data->ring_edge.angle;
+    scui_multi_t  angle         = data->ring_edge.angle;
     /* draw data<e> */
     SCUI_LOG_DEBUG("");
     
-    scui_multi_t point_x = radius * scui_cos4096((int32_t)angle) >> 12;
-    scui_multi_t point_y = radius * scui_sin4096((int32_t)angle) >> 12;
+    scui_coord3_t angle_3 = (scui_coord3_t)angle / SCUI_SCALE_COF;
+    scui_multi_t  point_x = radius * scui_cos(angle_3);
+    scui_multi_t  point_y = radius * scui_sin(angle_3);
     
     scui_area_t clip_edge = {
         .x = center.x + point_x - scui_image_w(image) / 2,

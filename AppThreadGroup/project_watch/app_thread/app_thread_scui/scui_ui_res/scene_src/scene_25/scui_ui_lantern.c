@@ -224,11 +224,11 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
                 scui_alpha_t alpha = scui_alpha_trans;
                 scui_widget_alpha_get(event->object, &alpha);
                 scui_widget_alpha_set(event->object, scui_alpha_pct50, false);
-                scui_widget_draw_image_matrix(event->object, NULL, image[draw_i[idx]], NULL,
+                scui_widget_draw_image_3d(event->object, NULL, image[draw_i[idx]], NULL,
                     &matrix_fake[draw_i[idx]], &inv_matrix_fake[draw_i[idx]]);
                 scui_widget_alpha_set(event->object, alpha, false);
                 
-                scui_widget_draw_image_matrix(event->object, NULL, image[draw_i[idx]], NULL,
+                scui_widget_draw_image_3d(event->object, NULL, image[draw_i[idx]], NULL,
                     &matrix[draw_i[idx]], &inv_matrix[draw_i[idx]]);
             }
             

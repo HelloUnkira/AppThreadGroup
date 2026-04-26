@@ -81,7 +81,7 @@ void scui_ui_scene_float_2_ring_edge_event_proc(scui_event_t *event)
         scui_custom_data_t *data = NULL;
         scui_custom_data_inst(event->object, &data);
         
-        data->ring_edge.angle += 1;
+        data->ring_edge.angle += SCUI_SCALE_COF * 1 / 6 / 3;
         scui_widget_draw(event->object, NULL, false);
         break;
     }

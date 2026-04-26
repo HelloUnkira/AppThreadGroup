@@ -418,7 +418,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
                 }
             
             for (uint8_t idx = 0; idx < matrix_num; idx++)
-                scui_widget_draw_image_matrix(event->object, NULL, list_image[draw_i[idx]],
+                scui_widget_draw_image_3d(event->object, NULL, list_image[draw_i[idx]],
                     NULL, &matrix_list[draw_i[idx]], &inv_matrix_list[draw_i[idx]]);
             
         }

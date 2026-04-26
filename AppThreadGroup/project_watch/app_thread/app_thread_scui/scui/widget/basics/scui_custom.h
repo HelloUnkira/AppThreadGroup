@@ -49,7 +49,7 @@ typedef union {
         scui_color_t  color;        /* 图像源色调(alpha图使用) */
         scui_point_t  center;       /* 旋转中心 */
         scui_coord_t  radius;       /* 旋转半径 */
-        scui_coord_t  angle;        /* 旋转角度(顺时针旋转:+,逆时针旋转:-) */
+        scui_multi_t  angle;        /* 旋转角度(顺时针旋转:+,逆时针旋转:-) */
     } ring_edge;
     struct {
         scui_handle_t *image;       /* 图像句柄 */

@@ -203,7 +203,7 @@ static void scui_roller_m_event(scui_event_t *event)
             
             /* 这里暂时不分为三个步调, 都在execute执行完毕 */
             /* 此外, 这里仅仅替父控件计算绘制的实际内容, 子控件本身不做额外绘制 */
-            scui_widget_draw_image_matrix(widget->myself, NULL, image_s, NULL, &matrix, &inv_matrix);
+            scui_widget_draw_image_3d(widget->myself, NULL, image_s, NULL, &matrix, &inv_matrix);
             break;
         }
         default:
