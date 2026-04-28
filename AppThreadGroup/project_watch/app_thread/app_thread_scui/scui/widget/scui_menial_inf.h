@@ -1,6 +1,14 @@
 #ifndef SCUI_MENIAL_INF_H
 #define SCUI_MENIAL_INF_H
 
+/*@brief 仆从控件数据实例
+ *@param handle 控件句柄
+ *@param data   数据实例
+ */
+void scui_menial_data_inst(scui_handle_t handle, scui_menial_data_t **data);
+
+/******************************************************************************/
+
 /*@brief 控件更新值(子类型)
  *@param handle 控件句柄
  *@param angle  目标角度
@@ -34,14 +42,20 @@ void scui_menial_bar_current_value(scui_handle_t handle, scui_coord3_t *value);
 /******************************************************************************/
 /* 属性过渡参考配置模板: */
 
-/*@brief 属性过渡配置
- *@param handle 控件句柄
+/*@brief 绘制经典按钮
+ *@param handle 对象控件句柄
+ *@retval 成功失败
  */
-void scui_menial_btn_prop_tran_def_pre(scui_handle_t handle);
+bool scui_menial_btn_draw(scui_handle_t handle);
 
 /*@brief 属性过渡配置
  *@param handle 控件句柄
  */
-void scui_menial_btn_prop_tran_chk_pre(scui_handle_t handle);
+void scui_menial_btn_crect(scui_handle_t handle);
+
+/*@brief 属性过渡配置
+ *@param handle 控件句柄
+ */
+void scui_menial_btn_prop_tran(scui_handle_t handle);
 
 #endif

@@ -57,8 +57,10 @@ void scui_object_state_set(scui_handle_t handle, scui_object_type_t state);
 /* 自定义的经典效果: */
 
 typedef struct {
+    scui_object_type_t part;
     scui_object_type_t state;
     
+    scui_coord_t  index;        /* 部件索引[0, 3] */
     scui_alpha_t  alpha[4];     /* 部件透明度(背景,边界,外部线,阴影) */
     scui_color_t  color[4];     /* 部件源色调(s->e) */
     scui_coord_t  width[4];     /* 部件宽度 */
@@ -76,10 +78,24 @@ typedef struct {
  */
 bool scui_object_draw_crect(scui_handle_t handle, scui_area_t *clip, scui_object_prop_t *prop);
 
+/*@brief 对象控件绘制圆角矩形
+ *@param handle 对象控件句柄
+ *@param clip   剪切域
+ *@param prop   属性(state)
+ *@retval 成功失败
+ */
+bool scui_object_draw_crect4(scui_handle_t handle, scui_area_t *clip, scui_object_prop_t *prop);
+
 /*@brief 对象控件添加经典圆角矩形属性
  *@param handle 对象控件句柄
  *@param crect  圆角矩形属性
  */
 void scui_object_prop_crect(scui_handle_t handle, scui_object_crect_t *crect);
+
+/*@brief 对象控件添加经典圆角矩形属性
+ *@param handle 对象控件句柄
+ *@param crect  圆角矩形属性
+ */
+void scui_object_prop_crect4(scui_handle_t handle, scui_object_crect_t *crect);
 
 #endif

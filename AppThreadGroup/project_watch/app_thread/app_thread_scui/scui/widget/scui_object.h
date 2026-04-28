@@ -7,38 +7,47 @@
  */
 
 typedef enum {
-    scui_object_type_none = 0,
+    scui_object_type_none  = 0,
+    scui_object_type_part  = 0x100,
+    scui_object_type_state = 0x200,
+    scui_object_type_style = 0x300,
     
     /* field part: */
-    scui_object_part_s  = 0x100,
+    scui_object_part_s =
+    scui_object_type_part,
     scui_object_part_crect_bg,  /* bg */
     scui_object_part_crect_bd,  /* border */
     scui_object_part_crect_ol,  /* outline */
     scui_object_part_crect_sd,  /* shadow */
+    
     scui_object_part_main,
     scui_object_part_item,
-    scui_object_part_e  = 0x199,
+    scui_object_part_e,
     /* field state: */
-    scui_object_state_s = 0x200,
+    scui_object_state_s =
+    scui_object_type_state,
     scui_object_state_def,
     scui_object_state_pre,
     scui_object_state_chk,
-    scui_object_state_e = 0x299,
+    scui_object_state_e,
     /* field style: */
-    scui_object_style_s = 0x300,
+    scui_object_style_s = 
+    scui_object_type_style,
     scui_object_style_crect_alpha,
-    scui_object_style_crect_color_s,
-    scui_object_style_crect_color_e,
+    scui_object_style_crect_color,
     scui_object_style_crect_width,
     scui_object_style_crect_radius,
+    scui_object_style_crect_color_grad,
     scui_object_style_crect_multi,
+    
     scui_object_style_width,
     scui_object_style_height,
     scui_object_style_radius,
+    scui_object_style_color,
     scui_object_style_color_bg,
     scui_object_style_color_fg,
     scui_object_style_alpha,
-    scui_object_style_e = 0x399,
+    scui_object_style_e,
 } scui_object_type_t;
 
 typedef union {

@@ -98,6 +98,19 @@ void scui_menial_burn(scui_handle_t handle)
     scui_object_burn(widget->myself);
 }
 
+/*@brief 仆从控件数据实例
+ *@param handle 控件句柄
+ *@param data   数据实例
+ */
+void scui_menial_data_inst(scui_handle_t handle, scui_menial_data_t **data)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
+    
+    *data = &menial->data;
+}
+
 /*@brief 事件处理回调
  *@param event 事件
  */
