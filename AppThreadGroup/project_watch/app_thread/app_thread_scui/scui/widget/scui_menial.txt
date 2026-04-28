@@ -4,3 +4,11 @@ plan:
 2.将object实现四级可选绘制插件
 3.抽象一些常用的prop给上层使用
 4.抽象一些常用的tran给上层使用
+
+
+未完成:
+
+1. Chart 折线图
+Line + Point
+2. Chart 柱状图
+多个 Bar 组合

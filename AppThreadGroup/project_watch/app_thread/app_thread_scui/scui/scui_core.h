@@ -76,6 +76,7 @@
 #include "scui_object_inf.h"        /* 控件(对象)API */
 #include "scui_menial.h"            /* 控件(仆从) */
 #include "scui_menial_inf.h"        /* 控件(仆从)API */
+/* widget(custom): */
 #include "scui_button.h"            /* 控件(按钮) */
 #include "scui_button_inf.h"        /* 控件(按钮)API */
 #include "scui_xchart.h"            /* 控件(图表) */

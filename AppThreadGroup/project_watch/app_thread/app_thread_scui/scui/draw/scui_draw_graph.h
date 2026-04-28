@@ -264,18 +264,18 @@ typedef struct {
         scui_coord_t        src_angle_s;    /* 起始角度 */
         scui_coord_t        src_angle_e;    /* 结束角度 */
         scui_coord_t        src_width;      /* 线宽, 环宽, 边界宽 */
+        scui_coord_t        src_radius;     /* 弧, 圆半径 */
         scui_point_t        src_pos_1;      /* 坐标点 */
         scui_point_t        src_pos_2;      /* 坐标点 */
-        scui_coord_t        src_radius;     /* 弧, 圆半径 */
-        scui_sbitfd_t       src_shadow:1;   /* crect阴影标记 */
+        scui_sbitfd_t       src_round:1;    /* 圆角标记:弧端点 */
+        scui_sbitfd_t       src_shadow:1;   /* 阴影标记:圆角矩形 */
+        scui_sbitfd_t       src_grad_w:1;   /* 渐变方向:水平或垂直 */
+        scui_sbitfd_t       src_grad:1;     /* 渐变标记:弧 */
         
         /* 矢量缩放图形扩展 */
-        void               (*src_tvg_cb)(void *draw_dsc);
-        void                *src_tvg_canvas;
-        scui_point_t         src_tvg_offset;
-        scui_sbitfd_t        src_tvg_round:1;   /* 端点圆角:弧 */
-        scui_sbitfd_t        src_tvg_gradw:1;   /* 渐变方向:水平或垂直 */
-        scui_sbitfd_t        src_tvg_grad:1;    /* 渐变标记:弧 */
+        void  *src_tvg_canvas;
+        void (*src_tvg_cb)(void *draw_dsc);
+        scui_point_t src_tvg_offset;
     } graph;
     /**************************************************************************
      * keep adding...

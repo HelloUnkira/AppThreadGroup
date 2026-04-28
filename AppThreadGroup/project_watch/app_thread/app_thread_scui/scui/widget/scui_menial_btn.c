@@ -24,8 +24,8 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
     /* draw dsc args<e> */
     
     scui_coord_t src_radius_max = scui_min(src_area->w, src_area->h) / 2;
-    if (src_radius < 0) src_radius = src_radius_max;
-    src_radius = scui_clamp(src_radius, 0, src_radius_max);
+    if (src_radius > src_radius_max || src_radius < 0)
+        src_radius = src_radius_max;
     
     Tvg_Canvas  *canvas = draw_dsc->graph.src_tvg_canvas;
     scui_point_t offset = draw_dsc->graph.src_tvg_offset;
@@ -101,12 +101,119 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
 }
 #endif
 
-/*@brief 属性过渡配置
+/*@brief 控件构造器初始化(子类型)
+ *@param menial_maker 控件构造器实例
+ */
+void scui_menial_btn_maker(scui_menial_maker_t *menial_maker)
+{
+    /* 必须标记widget事件 */
+    menial_maker->widget.style.sched_widget = true;
+    
+    /* 配置check状态激活 */
+    menial_maker->object.check = menial_maker->data.btn.check;
+}
+
+/*@brief 控件初始化(子类型)
  *@param menial 控件实例
  */
-static void scui_mem_btn_prop_tran_def_pre(scui_menial_t *menial)
+void scui_menial_btn_config(scui_menial_t *menial)
 {
-    scui_widget_t *widget = (void *)menial;
+    /* 未配置使用默认值 */
+    if (menial->data.btn.time == 0)
+        menial->data.btn.time  = SCUI_WIDGET_MENIAL_BTN_TIME;
+    
+    /* 未配置使用默认值 */
+    if (menial->data.btn.lim == 0)
+        menial->data.btn.lim  = SCUI_WIDGET_MENIAL_BTN_PCT;
+    if (menial->data.btn.fixed)
+        menial->data.btn.lim  = 100;
+    
+    scui_menial_btn_prop_tran_def_pre(menial->widget.myself);
+    if (menial->data.btn.check)
+    scui_menial_btn_prop_tran_chk_pre(menial->widget.myself);
+}
+
+/*@brief 控件反初始化(子类型)
+ *@param menial 控件实例
+ */
+void scui_menial_btn_recycle(scui_menial_t *menial)
+{
+}
+
+/*@brief 事件处理回调(子类型)
+ *@param event 事件
+ */
+void scui_menial_btn_invoke(scui_event_t *event)
+{
+    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_menial_t *menial = (void *)widget;
+    
+    switch (event->type) {
+    case scui_event_draw: {
+        if (!scui_event_check_execute(event))
+             return;
+        
+        scui_object_prop_t prop = {0};
+        prop.part  = scui_object_part_main;
+        prop.style = scui_object_style_color_bg;
+        scui_object_prop_sync(event->object, &prop);
+        scui_color_t src_color = {.color = prop.data.color32};
+        prop.style = scui_object_style_width;
+        scui_object_prop_sync(event->object, &prop);
+        scui_coord_t pct_w = prop.data.number;
+        prop.style = scui_object_style_height;
+        scui_object_prop_sync(event->object, &prop);
+        scui_coord_t pct_h = prop.data.number;
+        SCUI_LOG_INFO("<%d,%d>", pct_w, pct_h);
+        
+        scui_area_t src_area = widget->clip;
+        scui_coord_t scale_w = src_area.w * pct_w / 100;
+        scui_coord_t scale_h = src_area.h * pct_h / 100;
+        scale_w -= menial->data.btn.width * 2;
+        scale_h -= menial->data.btn.width * 2;
+        src_area.x += (src_area.w - scale_w) / 2;
+        src_area.y += (src_area.h - scale_h) / 2;
+        src_area.w  = scale_w;
+        src_area.h  = scale_h;
+        
+        scui_draw_dsc_t draw_dsc = {0};
+        draw_dsc.type = scui_draw_type_pixel_tvg;
+        draw_dsc.graph.src_area   = src_area;
+        draw_dsc.graph.src_width  = menial->data.btn.width;
+        draw_dsc.graph.src_radius = menial->data.btn.radius;
+        #if SCUI_DRAW_USE_THORVG
+        draw_dsc.graph.src_tvg_cb = scui_menial_tvg_cb;
+        #endif
+        
+        scui_widget_draw_graph(widget->myself, NULL,
+            widget->alpha, src_color, &draw_dsc);
+        break;
+    }
+    case scui_event_ptr_move:
+        scui_event_mask_over(event);
+        break;
+    case scui_event_ptr_click: {
+        scui_event_mask_over(event);
+        
+        /* 这里是直接响应的,要不要延迟到抬起? */
+        scui_event_define(event, widget->myself, true, scui_event_widget_button_click, NULL);
+        scui_event_notify(&event);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief 属性过渡配置
+ *@param handle 控件句柄
+ */
+void scui_menial_btn_prop_tran_def_pre(scui_handle_t handle)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
     
     scui_object_prop_t prop_def = {0};
     scui_object_prop_t prop_pre = {0};
@@ -167,11 +274,13 @@ static void scui_mem_btn_prop_tran_def_pre(scui_menial_t *menial)
 }
 
 /*@brief 属性过渡配置
- *@param menial 控件实例
+ *@param handle 控件句柄
  */
-static void scui_mem_btn_prop_tran_chk_pre(scui_menial_t *menial)
+void scui_menial_btn_prop_tran_chk_pre(scui_handle_t handle)
 {
-    scui_widget_t *widget = (void *)menial;
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
     
     scui_object_prop_t prop_chk = {0};
     scui_object_prop_t prop_pre = {0};
@@ -229,109 +338,4 @@ static void scui_mem_btn_prop_tran_chk_pre(scui_menial_t *menial)
     tran_pre.style = scui_object_style_height;
     scui_object_tran_add_by(widget->myself, &tran_chk);
     scui_object_tran_add_by(widget->myself, &tran_pre);
-}
-
-
-/*@brief 控件构造器初始化(子类型)
- *@param menial_maker 控件构造器实例
- */
-void scui_menial_btn_maker(scui_menial_maker_t *menial_maker)
-{
-    /* 必须标记widget事件 */
-    menial_maker->widget.style.sched_widget = true;
-    
-    menial_maker->object.prop_num = 20;
-    menial_maker->object.tran_num = 40;
-    menial_maker->object.check = menial_maker->data.btn.check;
-}
-
-/*@brief 控件初始化(子类型)
- *@param menial 控件实例
- */
-void scui_menial_btn_config(scui_menial_t *menial)
-{
-    /* 未配置使用默认值 */
-    if (menial->data.btn.time == 0)
-        menial->data.btn.time  = SCUI_WIDGET_MENIAL_BTN_TIME;
-    
-    /* 未配置使用默认值 */
-    if (menial->data.btn.lim == 0)
-        menial->data.btn.lim  = SCUI_WIDGET_MENIAL_BTN_PCT;
-    if (menial->data.btn.fixed)
-        menial->data.btn.lim  = 100;
-    
-    scui_mem_btn_prop_tran_def_pre(menial);
-    if (menial->data.btn.check)
-    scui_mem_btn_prop_tran_chk_pre(menial);
-}
-
-/*@brief 控件反初始化(子类型)
- *@param menial 控件实例
- */
-void scui_menial_btn_recycle(scui_menial_t *menial)
-{
-}
-
-/*@brief 事件处理回调(子类型)
- *@param event 事件
- */
-void scui_menial_btn_invoke(scui_event_t *event)
-{
-    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_menial_t *menial = (void *)widget;
-    
-    switch (event->type) {
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             return;
-        
-        scui_object_prop_t prop = {0};
-        prop.part  = scui_object_part_main;
-        prop.style = scui_object_style_color_bg;
-        scui_object_prop_sync(event->object, &prop);
-        scui_color_t src_color = {.color = prop.data.color32};
-        prop.style = scui_object_style_width;
-        scui_object_prop_sync(event->object, &prop);
-        scui_coord_t pct_w = prop.data.number;
-        prop.style = scui_object_style_height;
-        scui_object_prop_sync(event->object, &prop);
-        scui_coord_t pct_h = prop.data.number;
-        SCUI_LOG_INFO("<%d,%d>", pct_w, pct_h);
-        
-        scui_area_t src_area = widget->clip;
-        scui_coord_t scale_w = src_area.w * pct_w / 100;
-        scui_coord_t scale_h = src_area.h * pct_h / 100;
-        scale_w -= menial->data.btn.width * 2;
-        scale_h -= menial->data.btn.width * 2;
-        src_area.x += (src_area.w - scale_w) / 2;
-        src_area.y += (src_area.h - scale_h) / 2;
-        src_area.w  = scale_w;
-        src_area.h  = scale_h;
-        
-        scui_draw_dsc_t draw_dsc = {0};
-        draw_dsc.type = scui_draw_type_pixel_tvg;
-        draw_dsc.graph.src_area   = src_area;
-        draw_dsc.graph.src_width  = menial->data.btn.width;
-        draw_dsc.graph.src_radius = menial->data.btn.radius;
-        draw_dsc.graph.src_tvg_cb = scui_menial_tvg_cb;
-        
-        scui_widget_draw_graph(widget->myself, NULL,
-            widget->alpha, src_color, &draw_dsc);
-        break;
-    }
-    case scui_event_ptr_move:
-        scui_event_mask_over(event);
-        break;
-    case scui_event_ptr_click: {
-        scui_event_mask_over(event);
-        
-        /* 这里是直接响应的,要不要延迟到抬起? */
-        scui_event_define(event, widget->myself, true, scui_event_widget_button_click, NULL);
-        scui_event_notify(&event);
-        break;
-    }
-    default:
-        break;
-    }
 }

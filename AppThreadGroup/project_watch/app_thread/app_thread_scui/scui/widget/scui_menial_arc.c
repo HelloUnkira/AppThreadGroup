@@ -23,6 +23,9 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
     scui_point_t    src_center  =  draw_dsc->graph.src_center;
     scui_coord_t    src_angle_s =  draw_dsc->graph.src_angle_s;
     scui_coord_t    src_angle_e =  draw_dsc->graph.src_angle_e;
+    scui_sbitfd_t   src_round   =  draw_dsc->graph.src_round;
+    scui_sbitfd_t   src_grad_w  =  draw_dsc->graph.src_grad_w;
+    scui_sbitfd_t   src_grad    =  draw_dsc->graph.src_grad;
     /* draw dsc args<e> */
     
     if (src_radius <= 0)
@@ -30,9 +33,6 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
     
     Tvg_Canvas   *canvas = draw_dsc->graph.src_tvg_canvas;
     scui_point_t  offset = draw_dsc->graph.src_tvg_offset;
-    scui_sbitfd_t round  = draw_dsc->graph.src_tvg_round;
-    scui_sbitfd_t gradw  = draw_dsc->graph.src_tvg_gradw;
-    scui_sbitfd_t grad   = draw_dsc->graph.src_tvg_grad;
     
     /* 固定:取用画笔并配置信息 */
     Tvg_Paint *paint = tvg_shape_new();
@@ -47,9 +47,9 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
     scui_coord_t c_x  = src_center.x - offset.x;
     scui_coord_t c_y  = src_center.y - offset.y;
     tvg_shape_append_arc(paint, c_x, c_y, src_radius, a_s, a_l, full);
-    if (round) tvg_shape_set_stroke_cap(paint, TVG_STROKE_CAP_ROUND);
+    if (src_round) tvg_shape_set_stroke_cap(paint, TVG_STROKE_CAP_ROUND);
     
-    if (grad) {
+    if (src_grad) {
         uint8_t g_a[2] = {0}, g_r[2] = {0}, g_g[2] = {0}, g_b[2] = {0};
         g_a[0] = src_color.color_s.ch.a; g_a[1] = src_color.color_e.ch.a;
         g_r[0] = src_color.color_s.ch.r; g_r[1] = src_color.color_e.ch.r;
@@ -61,7 +61,7 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
         g_cs[1] = (Tvg_Color_Stop){1.0, .r = g_r[1], .g = g_g[1], .b = g_b[1], .a = g_a[1],};
         
         Tvg_Gradient *p_grad = tvg_linear_gradient_new();
-        if (gradw) tvg_linear_gradient_set(p_grad, c_x, c_y - src_radius, c_x, c_y + src_radius);
+        if (src_grad_w) tvg_linear_gradient_set(p_grad, c_x, c_y - src_radius, c_x, c_y + src_radius);
         else tvg_linear_gradient_set(p_grad, c_x - src_radius, c_y, c_x + src_radius, c_y);
         tvg_gradient_set_color_stops(p_grad, g_cs, 2);
         if (full) tvg_shape_set_linear_gradient(paint, p_grad);
@@ -249,11 +249,12 @@ void scui_menial_arc_invoke(scui_event_t *event)
         draw_dsc.graph.src_center = menial->data.arc.center;
         draw_dsc.graph.src_width  = menial->data.arc.width;
         draw_dsc.graph.src_radius = menial->data.arc.radius;
-        
-        draw_dsc.graph.src_tvg_cb    = scui_menial_tvg_cb;
-        draw_dsc.graph.src_tvg_round = menial->data.arc.round;
-        draw_dsc.graph.src_tvg_gradw = menial->data.arc.gradw;
-        draw_dsc.graph.src_tvg_grad  = menial->data.arc.grad;
+        draw_dsc.graph.src_round  = menial->data.arc.round;
+        draw_dsc.graph.src_grad_w = menial->data.arc.gradw;
+        draw_dsc.graph.src_grad   = menial->data.arc.grad;
+        #if SCUI_DRAW_USE_THORVG
+        draw_dsc.graph.src_tvg_cb = scui_menial_tvg_cb;
+        #endif
         
         draw_dsc.graph.src_center.x += widget->clip.x;
         draw_dsc.graph.src_center.y += widget->clip.y;

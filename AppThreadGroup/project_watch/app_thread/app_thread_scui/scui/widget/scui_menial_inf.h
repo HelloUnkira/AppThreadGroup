@@ -29,4 +29,19 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
  */
 void scui_menial_bar_current_value(scui_handle_t handle, scui_coord3_t *value);
 
+/******************************************************************************/
+/******************************************************************************/
+/******************************************************************************/
+/* 属性过渡参考配置模板: */
+
+/*@brief 属性过渡配置
+ *@param handle 控件句柄
+ */
+void scui_menial_btn_prop_tran_def_pre(scui_handle_t handle);
+
+/*@brief 属性过渡配置
+ *@param handle 控件句柄
+ */
+void scui_menial_btn_prop_tran_chk_pre(scui_handle_t handle);
+
 #endif

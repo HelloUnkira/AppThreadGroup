@@ -377,11 +377,12 @@ do {                                                                            
     scui_dd_i->graph.src_pos_2   = (draw_dsc_v)->graph.src_pos_2;                   \
     scui_dd_i->graph.src_radius  = (draw_dsc_v)->graph.src_radius;                  \
     scui_dd_i->graph.src_shadow  = (draw_dsc_v)->graph.src_shadow;                  \
+    scui_dd_i->graph.src_round   = (draw_dsc_v)->graph.src_round;                   \
+    scui_dd_i->graph.src_grad_w  = (draw_dsc_v)->graph.src_grad_w;                  \
+    scui_dd_i->graph.src_grad    = (draw_dsc_v)->graph.src_grad;                    \
     /* ThorVG扩展字段: */                                                               \
-    scui_dd_i->graph.src_tvg_cb     = (draw_dsc_v)->graph.src_tvg_cb;               \
-    scui_dd_i->graph.src_tvg_round  = (draw_dsc_v)->graph.src_tvg_round;            \
-    scui_dd_i->graph.src_tvg_gradw  = (draw_dsc_v)->graph.src_tvg_gradw;            \
-    scui_dd_i->graph.src_tvg_grad   = (draw_dsc_v)->graph.src_tvg_grad;             \
+    scui_dd_i->graph.src_tvg_cb  = (draw_dsc_v)->graph.src_tvg_cb;                  \
+                                                                                    \
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
 
