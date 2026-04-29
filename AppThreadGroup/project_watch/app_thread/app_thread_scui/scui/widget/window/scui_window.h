@@ -132,6 +132,7 @@ typedef struct {
 
 typedef struct {
     scui_handle_t stack[SCUI_WINDOW_STACK_NEST];
+    scui_handle_t stack_rcd[SCUI_WINDOW_STACK_NEST];
     scui_handle_t top;
 } scui_window_stack_t;
 

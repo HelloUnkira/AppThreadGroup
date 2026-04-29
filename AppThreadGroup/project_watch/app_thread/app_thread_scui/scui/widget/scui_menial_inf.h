@@ -40,22 +40,12 @@ void scui_menial_bar_current_value(scui_handle_t handle, scui_coord3_t *value);
 /******************************************************************************/
 /******************************************************************************/
 /******************************************************************************/
-/* 属性过渡参考配置模板: */
+/* 自定义参考配置模板: */
 
-/*@brief 绘制经典按钮
- *@param handle 对象控件句柄
- *@retval 成功失败
+/*@brief 事件处理回调(子类型)
+ *       经典按钮样板
+ *@param event 事件
  */
-bool scui_menial_btn_draw(scui_handle_t handle);
-
-/*@brief 属性过渡配置
- *@param handle 控件句柄
- */
-void scui_menial_btn_crect(scui_handle_t handle);
-
-/*@brief 属性过渡配置
- *@param handle 控件句柄
- */
-void scui_menial_btn_prop_tran(scui_handle_t handle);
+void scui_menial_btn_event_cb(scui_event_t *event);
 
 #endif

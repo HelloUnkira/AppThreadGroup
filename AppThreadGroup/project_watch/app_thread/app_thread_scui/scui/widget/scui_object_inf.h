@@ -41,6 +41,18 @@ bool scui_object_tran_add_by(scui_handle_t handle, scui_object_tran_t *tran);
 
 /*@brief 对象控件状态获取
  *@param handle 控件句柄
+ *@param check  控件状态
+ */
+void scui_object_check_get(scui_handle_t handle, bool *check);
+
+/*@brief 对象控件状态设置
+ *@param handle 控件句柄
+ *@param check  控件状态
+ */
+void scui_object_check_set(scui_handle_t handle, bool check);
+
+/*@brief 对象控件状态获取
+ *@param handle 控件句柄
  *@param state  控件状态
  */
 void scui_object_state_get(scui_handle_t handle, scui_object_type_t *state);
@@ -78,6 +90,12 @@ typedef struct {
  */
 bool scui_object_draw_crect(scui_handle_t handle, scui_area_t *clip, scui_object_prop_t *prop);
 
+/*@brief 对象控件添加经典圆角矩形属性
+ *@param handle 对象控件句柄
+ *@param crect  圆角矩形属性
+ */
+void scui_object_prop_crect(scui_handle_t handle, scui_object_crect_t *crect);
+
 /*@brief 对象控件绘制圆角矩形
  *@param handle 对象控件句柄
  *@param clip   剪切域
@@ -85,12 +103,6 @@ bool scui_object_draw_crect(scui_handle_t handle, scui_area_t *clip, scui_object
  *@retval 成功失败
  */
 bool scui_object_draw_crect4(scui_handle_t handle, scui_area_t *clip, scui_object_prop_t *prop);
-
-/*@brief 对象控件添加经典圆角矩形属性
- *@param handle 对象控件句柄
- *@param crect  圆角矩形属性
- */
-void scui_object_prop_crect(scui_handle_t handle, scui_object_crect_t *crect);
 
 /*@brief 对象控件添加经典圆角矩形属性
  *@param handle 对象控件句柄

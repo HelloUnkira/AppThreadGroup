@@ -146,6 +146,12 @@ void scui_window_stack_last(scui_handle_t *handle);
  */
 void scui_window_stack_top(scui_handle_t *handle);
 
+/*@brief 获得窗口记录
+ *@param handle 窗口句柄
+ *@param index  索引(0:当前;1:最近;以此类推)
+ */
+void scui_window_stack_rcd(scui_handle_t *handle, scui_handle_t index);
+
 /*@brief 窗口栈复位
  *@param handle  窗口句柄
  *@param reserve 保留当前显示窗口

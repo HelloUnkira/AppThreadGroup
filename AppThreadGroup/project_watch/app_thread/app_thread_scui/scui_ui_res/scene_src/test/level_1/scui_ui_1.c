@@ -23,6 +23,10 @@ static struct {
  */
 void scui_ui_scene_1_menial_btn_event_proc(scui_event_t *event)
 {
+    scui_menial_btn_event_cb(event);
+    
+    
+    
     switch (event->type) {
     case scui_event_widget_button_click:
         SCUI_LOG_WARN("event %u widget %u", event->type, event->object);

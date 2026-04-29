@@ -96,8 +96,8 @@ typedef struct {
     scui_widget_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_coord_t        check:1;        /* 使用chk状态 */
     /* 内部域: */
+    scui_coord_t        check:1;        /* 使用chk状态 */
     scui_object_type_t  state_l;        /* 上一状态(last) */
     scui_object_type_t  state_c;        /* 当前状态(curr) */
     scui_object_prop_t *prop_list;      /* 属性列表 */
@@ -115,7 +115,6 @@ typedef struct {
     scui_widget_maker_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_coord_t        check:1;        /* 使用chk状态 */
 } scui_object_maker_t;
 #pragma pack(pop)
 

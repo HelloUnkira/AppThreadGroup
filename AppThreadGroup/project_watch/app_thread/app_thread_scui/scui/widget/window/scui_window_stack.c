@@ -7,6 +7,18 @@
 
 #include "scui.h"
 
+/*@brief 窗口栈记录
+ *@param handle 窗口句柄
+ */
+static void scui_window_stack_record(scui_handle_t handle)
+{
+    for (scui_multi_t idx = SCUI_WINDOW_STACK_NEST - 1; idx - 1 >= 0; idx--)
+        scui_window_mgr.stack_args.stack_rcd[idx] = 
+        scui_window_mgr.stack_args.stack_rcd[idx - 1];
+    
+    scui_window_mgr.stack_args.stack_rcd[0] = handle;
+}
+
 /*@brief 窗口栈检查
  */
 static void scui_window_stack_check(void)
@@ -21,6 +33,13 @@ static void scui_window_stack_check(void)
         "%u ", scui_window_mgr.stack_args.stack[top]);
     
     SCUI_LOG_WARN("window stack: %s", stack_str);
+    
+    stack_top = 0;
+    for (scui_multi_t idx = 0; idx < SCUI_WINDOW_STACK_NEST; idx++)
+        stack_top += snprintf(stack_str + stack_top, sizeof(stack_str) - stack_top,
+        "%u ", scui_window_mgr.stack_args.stack_rcd[idx]);
+    
+    SCUI_LOG_WARN("window stack rcd: %s", stack_str);
 }
 
 /*@brief 窗口栈更新栈顶窗口(内部接口)
@@ -36,10 +55,12 @@ void scui_window_stack_update(scui_handle_t handle, uint8_t type)
     switch (type) {
     case 0:
         scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1] = handle;
+        scui_window_stack_record(handle);
         break;
     case 1:
         scui_window_mgr.stack_args.top++;
         scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1] = handle;
+        scui_window_stack_record(handle);
         break;
     case 2:
         SCUI_ASSERT(handle_top == handle);
@@ -84,6 +105,16 @@ void scui_window_stack_top(scui_handle_t *handle)
     *handle = scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1];
 }
 
+/*@brief 获得窗口记录
+ *@param handle 窗口句柄
+ *@param index  索引(0:当前;1:最近;以此类推)
+ */
+void scui_window_stack_rcd(scui_handle_t *handle, scui_handle_t index)
+{
+    SCUI_ASSERT(index < SCUI_WINDOW_STACK_NEST);
+    *handle = scui_window_mgr.stack_args.stack_rcd[index];
+}
+
 /*@brief 窗口栈复位
  *@param handle  窗口句柄
  *@param reserve 保留当前显示窗口
@@ -109,6 +140,7 @@ bool scui_window_stack_reset(scui_handle_t handle, bool reserve)
         scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top++] = handle;
     }
     
+    scui_window_stack_record(target_top);
     scui_window_stack_check();
     return true;
 }
@@ -138,6 +170,8 @@ bool scui_window_stack_goback(scui_handle_t handle)
              return false;
         }
         
+        scui_window_stack_record(target_top);
+        scui_window_stack_check();
         return true;
     }
     
@@ -160,6 +194,7 @@ bool scui_window_stack_cover(scui_handle_t handle)
     }
     
     scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1] = handle;
+    scui_window_stack_record(target_top);
     scui_window_stack_check();
     return true;
 }
@@ -189,6 +224,7 @@ bool scui_window_stack_add(scui_handle_t handle, bool reserve)
         scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1] = handle;
     }
     
+    scui_window_stack_record(target_top);
     scui_window_stack_check();
     return true;
 }
@@ -228,6 +264,7 @@ bool scui_window_stack_del(scui_handle_t handle)
          return false;
     }
     scui_window_mgr.stack_args.top--;
+    scui_window_stack_record(target_top);
     scui_window_stack_check();
     return true;
 }
