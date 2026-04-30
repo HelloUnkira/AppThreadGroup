@@ -93,6 +93,9 @@ static bool scui_event_cb_check(scui_event_t *event)
         scui_event_widget_scroll_start,
         scui_event_widget_scroll_over,
         scui_event_widget_scroll_keep,
+        
+        scui_event_engine_ready,
+        scui_event_engine_show,
     };
     
     for (scui_multi_t idx = 0; idx < scui_arr_len(event_table); idx++)
@@ -307,6 +310,9 @@ static void scui_event_respond(scui_event_t *event)
     if (event->object == SCUI_HANDLE_SYSTEM)
         event->object  = scui_window_active_last(0);
     
+    #if 0
+    /* 调试用的俩个情况 */
+    
     /* 本事件无活跃窗口接收 */
     if (scui_handle_unmap(event->object)) {
         /* 存在控件树已经被回收的情况 */
@@ -323,6 +329,7 @@ static void scui_event_respond(scui_event_t *event)
         SCUI_LOG_ERROR("error widget %u %s", event->object, type_stringify);
         return;
     }
+    #endif
     
     /* 标记事件为未处理 */
     scui_event_mask_quit(event);

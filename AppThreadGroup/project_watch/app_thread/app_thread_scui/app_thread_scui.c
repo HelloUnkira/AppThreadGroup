@@ -178,7 +178,7 @@ static void app_thread_scui_routine_ready_cb(void)
     app_thread_group_create(&app_thread_scui_draw, &app_thread_scui_draw_local, app_thread_scui_draw_routine);
     app_thread_process(&app_thread_scui_draw_local, app_thread_static);
     /* 创建draw_sw,draw_hw子线程 */
-    #if SCUI_DRAW_TASK_SEQ && !SCUI_DRAW_TASK_SYNC_SEQ
+    #if SCUI_DRAW_TASK_SEQ && SCUI_DRAW_TASK_SYNC_SEQ == 0
     static app_thread_t app_thread_scui_draw_task[SCUI_DRAW_TASK_ASYNC_NUM] = {0};
     for (scui_coord_t idx = 0; idx < SCUI_DRAW_TASK_ASYNC_NUM; idx++) {
         if (idx == 0) {
@@ -190,8 +190,6 @@ static void app_thread_scui_routine_ready_cb(void)
         }
     }
     #endif
-    /* 初始窗口 */
-    scui_ready_show();
 }
 
 /*@brief 子线程服务例程处理部

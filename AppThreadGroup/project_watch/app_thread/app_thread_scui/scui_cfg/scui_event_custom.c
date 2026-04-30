@@ -63,6 +63,9 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
             [scui_event_key_hold] =                 scui_stringify(scui_event_key_hold),
             [scui_event_key_click] =                scui_stringify(scui_event_key_click),
             [scui_event_key_up] =                   scui_stringify(scui_event_key_up),
+            /* 系统唯一事件:特殊 */
+            [scui_event_engine_ready] =             scui_stringify(scui_event_engine_ready),
+            [scui_event_engine_show] =              scui_stringify(scui_event_engine_show),
         };
         
         return event_sys_str[type];
@@ -89,6 +92,21 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
 void scui_event_custom_access(scui_event_t *event)
 {
     SCUI_LOG_INFO("event widget %u", event->object);
+    switch (event->type) {
+    case scui_event_engine_ready:
+        scui_event_mask_over(event);
+        scui_custom_ready();
+        break;
+    case scui_event_engine_show:
+        scui_event_mask_over(event);
+        scui_custom_show();
+        break;
+    default:
+        break;
+    }
+    
+    
+    
     switch (event->type) {
     case scui_event_widget_scroll_start:
     case scui_event_widget_scroll_over:

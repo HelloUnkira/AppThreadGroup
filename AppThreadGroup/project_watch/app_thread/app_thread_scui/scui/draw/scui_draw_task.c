@@ -50,6 +50,8 @@ static void scui_draw_task_node_hash(scui_draw_task_node_t *task_node)
     #if 0
     /* 这部分调试日志用宏单独圈出 */
     /* 本段代码仅验证网格是否正确 */
+    SCUI_LOG_WARN("draw_area:<%d,%d,%d,%d>",
+        draw_area.x1, draw_area.y1, draw_area.x2, draw_area.y2);
     SCUI_LOG_WARN("draw_clip:<%d,%d,%d,%d>",
         draw_clip.x1, draw_clip.y1, draw_clip.x2, draw_clip.y2);
     SCUI_LOG_WARN("draw_grid:<%d,%d,%d,%d>",
@@ -106,8 +108,8 @@ static bool scui_draw_task_node_find(scui_draw_task_node_t **task_node, scui_coo
     scui_list_dll_btra(&task_list->dl_list, node) {
         task_node_c = scui_own_ofs(scui_draw_task_node_t, dl_node, node);
         /* 寻找一个适合当前子任务处理的任务节点 */
-        bool swacc = scui_draw_ctx_acc_check(task_node_c->draw_dsc);
-        if ((task_idx == 0 && !swacc) || (task_idx != 0 && swacc)) {
+        bool hwacc = scui_draw_ctx_acc_check(task_node_c->draw_dsc);
+        if ((task_idx == 0 && !hwacc) || (task_idx != 0 && hwacc)) {
             /* 对节点逆向索引查重, 找到第一个不重复的节点 */
             task_node_inter = false;
             
@@ -186,6 +188,8 @@ static void scui_draw_task_sched(scui_coord_t task_idx)
     scui_draw_task_list_t *task_list = &scui_draw_task_list;
     
     #if SCUI_DRAW_TASK_SEQ
+    SCUI_LOG_WARN("task %d ready", task_idx);
+    
     while (true) {
         /* 等待调度派发子任务 */
         scui_sem_process(&task_list->async_sem[task_idx], scui_sem_take);
@@ -196,7 +200,7 @@ static void scui_draw_task_sched(scui_coord_t task_idx)
         SCUI_ASSERT(scui_bit_ext_get(task_list->async_busy, task_idx, 8));
         scui_draw_task_node_t *task_node = task_list->task_node[task_idx];
         if (task_node != NULL && task_node->draw_dsc != NULL) {
-            SCUI_LOG_WARN("task %d node:%d sched", task_idx, task_node->draw_idx);
+            SCUI_LOG_INFO("task %d node:%d sched", task_idx, task_node->draw_idx);
             draw_dsc = task_node->draw_dsc; task_node->draw_dsc = NULL;
         }
         scui_mutex_process(&task_list->sched_mutex, scui_mutex_give);
@@ -206,20 +210,25 @@ static void scui_draw_task_sched(scui_coord_t task_idx)
         if (draw_dsc) {
             draw_dsc->sync = true;
             /* scui_draw_dsc_task目前无法完全可重入, 此处的锁需要优化 */
-            scui_mutex_process(&task_list->sched_mutex, scui_mutex_take);
+            /* scui_mutex_process(&task_list->sched_mutex, scui_mutex_take); */
             scui_draw_dsc_task(draw_dsc);
-            scui_mutex_process(&task_list->sched_mutex, scui_mutex_give);
+            /* scui_mutex_process(&task_list->sched_mutex, scui_mutex_give); */
         }
         
         
         
-        /* 标记当前任务空闲 */
         scui_mutex_process(&task_list->sched_mutex, scui_mutex_take);
+        /* 回收之前旧的资源 */
+        task_list->task_node[task_idx] = NULL;
+        SCUI_ASSERT(task_node->draw_dsc == NULL);
+        SCUI_MEM_FREE(task_node);
+        /* 标记当前任务空闲 */
         SCUI_LOG_INFO("async busy %d rst", task_idx);
         scui_bit_ext_rst(task_list->async_busy, task_idx, 8);
         scui_mutex_process(&task_list->sched_mutex, scui_mutex_give);
         
         /* 当前子任务空闲通知 */
+        SCUI_LOG_INFO("task idle notify");
         scui_sem_process(&task_list->sched_sem, scui_sem_give);
     }
     #else
@@ -312,9 +321,9 @@ void scui_draw_task_dispatch(void)
     
     #if SCUI_DRAW_TASK_SEQ
     uintptr_t list_node_cnt = 0;
-    SCUI_LOG_WARN("draw task ready");
-    SCUI_LOG_WARN("draw task total node:%d", task_list->node_total);
-    SCUI_LOG_WARN("draw task frame node:%d", task_list->node_frame);
+    SCUI_LOG_INFO("draw task ready");
+    SCUI_LOG_INFO("draw task total node:%d", task_list->node_total);
+    SCUI_LOG_INFO("draw task frame node:%d", task_list->node_frame);
     
     /* 就地响应目标 */
     #if SCUI_DRAW_TASK_SYNC_SEQ
@@ -338,47 +347,35 @@ void scui_draw_task_dispatch(void)
     /* scui_sem_process(&task_list->sched_sem, scui_sem_give); */
     /* scui_sem_process(&task_list->sched_sem, scui_sem_take); */
     #else
-    /* unsupport yet */
-    SCUI_ASSERT(false);
-    
-    while (true) {
-        
-        bool task_idle = true;
+    for (bool task_idle = true; true; task_idle = true) {
         /* 获取当前任务忙碌状态, 存在子任务忙碌, 等待空闲 */
         scui_mutex_process(&task_list->sched_mutex, scui_mutex_take);
         for (scui_coord_t idx = 0; idx < SCUI_DRAW_TASK_ASYNC_NUM; idx++) {
             bool busy = scui_bit_ext_get(task_list->async_busy, idx, 8);
             if (busy) {task_idle = false; continue;}
             
-            scui_draw_task_node_t *task_node = NULL;
-            /* 回收之前旧的资源(冗余回收, 不一定存在) */
-            task_node = task_list->task_node[idx];
-            if (task_list->task_node[idx] != NULL) {
-                task_list->task_node[idx]  = NULL;
-                SCUI_ASSERT(task_node->draw_dsc == NULL);
-                SCUI_MEM_FREE(task_node);
-                task_node = NULL;
-            }
+            /* 如果任务派发队列为空, 检查下一个忙等待节点 */
+            if (scui_list_dll_head(&task_list->dl_list) == NULL)
+                continue;
             
+            task_idle = false;
             /* 如果任务派发队列不为空 */
-            if (scui_list_dll_head(&task_list->dl_list) != NULL) {
-                task_idle = false;
+            scui_draw_task_node_t *task_node = NULL;
+            /* 对该子任务尝试寻找一个绘制节点(直接加大锁, 熬大夜) */
+            if (scui_draw_task_node_find(&task_node, idx)) {
+                SCUI_ASSERT(task_node != NULL);
                 
-                /* 对该子任务尝试寻找一个绘制节点(直接加大锁, 熬大夜) */
-                if (scui_draw_task_node_find(&task_node, idx)) {
-                    SCUI_ASSERT(task_node != NULL);
-                    SCUI_LOG_WARN("task %d node:%d submit", idx, task_node->draw_idx);
-                    scui_list_dll_remove(&task_list->dl_list, &task_node->dl_node);
-                    list_node_cnt += 1;
-                    
-                    /* 替子任务提前加忙等待(防止被自己意外处理) */
-                    task_list->task_node[idx] = task_node;
-                    SCUI_LOG_INFO("async busy %d set", idx);
-                    scui_bit_ext_set(task_list->async_busy, idx, 8);
-                    
-                    /* 为子任务提交一个工作信号 */
-                    scui_sem_process(&task_list->async_sem[idx], scui_sem_give);
-                }
+                SCUI_LOG_INFO("task %d node:%d submit", idx, task_node->draw_idx);
+                scui_list_dll_remove(&task_list->dl_list, &task_node->dl_node);
+                list_node_cnt += 1;
+                
+                /* 替子任务提前加忙等待(防止被自己意外处理) */
+                task_list->task_node[idx] = task_node;
+                SCUI_LOG_INFO("async busy %d set", idx);
+                scui_bit_ext_set(task_list->async_busy, idx, 8);
+                
+                /* 为子任务提交一个工作信号 */
+                scui_sem_process(&task_list->async_sem[idx], scui_sem_give);
             }
         }
         scui_mutex_process(&task_list->sched_mutex, scui_mutex_give);
@@ -386,12 +383,14 @@ void scui_draw_task_dispatch(void)
         if (task_idle) break;
         
         /* 等待任意一个子任务结束 */
+        SCUI_LOG_INFO("task wait...");
         scui_sem_process(&task_list->sched_sem, scui_sem_take);
+        SCUI_LOG_INFO("task keep...");
     }
     #endif
     
     SCUI_ASSERT(task_list->node_frame == list_node_cnt);
-    SCUI_LOG_WARN("draw task finish");
+    SCUI_LOG_INFO("draw task finish");
     task_list->node_frame = 0;
     #endif
 }
@@ -428,8 +427,8 @@ void scui_draw_dsc_task(scui_draw_dsc_t *draw_dsc)
     if (draw_dsc->sync) {
         /* 同步绘制节点执行就地调度 */
         /* 优先使用硬件加速适配, 其次使用软件执行 */
-        bool unsupport = !scui_draw_ctx_acc_sched(draw_dsc);
-        if (unsupport) scui_draw_ctx_sched(draw_dsc);
+        if (!scui_draw_ctx_acc_sched(draw_dsc))
+             scui_draw_ctx_sched(draw_dsc);
         
         /* 全局唯一绘制描述符释放 */
         scui_mutex_process(&task_list->dsc_mutex, scui_mutex_take);
@@ -448,7 +447,9 @@ void scui_draw_dsc_task(scui_draw_dsc_t *draw_dsc)
         
         scui_list_dln_reset(&task_node->dl_node);
         scui_list_dll_ainsert(&task_list->dl_list, NULL, &task_node->dl_node);
+        #if SCUI_DRAW_TASK_SYNC_SEQ == 0
         scui_draw_task_node_hash(task_node);
+        #endif
         task_list->node_total++;
         task_list->node_frame++;
         

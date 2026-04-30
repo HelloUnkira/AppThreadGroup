@@ -1,6 +1,11 @@
 #ifndef SCUI_TICK_H
 #define SCUI_TICK_H
 
+typedef struct {
+    uint64_t cnt_passby;
+    uint64_t tag_work:1;
+} scui_tick_t;
+
 /*@brief 滴答器当前计数
  *@retval 当前计数值
  */
@@ -10,6 +15,11 @@ uint64_t scui_tick_cnt(void);
  *@retval 耗时
  */
 uint64_t scui_tick_us(void);
+
+/*@brief 滴答器启停
+ *@param work 启停状态
+ */
+void scui_tick_work(bool work);
 
 /*@brief 滴答器回调(建议1ms一调)
  *@param ms 过去时间

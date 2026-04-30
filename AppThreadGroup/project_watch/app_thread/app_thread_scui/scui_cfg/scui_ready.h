@@ -5,8 +5,12 @@
  */
 void scui_ready(void);
 
-/*@brief 初始窗口
+/*@brief 初始化scui自定义配置
  */
-void scui_ready_show(void);
+void scui_custom_ready(void);
+
+/*@brief 初始化scui自定义显示
+ */
+void scui_custom_show(void);
 
 #endif

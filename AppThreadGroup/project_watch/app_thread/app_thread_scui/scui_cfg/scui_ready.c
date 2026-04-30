@@ -120,6 +120,26 @@ void scui_ready(void)
     table.number = SCUI_MULTI_LANG_NUM_STR * SCUI_MULTI_LANG_NUM_TYPE;
     scui_handle_table_register(&table);
     
+    /* 启用同步自定义信息 */ {
+    scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_engine_ready, NULL);
+    scui_event_notify(&event);
+    }
+    
+    /* 统计基础信息 */
+    scui_stat_info();
+    /* 激活脉冲器 */
+    scui_tick_work(true);
+    
+    /* 启用同步自定义显示 */ {
+    scui_event_define(event, SCUI_HANDLE_SYSTEM, false, scui_event_engine_show, NULL);
+    scui_event_notify(&event);
+    }
+}
+
+/*@brief 初始化scui自定义配置
+ */
+void scui_custom_ready(void)
+{
     /* 字库配置 */
     scui_multi_lang_type_t lang_type = scui_multi_lang_type_en;
     scui_multi_lang_set(&lang_type);
@@ -137,24 +157,19 @@ void scui_ready(void)
     
     /* 窗口交互参数 */
     cfg_args->shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
-    
-    /* 统计基础信息 */
-    scui_stat_info();
 }
 
-/*@brief 初始窗口
+/*@brief 初始化scui自定义显示
  */
-void scui_ready_show(void)
+void scui_custom_show(void)
 {
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_NONE, false);
-    scui_engine_execute_status_set(true);
-    
-    /* 初始化scui性能监控 */
+    /* 启用scui性能监控 */
     #if SCUI_UI_MONITOR_USE
     scui_widget_show(SCUI_UI_SCENE_MONITOR, false);
     #endif
-    
+    /* 启用monkey test */
     #if SCUI_MONKEY_TEST
     scui_monkey_test();
     #endif
