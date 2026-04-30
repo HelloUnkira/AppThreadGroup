@@ -316,11 +316,8 @@ void scui_draw_task_dispatch(void)
     SCUI_LOG_WARN("draw task total node:%d", task_list->node_total);
     SCUI_LOG_WARN("draw task frame node:%d", task_list->node_frame);
     
-    /* unsupport yet */
-    SCUI_ASSERT(false);
-    
-    #if 0
-    /* 测试:就地响应目标,仅同步测试任务序列完备性 */
+    /* 就地响应目标 */
+    #if SCUI_DRAW_TASK_SYNC_SEQ
     for (scui_list_dln_t *list_node = NULL; true; true) {
         list_node = scui_list_dll_head(&task_list->dl_list);
         if (list_node == NULL) break;
@@ -341,6 +338,9 @@ void scui_draw_task_dispatch(void)
     /* scui_sem_process(&task_list->sched_sem, scui_sem_give); */
     /* scui_sem_process(&task_list->sched_sem, scui_sem_take); */
     #else
+    /* unsupport yet */
+    SCUI_ASSERT(false);
+    
     while (true) {
         
         bool task_idle = true;

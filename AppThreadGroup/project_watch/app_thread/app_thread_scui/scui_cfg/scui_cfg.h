@@ -30,9 +30,9 @@
 #define SCUI_MEM_RECORD_ITEM_USER                   (1024)
 /* 内存使用记录监控(子类型): */
 #define SCUI_MEM_RECORD_CHECK_MIX                   (0)
-#define SCUI_MEM_RECORD_CHECK_FONT                  (0) /* SCUI_MEM_FEAT_MINI: 不支持, 必须为0 */
-#define SCUI_MEM_RECORD_CHECK_GRAPH                 (0) /* SCUI_MEM_FEAT_MINI: 不支持, 必须为0 */
-#define SCUI_MEM_RECORD_CHECK_USER                  (0) /* SCUI_MEM_FEAT_MINI: 不支持, 必须为0 */
+#define SCUI_MEM_RECORD_CHECK_FONT                  (0 && !SCUI_MEM_FEAT_MINI)
+#define SCUI_MEM_RECORD_CHECK_GRAPH                 (0 && !SCUI_MEM_FEAT_MINI)
+#define SCUI_MEM_RECORD_CHECK_USER                  (0 && !SCUI_MEM_FEAT_MINI)
 /* 内存哨兵监控(内存边界追查) */
 #define SCUI_MEM_SENTRY_CHECK                       (1)
 
@@ -140,6 +140,7 @@
 /* 绘制任务序列 */
 #define SCUI_DRAW_TASK_SEQ                          (0 && !SCUI_MEM_FEAT_MINI)
 #if     SCUI_DRAW_TASK_SEQ
+#define SCUI_DRAW_TASK_SYNC_SEQ                     (1)
 #define SCUI_DRAW_TASK_HASH_HBIT                    (8 * 2)
 #define SCUI_DRAW_TASK_HASH_VBIT                    (8 * 2)
 #define SCUI_DRAW_TASK_HWACC_NUM                    (2) /* 硬件加速器单例数量 */

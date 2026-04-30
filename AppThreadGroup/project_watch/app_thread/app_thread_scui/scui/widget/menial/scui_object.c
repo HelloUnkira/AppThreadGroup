@@ -419,9 +419,49 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
     SCUI_LOG_INFO("pct:%3d%%, part:0x%x, state:0x%x, style:0x%x",
         pct_c, prop.part, prop.state, prop.style);
     
+    
+    
+    /* 内部样式: */
     switch (prop.style) {
     case scui_object_style_crect_color:
-    case scui_object_style_crect_color_grad:
+    case scui_object_style_crect_color_grad: {
+        scui_color32_t color32_p = local_tran->data_p.color32;
+        scui_color32_t color32_n = local_tran->data_n.color32;
+        scui_color32_mix_with(&prop.data.color32, &color32_n, &color32_p, pct_c);
+        SCUI_LOG_INFO("color:0x%x", prop.data.color32.full);
+        break;
+    }
+    case scui_object_style_crect_alpha: {
+        scui_alpha_t alpha_p = local_tran->data_p.alpha;
+        scui_alpha_t alpha_n = local_tran->data_n.alpha;
+        prop.data.alpha = scui_map(pct_c, 0, 100, alpha_p, alpha_n);
+        SCUI_LOG_INFO("alpha:%d", prop.data.alpha);
+        break;
+    }
+    case scui_object_style_crect_width:
+    case scui_object_style_crect_radius: {
+        scui_multi_t number_p = local_tran->data_p.number;
+        scui_multi_t number_n = local_tran->data_n.number;
+        prop.data.number = scui_map(pct_c, 0, 100, number_p, number_n);
+        SCUI_LOG_INFO("number:%d", prop.data.number);
+        break;
+    }
+    case scui_object_style_crect_multi: {
+        scui_object_data_t data_p = local_tran->data_p;
+        scui_object_data_t data_n = local_tran->data_n;
+        prop.data.multi = pct_c <= 50 ? data_p.multi: data_n.multi;
+        SCUI_LOG_INFO("shadow:%d", prop.data.multi.shadow);
+        SCUI_LOG_INFO("grad_w:%d", prop.data.multi.grad_w);
+        SCUI_LOG_INFO("grad:%d",   prop.data.multi.grad);
+    }
+    default:
+        break;
+    }
+    
+    
+    
+    /* 外部样式: */
+    switch (prop.style) {
     case scui_object_style_color_bg:
     case scui_object_style_color_fg: {
         scui_color32_t color32_p = local_tran->data_p.color32;
@@ -430,7 +470,6 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         SCUI_LOG_INFO("color:0x%x", prop.data.color32.full);
         break;
     }
-    case scui_object_style_crect_alpha:
     case scui_object_style_alpha: {
         scui_alpha_t alpha_p = local_tran->data_p.alpha;
         scui_alpha_t alpha_n = local_tran->data_n.alpha;
@@ -438,8 +477,6 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         SCUI_LOG_INFO("alpha:%d", prop.data.alpha);
         break;
     }
-    case scui_object_style_crect_width:
-    case scui_object_style_crect_radius:
     case scui_object_style_width:
     case scui_object_style_height:
     case scui_object_style_radius: {
