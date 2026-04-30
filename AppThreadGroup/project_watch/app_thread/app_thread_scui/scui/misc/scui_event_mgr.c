@@ -93,9 +93,6 @@ static bool scui_event_cb_check(scui_event_t *event)
         scui_event_widget_scroll_start,
         scui_event_widget_scroll_over,
         scui_event_widget_scroll_keep,
-        
-        scui_event_engine_ready,
-        scui_event_engine_show,
     };
     
     for (scui_multi_t idx = 0; idx < scui_arr_len(event_table); idx++)
@@ -306,30 +303,28 @@ static void scui_event_respond(scui_event_t *event)
         break;
     }
     
-    /* 系统事件发给活跃窗口 */
-    if (event->object == SCUI_HANDLE_SYSTEM)
-        event->object  = scui_window_active_last(0);
-    
-    #if 0
-    /* 调试用的俩个情况 */
-    
-    /* 本事件无活跃窗口接收 */
-    if (scui_handle_unmap(event->object)) {
-        /* 存在控件树已经被回收的情况 */
-        /* 但是事件调度队列还存在控件树的事件未响应 */
-        /* 直接丢弃这个事件即可, 因为它还未来得及生效已经失效了, 无额外影响 */
-        const char *type_stringify = scui_event_type_stringify(event->type);
-        SCUI_LOG_ERROR("error widget %u %s", event->object, type_stringify);
-        return;
+    if (scui_event_type_sys(event->type)) {
+        /* 系统事件发给活跃窗口 */
+        if (event->object == SCUI_HANDLE_SYSTEM)
+            event->object  = scui_window_active_last(0);
+        
+        /* 本事件无活跃窗口接收 */
+        if (scui_handle_unmap(event->object)) {
+            /* 存在控件树已经被回收的情况 */
+            /* 但是事件调度队列还存在控件树的事件未响应 */
+            /* 直接丢弃这个事件即可, 因为它还未来得及生效已经失效了, 无额外影响 */
+            const char *type_stringify = scui_event_type_stringify(event->type);
+            SCUI_LOG_ERROR("error widget %u %s", event->object, type_stringify);
+            return;
+        }
+        
+        /* 事件响应对象无效(未知情况?) */
+        if (scui_handle_source(event->object) == NULL) {
+            const char *type_stringify = scui_event_type_stringify(event->type);
+            SCUI_LOG_ERROR("error widget %u %s", event->object, type_stringify);
+            return;
+        }
     }
-    
-    /* 事件响应对象无效(未知情况?) */
-    if (scui_handle_source(event->object) == NULL) {
-        const char *type_stringify = scui_event_type_stringify(event->type);
-        SCUI_LOG_ERROR("error widget %u %s", event->object, type_stringify);
-        return;
-    }
-    #endif
     
     /* 标记事件为未处理 */
     scui_event_mask_quit(event);
@@ -340,9 +335,8 @@ static void scui_event_respond(scui_event_t *event)
     if (scui_event_check_over(event))
         return;
     
-    /* 系统事件响应 */
-    if (event->type >= scui_event_sys_s &&
-        event->type <= scui_event_sys_e) {
+    /* 系统事件响应<sys> */
+    if (scui_event_type_sys(event->type)) {
         
         /* 系统事件调度工步:prepare */
         if (scui_event_order_check(event)) {

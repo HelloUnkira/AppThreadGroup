@@ -19,8 +19,7 @@
  */
 const char * scui_event_type_misc_stringify(scui_event_type_t type)
 {
-    if (type >= scui_event_sys_s &&
-        type <= scui_event_sys_e) {
+    if (scui_event_type_sys(type)) {
         
         static const char * event_sys_str[scui_event_sys_num] = {
             /* 系统事件: sched */
@@ -63,9 +62,6 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
             [scui_event_key_hold] =                 scui_stringify(scui_event_key_hold),
             [scui_event_key_click] =                scui_stringify(scui_event_key_click),
             [scui_event_key_up] =                   scui_stringify(scui_event_key_up),
-            /* 系统唯一事件:特殊 */
-            [scui_event_engine_ready] =             scui_stringify(scui_event_engine_ready),
-            [scui_event_engine_show] =              scui_stringify(scui_event_engine_show),
         };
         
         return event_sys_str[type];
@@ -74,6 +70,10 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
     if (scui_event_type_custom(type)) {
         
         static const char * event_custom_str[scui_event_custom_num - scui_event_sys_num] = {
+            /* 系统唯一事件:特殊 */
+            [scui_event_engine_ready                - scui_event_sys_num] = scui_stringify(scui_event_engine_ready),
+            [scui_event_engine_show                 - scui_event_sys_num] = scui_stringify(scui_event_engine_show),
+            
             [scui_event_ui_none_goto                - scui_event_sys_num] = scui_stringify(scui_event_ui_none_goto),
             [scui_event_ui_home_goto                - scui_event_sys_num] = scui_stringify(scui_event_ui_home_goto),
             [scui_event_ui_standy_enter             - scui_event_sys_num] = scui_stringify(scui_event_ui_standy_enter),
@@ -91,7 +91,6 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
  */
 void scui_event_custom_access(scui_event_t *event)
 {
-    SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
     case scui_event_engine_ready:
         scui_event_mask_over(event);
@@ -174,7 +173,6 @@ void scui_event_custom_myself(scui_event_t *event)
     
     
     
-    SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
     case scui_event_ui_tick_frame: {
         scui_event_mask_over(event);
@@ -266,8 +264,6 @@ void scui_event_custom_myself(scui_event_t *event)
  */
 void scui_event_custom_finish(scui_event_t *event)
 {
-    SCUI_LOG_INFO("event widget %u", event->object);
-    
     switch (event->type) {
     case scui_event_ptr_fling:
         if (app_module_system_dlps_get())

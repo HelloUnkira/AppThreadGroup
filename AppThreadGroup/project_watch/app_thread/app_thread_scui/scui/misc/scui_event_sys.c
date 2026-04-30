@@ -10,6 +10,15 @@
  *@param event_type 事件类型
  *@retval 类型匹配
  */
+bool scui_event_type_sys(scui_event_type_t event_type)
+{
+    return event_type > scui_event_sys_s && event_type < scui_event_sys_e;
+}
+
+/*@brief 事件类型检查
+ *@param event_type 事件类型
+ *@retval 类型匹配
+ */
 bool scui_event_type_sched(scui_event_type_t event_type)
 {
     return event_type > scui_event_sched_s && event_type < scui_event_sched_e;

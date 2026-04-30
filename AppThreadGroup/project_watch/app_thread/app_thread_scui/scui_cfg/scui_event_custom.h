@@ -7,6 +7,10 @@ typedef enum {
     scui_event_custom_all,
     /* 自定义事件<s> */
     
+    /* 系统唯一事件:特殊 */
+    scui_event_engine_ready,
+    scui_event_engine_show,
+    
     scui_event_ui_tick_frame,
     scui_event_ui_none_goto,
     scui_event_ui_home_goto,

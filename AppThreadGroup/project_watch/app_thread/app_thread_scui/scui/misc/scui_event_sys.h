@@ -73,13 +73,15 @@ typedef enum {
     scui_event_key_e,
     /* 输入设备事件<key,e> */
     
-    /* 系统唯一事件:特殊 */
-    scui_event_engine_ready,
-    scui_event_engine_show,
-    
     scui_event_sys_e,
     scui_event_sys_num,
 } scui_event_sys_t;
+
+/*@brief 事件类型检查
+ *@param event_type 事件类型
+ *@retval 类型匹配
+ */
+bool scui_event_type_sys(scui_event_type_t event_type);
 
 /*@brief 事件类型检查
  *@param event_type 事件类型
