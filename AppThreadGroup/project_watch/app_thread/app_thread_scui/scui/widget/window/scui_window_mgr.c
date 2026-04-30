@@ -355,9 +355,9 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
             dst_clip.x = widget->clip.x;
             dst_clip.y = widget->clip.y;
             
-            scui_tick_calc(0x20, NULL, NULL, NULL);
+            scui_tick_stat(scui_tick_stat_draw_rcd);
             scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
-            scui_tick_calc(0x21, NULL, NULL, NULL);
+            scui_tick_stat(scui_tick_stat_draw_sum);
             continue;
         }
         
@@ -510,9 +510,9 @@ static void scui_window_surface_blend(void)
     #endif
     
     /* 第一轮混合:处理所有常规独立画布 */
-    scui_tick_calc(0x20, NULL, NULL, NULL);
+    scui_tick_stat(scui_tick_stat_draw_rcd);
     scui_window_list_blend(scui_window_mgr.blend_args.list_0, scui_window_mgr.blend_args.list_0_num);
-    scui_tick_calc(0x21, NULL, NULL, NULL);
+    scui_tick_stat(scui_tick_stat_draw_sum);
     /* 第二轮混合:处理所有特殊独立画布或共享画布 */
     scui_window_list_render(scui_window_mgr.blend_args.list_1, scui_window_mgr.blend_args.list_1_num);
 }
@@ -534,7 +534,7 @@ void scui_window_refresh(void)
         scui_frame_buffer_draw_wait();
         seg_valid = scui_frame_buffer_seg_offset();
     }
-    scui_tick_calc(0x00, NULL, NULL, NULL);
+    scui_tick_stat(scui_tick_stat_refr);
     return;
     #endif
     
@@ -553,7 +553,7 @@ void scui_window_refresh(void)
     }
     /* 等待绘制目标刷新 */
     scui_frame_buffer_draw_wait();
-    scui_tick_calc(0x00, NULL, NULL, NULL);
+    scui_tick_stat(scui_tick_stat_refr);
 }
 
 /*@brief 窗口激活

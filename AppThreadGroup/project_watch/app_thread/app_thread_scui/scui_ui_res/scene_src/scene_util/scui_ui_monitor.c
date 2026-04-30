@@ -20,30 +20,35 @@ void scui_ui_scene_monitor_anima_expire(void *instance)
     bool redraw_tag = false;
     
     #if 1 // refr
-    uint32_t tick_fps = 0;
-    uint32_t sched_us = 0;
-    uint32_t draw_us  = 0;
-    scui_tick_calc(0xAA, &tick_fps, &sched_us, &draw_us);
+    scui_tick_stat_t tick_stat = {0};
+    scui_tick_stat_rcd(&tick_stat);
     
-    if (sched_us >  draw_us)
-        sched_us -= draw_us;
+    if (tick_stat.sched_sum >  tick_stat.draw_sum)
+        tick_stat.sched_sum -= tick_stat.draw_sum;
     else
-        sched_us = 0;
+        tick_stat.sched_sum = 0;
     
     static uint64_t refr_us_last = 0;
     uint64_t elapse_us = scui_tick_us() - refr_us_last;
     if (elapse_us > 1000 * 1000) {
         
-        uint8_t  str_refr[50] = {0};
-        uint32_t val_args[3] = { 100 * sched_us / elapse_us, 100 * draw_us / elapse_us, tick_fps, };
-        snprintf(str_refr, sizeof(str_refr) - 1, "Sched:#-%d%%-#, Draw:#-%d%%-#, Fps:#-%d-#",
-                 val_args[0], val_args[1], val_args[2]);
+        uint8_t  str_refr[100] = {0};
+        uint32_t val_args[5] = {
+            100 * tick_stat.sched_sum   / elapse_us,
+            100 * tick_stat.draw_sum    / elapse_us,
+            100 * tick_stat.draw_sum_sw / elapse_us,
+            100 * tick_stat.draw_sum_hw / elapse_us,
+            tick_stat.refr_fps,
+        };
+        snprintf(str_refr, sizeof(str_refr) - 1,
+                "Sched:#-%d%%-#, Draw:(#-%d%%-#,#-%d%%-#,#-%d%%-#), Fps:#-%d-#",
+                 val_args[0], val_args[1], val_args[2], val_args[3], val_args[4]);
         
         uint32_t color_g = 0xFF008000;
         uint32_t color_y = 0xFF808000;
         uint32_t color_r = 0xFF800000;
         
-        scui_color_t recolors[3] = {
+        scui_color_t recolors[] = {
             {   .filter = true,
                 .color_s.full = val_args[0] > 80 ? color_r : val_args[0] > 60 ? color_y : color_g,
                 .color_e.full = val_args[0] > 80 ? color_r : val_args[0] > 60 ? color_y : color_g,},
@@ -51,14 +56,20 @@ void scui_ui_scene_monitor_anima_expire(void *instance)
                 .color_s.full = val_args[1] > 80 ? color_r : val_args[1] > 60 ? color_y : color_g,
                 .color_e.full = val_args[1] > 80 ? color_r : val_args[1] > 60 ? color_y : color_g,},
             {   .filter = true,
-                .color_s.full = val_args[2] > 40 ? color_g : val_args[2] > 30 ? color_y : color_r,
-                .color_e.full = val_args[2] > 40 ? color_g : val_args[2] > 30 ? color_y : color_r,},
+                .color_s.full = val_args[2] > 80 ? color_r : val_args[2] > 60 ? color_y : color_g,
+                .color_e.full = val_args[2] > 80 ? color_r : val_args[2] > 60 ? color_y : color_g,},
+            {   .filter = true,
+                .color_s.full = val_args[3] > 80 ? color_r : val_args[3] > 60 ? color_y : color_g,
+                .color_e.full = val_args[3] > 80 ? color_r : val_args[3] > 60 ? color_y : color_g,},
+            {   .filter = true,
+                .color_s.full = val_args[4] > 40 ? color_g : val_args[4] > 30 ? color_y : color_r,
+                .color_e.full = val_args[4] > 40 ? color_g : val_args[4] > 30 ? color_y : color_r,},
         };
         scui_string_update_str_rec(monitor_refr, str_refr, scui_arr_len(recolors), recolors);
         redraw_tag = true;
         
         refr_us_last = scui_tick_us();
-        scui_tick_calc(0xFF, NULL, NULL, NULL);
+        scui_tick_stat(scui_tick_stat_reset);
     }
     #endif
     

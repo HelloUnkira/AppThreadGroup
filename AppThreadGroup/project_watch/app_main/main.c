@@ -4,6 +4,43 @@
 #include "app_third_fatfs.h"
 #include "app_thread_group.h"
 
+#if 0
+#include <Windows.h>
+#include <stdio.h>
+
+DWORD WINAPI windows_thread(LPVOID param)
+{
+    int id = (int)param;
+    printf("thread %d work now\n", id);
+    while (1);
+    printf("thread %d work over\n", id);
+    return 0;
+}
+
+void windows_multi_thread_test(void)
+{
+    #define THREAD_COUNT    10
+    HANDLE threads[THREAD_COUNT];
+    
+    for (int i = 0; i < THREAD_COUNT; i++)
+    {
+        threads[i] = CreateThread(
+            NULL, 0, windows_thread, (LPVOID)i, 0, NULL);
+    }
+    
+    // 等待所有线程结束
+    WaitForMultipleObjects(THREAD_COUNT, threads, TRUE, INFINITE);
+    
+    // 关闭句柄
+    for (int i = 0; i < THREAD_COUNT; i++)
+    {
+        CloseHandle(threads[i]);
+    }
+    return 0;
+}
+#endif
+
+
 int main(int argc, char *argv[])
 {
     /* 资源构建 */
@@ -14,6 +51,10 @@ int main(int argc, char *argv[])
     app_sys_ext_mem_remake();
     app_third_fatfs_remake((char *[]){"lvgl_font", "lvgl_pic",}, 2);
     return 0;
+    #endif
+    
+    #if 0
+    windows_multi_thread_test();
     #endif
     
     /* 启动APP调度策略 */

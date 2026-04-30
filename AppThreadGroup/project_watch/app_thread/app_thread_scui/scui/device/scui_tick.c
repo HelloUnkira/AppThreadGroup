@@ -47,55 +47,62 @@ void scui_tick_elapse(uint64_t ms)
     }
 }
 
-/*@brief 滴答器计算时间
- *@param state 0x00:refr回调计数;
- *             0x10:主调度开始;
- *             0x11:主调度结束;
- *             0x20:绘制开始;
- *             0x21:绘制结束;
- *             0xAA:结果;
- *             0xFF:复位;
- *@param tick_fps 结果:refr回调计数
- *@param sched_us 结果:主调度时间
- *@param draw_us  结果:绘制时间
+/*@brief 嘀嗒统计
+ *@param stat 统计状态
  */
-void scui_tick_calc(uint8_t state, uint32_t *tick_fps, uint32_t *sched_us, uint32_t *draw_us)
+void scui_tick_stat(scui_tick_stat_type_t stat_type)
 {
-    static uint64_t stat_rcd = 0;
-    static uint64_t stat_sum = 0;
-    static uint64_t draw_rcd = 0;
-    static uint64_t draw_sum = 0;
-    static uint64_t stat_fps = 0;
-    uint64_t retval = 0;
+    uint64_t elapse = 0;
     
-    switch (state) {
-    case 0x00:
-        stat_fps++;
+    switch (stat_type) {
+    case scui_tick_stat_refr:
+        scui_tick.stat.refr_fps++;
         break;
-    case 0x10:
-        stat_rcd = scui_tick_us();
+    case scui_tick_stat_sched_rcd:
+        scui_tick.stat.sched_rcd = scui_tick_us();
         break;
-    case 0x11:
-        stat_sum += scui_tick_us() - stat_rcd;
+    case scui_tick_stat_sched_sum:
+        elapse = scui_tick_us() - scui_tick.stat.sched_rcd;
+        scui_tick.stat.sched_sum += elapse;
         break;
-    case 0x20:
-        draw_rcd = scui_tick_us();
+    case scui_tick_stat_draw_sw_rcd:
+        scui_tick.stat.draw_rcd_sw = scui_tick_us();
         break;
-    case 0x21:
-        draw_sum += scui_tick_us() - draw_rcd;
+    case scui_tick_stat_draw_sw_sum:
+        elapse = scui_tick_us() - scui_tick.stat.draw_rcd_sw;
+        scui_tick.stat.draw_sum_sw += elapse;
         break;
-    case 0xAA:
-        *tick_fps = stat_fps;
-        *sched_us = stat_sum;
-        *draw_us  = draw_sum;
+    case scui_tick_stat_draw_hw_rcd:
+        scui_tick.stat.draw_rcd_hw = scui_tick_us();
         break;
-    case 0xFF:
-        stat_fps = 0;
-        stat_sum = 0;
-        draw_sum = 0;
+    case scui_tick_stat_draw_hw_sum:
+        elapse = scui_tick_us() - scui_tick.stat.draw_rcd_hw;
+        scui_tick.stat.draw_sum_hw += elapse;
+        break;
+    case scui_tick_stat_draw_rcd:
+        scui_tick.stat.draw_rcd = scui_tick_us();
+        break;
+    case scui_tick_stat_draw_sum:
+        elapse = scui_tick_us() - scui_tick.stat.draw_rcd;
+        scui_tick.stat.draw_sum += elapse;
+        break;
+    case scui_tick_stat_reset:
+        scui_tick.stat.refr_fps = 0;
+        scui_tick.stat.sched_sum = 0;
+        scui_tick.stat.draw_sum_sw = 0;
+        scui_tick.stat.draw_sum_hw = 0;
+        scui_tick.stat.draw_sum = 0;
         break;
     default:
-        SCUI_LOG_ERROR("");
+        SCUI_LOG_ERROR("%d", stat_type);
         break;
     }
+}
+
+/*@brief 嘀嗒统计结果
+ *@param tick_stat 统计结果
+ */
+void scui_tick_stat_rcd(scui_tick_stat_t *tick_stat)
+{
+    *tick_stat = scui_tick.stat;
 }

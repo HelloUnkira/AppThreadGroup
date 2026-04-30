@@ -453,9 +453,9 @@ void scui_event_notify(scui_event_t *event)
 {
     /* 同步事件就地响应 */
     if (event->style.sync) {
-        scui_tick_calc(0x10, NULL, NULL, NULL);
+        scui_tick_stat(scui_tick_stat_sched_rcd);
         scui_event_respond(event);
-        scui_tick_calc(0x11, NULL, NULL, NULL);
+        scui_tick_stat(scui_tick_stat_sched_sum);
         return;
     }
     
@@ -477,9 +477,9 @@ void scui_event_dispatch(void)
         bool retval = scui_event_dequeue(&event, false, false);
         SCUI_ASSERT(retval);
         
-        scui_tick_calc(0x10, NULL, NULL, NULL);
+        scui_tick_stat(scui_tick_stat_sched_rcd);
         scui_event_respond(&event);
-        scui_tick_calc(0x11, NULL, NULL, NULL);
+        scui_tick_stat(scui_tick_stat_sched_sum);
         
         /* 不要让此调度, 长期的占用CPU资源 */
         uint64_t tick_us_now = scui_tick_us();

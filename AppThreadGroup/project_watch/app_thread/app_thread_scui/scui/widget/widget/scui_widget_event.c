@@ -650,9 +650,10 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 if (!surface_only && !event->style.sync) return;
                 
                 /* 执行绘制任务序列调度 */
-                scui_tick_calc(0x20, NULL, NULL, NULL);
+                scui_tick_stat(scui_tick_stat_draw_rcd);
                 scui_draw_task_dispatch();
-                scui_tick_calc(0x21, NULL, NULL, NULL);
+                scui_tick_stat(scui_tick_stat_draw_sum);
+                
                 /* 绘制结束, 产生一次异步刷新 */
                 scui_widget_refr(widget->myself, false);
                 /* 绘制结束, 去除surface剪切域 */
@@ -668,9 +669,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
         }
         
         /* 启用集成事件冒泡流程 */
-        scui_tick_calc(0x20, NULL, NULL, NULL);
+        scui_tick_stat(scui_tick_stat_draw_rcd);
         scui_widget_event_bubble(event, NULL, false, true);
-        scui_tick_calc(0x21, NULL, NULL, NULL);
+        scui_tick_stat(scui_tick_stat_draw_sum);
         return;
     }
     case scui_event_lang_change:
