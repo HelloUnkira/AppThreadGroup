@@ -188,7 +188,7 @@ void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text)
         custom->str_args[idx] = str_args;
         
         if (text != SCUI_HANDLE_INVALID) {
-            str_args->utf8 = scui_multi_lang_str(text, str_args->lang);
+            str_args->utf8 = scui_lang_str(text, str_args->lang);
         } else {
             scui_coord_t len_utf8 = strlen(str_args->utf8) + 1;
             void *str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, len_utf8);

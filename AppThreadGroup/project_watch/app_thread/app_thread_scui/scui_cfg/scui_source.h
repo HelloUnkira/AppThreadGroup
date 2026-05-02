@@ -6,8 +6,8 @@
 #include "scui_image_parser.h"          /* 静态图形索引表 */
 #include "scui_widget_parser.h"         /* 静态控件布局表 */
 #include "scui_font_package.h"          /* 字库资源信息表 */
-#include "scui_multi_lang.h"            /* 多国语字符串表 */
-#include "scui_multi_lang_font.h"       /* 多国语字库表 */
+#include "scui_lang_parser.h"           /* 多国语字符串表 */
+#include "scui_lang_font.h"             /* 多国语字库表 */
 
 /* monkey */
 #include "scui_monkey.h"

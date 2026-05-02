@@ -1,10 +1,10 @@
 /*本地静态的字符串表
- *通过scui_multi_lang.py生成
+ *通过scui_lang_parser.py生成
  */
 
 #include "scui.h"
 
-const char * scui_multi_lang_table[756 * 2] = {
+const char * scui_lang_parser_table[756 * 2] = {
 	//扫码下载APP或扫码配对
 	(const char []){0xe6, 0x89, 0xab, 0xe7, 0xa0, 0x81, 0xe4, 0xb8, 0x8b, 0xe8, 0xbd, 0xbd, 0x41, 0x50, 0x50, 0xe6, 0x88, 0x96, 0xe6, 0x89, 0xab, 0xe7, 0xa0, 0x81, 0xe9, 0x85, 0x8d, 0xe5, 0xaf, 0xb9, 0},
 	//是否绑定？
@@ -3031,26 +3031,26 @@ const char * scui_multi_lang_table[756 * 2] = {
 	(const char []){0x50, 0x6c, 0x65, 0x61, 0x73, 0x65, 0x20, 0x67, 0x6f, 0x20, 0x74, 0x6f, 0x20, 0x74, 0x68, 0x65, 0x20, 0x41, 0x70, 0x70, 0x20, 0x74, 0x6f, 0x20, 0x6f, 0x70, 0x65, 0x6e, 0x20, 0x74, 0x68, 0x65, 0x20, 0x63, 0x61, 0x6d, 0x65, 0x72, 0x61, 0},
 };
 
-static scui_multi_lang_type_t scui_multi_lang_type = 0;
+static scui_lang_type_t scui_lang_type = 0;
 
 /*@brief 获取多国语语言类型
  *@param type 语言类型编号
  */
 
-void scui_multi_lang_get(scui_multi_lang_type_t *type)
+void scui_lang_get(scui_lang_type_t *type)
 {
 	SCUI_ASSERT(type != NULL);
-	*type = scui_multi_lang_type;
+	*type = scui_lang_type;
 }
 
 /*@brief 设置多国语语言类型
  *@param type 语言类型编号
  */
 
-void scui_multi_lang_set(scui_multi_lang_type_t *type)
+void scui_lang_set(scui_lang_type_t *type)
 {
 	SCUI_ASSERT(type != NULL);
-	scui_multi_lang_type = *type;
+	scui_lang_type = *type;
 	
 	scui_event_define(event, SCUI_HANDLE_SYSTEM, false, scui_event_lang_change, scui_event_absorb_none);
 	scui_event_notify(&event);
@@ -3061,10 +3061,14 @@ void scui_multi_lang_set(scui_multi_lang_type_t *type)
  *@param type   语言类型编号
  *@retval 字符串
  */
-const char * scui_multi_lang_str(scui_handle_t handle, scui_multi_lang_type_t type)
+const char * scui_lang_str(scui_handle_t handle, scui_lang_type_t type)
 {
 	scui_handle_t string = handle;
-	string += SCUI_HANDLE_SYSTEM == type ? scui_multi_lang_type : type;
-	string -= SCUI_MULTI_LANG_NUM_OFS;
+	switch (type) {
+	default: string += type; break;
+	case scui_lang_type_multi: string += scui_lang_type; break;
+	case scui_lang_type_ascii: string += scui_lang_type; break;
+	}
+	string -= scui_lang_ofs_num;
 	return scui_handle_source(string);
 }

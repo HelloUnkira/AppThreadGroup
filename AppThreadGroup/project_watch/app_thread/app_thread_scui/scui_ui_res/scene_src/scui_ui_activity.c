@@ -36,7 +36,7 @@ void scui_ui_scene_activity_event_proc(scui_event_t *event)
         if (event->key_id != scui_event_key_val_enter)
             break;
         
-        scui_ui_scene_popup_exec(SCUI_MULTI_LANG_0X002f, NULL);
+        scui_ui_scene_popup_exec(SCUI_LANG_0X002f, NULL);
         scui_event_mask_over(event);
         break;
     default:
@@ -185,7 +185,7 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
         string_maker.args.color.color_s.full    = 0xFFFFFFFF;
         string_maker.args.color.color_e.full    = 0xFFFFFFFF;
         string_maker.args.color.filter          = true;
-        string_maker.text                       = SCUI_MULTI_LANG_0X0017;
+        string_maker.text                       = SCUI_LANG_0X0017;
         string_maker.font_idx                   = SCUI_FONT_IDX_36;
         scui_widget_create(&string_maker, &string_handle);
         break;
@@ -215,13 +215,13 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
         for (int16_t idx = 0; idx < 7; idx++) {
             
             uint32_t text_week[] = {
-                SCUI_MULTI_LANG_0X0016, /* 日 */
-                SCUI_MULTI_LANG_0X0010, /* 一 */
-                SCUI_MULTI_LANG_0X0011, /* 二 */
-                SCUI_MULTI_LANG_0X0012, /* 三 */
-                SCUI_MULTI_LANG_0X0013, /* 四 */
-                SCUI_MULTI_LANG_0X0014, /* 五 */
-                SCUI_MULTI_LANG_0X0015, /* 六 */
+                SCUI_LANG_0X0016, /* 日 */
+                SCUI_LANG_0X0010, /* 一 */
+                SCUI_LANG_0X0011, /* 二 */
+                SCUI_LANG_0X0012, /* 三 */
+                SCUI_LANG_0X0013, /* 四 */
+                SCUI_LANG_0X0014, /* 五 */
+                SCUI_LANG_0X0015, /* 六 */
             };
             
             /* 红色小圆圈绘制 */
@@ -241,7 +241,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
             args.align_hor = 2;
             args.align_ver = 2;
             
-            scui_multi_lang_get(&args.lang);
+            scui_lang_get(&args.lang);
             args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
             args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
             
@@ -391,14 +391,14 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         args.align_hor = 0;
         args.align_ver = 2;
         
-        scui_multi_lang_get(&args.lang);
+        scui_lang_get(&args.lang);
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         args.clip = clip;
         args.clip.w = SCUI_HOR_RES - 40 * 2; args.clip.x += 40;
         args.clip.h = 40; args.clip.y += 25 - 16;
-        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000a);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000a);
         
         scui_handle_t image_digit = scui_image_prj_image_src_num_44_white_24x34_04_03png;
         uint8_t char_digit[10] = {0};
@@ -415,14 +415,14 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         args.align_hor = 0;
         args.align_ver = 2;
         
-        scui_multi_lang_get(&args.lang);
+        scui_lang_get(&args.lang);
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         args.clip = clip;
         args.clip.y += 52; args.clip.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
         args.clip.h  = 40; args.clip.w = SCUI_HOR_RES - (args.clip.x - clip.x) - 40;
-        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000d);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000d);
         
         for (int16_t idx = 0; idx <= 24; idx++) {
             
@@ -460,7 +460,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
                 args.color.filter = true;
                 args.align_hor = 0;
                 args.align_ver = 2;
-                args.name = SCUI_FONT_TYPE_24_ASCII;
+                args.name = scui_font_name_match(SCUI_FONT_IDX_A24, scui_lang_type_ascii);
                 args.utf8 = digit_str;
                 
                 args.clip = clip;
@@ -554,14 +554,14 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         args.align_hor = 0;
         args.align_ver = 2;
         
-        scui_multi_lang_get(&args.lang);
+        scui_lang_get(&args.lang);
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         args.clip = clip;
         args.clip.w = SCUI_HOR_RES - 40 * 2; args.clip.x += 40;
         args.clip.h = 40; args.clip.y += 25 - 16;
-        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000c);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000c);
         
         scui_handle_t image_digit = scui_image_prj_image_src_num_44_white_24x34_04_03png;
         uint8_t char_digit[10] = {0};
@@ -578,14 +578,14 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         args.align_hor = 0;
         args.align_ver = 2;
         
-        scui_multi_lang_get(&args.lang);
+        scui_lang_get(&args.lang);
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         args.clip = clip;
         args.clip.y += 52; args.clip.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
         args.clip.h  = 40; args.clip.w = SCUI_HOR_RES - (args.clip.x - clip.x) - 40;
-        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000f);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000f);
         
         for (int16_t idx = 0; idx <= 24; idx++) {
             
@@ -623,7 +623,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
                 args.color.filter = true;
                 args.align_hor = 0;
                 args.align_ver = 2;
-                args.name = SCUI_FONT_TYPE_24_ASCII;
+                args.name = scui_font_name_match(SCUI_FONT_IDX_A24, scui_lang_type_ascii);
                 args.utf8 = digit_str;
                 
                 args.clip = clip;
@@ -718,14 +718,14 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         args.align_hor = 0;
         args.align_ver = 2;
         
-        scui_multi_lang_get(&args.lang);
+        scui_lang_get(&args.lang);
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         args.clip = clip;
         args.clip.w = SCUI_HOR_RES - 40 * 2; args.clip.x += 40;
         args.clip.h = 40; args.clip.y += 25 - 16;
-        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000b);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000b);
         
         scui_handle_t image_digit = scui_image_prj_image_src_num_44_white_24x34_04_03png;
         uint8_t char_digit[10] = {0};
@@ -742,14 +742,14 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         args.align_hor = 0;
         args.align_ver = 2;
         
-        scui_multi_lang_get(&args.lang);
+        scui_lang_get(&args.lang);
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         args.clip = clip;
         args.clip.y += 52; args.clip.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
         args.clip.h  = 40; args.clip.w = SCUI_HOR_RES - (args.clip.x - clip.x) - 40;
-        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000e);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000e);
         
         for (int16_t idx = 0; idx <= 24; idx++) {
             
@@ -787,7 +787,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
                 args.color.filter = true;
                 args.align_hor = 0;
                 args.align_ver = 2;
-                args.name = SCUI_FONT_TYPE_24_ASCII;
+                args.name = scui_font_name_match(SCUI_FONT_IDX_A24, scui_lang_type_ascii);
                 args.utf8 = digit_str;
                 
                 args.clip = clip;

@@ -15,11 +15,11 @@
 scui_handle_t scui_font_name_match(scui_handle_t font_idx, scui_handle_t lang_type)
 {
     switch (lang_type) {
-    case SCUI_MULTI_LANG_TYPE_MZ: {
+    case scui_lang_type_multi: {
         SCUI_ASSERT(font_idx == SCUI_FONT_IDX_MZ);
         break;
     }
-    case SCUI_MULTI_LANG_TYPE_A: {
+    case scui_lang_type_ascii: {
         switch (font_idx) {
         case SCUI_FONT_IDX_A8:  return scui_font_ascii_8bin;
         case SCUI_FONT_IDX_A16: return scui_font_ascii_16bin;
@@ -34,13 +34,13 @@ scui_handle_t scui_font_name_match(scui_handle_t font_idx, scui_handle_t lang_ty
         case SCUI_FONT_IDX_A88: return scui_font_ascii_88bin;
         }
     }
-    case scui_multi_lang_type_zh: {
+    case scui_lang_type_zh: {
         switch (font_idx) {
         case SCUI_FONT_IDX_32: return scui_font_match(scui_font_lang_zh, 32);
         case SCUI_FONT_IDX_36: return scui_font_match(scui_font_lang_zh, 36);
         }
     }
-    case scui_multi_lang_type_en: {
+    case scui_lang_type_en: {
         switch (font_idx) {
         case SCUI_FONT_IDX_32: return scui_font_match(scui_font_lang_en, 32);
         case SCUI_FONT_IDX_36: return scui_font_match(scui_font_lang_en, 36);

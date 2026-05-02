@@ -145,10 +145,10 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         string_maker.args.color.color_s.full    = 0xFF0000FF;
         string_maker.args.color.color_e.full    = 0xFF0000FF;
         string_maker.args.color.filter          = true;
-        string_maker.args.name                  = SCUI_FONT_TYPE_32_EN;
         string_maker.widget.clip.w              = roller_maker.widget.clip.w;
         string_maker.widget.clip.h              = roller_maker.widget.clip.h / 5;
         string_maker.font_idx                   = SCUI_FONT_IDX_32;
+        string_maker.args.lang                  = scui_lang_type_en;
         
         // 24
         roller_maker.widget.clip.x   = SCUI_HOR_RES *  1 / 25;

@@ -42,7 +42,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.draw_cache                 = true;
         
         string_maker.font_idx                   = SCUI_FONT_IDX_MZ;
-        string_maker.args.lang                  = SCUI_MULTI_LANG_TYPE_MZ;
+        string_maker.args.lang                  = scui_lang_type_multi;
         string_maker.args.size                  = font_size;
         
         /* test:全文本渐变 */
@@ -59,7 +59,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 50;
-        string_maker.text             = SCUI_MULTI_LANG_0X0029;
+        string_maker.text             = SCUI_LANG_0X0029;
         string_maker.args.line_under  = 1;
         string_maker.args.line_delete = 0;
         string_maker.args.color.color_s.full = 0xFFFFFFFF;
@@ -72,7 +72,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 50;
-        string_maker.text             = SCUI_MULTI_LANG_0X002e;
+        string_maker.text             = SCUI_LANG_0X002e;
         string_maker.args.line_under  = 0;
         string_maker.args.line_delete = 1;
         string_maker.args.color.color_s.full = 0xFFFF00FF;
@@ -85,7 +85,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 130;
-        string_maker.text             = SCUI_MULTI_LANG_0X0034;
+        string_maker.text             = SCUI_LANG_0X0034;
         string_maker.args.line_under  = 1;
         string_maker.args.line_delete = 0;
         string_maker.args.color.color_s.full = 0xFFFF0000;
@@ -99,7 +99,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 130;
-        string_maker.text             = SCUI_MULTI_LANG_0X0042;
+        string_maker.text             = SCUI_LANG_0X0042;
         string_maker.args.line_under  = 0;
         string_maker.args.line_delete = 1;
         string_maker.args.color.color_s.full = 0xFF0000FF;
@@ -173,12 +173,12 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         
         static uint8_t multi_lang_table_idx = 0;
         static const scui_handle_t multi_lang_table[] = {
-            scui_multi_lang_type_zh,
-            scui_multi_lang_type_en,
+            scui_lang_type_zh,
+            scui_lang_type_en,
         };
         multi_lang_table_idx++;
         multi_lang_table_idx %= scui_arr_len(multi_lang_table);
-        scui_multi_lang_set(&multi_lang_table[multi_lang_table_idx]);
+        scui_lang_set(&multi_lang_table[multi_lang_table_idx]);
         
         scui_event_mask_over(event);
         break;

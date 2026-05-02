@@ -29,7 +29,7 @@ void scui_ui_scene_notify_none_event(scui_event_t *event)
         args.align_hor = 2;
         args.align_ver = 2;
         
-        args.name = SCUI_FONT_TYPE_32_ASCII;
+        args.name = scui_font_name_match(SCUI_FONT_IDX_32, scui_lang_type_en);
         args.utf8 = "Wait-Adaptor";
         
         args.clip = scui_widget_clip(event->object);

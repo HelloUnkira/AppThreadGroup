@@ -116,8 +116,8 @@ void scui_ready(void)
     scui_handle_table_register(&table);
     /* 句柄表(multi language) */
     table.offset = SCUI_HANDLE_OFFSET_LANG + 1;
-    table.source = scui_multi_lang_table;
-    table.number = SCUI_MULTI_LANG_NUM_STR * SCUI_MULTI_LANG_NUM_TYPE;
+    table.source = scui_lang_parser_table;
+    table.number = scui_lang_type_num * scui_lang_str_num;
     scui_handle_table_register(&table);
     
     /* 启用同步自定义信息 */ {
@@ -141,8 +141,8 @@ void scui_ready(void)
 void scui_custom_ready(void)
 {
     /* 字库配置 */
-    scui_multi_lang_type_t lang_type = scui_multi_lang_type_en;
-    scui_multi_lang_set(&lang_type);
+    scui_lang_type_t lang_type = scui_lang_type_en;
+    scui_lang_set(&lang_type);
     
     /* 窗口交互风格 */
     scui_opt_dir_t *cfg_dir = NULL;

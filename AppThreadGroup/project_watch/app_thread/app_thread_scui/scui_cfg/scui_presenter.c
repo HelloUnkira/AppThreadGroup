@@ -310,7 +310,7 @@ static uint32_t scui_ui_func_local_get_dist_cur(void)
  */
 static uint32_t scui_ui_func_local_get_temp_type(void)
 {
-    return SCUI_MULTI_LANG_0X009d;
+    return SCUI_LANG_0X009d;
 }
 
 /*@brief scui ui数据交互回调
@@ -473,7 +473,7 @@ static bool scui_ui_func_local_sport_record_none(void)
  */
 static uint32_t scui_ui_func_local_sport_record_type(void)
 {
-    return SCUI_MULTI_LANG_0X0254;
+    return SCUI_LANG_0X0254;
 }
 
 /*@brief scui ui数据交互回调
@@ -508,7 +508,7 @@ static bool scui_ui_func_local_women_health_none(void)
  */
 static uint32_t scui_ui_func_local_women_health_type(void)
 {
-    return SCUI_MULTI_LANG_0X0113;
+    return SCUI_LANG_0X0113;
 }
 
 /*@brief scui ui数据交互回调

@@ -117,7 +117,6 @@ def scui_font_package_all(file_path_list, scui_font_package_list, scui_font_json
             continue
         # 对目标字库集合进行流式处理,提取数据内容
         for font_idx, font_name in enumerate(font_item['name']):
-            
             if_check = '\tif (size == %3d && lang == scui_font_lang_%s)\n'
             scui_font_package_c.write(if_check % (font_item['size'][font_idx], font_item['lang']))
             scui_font_tag = font_name.replace('.', '').replace("font_", "")

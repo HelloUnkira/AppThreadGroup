@@ -48,7 +48,7 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
         string->args.gap_none  = SCUI_WIDGET_STRING_GAP_NONE;
     
     if (string->args.lang == SCUI_HANDLE_INVALID)
-        scui_multi_lang_get(&string->args.lang);
+        scui_lang_get(&string->args.lang);
     
     if (string->unit_ms == 0)
         string->unit_ms  = SCUI_WIDGET_STRING_UNIT_MS;
@@ -178,8 +178,8 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     
     if (string->text != SCUI_HANDLE_INVALID) {
         if (string->args.lang == SCUI_HANDLE_INVALID)
-            scui_multi_lang_get(&string->args.lang);
-        uint8_t *str_utf8 = scui_multi_lang_str(string->text, string->args.lang);
+            scui_lang_get(&string->args.lang);
+        uint8_t *str_utf8 = scui_lang_str(string->text, string->args.lang);
         scui_coord_t str_bytes = scui_utf8_str_bytes(str_utf8);
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
@@ -658,7 +658,7 @@ void scui_string_invoke(scui_event_t *event)
             string->unit_way  = 1;
             scui_handle_t text = string->text;
             scui_string_update_text(widget->myself, SCUI_HANDLE_INVALID);
-            scui_multi_lang_get(&string->args.lang);
+            scui_lang_get(&string->args.lang);
             string->args.size = scui_font_size_match(string->font_idx, string->args.size);
             string->args.name = scui_font_name_match(string->font_idx, string->args.lang);
             scui_string_update_text(widget->myself, text);
