@@ -1,0 +1,52 @@
+{
+    "type": "scui font package",
+    "anno": "字库字号信息映射表",
+    "lang": [
+        "ascii",
+        "multi",
+        "en",
+        "zh"
+    ],
+    "info": [
+        {
+            "lang": "ascii",
+            "size": [8,16,24,32,40,48,56,64,72,80,88],
+            "name": [
+                "font_ascii_8.bin",
+                "font_ascii_16.bin",
+                "font_ascii_24.bin",
+                "font_ascii_32.bin",
+                "font_ascii_40.bin",
+                "font_ascii_48.bin",
+                "font_ascii_56.bin",
+                "font_ascii_64.bin",
+                "font_ascii_72.bin",
+                "font_ascii_80.bin",
+                "font_ascii_88.bin"
+            ]
+        },
+        {
+            "lang": "en",
+            "size": [32, 36],
+            "name": [
+                "font_en_32.bin",
+                "font_en_36.bin"
+            ]
+        },
+        {
+            "lang": "zh",
+            "size": [32, 36],
+            "name": [
+                "font_zh_32.bin",
+                "font_zh_36.bin"
+            ]
+        },
+        {
+            "lang": "multi",
+            "size": [0],
+            "name": [
+                "font_test.ttf"
+            ]
+        }
+    ]
+}

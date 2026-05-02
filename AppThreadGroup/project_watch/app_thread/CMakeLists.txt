@@ -37,7 +37,7 @@ endif()
 if (app_thread_group_use_scui)
 
 # 文件迁移到调试
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/font_out/*"
+file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/font_out/*.bin"
                         "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/image_out/*.bin"
                         "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/cwf_json/bin/*.bin")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_main)

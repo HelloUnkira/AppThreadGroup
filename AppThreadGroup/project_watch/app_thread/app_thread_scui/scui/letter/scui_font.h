@@ -12,8 +12,12 @@
  */
 
 typedef struct {
-    
-    uint16_t size;
+    /* 字库资源信息: */
+    const char   *font_name;
+    scui_handle_t font_lang;
+    scui_handle_t font_size;
+    uintptr_t data_bin;
+    uintptr_t size_bin;
     /* size == 0: 使用固定字号字体 */
     /* size != 0: 使用ttf_tiny字体 */
     union {
@@ -49,11 +53,10 @@ typedef struct {
 } scui_font_glyph_t;
 
 /*@brief 字库加载
- *@param name   字库名称
- *@param size   字库字号
- *@param handle 字库句柄
+ *@param font_src 字库信息
+ *@param handle   字库句柄
  */
-void scui_font_load(char *name, uint32_t size, scui_handle_t *handle);
+void scui_font_load(scui_font_t *font_src, scui_handle_t *handle);
 
 /*@brief 字库卸载
  *@param handle 字库句柄

@@ -1,0 +1,20 @@
+src path: ..\font_bin
+dst path: .
+font:font_ascii_8_bin
+font:font_ascii_16_bin
+font:font_ascii_24_bin
+font:font_ascii_32_bin
+font:font_ascii_40_bin
+font:font_ascii_48_bin
+font:font_ascii_56_bin
+font:font_ascii_64_bin
+font:font_ascii_72_bin
+font:font_ascii_80_bin
+font:font_ascii_88_bin
+font:font_en_32_bin
+font:font_en_36_bin
+font:font_zh_32_bin
+font:font_zh_36_bin
+font:font_test_ttf
+scui font parser finish
+请按任意键退出...

@@ -379,8 +379,8 @@ static void scui_widget_event_process(scui_event_t *event)
         }
         break;
     }
-    case scui_event_enc_clockwise:
-    case scui_event_enc_clockwise_anti: {
+    case scui_event_enc_fdir:
+    case scui_event_enc_bdir: {
         /* 存在该控件持有当前敏感事件 */
         if (widget->state.indev_enc_hold)
             break;

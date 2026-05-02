@@ -39,7 +39,7 @@ void scui_ui_scene_standby_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_lost:
         break;
-    case scui_event_enc_clockwise: {
+    case scui_event_enc_fdir: {
         
         scui_ui_res_local->cwf_json_idx += 1;
         if (scui_ui_res_local->cwf_json_idx >= scui_arr_len(cwf_json_bin))
@@ -50,7 +50,7 @@ void scui_ui_scene_standby_event_proc(scui_event_t *event)
         scui_widget_draw(event->object, NULL, false);
         break;
     }
-    case scui_event_enc_clockwise_anti: {
+    case scui_event_enc_bdir: {
         
         scui_ui_res_local->cwf_json_idx -= 1;
         if (scui_ui_res_local->cwf_json_idx >= scui_arr_len(cwf_json_bin))

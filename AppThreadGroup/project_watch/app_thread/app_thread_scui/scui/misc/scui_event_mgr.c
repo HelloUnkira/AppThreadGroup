@@ -87,8 +87,8 @@ static bool scui_event_cb_check(scui_event_t *event)
         scui_event_ptr_click,
         scui_event_ptr_fling,
         scui_event_key_click,
-        scui_event_enc_clockwise,
-        scui_event_enc_clockwise_anti,
+        scui_event_enc_fdir,
+        scui_event_enc_bdir,
         
         scui_event_widget_scroll_start,
         scui_event_widget_scroll_over,
@@ -197,8 +197,8 @@ static bool scui_event_bubble_filter(scui_event_t *event)
     case scui_event_ptr_move:
     case scui_event_ptr_fling:
         return true;
-    case scui_event_enc_clockwise:
-    case scui_event_enc_clockwise_anti:
+    case scui_event_enc_fdir:
+    case scui_event_enc_bdir:
         return true;
     case scui_event_key_hold:
     case scui_event_key_click:

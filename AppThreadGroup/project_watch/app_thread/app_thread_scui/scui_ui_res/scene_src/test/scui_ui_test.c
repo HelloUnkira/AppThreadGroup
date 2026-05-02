@@ -182,14 +182,14 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         
         scui_event_mask_over(event);
         break;
-    case scui_event_enc_clockwise:
+    case scui_event_enc_fdir:
         if (font_size +  font_size_gap <= font_size_max)
             font_size += font_size_gap;
         for (uint8_t idx = 0; idx < scui_arr_len(handle_string); idx++)
             scui_string_adjust_size(handle_string[idx], font_size);
         scui_event_mask_over(event);
         break;
-    case scui_event_enc_clockwise_anti:
+    case scui_event_enc_bdir:
         if (font_size -  font_size_gap >= font_size_min)
             font_size -= font_size_gap;
         for (uint8_t idx = 0; idx < scui_arr_len(handle_string); idx++)

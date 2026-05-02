@@ -7,8 +7,6 @@
 
 #include "scui.h"
 
-static bool scui_engine_execute_status = false;
-
 /*@brief 系统OOM命中
  *@param type    内存类型
  *@param invalid 该OOM无法处理, 在崩溃前做最后日志输出

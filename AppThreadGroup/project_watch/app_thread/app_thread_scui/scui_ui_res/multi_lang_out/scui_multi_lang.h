@@ -776,4 +776,21 @@ typedef enum {
 
 extern const char * scui_multi_lang_table[756 * 2];
 
+/*@brief 获取多国语语言类型
+ *@param type 语言类型编号
+ */
+void scui_multi_lang_get(scui_multi_lang_type_t *type);
+
+/*@brief 设置多国语语言类型
+ *@param type 语言类型编号
+ */
+void scui_multi_lang_set(scui_multi_lang_type_t *type);
+
+/*@brief 多国语字符串转换
+ *@param handle 字符串句柄
+ *@param type   语言类型编号
+ *@retval 字符串
+ */
+const char * scui_multi_lang_str(scui_handle_t handle, scui_multi_lang_type_t type);
+
 #endif

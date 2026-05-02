@@ -1442,8 +1442,8 @@ void scui_scroll_invoke(scui_event_t *event)
             widget->state.indev_key_hold = false;
         }
         break;
-    case scui_event_enc_clockwise:
-    case scui_event_enc_clockwise_anti: {
+    case scui_event_enc_fdir:
+    case scui_event_enc_bdir: {
         if (widget->state.indev_enc_hold)
             scui_event_mask_over(event);
         if (widget->state.indev_ptr_hold ||
@@ -1452,12 +1452,12 @@ void scui_scroll_invoke(scui_event_t *event)
         
         scui_coord_t way = 0;
         scui_opt_dir_t dir = scui_opt_dir_none;
-        if (event->type == scui_event_enc_clockwise) {
+        if (event->type == scui_event_enc_fdir) {
             if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_to_r;
             if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_to_d;
             way = +1;
         }
-        if (event->type == scui_event_enc_clockwise_anti) {
+        if (event->type == scui_event_enc_bdir) {
             if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_to_l;
             if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_to_u;
             way = -1;

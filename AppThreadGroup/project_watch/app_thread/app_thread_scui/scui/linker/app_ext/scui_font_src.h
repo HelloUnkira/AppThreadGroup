@@ -5,13 +5,22 @@ typedef struct {
     #if APP_ARCH_IS_PC
     FILE *file;
     #endif
+    
+    uintptr_t data_bin;
+    uintptr_t size_bin;
 } scui_font_src_t;
+
+/*@brief 字库加载
+ *@param font_src 字库信息
+ *@param handle   字库句柄
+ */
+void scui_font_load(scui_font_t *font_src, scui_handle_t *handle);
 
 /*@brief 字库文件操作(打开)
  *@param src  字库文件实例
- *@param name 字库文件名字
+ *@param name 字库名字
  */
-void scui_font_src_open(scui_font_src_t *src, char *name);
+void scui_font_src_open(scui_font_src_t *src, const char *name);
 
 /*@brief 字库文件操作(关闭)
  *@param src 字库文件实例

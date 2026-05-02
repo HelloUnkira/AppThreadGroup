@@ -940,13 +940,15 @@ static uint32_t load_kern(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_dsc
     return kern_length;
 }
 
-static lv_font_t * lv_font_load(char *name)
+static lv_font_t * lv_font_load(scui_font_t *font_src)
 {
     lv_font_t *font = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(lv_font_t));
     font->size += sizeof(lv_font_t);
     
-    strcpy(font->name, name);
-    scui_font_src_open(&font->font_src, font->name);
+    strcpy(font->name, font_src->font_name);
+    font->font_src.data_bin = font_src->data_bin;
+    font->font_src.size_bin = font_src->size_bin;
+    scui_font_src_open(&font->font_src, font_src);
     
     lv_font_fmt_txt_dsc_t *font_dsc = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_dsc_t));
     font->size += sizeof(lv_font_fmt_txt_dsc_t);
@@ -1334,22 +1336,24 @@ typedef struct {
     
 } lv_font_ttf_tiny_t;
 
-static void * lv_font_ttf_tiny_load(char *name, uint32_t size)
+static void * lv_font_ttf_tiny_load(scui_font_t *font_src)
 {
     lv_font_ttf_tiny_t *font = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(lv_font_ttf_tiny_t));
     font->size += sizeof(lv_font_ttf_tiny_t);
     
-    strcpy(font->name, name);
-    scui_font_src_open(&font->font_src, font->name);
+    strcpy(font->name, font_src->font_name);
+    font->font_src.data_bin = font_src->data_bin;
+    font->font_src.size_bin = font_src->size_bin;
+    scui_font_src_open(&font->font_src, font_src->font_name);
     
     /* 加载ttf_tiny实例 */
     int index0 = stbtt_GetFontOffsetForIndex(&font->font_src, 0);
     int retval = stbtt_InitFont(&font->info, &font->font_src, index0);
     SCUI_ASSERT(retval != 0);
     
-    SCUI_ASSERT(size > 0);
+    SCUI_ASSERT(font_src->font_size > 0);
     /* 设置ttf_tiny字号, 获得缩放比例值 */
-    font->scale = stbtt_ScaleForMappingEmToPixels(&font->info, size);
+    font->scale = stbtt_ScaleForMappingEmToPixels(&font->info, font_src->font_size);
     
     int line_gap = 0;
     /* 读取字库的上沿和下沿以及行间距 */
@@ -1418,26 +1422,26 @@ static void lv_font_ttf_tiny_glpyh_load(lv_font_ttf_tiny_t *font, scui_font_glyp
 #endif
 
 /*@brief 字库加载
- *@param name   字库名称
- *@param size   字库字号
- *@param handle 字库句柄
+ *@param font_src 字库信息
+ *@param handle   字库句柄
  */
-void scui_font_load(char *name, uint32_t size, scui_handle_t *handle)
+void scui_font_load(scui_font_t *font_src, scui_handle_t *handle)
 {
-    scui_font_t *font = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(scui_font_t));
+    scui_font_t *font = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(scui_font_t));
+    memcpy(font, font_src, sizeof(scui_font_t));
+    
     *handle = scui_handle_find();
     scui_handle_linker(*handle, font);
-    font->size = size;
     
-    if (font->size == 0) {
-        font->bmp_fixed = lv_font_load(name);
+    if (font->font_size == 0) {
+        font->bmp_fixed = lv_font_load(font);
         
         /* 只去支持1,2,4,8的bpp */
         lv_font_t *lv_font = font->bmp_fixed;
         uint8_t bpp = lv_font->bin_head.bits_per_pixel;
         SCUI_ASSERT(scui_pow2_check(bpp) && bpp <= 8);
     } else {
-        font->ttf_tiny = lv_font_ttf_tiny_load(name, size);
+        font->ttf_tiny = lv_font_ttf_tiny_load(font);
     }
 }
 
@@ -1448,7 +1452,7 @@ void scui_font_unload(scui_handle_t handle)
 {
     scui_font_t *font = scui_handle_source_check(handle);
     
-    if (font->size == 0) {
+    if (font->font_size == 0) {
         lv_font_free(font->bmp_fixed);
     } else {
         lv_font_ttf_tiny_unload(font->ttf_tiny);
@@ -1466,7 +1470,7 @@ uint32_t scui_font_size(scui_handle_t handle)
 {
     scui_font_t *font = scui_handle_source_check(handle);
     
-    if (font->size == 0) {
+    if (font->font_size == 0) {
         lv_font_t *lv_font = font->bmp_fixed;
         return lv_font->size;
     } else {
@@ -1483,7 +1487,7 @@ scui_coord_t scui_font_base_line(scui_handle_t handle)
 {
     scui_font_t *font = scui_handle_source_check(handle);
     
-    if (font->size == 0) {
+    if (font->font_size == 0) {
         lv_font_t *lv_font = font->bmp_fixed;
         return lv_font->base_line;
     } else {
@@ -1500,7 +1504,7 @@ scui_coord_t scui_font_line_height(scui_handle_t handle)
 {
     scui_font_t *font = scui_handle_source_check(handle);
     
-    if (font->size == 0) {
+    if (font->font_size == 0) {
         lv_font_t *lv_font = font->bmp_fixed;
         return lv_font->line_height;
     } else {
@@ -1517,7 +1521,7 @@ scui_coord_t scui_font_underline(scui_handle_t handle)
 {
     scui_font_t *font = scui_handle_source_check(handle);
     
-    if (font->size == 0) {
+    if (font->font_size == 0) {
         lv_font_t *lv_font = font->bmp_fixed;
         return lv_font->underline_position;
     } else {
@@ -1549,7 +1553,7 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
         return;
     }
     
-    if (font->size == 0) {
+    if (font->font_size == 0) {
         lv_font_t *lv_font = font->bmp_fixed;
         scui_font_src_open(&lv_font->font_src, lv_font->name);
         lv_font_glpyh_load(lv_font, glyph);

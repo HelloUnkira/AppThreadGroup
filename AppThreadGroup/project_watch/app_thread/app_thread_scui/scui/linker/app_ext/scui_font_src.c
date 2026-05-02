@@ -9,17 +9,21 @@
 
 /*@brief 字库文件操作(打开)
  *@param src  字库文件实例
- *@param name 字库文件名字
+ *@param name 字库名字
  */
-void scui_font_src_open(scui_font_src_t *src, char *name)
+void scui_font_src_open(scui_font_src_t *src, const char *name)
 {
     /* 字库文件共用一个文件夹 */
-    const char *path = ".";
+    const char *font_path = ".";
+    const char *font_name = "scui_font_package.bin";
+    /* 如果是多文件字库管理, 则只需使用name */
     
     char path_name[128] = {0};
-    snprintf(path_name, 127, "%s\\%s", path, name);
+    snprintf(path_name, 127, "%s\\%s", font_path, font_name);
     
     src->file = fopen(path_name, "rb+");
+    
+    scui_font_src_seek(src, 0);
 }
 
 /*@brief 字库文件操作(关闭)
@@ -37,7 +41,7 @@ void scui_font_src_close(scui_font_src_t *src)
  */
 void scui_font_src_seek(scui_font_src_t *src, uintptr_t ofs)
 {
-    fseek(src->file, ofs, SEEK_SET);
+    fseek(src->file, src->data_bin + ofs, SEEK_SET);
 }
 
 /*@brief 字库文件读取指定资源

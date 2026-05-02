@@ -131,7 +131,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         break;
     
     #if 1
-    case scui_event_enc_clockwise: {
+    case scui_event_enc_fdir: {
         scui_event_mask_over(event);
         
         scui_ui_res_local->cwf_json_idx += 1;
@@ -143,7 +143,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         scui_widget_draw(event->object, NULL, false);
         break;
     }
-    case scui_event_enc_clockwise_anti: {
+    case scui_event_enc_bdir: {
         scui_event_mask_over(event);
         
         scui_ui_res_local->cwf_json_idx -= 1;

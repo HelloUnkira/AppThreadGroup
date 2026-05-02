@@ -13,14 +13,4 @@ void scui_engine_wait(void);
  */
 void scui_engine_execute(void);
 
-/*@biref 设置引擎执行状态
- *@param 引擎是否执行
- */
-void scui_engine_execute_status_set(bool execute);
-
-/*@biref 获得引擎执行状态
- *@retval 引擎是否执行
- */
-bool scui_engine_execute_status_get(void);
-
 #endif

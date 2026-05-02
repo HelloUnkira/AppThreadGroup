@@ -256,7 +256,7 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
         
         break;
     }
-    case scui_event_enc_clockwise: {
+    case scui_event_enc_fdir: {
         scui_event_mask_over(event);
         
         /* 补完上次没跑完的位移 */
@@ -282,7 +282,7 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
             scui_ui_res_local->anima = true;
         break;
     }
-    case scui_event_enc_clockwise_anti: {
+    case scui_event_enc_bdir: {
         scui_event_mask_over(event);
         
         /* 补完上次没跑完的位移 */

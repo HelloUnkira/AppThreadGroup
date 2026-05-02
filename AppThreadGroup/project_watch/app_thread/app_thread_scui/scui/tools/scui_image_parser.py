@@ -309,13 +309,13 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
             scui_image_pixel_height = image_std.size[1]
         # 写入结构, 更新pixel_offset
         scui_image_struct = ''
-        scui_image_struct += 'const scui_image_t %s = {\n' % scui_image_tag
-        scui_image_struct += '\t.pixel.width\t = %s,\n' % hex(scui_image_pixel_width)
-        scui_image_struct += '\t.pixel.height\t = %s,\n' % hex(scui_image_pixel_height)
-        scui_image_struct += '\t.pixel.data_bin\t = %s,\n' % hex(pixel_bin_ofs)
-        scui_image_struct += '\t.pixel.size_bin\t = %s,\n' % hex(pixel_bin_len)
-        scui_image_struct += '\t.format\t\t\t = %s,\n' % scui_pixel_cf
-        scui_image_struct += '\t.type\t\t\t = %s,\n' % scui_image_type
+        scui_image_struct += 'static const scui_image_t %s = {\n' % scui_image_tag
+        scui_image_struct += '\t.format\t\t\t\t = %s,\n' % scui_pixel_cf
+        scui_image_struct += '\t.type\t\t\t\t = %s,\n' % scui_image_type
+        scui_image_struct += '\t.pixel.width\t\t = %s,\n' % hex(scui_image_pixel_width)
+        scui_image_struct += '\t.pixel.height\t\t = %s,\n' % hex(scui_image_pixel_height)
+        scui_image_struct += '\t.pixel.data_bin\t\t = %s,\n' % hex(pixel_bin_ofs)
+        scui_image_struct += '\t.pixel.size_bin\t\t = %s,\n' % hex(pixel_bin_len)
         scui_image_struct += '};\n\n'
         scui_image_parser_c.write(scui_image_struct)
         # 我们生成一个子记录,用于外界解析时使用(内部只使用全部bin)

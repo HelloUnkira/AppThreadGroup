@@ -58,8 +58,8 @@ typedef enum {
     /* 输入设备事件<enc,s> */
     scui_event_enc_s,
     scui_event_enc_all,
-    scui_event_enc_clockwise,       /* 正转<coord> */
-    scui_event_enc_clockwise_anti,  /* 反转<coord> */
+    scui_event_enc_fdir,    /* 正转<coord> */
+    scui_event_enc_bdir,    /* 反转<coord> */
     scui_event_enc_e,
     /* 输入设备事件<enc,e> */
     

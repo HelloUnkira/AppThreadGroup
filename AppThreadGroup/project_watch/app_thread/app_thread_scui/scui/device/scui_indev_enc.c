@@ -49,12 +49,12 @@ void scui_indev_enc_notify(scui_indev_data_t *data)
     scui_event_sys_t type = scui_event_invalid;
     /* 旋钮类型事件无需额外复杂处理 */
     if (data->enc.enc_diff > 0) {
-        type = scui_event_enc_clockwise;
-        SCUI_LOG_INFO("scui_event_enc_clockwise:%d", scui_abs(data->enc.enc_diff));
+        type = scui_event_enc_fdir;
+        SCUI_LOG_INFO("scui_event_enc_fdir:%d", scui_abs(data->enc.enc_diff));
     }
     if (data->enc.enc_diff < 0) {
-        type = scui_event_enc_clockwise_anti;
-        SCUI_LOG_INFO("scui_event_enc_clockwise_anti:%d", scui_abs(data->enc.enc_diff));
+        type = scui_event_enc_bdir;
+        SCUI_LOG_INFO("scui_event_enc_bdir:%d", scui_abs(data->enc.enc_diff));
     }
     /* 直接作为系统事件发送给管理器即可 */
     scui_event_define(event, SCUI_HANDLE_SYSTEM, false, type, scui_event_enc_absorb);

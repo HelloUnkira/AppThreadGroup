@@ -3030,3 +3030,41 @@ const char * scui_multi_lang_table[756 * 2] = {
 	//Please go to the App to open the camera
 	(const char []){0x50, 0x6c, 0x65, 0x61, 0x73, 0x65, 0x20, 0x67, 0x6f, 0x20, 0x74, 0x6f, 0x20, 0x74, 0x68, 0x65, 0x20, 0x41, 0x70, 0x70, 0x20, 0x74, 0x6f, 0x20, 0x6f, 0x70, 0x65, 0x6e, 0x20, 0x74, 0x68, 0x65, 0x20, 0x63, 0x61, 0x6d, 0x65, 0x72, 0x61, 0},
 };
+
+static scui_multi_lang_type_t scui_multi_lang_type = 0;
+
+/*@brief 获取多国语语言类型
+ *@param type 语言类型编号
+ */
+
+void scui_multi_lang_get(scui_multi_lang_type_t *type)
+{
+	SCUI_ASSERT(type != NULL);
+	*type = scui_multi_lang_type;
+}
+
+/*@brief 设置多国语语言类型
+ *@param type 语言类型编号
+ */
+
+void scui_multi_lang_set(scui_multi_lang_type_t *type)
+{
+	SCUI_ASSERT(type != NULL);
+	scui_multi_lang_type = *type;
+	
+	scui_event_define(event, SCUI_HANDLE_SYSTEM, false, scui_event_lang_change, scui_event_absorb_none);
+	scui_event_notify(&event);
+}
+
+/*@brief 多国语字符串转换
+ *@param handle 字符串句柄
+ *@param type   语言类型编号
+ *@retval 字符串
+ */
+const char * scui_multi_lang_str(scui_handle_t handle, scui_multi_lang_type_t type)
+{
+	scui_handle_t string = handle;
+	string += SCUI_HANDLE_SYSTEM == type ? scui_multi_lang_type : type;
+	string -= SCUI_MULTI_LANG_NUM_OFS;
+	return scui_handle_source(string);
+}

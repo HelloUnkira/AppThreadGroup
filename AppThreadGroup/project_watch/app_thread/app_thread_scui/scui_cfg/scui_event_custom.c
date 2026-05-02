@@ -55,8 +55,8 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
             [scui_event_ptr_move] =                 scui_stringify(scui_event_ptr_move),
             [scui_event_ptr_up] =                   scui_stringify(scui_event_ptr_up),
             /* 系统事件: enc */
-            [scui_event_enc_clockwise] =            scui_stringify(scui_event_enc_clockwise),
-            [scui_event_enc_clockwise_anti] =       scui_stringify(scui_event_enc_clockwise_anti),
+            [scui_event_enc_fdir] =                 scui_stringify(scui_event_enc_fdir),
+            [scui_event_enc_bdir] =                 scui_stringify(scui_event_enc_bdir),
             /* 系统事件: key */
             [scui_event_key_down] =                 scui_stringify(scui_event_key_down),
             [scui_event_key_hold] =                 scui_stringify(scui_event_key_hold),
@@ -120,8 +120,8 @@ void scui_event_custom_access(scui_event_t *event)
     switch (event->type) {
     case scui_event_ptr_hold:
     case scui_event_key_hold:
-    case scui_event_enc_clockwise:
-    case scui_event_enc_clockwise_anti:
+    case scui_event_enc_fdir:
+    case scui_event_enc_bdir:
     case scui_event_widget_scroll_start:
     case scui_event_widget_scroll_over:
     case scui_event_widget_scroll_keep:

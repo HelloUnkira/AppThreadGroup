@@ -67,8 +67,10 @@ static void scui_cache_font_unit_new_node(scui_cache_lru_unit_t **unit, scui_cac
     font_unit->name = font_unit_t->name;
     font_unit->font = font_unit_t->font;
     /* 字库资源加载 */
-    char *name = scui_handle_source_check(font_unit->name);
-    scui_font_load(name, font_unit->size, &font_unit->font);
+    scui_font_t *font = scui_handle_source_check(font_unit->name);
+    scui_font_t font_src = *font;
+    font_src.font_size = font_unit->size;
+    scui_font_load(&font_src, &font_unit->font);
     SCUI_ASSERT(scui_handle_source(font_unit->font) != NULL);
     
     *unit = &font_unit->lru_unit;
@@ -193,8 +195,10 @@ void scui_cache_font_load(scui_cache_font_unit_t *font_unit)
     #else
     
     /* 加载字库资源 */
-    char *name = scui_handle_source_check(font_unit->name);
-    scui_font_load(name, font_unit->size, &font_unit->font);
+    scui_font_t *font = scui_handle_source_check(font_unit->name);
+    scui_font_t font_src = *font;
+    font_src.font_size = font_unit->size;
+    scui_font_load(&font_src, &font_unit->font);
     SCUI_ASSERT(scui_handle_source(font_unit->font) != NULL);
     #endif
 }
