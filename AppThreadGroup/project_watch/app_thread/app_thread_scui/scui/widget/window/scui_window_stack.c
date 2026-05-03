@@ -12,6 +12,10 @@
  */
 static void scui_window_stack_record(scui_handle_t handle)
 {
+    /* 仅有效切换记录才被使用 */
+    if (scui_window_mgr.stack_args.stack_rcd[0] == handle)
+        return;
+    
     for (scui_multi_t idx = SCUI_WINDOW_STACK_NEST - 1; idx - 1 >= 0; idx--)
         scui_window_mgr.stack_args.stack_rcd[idx] = 
         scui_window_mgr.stack_args.stack_rcd[idx - 1];

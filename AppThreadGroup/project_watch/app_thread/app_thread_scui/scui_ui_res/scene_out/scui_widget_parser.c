@@ -76,9 +76,6 @@ static void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
 static void scui_ui_scene_waterfall_bar_arc_event(scui_event_t *event)
 {
 }
-static void scui_ui_scene_monitor_event_proc(scui_event_t *event)
-{
-}
 static void scui_ui_scene_popup_event_proc(scui_event_t *event)
 {
 }
@@ -239,7 +236,6 @@ extern void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event);
 extern void scui_ui_scene_waterfall_event_proc(scui_event_t *event);
 extern void scui_ui_scene_waterfall_scroll_event(scui_event_t *event);
 extern void scui_ui_scene_waterfall_bar_arc_event(scui_event_t *event);
-extern void scui_ui_scene_monitor_event_proc(scui_event_t *event);
 extern void scui_ui_scene_popup_event_proc(scui_event_t *event);
 extern void scui_ui_scene_popup_bg_event_proc(scui_event_t *event);
 extern void scui_ui_scene_activity_event_proc(scui_event_t *event);
@@ -603,22 +599,6 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_BAR_ARC = {
 	.widget.myself                  = SCUI_UI_SCENE_WATERFALL_BAR_ARC,
 	.widget.parent                  = SCUI_UI_SCENE_WATERFALL,
 	.widget.event_cb                = scui_ui_scene_waterfall_bar_arc_event,
-};
-
-static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MONITOR = {
-	.widget.type                    = scui_widget_type_window,
-	.widget.style.sched_anima       = true,
-	.widget.clip.x                  = 0,
-	.widget.clip.y                  = SCUI_VER_RES - 120,
-	.widget.clip.w                  = SCUI_HOR_RES,
-	.widget.clip.h                  = 120,
-	.widget.myself                  = SCUI_UI_SCENE_MONITOR,
-	.widget.event_cb                = scui_ui_scene_monitor_event_proc,
-	.level                          = 10,
-	.buffer                         = true,
-	.resident                       = true,
-	.format                         = SCUI_PIXEL_CF_DEF_A,
-	.widget.child_num               = 10,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
@@ -1238,7 +1218,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.widget.child_num               = 10,
 };
 
-const void * scui_widget_parser_table[73] = {
+const void * scui_widget_parser_table[72] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
@@ -1263,7 +1243,6 @@ const void * scui_widget_parser_table[73] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL,
 	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL,
 	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL_BAR_ARC,
-	(void *)&scui_widget_SCUI_UI_SCENE_MONITOR,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_SCALE,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_BG,

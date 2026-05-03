@@ -166,8 +166,8 @@ void scui_custom_show(void)
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_NONE, false);
     /* 启用scui性能监控 */
-    #if SCUI_UI_MONITOR_USE
-    scui_widget_show(SCUI_UI_SCENE_MONITOR, false);
+    #if SCUI_MONITOR_USE
+    scui_monitor_show(false || !SCUI_MEM_FEAT_MINI);
     #endif
     /* 启用monkey test */
     #if SCUI_MONKEY_TEST

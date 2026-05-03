@@ -8,15 +8,9 @@
 #include "scui_font_package.h"          /* 字库资源信息表 */
 #include "scui_lang_parser.h"           /* 多国语字符串表 */
 #include "scui_lang_font.h"             /* 多国语字库表 */
-
-/* monkey */
-#include "scui_monkey.h"
-/* presenter */
-#include "scui_presenter.h"
-/* cwf json */
-#include "scui_cwf_json_proto.h"
-#include "scui_cwf_json_parser.h"
-#include "scui_cwf_json_maker.h"
+#include "scui_presenter.h"             /* presenter */
+#include "scui_ready.h"                 /* ready */
+#include "scui_ui.h"                    /* ui */
 
 /* 图标库 */
 /* 缺图标可从此取用https://www.iconfont.cn */
