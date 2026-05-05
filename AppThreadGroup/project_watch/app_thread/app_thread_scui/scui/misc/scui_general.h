@@ -182,6 +182,8 @@ typedef enum {
     scui_pixel_cf_bits_mask = 0x00FF,
     
     scui_pixel_cf_none      = 0,
+    scui_pixel_cf_alpha1    = 0x0100 + 1 * 8 / 8,   /* alpha */
+    scui_pixel_cf_alpha2    = 0x0100 + 1 * 8 / 4,   /* alpha */
     scui_pixel_cf_alpha4    = 0x0100 + 1 * 8 / 2,   /* alpha */
     scui_pixel_cf_alpha8    = 0x0100 + 1 * 8,       /* alpha */
     scui_pixel_cf_bmp565    = 0x0200 + 2 * 8,       /* bitmap */

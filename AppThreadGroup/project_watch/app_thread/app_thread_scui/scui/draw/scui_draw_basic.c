@@ -296,7 +296,9 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
     }
     
     /* pixel cover:(调色板) */
-    if (src_surface->format == scui_pixel_cf_alpha4 ||
+    if (src_surface->format == scui_pixel_cf_alpha1 ||
+        src_surface->format == scui_pixel_cf_alpha2 ||
+        src_surface->format == scui_pixel_cf_alpha4 ||
         src_surface->format == scui_pixel_cf_alpha8) {
         scui_coord_t dst_bits = scui_pixel_bits(dst_surface->format);
         scui_coord_t src_bits = scui_pixel_bits(src_surface->format);

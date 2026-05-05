@@ -364,19 +364,6 @@ static void scui_widget_event_process(scui_event_t *event)
         if (area_unhit && scui_area_point(&clip, &event->ptr_e)) area_unhit = false;
         if (area_unhit) return;
         
-        /* 基础控件拖动效果 */
-        if (event->type == scui_event_ptr_move) {
-            
-            /* 控件指针移动跟随标记 */
-            if (widget->style.indev_ptr_move) {
-                scui_event_mask_over(event);
-                
-                scui_point_t offset = {0};
-                offset.x = event->ptr_e.x - event->ptr_s.x;
-                offset.y = event->ptr_e.y - event->ptr_s.y;
-                scui_widget_move_ofs(widget->myself, &offset);
-            }
-        }
         break;
     }
     case scui_event_enc_fdir:

@@ -493,6 +493,16 @@ void scui_ui_scene_6_9_event_proc(scui_event_t *event)
         
         break;
     }
+    case scui_event_ptr_move: {
+        scui_event_mask_over(event);
+        
+        scui_point_t offset = {0};
+        /* 基础控件拖动效果 */
+        offset.x = event->ptr_e.x - event->ptr_s.x;
+        offset.y = event->ptr_e.y - event->ptr_s.y;
+        scui_widget_move_ofs(event->object, &offset);
+        break;
+    }
     default:
         break;
     }

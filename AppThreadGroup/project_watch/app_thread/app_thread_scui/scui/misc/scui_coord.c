@@ -205,6 +205,7 @@ bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
             area->x2 = (area1_s.x2, area2_s.x2);
             area->y1 = scui_min(area1_s.y1, area2_s.y1);
             area->y2 = scui_max(area1_s.y2, area2_s.y2);
+            scui_area_m_by_s(area, area);
             result = true;
         }
     }
@@ -218,11 +219,11 @@ bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
             area->y2 = (area1_s.y2, area2_s.y2);
             area->x1 = scui_min(area1_s.x1, area2_s.x1);
             area->x2 = scui_max(area1_s.x2, area2_s.x2);
+            scui_area_m_by_s(area, area);
             result = true;
         }
     }
     
-    scui_area_m_by_s(area, area);
     return result;
 }
 
@@ -289,7 +290,7 @@ bool scui_area_differ(scui_area_t area[4], scui_coord_t *num, scui_area_t *area1
  *@param area2 区域
  *@retval 失败或者非相交
  */
-bool scui_area_differ2(scui_area_t area[2], scui_coord_t *num, scui_area_t *area1, scui_area_t *area2)
+bool scui_area_differ2(scui_area_t area[3], scui_coord_t *num, scui_area_t *area1, scui_area_t *area2)
 {
     /* 这里只考虑俩种情况,无论哪俩种情况,算法都很统一 */
     /* 第一种:一个矩形的唯一顶点在另一个矩形中间 */

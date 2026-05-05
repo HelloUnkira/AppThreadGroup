@@ -146,10 +146,10 @@ bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip)
                 scui_list_dll_remove(&clip_set->dl_list, &unit->dl_node);
                 clip_set->size -= scui_area_size(&unit->clip);
                 clip_set->num--;
-                /* 如果求不到余集,那就是全子集(clip4_num == 0) */
                 
                 scui_area_t  clip4[4] = {0};
                 scui_coord_t clip4_num = 0;
+                /* 如果求不到余集,那就是全子集(clip4_num == 0) */
                 if (scui_area_differ(clip4, &clip4_num, &unit->clip, &clip_inter)) {
                     /* 将多余的重新加回去, 当前循环就此终止 */
                     for (scui_coord_t idx = 0; idx < clip4_num; idx++)

@@ -24,77 +24,29 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(dst_surface != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_glyph != NULL && src_clip != NULL);
     
+    /* 使用scui_pixel_cf_alpha格式blend */
     scui_surface_t glyph_surface = {
         .pixel   = src_glyph->bitmap,
-        .format  = SCUI_PIXEL_CF_DEF,
         .hor_res = src_glyph->box_w,
         .ver_res = src_glyph->box_h,
+        .alpha   = src_alpha,
     };
+    switch (src_glyph->bpp) {
+    case 1: glyph_surface.format = scui_pixel_cf_alpha1; break;
+    case 2: glyph_surface.format = scui_pixel_cf_alpha2; break;
+    case 4: glyph_surface.format = scui_pixel_cf_alpha4; break;
+    case 8: glyph_surface.format = scui_pixel_cf_alpha8; break;
+    default: SCUI_LOG_WARN("unsupport bpp:%d", src_glyph->bpp);
+        SCUI_ASSERT(false); return;
+    }
     glyph_surface.pbyte   = scui_pixel_byte(glyph_surface.format);
     glyph_surface.stride  = glyph_surface.hor_res;
     glyph_surface.stride *= scui_pixel_bits(glyph_surface.format);
     glyph_surface.stride /= 8;
+    
     scui_surface_t *src_surface = &glyph_surface;
-    
-    scui_area_t dst_clip_v = {0};   /* v:vaild */
-    scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
-         return;
-    
-    scui_area_t src_clip_v = {0};   /* v:vaild */
-    scui_area_t src_area = scui_surface_area(src_surface);
-    if (!scui_area_inter(&src_clip_v, &src_area, src_clip))
-         return;
-    
-    scui_area_t draw_area = {0};
-    draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
-    draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
-    
-    scui_multi_t dst_ofs_p = scui_surface_point_ofs(dst_surface, dst_clip_v.y, dst_clip_v.x);
-    scui_multi_t src_ofs_p = scui_surface_point_ofs(src_surface, src_clip_v.y, src_clip_v.x);
-    uint8_t *dst_addr = dst_surface->pixel + dst_ofs_p * dst_surface->pbyte;
-    uint8_t *src_addr = src_surface->pixel;
-    /* 调色板数组(为空时计算,有时直接取): */
-    scui_multi_t grey_len = 1 << src_glyph->bpp;
-    scui_multi_t grey_size = sizeof(scui_color_wt_t) * grey_len;
-    scui_color_wt_t *grey_table = SCUI_MEM_ZALLOC(scui_mem_type_mix, grey_size);
-    scui_color_wt_t  filter = 0;
-    /* 起始色调和结束色调固定 */
-    scui_pixel_by_color(src_surface->format, &grey_table[0], src_color.color_e);
-    scui_pixel_by_color(src_surface->format, &grey_table[grey_len - 1], src_color.color_s);
-    scui_pixel_by_color(src_surface->format, &filter, src_color.color_f);
-    bool pixel_no_grad = grey_table[0] == grey_table[grey_len - 1];
-    
-    for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
-    for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-        uint8_t *dst_ofs = dst_addr  + scui_surface_pbyte_ofs(dst_surface, idx_line, idx_item);
-        uint32_t idx_ofs = src_ofs_p + scui_surface_point_ofs(src_surface, idx_line, idx_item);
-        uint8_t *src_ofs = src_addr  + idx_ofs / (8 / src_glyph->bpp);
-        uint8_t  grey = scui_pixel_grey_bpp_x(*src_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
-        uint8_t  grey_idx = pixel_no_grad ? 0 : (uint16_t)grey * (grey_len - 1) / 0xFF;
-        
-        if (grey_idx != 0 && grey_idx != grey_len - 1)
-        if (grey_table[grey_idx] == 0x00) {
-            uint32_t *pixel_1 = &grey_table[0];
-            uint32_t *pixel_2 = &grey_table[grey_len - 1];
-            
-            grey_table[grey_idx] = grey_table[0];
-            scui_pixel_mix_with(src_surface->format, &grey_table[grey_idx],
-                src_surface->format, &grey_table[grey_len - 1], scui_alpha_cover - grey);
-        }
-        
-        scui_color_wt_t grey_color = grey_table[grey_idx];
-        scui_pixel_mix_alpha(dst_surface->format, &grey_color, grey);
-        /* 过滤色调,去色 */
-        if (src_color.filter && grey_color == filter)
-            continue;
-        
-        scui_alpha_t alpha = (uint32_t)src_alpha * grey / scui_alpha_cover;
-        scui_pixel_mix_with(dst_surface->format, dst_ofs,
-            src_surface->format, &grey_table[grey_idx], alpha);
-    }
-    
-    SCUI_MEM_FREE(grey_table);
+    scui_draw_area_blend(true, dst_surface, *dst_clip,
+        src_surface, *src_clip, src_color);
 }
 
 /*@brief 绘制字符串
