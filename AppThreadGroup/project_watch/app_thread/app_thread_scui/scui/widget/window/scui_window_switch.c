@@ -7,6 +7,54 @@
 
 #include "scui.h"
 
+/*@brief 获取窗口切换风格
+ *@param cfg_type 窗口切换风格
+ */
+void scui_window_switch_get_cfg_type(scui_window_switch_type_t *cfg_type)
+{
+    *cfg_type = scui_window_mgr.switch_args.cfg_type;
+}
+
+/*@brief 设置窗口切换风格
+ *@param cfg_type 窗口切换风格
+ */
+void scui_window_switch_set_cfg_type(scui_window_switch_type_t cfg_type)
+{
+    scui_window_mgr.switch_args.cfg_type = cfg_type;
+}
+
+/*@brief 获取窗口切换方向
+ *@param cfg_dir 窗口切换方向
+ */
+void scui_window_switch_get_cfg_dir(scui_opt_dir_t *cfg_dir)
+{
+    *cfg_dir = scui_window_mgr.switch_args.cfg_dir;
+}
+
+/*@brief 设置窗口切换方向
+ *@param cfg_dir 窗口切换方向
+ */
+void scui_window_switch_set_cfg_dir(scui_opt_dir_t cfg_dir)
+{
+    scui_window_mgr.switch_args.cfg_dir = cfg_dir;
+}
+
+/*@brief 获取窗口切换参数
+ *@param cfg_args 窗口切换参数
+ */
+void scui_window_switch_get_cfg_args(scui_window_switch_args_t *cfg_args)
+{
+    *cfg_args = scui_window_mgr.switch_args.cfg_args;
+}
+
+/*@brief 设置窗口切换参数
+ *@param cfg_args 窗口切换参数
+ */
+void scui_window_switch_set_cfg_args(scui_window_switch_args_t *cfg_args)
+{
+    scui_window_mgr.switch_args.cfg_args = *cfg_args;
+}
+
 /*@brief 窗口切换风格自动更新
  *@param type 窗口切换风格
  *@param dir  窗口切换方向

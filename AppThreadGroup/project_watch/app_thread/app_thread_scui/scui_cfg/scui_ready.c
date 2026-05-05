@@ -145,18 +145,14 @@ void scui_custom_ready(void)
     scui_lang_set(&lang_type);
     
     /* 窗口交互风格 */
-    scui_opt_dir_t *cfg_dir = NULL;
-    scui_window_switch_type_t *cfg_type = NULL;
-    scui_window_switch_args_t *cfg_args = NULL;
-    
-    scui_window_switch_cfg_dir(&cfg_dir);
-    scui_window_switch_cfg_type(&cfg_type);
-    scui_window_switch_cfg_args(&cfg_args);
-    *cfg_type = scui_window_switch_move;    /* 默认切换风格 */
-    *cfg_dir  = scui_opt_dir_to_l;          /* 默认切换方向 */
+    scui_window_switch_set_cfg_dir(scui_opt_dir_to_l);
+    scui_window_switch_set_cfg_type(scui_window_switch_move);
     
     /* 窗口交互参数 */
-    cfg_args->shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
+    scui_window_switch_args_t cfg_args = {0};
+    scui_window_switch_get_cfg_args(&cfg_args);
+    cfg_args.shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
+    scui_window_switch_set_cfg_args(&cfg_args);
 }
 
 /*@brief 初始化scui自定义显示

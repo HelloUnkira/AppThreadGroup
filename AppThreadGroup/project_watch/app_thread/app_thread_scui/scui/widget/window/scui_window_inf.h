@@ -101,20 +101,39 @@ void scui_window_local_res_set(scui_handle_t handle, scui_handle_t size);
 /*************************************************************************************************/
 /*************************************************************************************************/
 
-/*@brief 窗口切换风格实例
- *@param switch_type 窗口切换风格
+/*@brief 获取窗口切换风格
+ *@param cfg_type 窗口切换风格
  */
-void scui_window_switch_cfg_type(scui_window_switch_type_t **cfg_type);
+void scui_window_switch_get_cfg_type(scui_window_switch_type_t *cfg_type);
 
-/*@brief 窗口切换参数实例
- *@param cfg_args 实例
+/*@brief 设置窗口切换风格
+ *@param cfg_type 窗口切换风格
  */
-void scui_window_switch_cfg_args(scui_window_switch_args_t **cfg_args);
+void scui_window_switch_set_cfg_type(scui_window_switch_type_t cfg_type);
 
-/*@brief 窗口切换方向实例
+/*@brief 获取窗口切换方向
  *@param cfg_dir 窗口切换方向
  */
-void scui_window_switch_cfg_dir(scui_opt_dir_t **cfg_dir);
+void scui_window_switch_get_cfg_dir(scui_opt_dir_t *cfg_dir);
+
+/*@brief 设置窗口切换方向
+ *@param cfg_dir 窗口切换方向
+ */
+void scui_window_switch_set_cfg_dir(scui_opt_dir_t cfg_dir);
+
+/*@brief 获取窗口切换参数
+ *@param cfg_args 窗口切换参数
+ */
+void scui_window_switch_get_cfg_args(scui_window_switch_args_t *cfg_args);
+
+/*@brief 设置窗口切换参数
+ *@param cfg_args 窗口切换参数
+ */
+void scui_window_switch_set_cfg_args(scui_window_switch_args_t *cfg_args);
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
 
 /*@brief 窗口激活
  *@param handle 窗口句柄
@@ -153,36 +172,51 @@ void scui_window_stack_top(scui_handle_t *handle);
 void scui_window_stack_rcd(scui_handle_t *handle, scui_handle_t index);
 
 /*@brief 窗口栈复位
- *@param handle  窗口句柄
- *@param reserve 保留当前显示窗口
+ *@param handle      窗口句柄
+ *@param reserve     保留当前显示窗口
+ *@param switch_type 切换类型
+ *@param switch_dir  切换方向
  *@retval 成功失败
  */
-bool scui_window_stack_reset(scui_handle_t handle, bool reserve);
+bool scui_window_stack_reset_by(scui_handle_t handle, bool reserve, scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir);
+#define scui_window_stack_reset(handle, reserve) scui_window_stack_reset_by(handle, reserve, scui_window_switch_auto, scui_opt_dir_none)
 
 /*@brief 窗口栈回退
- *@param handle 目标窗口
+ *@param handle      目标窗口
+ *@param switch_type 切换类型
+ *@param switch_dir  切换方向
  *@retval 成功失败
  */
-bool scui_window_stack_goback(scui_handle_t handle);
+bool scui_window_stack_goback_by(scui_handle_t handle, scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir);
+#define scui_window_stack_goback(handle) scui_window_stack_goback_by(handle, scui_window_switch_auto, scui_opt_dir_none)
 
 /*@brief 窗口栈覆盖
- *@param handle 窗口句柄
+ *@param handle      窗口句柄
+ *@param switch_type 切换类型
+ *@param switch_dir  切换方向
  *@retval 成功失败
  */
-bool scui_window_stack_cover(scui_handle_t handle);
+bool scui_window_stack_cover_by(scui_handle_t handle, scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir);
+#define scui_window_stack_cover(handle) scui_window_stack_cover_by(handle, scui_window_switch_auto, scui_opt_dir_none)
 
 /*@brief 窗口栈添加
- *@param handle  窗口句柄
- *@param reserve 保留当前显示窗口
+ *@param handle      窗口句柄
+ *@param reserve     保留当前显示窗口
+ *@param switch_type 切换类型
+ *@param switch_dir  切换方向
  *@retval 成功失败
  */
-bool scui_window_stack_add(scui_handle_t handle, bool reserve);
+bool scui_window_stack_add_by(scui_handle_t handle, bool reserve, scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir);
+#define scui_window_stack_add(handle, reserve) scui_window_stack_add_by(handle, reserve, scui_window_switch_auto, scui_opt_dir_none)
 
 /*@brief 窗口栈移除
- *@param handle 目标窗口
+ *@param handle      目标窗口
+ *@param switch_type 切换类型
+ *@param switch_dir  切换方向
  *@retval 成功失败
  */
-bool scui_window_stack_del(scui_handle_t handle);
+bool scui_window_stack_del_by(scui_handle_t handle, scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir);
+#define scui_window_stack_del(handle) scui_window_stack_del_by(handle, scui_window_switch_auto, scui_opt_dir_none)
 
 /*************************************************************************************************/
 /*************************************************************************************************/

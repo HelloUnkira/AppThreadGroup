@@ -120,12 +120,8 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         if (scui_ui_res_local->ptr_long_jump) {
             scui_ui_res_local->ptr_long_jump = true;
             #if SCUI_MEM_FEAT_MINI == 0
-            scui_window_switch_type_t *cfg_type = NULL;
-            scui_window_switch_cfg_type(&cfg_type);
-            scui_window_switch_type_t type = *cfg_type;
-            *cfg_type = scui_window_switch_circle;
-            scui_window_stack_add(SCUI_UI_SCENE_LANTERN, false);
-            *cfg_type = type;
+            scui_window_stack_add_by(SCUI_UI_SCENE_LANTERN, false,
+                scui_window_switch_circle, scui_opt_dir_none);
             #endif
         }
         break;
@@ -161,27 +157,19 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         if (event->key_id != scui_event_key_val_enter)
             break;
         
-        scui_window_switch_type_t *cfg_type = NULL;
-        scui_window_switch_cfg_type(&cfg_type);
-        scui_window_switch_type_t switch_type = *cfg_type;
-        static scui_ui_scene_list_type_t type = 0;
-        type++;
-        
+        static scui_ui_scene_list_type_t type = 0; type++;
         if (type < scui_ui_scene_list_type_s + 1)
             type = scui_ui_scene_list_type_e - 1;
         if (type > scui_ui_scene_list_type_e - 1)
             type = scui_ui_scene_list_type_s + 1;
         
-        SCUI_ASSERT(type > scui_ui_scene_list_type_s);
-        SCUI_ASSERT(type < scui_ui_scene_list_type_e);
-        
         switch (type) {
         #if SCUI_MEM_FEAT_MINI == 0
         case scui_ui_scene_list_type_list_scale: { // 缩放列表
-            #if 0   // 裁内存选择(去掉过场动画)
-            scui_window_switch_type_cfg_set(scui_window_switch_none);
-            scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
-            scui_window_switch_type_cfg_set(switch_type);
+            #if 0
+            // 裁内存选择(去掉过场动画)
+            scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false,
+                scui_window_switch_none, scui_opt_dir_none);
             #else
             scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
             #endif

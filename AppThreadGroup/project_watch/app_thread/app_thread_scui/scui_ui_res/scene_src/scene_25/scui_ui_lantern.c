@@ -253,16 +253,9 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         scui_ui_res_local->move_lock = false;
         break;
     case scui_event_key_click: {
-        if (event->key_id != scui_event_key_val_enter)
-            break;
         
-        scui_window_switch_type_t *cfg_type = NULL;
-        scui_window_switch_cfg_type(&cfg_type);
-        scui_window_switch_type_t type = *cfg_type;
-        *cfg_type = scui_window_switch_circle;
-        scui_window_stack_del(SCUI_UI_SCENE_LANTERN);
-        *cfg_type = type;
-        
+        scui_window_stack_del_by(SCUI_UI_SCENE_LANTERN,
+            scui_window_switch_circle, scui_opt_dir_none);
         break;
     }
     break;

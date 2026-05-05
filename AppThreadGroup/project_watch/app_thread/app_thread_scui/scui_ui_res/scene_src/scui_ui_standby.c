@@ -63,15 +63,10 @@ void scui_ui_scene_standby_event_proc(scui_event_t *event)
     }
     case scui_event_ptr_click:
     case scui_event_key_click: {
-        
-        scui_window_switch_type_t *cfg_type = NULL;
-        scui_window_switch_cfg_type(&cfg_type);
-        scui_window_switch_type_t type = *cfg_type;
-        *cfg_type = scui_window_switch_none;
-        scui_window_stack_del(SCUI_UI_SCENE_STANDBY);
-        *cfg_type = type;
-        
         scui_event_mask_over(event);
+        
+        scui_window_stack_del_by(SCUI_UI_SCENE_STANDBY,
+            scui_window_switch_none, scui_opt_dir_none);
         break;
     }
     default:

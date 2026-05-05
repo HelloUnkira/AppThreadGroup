@@ -9,30 +9,6 @@
 
 scui_window_mgr_t scui_window_mgr = {0};
 
-/*@brief 窗口切换风格实例
- *@param switch_type 窗口切换风格
- */
-void scui_window_switch_cfg_type(scui_window_switch_type_t **cfg_type)
-{
-    *cfg_type = &scui_window_mgr.switch_args.cfg_type;
-}
-
-/*@brief 窗口切换参数实例
- *@param cfg_args 实例
- */
-void scui_window_switch_cfg_args(scui_window_switch_args_t **cfg_args)
-{
-    *cfg_args = &scui_window_mgr.switch_args.cfg_args;
-}
-
-/*@brief 窗口切换方向实例
- *@param cfg_dir 窗口切换方向
- */
-void scui_window_switch_cfg_dir(scui_opt_dir_t **cfg_dir)
-{
-    *cfg_dir = &scui_window_mgr.switch_args.cfg_dir;
-}
-
 /*@brief 窗口列表添加窗口
  *@param handle 窗口句柄
  */

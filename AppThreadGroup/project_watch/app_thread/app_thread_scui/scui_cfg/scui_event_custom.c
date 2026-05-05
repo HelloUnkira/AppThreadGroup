@@ -184,12 +184,8 @@ void scui_event_custom_myself(scui_event_t *event)
         scui_event_mask_over(event);
         
         if (handle_top != SCUI_UI_SCENE_NONE) {
-            scui_window_switch_type_t *cfg_type = NULL;
-            scui_window_switch_cfg_type(&cfg_type);
-            scui_window_switch_type_t type = *cfg_type;
-            *cfg_type = scui_window_switch_none;
-            scui_window_stack_reset(SCUI_UI_SCENE_NONE, false);
-            *cfg_type = type;
+            scui_window_stack_reset_by(SCUI_UI_SCENE_NONE, false,
+                scui_window_switch_none, scui_opt_dir_none);
         }
         break;
     }
@@ -199,22 +195,14 @@ void scui_event_custom_myself(scui_event_t *event)
              break;
         
         if (handle_top != SCUI_UI_SCENE_HOME) {
-            scui_window_switch_type_t *cfg_type = NULL;
-            scui_window_switch_cfg_type(&cfg_type);
-            scui_window_switch_type_t type = *cfg_type;
-            *cfg_type = scui_window_switch_none;
-            scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
-            *cfg_type = type;
+            scui_window_stack_reset_by(SCUI_UI_SCENE_HOME, false,
+                scui_window_switch_none, scui_opt_dir_none);
         }
         
         /* 如果本来是在待机界面时 */
         if (handle_top == SCUI_UI_SCENE_STANDBY) {
-            scui_window_switch_type_t *cfg_type = NULL;
-            scui_window_switch_cfg_type(&cfg_type);
-            scui_window_switch_type_t type = *cfg_type;
-            *cfg_type = scui_window_switch_none;
-            scui_window_stack_add(SCUI_UI_SCENE_STANDBY, false);
-            *cfg_type = type;
+            scui_window_stack_add_by(SCUI_UI_SCENE_STANDBY, false,
+                scui_window_switch_none, scui_opt_dir_none);
         }
         break;
     }
@@ -230,12 +218,8 @@ void scui_event_custom_myself(scui_event_t *event)
             scui_cache_glyph_rectify();
             scui_cache_image_rectify();
             
-            scui_window_switch_type_t *cfg_type = NULL;
-            scui_window_switch_cfg_type(&cfg_type);
-            scui_window_switch_type_t type = *cfg_type;
-            *cfg_type = scui_window_switch_none;
-            scui_window_stack_add(SCUI_UI_SCENE_STANDBY, false);
-            *cfg_type = type;
+            scui_window_stack_add_by(SCUI_UI_SCENE_STANDBY, false,
+                scui_window_switch_none, scui_opt_dir_none);
         }
         break;
     }
@@ -245,12 +229,8 @@ void scui_event_custom_myself(scui_event_t *event)
              break;
         
         if (handle_top == SCUI_UI_SCENE_STANDBY) {
-            scui_window_switch_type_t *cfg_type = NULL;
-            scui_window_switch_cfg_type(&cfg_type);
-            scui_window_switch_type_t type = *cfg_type;
-            *cfg_type = scui_window_switch_none;
-            scui_window_stack_del(SCUI_UI_SCENE_STANDBY);
-            *cfg_type = type;
+            scui_window_stack_del_by(SCUI_UI_SCENE_STANDBY,
+                scui_window_switch_none, scui_opt_dir_none);
         }
         break;
     }

@@ -120,17 +120,19 @@ void scui_window_stack_rcd(scui_handle_t *handle, scui_handle_t index)
 }
 
 /*@brief 窗口栈复位
- *@param handle  窗口句柄
- *@param reserve 保留当前显示窗口
+ *@param handle      窗口句柄
+ *@param reserve     保留当前显示窗口
+ *@param switch_type 切换类型
+ *@param switch_dir  切换方向
  *@retval 成功失败
  */
-bool scui_window_stack_reset(scui_handle_t handle, bool reserve)
+bool scui_window_stack_reset_by(scui_handle_t handle, bool reserve, scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir)
 {
     SCUI_ASSERT(scui_window_mgr.stack_args.top > 0 || !reserve);
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     scui_handle_t handle_top = scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1];
     scui_handle_t target_top = reserve ? handle_top : handle;
-    if (!scui_window_jump(target_top, scui_window_switch_auto, scui_opt_dir_none)) {
+    if (!scui_window_jump(target_top, switch_type, switch_dir)) {
          SCUI_LOG_INFO("jump false");
          return false;
     }
@@ -150,10 +152,12 @@ bool scui_window_stack_reset(scui_handle_t handle, bool reserve)
 }
 
 /*@brief 窗口栈回退
- *@param handle 目标窗口
+ *@param handle      目标窗口
+ *@param switch_type 切换类型
+ *@param switch_dir  切换方向
  *@retval 成功失败
  */
-bool scui_window_stack_goback(scui_handle_t handle)
+bool scui_window_stack_goback_by(scui_handle_t handle, scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir)
 {
     SCUI_ASSERT(scui_window_mgr.stack_args.top > 1);
     scui_handle_t handle_top = scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1];
@@ -169,7 +173,7 @@ bool scui_window_stack_goback(scui_handle_t handle)
         if (handle_top == target_top)
             return false;
         
-        if (!scui_window_jump(target_top, scui_window_switch_auto, scui_opt_dir_none)) {
+        if (!scui_window_jump(target_top, switch_type, switch_dir)) {
              SCUI_LOG_INFO("jump false");
              return false;
         }
@@ -183,16 +187,18 @@ bool scui_window_stack_goback(scui_handle_t handle)
 }
 
 /*@brief 窗口栈覆盖
- *@param handle 窗口句柄
+ *@param handle      窗口句柄
+ *@param switch_type 切换类型
+ *@param switch_dir  切换方向
  *@retval 成功失败
  */
-bool scui_window_stack_cover(scui_handle_t handle)
+bool scui_window_stack_cover_by(scui_handle_t handle, scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir)
 {
     SCUI_ASSERT(scui_window_mgr.stack_args.top > 0);
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     scui_handle_t handle_top = scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1];
     scui_handle_t target_top = handle;
-    if (!scui_window_jump(target_top, scui_window_switch_auto, scui_opt_dir_none)) {
+    if (!scui_window_jump(target_top, switch_type, switch_dir)) {
          SCUI_LOG_INFO("jump false");
          return false;
     }
@@ -204,17 +210,19 @@ bool scui_window_stack_cover(scui_handle_t handle)
 }
 
 /*@brief 窗口栈添加
- *@param handle  窗口句柄
- *@param reserve 保留当前显示窗口
+ *@param handle      窗口句柄
+ *@param reserve     保留当前显示窗口
+ *@param switch_type 切换类型
+ *@param switch_dir  切换方向
  *@retval 成功失败
  */
-bool scui_window_stack_add(scui_handle_t handle, bool reserve)
+bool scui_window_stack_add_by(scui_handle_t handle, bool reserve, scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir)
 {
     SCUI_ASSERT(scui_window_mgr.stack_args.top > 0);
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     scui_handle_t handle_top = scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1];
     scui_handle_t target_top = reserve ? handle_top : handle;
-    if (!scui_window_jump(target_top, scui_window_switch_auto, scui_opt_dir_none)) {
+    if (!scui_window_jump(target_top, switch_type, switch_dir)) {
          SCUI_LOG_INFO("jump false");
          return false;
     }
@@ -234,10 +242,12 @@ bool scui_window_stack_add(scui_handle_t handle, bool reserve)
 }
 
 /*@brief 窗口栈移除
- *@param handle 目标窗口
+ *@param handle      目标窗口
+ *@param switch_type 切换类型
+ *@param switch_dir  切换方向
  *@retval 成功失败
  */
-bool scui_window_stack_del(scui_handle_t handle)
+bool scui_window_stack_del_by(scui_handle_t handle, scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir)
 {
     SCUI_ASSERT(scui_window_mgr.stack_args.top > 1);
     scui_handle_t handle_top = scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1];
@@ -263,7 +273,7 @@ bool scui_window_stack_del(scui_handle_t handle)
         target_top = handle_top;
     }
     
-    if (!scui_window_jump(target_top, scui_window_switch_auto, scui_opt_dir_none)) {
+    if (!scui_window_jump(target_top, switch_type, switch_dir)) {
          SCUI_LOG_INFO("jump false");
          return false;
     }
