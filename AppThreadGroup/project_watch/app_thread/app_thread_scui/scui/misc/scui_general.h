@@ -208,16 +208,18 @@ static inline bool scui_pixel_alpha_in(scui_pixel_cf_t cf)
  */
 typedef struct {
     uint8_t        *pixel;      /* 像素流地址 */
-    scui_coord_t    pbyte;      /* 像素字节数 */
     scui_pixel_cf_t format;     /* 像素流类型 */
     scui_coord_t    hor_res;    /* 像素流宽度 */
     scui_coord_t    ver_res;    /* 像素流高度 */
-    scui_multi_t    stride;     /* 像素流跨度 */
+    scui_multi_t    stride;     /* 像素流跨度(字节/比特) */
+    scui_coord_t    pbyte;      /* 像素字节数 */
+    scui_coord_t    pbits;      /* 像素比特数 */
     scui_alpha_t    alpha;      /* 全局透明度 */
 } scui_surface_t;
 
 /* 画布偏移地址,画布坐标偏移地址 */
 #define scui_surface_point_ofs(surface, y, x)   ((y) * (surface)->hor_res + (x))
+#define scui_surface_pbits_ofs(surface, y, x)   ((y) * (surface)->stride  + (x) * (surface)->pbits)
 #define scui_surface_pbyte_ofs(surface, y, x)   ((y) * (surface)->stride  + (x) * (surface)->pbyte)
 #define scui_surface_pixel_ofs(surface, y, x)   ((surface)->pixel + scui_surface_pbyte_ofs(surface, y, x))
 
@@ -374,5 +376,10 @@ uint8_t scui_pixel_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x);
  *@retval 混合撤销后的透明度
  */
 scui_alpha_t scui_alpha_undo(scui_alpha_t alpha1, scui_alpha_t alpha2);
+
+/*@brief 画布配置项
+ *@param surface 画布实例
+ */
+void scui_surface_config(scui_surface_t *surface);
 
 #endif

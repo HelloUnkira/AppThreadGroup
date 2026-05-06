@@ -220,15 +220,14 @@ void scui_widget_surface_create(scui_handle_t handle, scui_surface_t *surface)
     SCUI_ASSERT(widget->surface == NULL && surface->hor_res > 0 && surface->ver_res > 0);
     widget->surface = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t));
     
-    widget->surface->format  = surface->format;
-    widget->surface->pbyte   = scui_pixel_byte(widget->surface->format);
+    scui_pixel_cf_t format = surface->format;
+    if (format == scui_pixel_cf_def)
+        format  = SCUI_PIXEL_CF_DEF;
+    
+    widget->surface->format  = format;
     widget->surface->hor_res = surface->hor_res;
     widget->surface->ver_res = surface->ver_res;
-    widget->surface->stride  = surface->hor_res * widget->surface->pbyte;
-    widget->surface->alpha   = scui_alpha_cover;
-    
-    if (widget->surface->format == scui_pixel_cf_def)
-        widget->surface->format  = SCUI_PIXEL_CF_DEF;
+    scui_surface_config(widget->surface);
     
     scui_coord_t res_rem  = sizeof(scui_color_wt_t) - widget->surface->pbyte;
     scui_multi_t res_size = surface->ver_res * widget->surface->stride + res_rem;

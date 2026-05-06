@@ -15,4 +15,18 @@ void scui_image_src_read(scui_image_t *image, void *data);
  */
 void scui_image_bin_read(const char *name, uintptr_t offset, uintptr_t size, uint8_t *data);
 
+/*@brief 生成图片
+ *@param image 图片资源信息
+ *@param data  url字符串
+ *@param size  url字符串长度
+ */
+void scui_image_qrcode(scui_image_t *image, uint8_t *data, uint32_t size);
+
+/*@brief 生成图片
+ *@param image 图片资源信息
+ *@param data  url字符串
+ *@param size  url字符串长度
+ */
+void scui_image_barcode(scui_image_t *image, uint8_t *data, uint32_t size);
+
 #endif

@@ -700,7 +700,7 @@ uint8_t scui_pixel_grey_by(scui_pixel_cf_t cf, void *pixel)
  */
 uint8_t scui_pixel_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
 {
-    /* 只支持1,2,4,8的bpp, 在字库加载时检查 */
+    /* 只支持1,2,4,8的bpp */
     SCUI_ASSERT(bpp * bpp_x < 8);
     
     uint8_t ofs = 0;
@@ -710,7 +710,7 @@ uint8_t scui_pixel_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
     const uint16_t mask_8 = 0x00FF;
     
     switch (bpp) {
-    /* 高位在前,地位在后 */
+    /* 高位在前,低位在后 */
     case 1: ofs = 7 - bpp_x * 1;
         return ((bitmap & (mask_1 << ofs)) >> ofs) * 0xFF / mask_1;
     case 2: ofs = 6 - bpp_x * 2;
@@ -739,3 +739,16 @@ scui_alpha_t scui_alpha_undo(scui_alpha_t alpha1, scui_alpha_t alpha2)
     return scui_clamp((uint16_t)alpha1 * alpha_e / alpha2, alpha_s, alpha_e);
 }
 
+/*@brief 画布配置项
+ *@param surface 画布实例
+ */
+void scui_surface_config(scui_surface_t *surface)
+{
+    surface->alpha  = scui_alpha_cover;
+    surface->pbits  = scui_pixel_bits(surface->format);
+    surface->pbyte  = scui_pixel_byte(surface->format);
+    surface->stride = surface->hor_res;
+    
+    if (surface->pbyte != 0) surface->stride *= surface->pbyte;
+    if (surface->pbyte == 0) surface->stride *= surface->pbits;
+}

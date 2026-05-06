@@ -117,6 +117,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         scui_scroll_maker_t scroll_maker = {0};
         scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
         scroll_maker.widget.type = scui_widget_type_scroll;
+        scroll_maker.widget.style.fully_bg = true;
         scroll_maker.widget.style.sched_widget = true;
         scroll_maker.widget.style.indev_ptr = true;
         scroll_maker.widget.style.indev_enc = true;
@@ -219,6 +220,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         custom_maker.widget.clip.h = scui_image_h(custom_maker.data.spinner.spinner);
         custom_maker.widget.event_cb = scui_ui_scene_2_spinner_event_proc;
         scui_widget_create(&custom_maker, &custom_handle);
+        scui_widget_child_move_background(custom_handle);
         #endif
         
         scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_2_BAR_ARC;

@@ -12,6 +12,7 @@
 
 typedef enum {
     scui_draw_type_none = 0,
+    scui_draw_type_byte_new,
     scui_draw_type_byte_copy,
     scui_draw_type_area_fill,
     scui_draw_type_area_copy,
@@ -68,6 +69,11 @@ typedef struct {
     /**************************************************************************
      * draw basic(HW ACC Perhaps):
      */
+    struct {
+        void   *dst_addr;   /* 目标地址 */
+        uint8_t  src_val;   /* 源数据值 */
+        uint32_t dst_len;   /* 数据字节长度 */
+    } byte_new;
     struct {
         void   *dst_addr;   /* 目标地址 */
         void   *src_addr;   /* 源初地址 */
@@ -227,6 +233,7 @@ typedef struct {
      struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_area;       /* 图像绘制区域 */
         scui_area_t         src_clip;       /* 图像绘制区域 */
         scui_alpha_t        src_alpha;      /* 图像透明度 */
         scui_color_t        src_color;      /* 图像源色调 */
@@ -236,6 +243,7 @@ typedef struct {
      struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_area;       /* 图像绘制区域 */
         scui_area_t         src_clip;       /* 图像绘制区域 */
         scui_alpha_t        src_alpha;      /* 图像透明度 */
         scui_color_t        src_color;      /* 图像源色调 */
@@ -361,6 +369,7 @@ bool scui_draw_ctx_acc_check(scui_draw_dsc_t *draw_dsc);
 #define SCUI_DRAW_CTX_DECLARE(name)     void name(scui_draw_dsc_t *draw_dsc)
 #define SCUI_DRAW_CTX_ACC_DECLARE(name) bool name(scui_draw_dsc_t *draw_dsc)
 /*****************************************************************************/
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_byte_new);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_byte_copy);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_fill);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_copy);
@@ -383,6 +392,7 @@ SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_barcode);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_ring);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_graph);
 /*****************************************************************************/
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_byte_new);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_byte_copy);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_fill);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_copy);

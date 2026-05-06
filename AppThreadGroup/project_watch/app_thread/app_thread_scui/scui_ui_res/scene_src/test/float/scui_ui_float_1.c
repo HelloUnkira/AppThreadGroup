@@ -39,6 +39,24 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
         
         scui_widget_draw(event->object, NULL, false);
         break;
+    case scui_event_create: {
+        #if 0
+        /* 覆盖测试用的 */
+        scui_area_t widget_clip = scui_widget_clip(event->object);
+        
+        scui_custom_maker_t custom_maker = {0};
+        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
+        custom_maker.widget.type = scui_widget_type_custom;
+        custom_maker.widget.clip.x = widget_clip.w / 4;
+        custom_maker.widget.clip.y = widget_clip.h / 4;
+        custom_maker.widget.clip.w = widget_clip.w / 2;
+        custom_maker.widget.clip.h = widget_clip.h / 2;
+        custom_maker.widget.parent = event->object;
+        custom_maker.widget.style.fully_bg = true;
+        scui_widget_create(&custom_maker, &custom_handle);
+        #endif
+        break;
+    }
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;
@@ -82,6 +100,24 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
         
         scui_widget_draw(event->object, NULL, false);
         break;
+    case scui_event_create: {
+        #if 0
+        /* 覆盖测试用的 */
+        scui_area_t widget_clip = scui_widget_clip(event->object);
+        
+        scui_custom_maker_t custom_maker = {0};
+        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
+        custom_maker.widget.type = scui_widget_type_custom;
+        custom_maker.widget.clip.x = widget_clip.w / 4;
+        custom_maker.widget.clip.y = widget_clip.h / 4;
+        custom_maker.widget.clip.w = widget_clip.w / 2;
+        custom_maker.widget.clip.h = widget_clip.h / 2;
+        custom_maker.widget.parent = event->object;
+        custom_maker.widget.style.fully_bg = true;
+        scui_widget_create(&custom_maker, &custom_handle);
+        #endif
+        break;
+    }
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;

@@ -59,34 +59,24 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
         .format  = image.image->format,
         .hor_res = image.image->pixel.width,
         .ver_res = image.image->pixel.height,
-        .alpha   = scui_alpha_cover,
     };
-    image_surface.pbyte   = scui_pixel_byte(image_surface.format);
-    image_surface.stride  = image_surface.hor_res;
-    image_surface.stride *= scui_pixel_bits(image_surface.format);
-    image_surface.stride /= 8;
+    scui_surface_config(&image_surface);
     
     scui_surface_t image_e_surface = {
         .pixel   = image_e.data,
         .format  = image_e.image->format,
         .hor_res = image_e.image->pixel.width,
         .ver_res = image_e.image->pixel.height,
-        .alpha   = scui_alpha_cover,
     };
-    image_e_surface.pbyte   = scui_pixel_byte(image_e_surface.format);
-    image_e_surface.stride  = image_e_surface.hor_res;
-    image_e_surface.stride *= scui_pixel_bits(image_e_surface.format);
-    image_e_surface.stride /= 8;
+    scui_surface_config(&image_e_surface);
     
     scui_surface_t edge_surface = {0};
     if (scui_pixel_type_bmp(src_image->format)) {
         /* 开辟一个底图画布 */
         edge_surface.format  = src_image->format;
-        edge_surface.pbyte   = scui_pixel_byte(edge_surface.format);
         edge_surface.hor_res = src_image_e->pixel.width;
         edge_surface.ver_res = src_image_e->pixel.height;
-        edge_surface.stride  = edge_surface.hor_res * edge_surface.pbyte;
-        edge_surface.alpha   = scui_alpha_cover;
+        scui_surface_config(&edge_surface);
         
         scui_coord_t surface_rem  = sizeof(scui_color_wt_t) - edge_surface.pbyte;
         scui_multi_t surface_size = edge_surface.ver_res * edge_surface.stride + surface_rem;

@@ -30,6 +30,7 @@ bool scui_draw_ctx_acc_sched(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(draw_dsc->type < scui_draw_type_num);
     typedef void (*scui_draw_ctx_acc_cb_t)(scui_draw_dsc_t *draw_dsc);
     static const scui_draw_ctx_acc_cb_t scui_draw_ctx_acc_cb[scui_draw_type_num] = {
+        [scui_draw_type_byte_new] =                 scui_draw_ctx_acc_byte_new,
         [scui_draw_type_byte_copy] =                scui_draw_ctx_acc_byte_copy,
         [scui_draw_type_area_fill] =                scui_draw_ctx_acc_area_fill,
         [scui_draw_type_area_copy] =                scui_draw_ctx_acc_area_copy,
@@ -62,6 +63,7 @@ bool scui_draw_ctx_acc_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_pixel_tvg] =                scui_draw_ctx_acc_graph,
     };
     
+    SCUI_ASSERT(scui_draw_ctx_acc_cb[draw_dsc->type] != NULL);
     return scui_draw_ctx_acc_cb[draw_dsc->type](draw_dsc);
 }
 
@@ -74,6 +76,7 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(draw_dsc->type < scui_draw_type_num);
     typedef void (*scui_draw_ctx_cb_t)(scui_draw_dsc_t *draw_dsc);
     static const scui_draw_ctx_cb_t scui_draw_ctx_cb[scui_draw_type_num] = {
+        [scui_draw_type_byte_new] =                 scui_draw_ctx_byte_new,
         [scui_draw_type_byte_copy] =                scui_draw_ctx_byte_copy,
         [scui_draw_type_area_fill] =                scui_draw_ctx_area_fill,
         [scui_draw_type_area_copy] =                scui_draw_ctx_area_copy,
@@ -106,5 +109,6 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_pixel_tvg] =                scui_draw_ctx_graph,
     };
     
+    SCUI_ASSERT(scui_draw_ctx_cb[draw_dsc->type] != NULL);
     scui_draw_ctx_cb[draw_dsc->type](draw_dsc);
 }

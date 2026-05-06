@@ -33,6 +33,17 @@ typedef struct {
     scui_handle_t       from;       /* 图库来源 */
 } scui_image_t;
 
+/*@brief 内存图片构建
+ *@brief image 图片实例
+ *@brief area  图片尺寸
+ */
+void scui_image_make(scui_image_t *image, scui_area_t *area);
+
+/*@brief 内存图片销毁
+ *@brief image 图片实例
+ */
+void scui_image_burn(scui_image_t *image);
+
 /*@brief 图像格式转换(就地转换)
  *@param image 图像实例
  *@param rev 通道颠倒

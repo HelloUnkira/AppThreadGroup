@@ -94,6 +94,21 @@ static bool scui_draw_ctx_sample(
     SCUI_ASSERT(false);
 }
 
+/*@brief 绘制字节更新(可以使用DMA-one加速优化)
+ *@param draw_dsc 绘制描述符实例
+ */
+void scui_draw_ctx_byte_new(scui_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    void   *dst_addr = draw_dsc->byte_new.dst_addr;
+    uint8_t  src_val = draw_dsc->byte_new.src_val;
+    uint32_t dst_len = draw_dsc->byte_new.dst_len;
+    /* draw dsc args<e> */
+    /* */
+    
+    memset(dst_addr, src_val, dst_len);
+}
+
 /*@brief 绘制字节拷贝(可以使用DMA-copy加速优化)
  *@param draw_dsc 绘制描述符实例
  */
@@ -308,7 +323,7 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
         src_addr = src_surface->pixel;
         
         /* 调色板数组(为空时计算,有时直接取): */
-        scui_multi_t grey_len = 1 << src_bits;
+        scui_multi_t grey_len  = scui_max(1 << src_bits, 2);
         scui_multi_t grey_size = sizeof(scui_color_wt_t) * grey_len;
         scui_color_wt_t *grey_table = SCUI_MEM_ZALLOC(scui_mem_type_graph, grey_size);
         scui_color_wt_t  filter = 0;
@@ -317,7 +332,6 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
         scui_pixel_by_color(dst_surface->format, &grey_table[grey_len - 1], src_color.color_s);
         scui_pixel_by_color(dst_surface->format, &filter, src_color.color_f);
         bool pixel_no_grad = grey_table[0] == grey_table[grey_len - 1];
-        uint16_t mask = (1 << src_bits) - 1;
         
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
         for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
@@ -343,7 +357,10 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
             if (src_color.filter && grey_color == filter)
                 continue;
             
-            scui_alpha_t alpha = (uint32_t)src_surface->alpha * grey / scui_alpha_cover;
+            /* 异色不使用轮廓,同色需要轮廓 */
+            scui_alpha_t alpha = src_surface->alpha;
+            if (pixel_no_grad) alpha = scui_alpha_mix(alpha, grey);
+            
             scui_pixel_mix_with(dst_surface->format, dst_ofs,
                 dst_surface->format, &grey_table[grey_idx], alpha);
         }

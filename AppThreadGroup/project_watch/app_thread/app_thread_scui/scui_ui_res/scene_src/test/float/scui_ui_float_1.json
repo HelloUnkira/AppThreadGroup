@@ -23,6 +23,7 @@
             "widget.clip.h":                "SCUI_VER_RES / 2",
             "widget.myself":                "SCUI_UI_SCENE_FLOAT_1_1",
             "widget.parent":                "SCUI_UI_SCENE_FLOAT_1",
+            "widget.child_num":             "2",
             "widget.color.color.full":      "0xFFFFFFFF",
             "widget.event_cb":              "scui_ui_scene_float_1_1_event_proc"
         },
@@ -35,6 +36,7 @@
             "widget.clip.h":                "SCUI_VER_RES / 4",
             "widget.myself":                "SCUI_UI_SCENE_FLOAT_1_2",
             "widget.parent":                "SCUI_UI_SCENE_FLOAT_1",
+            "widget.child_num":             "2",
             "widget.color.color.full":      "0xFFFFFFFF",
             "widget.event_cb":              "scui_ui_scene_float_1_2_event_proc"
         }

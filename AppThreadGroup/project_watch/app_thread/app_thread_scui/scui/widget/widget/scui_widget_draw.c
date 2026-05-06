@@ -664,6 +664,10 @@ void scui_widget_draw_ctx_qrcode(scui_handle_t handle, scui_area_t *target, scui
     return;
     #endif
     
+    SCUI_ASSERT(target != NULL);
+    scui_area_t src_area = *target;
+    src_area.x = src_area.y = 0;
+    
     /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
@@ -675,20 +679,26 @@ void scui_widget_draw_ctx_qrcode(scui_handle_t handle, scui_area_t *target, scui
         scui_area_t dst_clip = {0};
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
-        scui_area_t src_clip = dst_clip;
-        src_clip.x = 0;
-        src_clip.y = 0;
+        
+        /* 子剪切域相对同步偏移 */
+        scui_area_t src_clip = src_area;
+        scui_point_t src_offset = {
+            .x = dst_clip.x - target->x,
+            .y = dst_clip.y - target->y,
+        };
+        if (!scui_area_limit_offset(&src_clip, &src_offset))
+             continue;
         
         #if SCUI_MEM_FEAT_MINI
         scui_area_t dst_offset = {0};
         if (!scui_widget_draw_clip_seg(&dst_clip, &dst_offset, NULL))
              continue;
-        src_clip.x = dst_offset.x;
-        src_clip.y = dst_offset.y;
+        if (!scui_area_limit_offset(&src_clip, &dst_offset))
+             continue;
         #endif
         
         scui_draw_qrcode(false, widget->surface, dst_clip,
-            src_clip, widget->alpha, draw_dsc->color,
+            src_area, src_clip, widget->alpha, draw_dsc->color,
             draw_dsc->size, draw_dsc->data);
     }
 }
@@ -705,6 +715,10 @@ void scui_widget_draw_ctx_barcode(scui_handle_t handle, scui_area_t *target, scu
     return;
     #endif
     
+    SCUI_ASSERT(target != NULL);
+    scui_area_t src_area = *target;
+    src_area.x = src_area.y = 0;
+    
     /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
@@ -716,18 +730,26 @@ void scui_widget_draw_ctx_barcode(scui_handle_t handle, scui_area_t *target, scu
         scui_area_t dst_clip = {0};
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
-        scui_area_t src_clip = dst_clip;
+        
+        /* 子剪切域相对同步偏移 */
+        scui_area_t src_clip = src_area;
+        scui_point_t src_offset = {
+            .x = dst_clip.x - target->x,
+            .y = dst_clip.y - target->y,
+        };
+        if (!scui_area_limit_offset(&src_clip, &src_offset))
+             continue;
         
         #if SCUI_MEM_FEAT_MINI
         scui_area_t dst_offset = {0};
         if (!scui_widget_draw_clip_seg(&dst_clip, &dst_offset, NULL))
              continue;
-        src_clip.x = dst_offset.x; src_clip.w -= src_clip.x;
-        src_clip.y = dst_offset.y; src_clip.h -= src_clip.y;
+        if (!scui_area_limit_offset(&src_clip, &dst_offset))
+             continue;
         #endif
         
         scui_draw_barcode(false, widget->surface, dst_clip,
-            src_clip, widget->alpha, draw_dsc->color,
+            src_area, src_clip, widget->alpha, draw_dsc->color,
             draw_dsc->size, draw_dsc->data);
     }
 }

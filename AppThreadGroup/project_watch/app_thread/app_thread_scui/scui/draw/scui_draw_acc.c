@@ -16,7 +16,9 @@ bool scui_draw_ctx_acc_check(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(draw_dsc->type > scui_draw_type_none);
     SCUI_ASSERT(draw_dsc->type < scui_draw_type_num);
     static const bool scui_draw_ctx_acc_check_cb[scui_draw_type_num] = {
+        [scui_draw_type_byte_new] =                 true,
         [scui_draw_type_byte_copy] =                true,
+        
         [scui_draw_type_area_fill] =                true,
         [scui_draw_type_area_copy] =                true,
         [scui_draw_type_area_blend] =               true,
@@ -33,9 +35,9 @@ bool scui_draw_ctx_acc_check(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_image] =                    true,
         [scui_draw_type_image_2d] =                 true,
         [scui_draw_type_image_3d] =                 true,
+        [scui_draw_type_letter] =                   true,
+        [scui_draw_type_string] =                   true,
         
-        [scui_draw_type_letter] =                   false,
-        [scui_draw_type_string] =                   false,
         [scui_draw_type_qrcode] =                   false,
         [scui_draw_type_barcode] =                  false,
         [scui_draw_type_ring] =                     false,
@@ -49,6 +51,15 @@ bool scui_draw_ctx_acc_check(scui_draw_dsc_t *draw_dsc)
     };
     
     return scui_draw_ctx_acc_check_cb[draw_dsc->type];
+}
+
+/*@brief 绘制上下文
+ *@param draw_dsc 绘制描述符实例
+ *@retval 支持:true;不支持:false;
+ */
+bool scui_draw_ctx_acc_byte_new(scui_draw_dsc_t *draw_dsc)
+{
+    return false;
 }
 
 /*@brief 绘制上下文

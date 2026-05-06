@@ -875,6 +875,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_1 = {
 	.widget.parent                  = SCUI_UI_SCENE_FLOAT_1,
 	.widget.color.color.full        = 0xFFFFFFFF,
 	.widget.event_cb                = scui_ui_scene_float_1_1_event_proc,
+	.widget.child_num               = 2,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_2 = {
@@ -888,6 +889,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_2 = {
 	.widget.parent                  = SCUI_UI_SCENE_FLOAT_1,
 	.widget.color.color.full        = 0xFFFFFFFF,
 	.widget.event_cb                = scui_ui_scene_float_1_2_event_proc,
+	.widget.child_num               = 2,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {

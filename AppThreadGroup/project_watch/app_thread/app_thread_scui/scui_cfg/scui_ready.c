@@ -59,11 +59,9 @@ void scui_ready(void)
     scui_surface_t  surface = {0};
     scui_surface_t *surface_fb = NULL;
     surface.format  = SCUI_PIXEL_CF_DEF;
-    surface.pbyte   = scui_pixel_byte(surface.format);
     surface.hor_res = SCUI_HOR_RES;
     surface.ver_res = SCUI_VER_RES;
-    surface.stride  = surface.hor_res * surface.pbyte;
-    surface.alpha   = scui_alpha_cover;
+    scui_surface_config(&surface);
     scui_coord_t surface_rem  = sizeof(scui_color_wt_t) - surface.pbyte;
     scui_multi_t surface_size = surface.ver_res * surface.stride + surface_rem;
     

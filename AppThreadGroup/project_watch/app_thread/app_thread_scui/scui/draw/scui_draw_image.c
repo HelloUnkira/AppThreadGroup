@@ -36,12 +36,9 @@ void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc)
         .format  = image.image->format,
         .hor_res = src_image->pixel.width,
         .ver_res = src_image->pixel.height,
-        .alpha   = src_alpha,
     };
-    image_surface.pbyte   = scui_pixel_byte(image_surface.format);
-    image_surface.stride  = image_surface.hor_res;
-    image_surface.stride *= scui_pixel_bits(image_surface.format);
-    image_surface.stride /= 8;
+    scui_surface_config(&image_surface);
+    image_surface.alpha = src_alpha;
     
     scui_draw_area_blend(true, dst_surface, *dst_clip,
         &image_surface, *src_clip, src_color);
@@ -82,10 +79,9 @@ void scui_draw_ctx_image_2d(scui_draw_dsc_t *draw_dsc)
         .format  = image.image->format,
         .hor_res = src_image->pixel.width,
         .ver_res = src_image->pixel.height,
-        .alpha   = src_alpha,
     };
-    image_surface.pbyte  = scui_pixel_byte(image_surface.format);
-    image_surface.stride = image_surface.hor_res * image_surface.pbyte;
+    scui_surface_config(&image_surface);
+    image_surface.alpha = src_alpha;
     
     #if 1
     scui_draw_area_2d_blend(true, dst_surface, *dst_clip,
@@ -145,10 +141,9 @@ void scui_draw_ctx_image_3d(scui_draw_dsc_t *draw_dsc)
         .format  = image.image->format,
         .hor_res = src_image->pixel.width,
         .ver_res = src_image->pixel.height,
-        .alpha   = src_alpha,
     };
-    image_surface.pbyte  = scui_pixel_byte(image_surface.format);
-    image_surface.stride = image_surface.hor_res * image_surface.pbyte;
+    scui_surface_config(&image_surface);
+    image_surface.alpha = src_alpha;
     
     scui_draw_area_3d_blend(true, dst_surface, *dst_clip,
         &image_surface, *src_clip, src_color, *inv_matrix, *src_matrix);

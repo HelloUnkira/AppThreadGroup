@@ -7,6 +7,35 @@
 
 #include "scui.h"
 
+/*@brief 内存图片构建
+ *@brief image 图片实例
+ *@brief area  图片尺寸
+ */
+void scui_image_make(scui_image_t *image, scui_area_t *area)
+{
+    /* 图片信息 */
+    image->type = scui_image_type_mem;
+    image->from = SCUI_HANDLE_INVALID;
+    image->pixel.width  = area->w;
+    image->pixel.height = area->h;
+    /* 图片资源信息 */
+    SCUI_ASSERT(image->format != scui_pixel_cf_none);
+    scui_multi_t image_bits = scui_pixel_bits(image->format);
+    scui_multi_t image_rem  = sizeof(scui_color_wt_t) - image_bits / 8;
+    scui_multi_t image_size = image->pixel.width * image->pixel.height * image_bits / 8 + image_rem;
+    image->pixel.data_bin   = (uintptr_t)SCUI_MEM_ALLOC(scui_mem_type_graph, image_size);
+    image->pixel.size_bin   = image_size;
+}
+
+/*@brief 内存图片销毁
+ *@brief image 图片实例
+ */
+void scui_image_burn(scui_image_t *image)
+{
+    SCUI_ASSERT(image->type == scui_image_type_mem);
+    SCUI_MEM_FREE((void *)image->pixel.data_bin);
+}
+
 /*@brief 图像格式转换(就地转换)
  *@param image 图像实例
  *@param rev 通道颠倒

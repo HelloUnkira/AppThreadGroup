@@ -20,6 +20,12 @@
 /* JPG */
 #include "tjpgd.h"
 
+/* 二维码生成器库(qrcode): */
+#include "qrcodegen.h"
+
+/* 条形码生成器库(barcode): */
+#include "code128.h"
+
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/
@@ -319,4 +325,137 @@ void scui_image_bin_read(const char *name, uintptr_t offset, uintptr_t size, uin
     fseek(file, offset, SEEK_SET);
     retval = fread(data, size, 1, file);
     fclose(file);
+}
+
+/*@brief 生成图片
+ *@param image 图片资源信息
+ *@param data  url字符串
+ *@param size  url字符串长度
+ */
+void scui_image_qrcode(scui_image_t *image, uint8_t *data, uint32_t size)
+{
+    /* 不需要渐变灰度,只需要0-1灰度 */
+    SCUI_ASSERT(image->format == scui_pixel_cf_alpha1);
+    scui_draw_byte_new(true, image->pixel.data_bin, 0x00, image->pixel.size_bin);
+    
+    /* 画布映射 */
+    scui_surface_t image_surface = {
+        .pixel   = (void *)image->pixel.data_bin,
+        .format  = image->format,
+        .hor_res = image->pixel.width,
+        .ver_res = image->pixel.height,
+    };
+    scui_surface_config(&image_surface);
+    scui_surface_t *dst_surface = &image_surface;
+    scui_area_t dst_clip = scui_surface_area(dst_surface);
+    
+    #if 1
+    SCUI_ASSERT(size < qrcodegen_BUFFER_LEN_MAX);
+    scui_multi_t qr_version = qrcodegen_getMinFitVersion(qrcodegen_Ecc_MEDIUM, size);
+    scui_multi_t qr_size    = qrcodegen_version2size(qr_version);
+    SCUI_ASSERT(qr_version > 0 || qr_size > 0);
+    
+    scui_multi_t scale  = dst_clip.w / qr_size;
+    scui_multi_t remain = dst_clip.w % qr_size;
+    scui_multi_t extend = remain / (scale << 2);
+    if (extend != 0 && qr_version < qrcodegen_VERSION_MAX)
+        qr_version = scui_min(qr_version + extend, qrcodegen_VERSION_MAX);
+    
+    scui_multi_t qr_version_len = qrcodegen_BUFFER_LEN_FOR_VERSION(qr_version);
+    uint8_t *qrcode = SCUI_MEM_ALLOC(scui_mem_type_graph, qr_version_len);
+    uint8_t *data_t = SCUI_MEM_ALLOC(scui_mem_type_graph, qr_version_len);
+    memcpy(data_t, data, size);
+    
+    enum qrcodegen_Ecc  ecc  = qrcodegen_Ecc_MEDIUM;
+    enum qrcodegen_Mask mask = qrcodegen_Mask_AUTO;
+    if (!qrcodegen_encodeBinary(data_t, size, qrcode, ecc, qr_version, qr_version, mask, true)) {
+         SCUI_LOG_ERROR("error");
+         SCUI_ASSERT(false);
+         return;
+    }
+    
+    qr_size = qrcodegen_getSize(qrcode);
+    scale   = dst_clip.w / qr_size;
+    scui_multi_t scaled = (qr_size * scale);
+    scui_multi_t margin = (dst_clip.w - scaled) / 2;
+    scui_area_t draw_area = {
+        .x = margin, .w = scaled,
+        .y = margin, .h = scaled,
+    };
+    
+    /* 在dst_surface.clip中的draw_area中填满pixel */
+    SCUI_ASSERT(scui_pixel_bits(dst_surface->format) == 1); /* 下述逻辑只支持bpp_1 */
+    scui_multi_t dst_ofs_p = scui_surface_point_ofs(dst_surface, draw_area.y, draw_area.x);
+    uint8_t *dst_addr = dst_surface->pixel;
+    
+    for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
+    for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
+        uint32_t idx_ofs = dst_ofs_p + scui_surface_point_ofs(dst_surface, idx_line, idx_item);
+        uint8_t *dst_ofs = dst_addr  + idx_ofs / 8;
+        uint32_t pos_ofs = 7 - idx_ofs % 8;
+        
+        bool bit = qrcodegen_getModule(qrcode, idx_item / scale, idx_line / scale);
+        if (bit) scui_bit_ext_set(dst_ofs, pos_ofs, 8);
+        else scui_bit_ext_rst(dst_ofs, pos_ofs, 8);
+    }
+    
+    SCUI_MEM_FREE(data_t);
+    SCUI_MEM_FREE(qrcode);
+    #endif
+}
+
+/*@brief 生成图片
+ *@param image 图片资源信息
+ *@param data  url字符串
+ *@param size  url字符串长度
+ */
+void scui_image_barcode(scui_image_t *image, uint8_t *data, uint32_t size)
+{
+    /* 不需要渐变灰度,只需要0-1灰度 */
+    SCUI_ASSERT(image->format == scui_pixel_cf_alpha1);
+    scui_draw_byte_new(true, image->pixel.data_bin, 0x00, image->pixel.size_bin);
+    
+    /* 画布映射 */
+    scui_surface_t image_surface = {
+        .pixel   = (void *)image->pixel.data_bin,
+        .format  = image->format,
+        .hor_res = image->pixel.width,
+        .ver_res = image->pixel.height,
+    };
+    scui_surface_config(&image_surface);
+    scui_surface_t *dst_surface = &image_surface;
+    scui_area_t dst_clip = scui_surface_area(dst_surface);
+    
+    #if 1
+    size_t len = code128_estimate_len(data);
+    uint8_t *out_buf = SCUI_MEM_ALLOC(scui_mem_type_mix, len);
+    size_t barcode_w = code128_encode_gs1(data, out_buf, len);
+    SCUI_ASSERT(barcode_w <= dst_clip.w);
+    
+    scui_multi_t scale  = (dst_clip.w / barcode_w);
+    scui_multi_t scaled = (barcode_w * scale);
+    scui_multi_t margin = (dst_clip.w - scaled) / 2;
+    scui_area_t draw_area = {
+        .x = margin, .y = 0,
+        .w = scaled, .h = dst_clip.h,
+    };
+    
+    /* 在dst_surface.clip中的draw_area中填满pixel */
+    SCUI_ASSERT(scui_pixel_bits(dst_surface->format) == 1); /* 下述逻辑只支持bpp_1 */
+    scui_multi_t dst_ofs_p = scui_surface_point_ofs(dst_surface, draw_area.y, draw_area.x);
+    uint8_t *dst_addr = dst_surface->pixel;
+    
+    for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
+    for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
+        uint32_t idx_ofs = dst_ofs_p + scui_surface_point_ofs(dst_surface, idx_line, idx_item);
+        uint8_t *dst_ofs = dst_addr  + idx_ofs / 8;
+        uint32_t pos_ofs = 7 - idx_ofs % 8;
+        
+        bool bit = out_buf[scui_map(idx_item, 0, draw_area.w, 0, barcode_w)];
+        if (bit) scui_bit_ext_set(dst_ofs, pos_ofs, 8);
+        else scui_bit_ext_rst(dst_ofs, pos_ofs, 8);
+    }
+    
+    SCUI_MEM_FREE(out_buf);
+    #endif
 }
