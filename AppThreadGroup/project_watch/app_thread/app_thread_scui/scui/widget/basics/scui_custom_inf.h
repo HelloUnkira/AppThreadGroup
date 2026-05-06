@@ -20,6 +20,20 @@ void scui_custom_data_inst(scui_handle_t handle, scui_custom_data_t **data);
  */
 void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text);
 
+/*@brief 自定义控件条形码更新
+ *@param handle 控件句柄
+ *@param data   url字符串
+ *@param size   url字符串长度
+ */
+void scui_custom_update_barcode(scui_handle_t handle);
+
+/*@brief 自定义控件二维码更新
+ *@param handle 控件句柄
+ *@param data   url字符串
+ *@param size   url字符串长度
+ */
+void scui_custom_update_qrcode(scui_handle_t handle);
+
 /*@brief 自定义控件
  *@param handle 自定义控件句柄
  *@param clip   绘制区域

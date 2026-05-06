@@ -3,6 +3,8 @@
 
 typedef enum {
     scui_custom_type_none = 0,
+    scui_custom_type_barcode,
+    scui_custom_type_qrcode,
     scui_custom_type_slider,
     scui_custom_type_spinner,
     scui_custom_type_indicator,
@@ -13,6 +15,20 @@ typedef enum {
 } scui_custom_type_t;
 
 typedef union {
+    struct {
+        scui_handle_t image;        /* 内存图像句柄 */
+        scui_image_t  image_src;    /* 内存图像源 */
+        scui_color_t  color;        /* 图像颜色 */
+        uint8_t      *data;         /* url字符串 */
+        uint32_t      size;         /* url字符串长度 */
+    } barcode;
+    struct {
+        scui_handle_t image;        /* 内存图像句柄 */
+        scui_image_t  image_src;    /* 内存图像源 */
+        scui_color_t  color;        /* 图像颜色 */
+        uint8_t      *data;         /* url字符串 */
+        uint32_t      size;         /* url字符串长度 */
+    } qrcode;
     struct {
         scui_handle_t bar;          /* 图像句柄(背景图) */
         scui_handle_t edge;         /* 图像句柄(边界点) */

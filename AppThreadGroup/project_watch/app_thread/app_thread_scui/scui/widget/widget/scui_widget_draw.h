@@ -24,9 +24,6 @@ typedef struct {
     scui_coord_t    percent;        /* 圆环进度(百分比) */
     scui_handle_t   image_e;        /* 控件句柄 */
     
-    scui_multi_t    size;           /* 字符串长度 */
-    uint8_t        *data;           /* url网址链接字符串 */
-    
     void           *graph;          /* 类型:(scui_draw_dsc_t->graph) */
     
 } scui_widget_draw_dsc_t;
@@ -61,8 +58,6 @@ SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_rotate);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_2d);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_3d);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_ring);
-SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_qrcode);
-SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_barcode);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_graph);
 /*****************************************************************************/
 /*@brief 简化转义的宏api
@@ -137,22 +132,6 @@ do {                                                                            
     scui_widget_draw_dsc_t scui_wdc_i = {.image = image_v,.clip = clip_v,       \
         .matrix = matrix_v,.inv_matrix = inv_matrix_v,};                        \
     scui_widget_draw_ctx_image_3d(handle_v, target_v, &scui_wdc_i);             \
-} while (0)                                                                     \
-
-#define scui_widget_draw_qrcode(handle_v, target_v,                             \
-    color_v, size_v, data_v)                                                    \
-do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
-        .color = color_v,.size = size_v,.data = data_v,};                       \
-    scui_widget_draw_ctx_qrcode(handle_v, target_v, &scui_wdc_i);               \
-} while (0)                                                                     \
-
-#define scui_widget_draw_barcode(handle_v, target_v,                            \
-    color_v, size_v, data_v)                                                    \
-do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
-        .color = color_v,.size = size_v,.data = data_v,};                       \
-    scui_widget_draw_ctx_barcode(handle_v, target_v, &scui_wdc_i);              \
 } while (0)                                                                     \
 
 #define scui_widget_draw_ring(handle_v, target_v,                               \

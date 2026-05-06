@@ -308,46 +308,6 @@ do {                                                                            
 
 
 
-/* scui_draw_type_qrcode */
-#define scui_draw_qrcode(sync_v, dst_surface_v, dst_clip_v,                         \
-    src_area_v, src_clip_v, src_alpha_v, src_color_v, src_size_v, src_data_v)       \
-do {                                                                                \
-    scui_draw_dsc_t *scui_dd_i = NULL;                                              \
-    scui_draw_dsc_ready(&scui_dd_i);                                                \
-    scui_dd_i->type = scui_draw_type_qrcode;                                        \
-    scui_dd_i->sync = sync_v;                                                       \
-    scui_dd_i->qrcode.dst_surface = dst_surface_v,                                  \
-    scui_dd_i->qrcode.dst_clip    = dst_clip_v,                                     \
-    scui_dd_i->qrcode.src_area    = src_area_v,                                     \
-    scui_dd_i->qrcode.src_clip    = src_clip_v,                                     \
-    scui_dd_i->qrcode.src_alpha   = src_alpha_v,                                    \
-    scui_dd_i->qrcode.src_color   = src_color_v,                                    \
-    scui_dd_i->qrcode.src_size    = src_size_v,                                     \
-    scui_dd_i->qrcode.src_data    = src_data_v,                                     \
-    scui_draw_dsc_task(scui_dd_i);                                                  \
-} while (0)                                                                         \
-
-/* scui_draw_type_barcode */
-#define scui_draw_barcode(sync_v, dst_surface_v, dst_clip_v,                        \
-    src_area_v, src_clip_v, src_alpha_v, src_color_v, src_size_v, src_data_v)       \
-do {                                                                                \
-    scui_draw_dsc_t *scui_dd_i = NULL;                                              \
-    scui_draw_dsc_ready(&scui_dd_i);                                                \
-    scui_dd_i->type = scui_draw_type_barcode;                                       \
-    scui_dd_i->sync = sync_v;                                                       \
-    scui_dd_i->barcode.dst_surface = dst_surface_v,                                 \
-    scui_dd_i->barcode.dst_clip    = dst_clip_v,                                    \
-    scui_dd_i->barcode.src_area    = src_area_v,                                    \
-    scui_dd_i->barcode.src_clip    = src_clip_v,                                    \
-    scui_dd_i->barcode.src_alpha   = src_alpha_v,                                   \
-    scui_dd_i->barcode.src_color   = src_color_v,                                   \
-    scui_dd_i->barcode.src_size    = src_size_v,                                    \
-    scui_dd_i->barcode.src_data    = src_data_v,                                    \
-    scui_draw_dsc_task(scui_dd_i);                                                  \
-} while (0)                                                                         \
-
-
-
 /* scui_draw_type_ring */
 #define scui_draw_ring(sync_v, dst_surface_v, dst_clip_v,                           \
     dst_center_v, src_image_e_v, src_image_v, src_clip_v,                           \

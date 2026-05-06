@@ -30,11 +30,8 @@ typedef enum {
     scui_draw_type_image,
     scui_draw_type_image_2d,
     scui_draw_type_image_3d,
-    
     scui_draw_type_letter,
     scui_draw_type_string,
-    scui_draw_type_qrcode,
-    scui_draw_type_barcode,
     scui_draw_type_ring,
     
     /* 基础图元放到最后 */
@@ -228,29 +225,6 @@ typedef struct {
         scui_color_t        src_color;      /* 图像源色调 */
     } ring;
     /**************************************************************************
-     * draw qrcode, barcode:
-     */
-     struct {
-        scui_surface_t     *dst_surface;    /* 画布实例 */
-        scui_area_t         dst_clip;       /* 画布绘制区域 */
-        scui_area_t         src_area;       /* 图像绘制区域 */
-        scui_area_t         src_clip;       /* 图像绘制区域 */
-        scui_alpha_t        src_alpha;      /* 图像透明度 */
-        scui_color_t        src_color;      /* 图像源色调 */
-        scui_multi_t        src_size;       /* 字符串长度 */
-        uint8_t            *src_data;       /* url网址链接字符串(静态) */
-     } qrcode;
-     struct {
-        scui_surface_t     *dst_surface;    /* 画布实例 */
-        scui_area_t         dst_clip;       /* 画布绘制区域 */
-        scui_area_t         src_area;       /* 图像绘制区域 */
-        scui_area_t         src_clip;       /* 图像绘制区域 */
-        scui_alpha_t        src_alpha;      /* 图像透明度 */
-        scui_color_t        src_color;      /* 图像源色调 */
-        scui_multi_t        src_size;       /* 字符串长度 */
-        uint8_t            *src_data;       /* url网址链接字符串(静态) */
-     } barcode;
-    /**************************************************************************
      * keep adding...
      */
     /*************************************************************************/
@@ -387,8 +361,6 @@ SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_2d);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_3d);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_letter);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_string);
-SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_qrcode);
-SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_barcode);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_ring);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_graph);
 /*****************************************************************************/
@@ -410,8 +382,6 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_2d);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_3d);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_letter);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_string);
-SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_qrcode);
-SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_barcode);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_ring);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_graph);
 /*****************************************************************************/

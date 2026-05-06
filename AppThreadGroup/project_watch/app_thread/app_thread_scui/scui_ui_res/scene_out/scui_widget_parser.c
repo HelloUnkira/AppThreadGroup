@@ -852,6 +852,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_STANDBY = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	.widget.type                    = scui_widget_type_window,
 	.widget.style.fully_bg          = true,
+	.widget.style.sched_anima       = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_enc         = true,
 	.widget.style.indev_key         = true,

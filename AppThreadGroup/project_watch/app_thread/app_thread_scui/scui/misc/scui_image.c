@@ -25,6 +25,9 @@ void scui_image_make(scui_image_t *image, scui_area_t *area)
     scui_multi_t image_size = image->pixel.width * image->pixel.height * image_bits / 8 + image_rem;
     image->pixel.data_bin   = (uintptr_t)SCUI_MEM_ALLOC(scui_mem_type_graph, image_size);
     image->pixel.size_bin   = image_size;
+    
+    /* 初始构造时,清空资源信息 */
+    scui_draw_byte_new(true, image->pixel.data_bin, 0x00, image->pixel.size_bin);
 }
 
 /*@brief 内存图片销毁
@@ -32,6 +35,9 @@ void scui_image_make(scui_image_t *image, scui_area_t *area)
  */
 void scui_image_burn(scui_image_t *image)
 {
+    if (image->pixel.data_bin == 0)
+        return;
+    
     SCUI_ASSERT(image->type == scui_image_type_mem);
     SCUI_MEM_FREE((void *)image->pixel.data_bin);
 }

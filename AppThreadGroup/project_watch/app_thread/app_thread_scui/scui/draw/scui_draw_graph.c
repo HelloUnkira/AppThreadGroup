@@ -48,11 +48,8 @@ bool scui_draw_ctx_acc_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_image] =                    scui_draw_ctx_acc_image,
         [scui_draw_type_image_2d] =                 scui_draw_ctx_acc_image_2d,
         [scui_draw_type_image_3d] =                 scui_draw_ctx_acc_image_3d,
-        
         [scui_draw_type_letter] =                   scui_draw_ctx_acc_letter,
         [scui_draw_type_string] =                   scui_draw_ctx_acc_string,
-        [scui_draw_type_qrcode] =                   scui_draw_ctx_acc_qrcode,
-        [scui_draw_type_barcode] =                  scui_draw_ctx_acc_barcode,
         [scui_draw_type_ring] =                     scui_draw_ctx_acc_ring,
         
         [scui_draw_type_pixel_arc] =                scui_draw_ctx_acc_graph,
@@ -94,11 +91,8 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_image] =                    scui_draw_ctx_image,
         [scui_draw_type_image_2d] =                 scui_draw_ctx_image_2d,
         [scui_draw_type_image_3d] =                 scui_draw_ctx_image_3d,
-        
         [scui_draw_type_letter] =                   scui_draw_ctx_letter,
         [scui_draw_type_string] =                   scui_draw_ctx_string,
-        [scui_draw_type_qrcode] =                   scui_draw_ctx_qrcode,
-        [scui_draw_type_barcode] =                  scui_draw_ctx_barcode,
         [scui_draw_type_ring] =                     scui_draw_ctx_ring,
         
         [scui_draw_type_pixel_arc] =                scui_draw_ctx_graph,

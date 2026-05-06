@@ -430,11 +430,14 @@ void scui_image_barcode(scui_image_t *image, uint8_t *data, uint32_t size)
     size_t len = code128_estimate_len(data);
     uint8_t *out_buf = SCUI_MEM_ALLOC(scui_mem_type_mix, len);
     size_t barcode_w = code128_encode_gs1(data, out_buf, len);
-    SCUI_ASSERT(barcode_w <= dst_clip.w);
+    // SCUI_ASSERT(barcode_w <= dst_clip.w);
     
-    scui_multi_t scale  = (dst_clip.w / barcode_w);
-    scui_multi_t scaled = (barcode_w * scale);
+    scui_multi_t scaled = (barcode_w * (dst_clip.w / barcode_w));
     scui_multi_t margin = (dst_clip.w - scaled) / 2;
+    if (barcode_w >= dst_clip.w) {
+        scaled = dst_clip.w;
+        margin = 0;
+    }
     scui_area_t draw_area = {
         .x = margin, .y = 0,
         .w = scaled, .h = dst_clip.h,
