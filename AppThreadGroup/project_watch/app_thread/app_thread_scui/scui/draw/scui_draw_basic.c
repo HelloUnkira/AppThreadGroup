@@ -323,6 +323,7 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
         src_addr = src_surface->pixel;
         
         /* 调色板数组(为空时计算,有时直接取): */
+        scui_multi_t bits_num  = 8 / src_bits;
         scui_multi_t grey_len  = scui_max(1 << src_bits, 2);
         scui_multi_t grey_size = sizeof(scui_color_wt_t) * grey_len;
         scui_color_wt_t *grey_table = SCUI_MEM_ZALLOC(scui_mem_type_graph, grey_size);
@@ -337,29 +338,33 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
         for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
             uint8_t *dst_ofs = dst_addr  + scui_surface_pbyte_ofs(dst_surface, idx_line, idx_item);
             uint32_t idx_ofs = src_ofs_p + scui_surface_point_ofs(src_surface, idx_line, idx_item);
-            uint8_t *src_ofs = src_addr  + idx_ofs / (8 / src_bits);
-            uint8_t  grey = scui_pixel_grey_bpp_x(*src_ofs, src_bits, idx_ofs % (8 / src_bits));
-            uint8_t  grey_idx = pixel_no_grad ? 0 : (uint16_t)grey * (grey_len - 1) / 0xFF;
+            uint8_t *src_ofs = src_addr  + idx_ofs / bits_num;
             
-            if (grey_idx != 0 && grey_idx != grey_len - 1)
-            if (grey_table[grey_idx] == 0x00) {
-                uint32_t *pixel_1 = &grey_table[0];
-                uint32_t *pixel_2 = &grey_table[grey_len - 1];
-                
-                grey_table[grey_idx] = grey_table[0];
-                scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx],
-                    dst_surface->format, &grey_table[grey_len - 1], scui_alpha_cover - grey);
+            /* 取出掩码灰度值并转换成颜色索引 */
+            uint8_t grey = scui_pixel_grey_bpp_x(*src_ofs, src_bits, idx_ofs % bits_num);
+            uint8_t grey_idx = pixel_no_grad ? 0 : SCUI_DIV_0xFF(grey * (grey_len - 1));
+            
+            /* 如果表没有颜色值,先将值存于颜色值表 */
+            if (grey_idx != 0 && grey_idx != grey_len - 1) {
+                /* 因为将来很大概率还会被复用到,保留它防止重复计算 */
+                if (grey_table[grey_idx] == 0x00) {
+                    grey_table[grey_idx]  = grey_table[grey_len - 1];
+                    scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx],
+                        dst_surface->format, &grey_table[0], grey);
+                }
             }
-            
-            scui_color_wt_t grey_color = grey_table[grey_idx];
-            scui_pixel_mix_alpha(dst_surface->format, &grey_color, grey);
-            /* 过滤色调,去色 */
-            if (src_color.filter && grey_color == filter)
-                continue;
             
             /* 异色不使用轮廓,同色需要轮廓 */
             scui_alpha_t alpha = src_surface->alpha;
             if (pixel_no_grad) alpha = scui_alpha_mix(alpha, grey);
+            
+            /* 过滤色调,去色 */
+            if (src_color.filter) {
+                scui_color_wt_t grey_color = grey_table[grey_idx];
+                scui_pixel_mix_alpha(dst_surface->format, &grey_color, alpha);
+                if (grey_color == filter)
+                    continue;
+            }
             
             scui_pixel_mix_with(dst_surface->format, dst_ofs,
                 dst_surface->format, &grey_table[grey_idx], alpha);

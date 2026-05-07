@@ -703,24 +703,39 @@ uint8_t scui_pixel_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
     /* 只支持1,2,4,8的bpp */
     SCUI_ASSERT(bpp * bpp_x < 8);
     
-    uint8_t ofs = 0;
+    /* 高位在前,低位在后 */
     const uint16_t mask_1 = 0x0001;
     const uint16_t mask_2 = 0x0003;
     const uint16_t mask_4 = 0x000F;
     const uint16_t mask_8 = 0x00FF;
+    uint8_t ofs = 0, bpp_idx = 0;
+    
+    /* 取索引值后查表 */
+    const uint8_t scui_pixel_bpp1[  2] = {  0, 255,};
+    const uint8_t scui_pixel_bpp2[  4] = {  0,  85, 170, 255,};
+    const uint8_t scui_pixel_bpp4[ 16] = {  0,  17,  34,  51,  68,  85, 102, 119,
+                                          136, 153, 170, 187, 204, 221, 238, 255,};
+    const uint8_t scui_pixel_bpp8[256] = {/* 默认转化, 无需此表, 自动优化 */};
     
     switch (bpp) {
     /* 高位在前,低位在后 */
     case 1: ofs = 7 - bpp_x * 1;
-        return ((bitmap & (mask_1 << ofs)) >> ofs) * 0xFF / mask_1;
+        bpp_idx = (bitmap & (mask_1 << ofs)) >> ofs;
+        return scui_pixel_bpp1[bpp_idx];
+        /* return bpp_idx * 0xFF / mask_1; */
     case 2: ofs = 6 - bpp_x * 2;
-        return ((bitmap & (mask_2 << ofs)) >> ofs) * 0xFF / mask_2;
+        bpp_idx = (bitmap & (mask_2 << ofs)) >> ofs;
+        return scui_pixel_bpp2[bpp_idx];
+        /* return bpp_idx * 0xFF / mask_2; */
     case 4: ofs = 4 - bpp_x * 4;
-        return ((bitmap & (mask_4 << ofs)) >> ofs) * 0xFF / mask_4;
-    case 8: ofs = 0;    /* 0 - bpp_x * 8;   // 这个应该永远都是0 */
-        return ((bitmap & (mask_8 << ofs)) >> ofs) * 0xFF / mask_8;
-    default:
-        SCUI_ASSERT(false);
+        bpp_idx = (bitmap & (mask_4 << ofs)) >> ofs;
+        return scui_pixel_bpp4[bpp_idx];
+        /* return bpp_idx * 0xFF / mask_4; */
+    case 8: ofs = 0 - bpp_x * 0;
+        bpp_idx = (bitmap & (mask_8 << ofs)) >> ofs;
+        return bpp_idx; // scui_pixel_bpp8[bpp_idx];
+        /* return bpp_idx * 0xFF / mask_8; */
+    default: SCUI_ASSERT(false);
         return 0;
     }
 }

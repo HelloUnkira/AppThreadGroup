@@ -243,7 +243,7 @@ void scui_linear_invoke(scui_event_t *event)
             scui_widget_child_list_btra(widget, idx) {
                 /* 取出子控件(主)的相关信息 */
                 scui_handle_t    handle_m = widget->child_list[idx];
-                scui_widget_t   *widget_m = scui_handle_source_assert(handle_m);
+                scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
                 scui_linear_m_t *linear_m = (void *)widget_m;
                 
                 /* 不是所有子控件(主)都有子控件树(从) */
@@ -252,7 +252,7 @@ void scui_linear_invoke(scui_event_t *event)
                 
                 /* 取出子控件树(从)的相关信息 */
                 scui_handle_t    handle_s = linear_m->handle_s;
-                scui_widget_t   *widget_s = scui_handle_source_assert(handle_s);
+                scui_widget_t   *widget_s = scui_handle_source_check(handle_s);
                 scui_linear_s_t *linear_s = (void *)widget_s;
                 
                 SCUI_LOG_DEBUG("surface index:%x", idx);

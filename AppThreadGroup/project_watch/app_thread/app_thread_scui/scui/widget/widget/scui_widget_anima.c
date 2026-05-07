@@ -209,7 +209,7 @@ void scui_widget_anima_submit(scui_handle_t handle, scui_handle_t anima, scui_ha
             widget_anima->step_lim = widget_anima->step[idx];
         
         /* 此处检查一下动画是否是本控件动画 */
-        scui_anima_t *anima_inst = scui_handle_source_assert(anima);
+        scui_anima_t *anima_inst = scui_handle_source_check(anima);
         SCUI_ASSERT(anima_inst->object == handle);
         return;
     }

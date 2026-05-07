@@ -52,6 +52,26 @@ SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_image_crect4);
 
 
 
+/* scui_custom_data_t->barcode */
+#define scui_custom_data_config_barcode(custom_data_v,                      \
+    color_v, data_v, size_v)                                                \
+do {                                                                        \
+    custom_data_v->barcode.color = color_v;                                 \
+    custom_data_v->barcode.data  = data_v;                                  \
+    custom_data_v->barcode.size  = size_v;                                  \
+} while (0)                                                                 \
+
+/* scui_custom_data_t->qrcode */
+#define scui_custom_data_config_qrcode(custom_data_v,                       \
+    color_v, data_v, size_v)                                                \
+do {                                                                        \
+    custom_data_v->qrcode.color = color_v;                                  \
+    custom_data_v->qrcode.data  = data_v;                                   \
+    custom_data_v->qrcode.size  = size_v;                                   \
+} while (0)                                                                 \
+
+/*****************************************************************************/
+
 /* scui_custom_data_t->slider */
 #define scui_custom_data_config_slider(custom_data_v,                       \
     bar_v, color_bar_v, edge_v, color_edge_v,                               \
@@ -109,7 +129,7 @@ do {                                                                        \
 } while (0)                                                                 \
 
 /* scui_custom_data_t->image_text */
-#define scui_custom_data_config_ring_edge(custom_data_v,                    \
+#define scui_custom_data_config_image_text(custom_data_v,                   \
     image_v, color_v, span_v, num_v, way_v)                                 \
 do {                                                                        \
     custom_data_v->image_text.image = image_v;                              \
@@ -118,8 +138,8 @@ do {                                                                        \
     custom_data_v->image_text.way   = way_v;                                \
     custom_data_v->image_text.num   = num_v;                                \
 } while (0)                                                                 \
-    
-    /* scui_custom_data_t->image_crect4 */
+
+/* scui_custom_data_t->image_crect4 */
 #define scui_custom_data_config_image_crect4(custom_data_v,                 \
     image_v, color_v, delta_v)                                              \
 do {                                                                        \

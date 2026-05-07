@@ -45,7 +45,8 @@ void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle)
             scui_image_make(&custom->data->barcode.image_src, &widget->clip);
             
             custom->data->barcode.image = scui_handle_find();
-            scui_handle_linker(custom->data->barcode.image, &custom->data->barcode.image_src);
+            scui_handle_linker(custom->data->barcode.image,
+                &custom->data->barcode.image_src);
             break;
         case scui_custom_type_qrcode:
             custom->data->qrcode.image_src = (scui_image_t){0};
@@ -53,7 +54,8 @@ void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle)
             scui_image_make(&custom->data->qrcode.image_src, &widget->clip);
             
             custom->data->qrcode.image = scui_handle_find();
-            scui_handle_linker(custom->data->qrcode.image, &custom->data->qrcode.image_src);
+            scui_handle_linker(custom->data->qrcode.image,
+                &custom->data->qrcode.image_src);
             break;
         }
     }
