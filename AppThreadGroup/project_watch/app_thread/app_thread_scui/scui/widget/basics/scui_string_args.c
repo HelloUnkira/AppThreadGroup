@@ -84,7 +84,7 @@ static bool scui_string_args_check_space(scui_string_args_t *args, uint32_t idx_
 /*@brief 字符串处理
  *@param args 字符串绘制参数
  */
-static void scui_string_args_prepare(scui_string_args_t *args)
+static void scui_string_args_enc(scui_string_args_t *args)
 {
     /* 预处理:将utf8->转为unicode */
     
@@ -100,27 +100,29 @@ static void scui_string_args_prepare(scui_string_args_t *args)
     
     /* 统计字符数量 */
     args->number  = scui_utf8_str_num(args->utf8);
-    args->unicode = SCUI_MEM_ZALLOC(scui_mem_type_mix, 4 * (args->number + 1));
+    args->unicode = SCUI_MEM_ALLOC(scui_mem_type_mix, 4 * (args->number + 4));
+    
     /* 将utf8转为unicode */
-    scui_utf8_str_to_unicode(args->utf8, args->number, args->unicode);
+    scui_utf8_str_to_uni(args->utf8, args->number, args->unicode);
 }
 
 /*@brief 字符串处理
  *@param args 字符串绘制参数
  */
-static void scui_string_args_transform(scui_string_args_t *args)
+static void scui_string_args_trans(scui_string_args_t *args)
 {
     if (args->utf8 == NULL || args->number == 0 ||
         args->name == SCUI_HANDLE_INVALID)
         return;
     
     /* 文字变形:将特殊的连序unicode替换成新的映射unicode */
+    scui_string_args_trans_ap(args);
 }
 
 /*@brief 字符串处理
  *@param args 字符串绘制参数
  */
-static void scui_string_args_typography(scui_string_args_t *args)
+static void scui_string_args_typo(scui_string_args_t *args)
 {
     /* 清空已有排版 */
     if (args->typo != NULL) {
@@ -313,7 +315,69 @@ static void scui_string_args_typography(scui_string_args_t *args)
 /*@brief 字符串处理
  *@param args 字符串绘制参数
  */
-void scui_string_args_process(scui_string_args_t *args)
+static void scui_string_args_rec(scui_string_args_t *args)
+{
+    if (args->utf8 == NULL || args->number == 0 ||
+        args->name == SCUI_HANDLE_INVALID)
+        return;
+    
+    if (!args->recolor) return;
+    if (args->colors == NULL) return;
+    /* 确认unicode编码下的index */
+    scui_coord_t idx_colors = 0, key_chars = 0;
+    /* 匹配颜色值的起始点和结束点, 记录范围索引值, 同时去除目标点 */
+    for (scui_coord_t idx = 0; idx + 1 < args->number; idx++) {
+        /* 匹配到颜色起始点:#- */
+        /* 匹配到颜色结束点:-# */
+        if (args->unicode[idx] == '#' && args->unicode[idx + 1] == '-') {
+            args->colors->index_ls[idx_colors] = idx - key_chars;
+            SCUI_ASSERT(idx_colors <= args->colors->color_num);
+            key_chars += 2;
+            idx++;
+            continue;
+        }
+        if (args->unicode[idx] == '-' && args->unicode[idx + 1] == '#') {
+            args->colors->index_le[idx_colors] = idx - key_chars - 1;
+            SCUI_ASSERT(idx_colors <= args->colors->color_num);
+            key_chars += 2;
+            idx++;
+            
+            idx_colors += 1;
+            continue;
+        }
+    }
+    /* 规则匹配不上, 断言中止 */
+    SCUI_ASSERT(idx_colors == args->colors->color_num);
+    
+    scui_coord_t idx_unicode = 0;
+    scui_coord_t num_unicode = args->number;
+    uint32_t *str_unicode = SCUI_MEM_ALLOC(scui_mem_type_mix, 4 * (args->number + 4));
+    for (scui_coord_t idx = 0; idx + 1 < args->number; idx++) {
+        /* 匹配到颜色起始点:#- */
+        /* 匹配到颜色结束点:-# */
+        if ((args->unicode[idx] == '#' && args->unicode[idx + 1] == '-') ||
+            (args->unicode[idx] == '-' && args->unicode[idx + 1] == '#')) {
+             idx++;
+             continue;
+        }
+        /* 拷贝其他字符 */
+        str_unicode[idx_unicode] = args->unicode[idx];
+        idx_unicode++;
+    }
+    
+    /* 更新新的unicode序列 */
+    SCUI_MEM_FREE(args->unicode);
+    args->number  = idx_unicode;
+    args->unicode = SCUI_MEM_ALLOC(scui_mem_type_mix, 4 * (args->number + 1));
+    memcpy(args->unicode, str_unicode, 4 * args->number);
+    args->unicode[args->number] = '\0';
+    SCUI_MEM_FREE(str_unicode);
+}
+
+/*@brief 字符串处理
+ *@param args 字符串绘制参数
+ */
+void scui_string_args_proc(scui_string_args_t *args)
 {
     SCUI_ASSERT(args != NULL);
     /* 无需更新时不处理文字 */
@@ -338,24 +402,28 @@ void scui_string_args_process(scui_string_args_t *args)
      *       一个个绘制到目标上面去
      */
     
-    /* 文字预处理,信息准备 */
-    scui_string_args_prepare(args);
+    /* 文字信息预处理准备 */
+    scui_string_args_enc(args);
     /* 特定文字进行文字变形 */
-    scui_string_args_transform(args);
+    scui_string_args_trans(args);
+    /* 文字重上色表更新映射 */
+    scui_string_args_rec(args);
     /* 文字进行排版布局 */
-    scui_string_args_typography(args);
+    scui_string_args_typo(args);
 }
 
 /*****************************************************************************/
 /* utf-8 unicode tools<s>:************************************************** */
 /*****************************************************************************/
 
+
+
 /*@brief utf8字符转unicode字符
  *@param utf8    utf8字符
  *@param unicode unicode字符
  *@retval utf8字符字节数
  */
-uint32_t scui_utf8_to_unicode(uint8_t *utf8, uint32_t *unicode)
+uint32_t scui_utf8_to_uni(uint8_t *utf8, uint32_t *unicode)
 {
     if (utf8[0] < 0x80) {
         
@@ -431,6 +499,18 @@ uint32_t scui_utf8_bytes(uint8_t utf8)
     return 0;
 }
 
+/*@brief utf8字符字节数(通过unicode字符)
+ *@param utf8 字符(首字符)
+ *@retval 字符长度
+ */
+uint32_t scui_utf8_bytes_uni(uint32_t unicode)
+{
+    if (unicode < 0x80) return 1;
+    if (unicode < 0x0800) return 2;
+    if (unicode < 0x010000) return 3;
+    return 4;
+}
+
 /*@brief utf8字符数量
  *@param utf8 字符串
  *@retval 字符数量
@@ -466,15 +546,15 @@ uint32_t scui_utf8_str_bytes(uint8_t *utf8)
 }
 
 /*@brief utf8字符串转为unicode字符串
- *@param unicode  unicode字符串
  *@param utf8     utf8字符串
  *@param utf8_num utf8字符数
+ *@param unicode  unicode字符串
  */
-void scui_utf8_str_to_unicode(uint8_t *utf8, uint32_t utf8_num, uint32_t *unicode)
+void scui_utf8_str_to_uni(uint8_t *utf8, uint32_t utf8_num, uint32_t *unicode)
 {
     uint8_t *utf8_ptr = utf8;
     for (uint32_t idx = 0; idx < utf8_num; idx++) {
-         uint8_t utf8_len = scui_utf8_to_unicode(utf8_ptr, &unicode[idx]);
+         uint8_t utf8_len = scui_utf8_to_uni(utf8_ptr, &unicode[idx]);
          SCUI_ASSERT(utf8_len != 0);
          utf8_ptr += utf8_len;
     }

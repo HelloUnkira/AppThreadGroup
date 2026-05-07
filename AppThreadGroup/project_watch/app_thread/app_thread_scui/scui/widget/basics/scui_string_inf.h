@@ -26,7 +26,8 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text);
 void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8);
 
 /*@brief 字符串控件更新字符串(重上色)
- *@param 使用#- -#包裹的内容为重上色区域
+ *@brief 使用#- -#包裹的内容为重上色区域
+ *@brief 不可再使用其他接口更新字符串
  *@param handle    字符串控件句柄
  *@param str_utf8  字符串(utf8)
  *@param color_num 重上色颜色数量

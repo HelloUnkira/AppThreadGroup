@@ -181,7 +181,7 @@ void scui_custom_text_recycle(scui_handle_t handle)
             str_args->update = true;
             str_args->utf8   = NULL;
             str_args->name   = SCUI_HANDLE_INVALID;
-            scui_string_args_process(str_args);
+            scui_string_args_proc(str_args);
             
             SCUI_MEM_FREE(custom->str_args[idx]);
             SCUI_MEM_FREE(custom->str_utf8[idx]);
@@ -243,7 +243,7 @@ void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text)
         
         /* 绘制时本地布局 */
         str_args->update = true;
-        scui_string_args_process(str_args);
+        scui_string_args_proc(str_args);
         scui_widget_draw_string(handle, &str_args->clip, str_args);
         return;
     }
