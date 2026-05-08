@@ -28,6 +28,7 @@ typedef struct {
 
 typedef struct {
     uint64_t cnt_passby;
+    uint64_t pos_active;
     uint64_t tag_work:1;
     scui_tick_stat_t stat;
 } scui_tick_t;
@@ -51,6 +52,15 @@ void scui_tick_work(bool work);
  *@param ms 过去时间
  */
 void scui_tick_elapse(uint64_t ms);
+
+/*@brief 嘀嗒非活跃时间获取
+ *@param tick 非活跃时间
+ */
+void scui_tick_inactive(uint64_t *tick);
+
+/*@brief 嘀嗒活跃记录
+ */
+void scui_tick_active(void);
 
 /*@brief 嘀嗒统计
  *@param stat 统计状态

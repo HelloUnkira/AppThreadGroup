@@ -490,6 +490,21 @@ static void scui_widget_event_process(scui_event_t *event)
     default:
         break;
     }
+    
+    /* 系统活跃标记 */
+    switch (event->type) {
+    case scui_event_ptr_hold:
+    case scui_event_key_hold:
+    case scui_event_enc_fdir:
+    case scui_event_enc_bdir:
+    case scui_event_widget_scroll_start:
+    case scui_event_widget_scroll_over:
+    case scui_event_widget_scroll_keep:
+        scui_tick_active();
+        break;
+    default:
+        break;
+    }
 }
 
 /*@brief 控件事件冒泡

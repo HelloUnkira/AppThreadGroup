@@ -100,6 +100,20 @@ void scui_event_custom_access(scui_event_t *event)
         scui_event_mask_over(event);
         scui_custom_show();
         break;
+    
+    case scui_event_check_time_over:
+        scui_event_mask_over(event);
+        SCUI_LOG_WARN("ui sleep");
+        app_module_system_dlps_set(true);
+        break;
+    case scui_event_check_time_idle:
+        scui_event_mask_over(event);
+        SCUI_LOG_WARN("ui idle back home");
+        scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
+            scui_event_ui_home_goto, NULL);
+        scui_event_notify(&event_ui);
+        break;
+    
     default:
         break;
     }
@@ -116,20 +130,8 @@ void scui_event_custom_access(scui_event_t *event)
         break;
     }
     
-    /* 当我们遇到认为不能休眠的事件时,重置时间 */
-    switch (event->type) {
-    case scui_event_ptr_hold:
-    case scui_event_key_hold:
-    case scui_event_enc_fdir:
-    case scui_event_enc_bdir:
-    case scui_event_widget_scroll_start:
-    case scui_event_widget_scroll_over:
-    case scui_event_widget_scroll_keep:
-        app_scui_check_time_reset(0, 0);
-        break;
-    default:
-        break;
-    }
+    /* 当我们遇到认为不能休眠的事件时 */
+    /* scui_tick_active(); */
     
     /* 此处退出休眠 */
     switch (event->type) {

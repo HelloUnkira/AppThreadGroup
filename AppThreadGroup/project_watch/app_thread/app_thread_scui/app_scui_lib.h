@@ -5,6 +5,5 @@
 
 #include "app_scui_timer.h"
 #include "app_scui_event.h"
-#include "app_scui_check_time.h"
 
 #endif

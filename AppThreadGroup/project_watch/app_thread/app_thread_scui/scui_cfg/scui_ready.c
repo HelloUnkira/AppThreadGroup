@@ -159,12 +159,20 @@ void scui_custom_show(void)
 {
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_NONE, false);
+    
     /* 启用scui性能监控 */
     #if SCUI_MONITOR_USE
     scui_monitor_show(false || !SCUI_MEM_FEAT_MINI);
     #endif
+    
     /* 启用monkey test */
     #if SCUI_MONKEY_TEST
     scui_monkey_test();
+    #endif
+    
+    /* 启用scui超时/空闲模组 */
+    #if SCUI_CHECK_TIME
+    scui_check_time_ready();
+    scui_check_time_work(true);
     #endif
 }

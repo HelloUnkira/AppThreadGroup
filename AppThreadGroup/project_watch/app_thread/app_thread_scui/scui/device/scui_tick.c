@@ -47,6 +47,31 @@ void scui_tick_elapse(uint64_t ms)
     }
 }
 
+/*@brief 嘀嗒非活跃时间获取
+ *@param tick 非活跃时间
+ */
+void scui_tick_inactive(uint64_t *tick)
+{
+    *tick = 0;
+    
+    if (scui_tick.tag_work) {
+        uint64_t pos_active = scui_tick.cnt_passby;
+        *tick = pos_active - scui_tick.pos_active;
+        if (pos_active <= scui_tick.pos_active)
+           *tick = 0;
+    }
+}
+
+/*@brief 嘀嗒活跃记录
+ */
+void scui_tick_active(void)
+{
+    if (scui_tick.tag_work) {
+        scui_tick.pos_active = scui_tick.cnt_passby;
+        /* 保留记录到毫秒级即可 */
+    }
+}
+
 /*@brief 嘀嗒统计
  *@param stat 统计状态
  */

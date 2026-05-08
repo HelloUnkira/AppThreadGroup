@@ -37,6 +37,8 @@ static void scui_window_stack_check(void)
         "%u ", scui_window_mgr.stack_args.stack[top]);
     
     SCUI_LOG_WARN("window stack: %s", stack_str);
+    /* 不打印历史窗口记录(有需要的时候才使用) */
+    return;
     
     stack_top = 0;
     for (scui_multi_t idx = 0; idx < SCUI_WINDOW_STACK_NEST; idx++)

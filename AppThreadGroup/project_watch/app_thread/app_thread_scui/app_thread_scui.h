@@ -14,7 +14,6 @@ typedef enum {
     app_thread_scui_sched_s = 0,
     app_thread_scui_sched_exec,         /* scui时钟调度事件 */
     app_thread_scui_sched_drv,          /* scui驱动检查事件 */
-    app_thread_scui_sched_check_time,   /* scui窗口计时检查 */
     app_thread_scui_sched_dlps_enter,   /* scui进入dlps事件 */
     app_thread_scui_sched_dlps_exit,    /* scui退出dlps事件 */
     app_thread_scui_sched_e,

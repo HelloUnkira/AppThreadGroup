@@ -220,15 +220,24 @@
 #define SCUI_WIDGET_MENIAL_BAR_EXT_SLIDER_TIME      (500)
 #define SCUI_WIDGET_MENIAL_BAR_EXT_SWITCH_TIME      (100)
 
-
-
 /* button:按钮1缩放限制百分比 */
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
 
-/* indev猴子测试 */
-#define SCUI_MONKEY_TEST                            (0)
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+/* plug: */
+
 /* 性能监视器 */
 #define SCUI_MONITOR_USE                            (1)
+/* indev猴子测试 */
+#define SCUI_MONKEY_TEST                            (0)
+/* 超时/空闲模组 */
+#define SCUI_CHECK_TIME                             (1)
+#define SCUI_CHECK_TIME_OVER_UNUSE                  (0xFF)
+#define SCUI_CHECK_TIME_IDLE_UNUSE                  (0xFF)
+#define SCUI_CHECK_TIME_OVER_DEF                    (10)
+#define SCUI_CHECK_TIME_IDLE_DEF                    (5)
 
 /*************************************************************************************************/
 /*************************************************************************************************/
