@@ -131,6 +131,7 @@ void scui_check_time_ready(void)
 }
 
 /*@brief scui 超时/空闲模组启停
+ *@param work 启停
  */
 void scui_check_time_work(bool work)
 {

@@ -276,6 +276,17 @@ static void scui_event_respond(scui_event_t *event)
                 return;
             #endif
             
+            /* 全局刷新窗口 */
+            #if SCUI_WIDGET_ANIMA_DRAW_AUTO
+            static uint32_t elapse_tick = 0;
+            elapse_tick += event->tick;
+            
+            if (elapse_tick >= SCUI_WIDGET_ANIMA_DRAW_TIME) {
+                elapse_tick -= SCUI_WIDGET_ANIMA_DRAW_TIME;
+                scui_window_list_event_draw();
+            }
+            #endif
+            
             /* 系统事件发给所有窗口(同步) */
             event->style.sync = true;
             scui_window_list_event_notify(event);

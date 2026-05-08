@@ -5,8 +5,6 @@ typedef enum {
     scui_tick_stat_refr,
     scui_tick_stat_sched_rcd,
     scui_tick_stat_sched_sum,
-    scui_tick_stat_draw_sw_rcd,
-    scui_tick_stat_draw_sw_sum,
     scui_tick_stat_draw_hw_rcd,
     scui_tick_stat_draw_hw_sum,
     scui_tick_stat_draw_rcd,
@@ -18,8 +16,6 @@ typedef struct {
     uint64_t refr_fps;
     uint64_t sched_rcd;
     uint64_t sched_sum;
-    uint64_t draw_rcd_sw;
-    uint64_t draw_sum_sw;
     uint64_t draw_rcd_hw;
     uint64_t draw_sum_hw;
     uint64_t draw_rcd;

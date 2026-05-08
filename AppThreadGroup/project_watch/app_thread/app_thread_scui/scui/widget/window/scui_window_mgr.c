@@ -367,6 +367,19 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     #endif
 }
 
+/*@brief 窗口列表事件(绘制)
+ */
+void scui_window_list_event_draw(void)
+{
+    for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
+        if (scui_window_mgr.list_args.curr[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        
+        scui_handle_t handle = scui_window_mgr.list_args.curr[idx];
+        scui_widget_draw(handle, NULL, false);
+    }
+}
+
 /*@brief 窗口列表事件通知
  *@param event 事件
  */

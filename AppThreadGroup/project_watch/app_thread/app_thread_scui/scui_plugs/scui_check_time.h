@@ -34,6 +34,7 @@ void scui_check_time_idle_reset(uint8_t idle_tick, bool idle_temp);
 void scui_check_time_ready(void);
 
 /*@brief scui 超时/空闲模组启停
+ *@param work 启停
  */
 void scui_check_time_work(bool work);
 

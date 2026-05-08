@@ -90,13 +90,6 @@ void scui_tick_stat(scui_tick_stat_type_t stat_type)
         elapse = scui_tick_us() - scui_tick.stat.sched_rcd;
         scui_tick.stat.sched_sum += elapse;
         break;
-    case scui_tick_stat_draw_sw_rcd:
-        scui_tick.stat.draw_rcd_sw = scui_tick_us();
-        break;
-    case scui_tick_stat_draw_sw_sum:
-        elapse = scui_tick_us() - scui_tick.stat.draw_rcd_sw;
-        scui_tick.stat.draw_sum_sw += elapse;
-        break;
     case scui_tick_stat_draw_hw_rcd:
         scui_tick.stat.draw_rcd_hw = scui_tick_us();
         break;
@@ -114,11 +107,10 @@ void scui_tick_stat(scui_tick_stat_type_t stat_type)
     case scui_tick_stat_reset:
         scui_tick.stat.refr_fps = 0;
         scui_tick.stat.sched_sum = 0;
-        scui_tick.stat.draw_sum_sw = 0;
         scui_tick.stat.draw_sum_hw = 0;
         scui_tick.stat.draw_sum = 0;
         break;
-    default:
+    default:
         SCUI_LOG_ERROR("%d", stat_type);
         break;
     }

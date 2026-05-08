@@ -155,6 +155,10 @@ void scui_window_list_add(scui_handle_t handle);
  */
 void scui_window_list_del(scui_handle_t handle);
 
+/*@brief 窗口列表事件(绘制)
+ */
+void scui_window_list_event_draw(void);
+
 /*@brief 窗口列表事件通知
  *@param event 事件
  */

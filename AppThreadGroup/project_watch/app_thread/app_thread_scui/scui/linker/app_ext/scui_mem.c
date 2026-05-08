@@ -460,6 +460,19 @@ uint32_t scui_mem_size_total(scui_mem_type_t type)
     return scui_mem.size_total[type];
 }
 
+/*@brief 内存模组统计(百分比)
+ *@param type 内存类型
+ *@retval 内存大小
+ */
+uint32_t scui_mem_size_pct(scui_mem_type_t type)
+{
+    uint32_t  used = scui_mem_size_used(type);
+    uint32_t total = scui_mem_size_total(type);
+    if (used >= total || total == 0) return 0;
+    
+    return used * 100 / total;
+}
+
 /*@brief 内存模组就绪
  *@param oom_hit OOM命中回调
  */
