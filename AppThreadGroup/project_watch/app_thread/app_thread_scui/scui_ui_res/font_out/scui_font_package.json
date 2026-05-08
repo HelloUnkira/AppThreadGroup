@@ -5,6 +5,8 @@
         "ascii",
         "multi",
         "en",
+        "eu",
+        "jp",
         "zh"
     ],
     "info": [
@@ -34,6 +36,22 @@
             ]
         },
         {
+            "lang": "eu",
+            "size": [32, 36],
+            "name": [
+                "font_eu_32.bin",
+                "font_eu_36.bin"
+            ]
+        },
+        {
+            "lang": "jp",
+            "size": [32, 36],
+            "name": [
+                "font_jp_32.bin",
+                "font_jp_36.bin"
+            ]
+        },
+        {
             "lang": "zh",
             "size": [32, 36],
             "name": [
@@ -45,7 +63,7 @@
             "lang": "multi",
             "size": [0],
             "name": [
-                "font_test.ttf"
+                "font_tinyTTF.ttf"
             ]
         }
     ]

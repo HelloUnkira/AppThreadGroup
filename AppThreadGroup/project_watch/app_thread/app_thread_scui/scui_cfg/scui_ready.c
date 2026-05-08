@@ -143,7 +143,7 @@ void scui_custom_ready(void)
     scui_lang_set(&lang_type);
     
     /* 窗口交互风格 */
-    scui_window_switch_set_cfg_dir(scui_opt_dir_to_l);
+    scui_window_switch_set_cfg_dir(scui_opt_dir_rtl);
     scui_window_switch_set_cfg_type(scui_window_switch_move);
     
     /* 窗口交互参数 */

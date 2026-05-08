@@ -100,14 +100,14 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         scui_opt_dir_t ver_dir = scui_opt_dir_none;
         
         if (icon_center.x < edge_center.x)
-            hor_dir = scui_opt_dir_to_r;
+            hor_dir = scui_opt_dir_ltr;
         if (icon_center.x > edge_center.x)
-            hor_dir = scui_opt_dir_to_l;
+            hor_dir = scui_opt_dir_rtl;
         
         if (icon_center.y < edge_center.y)
-            ver_dir = scui_opt_dir_to_d;
+            ver_dir = scui_opt_dir_utd;
         if (icon_center.y > edge_center.y)
-            ver_dir = scui_opt_dir_to_u;
+            ver_dir = scui_opt_dir_dtu;
         
         #if 0
         // 距离中心偏移做球面映射
@@ -156,17 +156,17 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
             // 水平缩放
             if (hor_dir == scui_opt_dir_none)
                 scale_clip.x += (icon_clip.w - image_clip_w) / 2;
-            if (hor_dir == scui_opt_dir_to_l)
+            if (hor_dir == scui_opt_dir_rtl)
                 scale_clip.x += (icon_clip.w - image_clip_w) * 1 / 4;
-            if (hor_dir == scui_opt_dir_to_r)
+            if (hor_dir == scui_opt_dir_ltr)
                 scale_clip.x += (icon_clip.w - image_clip_w) * 3 / 4;
             
             // 垂直缩放
             if (ver_dir == scui_opt_dir_none)
                 scale_clip.y += (icon_clip.h - image_clip_h) / 2;
-            if (ver_dir == scui_opt_dir_to_u)
+            if (ver_dir == scui_opt_dir_dtu)
                 scale_clip.y += (icon_clip.h - image_clip_h) * 1 / 4;
-            if (ver_dir == scui_opt_dir_to_d)
+            if (ver_dir == scui_opt_dir_utd)
                 scale_clip.y += (icon_clip.h - image_clip_h) * 3 / 4;
             #endif
             

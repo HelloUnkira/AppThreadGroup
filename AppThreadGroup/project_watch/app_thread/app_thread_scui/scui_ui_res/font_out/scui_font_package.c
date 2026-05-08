@@ -107,11 +107,43 @@ static const scui_font_t font_en_36_bin = {
 	.size_bin	 = 0x2c10,
 };
 
+static const scui_font_t font_eu_32_bin = {
+	.font_name	 = "font_eu_32.bin",
+	.font_lang	 = scui_font_lang_eu,
+	.font_size	 = 32,
+	.data_bin	 = 0x39aa0,
+	.size_bin	 = 0x661c,
+};
+
+static const scui_font_t font_eu_36_bin = {
+	.font_name	 = "font_eu_36.bin",
+	.font_lang	 = scui_font_lang_eu,
+	.font_size	 = 36,
+	.data_bin	 = 0x400bc,
+	.size_bin	 = 0x75d8,
+};
+
+static const scui_font_t font_jp_32_bin = {
+	.font_name	 = "font_jp_32.bin",
+	.font_lang	 = scui_font_lang_jp,
+	.font_size	 = 32,
+	.data_bin	 = 0x47694,
+	.size_bin	 = 0x352bf8,
+};
+
+static const scui_font_t font_jp_36_bin = {
+	.font_name	 = "font_jp_36.bin",
+	.font_lang	 = scui_font_lang_jp,
+	.font_size	 = 36,
+	.data_bin	 = 0x39a28c,
+	.size_bin	 = 0x3fd810,
+};
+
 static const scui_font_t font_zh_32_bin = {
 	.font_name	 = "font_zh_32.bin",
 	.font_lang	 = scui_font_lang_zh,
 	.font_size	 = 32,
-	.data_bin	 = 0x39aa0,
+	.data_bin	 = 0x797a9c,
 	.size_bin	 = 0x325dac,
 };
 
@@ -119,19 +151,19 @@ static const scui_font_t font_zh_36_bin = {
 	.font_name	 = "font_zh_36.bin",
 	.font_lang	 = scui_font_lang_zh,
 	.font_size	 = 36,
-	.data_bin	 = 0x35f84c,
+	.data_bin	 = 0xabd848,
 	.size_bin	 = 0x3c6104,
 };
 
-static const scui_font_t font_test_ttf = {
-	.font_name	 = "font_test.ttf",
+static const scui_font_t font_tinyTTF_ttf = {
+	.font_name	 = "font_tinyTTF.ttf",
 	.font_lang	 = scui_font_lang_multi,
 	.font_size	 = 0,
-	.data_bin	 = 0x725950,
+	.data_bin	 = 0xe8394c,
 	.size_bin	 = 0xc256c4,
 };
 
-const void * scui_font_package_table[16] = {
+const void * scui_font_package_table[20] = {
 	(void *)&font_ascii_8_bin,
 	(void *)&font_ascii_16_bin,
 	(void *)&font_ascii_24_bin,
@@ -145,9 +177,13 @@ const void * scui_font_package_table[16] = {
 	(void *)&font_ascii_88_bin,
 	(void *)&font_en_32_bin,
 	(void *)&font_en_36_bin,
+	(void *)&font_eu_32_bin,
+	(void *)&font_eu_36_bin,
+	(void *)&font_jp_32_bin,
+	(void *)&font_jp_36_bin,
 	(void *)&font_zh_32_bin,
 	(void *)&font_zh_36_bin,
-	(void *)&font_test_ttf,
+	(void *)&font_tinyTTF_ttf,
 };
 
 /*@brief 字库语言字号匹配
@@ -161,6 +197,14 @@ scui_handle_t scui_font_match(scui_font_lang_t lang, scui_handle_t size)
 		return scui_font_en_32bin;
 	if (size ==  36 && lang == scui_font_lang_en)
 		return scui_font_en_36bin;
+	if (size ==  32 && lang == scui_font_lang_eu)
+		return scui_font_eu_32bin;
+	if (size ==  36 && lang == scui_font_lang_eu)
+		return scui_font_eu_36bin;
+	if (size ==  32 && lang == scui_font_lang_jp)
+		return scui_font_jp_32bin;
+	if (size ==  36 && lang == scui_font_lang_jp)
+		return scui_font_jp_36bin;
 	if (size ==  32 && lang == scui_font_lang_zh)
 		return scui_font_zh_32bin;
 	if (size ==  36 && lang == scui_font_lang_zh)

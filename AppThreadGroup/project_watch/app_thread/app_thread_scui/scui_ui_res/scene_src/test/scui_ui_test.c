@@ -171,14 +171,28 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         if (event->key_id != scui_event_key_val_enter)
             break;
         
-        static uint8_t multi_lang_table_idx = 0;
-        static const scui_handle_t multi_lang_table[] = {
+        static const scui_lang_type_t lang_type_table[] = {
             scui_lang_type_zh,
             scui_lang_type_en,
+            scui_lang_type_de,
+            scui_lang_type_fra,
+            scui_lang_type_nl,
+            scui_lang_type_pt,
+            scui_lang_type_jp,
         };
-        multi_lang_table_idx++;
-        multi_lang_table_idx %= scui_arr_len(multi_lang_table);
-        scui_lang_set(&multi_lang_table[multi_lang_table_idx]);
+        scui_coord_t lang_type_num = scui_arr_len(lang_type_table);
+        scui_lang_type_t lang_type = 0; scui_lang_get(&lang_type);
+        for (scui_coord_t lang_idx = 0; lang_idx <lang_type_num; lang_idx++) {
+            if (lang_type_table[lang_idx] != lang_type)
+                continue;
+            
+            lang_idx += 1;
+            if (lang_idx >= lang_type_num)
+                lang_idx  = 0;
+            
+            scui_lang_set(&lang_type_table[lang_idx]);
+            break;
+        }
         
         scui_event_mask_over(event);
         break;

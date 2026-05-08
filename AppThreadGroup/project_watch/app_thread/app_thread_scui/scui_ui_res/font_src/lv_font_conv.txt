@@ -13,18 +13,13 @@ lvgl_font_conv
 7.在任意地方cmd执行lv_font_conv命令生成资源:
     命令见网址的介绍
 
+# 资源查看
+# lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 32 --format lvgl --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_32.c
+# lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format lvgl --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_36.c
 
 
 例子(直接一口气全粘贴到cmd就行了,自己会一条条跑):
-lv_font_conv --font font_en.ttf -r 0x00-0x7f --size 32 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_en_32.bin
-lv_font_conv --font font_en.ttf -r 0x00-0x7f --size 36 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_en_36.bin
-lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 32 --format bin --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_32.bin
-lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format bin --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_36.bin
-
-lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 32 --format lvgl --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_32.c
-lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format lvgl --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_36.c
-
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 8 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_8.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size  8 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_8.bin
 lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 16 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_16.bin
 lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 24 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_24.bin
 lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 32 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_32.bin
@@ -35,3 +30,17 @@ lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 64 --format bin  --bpp 2 
 lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 72 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_72.bin
 lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 80 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_80.bin
 lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 88 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_88.bin
+
+例子(直接一口气全粘贴到cmd就行了,自己会一条条跑):
+lv_font_conv --font font_en.ttf -r 0x00-0x7f --size 32 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_en_32.bin
+lv_font_conv --font font_en.ttf -r 0x00-0x7f --size 36 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_en_36.bin
+lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 32 --format bin --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_32.bin
+lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format bin --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_36.bin
+
+lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x3000-0x303F -r 0x3040-0x309F -r 0x30A0-0x30FF -r 0x4E00-0x9FFF --size 32 --format bin --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_jp_32.bin
+lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x3000-0x303F -r 0x3040-0x309F -r 0x30A0-0x30FF -r 0x4E00-0x9FFF --size 36 --format bin --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_jp_36.bin
+
+lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x80-0xFF -r 0x100-0x17F -r 0x180-0x24F -r 0x2B0-0x2FF --size 32 --format bin --bpp 2 --no-prefilter --no-prefilter --no-kerning -o ../font_bin/font_eu_32.bin
+lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x80-0xFF -r 0x100-0x17F -r 0x180-0x24F -r 0x2B0-0x2FF --size 36 --format bin --bpp 2 --no-prefilter --no-prefilter --no-kerning -o ../font_bin/font_eu_36.bin
+
+

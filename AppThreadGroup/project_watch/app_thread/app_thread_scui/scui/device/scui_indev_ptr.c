@@ -237,15 +237,15 @@ scui_opt_dir_t scui_indev_ptr_dir(scui_event_t *event)
         
         if (dist_x >= dist_y) {
             if (event->ptr_s.x >= event->ptr_e.x)
-                return scui_opt_dir_to_l;
+                return scui_opt_dir_rtl;
             if (event->ptr_s.x <= event->ptr_e.x)
-                return scui_opt_dir_to_r;
+                return scui_opt_dir_ltr;
         }
         if (dist_x <= dist_y) {
             if (event->ptr_s.y >= event->ptr_e.y)
-                return scui_opt_dir_to_u;
+                return scui_opt_dir_dtu;
             if (event->ptr_s.y <= event->ptr_e.y)
-                return scui_opt_dir_to_d;
+                return scui_opt_dir_utd;
         }
     }
     return scui_opt_dir_none;

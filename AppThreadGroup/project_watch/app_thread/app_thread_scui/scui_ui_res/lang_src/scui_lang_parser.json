@@ -9,7 +9,12 @@
     "offset_value": "0x4000 - 1",
     "language": [
         "zh",
-        "en"
+        "en",
+        "de",
+        "fra",
+        "nl",
+        "pt",
+        "jp"
     ],
     "custom": [
         "multi",

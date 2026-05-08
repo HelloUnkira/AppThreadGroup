@@ -231,23 +231,23 @@ static inline scui_area_t scui_surface_area(scui_surface_t *surface)
  */
 typedef enum {
     scui_opt_dir_none = (0),
-    scui_opt_dir_to_u = (1 << 0),   /* 向up */
-    scui_opt_dir_to_d = (1 << 1),   /* 向down */
-    scui_opt_dir_to_l = (1 << 2),   /* 向left */
-    scui_opt_dir_to_r = (1 << 3),   /* 向right */
-    scui_opt_dir_ver  = (scui_opt_dir_to_u | scui_opt_dir_to_d),
-    scui_opt_dir_hor  = (scui_opt_dir_to_l | scui_opt_dir_to_r),
-    scui_opt_dir_all  = (scui_opt_dir_ver  | scui_opt_dir_hor ),
+    scui_opt_dir_dtu  = (1 << 0),   /* down向up */
+    scui_opt_dir_utd  = (1 << 1),   /* up向down */
+    scui_opt_dir_rtl  = (1 << 2),   /* right向left */
+    scui_opt_dir_ltr  = (1 << 3),   /* left向right */
+    scui_opt_dir_ver  = (scui_opt_dir_dtu | scui_opt_dir_utd),
+    scui_opt_dir_hor  = (scui_opt_dir_rtl | scui_opt_dir_ltr),
+    scui_opt_dir_all  = (scui_opt_dir_ver | scui_opt_dir_hor),
 } scui_opt_dir_t;
 
 /*@brief 操作位置(与操作方向透明切换)
  */
 typedef enum {
     scui_opt_pos_none = scui_opt_dir_none,
-    scui_opt_pos_u    = scui_opt_dir_to_d,
-    scui_opt_pos_d    = scui_opt_dir_to_u,
-    scui_opt_pos_l    = scui_opt_dir_to_r,
-    scui_opt_pos_r    = scui_opt_dir_to_l,
+    scui_opt_pos_u    = scui_opt_dir_utd,
+    scui_opt_pos_d    = scui_opt_dir_dtu,
+    scui_opt_pos_l    = scui_opt_dir_ltr,
+    scui_opt_pos_r    = scui_opt_dir_rtl,
     scui_opt_pos_c    = scui_opt_dir_all,
     scui_opt_pos_ver  = scui_opt_dir_ver,
     scui_opt_pos_hor  = scui_opt_dir_hor,

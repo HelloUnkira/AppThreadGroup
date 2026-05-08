@@ -33,23 +33,43 @@ scui_handle_t scui_font_name_match(scui_handle_t font_idx, scui_handle_t lang_ty
         case SCUI_FONT_IDX_A80: return scui_font_ascii_80bin;
         case SCUI_FONT_IDX_A88: return scui_font_ascii_88bin;
         }
+        break;
     }
     case scui_lang_type_zh: {
         switch (font_idx) {
         case SCUI_FONT_IDX_32: return scui_font_match(scui_font_lang_zh, 32);
         case SCUI_FONT_IDX_36: return scui_font_match(scui_font_lang_zh, 36);
         }
+        break;
     }
     case scui_lang_type_en: {
         switch (font_idx) {
         case SCUI_FONT_IDX_32: return scui_font_match(scui_font_lang_en, 32);
         case SCUI_FONT_IDX_36: return scui_font_match(scui_font_lang_en, 36);
         }
+        break;
+    }
+    case scui_lang_type_de:
+    case scui_lang_type_fra:
+    case scui_lang_type_nl:
+    case scui_lang_type_pt: {
+        switch (font_idx) {
+        case SCUI_FONT_IDX_32: return scui_font_match(scui_font_lang_eu, 32);
+        case SCUI_FONT_IDX_36: return scui_font_match(scui_font_lang_eu, 36);
+        }
+        break;
+    }
+    case scui_lang_type_jp: {
+        switch (font_idx) {
+        case SCUI_FONT_IDX_32: return scui_font_match(scui_font_lang_jp, 32);
+        case SCUI_FONT_IDX_36: return scui_font_match(scui_font_lang_jp, 36);
+        }
+        break;
     }
     }
     
     /* 如果有通配字库 */
-    return scui_font_testttf;
+    return scui_font_tinyTTFttf;
     
     /* 如果没有通配字库 */
     SCUI_ASSERT(false);

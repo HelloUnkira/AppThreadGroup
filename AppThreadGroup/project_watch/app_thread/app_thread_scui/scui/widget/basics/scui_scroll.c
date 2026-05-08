@@ -407,12 +407,12 @@ static bool scui_scroll_edge_skip(scui_handle_t handle, scui_opt_dir_t dir)
         clip_c.y = scroll->point_rcd[index_h].y;
         scui_area_m_to_s(&clip_c, &clip_c);
         
-        if (scui_opt_bits_check(dir, scui_opt_dir_to_d))
+        if (scui_opt_bits_check(dir, scui_opt_dir_utd))
         if (scui_opt_bits_check(scroll->skip, scui_opt_pos_u))
         if (clip_w.y1 == clip_c.y1)
             return true;
         
-        if (scui_opt_bits_check(dir, scui_opt_dir_to_r))
+        if (scui_opt_bits_check(dir, scui_opt_dir_ltr))
         if (scui_opt_bits_check(scroll->skip, scui_opt_pos_l))
         if (clip_w.x1 == clip_c.x1)
             return true;
@@ -428,12 +428,12 @@ static bool scui_scroll_edge_skip(scui_handle_t handle, scui_opt_dir_t dir)
         clip_c.y = scroll->point_rcd[index_t].y;
         scui_area_m_to_s(&clip_c, &clip_c);
         
-        if (scui_opt_bits_check(dir, scui_opt_dir_to_u))
+        if (scui_opt_bits_check(dir, scui_opt_dir_dtu))
         if (scui_opt_bits_check(scroll->skip, scui_opt_pos_d))
         if (clip_w.y2 == clip_c.y2)
             return true;
         
-        if (scui_opt_bits_check(dir, scui_opt_dir_to_l))
+        if (scui_opt_bits_check(dir, scui_opt_dir_rtl))
         if (scui_opt_bits_check(scroll->skip, scui_opt_pos_r))
         if (clip_w.x2 == clip_c.x2)
             return true;
@@ -1453,13 +1453,13 @@ void scui_scroll_invoke(scui_event_t *event)
         scui_coord_t way = 0;
         scui_opt_dir_t dir = scui_opt_dir_none;
         if (event->type == scui_event_enc_fdir) {
-            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_to_r;
-            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_to_d;
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_ltr;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_utd;
             way = +1;
         }
         if (event->type == scui_event_enc_bdir) {
-            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_to_l;
-            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_to_u;
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_rtl;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_dtu;
             way = -1;
         }
         
@@ -1513,13 +1513,13 @@ void scui_scroll_invoke(scui_event_t *event)
         scui_coord_t way = 0;
         scui_opt_dir_t dir = scui_opt_dir_none;
         if (event->key_id == scroll->keyid_fdir) {
-            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_to_r;
-            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_to_d;
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_ltr;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_utd;
             way = +1;
         }
         if (event->key_id == scroll->keyid_bdir) {
-            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_to_l;
-            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_to_u;
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_rtl;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_dtu;
             way = -1;
         }
         

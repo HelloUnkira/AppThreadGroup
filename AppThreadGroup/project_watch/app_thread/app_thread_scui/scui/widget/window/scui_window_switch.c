@@ -272,13 +272,13 @@ static void scui_window_move_anima_expire(void *instance)
     
     /* 更新point */
     scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
-    if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_u)
+    if (scui_window_mgr.switch_args.dir == scui_opt_dir_dtu)
         point.y += scui_widget_clip(scui_window_mgr.switch_args.list[0]).h;
-    if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_d)
+    if (scui_window_mgr.switch_args.dir == scui_opt_dir_utd)
         point.y -= scui_widget_clip(scui_window_mgr.switch_args.list[1]).h;
-    if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_l)
+    if (scui_window_mgr.switch_args.dir == scui_opt_dir_rtl)
         point.x += scui_widget_clip(scui_window_mgr.switch_args.list[0]).w;
-    if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_r)
+    if (scui_window_mgr.switch_args.dir == scui_opt_dir_ltr)
         point.x -= scui_widget_clip(scui_window_mgr.switch_args.list[1]).w;
     scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
     
@@ -388,16 +388,16 @@ static void scui_window_move_anima_inout(scui_handle_t handle, bool inout)
     /* 从当前位置到达目标点 */
     int32_t value_s = 0, value_e = 0, value_all = 0;
     
-    if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_r) {
+    if (scui_window_mgr.switch_args.dir == scui_opt_dir_ltr) {
         value_s = point.x; value_e = inout ? 0 : +SCUI_HOR_RES; value_all = SCUI_HOR_RES;
     }
-    if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_l) {
+    if (scui_window_mgr.switch_args.dir == scui_opt_dir_rtl) {
         value_s = point.x; value_e = inout ? 0 : -SCUI_HOR_RES; value_all = SCUI_HOR_RES;
     }
-    if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_d) {
+    if (scui_window_mgr.switch_args.dir == scui_opt_dir_utd) {
         value_s = point.y; value_e = inout ? 0 : +SCUI_VER_RES; value_all = SCUI_VER_RES;
     }
-    if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_u) {
+    if (scui_window_mgr.switch_args.dir == scui_opt_dir_dtu) {
         value_s = point.y; value_e = inout ? 0 : -SCUI_VER_RES; value_all = SCUI_VER_RES;
     }
     
@@ -419,19 +419,19 @@ static bool scui_window_move_event_way(scui_widget_t *widget, scui_opt_dir_t eve
     scui_handle_t target = SCUI_HANDLE_INVALID;
     scui_window_switch_type_t switch_type = scui_window_switch_auto;
     
-    if (event_dir == scui_opt_dir_to_r) { /* 左窗:方向向右 */
+    if (event_dir == scui_opt_dir_ltr) { /* 左窗:方向向右 */
         target = window->sibling[2]; switch_type = window->switch_type[2];
         point.x = -SCUI_HOR_RES;
     }
-    if (event_dir == scui_opt_dir_to_l) { /* 右窗:方向向左 */
+    if (event_dir == scui_opt_dir_rtl) { /* 右窗:方向向左 */
         target = window->sibling[3]; switch_type = window->switch_type[3];
         point.x = +SCUI_HOR_RES;
     }
-    if (event_dir == scui_opt_dir_to_d) { /* 上窗:方向向下 */
+    if (event_dir == scui_opt_dir_utd) { /* 上窗:方向向下 */
         target = window->sibling[0]; switch_type = window->switch_type[0];
         point.y = -SCUI_VER_RES;
     }
-    if (event_dir == scui_opt_dir_to_u) { /* 下窗:方向向上 */
+    if (event_dir == scui_opt_dir_dtu) { /* 下窗:方向向上 */
         target = window->sibling[1]; switch_type = window->switch_type[1];
         point.y = +SCUI_VER_RES;
     }
@@ -533,22 +533,22 @@ void scui_window_event_dispatch(scui_event_t *event)
             scui_handle_t target = SCUI_HANDLE_INVALID;
             SCUI_LOG_INFO("dir:%u", event_dir);
             /* 方向检测与条件加载 */
-            if (event_dir == scui_opt_dir_to_r &&
+            if (event_dir == scui_opt_dir_ltr &&
                 scui_opt_bits_check(scui_window_mgr.switch_args.pos, scui_opt_pos_l)) { /* 左窗:方向向右 */
                 target = window->sibling[2]; switch_type = window->switch_type[2];
                 point.x = -SCUI_HOR_RES;
             }
-            if (event_dir == scui_opt_dir_to_l &&
+            if (event_dir == scui_opt_dir_rtl &&
                 scui_opt_bits_check(scui_window_mgr.switch_args.pos, scui_opt_pos_r)) { /* 右窗:方向向左 */
                 target = window->sibling[3]; switch_type = window->switch_type[3];
                 point.x = +SCUI_HOR_RES;
             }
-            if (event_dir == scui_opt_dir_to_d &&
+            if (event_dir == scui_opt_dir_utd &&
                 scui_opt_bits_check(scui_window_mgr.switch_args.pos, scui_opt_pos_u)) { /* 上窗:方向向下 */
                 target = window->sibling[0]; switch_type = window->switch_type[0];
                 point.y = -SCUI_VER_RES;
             }
-            if (event_dir == scui_opt_dir_to_u &&
+            if (event_dir == scui_opt_dir_dtu &&
                 scui_opt_bits_check(scui_window_mgr.switch_args.pos, scui_opt_pos_d)) { /* 下窗:方向向上 */
                 target = window->sibling[1]; switch_type = window->switch_type[1];
                 point.y = +SCUI_VER_RES;
@@ -656,23 +656,23 @@ void scui_window_event_dispatch(scui_event_t *event)
         if (event->type == scui_event_enc_fdir) {
             
             if (window->switch_enc_way == scui_opt_dir_hor) {
-                if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_to_d;
-                if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_to_r;
+                if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
+                if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_ltr;
             }
             if (window->switch_enc_way == scui_opt_dir_ver) {
-                if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_to_r;
-                if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_to_d;
+                if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_ltr;
+                if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
             }
         }
         if (event->type == scui_event_enc_bdir) {
             
             if (window->switch_enc_way == scui_opt_dir_hor) {
-                if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_to_u;
-                if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_to_l;
+                if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;
+                if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_rtl;
             }
             if (window->switch_enc_way == scui_opt_dir_ver) {
-                if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_to_l;
-                if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_to_u;
+                if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_rtl;
+                if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;
             }
         }
         
@@ -700,13 +700,13 @@ void scui_window_event_dispatch(scui_event_t *event)
         SCUI_LOG_INFO("key_id:%u", event->key_id);
         /* 方向检测与条件加载 */
         if (event->key_id == window->switch_key_id[2])
-            event_dir = scui_opt_dir_to_r;
+            event_dir = scui_opt_dir_ltr;
         if (event->key_id == window->switch_key_id[3])
-            event_dir = scui_opt_dir_to_l;
+            event_dir = scui_opt_dir_rtl;
         if (event->key_id == window->switch_key_id[0])
-            event_dir = scui_opt_dir_to_d;
+            event_dir = scui_opt_dir_utd;
         if (event->key_id == window->switch_key_id[1])
-            event_dir = scui_opt_dir_to_u;
+            event_dir = scui_opt_dir_dtu;
         
         /* 给定方向进行窗口切换 */
         if (scui_window_move_event_way(widget, event_dir, 2))
@@ -810,10 +810,10 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         if (window_curr->sibling[idx] == handle) {
             type = window_curr->switch_type[idx];
             /* 判断方向 */
-            if (idx == 0) dir = scui_opt_dir_to_d;
-            if (idx == 1) dir = scui_opt_dir_to_u;
-            if (idx == 2) dir = scui_opt_dir_to_r;
-            if (idx == 3) dir = scui_opt_dir_to_l;
+            if (idx == 0) dir = scui_opt_dir_utd;
+            if (idx == 1) dir = scui_opt_dir_dtu;
+            if (idx == 2) dir = scui_opt_dir_ltr;
+            if (idx == 3) dir = scui_opt_dir_rtl;
             /* 自适应需要更新窗口切换状态 */
             scui_window_switch_type_update(type, dir);
             break;

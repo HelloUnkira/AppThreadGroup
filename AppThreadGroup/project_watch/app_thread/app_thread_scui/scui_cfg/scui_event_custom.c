@@ -250,7 +250,7 @@ void scui_event_custom_finish(scui_event_t *event)
             break;
         
         /* 全局的右滑响应事件 */
-        if (scui_indev_ptr_dir(event) == scui_opt_dir_to_r) {
+        if (scui_indev_ptr_dir(event) == scui_opt_dir_ltr) {
             
             scui_event_mask_over(event);
             scui_ui_scene_return();

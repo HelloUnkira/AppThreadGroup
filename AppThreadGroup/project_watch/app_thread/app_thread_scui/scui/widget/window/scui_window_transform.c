@@ -316,8 +316,8 @@ void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
         scui_area_t src_clip = scui_surface_area(src_surface);
         
         scui_coord_t angle = 0, pct = scui_window_mgr.switch_args.pct;
-        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_to_r)) angle = +pct * 3.6;
-        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_to_l)) angle = -pct * 3.6;
+        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ltr)) angle = +pct * 3.6;
+        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_rtl)) angle = -pct * 3.6;
         
         if (list[idx]->myself == scui_window_mgr.list_args.acts[0]) if (pct >= 50) continue;
         if (list[idx]->myself != scui_window_mgr.list_args.acts[0]) if (pct <= 50) continue;
@@ -363,14 +363,14 @@ void scui_window_transform_rotate1(scui_widget_t **list, scui_handle_t num)
         scui_area_t src_clip = scui_surface_area(src_surface);
         
         scui_coord_t angle_total = 75, angle = 0, pct = scui_window_mgr.switch_args.pct;
-        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_to_r))
+        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ltr))
             angle = 270 + pct * angle_total / 100;
-        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_to_l))
+        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_rtl))
             angle = 270 - pct * angle_total / 100;
         
         if (list[idx]->myself != scui_window_mgr.list_args.acts[0]) {
-        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_to_r)) angle -= angle_total;
-        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_to_l)) angle += angle_total;
+        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ltr)) angle -= angle_total;
+        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_rtl)) angle += angle_total;
         }
         
         scui_multi_t radius  = dst_clip.h;
@@ -712,10 +712,10 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
     /* 空间建模参数 */
     scui_coord3_t angle = scui_map(scui_window_mgr.switch_args.pct, 0, 100, 0, 180);
     switch (scui_window_mgr.switch_args.dir) {
-    case scui_opt_dir_to_l: angle = -angle; break;
-    case scui_opt_dir_to_r: angle = +angle; break;
-    case scui_opt_dir_to_u: angle = +angle; break;
-    case scui_opt_dir_to_d: angle = -angle; break;
+    case scui_opt_dir_rtl: angle = -angle; break;
+    case scui_opt_dir_ltr: angle = +angle; break;
+    case scui_opt_dir_dtu: angle = +angle; break;
+    case scui_opt_dir_utd: angle = -angle; break;
     }
     SCUI_LOG_INFO("angle:%f", angle);
     
@@ -907,8 +907,8 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
         
         /* 空间建模参数 */
         scui_coord3_t angle = 0.0f, flag = 1.0f;
-        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_to_l)) flag = -flag;
-        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_to_r));
+        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_rtl)) flag = -flag;
+        if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ltr));
         angle  = scui_map(scui_window_mgr.switch_args.pct, 0, 100, 0, 180 + 90);
         angle -= scui_map(seg_idx, 0, seg_num, 0, 90);
         angle  = scui_clamp(angle, 0, 180);
@@ -1089,10 +1089,10 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
     /* 空间建模参数 */
     scui_coord3_t angle = scui_map(scui_window_mgr.switch_args.pct, 0, 100, 0, 90);
     switch (scui_window_mgr.switch_args.dir) {
-    case scui_opt_dir_to_l: angle = -angle; break;
-    case scui_opt_dir_to_r: angle = +angle; break;
-    case scui_opt_dir_to_u: angle = +angle; break;
-    case scui_opt_dir_to_d: angle = -angle; break;
+    case scui_opt_dir_rtl: angle = -angle; break;
+    case scui_opt_dir_ltr: angle = +angle; break;
+    case scui_opt_dir_dtu: angle = +angle; break;
+    case scui_opt_dir_utd: angle = -angle; break;
     }
     SCUI_LOG_INFO("angle:%f", angle);
     
@@ -1201,10 +1201,10 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
         
         bool cover_check = true;
         if (face_idx[idx] == 1 || /* 移动方向不同会导致选择的绘制面不一样 */
-           (face_idx[idx] == 2 && scui_window_mgr.switch_args.dir == scui_opt_dir_to_l) ||
-           (face_idx[idx] == 3 && scui_window_mgr.switch_args.dir == scui_opt_dir_to_r) ||
-           (face_idx[idx] == 4 && scui_window_mgr.switch_args.dir == scui_opt_dir_to_u) ||
-           (face_idx[idx] == 5 && scui_window_mgr.switch_args.dir == scui_opt_dir_to_d))
+           (face_idx[idx] == 2 && scui_window_mgr.switch_args.dir == scui_opt_dir_rtl) ||
+           (face_idx[idx] == 3 && scui_window_mgr.switch_args.dir == scui_opt_dir_ltr) ||
+           (face_idx[idx] == 4 && scui_window_mgr.switch_args.dir == scui_opt_dir_dtu) ||
+           (face_idx[idx] == 5 && scui_window_mgr.switch_args.dir == scui_opt_dir_utd))
             cover_check = false;
         if (cover_check)
             continue;

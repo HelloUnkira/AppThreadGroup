@@ -8,6 +8,8 @@ typedef enum {
 	scui_font_lang_ascii,
 	scui_font_lang_multi,
 	scui_font_lang_en,
+	scui_font_lang_eu,
+	scui_font_lang_jp,
 	scui_font_lang_zh,
 } scui_font_lang_t;
 
@@ -26,12 +28,16 @@ typedef enum {
 	scui_font_ascii_88bin, // 0x300a
 	scui_font_en_32bin, // 0x300b
 	scui_font_en_36bin, // 0x300c
-	scui_font_zh_32bin, // 0x300d
-	scui_font_zh_36bin, // 0x300e
-	scui_font_testttf, // 0x300f
+	scui_font_eu_32bin, // 0x300d
+	scui_font_eu_36bin, // 0x300e
+	scui_font_jp_32bin, // 0x300f
+	scui_font_jp_36bin, // 0x3010
+	scui_font_zh_32bin, // 0x3011
+	scui_font_zh_36bin, // 0x3012
+	scui_font_tinyTTFttf, // 0x3013
 } scui_font_type_t;
 
-extern const void * scui_font_package_table[16];
+extern const void * scui_font_package_table[20];
 
 /*@brief 字库语言字号匹配
  *@param lang 字库语言类型

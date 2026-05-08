@@ -67,10 +67,10 @@ static void scui_monkey_anima_expire(void *instance)
                 if (scui_ui_res_local->ptr_move) {
                     scui_coord_t step = scui_ui_res_local->ptr_move_step;
                     switch (scui_ui_res_local->ptr_move_way) {
-                    case scui_opt_dir_to_u: scui_ui_res_local->ptr_pos.y -= step; break;
-                    case scui_opt_dir_to_d: scui_ui_res_local->ptr_pos.y += step; break;
-                    case scui_opt_dir_to_l: scui_ui_res_local->ptr_pos.x -= step; break;
-                    case scui_opt_dir_to_r: scui_ui_res_local->ptr_pos.x += step; break;
+                    case scui_opt_dir_dtu: scui_ui_res_local->ptr_pos.y -= step; break;
+                    case scui_opt_dir_utd: scui_ui_res_local->ptr_pos.y += step; break;
+                    case scui_opt_dir_rtl: scui_ui_res_local->ptr_pos.x -= step; break;
+                    case scui_opt_dir_ltr: scui_ui_res_local->ptr_pos.x += step; break;
                     default: SCUI_ASSERT(false);
                     }
                     /* 整理坐标范围 */
