@@ -168,6 +168,11 @@ void scui_window_list_event_notify(scui_event_t *event);
  */
 void scui_window_refresh(void);
 
+/*@brief 控件默认事件处理回调
+ *@param event 事件
+ */
+void scui_window_event_dispatch(scui_event_t *event);
+
 /* 界面管理器资源(内部资源, 内部使用): */
 extern scui_window_mgr_t scui_window_mgr;
 
@@ -176,18 +181,18 @@ extern scui_window_mgr_t scui_window_mgr;
 /*************************************************************************************************/
 
 /*@brief 窗口栈更新栈顶窗口(内部接口)
- *@param type   更新类型(0:cover;1:add;2:del;)
+ *@param handle 窗口句柄
  */
-void scui_window_stack_update(scui_handle_t handle, uint8_t type);
+void scui_window_stack_switch_top(scui_handle_t handle);
 
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/
 
-/*@brief 控件默认事件处理回调
+/*@brief 窗口切换事件处理回调
  *@param event 事件
  */
-void scui_window_event_dispatch(scui_event_t *event);
+void scui_window_switch_event(scui_event_t *event);
 
 /*************************************************************************************************/
 /*************************************************************************************************/

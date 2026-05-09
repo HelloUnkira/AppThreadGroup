@@ -545,6 +545,14 @@ void scui_window_refresh(void)
     scui_tick_stat(scui_tick_stat_refr);
 }
 
+/*@brief 窗口切换事件处理回调
+ *@param event 事件
+ */
+void scui_window_event_dispatch(scui_event_t *event)
+{
+    scui_window_switch_event(event);
+}
+
 /*@brief 窗口激活
  *@param handle 窗口句柄
  */

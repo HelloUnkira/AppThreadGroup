@@ -312,15 +312,15 @@ static void scui_window_move_anima_finish(void *instance)
     
     if (scui_window_mgr.switch_args.pct == 0) {
         scui_window_active(scui_window_mgr.switch_args.list[0]);
-        scui_window_stack_update(scui_window_mgr.switch_args.list[0], 0);
         scui_widget_hide(scui_window_mgr.switch_args.list[1], true);
         scui_window_switch_type_update(scui_window_switch_move, scui_opt_dir_none);
+        scui_window_stack_switch_top(scui_window_mgr.switch_args.list[0]);
     }
     if (scui_window_mgr.switch_args.pct == 100) {
         scui_window_active(scui_window_mgr.switch_args.list[1]);
-        scui_window_stack_update(scui_window_mgr.switch_args.list[1], 0);
         scui_widget_hide(scui_window_mgr.switch_args.list[0], true);
         scui_window_switch_type_update(scui_window_switch_move, scui_opt_dir_none);
+        scui_window_stack_switch_top(scui_window_mgr.switch_args.list[1]);
     }
     
     scui_window_mgr.switch_args.lock_move = false;
@@ -470,7 +470,7 @@ static bool scui_window_move_event_way(scui_widget_t *widget, scui_opt_dir_t eve
 /*@brief 窗口切换事件处理回调
  *@param event 事件
  */
-void scui_window_event_dispatch(scui_event_t *event)
+void scui_window_switch_event(scui_event_t *event)
 {
     /* 不同的事件处理流程有不同的递归冒泡规则 */
     SCUI_LOG_DEBUG("event %u", event->type);
@@ -725,7 +725,7 @@ void scui_window_event_dispatch(scui_event_t *event)
  *@param dir    窗口切换方向
  *@retval 成功失败
  */
-bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_opt_dir_t dir)
+bool scui_window_switch_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_opt_dir_t dir)
 {
     SCUI_LOG_INFO("");
     
@@ -756,8 +756,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_handle_t  handle_a = scui_window_mgr.list_args.acts[0];
         scui_widget_t *widget_a = scui_handle_source_check(handle_a);
         scui_window_t *window_a = (void *)widget_a;
-        if (window_a->resident)
-            return false;
+        SCUI_ASSERT(!window_a->resident);
     }
     
     /* 先上锁(标记) */

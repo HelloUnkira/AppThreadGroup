@@ -186,8 +186,8 @@ void scui_event_custom_myself(scui_event_t *event)
         scui_event_mask_over(event);
         
         if (handle_top != SCUI_UI_SCENE_NONE) {
-            scui_window_stack_reset_by(SCUI_UI_SCENE_NONE, false,
-                scui_window_switch_none, scui_opt_dir_none);
+            scui_window_stack_reset_by(SCUI_UI_SCENE_NONE,
+                scui_window_switch_none, scui_opt_dir_none, false);
         }
         break;
     }
@@ -196,16 +196,15 @@ void scui_event_custom_myself(scui_event_t *event)
         if (!scui_event_check_execute(event))
              break;
         
-        if (handle_top != SCUI_UI_SCENE_HOME) {
-            scui_window_stack_reset_by(SCUI_UI_SCENE_HOME, false,
-                scui_window_switch_none, scui_opt_dir_none);
-        }
-        
         /* 如果本来是在待机界面时 */
         if (handle_top == SCUI_UI_SCENE_STANDBY) {
-            scui_window_stack_add_by(SCUI_UI_SCENE_STANDBY, false,
-                scui_window_switch_none, scui_opt_dir_none);
+            scui_window_stack_reset_by(SCUI_UI_SCENE_HOME,
+                scui_window_switch_none, scui_opt_dir_none, true);
+        } else {
+            scui_window_stack_reset_by(SCUI_UI_SCENE_HOME,
+                scui_window_switch_none, scui_opt_dir_none, false);
         }
+        
         break;
     }
     case scui_event_ui_standy_enter: {
@@ -220,8 +219,8 @@ void scui_event_custom_myself(scui_event_t *event)
             scui_cache_glyph_rectify();
             scui_cache_image_rectify();
             
-            scui_window_stack_add_by(SCUI_UI_SCENE_STANDBY, false,
-                scui_window_switch_none, scui_opt_dir_none);
+            scui_window_stack_add_by(SCUI_UI_SCENE_STANDBY,
+                scui_window_switch_none, scui_opt_dir_none, false);
         }
         break;
     }

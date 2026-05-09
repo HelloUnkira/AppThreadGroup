@@ -23,11 +23,15 @@ void scui_check_time_anima_expire(void *instance)
     
     /* 同步非活跃时间到模组 */
     if (inactive_tick < 1000) {
-        scui_check_time.over_tick = scui_check_time.over_temp ?
-        scui_check_time.over_tick_tmp : scui_check_time.over_tick_bak;
+        if (scui_check_time.over) {
+            scui_check_time.over_tick = scui_check_time.over_temp ?
+            scui_check_time.over_tick_tmp : scui_check_time.over_tick_bak;
+        }
         
-        scui_check_time.idle_tick = scui_check_time.idle_temp ?
-        scui_check_time.idle_tick_tmp : scui_check_time.idle_tick_bak;
+        if (scui_check_time.idle) {
+            scui_check_time.idle_tick = scui_check_time.idle_temp ?
+            scui_check_time.idle_tick_tmp : scui_check_time.idle_tick_bak;
+        }
     }
     
     /* 只取起始点位 */

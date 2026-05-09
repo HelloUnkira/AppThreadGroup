@@ -120,8 +120,8 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         if (scui_ui_res_local->ptr_long_jump) {
             scui_ui_res_local->ptr_long_jump = true;
             #if SCUI_MEM_FEAT_MINI == 0
-            scui_window_stack_add_by(SCUI_UI_SCENE_LANTERN, false,
-                scui_window_switch_circle, scui_opt_dir_none);
+            scui_window_stack_add_by(SCUI_UI_SCENE_LANTERN,
+                scui_window_switch_circle, scui_opt_dir_none, false);
             #endif
         }
         break;
