@@ -112,7 +112,7 @@ void scui_ready(void)
     table.source = scui_font_package_table;
     table.number = scui_arr_len(scui_font_package_table);
     scui_handle_table_register(&table);
-    /* 句柄表(multi language) */
+    /* 句柄表(lang) */
     table.offset = SCUI_HANDLE_OFFSET_LANG + 1;
     table.source = scui_lang_parser_table;
     table.number = scui_lang_type_num * scui_lang_str_num;

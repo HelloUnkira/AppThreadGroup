@@ -163,7 +163,7 @@ static const scui_font_t font_tinyTTF_ttf = {
 	.size_bin	 = 0xc256c4,
 };
 
-const void * scui_font_package_table[20] = {
+const void * const scui_font_package_table[20] = {
 	(void *)&font_ascii_8_bin,
 	(void *)&font_ascii_16_bin,
 	(void *)&font_ascii_24_bin,

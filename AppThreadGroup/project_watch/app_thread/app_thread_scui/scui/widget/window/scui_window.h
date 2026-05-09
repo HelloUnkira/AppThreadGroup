@@ -183,7 +183,7 @@ extern scui_window_mgr_t scui_window_mgr;
 /*@brief 窗口栈更新栈顶窗口(内部接口)
  *@param handle 窗口句柄
  */
-void scui_window_stack_switch_top(scui_handle_t handle);
+void scui_window_stack_switch(scui_handle_t handle);
 
 /*************************************************************************************************/
 /*************************************************************************************************/

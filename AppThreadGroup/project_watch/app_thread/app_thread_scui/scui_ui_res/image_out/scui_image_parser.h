@@ -2567,7 +2567,7 @@ typedef enum {
 	scui_image_prj_image_src_watchface_preview_01_00jpg, // 0x29fe
 } scui_image_parser_handle_t;
 
-extern const void * scui_image_parser_table[2559];
+extern const void * const scui_image_parser_table[2559];
 
 //<     w,     h,size_raw,size_mem,com_pct> handle
 //< 0x1d2, 0x1d2,0xb688,0x6a088,0.11> scui_image_prj_image_src_00_3d_AnalogClock_0jpg

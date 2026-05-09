@@ -23034,7 +23034,7 @@ static const scui_image_t prj_image_src_watchface_preview_01_00jpg = {
 	.pixel.size_bin		 = 0x66d0,
 };
 
-const void * scui_image_parser_table[2559] = {
+const void * const scui_image_parser_table[2559] = {
 	(void *)&prj_image_src_00_3d_AnalogClock_0jpg,
 	(void *)&prj_image_src_00_3d_AnalogClock_00png,
 	(void *)&prj_image_src_00_3d_AnalogClock_01png,

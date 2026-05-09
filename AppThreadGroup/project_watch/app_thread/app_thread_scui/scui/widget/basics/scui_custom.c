@@ -227,15 +227,16 @@ void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text)
         memcpy(str_args, args, sizeof(scui_string_args_t));
         custom->str_args[idx] = str_args;
         
-        if (text != SCUI_HANDLE_INVALID) {
+        if (text != SCUI_HANDLE_INVALID)
             str_args->utf8 = scui_lang_str(text, str_args->lang);
-        } else {
-            scui_coord_t len_utf8 = strlen(str_args->utf8) + 1;
-            void *str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, len_utf8);
-            strcpy(str_utf8, str_args->utf8);
-            custom->str_utf8[idx] = str_utf8;
-            str_args->utf8 = str_utf8;
-        }
+        
+        scui_coord_t str_bytes = scui_utf8_str_bytes(str_args->utf8);
+        uint8_t *str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
+        memcpy(str_utf8, str_args->utf8, str_bytes);
+        str_utf8[str_bytes] = '\0';
+        
+        custom->str_utf8[idx] = str_utf8;
+        str_args->utf8 = str_utf8;
         
         /* 绘制剪切域同步 */
         if (scui_area_empty(&str_args->clip))

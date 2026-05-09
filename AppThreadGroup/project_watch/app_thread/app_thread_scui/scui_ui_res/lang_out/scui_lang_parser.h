@@ -765,7 +765,14 @@ typedef enum {
 	SCUI_LANG_0X02f3,	/* 请前往APP打开相机 */
 } scui_lang_parser_str_t;
 
-extern const char * scui_lang_parser_table[756 * 7];
+#if SCUI_LANG_PARSER_BIN_USE
+typedef struct {
+	uintptr_t offset;
+	uintptr_t length;
+} scui_lang_item_t;
+#endif
+
+extern const void * const scui_lang_parser_table[756 * 7];
 
 typedef enum {
 	scui_lang_str_num = 756,
@@ -774,13 +781,13 @@ typedef enum {
 	scui_lang_type_num = 7,
 	scui_lang_type_multi = SCUI_HANDLE_SYSTEM - 1,
 	scui_lang_type_ascii = SCUI_HANDLE_SYSTEM - 2,
-	scui_lang_type_zh = scui_lang_str_num * 0 + scui_lang_ofs_num,
-	scui_lang_type_en = scui_lang_str_num * 1 + scui_lang_ofs_num,
-	scui_lang_type_de = scui_lang_str_num * 2 + scui_lang_ofs_num,
-	scui_lang_type_fra = scui_lang_str_num * 3 + scui_lang_ofs_num,
-	scui_lang_type_nl = scui_lang_str_num * 4 + scui_lang_ofs_num,
-	scui_lang_type_pt = scui_lang_str_num * 5 + scui_lang_ofs_num,
-	scui_lang_type_jp = scui_lang_str_num * 6 + scui_lang_ofs_num,
+	scui_lang_type_zh	= scui_lang_str_num * 0 + scui_lang_ofs_num,
+	scui_lang_type_en	= scui_lang_str_num * 1 + scui_lang_ofs_num,
+	scui_lang_type_de	= scui_lang_str_num * 2 + scui_lang_ofs_num,
+	scui_lang_type_fra	= scui_lang_str_num * 3 + scui_lang_ofs_num,
+	scui_lang_type_nl	= scui_lang_str_num * 4 + scui_lang_ofs_num,
+	scui_lang_type_pt	= scui_lang_str_num * 5 + scui_lang_ofs_num,
+	scui_lang_type_jp	= scui_lang_str_num * 6 + scui_lang_ofs_num,
 } scui_lang_type_t;
 
 /*@brief 获取多国语语言类型
@@ -794,6 +801,7 @@ void scui_lang_get(scui_lang_type_t *type);
 void scui_lang_set(scui_lang_type_t *type);
 
 /*@brief 多国语字符串转换
+ *       需要同步拷贝使用
  *@param handle 字符串句柄
  *@param type   语言类型编号
  *@retval 字符串

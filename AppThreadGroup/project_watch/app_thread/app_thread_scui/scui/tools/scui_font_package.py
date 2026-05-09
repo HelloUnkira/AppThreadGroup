@@ -88,7 +88,7 @@ def scui_font_package_all(file_path_list, scui_font_package_list, scui_font_json
             # 信息记录
             pixel_bin_ofs += pixel_bin_len
     scui_font_package_h.write('} scui_font_type_t;\n')
-    scui_font_package_h.write('\nextern const void * scui_font_package_table[%d];\n\n' % scui_font_num)
+    scui_font_package_h.write('\nextern const void * const scui_font_package_table[%d];\n\n' % scui_font_num)
     scui_font_package_h.write('/*@brief 字库语言字号匹配\n')
     scui_font_package_h.write(' *@param lang 字库语言类型\n')
     scui_font_package_h.write(' *@param size 字库字号\n')
@@ -96,7 +96,7 @@ def scui_font_package_all(file_path_list, scui_font_package_list, scui_font_json
     scui_font_package_h.write('scui_handle_t scui_font_match(scui_font_lang_t lang, scui_handle_t size);\n')
     scui_font_package_h.write('\n#endif\n')
     # 填充数据表
-    scui_font_package_c.write('const void * scui_font_package_table[%d] = {\n' % scui_font_num)
+    scui_font_package_c.write('const void * const scui_font_package_table[%d] = {\n' % scui_font_num)
     for font_item in scui_font_json['info']:
         if font_item['lang'] not in scui_font_lang:
             continue

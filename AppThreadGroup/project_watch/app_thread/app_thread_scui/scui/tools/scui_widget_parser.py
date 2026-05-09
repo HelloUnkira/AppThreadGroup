@@ -32,10 +32,10 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
                 print(e)
                 return
     scui_widget_parser_h.write('} scui_widget_parser_handle_t;\n\n')
-    scui_widget_parser_h.write('extern const void * scui_widget_parser_table[%s];\n\n' % scui_widget_parser_handle_num)
+    scui_widget_parser_h.write('extern const void * const scui_widget_parser_table[%s];\n\n' % scui_widget_parser_handle_num)
     scui_widget_parser_h.write('#endif\n')
     # 填充函数定义或者声明
-    scui_widget_parser_c.write('#if defined(SCUI_WIDGET_EVENT_USE_EMPTY) && SCUI_WIDGET_EVENT_USE_EMPTY == 1\n')
+    scui_widget_parser_c.write('#if defined(SCUI_WIDGET_PARSER_EVENT_CB_EMPTY) && SCUI_WIDGET_PARSER_EVENT_CB_EMPTY == 1\n')
     for scene in scene_list:
         for widget in scene['widget']:
             try:
@@ -93,7 +93,7 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
                 scui_widget_parser_c.write('\t.%-30s = %s,\n' % ("widget.child_num", str(scui_widget_field_child_num)))
             scui_widget_parser_c.write('};\n\n')
     # 填充数据表
-    scui_widget_parser_c.write('const void * scui_widget_parser_table[%s] = {\n' % scui_widget_parser_handle_num)
+    scui_widget_parser_c.write('const void * const scui_widget_parser_table[%s] = {\n' % scui_widget_parser_handle_num)
     for scene in scene_list:
         for widget in scene['widget']:
             scui_widget_tag = 'scui_widget_' + widget['widget.myself']

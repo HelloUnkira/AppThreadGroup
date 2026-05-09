@@ -53,3 +53,25 @@ void scui_font_src_read(scui_font_src_t *src, void *buf, uintptr_t size)
 {
     fread(buf, size, 1, src->file);
 }
+
+/*@brief 语言文件读取指定资源
+ *@param src  字库文件实例
+ *@param buf  数据缓冲区
+ *@param size 数据大小
+ */
+void scui_lang_src_read(void *buf, uintptr_t ofs, uintptr_t size)
+{
+    /* 字库文件共用一个文件夹 */
+    const char *lang_path = ".";
+    const char *lang_name = "scui_lang_parser.bin";
+    /* 如果是多文件字库管理, 则只需使用name */
+    
+    char path_name[128] = {0};
+    snprintf(path_name, 127, "%s\\%s", lang_path, lang_name);
+    
+    size_t retval = -1;
+    FILE *file = fopen(path_name, "rb+");
+    fseek(file, ofs, SEEK_SET);
+    retval = fread(buf, size, 1, file);
+    fclose(file);
+}

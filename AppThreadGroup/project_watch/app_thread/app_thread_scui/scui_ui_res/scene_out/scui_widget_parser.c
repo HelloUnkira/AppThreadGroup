@@ -3,7 +3,7 @@
 
 #include "scui.h"
 
-#if defined(SCUI_WIDGET_EVENT_USE_EMPTY) && SCUI_WIDGET_EVENT_USE_EMPTY == 1
+#if defined(SCUI_WIDGET_PARSER_EVENT_CB_EMPTY) && SCUI_WIDGET_PARSER_EVENT_CB_EMPTY == 1
 static void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
 {
 }
@@ -1220,7 +1220,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.widget.child_num               = 10,
 };
 
-const void * scui_widget_parser_table[72] = {
+const void * const scui_widget_parser_table[72] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,

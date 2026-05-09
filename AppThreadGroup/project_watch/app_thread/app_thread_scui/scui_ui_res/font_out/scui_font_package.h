@@ -37,7 +37,7 @@ typedef enum {
 	scui_font_tinyTTFttf, // 0x3013
 } scui_font_type_t;
 
-extern const void * scui_font_package_table[20];
+extern const void * const scui_font_package_table[20];
 
 /*@brief 字库语言字号匹配
  *@param lang 字库语言类型

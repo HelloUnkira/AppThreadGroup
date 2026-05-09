@@ -175,7 +175,7 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
         scui_image_ofs = hex(eval(offset_value) + scui_image_num)
         scui_image_parser_h.write('\tscui_image_%s, // %s\n' % (scui_image_tag, scui_image_ofs))
     scui_image_parser_h.write('} scui_image_parser_handle_t;\n\n')
-    scui_image_parser_h.write('extern const void * scui_image_parser_table[%d];\n\n' % len(file_path_list))
+    scui_image_parser_h.write('extern const void * const scui_image_parser_table[%d];\n\n' % len(file_path_list))
     scui_image_parser_h.write('//<%6s,%6s,%6s,%6s,%2s> handle\n' % ('w', 'h', 'size_raw', 'size_mem', 'com_pct'))
     # 对目标图片集合进行流式处理,提取数据内容
     for file in file_path_list:
@@ -346,7 +346,7 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
     scui_image_parser_h.write('\n//static pct:%2.2f\n' % (float(pixel_bin_all) / float(pixel_raw_all)))
     scui_image_parser_h.write('\n#endif\n')
     # 填充数据表
-    scui_image_parser_c.write('const void * scui_image_parser_table[%d] = {\n' % len(file_path_list))
+    scui_image_parser_c.write('const void * const scui_image_parser_table[%d] = {\n' % len(file_path_list))
     for file in file_path_list:
         scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
         scui_image_parser_c.write('\t(void *)&%s,\n' % scui_image_tag)

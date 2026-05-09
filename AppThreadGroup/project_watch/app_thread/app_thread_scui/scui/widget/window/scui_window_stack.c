@@ -51,7 +51,7 @@ static void scui_window_stack_check(void)
 /*@brief 窗口栈更新栈顶窗口(内部接口)
  *@param handle 窗口句柄
  */
-void scui_window_stack_switch_top(scui_handle_t handle)
+void scui_window_stack_switch(scui_handle_t handle)
 {
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     SCUI_ASSERT(scui_window_mgr.stack_args.top > 0);

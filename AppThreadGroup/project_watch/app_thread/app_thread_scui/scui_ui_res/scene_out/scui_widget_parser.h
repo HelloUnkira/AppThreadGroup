@@ -80,6 +80,6 @@ typedef enum {
 	SCUI_UI_SCENE_TEST, // 4167, 0x1047
 } scui_widget_parser_handle_t;
 
-extern const void * scui_widget_parser_table[72];
+extern const void * const scui_widget_parser_table[72];
 
 #endif

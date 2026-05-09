@@ -40,4 +40,11 @@ void scui_font_src_seek(scui_font_src_t *src, uintptr_t ofs);
  */
 void scui_font_src_read(scui_font_src_t *src, void *buf, uintptr_t size);
 
+/*@brief 语言文件读取指定资源
+ *@param src  字库文件实例
+ *@param buf  数据缓冲区
+ *@param size 数据大小
+ */
+void scui_lang_src_read(void *buf, uintptr_t ofs, uintptr_t size);
+
 #endif
