@@ -283,13 +283,15 @@ static void scui_event_respond(scui_event_t *event)
             
             if (elapse_tick >= SCUI_WIDGET_ANIMA_DRAW_TIME) {
                 elapse_tick -= SCUI_WIDGET_ANIMA_DRAW_TIME;
-                scui_window_list_event_draw();
+                event->type  = scui_event_draw;
+                scui_window_event_notify(event);
+                event->type  = scui_event_anima_elapse;
             }
             #endif
             
             /* 系统事件发给所有窗口(同步) */
             event->style.sync = true;
-            scui_window_list_event_notify(event);
+            scui_window_event_notify(event);
             return;
         }
         break;
@@ -305,7 +307,7 @@ static void scui_event_respond(scui_event_t *event)
             
             /* 系统事件发给所有窗口(同步) */
             event->style.sync = true;
-            scui_window_list_event_notify(event);
+            scui_window_event_notify(event);
             return;
         }
         break;

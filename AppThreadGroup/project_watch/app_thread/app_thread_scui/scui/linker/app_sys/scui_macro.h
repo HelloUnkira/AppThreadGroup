@@ -4,6 +4,9 @@
 /* 转为适配app_sys_lib宏
  */
 
+#define scui_bit_get        app_sys_bit_get
+#define scui_bit_set        app_sys_bit_set
+#define scui_bit_rst        app_sys_bit_rst
 #define scui_bit_ext_get    app_sys_bit_ext_get
 #define scui_bit_ext_set    app_sys_bit_ext_set
 #define scui_bit_ext_rst    app_sys_bit_ext_rst

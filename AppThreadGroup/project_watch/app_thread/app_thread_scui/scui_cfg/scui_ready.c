@@ -147,10 +147,10 @@ void scui_custom_ready(void)
     scui_window_switch_set_cfg_type(scui_window_switch_move);
     
     /* 窗口交互参数 */
-    scui_window_switch_args_t cfg_args = {0};
-    scui_window_switch_get_cfg_args(&cfg_args);
-    cfg_args.shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
-    scui_window_switch_set_cfg_args(&cfg_args);
+    scui_handle_t shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
+    scui_window_transform_flap1_shadow(shadow);
+    scui_window_transform_flap2_shadow(shadow);
+    scui_window_transform_cube_shadow(shadow);
 }
 
 /*@brief 初始化scui自定义显示

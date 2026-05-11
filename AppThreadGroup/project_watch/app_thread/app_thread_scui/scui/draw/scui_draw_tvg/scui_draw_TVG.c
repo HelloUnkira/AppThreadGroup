@@ -7,6 +7,9 @@
 
 #include "scui.h"
 
+/* 全局绘图资源(内部资源, 内部使用): */
+extern scui_draw_graph_t scui_draw_graph;
+
 /* 检查配置: */
 #include "scui_draw_thorvg.h"
 #if SCUI_DRAW_USE_THORVG != SCUI_DRAW_USE_THORVG_SRC

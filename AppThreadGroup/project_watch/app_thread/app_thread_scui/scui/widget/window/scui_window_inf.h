@@ -121,16 +121,6 @@ void scui_window_switch_get_cfg_dir(scui_opt_dir_t *cfg_dir);
  */
 void scui_window_switch_set_cfg_dir(scui_opt_dir_t cfg_dir);
 
-/*@brief 获取窗口切换参数
- *@param cfg_args 窗口切换参数
- */
-void scui_window_switch_get_cfg_args(scui_window_switch_args_t *cfg_args);
-
-/*@brief 设置窗口切换参数
- *@param cfg_args 窗口切换参数
- */
-void scui_window_switch_set_cfg_args(scui_window_switch_args_t *cfg_args);
-
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/
@@ -145,6 +135,7 @@ void scui_window_active(scui_handle_t handle);
  *@retval 窗口句柄
  */
 scui_handle_t scui_window_active_last(scui_handle_t index);
+#define scui_window_active_curr() scui_window_active_last(0)
 
 /*************************************************************************************************/
 /*************************************************************************************************/
@@ -250,8 +241,6 @@ scui_window_stack_cover_by(handle, scui_window_switch_auto, scui_opt_dir_none)  
 scui_window_stack_goback_by(handle, scui_window_switch_auto, scui_opt_dir_none)                     \
 
 /*************************************************************************************************/
-/*************************************************************************************************/
-/*************************************************************************************************/
 
 /*@brief 窗口跳转
  *@param handle 窗口句柄
@@ -261,12 +250,24 @@ scui_window_stack_goback_by(handle, scui_window_switch_auto, scui_opt_dir_none) 
  */
 bool scui_window_switch_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_opt_dir_t dir);
 
-/* 窗口跳转:自动模式 */
+/* 窗口跳转:自适应 */
 static inline bool scui_window_switch_jump_auto(scui_handle_t handle)
 {return scui_window_switch_jump(handle, scui_window_switch_auto, scui_opt_dir_none);}
 
 /*************************************************************************************************/
-/*************************************************************************************************/
+
+/*@brief 窗口切换参数配置
+ */
+void scui_window_transform_flap1_shadow(scui_handle_t shadow);
+
+/*@brief 窗口切换参数配置
+ */
+void scui_window_transform_flap2_shadow(scui_handle_t shadow);
+
+/*@brief 窗口切换参数配置
+ */
+void scui_window_transform_cube_shadow(scui_handle_t shadow);
+
 /*************************************************************************************************/
 
 #endif

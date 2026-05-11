@@ -405,9 +405,6 @@ typedef struct {
  */
 void scui_draw_graph_ready(void);
 
-/* 全局绘图资源(内部资源, 内部使用): */
-extern scui_draw_graph_t scui_draw_graph;
-
 /*****************************************************************************/
 
 /*@brief 线条绘制(简易绘制)

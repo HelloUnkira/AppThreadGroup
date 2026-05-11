@@ -8,7 +8,7 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_handle_t       sibling[4];         /* 临近界面句柄:0:上;1:下;2:左;3:右; */
-    scui_enumfd_t       switch_type[4];     /* 临近界面交互风格 */
+    scui_handle_t       switch_type[4];     /* 临近界面交互风格 */
     scui_opt_pos_t      switch_enc;         /* 临近界面旋钮交互(上下左右) */
     scui_opt_pos_t      switch_key;         /* 临近界面按键交互(上下左右) */
     scui_opt_dir_t      switch_enc_way;     /* 临近界面旋钮方向(水平垂直) */
@@ -30,7 +30,7 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_handle_t       sibling[4];         /* 临近界面句柄:0:上;1:下;2:左;3:右; */
-    scui_enumfd_t       switch_type[4];     /* 临近界面交互风格 */
+    scui_handle_t       switch_type[4];     /* 临近界面交互风格 */
     scui_opt_pos_t      switch_enc;         /* 临近界面旋钮交互(上下左右) */
     scui_opt_pos_t      switch_key;         /* 临近界面按键交互(上下左右) */
     scui_opt_dir_t      switch_enc_way;     /* 临近界面旋钮方向(水平垂直) */
@@ -92,58 +92,6 @@ typedef enum {
     scui_window_switch_single_e,
 } scui_window_switch_type_t;
 
-typedef struct {
-    /* 这部分参数未定, 暂保留自由度 */
-    scui_handle_t shadow;
-} scui_window_switch_args_t;
-
-typedef struct {
-    scui_handle_t curr_num;                         /* 窗口列表数量(当前存在) */
-    scui_handle_t curr[SCUI_WINDOW_LIST_LIMIT];     /* 窗口管理列表(当前存在) */
-    scui_handle_t acts[SCUI_WINDOW_LIST_LIMIT];     /* 窗口活跃序列(历史活跃记录) */
-} scui_window_list_t;
-
-typedef struct {
-    scui_handle_t   list[SCUI_WINDOW_LIST_LIMIT];
-    scui_enumfd_t   type;                           /* 窗口切换风格(当前) */
-    scui_enumfd_t   cfg_type;                       /* 窗口切换风格(配置) */
-    scui_opt_dir_t  cfg_dir;                        /* 窗口切换方向(配置) */
-    scui_opt_dir_t  dir;                            /* 窗口切换方向(当前) */
-    scui_opt_pos_t  pos;                            /* 窗口切换位置(当前) */
-    scui_point_t    point;                          /* 窗口切换偏移(坐标点) */
-    scui_coord_t    pct;                            /* 窗口切换进度(百分比) */
-    scui_coord_t    ofs;                            /* 窗口切换偏移(像素点) */
-    scui_handle_t   anima;                          /* 窗口切换动画 */
-    scui_coord_t    anima_speed[5];                 /* 窗口切换动画速度[ptr,enc,key,auto,jump](像素点/1s) */
-    scui_map_cb_t   anima_path[5];                  /* 窗口切换动画轨迹[ptr,enc,key,auto,jump] */
-    scui_boolfd_t   anima_tag[5];                   /* 窗口切换动画标记[ptr,enc,key,auto,jump] */
-    scui_sbitfd_t   lock_jump:1;                    /* 窗口切换锁 */
-    scui_sbitfd_t   lock_move:1;                    /* 窗口切换锁 */
-    scui_sbitfd_t   mask_fling:1;                   /* 窗口切换锁 */
-    
-    /* 窗口切换参数(配置) */
-    /* 参数未定:保留自由度 */
-    scui_window_switch_args_t cfg_args;
-} scui_window_switch_t;
-
-typedef struct {
-    scui_widget_t *list_0[SCUI_WINDOW_LIST_LIMIT];  /* 窗口管理列表(有独立画布) */
-    scui_widget_t *list_1[SCUI_WINDOW_LIST_LIMIT];  /* 窗口管理列表(无独立画布) */
-    scui_handle_t  list_0_num;                      /* 窗口列表数量(有独立画布) */
-    scui_handle_t  list_1_num;                      /* 窗口列表数量(无独立画布) */
-    scui_widget_t *refr_widget;                     /* 窗口送显模式控件实例地址 */
-    scui_sbitfd_t  refr_switch:1;                   /* 窗口送显模式标记 */
-} scui_window_blend_t;
-
-typedef struct {
-    scui_handle_t list[SCUI_WINDOW_STACK_NEST];
-    scui_handle_t list_rcd[SCUI_WINDOW_STACK_NEST];
-    scui_handle_t list_bak[SCUI_WINDOW_STACK_NEST];
-    scui_handle_t node_bak;
-    scui_handle_t top_bak;
-    scui_handle_t top;
-} scui_window_stack_t;
-
 /*@brief 窗口列表添加窗口
  *@param handle 窗口句柄
  */
@@ -154,14 +102,16 @@ void scui_window_list_add(scui_handle_t handle);
  */
 void scui_window_list_del(scui_handle_t handle);
 
-/*@brief 窗口列表事件(绘制)
+/*@brief 窗口列表隐藏所有窗口
+ *@param handle 窗口句柄(不隐藏:忽略它)
+ *@param source 仅隐藏有资源窗口
  */
-void scui_window_list_event_draw(void);
+void scui_window_list_hide(scui_handle_t handle, bool source);
 
-/*@brief 窗口列表事件通知
+/*@brief 窗口事件通知
  *@param event 事件
  */
-void scui_window_list_event_notify(scui_event_t *event);
+void scui_window_event_notify(scui_event_t *event);
 
 /*@brief 窗口刷新(仅调度使用)
  */
@@ -184,6 +134,21 @@ void scui_window_stack_switch(scui_handle_t handle);
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/
+
+/*@brief 窗口切换风格
+ *@retval 窗口切换风格
+ */
+scui_window_switch_type_t scui_window_switch_type(void);
+
+/*@brief 窗口切换方向
+ *@retval 窗口切换方向
+ */
+scui_opt_dir_t scui_window_switch_dir(void);
+
+/*@brief 窗口切换进度
+ *@retval 窗口切换进度
+ */
+scui_coord_t scui_window_switch_pct(void);
 
 /*@brief 窗口切换事件处理回调
  *@param event 事件

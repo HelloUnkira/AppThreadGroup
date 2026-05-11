@@ -7,11 +7,14 @@
 
 #include "scui.h"
 
-/* 窗口管理器资源(内部资源, 内部使用): */
-extern scui_window_list_t   scui_window_list;
-extern scui_window_stack_t  scui_window_stack;
-extern scui_window_blend_t  scui_window_blend;
-extern scui_window_switch_t scui_window_switch;
+static struct {
+    scui_handle_t list[SCUI_WINDOW_STACK_NEST];
+    scui_handle_t list_rcd[SCUI_WINDOW_STACK_NEST];
+    scui_handle_t list_bak[SCUI_WINDOW_STACK_NEST];
+    scui_handle_t node_bak;
+    scui_handle_t top_bak;
+    scui_handle_t top;
+} scui_window_stack = {0};
 
 /*@brief 窗口栈记录
  *@param handle 窗口句柄
