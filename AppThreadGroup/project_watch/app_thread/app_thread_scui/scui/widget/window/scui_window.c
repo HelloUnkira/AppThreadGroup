@@ -7,6 +7,12 @@
 
 #include "scui.h"
 
+/* 窗口管理器资源: */
+scui_window_list_t   scui_window_list;
+scui_window_stack_t  scui_window_stack;
+scui_window_blend_t  scui_window_blend;
+scui_window_switch_t scui_window_switch;
+
 /*@brief 控件构造
  *@param inst       控件实例
  *@param inst_maker 控件实例构造器

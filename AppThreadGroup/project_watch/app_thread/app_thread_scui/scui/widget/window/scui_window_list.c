@@ -7,7 +7,11 @@
 
 #include "scui.h"
 
-scui_window_mgr_t scui_window_mgr = {0};
+/* 窗口管理器资源(内部资源, 内部使用): */
+extern scui_window_list_t   scui_window_list;
+extern scui_window_stack_t  scui_window_stack;
+extern scui_window_blend_t  scui_window_blend;
+extern scui_window_switch_t scui_window_switch;
 
 /*@brief 窗口列表添加窗口
  *@param handle 窗口句柄
@@ -17,14 +21,14 @@ void scui_window_list_add(scui_handle_t handle)
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
     
     for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
-        if (scui_window_mgr.list_args.curr[idx] == handle) {
+        if (scui_window_list.curr[idx] == handle) {
             SCUI_LOG_INFO("redundant operation");
             return;
         }
     for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
-        if (scui_window_mgr.list_args.curr[idx] == SCUI_HANDLE_INVALID) {
-            scui_window_mgr.list_args.curr[idx]  = handle;
-            scui_window_mgr.list_args.curr_num++;
+        if (scui_window_list.curr[idx] == SCUI_HANDLE_INVALID) {
+            scui_window_list.curr[idx]  = handle;
+            scui_window_list.curr_num++;
             return;
         }
     SCUI_LOG_ERROR("window %u add fail", handle);
@@ -39,16 +43,16 @@ void scui_window_list_del(scui_handle_t handle)
     
     #if 0 /* 怪,这个应该用不着 */
     /* 如果移除的是焦点,记得清空 */
-    if (scui_window_mgr.list_args.acts[0] == handle)
-        scui_window_mgr.list_args.acts[0]  = SCUI_HANDLE_INVALID;
-    if (scui_window_mgr.list_args.acts[1] == handle)
-        scui_window_mgr.list_args.acts[1]  = SCUI_HANDLE_INVALID;
+    if (scui_window_list.acts[0] == handle)
+        scui_window_list.acts[0]  = SCUI_HANDLE_INVALID;
+    if (scui_window_list.acts[1] == handle)
+        scui_window_list.acts[1]  = SCUI_HANDLE_INVALID;
     #endif
     
     for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
-        if (scui_window_mgr.list_args.curr[idx] == handle) {
-            scui_window_mgr.list_args.curr[idx]  = SCUI_HANDLE_INVALID;
-            scui_window_mgr.list_args.curr_num--;
+        if (scui_window_list.curr[idx] == handle) {
+            scui_window_list.curr[idx]  = SCUI_HANDLE_INVALID;
+            scui_window_list.curr_num--;
             return;
         }
     SCUI_LOG_ERROR("window %u del fail", handle);
@@ -161,17 +165,17 @@ static void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scu
  */
 static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
 {
-    SCUI_ASSERT(scui_window_mgr.switch_args.cfg_type > scui_window_switch_single_s);
-    SCUI_ASSERT(scui_window_mgr.switch_args.cfg_type < scui_window_switch_single_e);
+    SCUI_ASSERT(scui_window_switch.cfg_type > scui_window_switch_single_s);
+    SCUI_ASSERT(scui_window_switch.cfg_type < scui_window_switch_single_e);
     
     #if SCUI_MEM_FEAT_MINI
     /* 小内存方案无独立画布 */
     return;
     #endif
     
-    scui_window_switch_type_t switch_type = scui_window_mgr.switch_args.type;
+    scui_window_switch_type_t switch_type = scui_window_switch.type;
     if (switch_type == scui_window_switch_none)
-        switch_type  = scui_window_mgr.switch_args.cfg_type;
+        switch_type  = scui_window_switch.cfg_type;
     
     bool mode_simple = false;
     /* 1.单一窗口直接渲染 */
@@ -281,7 +285,7 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     scui_alpha_t alpha_tar = scui_alpha_cover;
     scui_point_t point = {0};
     /* 对窗口进行坐标偏移处理 */
-    switch (scui_window_mgr.switch_args.type) {
+    switch (scui_window_switch.type) {
     default:
     case scui_window_switch_move:
         /* 其他风格都忽略为move */
@@ -290,8 +294,8 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         widget_cur = list[0];
         widget_tar = list[1];
         scui_widget_move_pos(widget_cur->myself, &point);
-        /* alpha_cur = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct); */
-        /* alpha_tar = scui_alpha_pct(scui_window_mgr.switch_args.pct); */
+        /* alpha_cur = scui_alpha_pct(100 - scui_window_switch.pct); */
+        /* alpha_tar = scui_alpha_pct(scui_window_switch.pct); */
         /* scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true); */
         /* scui_widget_alpha_mix(widget_tar->myself, alpha_tar, true); */
         break;
@@ -300,8 +304,8 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         widget_cur = list[1];
         widget_tar = list[0];
         scui_widget_move_pos(widget_tar->myself, &point);
-        /* alpha_cur = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct); */
-        /* alpha_tar = scui_alpha_pct(scui_window_mgr.switch_args.pct); */
+        /* alpha_cur = scui_alpha_pct(100 - scui_window_switch.pct); */
+        /* alpha_tar = scui_alpha_pct(scui_window_switch.pct); */
         /* scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true); */
         /* scui_widget_alpha_mix(widget_tar->myself, alpha_tar, true); */
         break;
@@ -344,7 +348,7 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     
     #if SCUI_MEM_FEAT_MINI
     /* 对窗口进行坐标偏移处理 */
-    switch (scui_window_mgr.switch_args.type) {
+    switch (scui_window_switch.type) {
     default:
     case scui_window_switch_move:
         /* 其他风格都忽略为move */
@@ -372,10 +376,10 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
 void scui_window_list_event_draw(void)
 {
     for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
-        if (scui_window_mgr.list_args.curr[idx] == SCUI_HANDLE_INVALID)
+        if (scui_window_list.curr[idx] == SCUI_HANDLE_INVALID)
             continue;
         
-        scui_handle_t handle = scui_window_mgr.list_args.curr[idx];
+        scui_handle_t handle = scui_window_list.curr[idx];
         scui_widget_draw(handle, NULL, false);
     }
 }
@@ -387,12 +391,58 @@ void scui_window_list_event_notify(scui_event_t *event)
 {
     scui_handle_t handle = event->object;
     for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
-        if (scui_window_mgr.list_args.curr[idx] == SCUI_HANDLE_INVALID)
+        if (scui_window_list.curr[idx] == SCUI_HANDLE_INVALID)
             continue;
         
-        event->object = scui_window_mgr.list_args.curr[idx];
+        event->object = scui_window_list.curr[idx];
         scui_event_notify(event);
         event->object = handle;
+    }
+}
+
+/*@brief 窗口管理器画布就绪
+ *       分类整理所需处理的窗口
+ */
+static void scui_window_surface_ready(void)
+{
+    scui_window_blend.list_0_num = 0;
+    scui_window_blend.list_1_num = 0;
+    
+    for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
+        if (scui_window_list.curr[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        scui_handle_t  handle = scui_window_list.curr[idx];
+        scui_widget_t *widget = scui_handle_source_check(handle);
+        scui_window_t *window = (void *)widget;
+        SCUI_ASSERT(scui_handle_remap(handle));
+        SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+        
+        if (scui_widget_surface_only(widget) && !window->resident)
+            scui_window_blend.list_0[scui_window_blend.list_0_num++] = widget;
+        else
+            scui_window_blend.list_1[scui_window_blend.list_1_num++] = widget;
+        
+        /* 小内存方案没有窗口独立画布混合 */
+        #if SCUI_MEM_FEAT_MINI
+        if (scui_widget_surface_only(widget))
+            SCUI_ASSERT(false);
+        #endif
+    }
+    
+    /* 依照窗口层级进行排序 */
+    scui_window_list_sort(scui_window_blend.list_0, scui_window_blend.list_0_num);
+    scui_window_list_sort(scui_window_blend.list_1, scui_window_blend.list_1_num);
+    
+    scui_handle_t list_lvl_0_ofs = 0;
+    scui_handle_t list_lvl_1_ofs = 0;
+    /* 仅窗口切换时才应用特效渲染 */
+    if (!scui_widget_scroll_state(0x02)) {
+        /* 过滤掉被覆盖的绘制界面 */
+        scui_window_list_filter(scui_window_blend.list_0, scui_window_blend.list_0_num, &list_lvl_0_ofs);
+        /* 去除掉覆盖的窗口 */
+        for (scui_multi_t idx = 0; idx + list_lvl_0_ofs < scui_window_blend.list_0_num; idx++)
+            scui_window_blend.list_0[idx] = scui_window_blend.list_0[idx + list_lvl_0_ofs];
+        scui_window_blend.list_0_num -= list_lvl_0_ofs;
     }
 }
 
@@ -404,65 +454,19 @@ static bool scui_window_surface_switch(uint8_t state, scui_widget_t **widget)
 {
     switch (state) {
     case 0x00:
-        scui_window_mgr.refr_switch = true;
-        scui_window_mgr.refr_widget = *widget;
-        return scui_window_mgr.refr_switch;
+        scui_window_blend.refr_switch = true;
+        scui_window_blend.refr_widget = *widget;
+        return scui_window_blend.refr_switch;
     case 0x01:
-        scui_window_mgr.refr_switch = false;
-        scui_window_mgr.refr_widget = *widget;
-        return scui_window_mgr.refr_switch;
+        scui_window_blend.refr_switch = false;
+        scui_window_blend.refr_widget = *widget;
+        return scui_window_blend.refr_switch;
     case 0x02:
-        *widget = scui_window_mgr.refr_widget;
-        return scui_window_mgr.refr_switch;
+        *widget = scui_window_blend.refr_widget;
+        return scui_window_blend.refr_switch;
     default:
         SCUI_LOG_ERROR("unknown state");
         return false;
-    }
-}
-
-/*@brief 窗口管理器画布就绪
- *       分类整理所需处理的窗口
- */
-static void scui_window_surface_ready(void)
-{
-    scui_window_mgr.blend_args.list_0_num = 0;
-    scui_window_mgr.blend_args.list_1_num = 0;
-    
-    for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
-        if (scui_window_mgr.list_args.curr[idx] == SCUI_HANDLE_INVALID)
-            continue;
-        scui_handle_t  handle = scui_window_mgr.list_args.curr[idx];
-        scui_widget_t *widget = scui_handle_source_check(handle);
-        scui_window_t *window = (void *)widget;
-        SCUI_ASSERT(scui_handle_remap(handle));
-        SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
-        
-        if (scui_widget_surface_only(widget) && !window->resident)
-            scui_window_mgr.blend_args.list_0[scui_window_mgr.blend_args.list_0_num++] = widget;
-        else
-            scui_window_mgr.blend_args.list_1[scui_window_mgr.blend_args.list_1_num++] = widget;
-        
-        /* 小内存方案没有窗口独立画布混合 */
-        #if SCUI_MEM_FEAT_MINI
-        if (scui_widget_surface_only(widget))
-            SCUI_ASSERT(false);
-        #endif
-    }
-    
-    /* 依照窗口层级进行排序 */
-    scui_window_list_sort(scui_window_mgr.blend_args.list_0, scui_window_mgr.blend_args.list_0_num);
-    scui_window_list_sort(scui_window_mgr.blend_args.list_1, scui_window_mgr.blend_args.list_1_num);
-    
-    scui_handle_t list_lvl_0_ofs = 0;
-    scui_handle_t list_lvl_1_ofs = 0;
-    /* 仅窗口切换时才应用特效渲染 */
-    if (!scui_widget_scroll_state(0x02)) {
-        /* 过滤掉被覆盖的绘制界面 */
-        scui_window_list_filter(scui_window_mgr.blend_args.list_0, scui_window_mgr.blend_args.list_0_num, &list_lvl_0_ofs);
-        /* 去除掉覆盖的窗口 */
-        for (scui_multi_t idx = 0; idx + list_lvl_0_ofs < scui_window_mgr.blend_args.list_0_num; idx++)
-            scui_window_mgr.blend_args.list_0[idx] = scui_window_mgr.blend_args.list_0[idx + list_lvl_0_ofs];
-        scui_window_mgr.blend_args.list_0_num -= list_lvl_0_ofs;
     }
 }
 
@@ -479,8 +483,8 @@ static void scui_window_surface_blend(void)
     #if SCUI_WINDOW_SWITCH_MODE
     scui_widget_t *widget_only = NULL;
     scui_window_surface_switch(0x01, &widget_only);
-    if (scui_window_mgr.blend_args.list_0_num == 1 && scui_window_mgr.blend_args.list_1_num == 0) {
-        widget_only = scui_window_mgr.blend_args.list_0[0];
+    if (scui_window_blend.list_0_num == 1 && scui_window_blend.list_1_num == 0) {
+        widget_only = scui_window_blend.list_0[0];
         
         scui_surface_t *surface_fb = scui_frame_buffer_draw();
         SCUI_ASSERT(surface_fb->hor_res == SCUI_HOR_RES);
@@ -491,7 +495,7 @@ static void scui_window_surface_blend(void)
             widget_only->surface->ver_res == surface_fb->ver_res) {
             
             scui_window_surface_switch(0x00, &widget_only);
-            scui_widget_surface_swap(scui_window_mgr.blend_args.list_0[0], surface_fb);
+            scui_widget_surface_swap(scui_window_blend.list_0[0], surface_fb);
             SCUI_LOG_INFO("blend to switch mode");
             return;
         }
@@ -500,10 +504,10 @@ static void scui_window_surface_blend(void)
     
     /* 第一轮混合:处理所有常规独立画布 */
     scui_tick_stat(scui_tick_stat_draw_rcd);
-    scui_window_list_blend(scui_window_mgr.blend_args.list_0, scui_window_mgr.blend_args.list_0_num);
+    scui_window_list_blend(scui_window_blend.list_0, scui_window_blend.list_0_num);
     scui_tick_stat(scui_tick_stat_draw_sum);
     /* 第二轮混合:处理所有特殊独立画布或共享画布 */
-    scui_window_list_render(scui_window_mgr.blend_args.list_1, scui_window_mgr.blend_args.list_1_num);
+    scui_window_list_render(scui_window_blend.list_1, scui_window_blend.list_1_num);
 }
 
 /*@brief 窗口刷新(仅调度使用)
@@ -562,7 +566,7 @@ void scui_window_active(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     
-    if (scui_window_mgr.list_args.acts[0] == handle) {
+    if (scui_window_list.acts[0] == handle) {
         scui_widget_draw(handle, NULL, false);
         SCUI_LOG_INFO("redundant operation");
         return;
@@ -572,7 +576,7 @@ void scui_window_active(scui_handle_t handle)
     /* 焦点必须在窗口列表中 */
     bool not_match_yet = true;
     for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
-        if (scui_window_mgr.list_args.curr[idx] == handle) {
+        if (scui_window_list.curr[idx] == handle) {
             not_match_yet = false;
             break;
         }
@@ -584,19 +588,19 @@ void scui_window_active(scui_handle_t handle)
     
     /* 清除当前活跃窗口, 后记录新的窗口 */
     for (scui_multi_t idx = SCUI_WINDOW_LIST_LIMIT - 1; idx > 0; idx--)
-        scui_window_mgr.list_args.acts[idx] = scui_window_mgr.list_args.acts[idx - 1];
-        scui_window_mgr.list_args.acts[0] = handle;
+        scui_window_list.acts[idx] = scui_window_list.acts[idx - 1];
+        scui_window_list.acts[0] = handle;
     
     /* 先失活旧的焦点窗口 */
-    if (scui_handle_remap(scui_window_mgr.list_args.acts[1])) {
-        scui_event_define(event, scui_window_mgr.list_args.acts[1], true, scui_event_focus_lost, NULL);
+    if (scui_handle_remap(scui_window_list.acts[1])) {
+        scui_event_define(event, scui_window_list.acts[1], true, scui_event_focus_lost, NULL);
         SCUI_LOG_WARN("window %u focus lost", event.object);
         scui_event_notify(&event);
     }
     
     /* 后激活新的焦点窗口 */
-    if (scui_handle_remap(scui_window_mgr.list_args.acts[0])) {
-        scui_event_define(event, scui_window_mgr.list_args.acts[0], true, scui_event_focus_get, NULL);
+    if (scui_handle_remap(scui_window_list.acts[0])) {
+        scui_event_define(event, scui_window_list.acts[0], true, scui_event_focus_get, NULL);
         SCUI_LOG_WARN("window %u focus get", event.object);
         scui_event_notify(&event);
         
@@ -613,6 +617,6 @@ void scui_window_active(scui_handle_t handle)
 scui_handle_t scui_window_active_last(scui_handle_t index)
 {
     SCUI_ASSERT(index < SCUI_WINDOW_LIST_LIMIT);
-    /* SCUI_ASSERT(scui_handle_remap(scui_window_mgr.list_args.acts[index])); */
-    return scui_window_mgr.list_args.acts[index];
+    /* SCUI_ASSERT(scui_handle_remap(scui_window_list.acts[index])); */
+    return scui_window_list.acts[index];
 }

@@ -171,6 +171,16 @@ void scui_window_stack_top(scui_handle_t *handle);
  */
 void scui_window_stack_rcd(scui_handle_t *handle, scui_handle_t index);
 
+/*@brief 窗口栈自定义更变
+ *@param switch_type  切换类型
+ *@param switch_dir   切换方向
+ *@param adjust       更变回调(stack 窗口栈信息;top 栈顶信息)
+ *@retval 成功失败
+ */
+bool scui_window_stack_adjust(
+    scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir,
+    void (*adjust)(scui_handle_t *stack, scui_handle_t *top));
+
 /*@brief 窗口栈入栈出栈语义
  *@param handle       窗口句柄
  *@param switch_type  切换类型

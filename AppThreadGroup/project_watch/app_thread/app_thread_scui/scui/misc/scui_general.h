@@ -294,9 +294,11 @@ typedef enum {
     
 } scui_opt_align_t;
 
-/*@brief 通用结构体位域
- */
+/* 通用结构位域 */
+/* 通用枚举标记 */
 typedef uintptr_t scui_sbitfd_t;
+typedef uintptr_t scui_enumfd_t;
+typedef uint8_t   scui_boolfd_t;
 
 /*@brief 操作检查
  */
