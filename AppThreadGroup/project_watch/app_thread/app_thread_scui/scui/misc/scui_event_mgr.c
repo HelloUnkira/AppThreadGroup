@@ -90,9 +90,10 @@ static bool scui_event_cb_check(scui_event_t *event)
         scui_event_enc_fdir,
         scui_event_enc_bdir,
         
-        scui_event_widget_scroll_start,
-        scui_event_widget_scroll_over,
-        scui_event_widget_scroll_keep,
+        scui_event_window_preload,
+        scui_event_scroll_start,
+        scui_event_scroll_over,
+        scui_event_scroll_keep,
     };
     
     for (scui_multi_t idx = 0; idx < scui_arr_len(event_table); idx++)

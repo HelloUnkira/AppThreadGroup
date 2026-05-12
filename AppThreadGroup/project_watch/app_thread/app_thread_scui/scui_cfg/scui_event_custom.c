@@ -41,11 +41,12 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
             [scui_event_size_adjust] =              scui_stringify(scui_event_size_adjust),
             [scui_event_lang_change] =              scui_stringify(scui_event_lang_change),
             /* 系统事件: sched */
-            [scui_event_widget_scroll_start] =      scui_stringify(scui_event_widget_scroll_start),
-            [scui_event_widget_scroll_keep] =       scui_stringify(scui_event_widget_scroll_keep),
-            [scui_event_widget_scroll_over] =       scui_stringify(scui_event_widget_scroll_over),
-            [scui_event_widget_scroll_layout] =     scui_stringify(scui_event_widget_scroll_layout),
-            [scui_event_widget_button_click] =      scui_stringify(scui_event_widget_button_click),
+            [scui_event_window_preload] =           scui_stringify(scui_event_window_preload),
+            [scui_event_scroll_layout] =            scui_stringify(scui_event_scroll_layout),
+            [scui_event_scroll_start] =             scui_stringify(scui_event_scroll_start),
+            [scui_event_scroll_keep] =              scui_stringify(scui_event_scroll_keep),
+            [scui_event_scroll_over] =              scui_stringify(scui_event_scroll_over),
+            [scui_event_button_click] =             scui_stringify(scui_event_button_click),
             /* 系统事件: ptr */
             [scui_event_ptr_cover] =                scui_stringify(scui_event_ptr_cover),
             [scui_event_ptr_down] =                 scui_stringify(scui_event_ptr_down),
@@ -121,9 +122,9 @@ void scui_event_custom_access(scui_event_t *event)
     
     
     switch (event->type) {
-    case scui_event_widget_scroll_start:
-    case scui_event_widget_scroll_over:
-    case scui_event_widget_scroll_keep:
+    case scui_event_scroll_start:
+    case scui_event_scroll_over:
+    case scui_event_scroll_keep:
         scui_presenter.vibrate_shot();
         break;
     default:

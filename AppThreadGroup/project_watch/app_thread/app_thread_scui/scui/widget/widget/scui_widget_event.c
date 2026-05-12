@@ -97,8 +97,8 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
  */
 static void scui_widget_show_delay(scui_handle_t handle)
 {
-    if (scui_handle_unmap(handle))
-        scui_widget_create_layout_tree(handle);
+    /* 尝试构建控件布局树 */
+    scui_widget_create_layout_tree(handle);
     
     /* 设置控件状态为显示 */
     scui_widget_state_view(handle, true, false);
@@ -119,6 +119,23 @@ static void scui_widget_show_delay(scui_handle_t handle)
     /* 控件布局更新, 重绘自己 */
     bool only = scui_widget_surface_only(widget);
     scui_widget_draw(widget->myself, NULL, only);
+}
+
+/*@brief 控件显示
+ *@param handle 控件句柄
+ *@param delay  迟延调度
+ */
+void scui_widget_show(scui_handle_t handle, bool delay)
+{
+    if (delay) {
+        scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_delay, NULL);
+        event.style.prior = scui_event_prior_real;
+        event.sched       = scui_widget_show_delay;
+        event.handle      = handle;
+        scui_event_notify(&event);
+        return;
+    }
+    scui_widget_show_delay(handle);
 }
 
 /*@brief 控件隐藏
@@ -149,23 +166,6 @@ static void scui_widget_hide_delay(scui_handle_t handle)
     /* 刷新窗口列表 */
     if (widget->parent == SCUI_HANDLE_INVALID)
         scui_widget_refr(widget->myself, false);
-}
-
-/*@brief 控件显示
- *@param handle 控件句柄
- *@param delay  迟延调度
- */
-void scui_widget_show(scui_handle_t handle, bool delay)
-{
-    if (delay) {
-        scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_delay, NULL);
-        event.style.prior = scui_event_prior_real;
-        event.sched       = scui_widget_show_delay;
-        event.handle      = handle;
-        scui_event_notify(&event);
-        return;
-    }
-    scui_widget_show_delay(handle);
 }
 
 /*@brief 控件隐藏
@@ -477,6 +477,7 @@ static void scui_widget_event_process(scui_event_t *event)
     case scui_event_hide:
     case scui_event_draw:
     case scui_event_create:
+    case scui_event_layout:
     case scui_event_destroy:
     case scui_event_ptr_down:
     case scui_event_ptr_up:
@@ -497,9 +498,9 @@ static void scui_widget_event_process(scui_event_t *event)
     case scui_event_key_hold:
     case scui_event_enc_fdir:
     case scui_event_enc_bdir:
-    case scui_event_widget_scroll_start:
-    case scui_event_widget_scroll_over:
-    case scui_event_widget_scroll_keep:
+    case scui_event_scroll_start:
+    case scui_event_scroll_over:
+    case scui_event_scroll_keep:
         scui_tick_active();
         break;
     default:

@@ -26,10 +26,10 @@ void scui_ui_scene_2_bar_arc_event_proc(scui_event_t *event)
 void scui_ui_scene_2_scroll_event(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_widget_scroll_layout:
-    case scui_event_widget_scroll_start:
-    case scui_event_widget_scroll_keep:
-    case scui_event_widget_scroll_over: {
+    case scui_event_scroll_layout:
+    case scui_event_scroll_start:
+    case scui_event_scroll_keep:
+    case scui_event_scroll_over: {
         
         scui_coord_t scroll_pct = 0;
         scui_scroll_percent_get(event->object, &scroll_pct);

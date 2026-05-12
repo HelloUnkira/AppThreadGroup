@@ -34,6 +34,7 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     /* 常配置信息 */
     window->resident = window_maker->resident;
+    window->preload  = window_maker->preload;
     window->buffer   = window_maker->buffer;
     window->level    = window_maker->level;
     window->format   = window_maker->format;
@@ -113,7 +114,41 @@ void scui_window_invoke(scui_event_t *event)
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_window_t *window = (void *)widget;
     
-    /* empty */
+    switch (event->type) {
+    case scui_event_window_preload: {
+        /* 检查它的四个临近窗口 */
+        /* 如果有预加载标记 */
+        /* 在此事件创建它们 */
+        for (scui_coord_t idx = 0; idx < 4; idx++) {
+            scui_handle_t handle_s = window->sibling[idx];
+            if (handle_s == SCUI_HANDLE_INVALID) continue;
+            if (scui_handle_remap(handle_s)) continue;
+            
+            scui_widget_maker_t *widget_maker = scui_handle_source_check(handle_s);
+            scui_window_maker_t *window_maker = (void *)widget_maker;
+            if (!window_maker->preload) continue;
+            
+            /* 不支持预加载, 不自动预加载 */
+            #if SCUI_WINDOW_PRELOAD_USE == 0
+            continue;
+            #endif
+            
+            /* 预加载检查完毕, 现在加载它 */
+            scui_widget_show(handle_s, false);
+            scui_area_t clip_w = widget->clip;
+            scui_area_t clip_s = scui_widget_clip(handle_s);
+            scui_point_t point = {
+                .x = idx == 2 ? -clip_s.w : idx == 3 ? +clip_w.w : 0,
+                .x = idx == 0 ? -clip_s.h : idx == 1 ? +clip_w.h : 0,
+            };
+            /* 移动到对应位置 */
+            scui_widget_move_pos(handle_s, &point);
+        }
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 /*@brief 窗口配置参数获取

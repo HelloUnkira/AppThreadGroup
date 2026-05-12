@@ -69,7 +69,7 @@ void scui_ui_scene_xfloat_event_proc(scui_event_t * event)
         break;
     case scui_event_destroy:
         break;
-    case scui_event_widget_scroll_layout:
+    case scui_event_scroll_layout:
     case scui_event_key_click: {
         // 布局结束后将目标控件移动到中心
         for(scui_handle_t idx = 0;  idx < scui_widget_child_now(event->object); idx++) {

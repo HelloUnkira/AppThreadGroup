@@ -14,6 +14,7 @@ typedef struct {
     scui_opt_dir_t      switch_enc_way;     /* 临近界面旋钮方向(水平垂直) */
     scui_coord_t        switch_key_id[4];   /* 临近界面按键交互id */
     scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
+    scui_sbitfd_t       preload:1;          /* 窗口预加载时(许可预加载) */
     scui_sbitfd_t       buffer:1;           /* 窗口独立画布(是否使用) */
     scui_sbitfd_t       level:6;            /* 窗口所在层级(越大越高) */
     scui_pixel_cf_t     format;             /* 窗口像素格式(独立画布) */
@@ -36,6 +37,7 @@ typedef struct {
     scui_opt_dir_t      switch_enc_way;     /* 临近界面旋钮方向(水平垂直) */
     scui_coord_t        switch_key_id[4];   /* 临近界面按键交互id */
     scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
+    scui_sbitfd_t       preload:1;          /* 窗口预加载时(许可预加载) */
     scui_sbitfd_t       buffer:1;           /* 窗口独立画布(是否使用) */
     scui_sbitfd_t       level:6;            /* 窗口所在层级(越大越高) */
     scui_pixel_cf_t     format;             /* 窗口像素格式(独立画布) */
@@ -92,6 +94,52 @@ typedef enum {
     scui_window_switch_single_e,
 } scui_window_switch_type_t;
 
+typedef struct {
+    scui_handle_t  list[SCUI_WINDOW_LIST_LIMIT];
+    scui_handle_t  type;            /* 窗口切换风格(当前) */
+    scui_handle_t  cfg_type;        /* 窗口切换风格(配置) */
+    scui_opt_dir_t cfg_dir;         /* 窗口切换方向(配置) */
+    scui_opt_dir_t dir;             /* 窗口切换方向(当前) */
+    scui_opt_pos_t pos;             /* 窗口切换位置(当前) */
+    scui_point_t   point;           /* 窗口切换偏移(坐标点) */
+    scui_coord_t   pct;             /* 窗口切换进度(百分比) */
+    scui_coord_t   ofs;             /* 窗口切换偏移(像素点) */
+    scui_handle_t  anima;           /* 窗口切换动画 */
+    scui_coord_t   anima_speed[5];  /* 窗口切换动画速度[ptr,enc,key,auto,jump](像素点/1s) */
+    scui_map_cb_t  anima_path[5];   /* 窗口切换动画轨迹[ptr,enc,key,auto,jump] */
+    scui_sbitfd_t  anima_tag:5;     /* 窗口切换动画标记[ptr,enc,key,auto,jump] */
+    scui_sbitfd_t  lock_jump:1;     /* 窗口切换锁 */
+    scui_sbitfd_t  lock_move:1;     /* 窗口切换锁 */
+    scui_sbitfd_t  mask_fling:1;    /* 窗口切换锁 */
+} scui_window_switch_t;
+
+typedef struct {
+    scui_handle_t flap1_shadow;
+    scui_handle_t flap2_shadow;
+    scui_handle_t cube_shadow;
+} scui_window_transform_t;
+
+typedef struct {
+    scui_handle_t list[SCUI_WINDOW_STACK_NEST];
+    scui_handle_t list_rcd[SCUI_WINDOW_STACK_NEST];
+    scui_handle_t list_bak[SCUI_WINDOW_STACK_NEST];
+    scui_handle_t node_bak;
+    scui_handle_t top_bak;
+    scui_handle_t top;
+} scui_window_stack_t;
+
+typedef struct {
+    scui_handle_t  acts_cur_num;
+    scui_handle_t  acts_cur[SCUI_WINDOW_LIST_LIMIT];
+    scui_handle_t  acts_rcd[SCUI_WINDOW_LIST_LIMIT];
+    scui_widget_t *widget_0[SCUI_WINDOW_LIST_LIMIT];
+    scui_widget_t *widget_1[SCUI_WINDOW_LIST_LIMIT];
+    scui_handle_t  widget_0_num;
+    scui_handle_t  widget_1_num;
+    scui_widget_t *widget_refr;
+    scui_sbitfd_t  switch_refr:1;
+} scui_window_list_t;
+
 /*@brief 窗口列表添加窗口
  *@param handle 窗口句柄
  */
@@ -102,11 +150,10 @@ void scui_window_list_add(scui_handle_t handle);
  */
 void scui_window_list_del(scui_handle_t handle);
 
-/*@brief 窗口列表隐藏所有窗口
- *@param handle 窗口句柄(不隐藏:忽略它)
- *@param source 仅隐藏有资源窗口
+/*@brief 窗口列表同步
+ *@param list 窗口列表
  */
-void scui_window_list_hide(scui_handle_t handle, bool source);
+void scui_window_list_sync(scui_handle_t list[SCUI_WINDOW_LIST_LIMIT]);
 
 /*@brief 窗口事件通知
  *@param event 事件

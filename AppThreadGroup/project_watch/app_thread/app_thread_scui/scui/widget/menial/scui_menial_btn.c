@@ -47,7 +47,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
         scui_event_mask_over(event);
         
         /* 这里是直接响应的,要不要延迟到抬起? */
-        scui_event_define(event, widget->myself, true, scui_event_widget_button_click, NULL);
+        scui_event_define(event, widget->myself, true, scui_event_button_click, NULL);
         scui_event_notify(&event);
         break;
     }

@@ -459,7 +459,7 @@ static void scui_scroll_notify_alone(scui_handle_t handle, uint8_t type)
         scroll->over_scroll = false;
         
         /* scroll event: */
-        scui_event_define(event, widget->myself, true, scui_event_widget_scroll_start, NULL);
+        scui_event_define(event, widget->myself, true, scui_event_scroll_start, NULL);
         scui_event_notify(&event);
         break;
     }
@@ -468,18 +468,18 @@ static void scui_scroll_notify_alone(scui_handle_t handle, uint8_t type)
         scroll->over_scroll = true;
         
         /* scroll event: */
-        scui_event_define(event, widget->myself, true, scui_event_widget_scroll_over, NULL);
+        scui_event_define(event, widget->myself, true, scui_event_scroll_over, NULL);
         scui_event_notify(&event);
         break;
     }
     case 0x02: {
         /* scroll event: */
-        scui_event_define(event, widget->myself, true, scui_event_widget_scroll_keep, NULL);
+        scui_event_define(event, widget->myself, true, scui_event_scroll_keep, NULL);
         scui_event_notify(&event);
         break;
     }
     case 0xAA: {
-        scui_event_define(event, widget->myself, true, scui_event_widget_scroll_layout, NULL);
+        scui_event_define(event, widget->myself, true, scui_event_scroll_layout, NULL);
         scui_event_notify(&event);
         break;
     }

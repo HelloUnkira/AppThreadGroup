@@ -217,6 +217,9 @@ void scui_monitor_event_cb(scui_event_t *event)
         
         break;
     }
+    case scui_event_destroy: {
+        break;
+    }
     case scui_event_draw:
         #if SCUI_MEM_FEAT_MINI == 0
         scui_widget_alpha_set(event->object, scui_alpha_cover, false);

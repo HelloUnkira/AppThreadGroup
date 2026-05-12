@@ -7,11 +7,7 @@
 
 #include "scui.h"
 
-static struct {
-    scui_handle_t flap1_shadow;
-    scui_handle_t flap2_shadow;
-    scui_handle_t cube_shadow;
-} scui_window_transform = {0};
+static scui_window_transform_t scui_window_transform = {0};
 
 /*@brief 调整控件画布到绘制画布的剪切域
  *@param widget   控件实例

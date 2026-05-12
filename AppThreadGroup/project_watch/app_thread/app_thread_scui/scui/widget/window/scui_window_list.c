@@ -7,17 +7,7 @@
 
 #include "scui.h"
 
-static struct {
-    scui_handle_t  acts_cur_num;
-    scui_handle_t  acts_cur[SCUI_WINDOW_LIST_LIMIT];
-    scui_handle_t  acts_rcd[SCUI_WINDOW_LIST_LIMIT];
-    scui_widget_t *widget_0[SCUI_WINDOW_LIST_LIMIT];
-    scui_widget_t *widget_1[SCUI_WINDOW_LIST_LIMIT];
-    scui_handle_t  widget_0_num;
-    scui_handle_t  widget_1_num;
-    scui_widget_t *widget_refr;
-    scui_sbitfd_t  switch_refr:1;
-} scui_window_list = {0};
+static scui_window_list_t scui_window_list = {0};
 
 /*@brief 窗口列表添加窗口
  *@param handle 窗口句柄
@@ -62,6 +52,17 @@ void scui_window_list_del(scui_handle_t handle)
             return;
         }
     SCUI_LOG_ERROR("window %u del fail", handle);
+}
+
+/*@brief 窗口列表同步
+ *@param list 窗口列表
+ */
+void scui_window_list_sync(scui_handle_t list[SCUI_WINDOW_LIST_LIMIT])
+{
+    SCUI_ASSERT(list != NULL);
+    
+    for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
+        list[idx] = scui_window_list.acts_cur[idx];
 }
 
 /*@brief 窗口管理器排序根控件列表
@@ -377,31 +378,6 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     }
     }
     #endif
-}
-
-/*@brief 窗口列表隐藏所有窗口
- *@param handle 窗口句柄(不隐藏:忽略它)
- *@param source 仅隐藏有资源窗口
- */
-void scui_window_list_hide(scui_handle_t handle, bool source)
-{
-    SCUI_LOG_INFO("");
-    
-    for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
-        if (scui_window_list.acts_cur[idx] == SCUI_HANDLE_INVALID) continue;
-        if (scui_window_list.acts_cur[idx] == handle) continue;
-        
-        scui_handle_t  handle_t = scui_window_list.acts_cur[idx];
-        scui_widget_t *widget_t = scui_handle_source_check(handle_t);
-        scui_window_t *window_t = (void *)widget_t;
-        
-        /* 不自动回收常驻窗口 */
-        if (window_t->resident) continue;
-        
-        /* 任意界面或者仅带资源界面 */
-        if (!source || scui_widget_surface_only(window_t))
-            scui_widget_hide(handle_t, false);
-    }
 }
 
 /*@brief 窗口事件通知

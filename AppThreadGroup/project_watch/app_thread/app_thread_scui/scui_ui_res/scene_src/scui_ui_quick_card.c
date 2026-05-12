@@ -210,10 +210,10 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
         scui_ui_res_local->linear = event->object;
         break;
     }
-    case scui_event_widget_scroll_layout:
-    case scui_event_widget_scroll_start:
-    case scui_event_widget_scroll_keep:
-    case scui_event_widget_scroll_over: {
+    case scui_event_scroll_layout:
+    case scui_event_scroll_start:
+    case scui_event_scroll_keep:
+    case scui_event_scroll_over: {
         
         scui_area_t   clip_p = scui_widget_clip(event->object);
         scui_handle_t list_m = scui_widget_child_now(event->object);

@@ -13,7 +13,7 @@
 void scui_ui_scene_float_3_button_event(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_widget_button_click:
+    case scui_event_button_click:
         SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
         break;
     }

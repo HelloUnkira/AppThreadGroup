@@ -94,7 +94,7 @@ void scui_ui_scene_float_2_ring_edge_event_proc(scui_event_t *event)
 void scui_ui_scene_float_2_button_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_widget_button_click:
+    case scui_event_button_click:
         SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
         break;
     }

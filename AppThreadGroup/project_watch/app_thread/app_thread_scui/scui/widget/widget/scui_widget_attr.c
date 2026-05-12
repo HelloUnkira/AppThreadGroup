@@ -217,7 +217,7 @@ void scui_widget_state_view(scui_handle_t handle, bool view, bool recurse)
     if (!recurse)
          return;
     
-    /* 必须递归设置控件透明度,迭代它的孩子列表 */
+    /* 递归设置控件显示隐藏,迭代它的孩子列表 */
     scui_widget_child_list_btra(widget, idx)
     scui_widget_state_view(widget->child_list[idx], view, recurse);
 }
