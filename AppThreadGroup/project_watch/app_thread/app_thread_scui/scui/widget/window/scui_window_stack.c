@@ -161,28 +161,51 @@ bool scui_window_stack_adjust(
 
 /*@brief 窗口栈入栈出栈语义
  *@param handle       窗口句柄
+ *@param semantic     语义类型[1,6][add, del, prio, clean, cover, goback]
  *@param switch_type  切换类型
  *@param switch_dir   切换方向
- *@param add          常规入栈
- *@param del          常规出栈
- *@param prio         优先级入栈
- *@param clean        清空入栈
- *@param cover        出栈入栈
- *@param goback       回退出栈
- *@param prio_compare 优先级比较(返回:arg1 > arg2)
  *@param reserve      保留栈顶
+ *@param prio_compare 优先级比较(返回:arg1 > arg2)
  *@retval 成功失败
  */
-bool scui_window_stack_jump(scui_handle_t handle,
+bool scui_window_stack_jump(scui_handle_t handle, scui_coord_t semantic,
     scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir,
-    bool add, bool del, bool prio, bool clean, bool cover, bool goback,
-    bool (*prio_compare)(scui_handle_t, scui_handle_t), bool reserve)
+    bool reserve, bool (*prio_compare)(scui_handle_t, scui_handle_t))
 {
     bool result = false;
     scui_window_stack_sync(switch_type, switch_dir, false);
     scui_handle_t handle_top = scui_window_stack.top == 0 ?
         SCUI_HANDLE_INVALID : scui_window_stack.list[scui_window_stack.top - 1];
     
+    bool add = false, prio  = false, cover  = false;
+    bool del = false, clean = false, goback = false;
+    
+    switch (semantic) {
+    case 1: add    = true; break;
+    case 2: del    = true; break;
+    case 3: prio   = true; break;
+    case 4: clean  = true; break;
+    case 5: cover  = true; break;
+    case 6: goback = true; break;
+    default:SCUI_LOG_ERROR("unknown type:%d", semantic);
+        return false;
+    }
+    
+    /*出栈入栈语义解析:(所有动作都由push/pop组合实现)
+     *常规入栈(add):        (push node)
+     *常规出栈(del):        (pop until -- pop  node -- push back)
+     *优先入栈(prio):       (pop until -- push node -- push back)
+     *清空入栈(clean):      (pop all -- push node)
+     *出栈入栈(cover):      (pop one -- push node)
+     *回退出栈(goback):     (pop until)
+     *
+     *reserve(语义扩充):
+     *  栈顶元素为当前显示元素, 将其特殊对待处理
+     *  意味着在执行上面的特殊操作add, prio, clean之前
+     *  提前pop top -- 执行操作 -- push top
+     *  最后栈顶元素保持不变, 栈发生更新
+     *  界面不产生实际切换当作
+     */
     
     #if 1
     /* push语义 */

@@ -7,8 +7,6 @@
 
 #include "scui.h"
 
-scui_draw_graph_t scui_draw_graph = {0};
-
 /*@brief 就绪绘图资源
  */
 void scui_draw_graph_ready(void)

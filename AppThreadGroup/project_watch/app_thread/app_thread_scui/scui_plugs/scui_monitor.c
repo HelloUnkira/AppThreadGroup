@@ -196,7 +196,7 @@ void scui_monitor_event_cb(scui_event_t *event)
         string_maker.args.line_under            = 1;
         string_maker.args.line_delete           = 1;
         string_maker.args.lang                  = scui_lang_type_ascii;
-        string_maker.font_idx                   = SCUI_FONT_IDX_A16;
+        string_maker.font_idx                   = SCUI_FONT_IDX_X16;
         
         
         

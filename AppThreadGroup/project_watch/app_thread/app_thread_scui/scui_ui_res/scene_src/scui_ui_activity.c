@@ -460,7 +460,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
                 args.color.filter = true;
                 args.align_hor = 0;
                 args.align_ver = 2;
-                args.name = scui_font_name_match(SCUI_FONT_IDX_A24, scui_lang_type_ascii);
+                args.name = scui_font_name_match(SCUI_FONT_IDX_X24, scui_lang_type_ascii);
                 args.utf8 = digit_str;
                 
                 args.clip = clip;
@@ -623,7 +623,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
                 args.color.filter = true;
                 args.align_hor = 0;
                 args.align_ver = 2;
-                args.name = scui_font_name_match(SCUI_FONT_IDX_A24, scui_lang_type_ascii);
+                args.name = scui_font_name_match(SCUI_FONT_IDX_X24, scui_lang_type_ascii);
                 args.utf8 = digit_str;
                 
                 args.clip = clip;
@@ -787,7 +787,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
                 args.color.filter = true;
                 args.align_hor = 0;
                 args.align_ver = 2;
-                args.name = scui_font_name_match(SCUI_FONT_IDX_A24, scui_lang_type_ascii);
+                args.name = scui_font_name_match(SCUI_FONT_IDX_X24, scui_lang_type_ascii);
                 args.utf8 = digit_str;
                 
                 args.clip = clip;

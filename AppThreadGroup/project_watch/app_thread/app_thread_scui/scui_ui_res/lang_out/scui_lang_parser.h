@@ -778,16 +778,17 @@ typedef enum {
 	scui_lang_str_num = 756,
 	scui_lang_ofs_num = 1,
 	
-	scui_lang_type_num = 7,
-	scui_lang_type_multi = SCUI_HANDLE_SYSTEM - 1,
-	scui_lang_type_ascii = SCUI_HANDLE_SYSTEM - 2,
-	scui_lang_type_zh	= scui_lang_str_num * 0 + scui_lang_ofs_num,
-	scui_lang_type_en	= scui_lang_str_num * 1 + scui_lang_ofs_num,
-	scui_lang_type_de	= scui_lang_str_num * 2 + scui_lang_ofs_num,
-	scui_lang_type_fra	= scui_lang_str_num * 3 + scui_lang_ofs_num,
-	scui_lang_type_nl	= scui_lang_str_num * 4 + scui_lang_ofs_num,
-	scui_lang_type_pt	= scui_lang_str_num * 5 + scui_lang_ofs_num,
-	scui_lang_type_jp	= scui_lang_str_num * 6 + scui_lang_ofs_num,
+	scui_lang_type_num		= 7,
+	scui_lang_type_multi	= SCUI_HANDLE_SYSTEM - 1,
+	scui_lang_type_ascii	= SCUI_HANDLE_SYSTEM - 2,
+	scui_lang_type_symbol	= SCUI_HANDLE_SYSTEM - 3,
+	scui_lang_type_zh		= scui_lang_str_num * 0 + scui_lang_ofs_num,
+	scui_lang_type_en		= scui_lang_str_num * 1 + scui_lang_ofs_num,
+	scui_lang_type_de		= scui_lang_str_num * 2 + scui_lang_ofs_num,
+	scui_lang_type_fra		= scui_lang_str_num * 3 + scui_lang_ofs_num,
+	scui_lang_type_nl		= scui_lang_str_num * 4 + scui_lang_ofs_num,
+	scui_lang_type_pt		= scui_lang_str_num * 5 + scui_lang_ofs_num,
+	scui_lang_type_jp		= scui_lang_str_num * 6 + scui_lang_ofs_num,
 } scui_lang_type_t;
 
 /*@brief 获取多国语语言类型

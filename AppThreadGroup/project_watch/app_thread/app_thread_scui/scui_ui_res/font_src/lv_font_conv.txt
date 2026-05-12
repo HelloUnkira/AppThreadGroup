@@ -13,34 +13,51 @@ lvgl_font_conv
 7.在任意地方cmd执行lv_font_conv命令生成资源:
     命令见网址的介绍
 
-# 资源查看
-# lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 32 --format lvgl --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_32.c
-# lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format lvgl --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_36.c
+资源查看:
+可参考lvgl命令编译出h/c文件查看
+
+联合装订:
+可参考lvgl预生成的库信息头部的命令参数表
+将多个字库的不同映射区间联合装订到一起去
+我们有打包工具将多个bin和ttf联合到一个bin
+所以根据情况使用即可,可以一口气装订到一起也可以分开
+可以为同一个语言同一个字号,装订不同字库灵活搭配使用
+
+备注:
+中日韩一般打包一个字库
+西欧语一般打包一个字库
 
 
-例子(直接一口气全粘贴到cmd就行了,自己会一条条跑):
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size  8 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_8.bin
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 16 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_16.bin
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 24 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_24.bin
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 32 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_32.bin
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 40 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_40.bin
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 48 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_48.bin
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 56 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_56.bin
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 64 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_64.bin
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 72 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_72.bin
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 80 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_80.bin
-lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 88 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_ascii_88.bin
 
 例子(直接一口气全粘贴到cmd就行了,自己会一条条跑):
-lv_font_conv --font font_en.ttf -r 0x00-0x7f --size 32 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_en_32.bin
-lv_font_conv --font font_en.ttf -r 0x00-0x7f --size 36 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_en_36.bin
-lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 32 --format bin --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_32.bin
-lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format bin --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_zh_36.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size  8 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_8.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 16 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_16.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 24 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_24.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 32 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_32.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 40 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_40.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 48 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_48.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 56 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_56.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 64 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_64.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 72 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_72.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 80 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_80.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 88 --format bin  --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ascii_88.bin
 
-lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x3000-0x303F -r 0x3040-0x309F -r 0x30A0-0x30FF -r 0x4E00-0x9FFF --size 32 --format bin --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_jp_32.bin
-lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x3000-0x303F -r 0x3040-0x309F -r 0x30A0-0x30FF -r 0x4E00-0x9FFF --size 36 --format bin --bpp 2 --no-prefilter --no-kerning -o ../font_bin/font_jp_36.bin
+例子(直接一口气全粘贴到cmd就行了,自己会一条条跑):
+lv_font_conv --font font_en_2.ttf -r 0x00-0x7f --size 32 --format bin  --bpp 8 --no-prefilter --no-kerning -o ../font_bin/font_en_32.bin
+lv_font_conv --font font_en_2.ttf -r 0x00-0x7f --size 36 --format bin  --bpp 8 --no-prefilter --no-kerning -o ../font_bin/font_en_36.bin
+lv_font_conv --font font_zh_1.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 32 --format bin --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_zh_32.bin
+lv_font_conv --font font_zh_1.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format bin --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_zh_36.bin
 
-lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x80-0xFF -r 0x100-0x17F -r 0x180-0x24F -r 0x2B0-0x2FF --size 32 --format bin --bpp 2 --no-prefilter --no-prefilter --no-kerning -o ../font_bin/font_eu_32.bin
-lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x80-0xFF -r 0x100-0x17F -r 0x180-0x24F -r 0x2B0-0x2FF --size 36 --format bin --bpp 2 --no-prefilter --no-prefilter --no-kerning -o ../font_bin/font_eu_36.bin
+lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x3000-0x303F -r 0x3040-0x309F -r 0x30A0-0x30FF -r 0x4E00-0x9FFF --size 32 --format bin --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_jp_32.bin
+lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x3000-0x303F -r 0x3040-0x309F -r 0x30A0-0x30FF -r 0x4E00-0x9FFF --size 36 --format bin --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_jp_36.bin
+
+lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x80-0xFF -r 0x100-0x17F -r 0x180-0x24F -r 0x2B0-0x2FF --size 32 --format bin --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_eu_32.bin
+lv_font_conv --font font_zh_1.ttf -r 0x00-0x7F -r 0x80-0xFF -r 0x100-0x17F -r 0x180-0x24F -r 0x2B0-0x2FF --size 36 --format bin --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_eu_36.bin
+
+例子(lvgl符号表:我们直接将其取用过来,看起来很好用的样子):
+
+lv_font_conv --font font_symbol.woff -r 61441,61448,61451,61452,61452,61453,61457,61459,61461,61465,61468,61473,61478,61479,61480,61502,61507,61512,61515,61516,61517,61521,61522,61523,61524,61543,61544,61550,61552,61553,61556,61559,61560,61561,61563,61587,61589,61636,61637,61639,61641,61664,61671,61674,61683,61724,61732,61787,61931,62016,62017,62018,62019,62020,62087,62099,62212,62189,62810,63426,63650 --size 32 --format bin  --bpp 8 --no-prefilter --no-kerning -o ../font_bin/font_symbol_32.bin
+
+lv_font_conv --font font_symbol.woff -r 61441,61448,61451,61452,61452,61453,61457,61459,61461,61465,61468,61473,61478,61479,61480,61502,61507,61512,61515,61516,61517,61521,61522,61523,61524,61543,61544,61550,61552,61553,61556,61559,61560,61561,61563,61587,61589,61636,61637,61639,61641,61664,61671,61674,61683,61724,61732,61787,61931,62016,62017,62018,62019,62020,62087,62099,62212,62189,62810,63426,63650 --size 36 --format bin  --bpp 8 --no-prefilter --no-kerning -o ../font_bin/font_symbol_36.bin
 
 

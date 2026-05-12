@@ -142,11 +142,11 @@ def encode_scui_lang_parser_h(file, xlsx_sheet, sheet_row, sheet_col, args_list)
     file.write('typedef enum {\n')
     file.write('\tscui_lang_str_num = %s,\n' % str(sheet_row))
     file.write('\tscui_lang_ofs_num = 1,\n\t\n')
-    file.write('\tscui_lang_type_num = %s,\n' % str(sheet_col))
+    file.write('\tscui_lang_type_num\t\t= %s,\n' % str(sheet_col))
     for idx, item in enumerate(args_list[1]):
-        file.write('\tscui_lang_type_%s = SCUI_HANDLE_SYSTEM - %d,\n' % (item, idx + 1))
+        file.write('\tscui_lang_type_%s\t= SCUI_HANDLE_SYSTEM - %d,\n' % (item, idx + 1))
     for idx, item in enumerate(args_list[0]):
-        file.write('\tscui_lang_type_%s\t= %s * %s + scui_lang_ofs_num,\n' % (item, 'scui_lang_str_num', str(idx)))
+        file.write('\tscui_lang_type_%s\t\t= %s * %s + scui_lang_ofs_num,\n' % (item, 'scui_lang_str_num', str(idx)))
     file.write('} scui_lang_type_t;\n\n')
     # 填充函数定义或者声明
     file.write('/*@brief 获取多国语语言类型\n')

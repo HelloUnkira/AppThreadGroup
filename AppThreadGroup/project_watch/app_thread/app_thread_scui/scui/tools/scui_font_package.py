@@ -113,7 +113,7 @@ def scui_font_package_all(file_path_list, scui_font_package_list, scui_font_json
     for font_item in scui_font_json['info']:
         if font_item['lang'] not in scui_font_lang:
             continue
-        if font_item['lang'] == 'ascii' or font_item['lang'] == 'multi':
+        if font_item['lang'] == 'ascii' or font_item['lang'] == 'multi' or font_item['lang'] == 'symbol':
             continue
         # 对目标字库集合进行流式处理,提取数据内容
         for font_idx, font_name in enumerate(font_item['name']):

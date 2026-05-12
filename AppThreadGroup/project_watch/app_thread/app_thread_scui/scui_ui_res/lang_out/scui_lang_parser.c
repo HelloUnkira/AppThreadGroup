@@ -21219,6 +21219,7 @@ const char * scui_lang_str(scui_handle_t handle, scui_lang_type_t type)
 	default: string += type; break;
 	case scui_lang_type_multi: string += scui_lang_type; break;
 	case scui_lang_type_ascii: string += scui_lang_type; break;
+	case scui_lang_type_symbol: string += scui_lang_type; break;
 	}
 	string -= scui_lang_ofs_num;
 	

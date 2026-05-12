@@ -8,7 +8,7 @@
 #include "scui.h"
 
 /* 全局绘图资源(内部资源, 内部使用): */
-extern scui_draw_graph_t scui_draw_graph;
+static scui_surface_t scui_draw_surface_tvg;
 
 /* 检查配置: */
 #include "scui_draw_thorvg.h"
@@ -24,7 +24,7 @@ extern scui_draw_graph_t scui_draw_graph;
 /* 就绪canvas画布实例 */
 static Tvg_Canvas * scui_draw_tvg_canvas_ready(void)
 {
-    scui_surface_t *tvg_surface = &scui_draw_graph.tvg_surface;
+    scui_surface_t *tvg_surface = &scui_draw_surface_tvg;
     scui_area_t tvg_area = scui_surface_area(tvg_surface);
     
     /* 固定:创建画布并绑定资源 */
@@ -82,7 +82,7 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
         src_radius  = 1;
     
     #if SCUI_DRAW_USE_THORVG
-    scui_surface_t *tvg_surface = &scui_draw_graph.tvg_surface;
+    scui_surface_t *tvg_surface = &scui_draw_surface_tvg;
     scui_area_t tvg_area = scui_surface_area(tvg_surface);
     Tvg_Canvas *canvas = scui_draw_tvg_canvas_ready();
     
@@ -125,7 +125,7 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
     
     /* 固定:资源获取绘制 */
     scui_draw_area_blend(true, dst_surface, *dst_clip,
-        &scui_draw_graph.tvg_surface, tvg_area, SCUI_COLOR_UNUSED);
+        &scui_draw_surface_tvg, tvg_area, SCUI_COLOR_UNUSED);
     
     #endif
 }
@@ -154,7 +154,7 @@ static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
         src_radius  = 1;
     
     #if SCUI_DRAW_USE_THORVG
-    scui_surface_t *tvg_surface = &scui_draw_graph.tvg_surface;
+    scui_surface_t *tvg_surface = &scui_draw_surface_tvg;
     scui_area_t tvg_area = scui_surface_area(tvg_surface);
     Tvg_Canvas *canvas = scui_draw_tvg_canvas_ready();
     
@@ -193,7 +193,7 @@ static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
     
     /* 固定:资源获取绘制 */
     scui_draw_area_blend(true, dst_surface, *dst_clip,
-        &scui_draw_graph.tvg_surface, tvg_area, SCUI_COLOR_UNUSED);
+        &scui_draw_surface_tvg, tvg_area, SCUI_COLOR_UNUSED);
     
     #endif
 }
@@ -222,7 +222,7 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
         src_width  = 1;
     
     #if SCUI_DRAW_USE_THORVG
-    scui_surface_t *tvg_surface = &scui_draw_graph.tvg_surface;
+    scui_surface_t *tvg_surface = &scui_draw_surface_tvg;
     scui_area_t tvg_area = scui_surface_area(tvg_surface);
     Tvg_Canvas *canvas = scui_draw_tvg_canvas_ready();
     
@@ -249,7 +249,7 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
     
     /* 固定:资源获取绘制 */
     scui_draw_area_blend(true, dst_surface, *dst_clip,
-        &scui_draw_graph.tvg_surface, tvg_area, SCUI_COLOR_UNUSED);
+        &scui_draw_surface_tvg, tvg_area, SCUI_COLOR_UNUSED);
     
     #endif
 }
@@ -279,7 +279,7 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
         src_radius  = 1;
     
     #if SCUI_DRAW_USE_THORVG
-    scui_surface_t *tvg_surface = &scui_draw_graph.tvg_surface;
+    scui_surface_t *tvg_surface = &scui_draw_surface_tvg;
     scui_area_t tvg_area = scui_surface_area(tvg_surface);
     Tvg_Canvas *canvas = scui_draw_tvg_canvas_ready();
     
@@ -474,7 +474,7 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
     
     /* 固定:资源获取绘制 */
     scui_draw_area_blend(true, dst_surface, *dst_clip,
-        &scui_draw_graph.tvg_surface, tvg_area, SCUI_COLOR_UNUSED);
+        &scui_draw_surface_tvg, tvg_area, SCUI_COLOR_UNUSED);
     
     #endif
     
@@ -498,7 +498,7 @@ static void scui_draw_tvg(scui_draw_dsc_t *draw_dsc)
         return;
     
     #if SCUI_DRAW_USE_THORVG
-    scui_surface_t *tvg_surface = &scui_draw_graph.tvg_surface;
+    scui_surface_t *tvg_surface = &scui_draw_surface_tvg;
     scui_area_t tvg_area = scui_surface_area(tvg_surface);
     Tvg_Canvas *canvas = scui_draw_tvg_canvas_ready();
     
@@ -512,7 +512,7 @@ static void scui_draw_tvg(scui_draw_dsc_t *draw_dsc)
     
     /* 固定:资源获取绘制 */
     scui_draw_area_blend(true, dst_surface, *dst_clip,
-        &scui_draw_graph.tvg_surface, tvg_area, SCUI_COLOR_UNUSED);
+        &scui_draw_surface_tvg, tvg_area, SCUI_COLOR_UNUSED);
     
     #endif
 }
@@ -570,7 +570,7 @@ bool scui_draw_ctx_graph_TVG(scui_draw_dsc_t *draw_dsc)
     tvg_line = scui_min(tvg_line, dst_clip.h);
     
     /* 更新绘制画布的实际宽高 */
-    scui_surface_t *tvg_surface = &scui_draw_graph.tvg_surface;
+    scui_surface_t *tvg_surface = &scui_draw_surface_tvg;
     tvg_surface->hor_res = tvg_item;
     tvg_surface->ver_res = tvg_line;
     tvg_surface->stride  = tvg_surface->hor_res * tvg_surface->pbyte;
@@ -622,7 +622,7 @@ void scui_draw_thorvg_ready(void)
     /* 一旦启用, 则永恒常驻, 无需释放 */
     /* tvg_engine_term(TVG_ENGINE_SW); */
     
-    scui_surface_t *tvg_surface = &scui_draw_graph.tvg_surface;
+    scui_surface_t *tvg_surface = &scui_draw_surface_tvg;
     tvg_surface->format = scui_pixel_cf_bmp8888;
     tvg_surface->pbyte  = scui_pixel_byte(tvg_surface->format);
     tvg_surface->alpha  = scui_alpha_cover;

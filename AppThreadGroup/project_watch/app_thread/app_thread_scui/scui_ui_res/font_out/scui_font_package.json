@@ -4,18 +4,20 @@
     "lang": [
         "ascii",
         "multi",
+        "symbol",
         "en",
         "eu",
-        "jp",
-        "zh"
+        "cjk"
     ],
     "info": [
         {
             "lang": "ascii",
-            "size": [8,16,24,32,40,48,56,64,72,80,88],
+            "size": [8,12,16,20,24,32,40,48,56,64,72,80,88],
             "name": [
                 "font_ascii_8.bin",
+                "font_ascii_12.bin",
                 "font_ascii_16.bin",
+                "font_ascii_20.bin",
                 "font_ascii_24.bin",
                 "font_ascii_32.bin",
                 "font_ascii_40.bin",
@@ -25,6 +27,24 @@
                 "font_ascii_72.bin",
                 "font_ascii_80.bin",
                 "font_ascii_88.bin"
+            ]
+        },{
+            "lang": "symbol",
+            "size": [8,12,16,20,24,32,40,48,56,64,72,80,88],
+            "name": [
+                "font_symbol_8.bin",
+                "font_symbol_12.bin",
+                "font_symbol_16.bin",
+                "font_symbol_20.bin",
+                "font_symbol_24.bin",
+                "font_symbol_32.bin",
+                "font_symbol_40.bin",
+                "font_symbol_48.bin",
+                "font_symbol_56.bin",
+                "font_symbol_64.bin",
+                "font_symbol_72.bin",
+                "font_symbol_80.bin",
+                "font_symbol_88.bin"
             ]
         },
         {
@@ -44,19 +64,11 @@
             ]
         },
         {
-            "lang": "jp",
+            "lang": "cjk",
             "size": [32, 36],
             "name": [
-                "font_jp_32.bin",
-                "font_jp_36.bin"
-            ]
-        },
-        {
-            "lang": "zh",
-            "size": [32, 36],
-            "name": [
-                "font_zh_32.bin",
-                "font_zh_36.bin"
+                "font_cjk_32.bin",
+                "font_cjk_36.bin"
             ]
         },
         {

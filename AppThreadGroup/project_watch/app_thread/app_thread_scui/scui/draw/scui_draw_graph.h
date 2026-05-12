@@ -394,13 +394,6 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_graph);
  *它在使用过程中限制较大
  */
 
-typedef struct {
-    void *dummy;
-    #if SCUI_DRAW_USE_THORVG
-    scui_surface_t tvg_surface;
-    #endif
-} scui_draw_graph_t;
-
 /*@brief 就绪绘图资源
  */
 void scui_draw_graph_ready(void);

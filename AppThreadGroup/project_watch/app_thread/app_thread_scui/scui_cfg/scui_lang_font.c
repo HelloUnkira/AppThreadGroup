@@ -21,24 +21,37 @@ scui_handle_t scui_font_name_match(scui_handle_t font_idx, scui_handle_t lang_ty
     }
     case scui_lang_type_ascii: {
         switch (font_idx) {
-        case SCUI_FONT_IDX_A8:  return scui_font_ascii_8bin;
-        case SCUI_FONT_IDX_A16: return scui_font_ascii_16bin;
-        case SCUI_FONT_IDX_A24: return scui_font_ascii_24bin;
-        case SCUI_FONT_IDX_A32: return scui_font_ascii_32bin;
-        case SCUI_FONT_IDX_A40: return scui_font_ascii_40bin;
-        case SCUI_FONT_IDX_A48: return scui_font_ascii_48bin;
-        case SCUI_FONT_IDX_A56: return scui_font_ascii_56bin;
-        case SCUI_FONT_IDX_A64: return scui_font_ascii_64bin;
-        case SCUI_FONT_IDX_A72: return scui_font_ascii_72bin;
-        case SCUI_FONT_IDX_A80: return scui_font_ascii_80bin;
-        case SCUI_FONT_IDX_A88: return scui_font_ascii_88bin;
+        case SCUI_FONT_IDX_X8:  return scui_font_ascii_8bin;
+        case SCUI_FONT_IDX_X12: return scui_font_ascii_12bin;
+        case SCUI_FONT_IDX_X16: return scui_font_ascii_16bin;
+        case SCUI_FONT_IDX_X20: return scui_font_ascii_20bin;
+        case SCUI_FONT_IDX_X24: return scui_font_ascii_24bin;
+        case SCUI_FONT_IDX_X32: return scui_font_ascii_32bin;
+        case SCUI_FONT_IDX_X40: return scui_font_ascii_40bin;
+        case SCUI_FONT_IDX_X48: return scui_font_ascii_48bin;
+        case SCUI_FONT_IDX_X56: return scui_font_ascii_56bin;
+        case SCUI_FONT_IDX_X64: return scui_font_ascii_64bin;
+        case SCUI_FONT_IDX_X72: return scui_font_ascii_72bin;
+        case SCUI_FONT_IDX_X80: return scui_font_ascii_80bin;
+        case SCUI_FONT_IDX_X88: return scui_font_ascii_88bin;
         }
         break;
     }
-    case scui_lang_type_zh: {
+    case scui_lang_type_symbol: {
         switch (font_idx) {
-        case SCUI_FONT_IDX_32: return scui_font_match(scui_font_lang_zh, 32);
-        case SCUI_FONT_IDX_36: return scui_font_match(scui_font_lang_zh, 36);
+        case SCUI_FONT_IDX_X8:  return scui_font_symbol_8bin;
+        case SCUI_FONT_IDX_X12: return scui_font_symbol_12bin;
+        case SCUI_FONT_IDX_X16: return scui_font_symbol_16bin;
+        case SCUI_FONT_IDX_X20: return scui_font_symbol_20bin;
+        case SCUI_FONT_IDX_X24: return scui_font_symbol_24bin;
+        case SCUI_FONT_IDX_X32: return scui_font_symbol_32bin;
+        case SCUI_FONT_IDX_X40: return scui_font_symbol_40bin;
+        case SCUI_FONT_IDX_X48: return scui_font_symbol_48bin;
+        case SCUI_FONT_IDX_X56: return scui_font_symbol_56bin;
+        case SCUI_FONT_IDX_X64: return scui_font_symbol_64bin;
+        case SCUI_FONT_IDX_X72: return scui_font_symbol_72bin;
+        case SCUI_FONT_IDX_X80: return scui_font_symbol_80bin;
+        case SCUI_FONT_IDX_X88: return scui_font_symbol_88bin;
         }
         break;
     }
@@ -49,8 +62,8 @@ scui_handle_t scui_font_name_match(scui_handle_t font_idx, scui_handle_t lang_ty
         }
         break;
     }
-    case scui_lang_type_de:
     case scui_lang_type_fra:
+    case scui_lang_type_de:
     case scui_lang_type_nl:
     case scui_lang_type_pt: {
         switch (font_idx) {
@@ -59,10 +72,11 @@ scui_handle_t scui_font_name_match(scui_handle_t font_idx, scui_handle_t lang_ty
         }
         break;
     }
-    case scui_lang_type_jp: {
+    case scui_lang_type_jp:
+    case scui_lang_type_zh: {
         switch (font_idx) {
-        case SCUI_FONT_IDX_32: return scui_font_match(scui_font_lang_jp, 32);
-        case SCUI_FONT_IDX_36: return scui_font_match(scui_font_lang_jp, 36);
+        case SCUI_FONT_IDX_32: return scui_font_match(scui_font_lang_cjk, 32);
+        case SCUI_FONT_IDX_36: return scui_font_match(scui_font_lang_cjk, 36);
         }
         break;
     }

@@ -174,71 +174,61 @@ bool scui_window_stack_adjust(
 
 /*@brief 窗口栈入栈出栈语义
  *@param handle       窗口句柄
+ *@param semantic     语义类型[1,6][add, del, prio, clean, cover, goback]
  *@param switch_type  切换类型
  *@param switch_dir   切换方向
- *@param add          常规入栈
- *@param del          常规出栈
- *@param prio         优先级入栈
- *@param clean        清空入栈
- *@param cover        出栈入栈
- *@param goback       回退出栈
- *@param prio_compare 优先级比较(返回:arg1 > arg2)
  *@param reserve      保留栈顶
+ *@param prio_compare 优先级比较(返回:arg1 > arg2)
  *@retval 成功失败
  */
-bool scui_window_stack_jump(scui_handle_t handle,
+bool scui_window_stack_jump(scui_handle_t handle, scui_coord_t semantic,
     scui_window_switch_type_t switch_type, scui_opt_dir_t switch_dir,
-    bool add, bool del, bool prio, bool clean, bool cover, bool goback,
-    bool (*prio_compare)(scui_handle_t, scui_handle_t), bool reserve);
+    bool reserve, bool (*prio_compare)(scui_handle_t, scui_handle_t));
+
+#define scui_window_stack_jump_auto(handle, semantic, reserve, prio_compare) \
+        scui_window_stack_jump(handle, semantic, scui_window_switch_auto, scui_opt_dir_none, reserve, prio_compare)
 
 /*************************************************************************************************/
 /* stack的一些扩充语义 */
 
-
-
 #define scui_window_stack_add_by(handle, switch_type, switch_dir, reserve)                          \
-        scui_window_stack_jump(handle, switch_type, switch_dir,                                     \
-         true, false, false, false, false, false, NULL, reserve)                                    \
+        scui_window_stack_jump(handle, 0x01, switch_type, switch_dir, reserve, NULL)                \
 
 #define scui_window_stack_del_by(handle, switch_type, switch_dir)                                   \
-        scui_window_stack_jump(handle, switch_type, switch_dir,                                     \
-        false,  true, false, false, false, false, NULL, false)                                      \
+        scui_window_stack_jump(handle, 0x02, switch_type, switch_dir, false, NULL)                  \
 
-#define scui_window_stack_prio_by(handle, switch_type, switch_dir, compare, reserve)                \
-        scui_window_stack_jump(handle, switch_type, switch_dir,                                     \
-        false, false,  true, false, false, false, compare, reserve)                                 \
+#define scui_window_stack_prio_by(handle, switch_type, switch_dir, reserve, compare)                \
+        scui_window_stack_jump(handle, 0x03, switch_type, switch_dir, reserve, compare)             \
 
 #define scui_window_stack_reset_by(handle, switch_type, switch_dir, reserve)                        \
-        scui_window_stack_jump(handle, switch_type, switch_dir,                                     \
-        false, false, false,  true, false, false, NULL, reserve)                                    \
+        scui_window_stack_jump(handle, 0x04, switch_type, switch_dir, reserve, NULL)                \
 
 #define scui_window_stack_cover_by(handle, switch_type, switch_dir)                                 \
-        scui_window_stack_jump(handle, switch_type, switch_dir,                                     \
-        false, false, false, false,  true, false, NULL, false)                                      \
+        scui_window_stack_jump(handle, 0x05, switch_type, switch_dir, false, NULL)                  \
 
 #define scui_window_stack_goback_by(handle, switch_type, switch_dir)                                \
-        scui_window_stack_jump(handle, switch_type, switch_dir,                                     \
-        false, false, false, false, false,  true, NULL, false)                                      \
+        scui_window_stack_jump(handle, 0x06, switch_type, switch_dir, false, NULL)                  \
 
-
+/*************************************************************************************************/
+/* stack的一些扩充语义 */
 
 #define scui_window_stack_add(handle, reserve)                                                      \
-scui_window_stack_add_by(handle, scui_window_switch_auto, scui_opt_dir_none, reserve)               \
+        scui_window_stack_jump_auto(handle, 0x01, reserve, NULL)                                    \
 
 #define scui_window_stack_del(handle)                                                               \
-scui_window_stack_del_by(handle, scui_window_switch_auto, scui_opt_dir_none)                        \
+        scui_window_stack_jump_auto(handle, 0x02, false, NULL)                                      \
 
 #define scui_window_stack_prio(handle, reserve, compare)                                            \
-scui_window_stack_prio_by(handle, scui_window_switch_auto, scui_opt_dir_none, compare, reserve)     \
+        scui_window_stack_jump_auto(handle, 0x03, reserve, compare)                                 \
 
 #define scui_window_stack_reset(handle, reserve)                                                    \
-scui_window_stack_reset_by(handle, scui_window_switch_auto, scui_opt_dir_none, reserve)             \
+        scui_window_stack_jump_auto(handle, 0x04, reserve, NULL)                                    \
 
 #define scui_window_stack_cover(handle)                                                             \
-scui_window_stack_cover_by(handle, scui_window_switch_auto, scui_opt_dir_none)                      \
+        scui_window_stack_jump_auto(handle, 0x05, false, NULL)                                      \
 
 #define scui_window_stack_goback(handle)                                                            \
-scui_window_stack_goback_by(handle, scui_window_switch_auto, scui_opt_dir_none)                     \
+        scui_window_stack_jump_auto(handle, 0x06, false, NULL)                                      \
 
 /*************************************************************************************************/
 
