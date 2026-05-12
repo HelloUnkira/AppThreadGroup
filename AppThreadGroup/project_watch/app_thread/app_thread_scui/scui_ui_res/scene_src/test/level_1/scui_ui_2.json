@@ -12,6 +12,7 @@
             "widget.event_cb":              "scui_ui_scene_2_event_proc",
             "widget.image":                 "scui_image_prj_image_src_watchface_bg_01_bgjpg",
             "widget.child_num":             "5",
+            "preload":                      "1",
             "level":                        "0",
             "buffer":                       "true"
         },

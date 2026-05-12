@@ -137,6 +137,11 @@ static void scui_window_switch_finish(scui_handle_t handle)
         /* 回收无关联性质窗口 */
         scui_widget_hide(handle_n, true);
     }
+    
+    /* 发送预加载事件到达指定窗口 */
+    scui_event_define(event, handle, false,
+        scui_event_window_preload, NULL);
+    scui_event_notify(&event);
 }
 
 /*@brief 窗口切换风格自动更新
@@ -380,11 +385,6 @@ static void scui_window_move_anima_finish(void *instance)
         scui_window_switch_finish(scui_window_switch.list[1]);
         scui_window_switch_update(scui_window_switch_move, scui_opt_dir_none);
         scui_window_stack_switch(scui_window_switch.list[1]);
-        
-        /* 发送预加载事件到达指定窗口 */
-        scui_event_define(event, scui_window_switch.list[1], false,
-            scui_event_window_preload, NULL);
-        scui_event_notify(&event);
     }
     
     scui_window_switch.lock_move = false;
@@ -760,8 +760,11 @@ bool scui_window_switch_jump(scui_handle_t handle, scui_window_switch_type_t typ
     /* 如果没有焦点窗口 */
     /* 新窗口已经是焦点窗口 */
     if (handle_a == SCUI_HANDLE_INVALID || handle_a == handle) {
-        scui_widget_show(handle, false);
+        scui_window_switch.list[0] = SCUI_HANDLE_INVALID;
+        scui_window_switch.list[1] = handle;
+        scui_window_switch_ready();
         scui_window_active(handle);
+        scui_window_switch_finish(handle);
         scui_window_switch.lock_jump = false;
         return true;
     }
@@ -803,6 +806,7 @@ bool scui_window_switch_jump(scui_handle_t handle, scui_window_switch_type_t typ
         scui_window_switch.list[1] = handle;
         scui_window_switch_ready();
         scui_window_active(handle);
+        scui_window_switch_finish(handle);
         scui_window_switch.lock_jump = false;
         return true;
     }

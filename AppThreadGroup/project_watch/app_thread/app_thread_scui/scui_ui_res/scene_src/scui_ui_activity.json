@@ -11,6 +11,7 @@
             "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY",
             "widget.event_cb":              "scui_ui_scene_activity_event_proc",
+            "preload":                      "1",
             "level":                        "0",
             "buffer":                       "true"
         },

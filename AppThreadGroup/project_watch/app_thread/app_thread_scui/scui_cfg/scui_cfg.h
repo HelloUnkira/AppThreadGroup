@@ -179,11 +179,11 @@
 
 /* 窗口管理器参数配置 */
 /* 窗口切换动画速度[ptr, enc, key, auto, jump] */
-#define SCUI_WINDOW_LIST_LIMIT                      (5)
-#define SCUI_WINDOW_STACK_NEST                      (10)
+#define SCUI_WINDOW_LIST_LIMIT                      (10)
+#define SCUI_WINDOW_STACK_NEST                      (20)
 #define SCUI_WINDOW_SWITCH_MODE                     (1 && !SCUI_MEM_FEAT_MINI)
 #define SCUI_WINDOW_SWITCH_MOVE_SPD                 {2000, 1700, 1700, 1000, 300}
-#define SCUI_WINDOW_PRELOAD_USE                     (1)
+#define SCUI_WINDOW_PRELOAD_USE                     (0)
 
 /* 控件布局标记(为控件添加随机颜色轮廓) */
 #define SCUI_WIDGET_BORDER_TAG                      (0)

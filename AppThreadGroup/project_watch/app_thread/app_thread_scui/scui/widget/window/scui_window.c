@@ -127,9 +127,8 @@ void scui_window_invoke(scui_event_t *event)
             scui_widget_maker_t *widget_maker = scui_handle_source_check(handle_s);
             scui_window_maker_t *window_maker = (void *)widget_maker;
             if (!window_maker->preload) continue;
-            
-            /* 不支持预加载, 不自动预加载 */
             #if SCUI_WINDOW_PRELOAD_USE == 0
+            /* 不使用预加载机制 */
             continue;
             #endif
             
@@ -143,6 +142,7 @@ void scui_window_invoke(scui_event_t *event)
             };
             /* 移动到对应位置 */
             scui_widget_move_pos(handle_s, &point);
+            SCUI_LOG_WARN("window preload: %d", handle_s);
         }
         break;
     }
