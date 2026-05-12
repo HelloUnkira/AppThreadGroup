@@ -70,6 +70,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     scui_coord_t base_line   = scui_font_base_line(font_unit.font);
     scui_coord_t line_height = scui_font_line_height(font_unit.font);
     scui_coord_t underline   = scui_font_underline(font_unit.font);
+    scui_coord_t bool_kern   = scui_font_kern(font_unit.font);
     scui_cache_font_unload(&font_unit);
     
     scui_area_t dst_clip_v = *dst_clip;   /* v:vaild */
@@ -124,9 +125,14 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                     .glyph.space_width = src_args->gap_none,
                     .glyph.unicode_letter = src_args->unicode[idx],
                 };
+                if (bool_kern) {
+                    glyph_unit.glyph.unicode_letter_next =
+                        idx + 1 > line_e ? 0 : src_args->unicode[idx + 1];
+                }
                 scui_cache_glyph_load(&glyph_unit);
                 scui_cache_glyph_unload(&glyph_unit);
                 
+                SCUI_LOG_DEBUG("adv_w:%d", glyph_unit.glyph.adv_w);
                 SCUI_LOG_DEBUG("box_w:%d", glyph_unit.glyph.box_w);
                 SCUI_LOG_DEBUG("box_h:%d", glyph_unit.glyph.box_h);
                 SCUI_LOG_DEBUG("ofs_x:%d", glyph_unit.glyph.ofs_x);
@@ -189,7 +195,8 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 }
                 
                 offset_line.x += (glyph_unit.glyph.bitmap == NULL ? src_args->gap_none :
-                    (glyph_unit.glyph.ofs_x + glyph_unit.glyph.box_w)) + src_args->gap_item;
+                        glyph_unit.glyph.adv_w) + src_args->gap_item;
+                    // (glyph_unit.glyph.ofs_x + glyph_unit.glyph.box_w)) + src_args->gap_item;
             }
             
             /* 下划线和删除线 */
@@ -262,9 +269,14 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 .glyph.space_width = src_args->gap_none,
                 .glyph.unicode_letter = src_args->unicode[idx],
             };
+            if (bool_kern) {
+                glyph_unit.glyph.unicode_letter_next =
+                    idx + 1 >= src_args->number ? 0 : src_args->unicode[idx + 1];
+            }
             scui_cache_glyph_load(&glyph_unit);
             scui_cache_glyph_unload(&glyph_unit);
             
+            SCUI_LOG_DEBUG("adv_w:%d", glyph_unit.glyph.adv_w);
             SCUI_LOG_DEBUG("box_w:%d", glyph_unit.glyph.box_w);
             SCUI_LOG_DEBUG("box_h:%d", glyph_unit.glyph.box_h);
             SCUI_LOG_DEBUG("ofs_x:%d", glyph_unit.glyph.ofs_x);
@@ -326,7 +338,8 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             }
             
             offset.x += (glyph_unit.glyph.bitmap == 0 ? src_args->gap_none :
-                (glyph_unit.glyph.ofs_x + glyph_unit.glyph.box_w)) + src_args->gap_item;
+                    glyph_unit.glyph.adv_w) + src_args->gap_item;
+                // (glyph_unit.glyph.ofs_x + glyph_unit.glyph.box_w)) + src_args->gap_item;
         }
         
         /* 下划线和删除线 */

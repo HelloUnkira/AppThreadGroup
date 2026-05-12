@@ -1018,10 +1018,10 @@ static lv_font_t * lv_font_load(scui_font_t *font_src)
     
     /* bin[kern] */
     if(font_header.tables_count >= 4) {
-        
-        #if 0   /* 不需要使用此字段信息 */
+        #if 1
         uint32_t kern_offset = bin_glyph_offset + bin_glyph_langth;
         uint32_t kern_length = load_kern(font, kern_offset, font_dsc, font_header.glyph_id_format);
+        SCUI_ASSERT(kern_length >= 0);
         #endif
     }
     
@@ -1099,6 +1099,12 @@ static void lv_font_free(lv_font_t * font)
         }
         SCUI_MEM_FREE(font);
     }
+}
+
+static bool lv_font_kern(lv_font_t *font)
+{
+    lv_font_fmt_txt_dsc_t * fdsc = (lv_font_fmt_txt_dsc_t *)font->dsc;
+    return fdsc->kern_dsc != NULL;
 }
 
 /*@brief 这里补充一个2进制流左移位接口
@@ -1272,12 +1278,12 @@ static void lv_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
     /* Put together a glyph dsc */
     int32_t kv = ((int32_t)((int32_t)kvalue * fdsc->kern_scale) >> 4);
     uint32_t adv_w = glyph->adv_w;
-    if (is_tab)
-        adv_w *= 2;
+    if (is_tab) adv_w *= 2;
     adv_w += kv;
     adv_w = (adv_w + (1 << 3)) >> 4;
-
-    glyph->adv_w = adv_w * 16;
+    
+    /* LVGL默认放大了16倍像素点比例(此处还原) */
+    glyph->adv_w = adv_w; // * 16;
     glyph->bpp = (uint8_t)fdsc->bpp;
     if (is_tab)
         glyph->box_w = glyph->box_w * 2;
@@ -1462,6 +1468,21 @@ void scui_font_unload(scui_handle_t handle)
     SCUI_MEM_FREE(font);
 }
 
+/*@brief 字库字距使用
+ *@param handle 字库句柄
+ */
+bool scui_font_kern(scui_handle_t handle)
+{
+    scui_font_t *font = scui_handle_source_check(handle);
+    
+    if (font->font_size == 0) {
+        lv_font_t *lv_font = font->bmp_fixed;
+        return lv_font_kern(lv_font);
+    } else {
+        return false;
+    }
+}
+
 /*@brief 字库大小
  *@param handle 字库句柄
  *@retval 字库大小
@@ -1545,9 +1566,9 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
         glyph->unicode_letter == 0x202C || glyph->unicode_letter == 0x202B) {
         
         if (glyph->space_width != 0) {
-            glyph->ofs_x = 0;
+            glyph->ofs_x = glyph->space_width;
             glyph->box_h = glyph->space_width;
-            glyph->adv_w = glyph->space_width << 4;
+            glyph->adv_w = glyph->space_width;
             glyph->box_w = glyph->space_width;
         }
         return;

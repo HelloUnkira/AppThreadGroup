@@ -31,12 +31,24 @@ static uint8_t scui_cache_glyph_fc_t(scui_table_dln_t *node1, scui_table_dln_t *
     
     scui_handle_t name1 = glyph_unit1->name;
     scui_handle_t name2 = glyph_unit2->name;
-    uint32_t letter1 = glyph_unit1->glyph.unicode_letter;
-    uint32_t letter2 = glyph_unit2->glyph.unicode_letter;
+    if (name1 != name2) return false;
+    
     uint16_t size1 = glyph_unit1->size;
     uint16_t size2 = glyph_unit2->size;
+    if (size1 != size2) return false;
     
-    return name1 == name2 && letter1 == letter2 && size1 == size2 ? true : false;
+    uint32_t letter1 = glyph_unit1->glyph.unicode_letter;
+    uint32_t letter2 = glyph_unit2->glyph.unicode_letter;
+    if (letter1 != letter2) return false;
+    
+    /* 只有使用kern的字这个字段才会特殊化 */
+    uint32_t letter1_next = glyph_unit1->glyph.unicode_letter_next;
+    uint32_t letter2_next = glyph_unit2->glyph.unicode_letter_next;
+    if (letter1_next != letter2_next) return false;
+    
+    
+    
+    return true;
 }
 
 /*@brief 哈希访问函数
@@ -46,11 +58,12 @@ static void scui_cache_glyph_fv_t(scui_table_dln_t *node, uint32_t idx)
     scui_cache_lru_unit_t *unit = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node);
     scui_cache_glyph_unit_t *glyph_unit = scui_own_ofs(scui_cache_glyph_unit_t, lru_unit, unit);
     
-    SCUI_LOG_INFO("- name:%s",   scui_handle_source(glyph_unit->name));
-    SCUI_LOG_INFO("- size:%u",   glyph_unit->size);
-    SCUI_LOG_INFO("- letter:%x", glyph_unit->glyph.unicode_letter);
-    SCUI_LOG_INFO("- count:%x",  unit->count);
-    SCUI_LOG_INFO("- lock:%x",   unit->lock);
+    SCUI_LOG_INFO("- name:%s",     scui_handle_source(glyph_unit->name));
+    SCUI_LOG_INFO("- size:%u",     glyph_unit->size);
+    SCUI_LOG_INFO("- letter_c:%x", glyph_unit->glyph.unicode_letter);
+    SCUI_LOG_INFO("- letter_n:%x", glyph_unit->glyph.unicode_letter_next);
+    SCUI_LOG_INFO("- count:%x",    unit->count);
+    SCUI_LOG_INFO("- lock:%x",     unit->lock);
 }
 
 /*@brief 节点占用回调

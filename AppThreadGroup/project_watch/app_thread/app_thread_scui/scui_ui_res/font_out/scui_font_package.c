@@ -8,142 +8,142 @@ static const scui_font_t font_ascii_8_bin = {
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 8,
 	.data_bin	 = 0x0,
-	.size_bin	 = 0x894,
+	.size_bin	 = 0x890,
 };
 
 static const scui_font_t font_ascii_12_bin = {
 	.font_name	 = "font_ascii_12.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 12,
-	.data_bin	 = 0x894,
-	.size_bin	 = 0xdc0,
+	.data_bin	 = 0x890,
+	.size_bin	 = 0xdb4,
 };
 
 static const scui_font_t font_ascii_16_bin = {
 	.font_name	 = "font_ascii_16.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 16,
-	.data_bin	 = 0x1654,
-	.size_bin	 = 0x14e8,
+	.data_bin	 = 0x1644,
+	.size_bin	 = 0x14a8,
 };
 
 static const scui_font_t font_ascii_20_bin = {
 	.font_name	 = "font_ascii_20.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 20,
-	.data_bin	 = 0x2b3c,
-	.size_bin	 = 0x1be8,
+	.data_bin	 = 0x2aec,
+	.size_bin	 = 0x1bc4,
 };
 
 static const scui_font_t font_ascii_24_bin = {
 	.font_name	 = "font_ascii_24.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 24,
-	.data_bin	 = 0x4724,
-	.size_bin	 = 0x26f0,
+	.data_bin	 = 0x46b0,
+	.size_bin	 = 0x2680,
 };
 
 static const scui_font_t font_ascii_32_bin = {
 	.font_name	 = "font_ascii_32.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 32,
-	.data_bin	 = 0x6e14,
-	.size_bin	 = 0x39c8,
+	.data_bin	 = 0x6d30,
+	.size_bin	 = 0x393c,
 };
 
 static const scui_font_t font_ascii_40_bin = {
 	.font_name	 = "font_ascii_40.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 40,
-	.data_bin	 = 0xa7dc,
-	.size_bin	 = 0x5360,
+	.data_bin	 = 0xa66c,
+	.size_bin	 = 0x51ec,
 };
 
 static const scui_font_t font_ascii_48_bin = {
 	.font_name	 = "font_ascii_48.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 48,
-	.data_bin	 = 0xfb3c,
-	.size_bin	 = 0x69fc,
+	.data_bin	 = 0xf858,
+	.size_bin	 = 0x680c,
 };
 
 static const scui_font_t font_ascii_56_bin = {
 	.font_name	 = "font_ascii_56.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 56,
-	.data_bin	 = 0x16538,
-	.size_bin	 = 0x85fc,
+	.data_bin	 = 0x16064,
+	.size_bin	 = 0x8244,
 };
 
 static const scui_font_t font_ascii_64_bin = {
 	.font_name	 = "font_ascii_64.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 64,
-	.data_bin	 = 0x1eb34,
-	.size_bin	 = 0xa05c,
+	.data_bin	 = 0x1e2a8,
+	.size_bin	 = 0x9aac,
 };
 
 static const scui_font_t font_ascii_72_bin = {
 	.font_name	 = "font_ascii_72.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 72,
-	.data_bin	 = 0x28b90,
-	.size_bin	 = 0xc1d4,
+	.data_bin	 = 0x27d54,
+	.size_bin	 = 0xb758,
 };
 
 static const scui_font_t font_ascii_80_bin = {
 	.font_name	 = "font_ascii_80.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 80,
-	.data_bin	 = 0x34d64,
-	.size_bin	 = 0xdd14,
+	.data_bin	 = 0x334ac,
+	.size_bin	 = 0xd0ac,
 };
 
 static const scui_font_t font_ascii_88_bin = {
 	.font_name	 = "font_ascii_88.bin",
 	.font_lang	 = scui_font_lang_ascii,
 	.font_size	 = 88,
-	.data_bin	 = 0x42a78,
-	.size_bin	 = 0xfdf8,
+	.data_bin	 = 0x40558,
+	.size_bin	 = 0xee80,
 };
 
 static const scui_font_t font_symbol_8_bin = {
 	.font_name	 = "font_symbol_8.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 8,
-	.data_bin	 = 0x52870,
-	.size_bin	 = 0x79c,
+	.data_bin	 = 0x4f3d8,
+	.size_bin	 = 0x7c8,
 };
 
 static const scui_font_t font_symbol_12_bin = {
 	.font_name	 = "font_symbol_12.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 12,
-	.data_bin	 = 0x5300c,
-	.size_bin	 = 0xd1c,
+	.data_bin	 = 0x4fba0,
+	.size_bin	 = 0xd48,
 };
 
 static const scui_font_t font_symbol_16_bin = {
 	.font_name	 = "font_symbol_16.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 16,
-	.data_bin	 = 0x53d28,
-	.size_bin	 = 0x11d4,
+	.data_bin	 = 0x508e8,
+	.size_bin	 = 0x11ec,
 };
 
 static const scui_font_t font_symbol_20_bin = {
 	.font_name	 = "font_symbol_20.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 20,
-	.data_bin	 = 0x54efc,
-	.size_bin	 = 0x19dc,
+	.data_bin	 = 0x51ad4,
+	.size_bin	 = 0x1970,
 };
 
 static const scui_font_t font_symbol_24_bin = {
 	.font_name	 = "font_symbol_24.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 24,
-	.data_bin	 = 0x568d8,
+	.data_bin	 = 0x53444,
 	.size_bin	 = 0x1f60,
 };
 
@@ -151,119 +151,119 @@ static const scui_font_t font_symbol_32_bin = {
 	.font_name	 = "font_symbol_32.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 32,
-	.data_bin	 = 0x58838,
-	.size_bin	 = 0x2be4,
+	.data_bin	 = 0x553a4,
+	.size_bin	 = 0x2ad0,
 };
 
 static const scui_font_t font_symbol_40_bin = {
 	.font_name	 = "font_symbol_40.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 40,
-	.data_bin	 = 0x5b41c,
-	.size_bin	 = 0x3d44,
+	.data_bin	 = 0x57e74,
+	.size_bin	 = 0x3a4c,
 };
 
 static const scui_font_t font_symbol_48_bin = {
 	.font_name	 = "font_symbol_48.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 48,
-	.data_bin	 = 0x5f160,
-	.size_bin	 = 0x4b80,
+	.data_bin	 = 0x5b8c0,
+	.size_bin	 = 0x4730,
 };
 
 static const scui_font_t font_symbol_56_bin = {
 	.font_name	 = "font_symbol_56.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 56,
-	.data_bin	 = 0x63ce0,
-	.size_bin	 = 0x5d98,
+	.data_bin	 = 0x5fff0,
+	.size_bin	 = 0x57b0,
 };
 
 static const scui_font_t font_symbol_64_bin = {
 	.font_name	 = "font_symbol_64.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 64,
-	.data_bin	 = 0x69a78,
-	.size_bin	 = 0x6ae4,
+	.data_bin	 = 0x657a0,
+	.size_bin	 = 0x647c,
 };
 
 static const scui_font_t font_symbol_72_bin = {
 	.font_name	 = "font_symbol_72.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 72,
-	.data_bin	 = 0x7055c,
-	.size_bin	 = 0x8030,
+	.data_bin	 = 0x6bc1c,
+	.size_bin	 = 0x7828,
 };
 
 static const scui_font_t font_symbol_80_bin = {
 	.font_name	 = "font_symbol_80.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 80,
-	.data_bin	 = 0x7858c,
-	.size_bin	 = 0x9048,
+	.data_bin	 = 0x73444,
+	.size_bin	 = 0x8724,
 };
 
 static const scui_font_t font_symbol_88_bin = {
 	.font_name	 = "font_symbol_88.bin",
 	.font_lang	 = scui_font_lang_symbol,
 	.font_size	 = 88,
-	.data_bin	 = 0x815d4,
-	.size_bin	 = 0xa71c,
+	.data_bin	 = 0x7bb68,
+	.size_bin	 = 0x9c50,
 };
 
 static const scui_font_t font_en_32_bin = {
 	.font_name	 = "font_en_32.bin",
 	.font_lang	 = scui_font_lang_en,
 	.font_size	 = 32,
-	.data_bin	 = 0x8bcf0,
-	.size_bin	 = 0x5c0c,
+	.data_bin	 = 0x857b8,
+	.size_bin	 = 0x691c,
 };
 
 static const scui_font_t font_en_36_bin = {
 	.font_name	 = "font_en_36.bin",
 	.font_lang	 = scui_font_lang_en,
 	.font_size	 = 36,
-	.data_bin	 = 0x918fc,
-	.size_bin	 = 0x71b8,
+	.data_bin	 = 0x8c0d4,
+	.size_bin	 = 0x80b4,
 };
 
 static const scui_font_t font_eu_32_bin = {
 	.font_name	 = "font_eu_32.bin",
 	.font_lang	 = scui_font_lang_eu,
 	.font_size	 = 32,
-	.data_bin	 = 0x98ab4,
-	.size_bin	 = 0x3cd4,
+	.data_bin	 = 0x94188,
+	.size_bin	 = 0x40c0,
 };
 
 static const scui_font_t font_eu_36_bin = {
 	.font_name	 = "font_eu_36.bin",
 	.font_lang	 = scui_font_lang_eu,
 	.font_size	 = 36,
-	.data_bin	 = 0x9c788,
-	.size_bin	 = 0x4568,
+	.data_bin	 = 0x98248,
+	.size_bin	 = 0x4a84,
 };
 
 static const scui_font_t font_cjk_32_bin = {
 	.font_name	 = "font_cjk_32.bin",
 	.font_lang	 = scui_font_lang_cjk,
 	.font_size	 = 32,
-	.data_bin	 = 0xa0cf0,
-	.size_bin	 = 0x352bf8,
+	.data_bin	 = 0x9cccc,
+	.size_bin	 = 0x351bb8,
 };
 
 static const scui_font_t font_cjk_36_bin = {
 	.font_name	 = "font_cjk_36.bin",
 	.font_lang	 = scui_font_lang_cjk,
 	.font_size	 = 36,
-	.data_bin	 = 0x3f38e8,
-	.size_bin	 = 0x3fd810,
+	.data_bin	 = 0x3ee884,
+	.size_bin	 = 0x3fa5b8,
 };
 
 static const scui_font_t font_tinyTTF_ttf = {
 	.font_name	 = "font_tinyTTF.ttf",
 	.font_lang	 = scui_font_lang_multi,
 	.font_size	 = 0,
-	.data_bin	 = 0x7f10f8,
+	.data_bin	 = 0x7e8e3c,
 	.size_bin	 = 0xc256c4,
 };
 
