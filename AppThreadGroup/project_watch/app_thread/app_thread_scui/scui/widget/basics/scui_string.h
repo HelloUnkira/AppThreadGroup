@@ -19,13 +19,15 @@ typedef struct {
     scui_coord_t       *line_ofs_s;         /* 行索引偏移(起始) */
     scui_coord_t       *line_ofs_e;         /* 行索引偏移(结束) */
     scui_coord_t       *line_width;         /* 行当前宽度 */
+    scui_coord_t       *line_min_y;         /* 行最小偏移y */
+    scui_coord_t       *line_max_y;         /* 行最大偏移y */
 } scui_string_typo_t;
 
 typedef struct {
     scui_color_t        color;              /* 字符串颜色 */
-    scui_coord_t        line_width;         /* 线宽 */
     scui_string_rec_t  *colors;             /* 字符复色序列表 */
     scui_string_grad_t *grads;              /* 字符渐变序列表 */
+    scui_coord_t        line_width;         /* 宽:下划线/删除线 */
     scui_sbitfd_t       regrad:1;           /* 字符颜色渐变使能 */
     scui_sbitfd_t       recolor:1;          /* 字符颜色复色使能 */
     scui_sbitfd_t       line_under:1;       /* 下划线 */
@@ -43,10 +45,13 @@ typedef struct {
     /* 外部域转内部域: */
     scui_area_t         clip;               /* 绘制剪切域 */
     uint8_t            *utf8;               /* 字符串(utf8) */
-    /* 内部域: */
-    scui_string_typo_t *typo;               /* 排版信息(多行模式使用) */
+    /* 内部域(排版信息): */
+    scui_string_typo_t *typo;               /* 多行模式排版信息 */
+    scui_coord_t        min_y;              /* 单行模式行最小偏移y */
+    scui_coord_t        max_y;              /* 单行模式行最大偏移y */
     scui_coord_t        width;              /* 单行模式宽度 */
     scui_coord_t        height;             /* 多行模式高度 */
+    /* 内部域: */
     scui_coord_t        limit;              /* 滚动限制量 */
     scui_coord_t        offset;             /* 滚动偏移量 */
     scui_coord_t        number;             /* 字符数量 */
@@ -60,9 +65,9 @@ typedef struct {
     scui_widget_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
+    scui_string_args_t  args;               /* 字符串绘制参数 */
     scui_handle_t       text;               /* 字符串 */
     scui_handle_t       font_idx;           /* 字库索引 */
-    scui_string_args_t  args;               /* 字符串绘制参数 */
     scui_coord_t        unit_ms;            /* 滚动单元时间 */
     scui_coord_t        unit_dx;            /* 滚动单元距离 */
     scui_sbitfd_t       unit_s:1;           /* 滚动模式(单次滚动,结束后不再滚动) */
@@ -86,9 +91,9 @@ typedef struct {
     scui_widget_maker_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
+    scui_string_args_t  args;               /* 字符串绘制参数 */
     scui_handle_t       text;               /* 字符串 */
     scui_handle_t       font_idx;           /* 字库索引 */
-    scui_string_args_t  args;               /* 字符串绘制参数 */
     scui_coord_t        unit_ms;            /* 滚动单元时间 */
     scui_coord_t        unit_dx;            /* 滚动单元距离 */
     scui_sbitfd_t       unit_s:1;           /* 滚动模式(单次滚动,结束后不再滚动) */

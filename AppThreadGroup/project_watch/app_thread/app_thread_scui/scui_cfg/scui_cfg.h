@@ -200,7 +200,7 @@
 #define SCUI_WIDGET_SCROLL_KEY_FDIR                 (scui_event_key_val_down)
 #define SCUI_WIDGET_SCROLL_KEY_BDIR                 (scui_event_key_val_up)
 /* string:行间距,字间距,空字符宽度 */
-#define SCUI_WIDGET_STRING_GAP_LINE                 (0)
+#define SCUI_WIDGET_STRING_GAP_LINE                 (5)
 #define SCUI_WIDGET_STRING_GAP_ITEM                 (0)
 #define SCUI_WIDGET_STRING_GAP_NONE                 (8)
 /* string:文本滚动时间与距离 */

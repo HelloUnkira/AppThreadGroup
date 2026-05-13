@@ -349,6 +349,8 @@ void scui_string_adjust_size(scui_handle_t handle, scui_coord_t size)
         return;
     
     string->args.size = scui_font_size_match(string->font_idx, size);
+    scui_event_define(event, handle, true, scui_event_size_auto, NULL);
+    scui_event_notify(&event);
     
     /* 清扫一遍cache以让旧资源快速回收 */
     scui_cache_font_rectify();
@@ -459,6 +461,7 @@ void scui_string_invoke(scui_event_t *event)
                 scui_coord_t ver_res = string->widget.clip.h;
                 hor_res = string->args.line_multi ? hor_res : scui_max(hor_res, string->args.width);
                 ver_res = string->args.line_multi ? scui_max(ver_res, string->args.height) : ver_res;
+                /* 上面偷了懒, 应该要做对齐的, 直接用的最大区域对齐 */
                 
                 string->draw_surface->format  = SCUI_PIXEL_CF_DEF_A;
                 string->draw_surface->hor_res = hor_res;

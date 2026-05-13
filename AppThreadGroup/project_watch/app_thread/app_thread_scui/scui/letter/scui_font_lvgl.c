@@ -1209,9 +1209,9 @@ static void lv_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
     if (gid == 0) {
         glyph->adv_w = 0;
         glyph->box_w = 0;
-        glyph->box_h = 0;
-        glyph->ofs_x = 0;
-        glyph->ofs_y = 0;
+        glyph->box_h = glyph->space_width;
+        glyph->ofs_x = glyph->space_width;
+        glyph->ofs_y = glyph->space_width;
     }
     
     /*空格字符是合法字符 */
@@ -1471,7 +1471,7 @@ void scui_font_unload(scui_handle_t handle)
 /*@brief 字库字距使用
  *@param handle 字库句柄
  */
-bool scui_font_kern(scui_handle_t handle)
+bool scui_font_kern_used(scui_handle_t handle)
 {
     scui_font_t *font = scui_handle_source_check(handle);
     
@@ -1565,12 +1565,11 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
         glyph->unicode_letter == 0x200E || glyph->unicode_letter == 0x202A ||
         glyph->unicode_letter == 0x202C || glyph->unicode_letter == 0x202B) {
         
-        if (glyph->space_width != 0) {
-            glyph->ofs_x = glyph->space_width;
-            glyph->box_h = glyph->space_width;
-            glyph->adv_w = glyph->space_width;
-            glyph->box_w = glyph->space_width;
-        }
+        glyph->ofs_x = 0;
+        glyph->ofs_y = 0;
+        glyph->adv_w = glyph->space_width;
+        glyph->box_h = glyph->space_width;
+        glyph->box_w = glyph->space_width;
         return;
     }
     
@@ -1588,12 +1587,11 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
     
     if (glyph->bitmap == NULL) {
         
-        if (glyph->space_width != 0) {
-            glyph->ofs_x = 0;
-            glyph->box_h = glyph->space_width;
-            glyph->adv_w = glyph->space_width << 4;
-            glyph->box_w = glyph->space_width;
-        }
+        glyph->ofs_x = 0;
+        glyph->ofs_y = 0;
+        glyph->adv_w = glyph->space_width;
+        glyph->box_h = glyph->space_width;
+        glyph->box_w = glyph->space_width;
     }
 }
 

@@ -66,7 +66,7 @@ void scui_font_unload(scui_handle_t handle);
 /*@brief 字库字距使用
  *@param handle 字库句柄
  */
-bool scui_font_kern(scui_handle_t handle);
+bool scui_font_kern_used(scui_handle_t handle);
 
 /*@brief 字库大小
  *@param handle 字库句柄

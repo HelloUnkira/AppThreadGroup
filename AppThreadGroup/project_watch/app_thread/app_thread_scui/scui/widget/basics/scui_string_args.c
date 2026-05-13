@@ -7,6 +7,20 @@
 
 #include "scui.h"
 
+/*@brief 绘制字符检查单词是否为空白字符
+ *@param args  字符串绘制参数
+ *@param idx_t 目标点
+ *@retval 是否为空白字符
+ */
+static bool scui_string_args_check_space(scui_string_args_t *args, scui_coord_t idx_t)
+{
+    for (scui_coord_t idx_k = 0; SCUI_STRING_SPACE_CHAR[idx_k] != '\0'; idx_k++)
+        if (args->unicode[idx_t] == SCUI_STRING_SPACE_CHAR[idx_k])
+            return true;
+    
+    return false;
+}
+
 /*@brief 绘制字符查找一个单词
  *@param args      字符串绘制参数
  *@param idx_s     起始点
@@ -14,9 +28,10 @@
  *@param width     单词总宽度
  *@param width_max 单词总宽度限制
  */
-static void scui_string_args_match_word(scui_string_args_t *args, uint32_t *idx_s, uint32_t *idx_e, uint32_t *width, uint32_t *width_max)
+static void scui_string_args_match_word(scui_string_args_t *args,
+    scui_coord_t *idx_s, scui_coord_t *idx_e, scui_coord_t *width, scui_coord_t *width_max)
 {
-    uint32_t idx = 0;
+    scui_coord_t idx = 0;
     *idx_e = *idx_s;
     *width = 0;
     
@@ -25,7 +40,7 @@ static void scui_string_args_match_word(scui_string_args_t *args, uint32_t *idx_
     font_unit.name = args->name;
     font_unit.size = args->size;
     scui_cache_font_load(&font_unit);
-    scui_coord_t bool_kern = scui_font_kern(font_unit.font);
+    scui_coord_t kern_used = scui_font_kern_used(font_unit.font);
     scui_cache_font_unload(&font_unit);
     
     for (idx = *idx_s; idx < args->number; idx++) {
@@ -36,14 +51,14 @@ static void scui_string_args_match_word(scui_string_args_t *args, uint32_t *idx_
             .glyph.space_width = args->gap_none,
             .glyph.unicode_letter = args->unicode[idx],
         };
-        if (bool_kern) {
+        if (kern_used) {
             glyph_unit.glyph.unicode_letter_next =
                  idx + 1 >= args->number ? 0 : args->unicode[idx + 1];
         }
         scui_cache_glyph_load(&glyph_unit);
         scui_cache_glyph_unload(&glyph_unit);
         
-        uint32_t glyph_width = 0;
+        scui_coord_t glyph_width = 0;
         /* glyph_width += glyph_unit.glyph.ofs_x; */
         /* glyph_width += glyph_unit.glyph.box_w; */
         glyph_width += glyph_unit.glyph.adv_w;
@@ -59,7 +74,7 @@ static void scui_string_args_match_word(scui_string_args_t *args, uint32_t *idx_
         bool break_char = false;
         
         /* 被标记的字符都可以分割单词 */
-        for (uint8_t idx_k = 0; !break_char && SCUI_STRING_BREAK_CHAR[idx_k] != '\0'; idx_k++)
+        for (scui_coord_t idx_k = 0; !break_char && SCUI_STRING_BREAK_CHAR[idx_k] != '\0'; idx_k++)
             if (args->unicode[idx] == SCUI_STRING_BREAK_CHAR[idx_k])
                 break_char = true;
         
@@ -79,18 +94,58 @@ static void scui_string_args_match_word(scui_string_args_t *args, uint32_t *idx_
     }
 }
 
-/*@brief 绘制字符检查单词是否为空白字符
- *@param args    字符串绘制参数
- *@param idx_t   目标点
- *@retval 是否为空白字符
+/*@brief 绘制字符子序列真实范围
+ *@param args  字符串绘制参数
+ *@param idx_s 起始点
+ *@param idx_e 结束点
+ *@param min_y 子序列最小ofs_y
+ *@param max_y 子序列最大ofs_y
  */
-static bool scui_string_args_check_space(scui_string_args_t *args, uint32_t idx_t)
+static void scui_string_args_line_ofs(scui_string_args_t *args,
+    scui_coord_t idx_s, scui_coord_t idx_e, scui_coord_t *min_y, scui_coord_t *max_y)
 {
-    for (uint8_t idx_k = 0; SCUI_STRING_SPACE_CHAR[idx_k] != '\0'; idx_k++)
-        if (args->unicode[idx_t] == SCUI_STRING_SPACE_CHAR[idx_k])
-            return true;
+    /* 从字库中提取一些信息 */
+    scui_cache_font_unit_t font_unit = {0};
+    font_unit.name = args->name;
+    font_unit.size = args->size;
+    scui_cache_font_load(&font_unit);
+    scui_coord_t kern_used   = scui_font_kern_used(font_unit.font);
+    scui_coord_t base_line   = scui_font_base_line(font_unit.font);
+    scui_coord_t line_height = scui_font_line_height(font_unit.font);
+    scui_cache_font_unload(&font_unit);
     
-    return false;
+    scui_coord_t line_min_y1 = scui_coord_max;  /* 最小y偏移 */
+    scui_coord_t line_max_y2 = scui_coord_min;  /* 最大y偏移 */
+    
+    for (scui_coord_t idx = idx_s; idx <= idx_e; idx++) {
+        /* 文字信息缓存节点实例映射 */
+        scui_cache_glyph_unit_t glyph_unit = {
+            .size = args->size,
+            .name = args->name,
+            .glyph.space_width = args->gap_none,
+            .glyph.unicode_letter = args->unicode[idx],
+        };
+        if (kern_used) {
+            glyph_unit.glyph.unicode_letter_next =
+                 idx + 1 >= args->number ? 0 : args->unicode[idx + 1];
+        }
+        scui_cache_glyph_load(&glyph_unit);
+        scui_cache_glyph_unload(&glyph_unit);
+        
+        scui_coord_t line_y2 = line_height - base_line;
+        line_y2 -= glyph_unit.glyph.ofs_y;
+        if (line_max_y2 < line_y2)
+            line_max_y2 = line_y2;
+        
+        scui_coord_t line_y1 = line_y2;
+        line_y1 -= glyph_unit.glyph.box_h;
+        if (line_min_y1 > line_y1)
+            line_min_y1 = line_y1;
+    }
+    
+   *min_y = line_min_y1 < line_height ? line_min_y1 : 0;
+   *max_y = line_max_y2 > 0 ? line_max_y2 : line_height;
+    SCUI_ASSERT((*max_y - *min_y) <= line_height);
 }
 
 /*@brief 字符串处理
@@ -141,6 +196,8 @@ static void scui_string_args_typo(scui_string_args_t *args)
         SCUI_MEM_FREE(args->typo->line_ofs_s);
         SCUI_MEM_FREE(args->typo->line_ofs_e);
         SCUI_MEM_FREE(args->typo->line_width);
+        SCUI_MEM_FREE(args->typo->line_min_y);
+        SCUI_MEM_FREE(args->typo->line_max_y);
         SCUI_MEM_FREE(args->typo);
         args->typo = NULL;
     }
@@ -159,9 +216,9 @@ static void scui_string_args_typo(scui_string_args_t *args)
     font_unit.name = args->name;
     font_unit.size = args->size;
     scui_cache_font_load(&font_unit);
+    scui_coord_t kern_used   = scui_font_kern_used(font_unit.font);
     scui_coord_t base_line   = scui_font_base_line(font_unit.font);
     scui_coord_t line_height = scui_font_line_height(font_unit.font);
-    scui_coord_t bool_kern   = scui_font_kern(font_unit.font);
     scui_cache_font_unload(&font_unit);
     
     if (args->line_multi) {
@@ -169,12 +226,14 @@ static void scui_string_args_typo(scui_string_args_t *args)
         /* 也即当已知最大绘制宽度的情况下, 进行多行的排布 */
         
         /* 先做统计,将信息填入到临时开辟的空间之中 */
-        uint32_t line_w_list[SCUI_STRING_LIMIT_LINE] = {0};
-        uint32_t line_s_list[SCUI_STRING_LIMIT_LINE] = {0};
-        uint32_t line_e_list[SCUI_STRING_LIMIT_LINE] = {0};
-        uint32_t line_n = 1; line_s_list[0] = 0;
+        scui_coord_t min_y_list[SCUI_STRING_LIMIT_LINE] = {0};
+        scui_coord_t max_y_list[SCUI_STRING_LIMIT_LINE] = {0};
+        scui_coord_t line_w_list[SCUI_STRING_LIMIT_LINE] = {0};
+        scui_coord_t line_s_list[SCUI_STRING_LIMIT_LINE] = {0};
+        scui_coord_t line_e_list[SCUI_STRING_LIMIT_LINE] = {0};
+        scui_coord_t line_n = 1; line_s_list[0] = 0;
         
-        for (uint32_t idx = 0; idx < args->number; idx++) {
+        for (scui_coord_t idx = 0; idx < args->number; idx++) {
             
             if (args->unicode[idx] < 0x80)
                 SCUI_LOG_DEBUG("letter:%c", args->unicode[idx]);
@@ -182,7 +241,7 @@ static void scui_string_args_typo(scui_string_args_t *args)
                 SCUI_LOG_DEBUG("letter:%x", args->unicode[idx]);
             
             /* 先拿一个单词,尝试填满 */
-            uint32_t word_s = idx, word_e = 0, word_w = 0;
+            scui_coord_t word_s = idx, word_e = 0, word_w = 0;
             scui_string_args_match_word(args, &word_s, &word_e, &word_w, NULL);
             
             /* 本行还能接受一个单词,接受它 */
@@ -195,10 +254,10 @@ static void scui_string_args_typo(scui_string_args_t *args)
             
             /* 一个单词填不满,且不是单字符,限制填充 */
             if (line_w_list[line_n - 1] == 0 && word_e - word_s > 0) {
-                uint32_t word_s = idx;
-                uint32_t word_e = 0;
-                uint32_t word_w = 0;
-                uint32_t word_m = src_clip_v.w - line_w_list[line_n];
+                scui_coord_t word_s = idx;
+                scui_coord_t word_e = 0;
+                scui_coord_t word_w = 0;
+                scui_coord_t word_m = src_clip_v.w - line_w_list[line_n];
                 scui_string_args_match_word(args, &word_s, &word_e, &word_w, &word_m);
                 if (word_w != 0) {
                     line_w_list[line_n - 1] += word_w;
@@ -218,13 +277,12 @@ static void scui_string_args_typo(scui_string_args_t *args)
         
         /* 是否到达最后一个字符 */
         SCUI_ASSERT(line_e_list[line_n - 1] == args->number - 1);
-        
-        /* 去除俩端的空白字符 */
-        for (uint32_t line_i = 0; line_i < line_n; line_i++) {
-             uint32_t line_s = line_s_list[line_i];
-             uint32_t line_e = line_e_list[line_i];
-             uint32_t word_t = 0;
+        for (scui_coord_t line_i = 0; line_i < line_n; line_i++) {
+             scui_coord_t line_s = line_s_list[line_i];
+             scui_coord_t line_e = line_e_list[line_i];
+             scui_coord_t word_t = 0;
             
+            /* 去除俩端的空白字符 */
             for (word_t = line_s; word_t < line_e; word_t++) {
                 if (scui_string_args_check_space(args, word_t)) {
                     /* 文字信息缓存节点实例映射 */
@@ -233,17 +291,15 @@ static void scui_string_args_typo(scui_string_args_t *args)
                         .name = args->name,
                         .glyph.space_width = args->gap_none,
                         .glyph.unicode_letter = args->unicode[word_t],
-                        .glyph.unicode_letter_next = word_t + 1 >= line_e ?
-                            0 : args->unicode[word_t + 1],
                     };
-                    if (bool_kern) {
+                    if (kern_used) {
                         glyph_unit.glyph.unicode_letter_next =
                              word_t + 1 >= line_e ? 0 : args->unicode[word_t + 1];
                     }
                     scui_cache_glyph_load(&glyph_unit);
                     scui_cache_glyph_unload(&glyph_unit);
                     
-                    uint32_t glyph_width = 0;
+                    scui_coord_t glyph_width = 0;
                     /* glyph_width += glyph_unit.glyph.ofs_x; */
                     /* glyph_width += glyph_unit.glyph.box_w; */
                     glyph_width += glyph_unit.glyph.adv_w;
@@ -256,6 +312,7 @@ static void scui_string_args_typo(scui_string_args_t *args)
             }
             line_s_list[line_i] = line_s = word_t;
             
+            /* 去除俩端的空白字符 */
             for (word_t = line_e; word_t > line_s; word_t--) {
                 if (scui_string_args_check_space(args, word_t)) {
                     /* 文字信息缓存节点实例映射 */
@@ -264,17 +321,15 @@ static void scui_string_args_typo(scui_string_args_t *args)
                         .name = args->name,
                         .glyph.space_width = args->gap_none,
                         .glyph.unicode_letter = args->unicode[word_t],
-                        .glyph.unicode_letter_next = word_t + 1 >= line_e ?
-                            0 : args->unicode[word_t + 1],
                     };
-                    if (bool_kern) {
+                    if (kern_used) {
                         glyph_unit.glyph.unicode_letter_next =
                              word_t + 1 >= line_e ? 0 : args->unicode[word_t + 1];
                     }
                     scui_cache_glyph_load(&glyph_unit);
                     scui_cache_glyph_unload(&glyph_unit);
                     
-                    uint32_t glyph_width = 0;
+                    scui_coord_t glyph_width = 0;
                     /* glyph_width += glyph_unit.glyph.ofs_x; */
                     /* glyph_width += glyph_unit.glyph.box_w; */
                     glyph_width += glyph_unit.glyph.adv_w;
@@ -286,31 +341,45 @@ static void scui_string_args_typo(scui_string_args_t *args)
                 break;
             }
             line_e_list[line_i] = line_e = word_t;
+            
+            /* 计算真实行高 */
+            line_s = line_s_list[line_i];
+            line_e = line_e_list[line_i];
+            scui_string_args_line_ofs(args, line_s, line_e, &min_y_list[line_i], &max_y_list[line_i]);
         }
         
         /* 生成排版 */
         args->typo = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_string_typo_t));
         args->typo->line_mum   = line_n;
-        args->typo->line_ofs_s = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(uint32_t) * line_n);
-        args->typo->line_ofs_e = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(uint32_t) * line_n);
-        args->typo->line_width = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(uint32_t) * line_n);
+        args->typo->line_ofs_s = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
+        args->typo->line_ofs_e = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
+        args->typo->line_width = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
+        args->typo->line_min_y = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
+        args->typo->line_max_y = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
         
+        args->height = 0;
         SCUI_LOG_INFO("typo num:%d", line_n);
-        for (uint8_t idx = 0; idx < line_n; idx++) {
+        for (scui_coord_t idx = 0; idx < line_n; idx++) {
             args->typo->line_ofs_s[idx] = line_s_list[idx];
             args->typo->line_ofs_e[idx] = line_e_list[idx];
             args->typo->line_width[idx] = line_w_list[idx];
+            args->typo->line_min_y[idx] = min_y_list[idx];
+            args->typo->line_max_y[idx] = max_y_list[idx];
             SCUI_LOG_INFO("line ofs_s:%d", args->typo->line_ofs_s[idx]);
             SCUI_LOG_INFO("line ofs_e:%d", args->typo->line_ofs_e[idx]);
             SCUI_LOG_INFO("line width:%d", args->typo->line_width[idx]);
+            SCUI_LOG_INFO("line min_y:%d", args->typo->line_min_y[idx]);
+            SCUI_LOG_INFO("line max_y:%d", args->typo->line_max_y[idx]);
             SCUI_ASSERT(line_w_list[idx] <= src_clip_v.w);
+            args->height += max_y_list[idx] - min_y_list[idx];
+            args->height += args->gap_line;
         }
         
-        args->height = line_n * (line_height + args->gap_line) - args->gap_line;
-        args->limit  = args->height - src_clip_v.h;
+        args->height -= args->gap_line;
+        args->limit   = args->height - src_clip_v.h;
     } else {
         /* 单行模式下只需统计最大行宽即可 */
-        for (uint32_t idx = 0; idx < args->number; idx++) {
+        for (scui_coord_t idx = 0; idx < args->number; idx++) {
             
             if (args->unicode[idx] < 0x80)
                 SCUI_LOG_DEBUG("letter:%c", args->unicode[idx]);
@@ -323,10 +392,8 @@ static void scui_string_args_typo(scui_string_args_t *args)
                 .name = args->name,
                 .glyph.space_width = args->gap_none,
                 .glyph.unicode_letter = args->unicode[idx],
-                .glyph.unicode_letter_next = idx + 1 >= args->number ?
-                    0 : args->unicode[idx + 1],
             };
-            if (bool_kern) {
+            if (kern_used) {
                 glyph_unit.glyph.unicode_letter_next =
                      idx + 1 >= args->number ? 0 : args->unicode[idx + 1];
             }
@@ -338,6 +405,11 @@ static void scui_string_args_typo(scui_string_args_t *args)
             args->width += glyph_unit.glyph.adv_w;
             args->width += args->gap_item;
         }
+        
+        /* 计算真实行高(单行模式下占用此字段作为行高) */
+        SCUI_ASSERT(args->number != 0);
+        scui_string_args_line_ofs(args, 0, args->number - 1, &args->min_y, &args->max_y);
+        
         args->width -= args->gap_item;
         args->limit  = args->width - src_clip_v.w;
     }
