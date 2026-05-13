@@ -461,7 +461,8 @@ void scui_string_invoke(scui_event_t *event)
                 scui_coord_t ver_res = string->widget.clip.h;
                 hor_res = string->args.line_multi ? hor_res : scui_max(hor_res, string->args.width);
                 ver_res = string->args.line_multi ? scui_max(ver_res, string->args.height) : ver_res;
-                /* 上面偷了懒, 应该要做对齐的, 直接用的最大区域对齐 */
+                /* 问题:上面用的剪切域生成的排版在这里重调, 会导致剪切域更变 */
+                /* 影响:只能统一到控件剪切域, 会导致非峰值画布变大(问题不大) */
                 
                 string->draw_surface->format  = SCUI_PIXEL_CF_DEF_A;
                 string->draw_surface->hor_res = hor_res;

@@ -31,19 +31,18 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         
         #if 1 /* test string widget */
         scui_string_maker_t string_maker = {0};
-        string_maker.widget.type                = scui_widget_type_string;
-        string_maker.widget.parent              = SCUI_UI_SCENE_TEST;
-        string_maker.args.line_width            = 2;
-        string_maker.args.mode_scroll           = 1;
-        string_maker.args.align_hor             = 2;
-        string_maker.args.align_ver             = 2;
-        string_maker.args.color.filter          = true;
-        string_maker.args.regrad                = true;
-        string_maker.draw_cache                 = true;
+        string_maker.widget.type       = scui_widget_type_string;
+        string_maker.widget.parent     = SCUI_UI_SCENE_TEST;
+        string_maker.args.line_width   = 2;
+        string_maker.args.mode_scroll  = 1;
+        string_maker.args.align_hor    = 2;
+        string_maker.args.align_ver    = 2;
+        string_maker.args.regrad       = true;
+        string_maker.draw_cache        = true;
         
-        string_maker.font_idx                   = SCUI_FONT_IDX_MZ;
-        string_maker.args.lang                  = scui_lang_type_multi;
-        string_maker.args.size                  = font_size;
+        string_maker.font_idx  = SCUI_FONT_IDX_MZ;
+        string_maker.args.lang = scui_lang_type_multi;
+        string_maker.args.size = font_size;
         
         /* test:全文本渐变 */
         scui_coord_t grad_n = 8;
@@ -62,8 +61,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.text             = SCUI_LANG_0X0029;
         string_maker.args.line_under  = 1;
         string_maker.args.line_delete = 0;
-        string_maker.args.color.color_s.full = 0xFFFFFFFF;
-        string_maker.args.color.color_e.full = 0xFFFFFFFF;
+        string_maker.args.color.color_s.full = 0xFFFF00FF;
+        string_maker.args.color.color_e.full = 0xFFFF00FF;
         scui_widget_create(&string_maker, &handle_string[0]);
         scui_string_upgrade_grads(handle_string[0], grad_s, grad_n, false);
         
@@ -75,8 +74,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.text             = SCUI_LANG_0X002e;
         string_maker.args.line_under  = 0;
         string_maker.args.line_delete = 1;
-        string_maker.args.color.color_s.full = 0xFFFF00FF;
-        string_maker.args.color.color_e.full = 0xFF00FF00;
+        string_maker.args.color.color_s.full = 0xFFFF0000;
+        string_maker.args.color.color_e.full = 0xFFFF0000;
         scui_widget_create(&string_maker, &handle_string[1]);
         scui_string_upgrade_grads(handle_string[1], grad_s, grad_n, false);
         
@@ -88,8 +87,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.text             = SCUI_LANG_0X0034;
         string_maker.args.line_under  = 1;
         string_maker.args.line_delete = 0;
-        string_maker.args.color.color_s.full = 0xFFFF0000;
-        string_maker.args.color.color_e.full = 0xFF0000FF;
+        string_maker.args.color.color_s.full = 0xFF00FF00;
+        string_maker.args.color.color_e.full = 0xFF00FF00;
         string_maker.args.line_multi = true;
         scui_widget_create(&string_maker, &handle_string[2]);
         scui_string_upgrade_grads(handle_string[2], grad_s, grad_n, false);
@@ -103,7 +102,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.args.line_under  = 0;
         string_maker.args.line_delete = 1;
         string_maker.args.color.color_s.full = 0xFF0000FF;
-        string_maker.args.color.color_e.full = 0xFFFF0000;
+        string_maker.args.color.color_e.full = 0xFF0000FF;
         string_maker.args.line_multi = true;
         scui_widget_create(&string_maker, &handle_string[3]);
         scui_string_upgrade_grads(handle_string[3], grad_s, grad_n, true);

@@ -350,7 +350,7 @@ static void scui_string_args_typo(scui_string_args_t *args)
         
         /* 生成排版 */
         args->typo = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_string_typo_t));
-        args->typo->line_mum   = line_n;
+        args->typo->line_num   = line_n;
         args->typo->line_ofs_s = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
         args->typo->line_ofs_e = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
         args->typo->line_width = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
@@ -406,7 +406,7 @@ static void scui_string_args_typo(scui_string_args_t *args)
             args->width += args->gap_item;
         }
         
-        /* 计算真实行高(单行模式下占用此字段作为行高) */
+        /* 计算真实行高 */
         SCUI_ASSERT(args->number != 0);
         scui_string_args_line_ofs(args, 0, args->number - 1, &args->min_y, &args->max_y);
         

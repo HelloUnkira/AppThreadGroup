@@ -15,7 +15,7 @@ typedef struct {
 } scui_string_grad_t;
 
 typedef struct {
-    scui_coord_t        line_mum;           /* 行数量 */
+    scui_coord_t        line_num;           /* 行数量 */
     scui_coord_t       *line_ofs_s;         /* 行索引偏移(起始) */
     scui_coord_t       *line_ofs_e;         /* 行索引偏移(结束) */
     scui_coord_t       *line_width;         /* 行当前宽度 */
