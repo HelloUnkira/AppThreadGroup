@@ -35,11 +35,42 @@ void scui_image_make(scui_image_t *image, scui_area_t *area)
  */
 void scui_image_burn(scui_image_t *image)
 {
-    if (image->pixel.data_bin == 0)
-        return;
+    if (image != NULL && image->pixel.data_bin != 0) {
+        SCUI_ASSERT(image->type == scui_image_type_mem);
+        SCUI_MEM_FREE((void *)image->pixel.data_bin);
+        
+        image->pixel.data_bin = 0;
+        image->pixel.size_bin = 0;
+    }
+}
+
+/*@brief 画布转为图像
+ *@param image   图像实例
+ *@param surface 画布实例
+ */
+void scui_image_by_surface(scui_image_t *image, scui_surface_t *surface)
+{
+    image->type = scui_image_type_mem;
+    image->from = SCUI_HANDLE_INVALID;
+    image->format = surface->format;
+    image->pixel.width  = surface->hor_res;
+    image->pixel.height = surface->ver_res;
+    image->pixel.data_bin = surface->pixel;
+    image->pixel.size_bin = surface->stride * surface->ver_res;
+}
+
+/*@brief 图像转为画布
+ *@param image   图像实例
+ *@param surface 画布实例
+ */
+void scui_image_to_surface(scui_image_t *image, scui_surface_t *surface)
+{
+    surface->pixel   = image->pixel.data_bin;
+    surface->format  = image->format;
+    surface->hor_res = image->pixel.width;
+    surface->ver_res = image->pixel.height;
     
-    SCUI_ASSERT(image->type == scui_image_type_mem);
-    SCUI_MEM_FREE((void *)image->pixel.data_bin);
+    scui_surface_config(surface);
 }
 
 /*@brief 图像格式转换(就地转换)

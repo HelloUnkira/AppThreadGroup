@@ -14,9 +14,8 @@
  *@param color   采样值
  *@retval 成功失败
  */
-static bool scui_draw_ctx_sample(
-    scui_surface_t *surface, scui_area_t     *clip,
-    scui_point2_t  *point2,  scui_color_wt_t *sample_color)
+static bool scui_draw_ctx_sample( scui_surface_t *surface, scui_area_t *clip,
+    scui_point2_t *point2, scui_color_wt_t *sample_color)
 {
     #if 1
     /* 双线性插值采样 */

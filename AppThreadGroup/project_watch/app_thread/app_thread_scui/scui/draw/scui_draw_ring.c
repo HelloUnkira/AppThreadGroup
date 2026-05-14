@@ -54,21 +54,13 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(image.data != NULL);
     SCUI_ASSERT(image_e.data != NULL);
     
-    scui_surface_t image_surface = {
-        .pixel   = image.data,
-        .format  = image.image->format,
-        .hor_res = image.image->pixel.width,
-        .ver_res = image.image->pixel.height,
-    };
-    scui_surface_config(&image_surface);
+    scui_surface_t image_surface = {0};
+    scui_image_to_surface(src_image, &image_surface);
+    image_surface.pixel = image.data;
     
-    scui_surface_t image_e_surface = {
-        .pixel   = image_e.data,
-        .format  = image_e.image->format,
-        .hor_res = image_e.image->pixel.width,
-        .ver_res = image_e.image->pixel.height,
-    };
-    scui_surface_config(&image_e_surface);
+    scui_surface_t image_e_surface = {0};
+    scui_image_to_surface(src_image_e, &image_e_surface);
+    image_e_surface.pixel = image_e.data;
     
     scui_surface_t edge_surface = {0};
     if (scui_pixel_type_bmp(src_image->format)) {
@@ -387,17 +379,10 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     scui_cache_image_load(&image);
     SCUI_ASSERT(image.data != NULL);
     
-    scui_surface_t image_surface = {
-        .pixel   = image.data,
-        .format  = image.image->format,
-        .hor_res = src_image->pixel.width,
-        .ver_res = src_image->pixel.height,
-        .alpha   = src_alpha,
-    };
-    image_surface.pbyte   = scui_pixel_byte(image_surface.format);
-    image_surface.stride  = image_surface.hor_res;
-    image_surface.stride *= scui_pixel_bits(image_surface.format);
-    image_surface.stride /= 8;
+    scui_surface_t image_surface = {0};
+    scui_image_to_surface(src_image, &image_surface);
+    image_surface.pixel = image.data;
+    image_surface.alpha = src_alpha;
     scui_surface_t *src_surface = &image_surface;
     
     scui_point_t dst_offset = {
@@ -485,6 +470,7 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
         scui_coord_t dst_bits = scui_pixel_bits(dst_surface->format);
         scui_coord_t src_bits = scui_pixel_bits(src_surface->format);
         /* 调色板数组(为空时计算,有时直接取): */
+        scui_multi_t bits_num  = 8 / src_bits;
         scui_multi_t grey_len = 1 << src_bits;
         scui_multi_t grey_size = sizeof(scui_color_wt_t) * grey_len;
         scui_color_wt_t *grey_table = SCUI_MEM_ZALLOC(scui_mem_type_graph, grey_size);
@@ -510,27 +496,34 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
                 uint8_t *dst_ofs = dst_addr  + scui_surface_pbyte_ofs(dst_surface, src_area.y + idx_line, src_area.x + idx_item);
                 uint32_t idx_ofs = src_ofs_p + scui_surface_point_ofs(src_surface, src_area.y + idx_line, src_area.x + idx_item);
-                uint8_t *src_ofs = src_addr  + idx_ofs / (8 / src_bits);
-                uint8_t  grey = scui_pixel_grey_bpp_x(*src_ofs, src_bits, idx_ofs % (8 / src_bits));
-                uint8_t  grey_idx = pixel_no_grad ? 0 : (uint16_t)grey * (grey_len - 1) / 0xFF;
+                uint8_t *src_ofs = src_addr  + idx_ofs / bits_num;
                 
-                if (grey_idx != 0 && grey_idx != grey_len - 1)
-                if (grey_table[grey_idx] == 0x00) {
-                    uint32_t *pixel_1 = &grey_table[0];
-                    uint32_t *pixel_2 = &grey_table[grey_len - 1];
-                    
-                    grey_table[grey_idx] = grey_table[0];
-                    scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx],
-                        dst_surface->format, &grey_table[grey_len - 1], scui_alpha_cover - grey);
+                /* 取出掩码灰度值并转换成颜色索引 */
+                uint8_t grey = scui_pixel_grey_bpp_x(*src_ofs, src_bits, idx_ofs % bits_num);
+                uint8_t grey_idx = pixel_no_grad ? 0 : SCUI_DIV_0xFF(grey * (grey_len - 1));
+                
+                /* 如果表没有颜色值,先将值存于颜色值表 */
+                if (grey_idx != 0 && grey_idx != grey_len - 1) {
+                    /* 因为将来很大概率还会被复用到,保留它防止重复计算 */
+                    if (grey_table[grey_idx] == 0x00) {
+                        grey_table[grey_idx]  = grey_table[grey_len - 1];
+                        scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx],
+                            dst_surface->format, &grey_table[0], grey);
+                    }
                 }
                 
-                scui_color_wt_t grey_color = grey_table[grey_idx];
-                scui_pixel_mix_alpha(dst_surface->format, &grey_color, grey);
-                /* 过滤色调,去色 */
-                if (src_color.filter && grey_color == filter)
-                    continue;
+                /* 异色不使用轮廓,同色需要轮廓 */
+                scui_alpha_t alpha = src_surface->alpha;
+                if (pixel_no_grad) alpha = scui_alpha_mix(alpha, grey);
                 
-                scui_alpha_t alpha = (uint32_t)src_surface->alpha * grey / scui_alpha_cover;
+                /* 过滤色调,去色 */
+                if (src_color.filter) {
+                    scui_color_wt_t grey_color = grey_table[grey_idx];
+                    scui_pixel_mix_alpha(dst_surface->format, &grey_color, alpha);
+                    if (grey_color == filter)
+                        continue;
+                }
+                
                 scui_pixel_mix_with(dst_surface->format, dst_ofs,
                     dst_surface->format, &grey_table[grey_idx], alpha);
             }

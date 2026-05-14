@@ -783,6 +783,7 @@ void scui_draw_ctx_area_afilter(scui_draw_dsc_t *draw_dsc)
         dst_addr = dst_surface->pixel + dst_ofs_p * dst_surface->pbyte;
         src_addr = src_surface->pixel;
         
+        scui_multi_t  bits_num  = 8 / src_bits;
         scui_multi_t  alpha_len = 1 << src_bits;
         scui_multi_t  alpha_size = sizeof(scui_alpha_t) * alpha_len;
         scui_alpha_t *alpha_table = SCUI_MEM_ZALLOC(scui_mem_type_graph, alpha_size);
@@ -792,10 +793,13 @@ void scui_draw_ctx_area_afilter(scui_draw_dsc_t *draw_dsc)
         for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
             uint8_t *dst_ofs = dst_addr  + scui_surface_pbyte_ofs(dst_surface, idx_line, idx_item);
             uint32_t idx_ofs = src_ofs_p + scui_surface_point_ofs(src_surface, idx_line, idx_item);
-            uint8_t *src_ofs = src_addr  + idx_ofs / (8 / src_bits);
-            uint8_t  grey = scui_pixel_grey_bpp_x(*src_ofs, src_bits, idx_ofs % (8 / src_bits));
-            uint8_t  grey_idx = (uint16_t)grey * (alpha_len - 1) / 0xFF;
+            uint8_t *src_ofs = src_addr  + idx_ofs / bits_num;
             
+            /* 取出掩码灰度值并转换成颜色索引 */
+            uint8_t grey = scui_pixel_grey_bpp_x(*src_ofs, src_bits, idx_ofs % bits_num);
+            uint8_t grey_idx = SCUI_DIV_0xFF(grey * (alpha_len - 1));
+            
+            /* 因为将来很大概率还会被复用到,保留它防止重复计算 */
             if (grey_idx != 0 && alpha_table[grey_idx] == 0)
                 alpha_table[grey_idx] = scui_alpha_mix(src_surface->alpha, grey);
             

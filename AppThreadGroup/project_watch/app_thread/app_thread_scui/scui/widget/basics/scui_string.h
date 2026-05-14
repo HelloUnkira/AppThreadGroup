@@ -19,8 +19,6 @@ typedef struct {
     scui_coord_t       *line_ofs_s;         /* 行索引偏移(起始) */
     scui_coord_t       *line_ofs_e;         /* 行索引偏移(结束) */
     scui_coord_t       *line_width;         /* 行当前宽度 */
-    scui_coord_t       *line_min_y;         /* 行最小偏移y */
-    scui_coord_t       *line_max_y;         /* 行最大偏移y */
 } scui_string_typo_t;
 
 typedef struct {
@@ -47,8 +45,6 @@ typedef struct {
     uint8_t            *utf8;               /* 字符串(utf8) */
     /* 内部域(排版信息): */
     scui_string_typo_t *typo;               /* 多行模式排版信息 */
-    scui_coord_t        min_y;              /* 单行模式行最小偏移y */
-    scui_coord_t        max_y;              /* 单行模式行最大偏移y */
     scui_coord_t        width;              /* 单行模式宽度 */
     scui_coord_t        height;             /* 多行模式高度 */
     /* 内部域: */
@@ -73,7 +69,6 @@ typedef struct {
     scui_sbitfd_t       unit_s:1;           /* 滚动模式(单次滚动,结束后不再滚动) */
     scui_sbitfd_t       draw_cache:1;       /* 绘制缓存块使能 */
     /* 内部域: */
-    scui_surface_t     *draw_surface;       /* 绘制缓存块 */
     scui_image_t       *draw_image_src;     /* 绘制缓存块资源 */
     scui_handle_t       draw_image;         /* 绘制缓存块句柄 */
     scui_sbitfd_t       unit_anima:1;       /* 滚动动画标记 */

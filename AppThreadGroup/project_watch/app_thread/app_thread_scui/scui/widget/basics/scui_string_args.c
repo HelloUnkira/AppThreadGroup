@@ -196,8 +196,6 @@ static void scui_string_args_typo(scui_string_args_t *args)
         SCUI_MEM_FREE(args->typo->line_ofs_s);
         SCUI_MEM_FREE(args->typo->line_ofs_e);
         SCUI_MEM_FREE(args->typo->line_width);
-        SCUI_MEM_FREE(args->typo->line_min_y);
-        SCUI_MEM_FREE(args->typo->line_max_y);
         SCUI_MEM_FREE(args->typo);
         args->typo = NULL;
     }
@@ -354,8 +352,6 @@ static void scui_string_args_typo(scui_string_args_t *args)
         args->typo->line_ofs_s = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
         args->typo->line_ofs_e = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
         args->typo->line_width = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
-        args->typo->line_min_y = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
-        args->typo->line_max_y = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * line_n);
         
         args->height = 0;
         SCUI_LOG_INFO("typo num:%d", line_n);
@@ -363,15 +359,11 @@ static void scui_string_args_typo(scui_string_args_t *args)
             args->typo->line_ofs_s[idx] = line_s_list[idx];
             args->typo->line_ofs_e[idx] = line_e_list[idx];
             args->typo->line_width[idx] = line_w_list[idx];
-            args->typo->line_min_y[idx] = min_y_list[idx];
-            args->typo->line_max_y[idx] = max_y_list[idx];
             SCUI_LOG_INFO("line ofs_s:%d", args->typo->line_ofs_s[idx]);
             SCUI_LOG_INFO("line ofs_e:%d", args->typo->line_ofs_e[idx]);
             SCUI_LOG_INFO("line width:%d", args->typo->line_width[idx]);
-            SCUI_LOG_INFO("line min_y:%d", args->typo->line_min_y[idx]);
-            SCUI_LOG_INFO("line max_y:%d", args->typo->line_max_y[idx]);
             SCUI_ASSERT(line_w_list[idx] <= src_clip_v.w);
-            args->height += max_y_list[idx] - min_y_list[idx];
+            args->height += line_height;
             args->height += args->gap_line;
         }
         
@@ -407,8 +399,8 @@ static void scui_string_args_typo(scui_string_args_t *args)
         }
         
         /* 计算真实行高 */
-        SCUI_ASSERT(args->number != 0);
-        scui_string_args_line_ofs(args, 0, args->number - 1, &args->min_y, &args->max_y);
+        // SCUI_ASSERT(args->number != 0);
+        // scui_string_args_line_ofs(args, 0, args->number - 1, &args->min_y, &args->max_y);
         
         args->width -= args->gap_item;
         args->limit  = args->width - src_clip_v.w;

@@ -44,6 +44,18 @@ void scui_image_make(scui_image_t *image, scui_area_t *area);
  */
 void scui_image_burn(scui_image_t *image);
 
+/*@brief 画布转为图像
+ *@param image   图像实例
+ *@param surface 画布实例
+ */
+void scui_image_by_surface(scui_image_t *image, scui_surface_t *surface);
+
+/*@brief 图像转为画布
+ *@param image   图像实例
+ *@param surface 画布实例
+ */
+void scui_image_to_surface(scui_image_t *image, scui_surface_t *surface);
+
 /*@brief 图像格式转换(就地转换)
  *@param image 图像实例
  *@param rev 通道颠倒

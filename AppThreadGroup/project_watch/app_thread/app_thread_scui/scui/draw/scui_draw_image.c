@@ -31,13 +31,9 @@ void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc)
     scui_cache_image_load(&image);
     SCUI_ASSERT(image.data != NULL);
     
-    scui_surface_t image_surface = {
-        .pixel   = image.data,
-        .format  = image.image->format,
-        .hor_res = src_image->pixel.width,
-        .ver_res = src_image->pixel.height,
-    };
-    scui_surface_config(&image_surface);
+    scui_surface_t image_surface = {0};
+    scui_image_to_surface(src_image, &image_surface);
+    image_surface.pixel = image.data;
     image_surface.alpha = src_alpha;
     
     scui_draw_area_blend(true, dst_surface, *dst_clip,
@@ -74,13 +70,9 @@ void scui_draw_ctx_image_2d(scui_draw_dsc_t *draw_dsc)
     scui_cache_image_load(&image);
     SCUI_ASSERT(image.data != NULL);
     
-    scui_surface_t image_surface = {
-        .pixel   = image.data,
-        .format  = image.image->format,
-        .hor_res = src_image->pixel.width,
-        .ver_res = src_image->pixel.height,
-    };
-    scui_surface_config(&image_surface);
+    scui_surface_t image_surface = {0};
+    scui_image_to_surface(src_image, &image_surface);
+    image_surface.pixel = image.data;
     image_surface.alpha = src_alpha;
     
     #if 1
@@ -136,13 +128,9 @@ void scui_draw_ctx_image_3d(scui_draw_dsc_t *draw_dsc)
     scui_cache_image_load(&image);
     SCUI_ASSERT(image.data != NULL);
     
-    scui_surface_t image_surface = {
-        .pixel   = image.data,
-        .format  = image.image->format,
-        .hor_res = src_image->pixel.width,
-        .ver_res = src_image->pixel.height,
-    };
-    scui_surface_config(&image_surface);
+    scui_surface_t image_surface = {0};
+    scui_image_to_surface(src_image, &image_surface);
+    image_surface.pixel = image.data;
     image_surface.alpha = src_alpha;
     
     scui_draw_area_3d_blend(true, dst_surface, *dst_clip,

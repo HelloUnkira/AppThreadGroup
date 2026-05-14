@@ -71,7 +71,7 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
     /* 让内存画布绑定到句柄 */
     if (string->draw_cache) {
         string->draw_image = scui_handle_find();
-        string->draw_image_src = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_image_t));
+        string->draw_image_src = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_image_t));
         scui_handle_linker(string->draw_image, string->draw_image_src);
     }
     
@@ -114,11 +114,7 @@ void scui_string_burn(scui_handle_t handle)
     }
     
     /* 回收绘制缓存块 */
-    if (string->draw_surface != NULL) {
-        SCUI_MEM_FREE(string->draw_surface->pixel);
-        SCUI_MEM_FREE(string->draw_surface);
-        string->draw_surface = NULL;
-    }
+    scui_image_burn(string->draw_image_src);
     
     /* 资源及句柄回收 */
     SCUI_MEM_FREE(string->draw_image_src);
@@ -441,41 +437,31 @@ void scui_string_invoke(scui_event_t *event)
         if (string->args.update)
         if (string->draw_cache) {
             /* 回收绘制缓存块 */
-            if (string->draw_surface != NULL) {
-                SCUI_MEM_FREE(string->draw_surface->pixel);
-                SCUI_MEM_FREE(string->draw_surface);
-                string->draw_surface = NULL;
-            }
+            scui_image_burn(string->draw_image_src);
         }
         
         string->args.utf8 = string->str_utf8;
-        string->args.clip = string->widget.clip;
+        string->args.clip = widget->clip;
         scui_string_args_proc(&string->args);
         
         if (string->draw_cache) {
             /* 绘制缓存块,在第一次全局重绘时进行 */
-            if (string->draw_surface == NULL) {
-                string->draw_surface  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t));
+            if (string->draw_image_src->pixel.data_bin == NULL) {
+                string->draw_image_src->format = SCUI_PIXEL_CF_DEF_A;
                 
-                scui_coord_t hor_res = string->widget.clip.w;
-                scui_coord_t ver_res = string->widget.clip.h;
+                scui_coord_t hor_res = widget->clip.w;
+                scui_coord_t ver_res = widget->clip.h;
                 hor_res = string->args.line_multi ? hor_res : scui_max(hor_res, string->args.width);
                 ver_res = string->args.line_multi ? scui_max(ver_res, string->args.height) : ver_res;
                 /* 问题:上面用的剪切域生成的排版在这里重调, 会导致剪切域更变 */
                 /* 影响:只能统一到控件剪切域, 会导致非峰值画布变大(问题不大) */
                 
-                string->draw_surface->format  = SCUI_PIXEL_CF_DEF_A;
-                string->draw_surface->hor_res = hor_res;
-                string->draw_surface->ver_res = ver_res;
-                scui_surface_config(string->draw_surface);
+                scui_surface_t draw_surface = {0};
+                scui_area_t area_image = {.w = hor_res,.h = ver_res};
+                scui_image_make(string->draw_image_src, &area_image);
+                scui_image_to_surface(string->draw_image_src, &draw_surface);
+                scui_area_t draw_clip = scui_surface_area(&draw_surface);
                 
-                scui_coord_t surface_rem    = sizeof(scui_color_wt_t) - string->draw_surface->pbyte;
-                scui_multi_t surface_size   = ver_res * string->draw_surface->stride + surface_rem;
-                string->draw_surface->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_size);
-                
-                /* 先填充透明背景 */
-                scui_area_t draw_clip = scui_surface_area(string->draw_surface);
-                scui_draw_area_fill(true, string->draw_surface, draw_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
                 /* 如果全局渐变 */
                 if (string->args.regrad) {
                     /* 回收旧颜色值表 */
@@ -487,33 +473,20 @@ void scui_string_invoke(scui_event_t *event)
                         string->args.colors  = NULL;
                     }
                     /* 所有颜色统一绘制成白色 */
-                    string->args.color = (scui_color_t){0};
-                    string->args.color.color_s.full = 0xFFFFFFFF;
-                    string->args.color.color_e.full = 0xFFFFFFFF;
-                    string->args.color.filter = true;
+                    string->args.color = SCUI_COLOR_MAKE32_SE(true, 0x0, 0xFFFFFFFF, 0xFFFFFFFF);
                 }
                 /* 后将文字绘制到这个画布中 */
                 string->args.offset = 0;
-                string->args.clip = draw_clip;
-                scui_area_t string_clip = draw_clip;
-                
-                scui_draw_string(true, string->draw_surface, draw_clip,
-                    string_clip, scui_alpha_cover, &string->args);
+                scui_draw_string(true, &draw_surface, draw_clip,
+                    draw_clip, scui_alpha_cover, &string->args);
                 
                 if (string->args.regrad) {
                     /* 如果需要全局渐变,对绘制画布进行渐变 */
-                    scui_draw_area_grads(true, string->draw_surface, draw_clip,
+                    scui_draw_area_grads(true, &draw_surface, draw_clip,
                         string->args.grads->grad_s, string->args.grads->grad_n,
                         string->args.grads->grad_w, SCUI_COLOR_FILTER_TRANS,
                         scui_alpha_cover);
                 }
-                
-                /* 更新此画布目标,重配画布图资源 */
-                string->draw_image_src->type           = scui_image_type_mem;
-                string->draw_image_src->format         = string->draw_surface->format;
-                string->draw_image_src->pixel.width    = string->draw_surface->hor_res;
-                string->draw_image_src->pixel.height   = string->draw_surface->ver_res;
-                string->draw_image_src->pixel.data_bin = string->draw_surface->pixel;
             }
             
             if (string->args.limit <= 0)
@@ -525,15 +498,15 @@ void scui_string_invoke(scui_event_t *event)
                     SCUI_LOG_DEBUG("offset x:%d", string->args.offset);
                 
                 if (string->args.mode_scroll == 0) {
-                    scui_area_t image_clip = scui_surface_area(string->draw_surface);
+                    scui_area_t image_clip = scui_image_area(string->draw_image);
                     image_clip.x = string->args.line_multi ? 0 : -string->args.offset;
                     image_clip.y = string->args.line_multi ? -string->args.offset : 0;
                     scui_widget_draw_image(widget->myself, NULL, string->draw_image, &image_clip, SCUI_COLOR_UNUSED);
                 }
                 
                 if (string->args.mode_scroll == 1) {
-                    scui_area_t draw_clip  = widget->clip;
-                    scui_area_t image_clip = scui_surface_area(string->draw_surface);
+                    scui_area_t  draw_clip = widget->clip;
+                    scui_area_t image_clip = scui_image_area(string->draw_image);
                     if (string->args.offset < 0) {
                         image_clip.x = string->args.line_multi ? 0 : -string->args.offset;
                         image_clip.y = string->args.line_multi ? -string->args.offset : 0;
@@ -581,7 +554,6 @@ void scui_string_invoke(scui_event_t *event)
         font_unit.name = string->args.name;
         font_unit.size = string->args.size;
         scui_cache_font_load(&font_unit);
-        scui_coord_t base_line   = scui_font_base_line(font_unit.font);
         scui_coord_t line_height = scui_font_line_height(font_unit.font);
         scui_cache_font_unload(&font_unit);
         
@@ -592,13 +564,9 @@ void scui_string_invoke(scui_event_t *event)
     case scui_event_size_adjust: {
         string->args.update = true;
         scui_widget_draw(widget->myself, NULL, false);
-    
+        
         /* 回收绘制缓存块 */
-        if (string->draw_surface != NULL) {
-            SCUI_MEM_FREE(string->draw_surface->pixel);
-            SCUI_MEM_FREE(string->draw_surface);
-            string->draw_surface = NULL;
-        }
+        scui_image_burn(string->draw_image_src);
         break;
     }
     case scui_event_lang_change: {

@@ -29,7 +29,6 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
         .pixel   = src_glyph->bitmap,
         .hor_res = src_glyph->box_w,
         .ver_res = src_glyph->box_h,
-        .alpha   = src_alpha,
     };
     switch (src_glyph->bpp) {
     case 1: glyph_surface.format = scui_pixel_cf_alpha1; break;
@@ -39,10 +38,8 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
     default: SCUI_LOG_WARN("unsupport bpp:%d", src_glyph->bpp);
         SCUI_ASSERT(false); return;
     }
-    glyph_surface.pbyte   = scui_pixel_byte(glyph_surface.format);
-    glyph_surface.stride  = glyph_surface.hor_res;
-    glyph_surface.stride *= scui_pixel_bits(glyph_surface.format);
-    glyph_surface.stride /= 8;
+    scui_surface_config(&glyph_surface);
+    glyph_surface.alpha = src_alpha;
     
     scui_surface_t *src_surface = &glyph_surface;
     scui_draw_area_blend(true, dst_surface, *dst_clip,
@@ -132,10 +129,6 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
         if (src_args->align_ver == 0);
         if (src_args->align_ver == 1) src_offset.y += (src_clip_v.h - line_height);
         if (src_args->align_ver == 2) src_offset.y += (src_clip_v.h - line_height) / 2;
-        
-        /* 真实行高修正 */
-        scui_coord_t line_height_real = src_args->max_y - src_args->min_y;
-        if (src_args->align_ver == 2) src_offset.y += (line_height - line_height_real) / 2;
     }
     
     /* 绘制每一个行(单行模式只有一个行) */
@@ -145,9 +138,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
         scui_coord_t line_s = line_multi ? typo->line_ofs_s[idx_line] : 0;
         scui_coord_t line_e = line_multi ? typo->line_ofs_e[idx_line] : src_args->number - 1;
         scui_coord_t line_w = line_multi ? typo->line_width[idx_line] : src_args->width;
-        scui_coord_t  min_y = line_multi ? typo->line_min_y[idx_line] : src_args->min_y;
-        scui_coord_t  max_y = line_multi ? typo->line_max_y[idx_line] : src_args->max_y;
-        SCUI_LOG_INFO("line:<%d,%d><%d><%d,%d>", line_s, line_e, line_w, min_y, max_y);
+        SCUI_LOG_INFO("line:<%d,%d><%d>", line_s, line_e, line_w);
         scui_point_t src_line = src_offset;
         
         /* 多行模式内部对齐水平方向 */
@@ -155,7 +146,6 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             if (src_args->align_hor == 0);
             if (src_args->align_hor == 1) src_line.x += (src_clip_v.w - line_w);
             if (src_args->align_hor == 2) src_line.x += (src_clip_v.w - line_w) / 2;
-            src_line.y -= min_y;
         }
         
         /* 下划线和删除线 */
@@ -264,6 +254,6 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             }
         }
         
-        src_offset.y += (max_y - min_y + src_args->gap_line);
+        src_offset.y += (line_height + src_args->gap_line);
     }
 }
