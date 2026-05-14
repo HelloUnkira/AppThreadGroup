@@ -1510,10 +1510,10 @@ scui_coord_t scui_font_base_line(scui_handle_t handle)
     
     if (font->font_size == 0) {
         lv_font_t *lv_font = font->bmp_fixed;
-        return lv_font->base_line;
+        return lv_font->base_line + font->base_line_ext;
     } else {
         lv_font_ttf_tiny_t *ttf_tiny = font->ttf_tiny;
-        return ttf_tiny->base_line;
+        return ttf_tiny->base_line + font->base_line_ext;
     }
 }
 
@@ -1527,27 +1527,10 @@ scui_coord_t scui_font_line_height(scui_handle_t handle)
     
     if (font->font_size == 0) {
         lv_font_t *lv_font = font->bmp_fixed;
-        return lv_font->line_height;
+        return lv_font->line_height + font->line_height_ext;
     } else {
         lv_font_ttf_tiny_t *ttf_tiny = font->ttf_tiny;
-        return ttf_tiny->line_height;
-    }
-}
-
-/*@brief 字库参数信息
- *@param handle 字库句柄
- *@retval 字库参数信息
- */
-scui_coord_t scui_font_underline(scui_handle_t handle)
-{
-    scui_font_t *font = scui_handle_source_check(handle);
-    
-    if (font->font_size == 0) {
-        lv_font_t *lv_font = font->bmp_fixed;
-        return lv_font->underline_position;
-    } else {
-        lv_font_ttf_tiny_t *ttf_tiny = font->ttf_tiny;
-        return ttf_tiny->underline_position;
+        return ttf_tiny->line_height + font->line_height_ext;
     }
 }
 

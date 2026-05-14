@@ -53,6 +53,16 @@
             "name": [
                 "font_en_32.bin",
                 "font_en_36.bin"
+            ],
+            "ext": [
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 9
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 11
+                }
             ]
         },
         {

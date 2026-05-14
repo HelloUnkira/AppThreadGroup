@@ -217,6 +217,10 @@ static const scui_font_t font_en_32_bin = {
 	.font_size	 = 32,
 	.data_bin	 = 0x857b8,
 	.size_bin	 = 0x691c,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x9,
+	
 };
 
 static const scui_font_t font_en_36_bin = {
@@ -225,6 +229,10 @@ static const scui_font_t font_en_36_bin = {
 	.font_size	 = 36,
 	.data_bin	 = 0x8c0d4,
 	.size_bin	 = 0x80b4,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0xb,
+	
 };
 
 static const scui_font_t font_eu_32_bin = {

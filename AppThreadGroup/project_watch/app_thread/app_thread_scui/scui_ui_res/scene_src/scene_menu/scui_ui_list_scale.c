@@ -193,7 +193,7 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
         linear_m_maker.widget.parent    = event->object;
         linear_s_maker.widget.type      = scui_widget_type_linear_s;
         linear_s_maker.widget.clip.w    = SCUI_HOR_RES - 20 - 10;
-        linear_s_maker.widget.clip.h    = scale_h;
+        linear_s_maker.widget.clip.h    = 72;
         linear_s_maker.widget.child_num = 1;
         linear_s_maker.widget.event_cb  = scui_ui_scene_item_s_event_proc;
         

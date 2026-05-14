@@ -18,6 +18,10 @@ typedef struct {
     scui_handle_t font_size;
     uintptr_t data_bin;
     uintptr_t size_bin;
+    /* 字库参数调整: */
+    /* 固定字号字体:非标字库 */
+    scui_coord_t base_line_ext;
+    scui_coord_t line_height_ext;
     /* size == 0: 使用固定字号字体 */
     /* size != 0: 使用ttf_tiny字体 */
     union {
@@ -85,12 +89,6 @@ scui_coord_t scui_font_base_line(scui_handle_t handle);
  *@retval 字库参数信息
  */
 scui_coord_t scui_font_line_height(scui_handle_t handle);
-
-/*@brief 字库参数信息
- *@param handle 字库句柄
- *@retval 字库参数信息
- */
-scui_coord_t scui_font_underline(scui_handle_t handle);
 
 /*@brief 字型加载
  *@param glyph 字形信息

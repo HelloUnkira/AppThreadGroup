@@ -69,6 +69,16 @@ def scui_font_package_all(file_path_list, scui_font_package_list, scui_font_json
             scui_font_struct += '\t.font_size\t = %d,\n' % font_item['size'][font_idx]
             scui_font_struct += '\t.data_bin\t = %s,\n' % hex(pixel_bin_ofs)
             scui_font_struct += '\t.size_bin\t = %s,\n' % hex(pixel_bin_len)
+            # 尝试提取扩充字段(如果有的话)
+            try:
+                base_line_ext = font_item['ext'][font_idx]['base_line_ext']
+                line_height_ext = font_item['ext'][font_idx]['line_height_ext']
+                scui_font_struct += '\t\n'
+                scui_font_struct += '\t.base_line_ext = %s,\n' % hex(base_line_ext)
+                scui_font_struct += '\t.line_height_ext = %s,\n' % hex(line_height_ext)
+                scui_font_struct += '\t\n'
+            except Exception as e:
+                pass
             scui_font_struct += '};\n\n'
             scui_font_package_c.write(scui_font_struct)
             # 我们生成一个子记录,用于外界解析时使用(内部只使用全部bin)

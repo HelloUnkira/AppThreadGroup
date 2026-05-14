@@ -187,7 +187,7 @@ void scui_monitor_event_cb(scui_event_t *event)
         string_maker.widget.clip.w              = SCUI_HOR_RES - 10 * 2;
         string_maker.widget.clip.h              = 20;
         string_maker.args.recolor               = true;
-        string_maker.args.align_hor             = 2;
+        string_maker.args.align_hor             = 0;
         string_maker.args.align_ver             = 2;
         string_maker.args.color.color_s.full    = 0xFF404040;
         string_maker.args.color.color_e.full    = 0xFF404040;

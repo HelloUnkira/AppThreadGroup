@@ -80,7 +80,6 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     scui_coord_t kern_used   = scui_font_kern_used(font_unit.font);
     scui_coord_t base_line   = scui_font_base_line(font_unit.font);
     scui_coord_t line_height = scui_font_line_height(font_unit.font);
-    scui_coord_t underline   = scui_font_underline(font_unit.font);
     scui_cache_font_unload(&font_unit);
     
     uint8_t line_xor = 0;
@@ -103,13 +102,14 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     draw_dsc_line.graph.src_pos_2.x = line_multi ? 0 : src_args->offset;
     draw_dsc_line.graph.src_pos_1.y = line_multi ? src_args->offset : 0;
     draw_dsc_line.graph.src_pos_2.y = line_multi ? src_args->offset : 0;
-    /* 删除线/下划线 */
+    /* 删除线:行高一半用作删除线 */
+    /* 下划线:基线位置用作下划线 */
     scui_draw_dsc_t draw_dsc_line_d = draw_dsc_line;
     scui_draw_dsc_t draw_dsc_line_u = draw_dsc_line;
     draw_dsc_line_d.graph.src_pos_1.y += (line_height - src_args->line_width) / 2;
     draw_dsc_line_d.graph.src_pos_2.y += (line_height - src_args->line_width) / 2;
-    draw_dsc_line_u.graph.src_pos_1.y += (line_height - base_line - underline);
-    draw_dsc_line_u.graph.src_pos_2.y += (line_height - base_line - underline);
+    draw_dsc_line_u.graph.src_pos_1.y += (line_height - base_line);
+    draw_dsc_line_u.graph.src_pos_2.y += (line_height - base_line);
     
     /* 全局对齐 */
     if (line_multi) {
