@@ -212,6 +212,59 @@ void scui_widget_draw_ctx_string(scui_handle_t handle, scui_area_t *target, scui
     }
 }
 
+/*@brief 控件在画布绘制图像
+ *@param draw_graph 绘制参数实例
+ */
+void scui_widget_draw_ctx_symbol(scui_handle_t handle, scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
+{
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    scui_area_t  *clip = draw_dsc->clip;
+    scui_handle_t name = draw_dsc->font_name;
+    uint32_t    symbol = draw_dsc->symbol;
+    
+    /* 绘制目标重定向 */
+    if (!scui_widget_draw_target(widget, &target))
+         return;
+    
+    /* step:symbol<s> */
+    scui_area_t symbol_clip = scui_symbol_area(name, symbol);
+    if (clip != NULL && !scui_area_inter2(&symbol_clip, clip))
+        return;
+    clip = &symbol_clip;
+    /* step:symbol<e> */
+    
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
+        
+        /* 子剪切域相对同步偏移 */
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &unit->clip, target))
+             continue;
+        
+        /* 子剪切域相对同步偏移 */
+        scui_area_t src_clip = *clip;
+        scui_point_t src_offset = {
+            .x = dst_clip.x - target->x,
+            .y = dst_clip.y - target->y,
+        };
+        if (!scui_area_limit_offset(&src_clip, &src_offset))
+             continue;
+        
+        #if SCUI_MEM_FEAT_MINI
+        scui_point_t dst_offset = {0};
+        if (!scui_widget_draw_clip_seg(&dst_clip, &dst_offset, NULL))
+             continue;
+        if (!scui_area_limit_offset(&src_clip, &dst_offset))
+             continue;
+        #endif
+        
+        scui_draw_symbol(false, widget->surface, dst_clip,
+            name, symbol, src_clip, widget->alpha, draw_dsc->color);
+    }
+}
+
 /*@brief 控件在画布绘制纯色区域
  *@param draw_graph 绘制参数实例
  */

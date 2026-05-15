@@ -60,6 +60,7 @@
 #include "scui_custom_inf.h"        /* 控件(自定义)API */
 #include "scui_string.h"            /* 控件(字符串) */
 #include "scui_string_inf.h"        /* 控件(字符串)API */
+#include "scui_symbol_inf.h"        /* 控件(字符串)API */
 #include "scui_scroll.h"            /* 控件(滚动) */
 #include "scui_scroll_inf.h"        /* 控件(滚动)API */
 #include "scui_linear.h"            /* 控件(列表) */

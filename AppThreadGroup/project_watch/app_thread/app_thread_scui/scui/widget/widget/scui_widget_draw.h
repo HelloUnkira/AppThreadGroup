@@ -5,6 +5,9 @@ typedef struct {
     
     void           *str_args;       /* 类型:(scui_string_args_t) */
     
+    scui_handle_t   font_name;      /* 字库名称句柄 */
+    uint32_t        symbol;         /* 符号字符编码Unicode */
+    
     scui_alpha_t    alpha;          /* 像素,图像透明度 */
     scui_color_t    color;          /* 像素,图像源色调 */
     scui_sbitfd_t   way:1;          /* 渐变方向(水平:0;垂直:1;) */
@@ -48,6 +51,7 @@ bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *f
     scui_area_t *target, scui_widget_draw_dsc_t *draw_dsc)
 /*****************************************************************************/
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_string);
+SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_symbol);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_color);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_color_grad);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_dither);
@@ -67,6 +71,14 @@ SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_graph);
 do {                                                                            \
     scui_widget_draw_dsc_t scui_wdc_i = {.str_args = str_args_v,};              \
     scui_widget_draw_ctx_string(handle_v, target_v, &scui_wdc_i);               \
+} while (0)                                                                     \
+
+#define scui_widget_draw_symbol(handle_v, target_v,                             \
+    clip_v, color_v, font_name_v, symbol_v)                                     \
+do {                                                                            \
+    scui_widget_draw_dsc_t scui_wdc_i = {.clip = clip_v,.color = color_v,       \
+        .font_name = font_name_v,.symbol = symbol_v,};                          \
+    scui_widget_draw_ctx_symbol(handle_v, target_v, &scui_wdc_i);               \
 } while (0)                                                                     \
 
 #define scui_widget_draw_color(handle_v, target_v, color_v)                     \

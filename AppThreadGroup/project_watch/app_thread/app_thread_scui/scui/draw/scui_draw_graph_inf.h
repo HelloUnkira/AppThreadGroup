@@ -306,6 +306,24 @@ do {                                                                            
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
 
+/* scui_draw_type_symbol */
+#define scui_draw_symbol(sync_v, dst_surface_v, dst_clip_v,                         \
+    src_name_v, src_code_v, src_clip_v, src_alpha_v, src_color_v)                   \
+do {                                                                                \
+    scui_draw_dsc_t *scui_dd_i = NULL;                                              \
+    scui_draw_dsc_ready(&scui_dd_i);                                                \
+    scui_dd_i->type = scui_draw_type_symbol;                                        \
+    scui_dd_i->sync = sync_v;                                                       \
+    scui_dd_i->symbol.dst_surface = dst_surface_v,                                  \
+    scui_dd_i->symbol.dst_clip    = dst_clip_v,                                     \
+    scui_dd_i->symbol.src_clip    = src_clip_v,                                     \
+    scui_dd_i->symbol.src_alpha   = src_alpha_v,                                    \
+    scui_dd_i->symbol.src_color   = src_color_v,                                    \
+    scui_dd_i->symbol.src_name    = src_name_v,                                     \
+    scui_dd_i->symbol.src_code    = src_code_v,                                     \
+    scui_draw_dsc_task(scui_dd_i);                                                  \
+} while (0)                                                                         \
+
 
 
 /* scui_draw_type_ring */

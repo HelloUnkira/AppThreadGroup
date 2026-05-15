@@ -27,8 +27,8 @@ if __name__ == '__main__':
     try:
         # ascii + symbol
         for size in [8,12,16,20,24,32,40,48,56,64,72,80,88]:
-            parse_cmd_func(parse_cmd_diy.format('font_zh_en.ttf', '-r 0x20-0x7f', size, 4, 'font_ascii_%d' % size))
-            parse_cmd_func(parse_cmd_diy.format('font_symbol.woff', '-r ' + range_symbol, size, 4, 'font_symbol_%d' % size))
+            parse_cmd_func(parse_cmd_diy.format('font_zh_en.ttf', '-r 0x20-0x7f', size, 8, 'font_ascii_%d' % size))
+            parse_cmd_func(parse_cmd_ord.format('font_symbol.woff', '-r ' + range_symbol, size, 8, 'font_symbol_%d' % size))
         
         # lang_en
         parse_cmd_func(parse_cmd_ord.format('font_en_2.ttf', '-r 0x00-0x7f', 32, 8, 'font_en_%d' % 32))

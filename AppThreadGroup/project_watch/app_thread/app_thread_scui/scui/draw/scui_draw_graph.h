@@ -32,6 +32,8 @@ typedef enum {
     scui_draw_type_image_3d,
     scui_draw_type_letter,
     scui_draw_type_string,
+    scui_draw_type_symbol,
+    
     scui_draw_type_ring,
     
     /* 基础图元放到最后 */
@@ -192,7 +194,7 @@ typedef struct {
         scui_matrix_t       src_matrix;     /* 源变换矩阵 */
     } image_3d;
     /**************************************************************************
-     * draw letter & string:
+     * draw letter & string & symbol:
      */
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
@@ -209,6 +211,15 @@ typedef struct {
         scui_alpha_t        src_alpha;      /* 字符透明度 */
         scui_string_args_t *src_args;       /* 字符串绘制参数 */
     } string;
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_clip;       /* 符号字符绘制区域 */
+        scui_alpha_t        src_alpha;      /* 符号字符透明度 */
+        scui_color_t        src_color;      /* 符号字符色调 */
+        scui_handle_t       src_name;       /* 符号字库名字句柄 */
+        uint32_t            src_code;       /* 符号字符编码Unicode */
+    } symbol;
     /**************************************************************************
      * draw ring:
      */
@@ -361,6 +372,7 @@ SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_2d);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_3d);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_letter);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_string);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_symbol);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_ring);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_graph);
 /*****************************************************************************/
@@ -382,6 +394,7 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_2d);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_3d);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_letter);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_string);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_symbol);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_ring);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_graph);
 /*****************************************************************************/

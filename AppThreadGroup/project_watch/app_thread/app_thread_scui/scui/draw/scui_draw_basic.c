@@ -325,11 +325,14 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
         scui_multi_t bits_num  = 8 / src_bits;
         scui_multi_t grey_len  = scui_max(1 << src_bits, 2);
         scui_multi_t grey_size = sizeof(scui_color_wt_t) * grey_len;
-        scui_color_wt_t *grey_table = SCUI_MEM_ZALLOC(scui_mem_type_graph, grey_size);
-        scui_color_wt_t  filter = 0;
-        /* 起始色调和结束色调固定 */
+        scui_color_wt_t *grey_table = SCUI_MEM_ALLOC(scui_mem_type_graph, grey_size);
+        /* 起始色调和结束色调固定(中间色调初始值为结束色调) */
         scui_pixel_by_color(dst_surface->format, &grey_table[0], src_color.color_e);
+        for (scui_coord_t idx = 1; idx < grey_len; grey_table[idx] = grey_table[0], idx++);
         scui_pixel_by_color(dst_surface->format, &grey_table[grey_len - 1], src_color.color_s);
+        
+        /* 图像颜色过滤 */
+        scui_color_wt_t filter = 0;
         scui_pixel_by_color(dst_surface->format, &filter, src_color.color_f);
         bool pixel_no_grad = grey_table[0] == grey_table[grey_len - 1];
         
@@ -344,26 +347,18 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
             uint8_t grey_idx = pixel_no_grad ? 0 : SCUI_DIV_0xFF(grey * (grey_len - 1));
             
             /* 如果表没有颜色值,先将值存于颜色值表 */
-            if (grey_idx != 0 && grey_idx != grey_len - 1) {
-                /* 因为将来很大概率还会被复用到,保留它防止重复计算 */
-                if (grey_table[grey_idx] == 0x00) {
-                    grey_table[grey_idx]  = grey_table[grey_len - 1];
-                    scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx],
-                        dst_surface->format, &grey_table[0], grey);
-                }
-            }
+            /* 因为将来很大概率还会被复用到,保留它防止重复计算 */
+            if (grey_idx != 0 && grey_table[grey_idx] == grey_table[0])
+                scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx],
+                    dst_surface->format, &grey_table[grey_len - 1], grey);
             
             /* 异色不使用轮廓,同色需要轮廓 */
             scui_alpha_t alpha = src_surface->alpha;
             if (pixel_no_grad) alpha = scui_alpha_mix(alpha, grey);
             
-            /* 过滤色调,去色 */
-            if (src_color.filter) {
-                scui_color_wt_t grey_color = grey_table[grey_idx];
-                scui_pixel_mix_alpha(dst_surface->format, &grey_color, alpha);
-                if (grey_color == filter)
-                    continue;
-            }
+            /* 过滤色调,去色(滤色发生在原图上) */
+            if (src_color.filter && grey_table[grey_idx] == filter)
+                continue;
             
             scui_pixel_mix_with(dst_surface->format, dst_ofs,
                 dst_surface->format, &grey_table[grey_idx], alpha);

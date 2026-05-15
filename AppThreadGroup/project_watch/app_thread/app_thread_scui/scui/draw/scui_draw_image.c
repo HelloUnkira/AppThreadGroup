@@ -27,19 +27,19 @@ void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    scui_cache_image_unit_t image = {.image = src_image,};
-    scui_cache_image_load(&image);
-    SCUI_ASSERT(image.data != NULL);
+    scui_cache_image_unit_t image_unit = {.image = src_image,};
+    scui_cache_image_load(&image_unit);
+    SCUI_ASSERT(image_unit.data != NULL);
     
     scui_surface_t image_surface = {0};
     scui_image_to_surface(src_image, &image_surface);
-    image_surface.pixel = image.data;
+    image_surface.pixel = image_unit.data;
     image_surface.alpha = src_alpha;
     
     scui_draw_area_blend(true, dst_surface, *dst_clip,
         &image_surface, *src_clip, src_color);
     
-    scui_cache_image_unload(&image);
+    scui_cache_image_unload(&image_unit);
 }
 
 /*@brief 区域图像旋转
@@ -66,13 +66,13 @@ void scui_draw_ctx_image_2d(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    scui_cache_image_unit_t image = {.image = src_image,};
-    scui_cache_image_load(&image);
-    SCUI_ASSERT(image.data != NULL);
+    scui_cache_image_unit_t image_unit = {.image = src_image,};
+    scui_cache_image_load(&image_unit);
+    SCUI_ASSERT(image_unit.data != NULL);
     
     scui_surface_t image_surface = {0};
     scui_image_to_surface(src_image, &image_surface);
-    image_surface.pixel = image.data;
+    image_surface.pixel = image_unit.data;
     image_surface.alpha = src_alpha;
     
     #if 1
@@ -99,7 +99,7 @@ void scui_draw_ctx_image_2d(scui_draw_dsc_t *draw_dsc)
         &image_surface, *src_clip, src_color, inv_matrix, src_matrix);
     #endif
     
-    scui_cache_image_unload(&image);
+    scui_cache_image_unload(&image_unit);
 }
 
 /*@brief 区域图像变换
@@ -124,17 +124,17 @@ void scui_draw_ctx_image_3d(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    scui_cache_image_unit_t image = {.image = src_image,};
-    scui_cache_image_load(&image);
-    SCUI_ASSERT(image.data != NULL);
+    scui_cache_image_unit_t image_unit = {.image = src_image,};
+    scui_cache_image_load(&image_unit);
+    SCUI_ASSERT(image_unit.data != NULL);
     
     scui_surface_t image_surface = {0};
     scui_image_to_surface(src_image, &image_surface);
-    image_surface.pixel = image.data;
+    image_surface.pixel = image_unit.data;
     image_surface.alpha = src_alpha;
     
     scui_draw_area_3d_blend(true, dst_surface, *dst_clip,
         &image_surface, *src_clip, src_color, *inv_matrix, *src_matrix);
     
-    scui_cache_image_unload(&image);
+    scui_cache_image_unload(&image_unit);
 }

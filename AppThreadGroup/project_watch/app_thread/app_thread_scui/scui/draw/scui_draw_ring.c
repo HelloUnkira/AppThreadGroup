@@ -47,20 +47,21 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
     edge_clip_e.y = dst_center->y + center_e_ey - edge_clip.h / 2;
     
     /* 缓存一下图片 */
-    scui_cache_image_unit_t image = {.image = src_image,};
-    scui_cache_image_unit_t image_e = {.image = src_image_e,};
-    scui_cache_image_load(&image);
-    scui_cache_image_load(&image_e);
-    SCUI_ASSERT(image.data != NULL);
-    SCUI_ASSERT(image_e.data != NULL);
+    scui_cache_image_unit_t image_unit = {.image = src_image,};
+    scui_cache_image_load(&image_unit);
+    SCUI_ASSERT(image_unit.data != NULL);
     
     scui_surface_t image_surface = {0};
     scui_image_to_surface(src_image, &image_surface);
-    image_surface.pixel = image.data;
+    image_surface.pixel = image_unit.data;
+    
+    scui_cache_image_unit_t image_unit_e = {.image = src_image_e,};
+    scui_cache_image_load(&image_unit_e);
+    SCUI_ASSERT(image_unit_e.data != NULL);
     
     scui_surface_t image_e_surface = {0};
     scui_image_to_surface(src_image_e, &image_e_surface);
-    image_e_surface.pixel = image_e.data;
+    image_e_surface.pixel = image_unit_e.data;
     
     scui_surface_t edge_surface = {0};
     if (scui_pixel_type_bmp(src_image->format)) {
@@ -141,8 +142,8 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
     
     SCUI_MEM_FREE(edge_surface.pixel);
     
-    scui_cache_image_unload(&image);
-    scui_cache_image_unload(&image_e);
+    scui_cache_image_unload(&image_unit);
+    scui_cache_image_unload(&image_unit_e);
 }
 
 /*@brief 区域图像绘制(内部接口)
@@ -375,13 +376,13 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     };
     #endif
     
-    scui_cache_image_unit_t image = {.image = src_image,};
-    scui_cache_image_load(&image);
-    SCUI_ASSERT(image.data != NULL);
+    scui_cache_image_unit_t image_unit = {.image = src_image,};
+    scui_cache_image_load(&image_unit);
+    SCUI_ASSERT(image_unit.data != NULL);
     
     scui_surface_t image_surface = {0};
     scui_image_to_surface(src_image, &image_surface);
-    image_surface.pixel = image.data;
+    image_surface.pixel = image_unit.data;
     image_surface.alpha = src_alpha;
     scui_surface_t *src_surface = &image_surface;
     
@@ -471,13 +472,16 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
         scui_coord_t src_bits = scui_pixel_bits(src_surface->format);
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t bits_num  = 8 / src_bits;
-        scui_multi_t grey_len = 1 << src_bits;
+        scui_multi_t grey_len  = scui_max(1 << src_bits, 2);
         scui_multi_t grey_size = sizeof(scui_color_wt_t) * grey_len;
-        scui_color_wt_t *grey_table = SCUI_MEM_ZALLOC(scui_mem_type_graph, grey_size);
-        scui_color_wt_t  filter = 0;
-        /* 起始色调和结束色调固定 */
+        scui_color_wt_t *grey_table = SCUI_MEM_ALLOC(scui_mem_type_graph, grey_size);
+        /* 起始色调和结束色调固定(中间色调初始值为结束色调) */
         scui_pixel_by_color(dst_surface->format, &grey_table[0], src_color.color_e);
+        for (scui_coord_t idx = 1; idx < grey_len; grey_table[idx] = grey_table[0], idx++);
         scui_pixel_by_color(dst_surface->format, &grey_table[grey_len - 1], src_color.color_s);
+        
+        /* 图像颜色过滤 */
+        scui_color_wt_t filter = 0;
         scui_pixel_by_color(dst_surface->format, &filter, src_color.color_f);
         bool pixel_no_grad = grey_table[0] == grey_table[grey_len - 1];
         
@@ -503,26 +507,19 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
                 uint8_t grey_idx = pixel_no_grad ? 0 : SCUI_DIV_0xFF(grey * (grey_len - 1));
                 
                 /* 如果表没有颜色值,先将值存于颜色值表 */
-                if (grey_idx != 0 && grey_idx != grey_len - 1) {
-                    /* 因为将来很大概率还会被复用到,保留它防止重复计算 */
-                    if (grey_table[grey_idx] == 0x00) {
-                        grey_table[grey_idx]  = grey_table[grey_len - 1];
-                        scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx],
-                            dst_surface->format, &grey_table[0], grey);
-                    }
+                /* 因为将来很大概率还会被复用到,保留它防止重复计算 */
+                if (grey_idx != 0 && grey_table[grey_idx] == grey_table[0]) {
+                    scui_pixel_mix_with(dst_surface->format, &grey_table[grey_idx],
+                        dst_surface->format, &grey_table[grey_len - 1], grey);
                 }
                 
                 /* 异色不使用轮廓,同色需要轮廓 */
                 scui_alpha_t alpha = src_surface->alpha;
                 if (pixel_no_grad) alpha = scui_alpha_mix(alpha, grey);
                 
-                /* 过滤色调,去色 */
-                if (src_color.filter) {
-                    scui_color_wt_t grey_color = grey_table[grey_idx];
-                    scui_pixel_mix_alpha(dst_surface->format, &grey_color, alpha);
-                    if (grey_color == filter)
-                        continue;
-                }
+                /* 过滤色调,去色(滤色发生在原图上) */
+                if (src_color.filter && grey_table[grey_idx] == filter)
+                    continue;
                 
                 scui_pixel_mix_with(dst_surface->format, dst_ofs,
                     dst_surface->format, &grey_table[grey_idx], alpha);
@@ -532,7 +529,7 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     }
     
     over:
-    scui_cache_image_unload(&image);
+    scui_cache_image_unload(&image_unit);
 }
 
 /*@brief 区域图像绘制

@@ -160,16 +160,14 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             if (src_args->unicode[idx] <  0x80) SCUI_LOG_DEBUG("letter:%c", src_args->unicode[idx]);
             if (src_args->unicode[idx] >= 0x80) SCUI_LOG_DEBUG("letter:%x", src_args->unicode[idx]);
             
-            scui_cache_glyph_unit_t glyph_unit = {
-                .size = src_args->size,
-                .name = src_args->name,
-                .glyph.space_width = src_args->gap_none,
-                .glyph.unicode_letter = src_args->unicode[idx],
-            };
-            if (kern_used) {
-                glyph_unit.glyph.unicode_letter_next =
-                    idx + 1 > line_e ? 0 : src_args->unicode[idx + 1];
-            }
+            scui_cache_glyph_unit_t glyph_unit = {0};
+            glyph_unit.size = src_args->size;
+            glyph_unit.name = src_args->name;
+            glyph_unit.glyph.space_width = src_args->gap_none;
+            glyph_unit.glyph.unicode_letter = src_args->unicode[idx];
+            glyph_unit.glyph.unicode_letter_next = !kern_used ? 0 :
+                idx + 1 > line_e ? 0 : src_args->unicode[idx + 1];
+            
             scui_cache_glyph_load(&glyph_unit);
             scui_cache_glyph_unload(&glyph_unit);
             
@@ -256,4 +254,34 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
         
         src_offset.y += (line_height + src_args->gap_line);
     }
+}
+
+/*@brief 绘制字符符号
+ *@param draw_dsc 绘制描述符实例
+ */
+void scui_draw_ctx_symbol(scui_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_surface_t    *dst_surface =  draw_dsc->symbol.dst_surface;
+    scui_area_t       *dst_clip    = &draw_dsc->symbol.dst_clip;
+    scui_area_t       *src_clip    = &draw_dsc->symbol.src_clip;
+    scui_alpha_t       src_alpha   =  draw_dsc->symbol.src_alpha;
+    scui_color_t       src_color   =  draw_dsc->symbol.src_color;
+    scui_handle_t      src_name    =  draw_dsc->symbol.src_name;
+    uint32_t           src_code    =  draw_dsc->symbol.src_code;
+    /* draw dsc args<e> */
+    /* */
+    
+    scui_cache_glyph_unit_t glyph_unit = {0};
+    glyph_unit.name = src_name;
+    glyph_unit.glyph.unicode_letter = src_code;
+    
+    scui_cache_glyph_load(&glyph_unit);
+    scui_cache_glyph_unload(&glyph_unit);
+    
+    if (glyph_unit.glyph.bitmap == 0)
+        return;
+    
+    scui_draw_letter(true, dst_surface, *dst_clip,
+        &glyph_unit.glyph, *src_clip, src_alpha, src_color);
 }
