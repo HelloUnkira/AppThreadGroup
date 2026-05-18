@@ -44,6 +44,7 @@ typedef struct {
     scui_sbitfd_t sched_widget:1;       /* 控件专属事件响应标记 */
     scui_sbitfd_t event_override:1;     /* 事件响应重载(0:默认;1:自定义;) */
     scui_sbitfd_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
+    scui_sbitfd_t fully_clip:1;         /* 控件绘制区域(0:局部;1:完整;) */
 } scui_widget_style_t;
 
 /*@brief 控件状态
@@ -71,7 +72,7 @@ typedef struct {
  *@brief 控件析构回调
  *@brief 控件事件回调
  */
-typedef void (*scui_widget_cb_make_t)(void *inst, void *inst_maker, scui_handle_t *handle);
+typedef void (*scui_widget_cb_make_t)(void *widget, void *maker, scui_handle_t *handle);
 typedef void (*scui_widget_cb_burn_t)(scui_handle_t handle);
 typedef scui_event_cb_t scui_widget_cb_invoke_t;
 
@@ -285,7 +286,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
 /*@brief 创建控件树(句柄映射表)
  *@param handle 根控件句柄
  */
-void scui_widget_create_layout_tree(scui_handle_t handle);
+void scui_widget_layout_tree(scui_handle_t handle);
 
 /*************************************************************************************************/
 /*************************************************************************************************/

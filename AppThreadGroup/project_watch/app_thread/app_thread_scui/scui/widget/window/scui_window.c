@@ -119,6 +119,7 @@ void scui_window_invoke(scui_event_t *event)
         /* 检查它的四个临近窗口 */
         /* 如果有预加载标记 */
         /* 在此事件创建它们 */
+        #if SCUI_WINDOW_PRELOAD_USE
         for (scui_coord_t idx = 0; idx < 4; idx++) {
             scui_handle_t handle_s = window->sibling[idx];
             if (handle_s == SCUI_HANDLE_INVALID) continue;
@@ -127,10 +128,6 @@ void scui_window_invoke(scui_event_t *event)
             scui_widget_maker_t *widget_maker = scui_handle_source_check(handle_s);
             scui_window_maker_t *window_maker = (void *)widget_maker;
             if (!window_maker->preload) continue;
-            #if SCUI_WINDOW_PRELOAD_USE == 0
-            /* 不使用预加载机制 */
-            continue;
-            #endif
             
             /* 预加载检查完毕, 现在加载它 */
             scui_widget_show(handle_s, false);
@@ -144,6 +141,7 @@ void scui_window_invoke(scui_event_t *event)
             scui_widget_move_pos(handle_s, &point);
             SCUI_LOG_WARN("window preload: %d", handle_s);
         }
+        #endif
         break;
     }
     default:

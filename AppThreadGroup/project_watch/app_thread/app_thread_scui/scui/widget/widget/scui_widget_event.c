@@ -98,7 +98,7 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
 static void scui_widget_show_delay(scui_handle_t handle)
 {
     /* 尝试构建控件布局树 */
-    scui_widget_create_layout_tree(handle);
+    scui_widget_layout_tree(handle);
     
     /* 设置控件状态为显示 */
     scui_widget_state_view(handle, true, false);
@@ -491,21 +491,6 @@ static void scui_widget_event_process(scui_event_t *event)
     default:
         break;
     }
-    
-    /* 系统活跃标记 */
-    switch (event->type) {
-    case scui_event_ptr_hold:
-    case scui_event_key_hold:
-    case scui_event_enc_fdir:
-    case scui_event_enc_bdir:
-    case scui_event_scroll_start:
-    case scui_event_scroll_over:
-    case scui_event_scroll_keep:
-        scui_tick_active();
-        break;
-    default:
-        break;
-    }
 }
 
 /*@brief 控件事件冒泡
@@ -567,10 +552,6 @@ static void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_
  */
 void scui_widget_event_dispatch(scui_event_t *event)
 {
-    /* 事件调度序列可能有无效事件 */
-    if (scui_handle_unmap(event->object))
-        return;
-    
     /* 不同的事件处理流程有不同的递归冒泡规则 */
     SCUI_LOG_DEBUG("event %u", event->type);
     

@@ -135,7 +135,7 @@ void scui_window_active(scui_handle_t handle);
  *@retval 窗口句柄
  */
 scui_handle_t scui_window_active_last(scui_handle_t index);
-#define scui_window_active_curr() scui_window_active_last(0)
+#define scui_window_active_curr() (scui_window_active_last(0))
 
 /*************************************************************************************************/
 /*************************************************************************************************/

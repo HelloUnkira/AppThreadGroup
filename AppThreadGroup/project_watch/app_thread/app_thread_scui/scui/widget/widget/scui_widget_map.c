@@ -15,7 +15,7 @@ void scui_widget_tree_check(scui_handle_t handle)
     SCUI_LOG_INFO("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    /* 必须递归设置控件透明度,迭代它的孩子列表 */
+    /* 递归迭代它的孩子列表 */
     scui_widget_child_list_btra(widget, idx)
     scui_widget_tree_check(widget->child_list[idx]);
 }
@@ -242,22 +242,24 @@ void scui_widget_destroy(scui_handle_t handle)
     if (scui_handle_unmap(handle))
         return;
     
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
     /* 设置控件状态为隐藏 */
-    scui_widget_state_view(handle, false, false);
+    scui_widget_state_view(widget->myself, false, false);
     
     /* 控件销毁前:控件销毁事件 */
-    scui_event_define(event, handle, true, scui_event_destroy, NULL);
+    scui_event_define(event, widget->myself, true, scui_event_destroy, NULL);
     scui_event_notify(&event);
     
     /* 得到控件实例 */
-    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_widget_map_t *widget_map = NULL;
     scui_widget_map_find(widget->type, &widget_map);
     /* 销毁流程 */
-    widget_map->burn(handle);
+    widget_map->burn(widget->myself);
     /* 销毁控件实例 */
     SCUI_MEM_FREE(widget);
 }
+
 /*@brief 创建控件
  *@param maker  控件构造实例
  *@param handle 控件句柄
@@ -268,13 +270,12 @@ void scui_widget_create(void *maker, scui_handle_t *handle)
     scui_widget_maker_t *widget_maker = maker;
     scui_widget_map_find(widget_maker->type, &widget_map);
     
-    /* 创建构造器实例 */
-    void *local_maker = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->maker);
-    memcpy(local_maker, widget_maker, widget_map->maker);
+    /* 创建构造器实例(配置-同步) */
+    maker = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->maker);
+    memcpy(maker, widget_maker, widget_map->maker);
+    widget_maker = maker;
     /* 创建控件实例 */
     scui_widget_t *widget = SCUI_MEM_ZALLOC(scui_mem_type_mix, widget_map->size);
-    /* 构造流程 */
-    widget_maker = local_maker;
     /* 备注:动态构造器是不知道句柄的 */
     /* 所以动态构造器需要填入非法句柄 */
     /* widget_maker->myself = SCUI_HANDLE_INVALID; */
@@ -292,7 +293,7 @@ void scui_widget_create(void *maker, scui_handle_t *handle)
 /*@brief 创建控件树(句柄映射表)
  *@param handle 根控件句柄
  */
-void scui_widget_create_layout_tree(scui_handle_t handle)
+void scui_widget_layout_tree(scui_handle_t handle)
 {
     if (scui_handle_remap(handle))
         return;

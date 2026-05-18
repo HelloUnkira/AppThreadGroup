@@ -302,6 +302,12 @@ void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
         }
         break;
     }
+    #if SCUI_DRAW_USE_THORVG
+    case scui_draw_type_pixel_tvg:
+        if (scui_draw_ctx_graph_TVG(draw_dsc))
+            return;
+        break;
+    #endif
     default:
         break;
     }
@@ -309,7 +315,7 @@ void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
     
     
     /* 矢量绘图引擎 */
-    #if SCUI_DRAW_USE_THORVG
+    #if SCUI_DRAW_GRAPH_USE_TVG
     if (scui_draw_ctx_graph_TVG(draw_dsc))
         return;
     #endif

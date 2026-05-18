@@ -76,7 +76,6 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_focus_get:
-        scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
         break;

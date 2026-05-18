@@ -140,6 +140,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_ptr_click:
+    case scui_event_key_click:
         scui_event_mask_over(event);
         scui_window_active(scui_window_active_last(1));
         scui_widget_hide(SCUI_UI_SCENE_POPUP, true);

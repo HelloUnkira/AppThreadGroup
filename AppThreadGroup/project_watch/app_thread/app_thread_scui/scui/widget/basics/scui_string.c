@@ -175,6 +175,10 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
+        
+        /* 自动调整一下行高到完全可显示 */
+        scui_event_define(event, handle, true, scui_event_size_auto, NULL);
+        scui_event_notify(&event);
     }
     
     string->args.update = true;
@@ -207,6 +211,10 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
+        
+        /* 自动调整一下行高到完全可显示 */
+        scui_event_define(event, handle, true, scui_event_size_auto, NULL);
+        scui_event_notify(&event);
     }
     
     string->args.update = true;

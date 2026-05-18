@@ -37,14 +37,6 @@ void scui_window_list_del(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
     
-    #if 0 /* 怪,这个应该用不着 */
-    /* 如果移除的是焦点,记得清空 */
-    if (scui_window_active_curr() == handle)
-        scui_window_active_curr()  = SCUI_HANDLE_INVALID;
-    if (scui_window_active_last(1) == handle)
-        scui_window_active_last(1)  = SCUI_HANDLE_INVALID;
-    #endif
-    
     for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
         if (scui_window_list.acts_cur[idx] == handle) {
             scui_window_list.acts_cur[idx]  = SCUI_HANDLE_INVALID;
@@ -380,29 +372,6 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     #endif
 }
 
-/*@brief 窗口事件通知
- *@param event 事件
- */
-void scui_window_event_notify(scui_event_t *event)
-{
-    scui_handle_t handle = event->object;
-    for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
-        if (scui_window_list.acts_cur[idx] == SCUI_HANDLE_INVALID) continue;
-        event->object = scui_window_list.acts_cur[idx];
-        
-        switch (event->type) {
-        case scui_event_draw:
-            scui_widget_draw(event->object, NULL, false);
-            break;
-        default:
-            scui_event_notify(event);
-            break;
-        }
-        
-        event->object = handle;
-    }
-}
-
 /*@brief 窗口管理器画布就绪
  *       分类整理所需处理的窗口
  */
@@ -440,7 +409,7 @@ static void scui_window_surface_ready(void)
     scui_handle_t list_lvl_1_ofs = 0;
     /* 仅窗口切换时才应用特效渲染 */
     if (!scui_widget_scroll_state(0x02)) {
-        /* 过滤掉被覆盖的绘制界面 */
+        /* 过滤掉被覆盖的绘制窗口 */
         scui_window_list_filter(scui_window_list.widget_0, scui_window_list.widget_0_num, &list_lvl_0_ofs);
         /* 去除掉覆盖的窗口 */
         for (scui_multi_t idx = 0; idx + list_lvl_0_ofs < scui_window_list.widget_0_num; idx++)
@@ -513,9 +482,9 @@ static void scui_window_surface_blend(void)
     scui_window_list_render(scui_window_list.widget_1, scui_window_list.widget_1_num);
 }
 
-/*@brief 窗口刷新(仅调度使用)
+/*@brief 窗口刷新
  */
-void scui_window_refresh(void)
+static void scui_window_surface_refresh(void)
 {
     #if SCUI_MEM_FEAT_MINI
     scui_window_surface_ready();
@@ -557,7 +526,81 @@ void scui_window_refresh(void)
  */
 void scui_window_event_dispatch(scui_event_t *event)
 {
-    scui_window_switch_event(event);
+    /* 活跃窗口的事件处理 */
+    if (event->object != SCUI_HANDLE_SYSTEM) {
+        
+        /* 活跃窗口的切换调度 */
+        scui_window_switch_event(event);
+        
+        return;
+    }
+    
+    
+    
+    /* 窗口列表的组合调度:整体处理 */
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        
+        #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
+        if (scui_widget_scroll_state(0x02))
+            return;
+        #endif
+        break;
+    }
+    case scui_event_refr: {
+        scui_window_surface_refresh();
+        return;
+    }
+    case scui_event_lang_change: {
+        /* 清扫一遍cache以让旧资源快速回收 */
+        scui_cache_font_rectify();
+        scui_cache_glyph_rectify();
+        break;
+    }
+    }
+    
+    /* 窗口列表的组合调度:元素处理 */
+    for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
+        if (scui_window_list.acts_cur[idx] == SCUI_HANDLE_INVALID) continue;
+        
+        scui_handle_t  handle = scui_window_list.acts_cur[idx];
+        scui_widget_t *widget = scui_handle_source_check(handle);
+        scui_window_t *window = (void *)widget;
+        event->object = handle;
+        
+        switch (event->type) {
+        case scui_event_anima_elapse: {
+            
+            /* 动画驱动:全局刷新窗口 */
+            #if SCUI_WIDGET_ANIMA_DRAW_AUTO
+            if (scui_window_active_curr() == handle) {
+                uint32_t anima_draw = scui_window_list.anima_draw;
+                anima_draw += event->tick;
+                
+                if (anima_draw >= SCUI_WIDGET_ANIMA_DRAW_TIME) {
+                    anima_draw -= SCUI_WIDGET_ANIMA_DRAW_TIME;
+                    scui_widget_draw(handle, NULL, false);
+                }
+                scui_window_list.anima_draw = anima_draw;
+            }
+            #endif
+            
+            /* 通知焦点窗口或常驻窗口 */
+            if (scui_window_active_curr() == handle || window->resident) {
+                event->style.sync = true;
+                scui_event_notify(event);
+            }
+            
+            break;
+        }
+        case scui_event_lang_change:
+            /* 通知所有窗口 */
+            scui_event_notify(event);
+            break;
+        }
+    }
+    
+    event->object = SCUI_HANDLE_SYSTEM;
 }
 
 /*@brief 窗口激活
@@ -605,7 +648,7 @@ void scui_window_active(scui_handle_t handle)
         scui_event_notify(&event);
     }
     
-    /* 切到新界面时 */
+    /* 切到新窗口时 */
     /* 快速刷新权重淘汰旧资源 */
     scui_cache_image_rectify();
 }

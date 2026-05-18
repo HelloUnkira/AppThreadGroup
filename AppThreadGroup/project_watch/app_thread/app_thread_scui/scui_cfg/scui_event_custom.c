@@ -13,84 +13,10 @@
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 
-/*@brief 事件类型转标记字符串
- *@param type 事件类型
- *@retval 标记字符串
- */
-const char * scui_event_type_misc_stringify(scui_event_type_t type)
-{
-    if (scui_event_type_sys(type)) {
-        
-        static const char * event_sys_str[scui_event_sys_num] = {
-            /* 系统事件: sched */
-            [scui_event_sched_delay] =              scui_stringify(scui_event_sched_delay),
-            [scui_event_anima_elapse] =             scui_stringify(scui_event_anima_elapse),
-            [scui_event_focus_lost] =               scui_stringify(scui_event_focus_lost),
-            [scui_event_focus_get] =                scui_stringify(scui_event_focus_get),
-            [scui_event_destroy] =                  scui_stringify(scui_event_destroy),
-            [scui_event_create] =                   scui_stringify(scui_event_create),
-            [scui_event_hide] =                     scui_stringify(scui_event_hide),
-            [scui_event_show] =                     scui_stringify(scui_event_show),
-            [scui_event_draw] =                     scui_stringify(scui_event_draw),
-            [scui_event_refr] =                     scui_stringify(scui_event_refr),
-            [scui_event_layout] =                   scui_stringify(scui_event_layout),
-            [scui_event_child_nums] =               scui_stringify(scui_event_child_nums),
-            [scui_event_child_size] =               scui_stringify(scui_event_child_size),
-            [scui_event_child_pos] =                scui_stringify(scui_event_child_pos),
-            [scui_event_size_auto] =                scui_stringify(scui_event_size_auto),
-            [scui_event_size_adjust] =              scui_stringify(scui_event_size_adjust),
-            [scui_event_lang_change] =              scui_stringify(scui_event_lang_change),
-            /* 系统事件: sched */
-            [scui_event_window_preload] =           scui_stringify(scui_event_window_preload),
-            [scui_event_scroll_layout] =            scui_stringify(scui_event_scroll_layout),
-            [scui_event_scroll_start] =             scui_stringify(scui_event_scroll_start),
-            [scui_event_scroll_keep] =              scui_stringify(scui_event_scroll_keep),
-            [scui_event_scroll_over] =              scui_stringify(scui_event_scroll_over),
-            [scui_event_button_click] =             scui_stringify(scui_event_button_click),
-            /* 系统事件: ptr */
-            [scui_event_ptr_cover] =                scui_stringify(scui_event_ptr_cover),
-            [scui_event_ptr_down] =                 scui_stringify(scui_event_ptr_down),
-            [scui_event_ptr_hold] =                 scui_stringify(scui_event_ptr_hold),
-            [scui_event_ptr_click] =                scui_stringify(scui_event_ptr_click),
-            [scui_event_ptr_fling] =                scui_stringify(scui_event_ptr_fling),
-            [scui_event_ptr_move] =                 scui_stringify(scui_event_ptr_move),
-            [scui_event_ptr_up] =                   scui_stringify(scui_event_ptr_up),
-            /* 系统事件: enc */
-            [scui_event_enc_fdir] =                 scui_stringify(scui_event_enc_fdir),
-            [scui_event_enc_bdir] =                 scui_stringify(scui_event_enc_bdir),
-            /* 系统事件: key */
-            [scui_event_key_down] =                 scui_stringify(scui_event_key_down),
-            [scui_event_key_hold] =                 scui_stringify(scui_event_key_hold),
-            [scui_event_key_click] =                scui_stringify(scui_event_key_click),
-            [scui_event_key_up] =                   scui_stringify(scui_event_key_up),
-        };
-        
-        return event_sys_str[type];
-    }
-    
-    if (scui_event_type_custom(type)) {
-        
-        static const char * event_custom_str[scui_event_custom_num - scui_event_sys_num] = {
-            /* 系统唯一事件:特殊 */
-            [scui_event_engine_ready                - scui_event_sys_num] = scui_stringify(scui_event_engine_ready),
-            [scui_event_engine_show                 - scui_event_sys_num] = scui_stringify(scui_event_engine_show),
-            
-            [scui_event_ui_none_goto                - scui_event_sys_num] = scui_stringify(scui_event_ui_none_goto),
-            [scui_event_ui_home_goto                - scui_event_sys_num] = scui_stringify(scui_event_ui_home_goto),
-            [scui_event_ui_standy_enter             - scui_event_sys_num] = scui_stringify(scui_event_ui_standy_enter),
-            [scui_event_ui_standy_exit              - scui_event_sys_num] = scui_stringify(scui_event_ui_standy_exit),
-        };
-        
-        return event_custom_str[type - scui_event_sys_num];
-    }
-    
-    return NULL;
-}
-
 /*@brief 事件响应
  *@param event 事件包
  */
-void scui_event_custom_access(scui_event_t *event)
+static void scui_event_custom_system(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_engine_ready:
@@ -118,9 +44,196 @@ void scui_event_custom_access(scui_event_t *event)
     default:
         break;
     }
+}
+
+/*@brief 事件响应
+ *@param event 事件包
+ */
+static void scui_event_custom_active(scui_event_t *event)
+{
+    /* 当我们遇到认为不能休眠的事件时 */
+    /* scui_tick_active(); */
     
+    /* 系统活跃标记 */
+    switch (event->type) {
+    case scui_event_ptr_hold:
+    case scui_event_key_hold:
+    case scui_event_enc_fdir:
+    case scui_event_enc_bdir:
+    case scui_event_scroll_start:
+    case scui_event_scroll_over:
+    case scui_event_scroll_keep:
+        scui_tick_active();
+        break;
+    default:
+        break;
+    }
+}
+
+/*@brief 事件响应
+ *@param event 事件包
+ */
+static void scui_event_custom_window(scui_event_t *event)
+{
+    /* 自定义窗口事件响应 */
+    if (event->object == SCUI_HANDLE_INVALID ||
+        event->object == SCUI_HANDLE_SYSTEM  ||
+        scui_widget_type(event->object) !=
+        scui_widget_type_window)
+        return;
     
-    
+    switch (event->type) {
+    case scui_event_focus_get: {
+        /* 窗口属性参数配置(窗口管理) */
+        scui_handle_t window_sibling[4] = {0};
+        scui_window_switch_type_t switch_type[4] = {0};
+        for (scui_coord_t idx = 0; idx < 4; idx++) {
+            window_sibling[idx] = SCUI_HANDLE_INVALID;
+            switch_type[idx] = scui_window_switch_auto;
+        }
+        
+        // float window
+        switch (event->object) {
+        case SCUI_UI_SCENE_TEST:
+            window_sibling[0] = SCUI_UI_SCENE_FLOAT_1;
+            window_sibling[1] = SCUI_UI_SCENE_FLOAT_2;
+            window_sibling[2] = SCUI_UI_SCENE_FLOAT_3;
+            window_sibling[3] = SCUI_UI_SCENE_FLOAT_4;
+            switch_type[0] = scui_window_switch_cover_in;
+            switch_type[1] = scui_window_switch_cover_in;
+            switch_type[2] = scui_window_switch_cover_in;
+            switch_type[3] = scui_window_switch_cover_in;
+            break;
+        case SCUI_UI_SCENE_FLOAT_1:
+            window_sibling[1] = SCUI_UI_SCENE_TEST;
+            switch_type[1] = scui_window_switch_cover_out;
+            break;
+        case SCUI_UI_SCENE_FLOAT_2:
+            window_sibling[0] = SCUI_UI_SCENE_TEST;
+            switch_type[0] = scui_window_switch_cover_out;
+            break;
+        case SCUI_UI_SCENE_FLOAT_3:
+            window_sibling[3] = SCUI_UI_SCENE_TEST;
+            switch_type[3] = scui_window_switch_cover_out;
+            break;
+        case SCUI_UI_SCENE_FLOAT_4:
+            window_sibling[2] = SCUI_UI_SCENE_TEST;
+            switch_type[2] = scui_window_switch_cover_out;
+            break;
+        }
+        
+        // float window
+        switch (event->object) {
+        case SCUI_UI_SCENE_HOME:
+            #if SCUI_MEM_FEAT_MINI == 0
+            window_sibling[0] = SCUI_UI_SCENE_NOTIFY;
+            window_sibling[1] = SCUI_UI_SCENE_QUICK_CARD;
+            window_sibling[2] = SCUI_UI_SCENE_MINI_CARD;
+            switch_type[0] = scui_window_switch_cover_in;
+            switch_type[1] = scui_window_switch_cover_in;
+            switch_type[2] = scui_window_switch_cover_in;
+            #endif
+            break;
+        
+        case SCUI_UI_SCENE_MINI_CARD:
+            window_sibling[3] = SCUI_UI_SCENE_HOME;
+            switch_type[3] = scui_window_switch_cover_out;
+            break;
+        case SCUI_UI_SCENE_NOTIFY:
+            window_sibling[1] = SCUI_UI_SCENE_HOME;
+            switch_type[1] = scui_window_switch_cover_out;
+            break;
+        case SCUI_UI_SCENE_QUICK_CARD:
+            window_sibling[0] = SCUI_UI_SCENE_HOME;
+            window_sibling[1] = SCUI_UI_SCENE_LIST_SCALE;
+            switch_type[0] = scui_window_switch_cover_out;
+            switch_type[1] = scui_window_switch_move;
+            break;
+        }
+        
+        switch (event->object) {
+        case SCUI_UI_SCENE_HOME:
+            #if SCUI_MEM_FEAT_MINI == 0
+            window_sibling[3] = SCUI_UI_SCENE_ACTIVITY;
+            #else
+            window_sibling[3] = SCUI_UI_SCENE_1;
+            #endif
+            break;
+        
+        case SCUI_UI_SCENE_ACTIVITY:
+            window_sibling[2] = SCUI_UI_SCENE_HOME;
+            window_sibling[3] = SCUI_UI_SCENE_1;
+            break;
+        
+        case SCUI_UI_SCENE_1:
+            window_sibling[0] = SCUI_UI_SCENE_TEST;
+            #if SCUI_MEM_FEAT_MINI == 0
+            window_sibling[1] = SCUI_UI_SCENE_CUBE;
+            window_sibling[2] = SCUI_UI_SCENE_ACTIVITY;
+            #else
+            window_sibling[2] = SCUI_UI_SCENE_HOME;
+            #endif
+            window_sibling[3] = SCUI_UI_SCENE_2;
+            break;
+        
+        case SCUI_UI_SCENE_CUBE:
+            window_sibling[0] = SCUI_UI_SCENE_1;
+            break;
+        
+        case SCUI_UI_SCENE_2:
+            #if SCUI_MEM_FEAT_MINI == 0
+            window_sibling[0] = SCUI_UI_SCENE_BUTTERFLY;
+            window_sibling[1] = SCUI_UI_SCENE_SOCCER;
+            #endif
+            window_sibling[2] = SCUI_UI_SCENE_1;
+            window_sibling[3] = SCUI_UI_SCENE_6;
+            break;
+        
+        case SCUI_UI_SCENE_BUTTERFLY:
+            window_sibling[1] = SCUI_UI_SCENE_2;
+            break;
+        
+        case SCUI_UI_SCENE_SOCCER:
+            window_sibling[0] = SCUI_UI_SCENE_2;
+            break;
+        
+        case SCUI_UI_SCENE_6:
+            window_sibling[2] = SCUI_UI_SCENE_2;
+            window_sibling[3] = SCUI_UI_SCENE_HOME;
+            break;
+        
+        default:
+            break;
+        }
+        scui_window_sibling_set(event->object, window_sibling);
+        scui_window_switch_type_set(event->object, switch_type);
+        
+        /* 默认支持所有方向 */
+        scui_window_switch_enc_set(event->object, scui_opt_pos_all);
+        scui_window_switch_key_set(event->object, scui_opt_pos_all);
+        
+        /* 默认支持所有方向 */
+        scui_coord_t switch_key_id[4] = {
+            scui_event_key_val_down,  scui_event_key_val_up,
+            scui_event_key_val_right, scui_event_key_val_left,
+        };
+        scui_window_switch_enc_way_set(event->object, scui_opt_dir_ver);
+        scui_window_switch_key_id_set(event->object, switch_key_id);
+        
+        break;
+    }
+    case scui_event_focus_lost: {
+        break;
+    }
+    }
+}
+
+/*@brief 事件响应
+ *@param event 事件包
+ */
+static void scui_event_custom_vibrate(scui_event_t *event)
+{
+    /* 滚动时的震动 */
     switch (event->type) {
     case scui_event_scroll_start:
     case scui_event_scroll_over:
@@ -130,9 +243,38 @@ void scui_event_custom_access(scui_event_t *event)
     default:
         break;
     }
+}
+
+/*@brief 事件响应
+ *@param event 事件包
+ */
+void scui_event_custom_check(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_ptr_click:
+        SCUI_LOG_INFO("event ptr click:%d", event->ptr_cnt);
+        break;
+    case scui_event_key_click:
+        SCUI_LOG_INFO("event key click:%d", event->key_cnt);
+        break;
+    default:
+        break;
+    }
+}
+
+/*@brief 事件响应
+ *@param event 事件包
+ */
+void scui_event_custom_access(scui_event_t *event)
+{
+    scui_event_custom_system(event);
+    scui_event_custom_active(event);
+    scui_event_custom_window(event);
     
-    /* 当我们遇到认为不能休眠的事件时 */
-    /* scui_tick_active(); */
+    scui_event_custom_check(event);
+    scui_event_custom_vibrate(event);
+    
+    
     
     /* 此处退出休眠 */
     switch (event->type) {
@@ -145,20 +287,7 @@ void scui_event_custom_access(scui_event_t *event)
             scui_event_notify(&event_ui);
             
             app_module_system_dlps_set(false);
-        } else {
-            
         }
-        break;
-    default:
-        break;
-    }
-    
-    switch (event->type) {
-    case scui_event_ptr_click:
-        SCUI_LOG_INFO("event ptr click:%d", event->ptr_cnt);
-        break;
-    case scui_event_key_click:
-        SCUI_LOG_INFO("event key click:%d", event->key_cnt);
         break;
     default:
         break;
@@ -177,12 +306,6 @@ void scui_event_custom_myself(scui_event_t *event)
     
     
     switch (event->type) {
-    case scui_event_ui_tick_frame: {
-        scui_event_mask_over(event);
-        /* 如果要是用时序调度, 通过该事件控制 */
-        scui_widget_refr(SCUI_HANDLE_INVALID, false);
-        break;
-    }
     case scui_event_ui_none_goto: {
         scui_event_mask_over(event);
         

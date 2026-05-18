@@ -294,7 +294,7 @@ typedef enum {
     
 } scui_opt_align_t;
 
-/* 通用结构位域 */
+/* 通用结构位域, 字段整理 */
 typedef uintptr_t scui_sbitfd_t;
 
 /*@brief 操作检查

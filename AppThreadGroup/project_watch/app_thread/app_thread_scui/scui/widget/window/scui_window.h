@@ -138,6 +138,7 @@ typedef struct {
     scui_handle_t  widget_1_num;
     scui_widget_t *widget_refr;
     scui_sbitfd_t  switch_refr:1;
+    uint32_t        anima_draw;
 } scui_window_list_t;
 
 /*@brief 窗口列表添加窗口
@@ -154,15 +155,6 @@ void scui_window_list_del(scui_handle_t handle);
  *@param list 窗口列表
  */
 void scui_window_list_sync(scui_handle_t list[SCUI_WINDOW_LIST_LIMIT]);
-
-/*@brief 窗口事件通知
- *@param event 事件
- */
-void scui_window_event_notify(scui_event_t *event);
-
-/*@brief 窗口刷新(仅调度使用)
- */
-void scui_window_refresh(void);
 
 /*@brief 控件默认事件处理回调
  *@param event 事件

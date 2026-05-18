@@ -81,7 +81,6 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
         break;
     case scui_event_focus_get:
-        scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
         break;

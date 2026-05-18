@@ -124,6 +124,7 @@ static void scui_window_switch_finish(scui_handle_t handle)
         
         bool sibling_check = false;
         /* 不回收当前窗口的临近窗口 */
+        #if SCUI_WINDOW_PRELOAD_USE
         for (scui_coord_t idx_c = 0; idx_c < 4; idx_c++) {
             if (window->sibling[idx_c] != handle_n)
                 continue;
@@ -131,6 +132,8 @@ static void scui_window_switch_finish(scui_handle_t handle)
             sibling_check = true;
             break;
         }
+        #endif
+        
         if (sibling_check)
             continue;
         
@@ -555,18 +558,15 @@ void scui_window_switch_event(scui_event_t *event)
     /* 不同的事件处理流程有不同的递归冒泡规则 */
     SCUI_LOG_DEBUG("event %u", event->type);
     
-    /* 只有常规窗口才支持事件响应 */
-    if (scui_window_active_curr() != SCUI_HANDLE_INVALID) {
-        scui_handle_t  handle_a = scui_window_active_curr();
-        scui_widget_t *widget_a = scui_handle_source_check(handle_a);
-        scui_window_t *window_a = (void *)widget_a;
-        if (window_a->resident)
-            return;
-    }
+    /* 只有活跃窗口才进行窗口切换 */
+    if (scui_window_active_curr() != event->object)
+        return;
     
     SCUI_ASSERT(scui_widget_type_check(event->object, scui_widget_type_window));
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_window_t *window = (void *)widget;
+    /* 只有常规窗口才支持事件响应 */
+    if (window->resident) return;
     
     switch (event->type) {
     case scui_event_ptr_down: {
@@ -733,7 +733,7 @@ bool scui_window_switch_jump(scui_handle_t handle, scui_window_switch_type_t typ
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     scui_handle_t handle_a = scui_window_active_curr();
     
-    #if 1
+    #if 0
     /* 检查参数正确与否的断言(可选) */
     void *widget_src = scui_handle_source_check(handle);
     bool  window_isw = ((scui_widget_t *)widget_src)->type == scui_widget_type_window;

@@ -33,6 +33,7 @@ void scui_clip_clear(scui_clip_set_t *clip_set);
  *       调用者:检查剪切域有效性
  *@param clip_set 剪切域集合
  *@param clip     剪切域
+ *@retval 成功失败
  */
 bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip);
 
@@ -40,6 +41,7 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip);
  *       调用者:检查剪切域有效性
  *@param clip_set 剪切域集合
  *@param clip     剪切域
+ *@retval 成功失败
  */
 bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip);
 

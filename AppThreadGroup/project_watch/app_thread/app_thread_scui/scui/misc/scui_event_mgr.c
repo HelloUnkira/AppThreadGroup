@@ -7,41 +7,11 @@
 
 #include "scui.h"
 
-/* 事件类型转标号字符串回调(可选支持,可能浪费空间占用) */
-static scui_event_cb_type_stringify_t scui_event_cb_type_stringify = NULL;
-
 /* 引擎有一个全局默认的先响应和后响应回调 */
 /* 事件会依照类别分为系统事件与自定义事件 */
 static scui_event_cb_t scui_event_cb_access = NULL;
 static scui_event_cb_t scui_event_cb_custom = NULL;
 static scui_event_cb_t scui_event_cb_finish = NULL;
-
-/*@brief 事件类型转标记字符串
- *@param type 事件类型
- *@retval 标记字符串
- */
-const char * scui_event_type_stringify(scui_event_type_t type)
-{
-    const char * type_stringify = NULL;
-    if (scui_event_cb_type_stringify != NULL)
-        type_stringify = scui_event_cb_type_stringify(type);
-    
-    /* 不支持的和未识别的直接返回本身的数字字符串 */
-    if (type_stringify == NULL) {
-        static uint16_t stringify[10] = {0};
-        snprintf(stringify, sizeof(stringify), "%d", type);
-        return stringify;
-    }
-    return type_stringify;
-}
-
-/*@brief 事件引擎注册转标号字符串回调
- *@param type_stringify 回调
- */
-void scui_event_register_type_stringify(scui_event_cb_type_stringify_t type_stringify)
-{
-    scui_event_cb_type_stringify = type_stringify;
-}
 
 /*@brief 事件引擎注册响应回调
  *@param event_cb 事件回调
@@ -82,15 +52,17 @@ static bool scui_event_cb_check(scui_event_t *event)
     /* 系统事件中必须该表中事件才响应before和after */
     static const uint32_t event_table[] = {
         scui_event_ptr_hold,
-        scui_event_key_hold,
         scui_event_ptr_move,
         scui_event_ptr_click,
         scui_event_ptr_fling,
+        scui_event_key_hold,
         scui_event_key_click,
         scui_event_enc_fdir,
         scui_event_enc_bdir,
         
-        scui_event_window_preload,
+        scui_event_focus_get,
+        scui_event_focus_lost,
+        
         scui_event_scroll_start,
         scui_event_scroll_over,
         scui_event_scroll_keep,
@@ -271,54 +243,26 @@ static void scui_event_respond(scui_event_t *event)
         if (event->object == SCUI_HANDLE_SYSTEM) {
             scui_anima_update();
             
-            /* 全局滚动检查 */
-            #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
-            if (scui_widget_scroll_state(0x02))
-                return;
-            #endif
-            
-            /* 全局刷新窗口 */
-            #if SCUI_WIDGET_ANIMA_DRAW_AUTO
-            static uint32_t elapse_tick = 0;
-            elapse_tick += event->tick;
-            
-            if (elapse_tick >= SCUI_WIDGET_ANIMA_DRAW_TIME) {
-                elapse_tick -= SCUI_WIDGET_ANIMA_DRAW_TIME;
-                event->type  = scui_event_draw;
-                scui_window_event_notify(event);
-                event->type  = scui_event_anima_elapse;
-            }
-            #endif
-            
-            /* 系统事件发给所有窗口(同步) */
-            event->style.sync = true;
-            scui_window_event_notify(event);
+            scui_window_event_dispatch(event);
+            scui_event_mask_over(event);
             return;
         }
         break;
     case scui_event_refr:
-        scui_window_refresh();
+        scui_window_event_dispatch(event);
         scui_event_mask_over(event);
         return;
-    case scui_event_lang_change: {
+    case scui_event_lang_change:
         if (event->object == SCUI_HANDLE_SYSTEM) {
-            /* 清扫一遍cache以让旧资源快速回收 */
-            scui_cache_font_rectify();
-            scui_cache_glyph_rectify();
-            
-            /* 系统事件发给所有窗口(同步) */
-            event->style.sync = true;
-            scui_window_event_notify(event);
+            scui_window_event_dispatch(event);
+            scui_event_mask_over(event);
             return;
         }
         break;
     }
-    default:
-        break;
-    }
     
+    /* 系统事件发给活跃窗口 */
     if (scui_event_type_sys(event->type)) {
-        /* 系统事件发给活跃窗口 */
         if (event->object == SCUI_HANDLE_SYSTEM)
             event->object  = scui_window_active_last(0);
         
@@ -327,15 +271,13 @@ static void scui_event_respond(scui_event_t *event)
             /* 存在控件树已经被回收的情况 */
             /* 但是事件调度队列还存在控件树的事件未响应 */
             /* 直接丢弃这个事件即可, 因为它还未来得及生效已经失效了, 无额外影响 */
-            const char *type_stringify = scui_event_type_stringify(event->type);
-            SCUI_LOG_ERROR("error widget %u %s", event->object, type_stringify);
+            SCUI_LOG_ERROR("event %u widget %u error", event->type, event->object);
             return;
         }
         
         /* 事件响应对象无效(未知情况?) */
         if (scui_handle_source(event->object) == NULL) {
-            const char *type_stringify = scui_event_type_stringify(event->type);
-            SCUI_LOG_ERROR("error widget %u %s", event->object, type_stringify);
+            SCUI_LOG_ERROR("event %u widget %u error", event->type, event->object);
             return;
         }
     }
@@ -445,13 +387,10 @@ static void scui_event_respond(scui_event_t *event)
     SCUI_LOG_ERROR("scui_event_custom_e:%u", scui_event_custom_e);
     #endif
     
-    const char *type_stringify = scui_event_type_stringify(event->type);
     /* 未定义事件响应 */
     SCUI_LOG_ERROR("catch unknown event:");
-    SCUI_LOG_ERROR("event->type:%s",            type_stringify);
-    SCUI_LOG_ERROR("event->style:%u",           event->style);
-    SCUI_LOG_ERROR("event->object:%u",          event->object);
-    SCUI_LOG_ERROR("event->style.priority:%u",  event->style.prior);
+    SCUI_LOG_ERROR("event->type:%u",   event->type);
+    SCUI_LOG_ERROR("event->object:%u", event->object);
 }
 
 /*@brief 事件通报

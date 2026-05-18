@@ -63,11 +63,13 @@ void scui_clip_clear(scui_clip_set_t *clip_set)
  *       调用者:检查剪切域有效性
  *@param clip_set 剪切域集合
  *@param clip     剪切域
+ *@retval 成功失败
  */
 bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
 {
     scui_area_t clip_valid = *clip;
-    SCUI_ASSERT(scui_area_inter(&clip_valid, &clip_set->clip, clip));
+    if (!scui_area_inter2(&clip_valid, &clip_set->clip))
+         return false;
     
     for (scui_clip_unit_t *unit = NULL; !scui_clip_empty(clip_set); true) {
         /* 如果剪切域可以合并,合并后的剪切域要继续检查 */
@@ -98,12 +100,13 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
             }
             /* 剪切域是否相交(去除重合的,重走流程) */
             scui_area_t  clip2[3] = {0};
-            scui_coord_t clip2_num = 0; bool result = true;
+            scui_coord_t clip2_num = 0;
             if (scui_area_differ2(clip2, &clip2_num, &unit->clip, &clip_valid)) {
                 /* 现在clip_valid被拆成更小的了(重走流程) */
                 for (scui_coord_t idx = 0; idx < clip2_num; idx++)
-                    result |= scui_clip_add(clip_set, &clip2[idx]);
-                return result;
+                    scui_clip_add(clip_set, &clip2[idx]);
+                
+                return true;
             }
             
             unit = NULL;
@@ -130,11 +133,13 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
  *       调用者:检查剪切域有效性
  *@param clip_set 剪切域集合
  *@param clip     剪切域
+ *@retval 成功失败
  */
 bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip)
 {
     scui_area_t clip_valid = *clip;
-    SCUI_ASSERT(scui_area_inter(&clip_valid, &clip_set->clip, clip));
+    if (!scui_area_inter2(&clip_valid, &clip_set->clip))
+         return false;
     
     for (scui_clip_unit_t *unit = NULL; !scui_clip_empty(clip_set); true) {
         /* 如果剪切域可以合并,合并后的剪切域要继续检查 */

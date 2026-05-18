@@ -1559,7 +1559,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
     case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
         break;
