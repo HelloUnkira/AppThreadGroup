@@ -236,16 +236,18 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_object_t *object = (void *)widget;
     
-    scui_object_type_t src_style[] = {
-        scui_object_style_rect_alpha,
-        scui_object_style_rect_color,
-        scui_object_style_rect_width,
-        scui_object_style_rect_height,
-        scui_object_style_rect_radius,
-        scui_object_style_rect_side_width,
+    const struct {bool must;scui_object_type_t style;} src_style[] = {
         
-        scui_object_style_rect_color_grad,
-        scui_object_style_rect_multi,
+        {true,  scui_object_style_rect_alpha,},
+        {true,  scui_object_style_rect_color,},
+        {false, scui_object_style_rect_align,},
+        {true,  scui_object_style_rect_width,},
+        {true,  scui_object_style_rect_height,},
+        {true,  scui_object_style_rect_radius,},
+        {true,  scui_object_style_rect_side_width,},
+        
+        {false, scui_object_style_rect_color_grad,},
+        {false, scui_object_style_rect_multi,},
     };
     
     /* 从属性列表取属性 */
@@ -257,8 +259,9 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     };
     for (scui_coord_t idx = 0; idx < scui_arr_len(src_style); idx++) {
         local_prop.data  = local_data_zero;
-        local_prop.style = src_style[idx];
-        if (idx <= 5 && !scui_object_prop_sync(handle, &local_prop)) {
+        local_prop.style = src_style[idx].style;
+        bool retval = scui_object_prop_sync(handle, &local_prop);
+        if (src_style[idx].must && !retval) {
             SCUI_LOG_ERROR("lose rect style %d", idx);
             return false;
         }
@@ -268,14 +271,15 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     
     scui_alpha_t   alpha        = src_data[0].alpha;
     scui_color32_t color_s      = src_data[1].color32;
-    scui_coord_t   width        = src_data[2].number;
-    scui_coord_t   height       = src_data[3].number;
-    scui_coord_t   radius       = src_data[4].number;
-    scui_coord_t   side_width   = src_data[5].number;
-    scui_color32_t color_e      = src_data[6].color32;
-    bool shadow = src_data[7].multi.shadow;
-    bool grad_w = src_data[7].multi.grad_w;
-    bool grad   = src_data[7].multi.grad;
+    scui_opt_pos_t align        = src_data[2].align;
+    scui_coord_t   width        = src_data[3].number;
+    scui_coord_t   height       = src_data[4].number;
+    scui_coord_t   radius       = src_data[5].number;
+    scui_coord_t   side_width   = src_data[6].number;
+    scui_color32_t color_e      = src_data[7].color32;
+    bool shadow = src_data[8].multi.shadow;
+    bool grad_w = src_data[8].multi.grad_w;
+    bool grad   = src_data[8].multi.grad;
     
     alpha = scui_alpha_mix(alpha, widget->alpha);
     scui_color_t color = {
@@ -284,12 +288,30 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
         .color_e = color_e,
     };
     
-    /* 固定为居中 */
+    /* 默认为居中 */
+    if (!scui_opt_bits_check(align, scui_opt_pos_hor)) align |= scui_opt_pos_hor;
+    if (!scui_opt_bits_check(align, scui_opt_pos_ver)) align |= scui_opt_pos_ver;
+    
     scui_area_t dst_area = widget->clip;
-    dst_area.x += (dst_area.w - (width  - side_width * 2)) / 2;
-    dst_area.y += (dst_area.h - (height - side_width * 2)) / 2;
-    dst_area.w  = (width  - side_width * 2);
-    dst_area.h  = (height - side_width * 2);
+    if (scui_opt_bits_equal(align, scui_opt_pos_hor))
+        dst_area.x += (dst_area.w - (width  - side_width * 2)) / 2;
+    else if (scui_opt_bits_equal(align, scui_opt_pos_l));
+    else if (scui_opt_bits_equal(align, scui_opt_pos_r))
+        dst_area.x += (dst_area.w - (width  - side_width * 2));
+    
+    if (scui_opt_bits_equal(align, scui_opt_pos_ver))
+        dst_area.y += (dst_area.h - (height - side_width * 2)) / 2;
+    else if (scui_opt_bits_equal(align, scui_opt_pos_u));
+    else if (scui_opt_bits_equal(align, scui_opt_pos_d))
+        dst_area.y += (dst_area.h - (height - side_width * 2));
+    
+    dst_area.w = (width  - side_width * 2);
+    dst_area.h = (height - side_width * 2);
+    
+    /* 检查信息 */
+    if (dst_area.w == 0 || width  == 0 ||
+        dst_area.h == 0 || height == 0)
+        return true;
     
     /* tvg draw cb */
     scui_draw_dsc_t draw_dsc = {0};
@@ -307,6 +329,9 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     scui_widget_draw_graph(widget->myself, NULL,
         alpha, color, &draw_dsc);
     
+    /* 添加抖动模糊效果 */
+    if (grad) scui_widget_draw_dither(widget->myself, &dst_area);
+    
     return true;
 }
 
@@ -320,16 +345,18 @@ void scui_object_prop_rect(scui_handle_t handle, scui_object_rect_t *rect)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_object_t *object = (void *)widget;
     
-    SCUI_ASSERT(rect->index < 4);
-    scui_coord_t src_radius[4] = {[0] = rect->radius,};
-    for (scui_coord_t idx = 0; idx + 1 < 4; idx++) {
-        src_radius[idx + 1]  = src_radius[idx];
-        src_radius[idx + 1] += rect->width[idx + 1];
-    }
+    scui_object_type_t src_part[] = {
+        scui_object_part_rect_bg,
+        scui_object_part_rect_fg,
+        scui_object_part_rect_edge,
+        scui_object_part_rect_box,
+        scui_object_part_rect_sha,
+    };
     
     scui_object_type_t src_style[] = {
         scui_object_style_rect_alpha,
         scui_object_style_rect_color,
+        scui_object_style_rect_align,
         scui_object_style_rect_width,
         scui_object_style_rect_height,
         scui_object_style_rect_radius,
@@ -338,22 +365,33 @@ void scui_object_prop_rect(scui_handle_t handle, scui_object_rect_t *rect)
         scui_object_style_rect_color_grad,
         scui_object_style_rect_multi,
     };
+    
+    SCUI_ASSERT(rect->index < scui_arr_len(src_part));
+    scui_coord_t src_radius[scui_arr_len(src_part)] = {
+        [0] = rect->radius,[1] = rect->radius,};
+    
+    for (scui_coord_t idx = 1; idx + 1 < scui_arr_len(src_part); idx++) {
+        src_radius[idx + 1]  = src_radius[idx];
+        src_radius[idx + 1] += rect->width[idx + 1];
+    }
+    
     scui_object_data_t src_data[scui_arr_len(src_style)] = {
         [0].alpha   = rect->alpha[rect->index],
         [1].color32 = rect->color[rect->index].color_s,
-        [2].number  = rect->area.w,
-        [3].number  = rect->area.h,
-        [4].number  = src_radius[rect->index],
-        [5].number  = rect->width[rect->index],
+        [2].align   = rect->align,
+        [3].number  = rect->area.w,
+        [4].number  = rect->area.h,
+        [5].number  = src_radius[rect->index],
+        [6].number  = rect->width[rect->index],
         /*  */
-        [6].color32 = rect->color[rect->index].color_e,
-        [7].multi.shadow = rect->index == 3,
-        [7].multi.grad_w = rect->grad_w,
-        [7].multi.grad   = rect->grad,
+        [7].color32 = rect->color[rect->index].color_e,
+        [8].multi.shadow = rect->index == 3,
+        [8].multi.grad_w = rect->grad_w,
+        [8].multi.grad   = rect->grad,
     };
     
     scui_object_prop_t local_prop = {
-        .part  = rect->part,
+        .part  = src_part[rect->index],
         .state = rect->state,
     };
     for (scui_coord_t idx = 0; idx < scui_arr_len(src_style); idx++) {
@@ -369,7 +407,7 @@ void scui_object_prop_rect(scui_handle_t handle, scui_object_rect_t *rect)
  *@param prop   属性(state)
  *@retval 成功失败
  */
-bool scui_object_draw_rect4(scui_handle_t handle, scui_object_prop_t *prop)
+bool scui_object_draw_rect_x(scui_handle_t handle, scui_object_prop_t *prop)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -377,6 +415,7 @@ bool scui_object_draw_rect4(scui_handle_t handle, scui_object_prop_t *prop)
     
     scui_object_type_t src_part[] = {
         scui_object_part_rect_bg,
+        scui_object_part_rect_fg,
         scui_object_part_rect_edge,
         scui_object_part_rect_box,
         scui_object_part_rect_sha,
@@ -401,7 +440,7 @@ bool scui_object_draw_rect4(scui_handle_t handle, scui_object_prop_t *prop)
  *@param handle 对象控件句柄
  *@param rect   圆角矩形属性
  */
-void scui_object_prop_rect4(scui_handle_t handle, scui_object_rect_t *rect)
+void scui_object_prop_rect_x(scui_handle_t handle, scui_object_rect_t *rect)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -409,6 +448,7 @@ void scui_object_prop_rect4(scui_handle_t handle, scui_object_rect_t *rect)
     
     scui_object_type_t src_part[] = {
         scui_object_part_rect_bg,
+        scui_object_part_rect_fg,
         scui_object_part_rect_edge,
         scui_object_part_rect_box,
         scui_object_part_rect_sha,

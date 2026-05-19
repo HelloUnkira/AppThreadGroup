@@ -7,94 +7,6 @@
 
 #include "scui.h"
 
-#if SCUI_DRAW_USE_THORVG
-/* 矢量绘图引擎(thorvg): */
-#include "thorvg_capi.h"
-
-static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
-{
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
-    scui_area_t    *dst_part    = &draw_dsc->graph.dst_part;
-    scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
-    scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
-    scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
-    scui_sbitfd_t   src_grad_w  =  draw_dsc->graph.src_grad_w;
-    scui_sbitfd_t   src_grad    =  draw_dsc->graph.src_grad;
-    /* draw dsc args<e> */
-    
-    scui_coord_t src_radius_max = scui_min(dst_part->w, dst_part->h) / 2;
-    if (src_radius < 0) src_radius = src_radius_max;
-    src_radius = scui_clamp(src_radius, 0, src_radius_max);
-    
-    Tvg_Canvas   *canvas = draw_dsc->graph.src_tvg_canvas;
-    scui_point_t  offset = draw_dsc->graph.src_tvg_offset;
-    
-    /* 固定:取用画笔并配置信息 */
-    Tvg_Paint *paint = tvg_shape_new();
-    tvg_paint_set_opacity(paint, src_alpha);
-    
-    scui_coord_t x = dst_part->x - offset.x;
-    scui_coord_t y = dst_part->y - offset.y;
-    scui_coord_t w = dst_part->w;
-    scui_coord_t h = dst_part->h;
-    scui_coord_t r = src_radius;
-    
-    tvg_shape_move_to(paint, x + r, y);
-    tvg_shape_line_to(paint, x + w - r, y);
-    tvg_shape_line_to(paint, x + w - r, y + r);
-    tvg_shape_line_to(paint, x + r, y + r);
-    tvg_shape_line_to(paint, x + r, y);
-    
-    tvg_shape_move_to(paint, x + r, y + h - r);
-    tvg_shape_line_to(paint, x + w - r, y + h - r);
-    tvg_shape_line_to(paint, x + w - r, y + h);
-    tvg_shape_line_to(paint, x + r, y + h);
-    tvg_shape_line_to(paint, x + r, y + h - r);
-    
-    tvg_shape_move_to(paint, x, y + r);
-    tvg_shape_line_to(paint, x + w, y + r);
-    tvg_shape_line_to(paint, x + w, y + h - r);
-    tvg_shape_line_to(paint, x, y + h - r);
-    tvg_shape_line_to(paint, x, y + r);
-    
-    tvg_shape_append_arc(paint, x + w - r, y + r, r, 270, 90, 1);
-    tvg_shape_append_arc(paint, x + w - r, y + h - r, r, 0, 90, 1);
-    tvg_shape_append_arc(paint, x + r, y + h - r, r, 90, 90, 1);
-    tvg_shape_append_arc(paint, x + r, y + r, r, 180, 90, 1);
-    
-    if (src_grad) {
-        uint8_t g_a[2] = {0}, g_r[2] = {0}, g_g[2] = {0}, g_b[2] = {0};
-        g_a[0] = src_color.color_s.ch.a; g_a[1] = src_color.color_e.ch.a;
-        g_r[0] = src_color.color_s.ch.r; g_r[1] = src_color.color_e.ch.r;
-        g_g[0] = src_color.color_s.ch.g; g_g[1] = src_color.color_e.ch.g;
-        g_b[0] = src_color.color_s.ch.b; g_b[1] = src_color.color_e.ch.b;
-        
-        Tvg_Color_Stop g_cs[2] = {0};
-        g_cs[0] = (Tvg_Color_Stop){0.0, .r = g_r[0], .g = g_g[0], .b = g_b[0], .a = g_a[0],};
-        g_cs[1] = (Tvg_Color_Stop){1.0, .r = g_r[1], .g = g_g[1], .b = g_b[1], .a = g_a[1],};
-        
-        Tvg_Gradient *p_grad = tvg_linear_gradient_new();
-        if (src_grad_w) tvg_linear_gradient_set(p_grad, x, y, x, y + h);
-        else tvg_linear_gradient_set(p_grad, x, y, x + w, y);
-        tvg_gradient_set_color_stops(p_grad, g_cs, 2);
-        tvg_shape_set_linear_gradient(paint, p_grad);
-    } else {
-        uint8_t f_a = 0, f_r = 0, f_g = 0, f_b = 0;
-        f_a = src_color.color.ch.a;
-        f_r = src_color.color.ch.r;
-        f_g = src_color.color.ch.g;
-        f_b = src_color.color.ch.b;
-        
-        tvg_shape_set_fill_color(paint, f_r, f_g, f_b, f_a);
-    }
-    
-    tvg_canvas_push(canvas, paint);
-}
-#endif
-
 /*@brief 控件构造(子类型)
  *@param maker inst是构造器
  *@param inst  构造器或实例
@@ -111,10 +23,10 @@ void scui_menial_bar_make(bool maker, void *inst)
         bool ext_switch = menial_maker->data.bar.ext_switch;
         SCUI_ASSERT(!(ext_slider && ext_switch));
         
-        /* 必须标记anima事件 */
+        /* 必须标记widget事件 */
         /* 条件标记ptr事件 */
-        menial_maker->widget.style.sched_anima = true;
-        menial_maker->widget.style.indev_ptr   = ext_slider || ext_switch;
+        menial_maker->widget.style.sched_widget = true;
+        menial_maker->widget.style.indev_ptr    = ext_slider || ext_switch;
     } else {
         
         /* 未配置使用默认值 */
@@ -131,7 +43,6 @@ void scui_menial_bar_make(bool maker, void *inst)
         
         scui_coord3_t value_d = menial->data.bar.value_lim;
         menial->data.bar.time = menial->data.bar.time * value_d / 100.0f;
-        menial->data.bar.tick = 0;
     }
 }
 
@@ -162,39 +73,61 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
     value = scui_clamp(value, 0.0f, menial->data.bar.value_lim);
     if (menial->data.bar.value_int) value = (scui_coord_t)value;
     
-    /* 扩充slider无动画 */
-    if (menial->data.bar.ext_slider)
-        anim = false;
-    /* 扩充switch有动画,端点值 */
+    /* 可选:slider无动画 */
+    /* 可选:switch有动画,端点值 */
+    if (menial->data.bar.ext_slider) anim = false;
     if (menial->data.bar.ext_switch) {
         scui_coord3_t value_d = menial->data.bar.value_lim;
         value = (value < value_d / 2) ? 0.0f : value_d;
     }
-    
-    
-    
-    /* 动画更新 */
-    if (anim) {
-        menial->data.bar.value_way = menial->data.bar.value_cur <= value ? +1.0f : -1.0f;
-        /* 让vaule_cur到达value即可 */
-        scui_coord3_t value_d = menial->data.bar.value_lim;
-        scui_coord3_t value_c = scui_dist(menial->data.bar.value_cur, value);
-        menial->data.bar.tick = scui_map(value_c, 0.0f, value_d, 0, menial->data.bar.time);
-        /* 值过小:直接更新 */
-        if (menial->data.bar.tick < SCUI_ANIMA_TICK) {
-            menial->data.bar.value_cur = value;
-            menial->data.bar.value_way = 0;
-            menial->data.bar.tick = 0;
-            scui_widget_draw(widget->myself, NULL, false);
-        }
-        return;
-    }
-    
-    /* 直接更新 */
     menial->data.bar.value_cur = value;
-    menial->data.bar.value_way = 0;
-    menial->data.bar.tick = 0;
-    scui_widget_draw(widget->myself, NULL, false);
+    scui_event_define(event, widget->myself, true, scui_event_update_value, NULL);
+    scui_event_notify(&event);
+    
+    scui_object_prop_t prop_def = {0};
+    scui_object_tran_t tran_def = {0};
+    prop_def.part  = scui_object_part_rect_fg;
+    prop_def.state = scui_object_state_def;
+    prop_def.style = scui_object_style_rect_height;
+    prop_def.style = menial->data.bar.way ? prop_def.style : scui_object_style_rect_width;
+    scui_object_prop_sync(handle, &prop_def);
+    
+    #if 1
+    /* 计算宽高值 */
+    scui_area_t  dst_part = widget->clip;
+    scui_coord3_t value_d = menial->data.bar.value_lim;
+    scui_coord3_t value_c = menial->data.bar.value_cur;
+    scui_coord3_t value_m = menial->data.bar.radius * 2;
+    scui_coord3_t value_l = scui_min(dst_part.w, dst_part.h);
+    if (value_m < 0) value_m = value_l;
+    value_m = scui_clamp(value_m, 0, value_l);
+    
+    scui_coord_t size_max = menial->data.bar.way ? dst_part.h : dst_part.w;
+    scui_coord_t size_min = scui_map(value_c, 0.0f, value_d, 0, size_max - value_m);
+    size_min = scui_clamp(value_m + size_min, value_m, size_max);
+    #endif
+    
+    tran_def.part    = scui_object_part_rect_fg;
+    tran_def.state_p = scui_object_state_def;
+    tran_def.state_n = scui_object_state_def;
+    tran_def.style   = prop_def.style;
+    tran_def.data_p.number = prop_def.data.number;
+    tran_def.data_n.number = scui_map(value, 0.0f, value_d, size_min, size_max);
+    
+    if (anim) {
+        scui_coord_t size_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
+        tran_def.time = scui_map(size_dif, 0, size_max, 0, menial->data.bar.time);
+        
+        /* 过渡动画更新 */
+        scui_object_tran_add(handle, &tran_def);
+        scui_object_tran_work(handle, &tran_def);
+    } else {
+        /* 直接更新(过渡动画移除) */
+        scui_object_tran_del(handle, &tran_def);
+        
+        prop_def.data.number = tran_def.data_n.number;
+        scui_object_prop_add(handle, &prop_def);
+    }
 }
 
 /*@brief 控件当前值(子类型)
@@ -226,71 +159,6 @@ void scui_menial_bar_invoke(scui_event_t *event)
     scui_menial_t *menial = (void *)widget;
     
     switch (event->type) {
-    case scui_event_anima_elapse: {
-        
-        if (menial->data.bar.tick == 0)
-            break;
-        if (menial->data.bar.tick < 0) {
-            menial->data.bar.tick = 0;
-            break;
-        }
-        
-        scui_coord_t tick = event->tick;
-        menial->data.bar.tick -= tick;
-        
-        scui_coord3_t value_d = menial->data.bar.value_lim;
-        scui_coord3_t value_c = scui_map(tick, 0, menial->data.bar.time, 0.0f, value_d);
-        menial->data.bar.value_cur += menial->data.bar.value_way * value_c;
-        scui_widget_draw(widget->myself, NULL, false);
-        break;
-    }
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             return;
-        
-        scui_draw_dsc_t draw_dsc = {0};
-        draw_dsc.type = scui_draw_type_pixel_tvg;
-        draw_dsc.graph.src_radius = menial->data.bar.radius;
-        draw_dsc.graph.src_grad_w = menial->data.bar.way;
-        draw_dsc.graph.src_grad   = menial->data.bar.grad;
-        #if SCUI_DRAW_USE_THORVG
-        draw_dsc.graph.src_tvg_cb = scui_menial_tvg_cb;
-        #endif
-        /* 渐变方向与绘制方向是一致的 */
-        
-        /* 绘制背景: */
-        scui_area_t dst_part = widget->clip;
-        draw_dsc.graph.dst_part = dst_part;
-        
-        scui_widget_draw_graph(widget->myself, NULL,
-            widget->alpha, menial->data.bar.color[0], &draw_dsc);
-        
-        /* 绘制前景: */
-        dst_part = widget->clip;
-        scui_coord3_t value_d = menial->data.bar.value_lim;
-        scui_coord3_t value_c = menial->data.bar.value_cur;
-        scui_coord3_t value_m = menial->data.bar.radius * 2;
-        scui_coord3_t value_l = scui_min(dst_part.w, dst_part.h);
-        if (value_m < 0) value_m = value_l;
-        value_m = scui_clamp(value_m, 0, value_l);
-        
-        if (menial->data.bar.way) {
-            dst_part.h = value_m + scui_map(value_c, 0.0f, value_d, 0, dst_part.h - value_m);
-            dst_part.h = scui_clamp(dst_part.h, value_m, widget->clip.h);
-        } else {
-            dst_part.w = value_m + scui_map(value_c, 0.0f, value_d, 0, dst_part.w - value_m);
-            dst_part.w = scui_clamp(dst_part.w, value_m, widget->clip.w);
-        }
-        draw_dsc.graph.dst_part = dst_part;
-        
-        scui_widget_draw_graph(widget->myself, NULL,
-            widget->alpha, menial->data.bar.color[1], &draw_dsc);
-        
-        if (menial->data.bar.grad)
-            scui_widget_draw_dither(widget->myself, NULL);
-        
-        break;
-    }
     case scui_event_ptr_click: {
         if (!menial->data.bar.ext_switch)
              break;
@@ -337,6 +205,62 @@ void scui_menial_bar_invoke(scui_event_t *event)
     case scui_event_ptr_up:
         widget->state.indev_ptr_hold = false;
         break;
+    default:
+        break;
+    }
+}
+
+/*@brief 事件处理回调(子类型)(样板)
+ *@param event 事件
+ */
+void scui_menial_bar_event_cb(scui_event_t *event)
+{
+    scui_menial_data_t *data = NULL;
+    scui_menial_data_inst(event->object, &data);
+    
+    switch (event->type) {
+    case scui_event_create: {
+        scui_area_t widget_clip = scui_widget_clip(event->object);
+        scui_object_rect_t rect = {
+            .area.w   = widget_clip.w,
+            .area.h   = widget_clip.h,
+            .index    = 0,
+            .alpha[0] = scui_alpha_cover,
+            .alpha[1] = scui_alpha_cover,
+            .color[0] = data->bar.color[0],
+            .color[1] = data->bar.color[1],
+            .radius   = data->bar.radius,
+            .align    = scui_opt_pos_l | scui_opt_pos_u,
+            .grad_w   = data->bar.way,
+            .grad     = data->bar.grad,
+        };
+        
+        rect.state = scui_object_state_def;
+        rect.index = 0;scui_object_prop_rect(event->object, &rect);
+        rect.index = 1;scui_object_prop_rect(event->object, &rect);
+        
+        /* 需要按下变色, 考虑 */
+        // rect.state = scui_object_state_pre;
+        // rect.index = 0;scui_object_prop_rect(event->object, &rect);
+        // rect.index = 1;scui_object_prop_rect(event->object, &rect);
+        
+        scui_menial_bar_update_value(event->object, 0.0f, false);
+        break;
+    }
+    case scui_event_draw: {
+        if (!scui_event_check_execute(event))
+             return;
+        
+        scui_object_prop_t prop = {0};
+        prop.part = scui_object_part_rect_bg;
+        scui_object_state_get(event->object, &prop.state);
+        scui_object_draw_rect(event->object, &prop);
+        
+        prop.part = scui_object_part_rect_fg;
+        scui_object_state_get(event->object, &prop.state);
+        scui_object_draw_rect(event->object, &prop);
+        break;
+    }
     default:
         break;
     }

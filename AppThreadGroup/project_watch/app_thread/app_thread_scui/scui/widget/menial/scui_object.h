@@ -7,50 +7,45 @@
  */
 
 typedef enum {
-    scui_object_type_none  = 0,
-    scui_object_type_part  = 0x100,
-    scui_object_type_state = 0x200,
-    scui_object_type_style = 0x300,
+    scui_object_type_none = 0,
     
     /* field part: */
-    scui_object_part_s =
-    scui_object_type_part,
-    /* LVGL式部件:背景(bg)/边界(border)/盒子(outline)/阴影(shadow) */
-    
+    scui_object_part_s = 0x100,
+    /* 背景/前景/边界/盒子/阴影 */
     scui_object_part_rect_bg,       /* 背景 */
     scui_object_part_rect_fg,       /* 前景 */
-    
     scui_object_part_rect_edge,     /* 边界(可选扩充) */
     scui_object_part_rect_box,      /* 盒子(可选扩充) */
     scui_object_part_rect_sha,      /* 阴影(可选扩充) */
-    
     scui_object_part_e,
+    
     /* field state: */
-    scui_object_state_s =
-    scui_object_type_state,
+    scui_object_state_s = 0x200,
     scui_object_state_def,
     scui_object_state_pre,
     scui_object_state_chk,
     scui_object_state_e,
+    
     /* field style: */
-    scui_object_style_s = 
-    scui_object_type_style,
+    scui_object_style_s = 0x300,
     scui_object_style_rect_alpha,
     scui_object_style_rect_color,
+    scui_object_style_rect_align,
     scui_object_style_rect_width,
     scui_object_style_rect_height,
     scui_object_style_rect_radius,
     scui_object_style_rect_side_width,
     scui_object_style_rect_color_grad,
     scui_object_style_rect_multi,
-    
     scui_object_style_e,
+    
 } scui_object_type_t;
 
 typedef union {
     scui_alpha_t   alpha;
     scui_multi_t   number;
     scui_color32_t color32;
+    scui_opt_pos_t align;
     
     /* 组合值: */
     struct {
@@ -94,7 +89,8 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     /* 内部域: */
-    scui_coord_t        check:1;        /* 使用chk状态 */
+    scui_sbitfd_t       press:1;        /* 使用pre状态 */
+    scui_sbitfd_t       check:1;        /* 使用chk状态 */
     scui_object_type_t  state_l;        /* 上一状态(last) */
     scui_object_type_t  state_c;        /* 当前状态(curr) */
     scui_object_prop_t *prop_list;      /* 属性列表 */

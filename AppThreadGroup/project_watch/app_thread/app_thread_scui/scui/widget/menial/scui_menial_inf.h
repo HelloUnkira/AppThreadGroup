@@ -42,10 +42,14 @@ void scui_menial_bar_current_value(scui_handle_t handle, scui_coord3_t *value);
 /******************************************************************************/
 /* 自定义参考配置模板: */
 
-/*@brief 事件处理回调(子类型)
- *       经典按钮样板
+/*@brief 事件处理回调(子类型)(样板)
  *@param event 事件
  */
 void scui_menial_btn_event_cb(scui_event_t *event);
+
+/*@brief 事件处理回调(子类型)(样板)
+ *@param event 事件
+ */
+void scui_menial_bar_event_cb(scui_event_t *event);
 
 #endif

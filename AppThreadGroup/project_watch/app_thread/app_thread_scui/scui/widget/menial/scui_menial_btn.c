@@ -22,6 +22,10 @@ void scui_menial_btn_make(bool maker, void *inst)
         menial_maker->widget.style.sched_widget = true;
     } else {
         
+        /* 未配置使用默认值 */
+        if (menial->data.btn.time == 0) menial->data.btn.time = SCUI_WIDGET_MENIAL_BTN_TIME;
+        if (menial->data.btn.lim  == 0) menial->data.btn.lim  = SCUI_WIDGET_MENIAL_BTN_PCT;
+        if (menial->data.btn.fixed)     menial->data.btn.lim  = 100;
     }
 }
 
@@ -58,8 +62,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
     }
 }
 
-/*@brief 事件处理回调(子类型)
- *       经典按钮样板
+/*@brief 事件处理回调(子类型)(样板)
  *@param event 事件
  */
 void scui_menial_btn_event_cb(scui_event_t *event)
@@ -69,14 +72,8 @@ void scui_menial_btn_event_cb(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_create: {
-        /* 未配置使用默认值 */
-        if (data->btn.time == 0) data->btn.time = SCUI_WIDGET_MENIAL_BTN_TIME;
-        if (data->btn.lim  == 0) data->btn.lim  = SCUI_WIDGET_MENIAL_BTN_PCT;
-        if (data->btn.fixed)     data->btn.lim  = 100;
-        
         scui_area_t widget_clip = scui_widget_clip(event->object);
         scui_object_rect_t rect = {
-            .part     = scui_object_part_rect_bg,
             .area.w   = widget_clip.w,
             .area.h   = widget_clip.h,
             .index    = 0,
@@ -84,6 +81,9 @@ void scui_menial_btn_event_cb(scui_event_t *event)
             .width[0] = data->btn.width,
             .radius   = data->btn.radius,
         };
+        
+        scui_object_press_set(event->object, true);
+        scui_object_check_set(event->object, data->btn.check);
         
         /* def<->pre */
         if (true) {
@@ -94,7 +94,6 @@ void scui_menial_btn_event_cb(scui_event_t *event)
         }
         /* chk */
         if (data->btn.check) {
-            scui_object_check_set(event->object, true);
             
             rect.state = scui_object_state_chk;
             scui_object_prop_rect(event->object, &rect);

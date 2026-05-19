@@ -39,6 +39,25 @@ void scui_object_tran_add(scui_handle_t handle, scui_object_tran_t *tran);
  */
 bool scui_object_tran_add_by(scui_handle_t handle, scui_object_tran_t *tran);
 
+/*@brief 对象控件过渡执行
+ *@param handle 控件句柄
+ *@param tran   控件过渡
+ *@retval 未找到控件过渡
+ */
+bool scui_object_tran_work(scui_handle_t handle, scui_object_tran_t *tran);
+
+/*@brief 对象控件状态获取
+ *@param handle 控件句柄
+ *@param press  控件状态
+ */
+void scui_object_press_get(scui_handle_t handle, bool *press);
+
+/*@brief 对象控件状态设置
+ *@param handle 控件句柄
+ *@param press  控件状态
+ */
+void scui_object_press_set(scui_handle_t handle, bool press);
+
 /*@brief 对象控件状态获取
  *@param handle 控件句柄
  *@param check  控件状态
@@ -72,14 +91,15 @@ typedef struct {
     scui_object_type_t part;
     scui_object_type_t state;
     
-    scui_area_t   area;         /* 部件宽高 */
-    scui_coord_t  index;        /* 部件索引[0, 3] */
-    scui_alpha_t  alpha[4];     /* 部件透明度(背景,边界,外部线,阴影) */
-    scui_color_t  color[4];     /* 部件源色调(s->e) */
-    scui_coord_t  width[4];     /* 部件宽度(边框) */
-    scui_coord_t  radius;       /* 部件圆角(背景) */
-    scui_sbitfd_t grad_w:1;     /* 渐变方向 */
-    scui_sbitfd_t grad:1;       /* 渐变标记 */
+    scui_area_t    area;        /* 部件宽高 */
+    scui_coord_t   index;       /* 部件索引[0, 4] */
+    scui_alpha_t   alpha[5];    /* 部件透明度(背景,前景,边界,盒子,阴影) */
+    scui_color_t   color[5];    /* 部件源色调(s->e) */
+    scui_coord_t   width[5];    /* 部件宽度(边框) */
+    scui_coord_t   radius;      /* 部件圆角(背景) */
+    scui_opt_pos_t align;       /* 部件对齐 */
+    scui_sbitfd_t  grad_w:1;    /* 渐变方向 */
+    scui_sbitfd_t  grad:1;      /* 渐变标记 */
     
 } scui_object_rect_t;
 
@@ -101,12 +121,12 @@ void scui_object_prop_rect(scui_handle_t handle, scui_object_rect_t *rect);
  *@param prop   属性(state)
  *@retval 成功失败
  */
-bool scui_object_draw_rect4(scui_handle_t handle, scui_object_prop_t *prop);
+bool scui_object_draw_rect_x(scui_handle_t handle, scui_object_prop_t *prop);
 
 /*@brief 对象控件添加经典圆角矩形属性
  *@param handle 对象控件句柄
  *@param rect   圆角矩形属性
  */
-void scui_object_prop_rect4(scui_handle_t handle, scui_object_rect_t *rect);
+void scui_object_prop_rect_x(scui_handle_t handle, scui_object_rect_t *rect);
 
 #endif

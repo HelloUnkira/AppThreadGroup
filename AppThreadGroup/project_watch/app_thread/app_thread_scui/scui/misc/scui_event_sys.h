@@ -40,6 +40,7 @@ typedef enum {
     scui_event_scroll_keep,     /* 滚动控件:滚动进行 */
     scui_event_scroll_over,     /* 滚动控件:滚动结束 */
     scui_event_button_click,    /* 按钮控件:指针点击 */
+    scui_event_update_value,    /* 其余控件:数据更新 */
     scui_event_widget_e,
     /* 调度事件<e> */
     

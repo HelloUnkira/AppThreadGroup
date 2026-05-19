@@ -30,9 +30,10 @@ void scui_object_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_object));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
+    object->press   = false;
     object->check   = false;
-    object->state_c = scui_object_state_def;
     object->state_l = scui_object_state_def;
+    object->state_c = scui_object_state_def;
 }
 
 /*@brief 控件析构
@@ -250,9 +251,11 @@ void scui_object_tran_add(scui_handle_t handle, scui_object_tran_t *tran)
             continue;
         
        *local_tran = *tran;
+        local_tran->use = true;
         
         scui_map_cb_t path = local_tran->path;
-        if (path == NULL) path = scui_map_ease_in_out;
+        if (path == NULL) path = scui_map_linear;
+        
         local_tran->path   = path;
         local_tran->tick_d = local_tran->delay + 1;
         local_tran->tick_t = local_tran->time + 1;
@@ -263,7 +266,7 @@ void scui_object_tran_add(scui_handle_t handle, scui_object_tran_t *tran)
     
     /* 动态调整资源大小(只需扩充即可) */
     if (object->tran_cur + 1 > object->tran_num) {
-        scui_coord_t tran_num  = object->tran_num + SCUI_WIDGET_OBJECT_PROP_STEP;
+        scui_coord_t tran_num  = object->tran_num + SCUI_WIDGET_OBJECT_TRAN_STEP;
         scui_multi_t tran_size = tran_num * sizeof(scui_object_tran_t);
         scui_object_tran_t *tran_list = SCUI_MEM_ZALLOC(scui_mem_type_mix, tran_size);
         tran_size = object->tran_num * sizeof(scui_object_tran_t);
@@ -283,7 +286,8 @@ void scui_object_tran_add(scui_handle_t handle, scui_object_tran_t *tran)
         object->tran_cur++;
         
         scui_map_cb_t path = local_tran->path;
-        if (path == NULL) path = scui_map_ease_in_out;
+        if (path == NULL) path = scui_map_linear;
+        
         local_tran->path   = path;
         local_tran->tick_d = local_tran->delay + 1;
         local_tran->tick_t = local_tran->time + 1;
@@ -319,6 +323,61 @@ bool scui_object_tran_add_by(scui_handle_t handle, scui_object_tran_t *tran)
     
     scui_object_tran_add(handle, &local_tran);
     return true;
+}
+
+/*@brief 对象控件过渡执行
+ *@param handle 控件句柄
+ *@param tran   控件过渡
+ *@retval 未找到控件过渡
+ */
+bool scui_object_tran_work(scui_handle_t handle, scui_object_tran_t *tran)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_object_t *object = (void *)widget;
+    
+    for (scui_coord_t idx = 0; idx < object->tran_num; idx++) {
+        scui_object_tran_t *local_tran = &object->tran_list[idx];
+        if (!local_tran->use) continue;
+        
+        if (local_tran->part    != tran->part    ||
+            local_tran->state_p != tran->state_p ||
+            local_tran->state_n != tran->state_n ||
+            local_tran->style   != tran->style)
+            continue;
+        
+        local_tran->tick_d = 0;
+        local_tran->tick_t = 0;
+        return true;
+    }
+    
+    return false;
+}
+
+/*@brief 对象控件状态获取
+ *@param handle 控件句柄
+ *@param press  控件状态
+ */
+void scui_object_press_get(scui_handle_t handle, bool *press)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_object_t *object = (void *)widget;
+    
+    *press = object->press;
+}
+
+/*@brief 对象控件状态设置
+ *@param handle 控件句柄
+ *@param press  控件状态
+ */
+void scui_object_press_set(scui_handle_t handle, bool press)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_object_t *object = (void *)widget;
+    
+    object->press = press;
 }
 
 /*@brief 对象控件状态获取
@@ -438,6 +497,13 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         SCUI_LOG_INFO("color:0x%x", prop.data.color32.full);
         break;
     }
+    case scui_object_style_rect_align: {
+        scui_object_data_t data_p = local_tran->data_p;
+        scui_object_data_t data_n = local_tran->data_n;
+        prop.data.align = pct_c <= 50 ? data_p.align: data_n.align;
+        SCUI_LOG_INFO("align:%x", prop.data.align);
+        break;
+    }
     case scui_object_style_rect_width:
     case scui_object_style_rect_height:
     case scui_object_style_rect_radius:
@@ -455,6 +521,7 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         SCUI_LOG_INFO("shadow:%d", prop.data.multi.shadow);
         SCUI_LOG_INFO("grad_w:%d", prop.data.multi.grad_w);
         SCUI_LOG_INFO("grad:%d",   prop.data.multi.grad);
+        break;
     }
     default:
         break;
@@ -462,6 +529,10 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
     
     /* 同步更新prop(直接add即可) */
     scui_object_prop_add(handle, &prop);
+    
+    /* 如果state不变,视做单次tran,执行到最后移除该tran */
+    if (local_tran->state_p == local_tran->state_n && pct_c == 100)
+        scui_object_tran_del(handle, local_tran);
 }
 
 /*@brief 事件处理回调
@@ -508,25 +579,44 @@ void scui_object_invoke(scui_event_t *event)
         if (!scui_widget_event_inside(event))
              break;
         
-        scui_object_state_set(event->object, scui_object_state_pre);
+        if (object->press) {
+            
+            scui_object_state_set(event->object, scui_object_state_pre);
+        } else {
+            
+            if (object->check) {
+                if (object->state_c == scui_object_state_def) {
+                    scui_object_state_set(event->object, scui_object_state_chk);
+                    break;
+                }
+                if (object->state_c == scui_object_state_chk) {
+                    scui_object_state_set(event->object, scui_object_state_def);
+                    break;
+                }
+            }
+        }
         break;
     }
     case scui_event_ptr_up: {
-        if (object->state_c != scui_object_state_pre)
+        
+        if (object->press) {
+            if (object->state_c != scui_object_state_pre)
+                break;
+            
+            if (object->check) {
+                if (object->state_l == scui_object_state_def) {
+                    scui_object_state_set(event->object, scui_object_state_chk);
+                    break;
+                }
+                if (object->state_l == scui_object_state_chk) {
+                    scui_object_state_set(event->object, scui_object_state_def);
+                    break;
+                }
+            }
+            
+            scui_object_state_set(event->object, scui_object_state_def);
             break;
-        
-        if (object->check) {
-            if (object->state_l == scui_object_state_def) {
-                scui_object_state_set(event->object, scui_object_state_chk);
-                break;
-            }
-            if (object->state_l == scui_object_state_chk) {
-                scui_object_state_set(event->object, scui_object_state_def);
-                break;
-            }
         }
-        
-        scui_object_state_set(event->object, scui_object_state_def);
         break;
     }
     default:

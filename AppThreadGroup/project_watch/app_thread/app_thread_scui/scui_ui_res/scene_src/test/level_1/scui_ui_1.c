@@ -37,6 +37,25 @@ void scui_ui_scene_1_menial_btn_event_proc(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
+void scui_ui_scene_1_menial_bar_event_proc(scui_event_t *event)
+{
+    scui_menial_bar_event_cb(event);
+    
+    
+    
+    switch (event->type) {
+    case scui_event_update_value: {
+        scui_coord3_t value = 0.0f;
+        scui_menial_bar_current_value(event->object, &value);
+        // SCUI_LOG_WARN("event %u widget %u value:%.2f", event->type, event->object, value);
+        break;
+    }
+    }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
 void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
 {
     static scui_coord_t arc_val = 0;
@@ -71,7 +90,7 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
             scui_ui_res_local->menial_bar_w1 = -1;
         
         scui_menial_bar_update_value(scui_ui_res_local->menial_bar_1,
-            scui_ui_res_local->menial_bar_v1, true);
+            scui_ui_res_local->menial_bar_v1, false);
         #endif
         
         break;
@@ -191,7 +210,7 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         #if 1
         // menial_bar:
         scui_coord_t bar_ofs_y = arc_ofs_y + 100 + 10;
-        menial_maker.widget.event_cb = NULL;
+        menial_maker.widget.event_cb = scui_ui_scene_1_menial_bar_event_proc;
         menial_maker.type = scui_menial_type_bar;
         menial_maker.data = menial_data_zero;
         menial_maker.data.bar.color[0].color_s.full = 0xFF000080;
