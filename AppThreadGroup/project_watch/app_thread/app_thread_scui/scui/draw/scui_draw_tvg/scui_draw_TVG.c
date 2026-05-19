@@ -262,7 +262,7 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
     scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
-    scui_area_t    *src_area    = &draw_dsc->graph.src_area;
+    scui_area_t    *dst_part    = &draw_dsc->graph.dst_part;
     scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
     scui_color_t    src_color   =  draw_dsc->graph.src_color;
     scui_coord_t    src_width   =  draw_dsc->graph.src_width;
@@ -300,10 +300,10 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
         };
         
         scui_coord_t sw = src_width;
-        scui_coord_t x = src_area->x - dst_clip->x;
-        scui_coord_t y = src_area->y - dst_clip->y;
-        scui_coord_t w = src_area->w;
-        scui_coord_t h = src_area->h;
+        scui_coord_t x = dst_part->x - dst_clip->x;
+        scui_coord_t y = dst_part->y - dst_clip->y;
+        scui_coord_t w = dst_part->w;
+        scui_coord_t h = dst_part->h;
         scui_coord_t r = src_radius;
         
         Tvg_Paint *paint_r1 = tvg_shape_new();
@@ -420,10 +420,10 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
             s_width = src_width;
         }
         
-        scui_coord_t x = src_area->x - dst_clip->x;
-        scui_coord_t y = src_area->y - dst_clip->y;
-        scui_coord_t w = src_area->w;
-        scui_coord_t h = src_area->h;
+        scui_coord_t x = dst_part->x - dst_clip->x;
+        scui_coord_t y = dst_part->y - dst_clip->y;
+        scui_coord_t w = dst_part->w;
+        scui_coord_t h = dst_part->h;
         scui_coord_t r = src_radius;
         
         if (src_width == 0 || src_width >= src_radius) {
@@ -526,14 +526,14 @@ static bool scui_draw_ctx_graph_part_TVG(scui_draw_dsc_t *draw_dsc)
     #if SCUI_DRAW_USE_THORVG
     switch (draw_dsc->type) {
     case scui_draw_type_pixel_arc:
-        scui_draw_arc(draw_dsc);
-        return true;
+        // scui_draw_arc(draw_dsc);
+        return false;
     case scui_draw_type_pixel_circle:
-        scui_draw_circle(draw_dsc);
-        return true;
+        // scui_draw_circle(draw_dsc);
+        return false;
     case scui_draw_type_pixel_line:
-        scui_draw_line(draw_dsc);
-        return true;
+        // scui_draw_line(draw_dsc);
+        return false;
     case scui_draw_type_pixel_crect:
         // scui_draw_crect(draw_dsc);
         return false;

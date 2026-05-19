@@ -11,26 +11,24 @@
  *@param type 控件子类型
  *@param info 控件子类型信息
  */
-static void scui_menial_info_map_find(scui_menial_type_t type, scui_menial_info_t **info)
+static void scui_menial_info_map_find(scui_menial_type_t type, scui_menial_sub_info_t **info)
 {
-    static const scui_menial_info_t scui_menial_info[scui_menial_type_num] = {
+    static const scui_menial_sub_info_t scui_menial_info[scui_menial_type_num] = {
+        
         [scui_menial_type_btn] = {
-            .maker   = scui_menial_btn_maker,
-            .config  = scui_menial_btn_config,
-            .recycle = scui_menial_btn_recycle,
-            .invoke  = scui_menial_btn_invoke,
+            .make   = scui_menial_btn_make,
+            .burn   = scui_menial_btn_burn,
+            .invoke = scui_menial_btn_invoke,
         },
         [scui_menial_type_arc] = {
-            .maker   = scui_menial_arc_maker,
-            .config  = scui_menial_arc_config,
-            .recycle = scui_menial_arc_recycle,
-            .invoke  = scui_menial_arc_invoke,
+            .make   = scui_menial_arc_make,
+            .burn   = scui_menial_arc_burn,
+            .invoke = scui_menial_arc_invoke,
         },
         [scui_menial_type_bar] = {
-            .maker   = scui_menial_bar_maker,
-            .config  = scui_menial_bar_config,
-            .recycle = scui_menial_bar_recycle,
-            .invoke  = scui_menial_bar_invoke,
+            .make   = scui_menial_bar_make,
+            .burn   = scui_menial_bar_burn,
+            .invoke = scui_menial_bar_invoke,
         },
     };
     
@@ -57,9 +55,9 @@ void scui_menial_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_menial_t *menial = widget;
     scui_menial_maker_t *menial_maker = widget_maker;
     
-    scui_menial_info_t *menial_info = NULL;
+    scui_menial_sub_info_t *menial_info = NULL;
     scui_menial_info_map_find(menial_maker->type, &menial_info);
-    menial_info->maker(menial_maker);
+    menial_info->make(true, menial_maker);
     
     /* 构造派生控件实例 */
     scui_object_make(widget, widget_maker, handle);
@@ -75,7 +73,7 @@ void scui_menial_make(void *inst, void *inst_maker, scui_handle_t *handle)
     /* 资源同步与构造 */
     menial->type = menial_maker->type;
     menial->data = menial_maker->data;
-    menial_info->config(menial);
+    menial_info->make(false, menial);
     SCUI_ASSERT(menial->type > scui_menial_type_none);
     SCUI_ASSERT(menial->type < scui_menial_type_num);
 }
@@ -90,9 +88,9 @@ void scui_menial_burn(scui_handle_t handle)
     scui_menial_t *menial = (void *)widget;
     
     /* 资源析构 */
-    scui_menial_info_t *menial_info = NULL;
+    scui_menial_sub_info_t *menial_info = NULL;
     scui_menial_info_map_find(menial->type, &menial_info);
-    menial_info->recycle(menial);
+    menial_info->burn(menial);
     
     /* 析构派生控件实例 */
     scui_object_burn(widget->myself);
@@ -124,7 +122,7 @@ void scui_menial_invoke(scui_event_t *event)
     scui_object_invoke(event);
     
     /* 事件处理回调:子控件 */
-    scui_menial_info_t *menial_info = NULL;
+    scui_menial_sub_info_t *menial_info = NULL;
     scui_menial_info_map_find(menial->type, &menial_info);
     menial_info->invoke(event);
 }

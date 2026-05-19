@@ -252,7 +252,7 @@ typedef struct {
         scui_alpha_t        src_alpha;      /* 透明度 */
         scui_color_t        src_color;      /* 源色调 */
         
-        scui_area_t         src_area;       /* 图元区域 */
+        scui_area_t         dst_part;       /* 图元区域 */
         scui_point_t        src_center;     /* 旋转中心 */
         scui_coord_t        src_angle_s;    /* 起始角度 */
         scui_coord_t        src_angle_e;    /* 结束角度 */
@@ -266,9 +266,12 @@ typedef struct {
         scui_sbitfd_t       src_grad:1;     /* 渐变标记:弧 */
         
         /* 矢量缩放图形扩展 */
-        void  *src_tvg_canvas;
-        void (*src_tvg_cb)(void *draw_dsc);
+        #if SCUI_DRAW_USE_THORVG
         scui_point_t src_tvg_offset;
+        void (*src_tvg_cb)(void *draw_dsc);
+        void  *src_tvg_canvas;
+        #endif
+        
     } graph;
     /**************************************************************************
      * keep adding...

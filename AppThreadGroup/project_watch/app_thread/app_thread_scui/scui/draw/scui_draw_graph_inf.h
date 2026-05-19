@@ -363,7 +363,7 @@ do {                                                                            
     scui_dd_i->graph.src_alpha   = src_alpha_v;                                     \
     scui_dd_i->graph.src_color   = src_color_v;                                     \
                                                                                     \
-    scui_dd_i->graph.src_area    = (draw_dsc_v)->graph.src_area;                    \
+    scui_dd_i->graph.dst_part    = (draw_dsc_v)->graph.dst_part;                    \
     scui_dd_i->graph.src_center  = (draw_dsc_v)->graph.src_center;                  \
     scui_dd_i->graph.src_angle_s = (draw_dsc_v)->graph.src_angle_s;                 \
     scui_dd_i->graph.src_angle_e = (draw_dsc_v)->graph.src_angle_e;                 \

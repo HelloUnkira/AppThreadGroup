@@ -93,52 +93,54 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
 }
 #endif
 
-/*@brief 控件构造器初始化(子类型)
- *@param menial_maker 控件构造器实例
+/*@brief 控件构造(子类型)
+ *@param maker inst是构造器
+ *@param inst  构造器或实例
  */
-void scui_menial_arc_maker(scui_menial_maker_t *menial_maker)
+void scui_menial_arc_make(bool maker, void *inst)
 {
-    /* 必须标记anima事件 */
-    menial_maker->widget.style.sched_anima = true;
-}
-
-/*@brief 控件初始化(子类型)
- *@param menial 控件实例
- */
-void scui_menial_arc_config(scui_menial_t *menial)
-{
-    /* 未配置使用默认值 */
-    if (SCUI_IS_ZERO_VAL_F(menial->data.arc.angle_s) &&
-        SCUI_IS_ZERO_VAL_F(menial->data.arc.angle_e)) {
-        menial->data.arc.angle_s = 0.0f;
-        menial->data.arc.angle_e = 360.0f;
-    }
+    scui_menial_t *menial = inst;
+    scui_menial_maker_t *menial_maker = inst;
     
-    /* 未配置使用默认值 */
-    if (menial->data.arc.time == 0)
-        menial->data.arc.time  = SCUI_WIDGET_MENIAL_ARC_TIME;
-    
-    /* 默认从零点开始 */
-    scui_coord3_t angle_s = menial->data.arc.angle_s;
-    scui_coord3_t angle_e = menial->data.arc.angle_e;
-    menial->data.arc.angle_dist = scui_dist(angle_s, angle_e);
-    menial->data.arc.angle_cur  = menial->data.arc.anti ? angle_e : angle_s;
-    menial->data.arc.angle_way  = 0;
-    
-    if (menial->data.arc.spinner) {
-        /* spinner的time不做计算, 默认按360度给入 */
-        menial->data.arc.tick = 0;
+    if (maker) {
+        
+        /* 必须标记anima事件 */
+        menial_maker->widget.style.sched_anima = true;
     } else {
-        scui_coord3_t angle_d = menial->data.arc.angle_dist;
-        menial->data.arc.time = menial->data.arc.time * angle_d / 360.0f;
-        menial->data.arc.tick = 0;
+        
+        /* 未配置使用默认值 */
+        if (SCUI_IS_ZERO_VAL_F(menial->data.arc.angle_s) &&
+            SCUI_IS_ZERO_VAL_F(menial->data.arc.angle_e)) {
+            menial->data.arc.angle_s = 0.0f;
+            menial->data.arc.angle_e = 360.0f;
+        }
+        
+        /* 未配置使用默认值 */
+        if (menial->data.arc.time == 0)
+            menial->data.arc.time  = SCUI_WIDGET_MENIAL_ARC_TIME;
+        
+        /* 默认从零点开始 */
+        scui_coord3_t angle_s = menial->data.arc.angle_s;
+        scui_coord3_t angle_e = menial->data.arc.angle_e;
+        menial->data.arc.angle_dist = scui_dist(angle_s, angle_e);
+        menial->data.arc.angle_cur  = menial->data.arc.anti ? angle_e : angle_s;
+        menial->data.arc.angle_way  = 0;
+        
+        if (menial->data.arc.spinner) {
+            /* spinner的time不做计算, 默认按360度给入 */
+            menial->data.arc.tick = 0;
+        } else {
+            scui_coord3_t angle_d = menial->data.arc.angle_dist;
+            menial->data.arc.time = menial->data.arc.time * angle_d / 360.0f;
+            menial->data.arc.tick = 0;
+        }
     }
 }
 
-/*@brief 控件反初始化(子类型)
+/*@brief 控件析构(子类型)
  *@param menial 控件实例
  */
-void scui_menial_arc_recycle(scui_menial_t *menial)
+void scui_menial_arc_burn(scui_menial_t *menial)
 {
 }
 

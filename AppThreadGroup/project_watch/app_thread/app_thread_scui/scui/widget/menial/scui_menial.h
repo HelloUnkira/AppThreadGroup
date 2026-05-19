@@ -90,27 +90,29 @@ typedef struct {
 } scui_menial_maker_t;
 #pragma pack(pop)
 
-/*@brief 控件子类型信息
+/*@brief 控件子类型构造回调
+ *@brief 控件子类型析构回调
+ */
+typedef void (*scui_menial_sub_make_t)(bool maker, void *inst);
+typedef void (*scui_menial_sub_burn_t)(scui_menial_t *menial);
+
+/*@brief 控件子类型结构
  */
 typedef struct {
-    void (*maker)(scui_menial_maker_t *menial_maker);
-    void (*config)(scui_menial_t *menial);
-    void (*recycle)(scui_menial_t *menial);
+    scui_menial_sub_make_t make;
+    scui_menial_sub_burn_t burn;
     scui_event_cb_t invoke;
-} scui_menial_info_t;
+} scui_menial_sub_info_t;
 
 /* menial_type:<s> */
-void scui_menial_btn_maker(scui_menial_maker_t *menial_maker);
-void scui_menial_btn_config(scui_menial_t *menial);
-void scui_menial_btn_recycle(scui_menial_t *menial);
+void scui_menial_btn_make(bool maker, void *inst);
+void scui_menial_arc_make(bool maker, void *inst);
+void scui_menial_bar_make(bool maker, void *inst);
+void scui_menial_btn_burn(scui_menial_t *menial);
+void scui_menial_arc_burn(scui_menial_t *menial);
+void scui_menial_bar_burn(scui_menial_t *menial);
 void scui_menial_btn_invoke(scui_event_t *event);
-void scui_menial_arc_maker(scui_menial_maker_t *menial_maker);
-void scui_menial_arc_config(scui_menial_t *menial);
-void scui_menial_arc_recycle(scui_menial_t *menial);
 void scui_menial_arc_invoke(scui_event_t *event);
-void scui_menial_bar_maker(scui_menial_maker_t *menial_maker);
-void scui_menial_bar_config(scui_menial_t *menial);
-void scui_menial_bar_recycle(scui_menial_t *menial);
 void scui_menial_bar_invoke(scui_event_t *event);
 /* menial_type:<e> */
 

@@ -15,13 +15,15 @@ typedef enum {
     /* field part: */
     scui_object_part_s =
     scui_object_type_part,
-    scui_object_part_crect_bg,  /* bg */
-    scui_object_part_crect_bd,  /* border */
-    scui_object_part_crect_ol,  /* outline */
-    scui_object_part_crect_sd,  /* shadow */
+    /* LVGL式部件:背景(bg)/边界(border)/盒子(outline)/阴影(shadow) */
     
-    scui_object_part_main,
-    scui_object_part_item,
+    scui_object_part_rect_bg,       /* 背景 */
+    scui_object_part_rect_fg,       /* 前景 */
+    
+    scui_object_part_rect_edge,     /* 边界(可选扩充) */
+    scui_object_part_rect_box,      /* 盒子(可选扩充) */
+    scui_object_part_rect_sha,      /* 阴影(可选扩充) */
+    
     scui_object_part_e,
     /* field state: */
     scui_object_state_s =
@@ -33,20 +35,15 @@ typedef enum {
     /* field style: */
     scui_object_style_s = 
     scui_object_type_style,
-    scui_object_style_crect_alpha,
-    scui_object_style_crect_color,
-    scui_object_style_crect_width,
-    scui_object_style_crect_radius,
-    scui_object_style_crect_color_grad,
-    scui_object_style_crect_multi,
+    scui_object_style_rect_alpha,
+    scui_object_style_rect_color,
+    scui_object_style_rect_width,
+    scui_object_style_rect_height,
+    scui_object_style_rect_radius,
+    scui_object_style_rect_side_width,
+    scui_object_style_rect_color_grad,
+    scui_object_style_rect_multi,
     
-    scui_object_style_width,
-    scui_object_style_height,
-    scui_object_style_radius,
-    scui_object_style_color,
-    scui_object_style_color_bg,
-    scui_object_style_color_fg,
-    scui_object_style_alpha,
     scui_object_style_e,
 } scui_object_type_t;
 

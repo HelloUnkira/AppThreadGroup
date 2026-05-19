@@ -197,7 +197,7 @@ void scui_button_invoke(scui_event_t *event)
                     
                     scui_draw_dsc_t draw_dsc = {0};
                     draw_dsc.type = scui_draw_type_pixel_crect;
-                    draw_dsc.graph.src_area   = dst_clip[idx];
+                    draw_dsc.graph.dst_part   = dst_clip[idx];
                     draw_dsc.graph.src_alpha  = button->pixel.alpha[idx];
                     draw_dsc.graph.src_width  = button->pixel.width[idx];
                     draw_dsc.graph.src_radius = src_radius[idx];

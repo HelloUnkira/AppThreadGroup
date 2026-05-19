@@ -16,7 +16,7 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
     scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
-    scui_area_t    *src_area    = &draw_dsc->graph.src_area;
+    scui_area_t    *dst_part    = &draw_dsc->graph.dst_part;
     scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
     scui_color_t    src_color   =  draw_dsc->graph.src_color;
     scui_coord_t    src_width   =  draw_dsc->graph.src_width;
@@ -25,7 +25,7 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
     scui_sbitfd_t   src_grad    =  draw_dsc->graph.src_grad;
     /* draw dsc args<e> */
     
-    scui_coord_t src_radius_max = scui_min(src_area->w, src_area->h) / 2;
+    scui_coord_t src_radius_max = scui_min(dst_part->w, dst_part->h) / 2;
     if (src_radius < 0) src_radius = src_radius_max;
     src_radius = scui_clamp(src_radius, 0, src_radius_max);
     
@@ -36,10 +36,10 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
     Tvg_Paint *paint = tvg_shape_new();
     tvg_paint_set_opacity(paint, src_alpha);
     
-    scui_coord_t x = src_area->x - offset.x;
-    scui_coord_t y = src_area->y - offset.y;
-    scui_coord_t w = src_area->w;
-    scui_coord_t h = src_area->h;
+    scui_coord_t x = dst_part->x - offset.x;
+    scui_coord_t y = dst_part->y - offset.y;
+    scui_coord_t w = dst_part->w;
+    scui_coord_t h = dst_part->h;
     scui_coord_t r = src_radius;
     
     tvg_shape_move_to(paint, x + r, y);
@@ -95,48 +95,50 @@ static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
 }
 #endif
 
-/*@brief 控件构造器初始化(子类型)
- *@param menial_maker 控件构造器实例
+/*@brief 控件构造(子类型)
+ *@param maker inst是构造器
+ *@param inst  构造器或实例
  */
-void scui_menial_bar_maker(scui_menial_maker_t *menial_maker)
+void scui_menial_bar_make(bool maker, void *inst)
 {
-    /* 不能同时开启slider和switch */
-    bool ext_slider = menial_maker->data.bar.ext_slider;
-    bool ext_switch = menial_maker->data.bar.ext_switch;
-    SCUI_ASSERT(!(ext_slider && ext_switch));
+    scui_menial_t *menial = inst;
+    scui_menial_maker_t *menial_maker = inst;
     
-    /* 必须标记anima事件 */
-    /* 条件标记ptr事件 */
-    menial_maker->widget.style.sched_anima = true;
-    menial_maker->widget.style.indev_ptr   = ext_slider || ext_switch;
+    if (maker) {
+        
+        /* 不能同时开启slider和switch */
+        bool ext_slider = menial_maker->data.bar.ext_slider;
+        bool ext_switch = menial_maker->data.bar.ext_switch;
+        SCUI_ASSERT(!(ext_slider && ext_switch));
+        
+        /* 必须标记anima事件 */
+        /* 条件标记ptr事件 */
+        menial_maker->widget.style.sched_anima = true;
+        menial_maker->widget.style.indev_ptr   = ext_slider || ext_switch;
+    } else {
+        
+        /* 未配置使用默认值 */
+        if (SCUI_IS_ZERO_VAL_F(menial->data.bar.value_lim))
+            menial->data.bar.value_lim = 100.0f;
+        
+        /* 未配置使用默认值 */
+        if (menial->data.bar.time == 0 && menial->data.bar.ext_slider)
+            menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_EXT_SLIDER_TIME;
+        if (menial->data.bar.time == 0 && menial->data.bar.ext_switch)
+            menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_EXT_SWITCH_TIME;
+        if (menial->data.bar.time == 0)
+            menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_TIME;
+        
+        scui_coord3_t value_d = menial->data.bar.value_lim;
+        menial->data.bar.time = menial->data.bar.time * value_d / 100.0f;
+        menial->data.bar.tick = 0;
+    }
 }
 
-/*@brief 控件初始化(子类型)
+/*@brief 控件析构(子类型)
  *@param menial 控件实例
  */
-void scui_menial_bar_config(scui_menial_t *menial)
-{
-    /* 未配置使用默认值 */
-    if (SCUI_IS_ZERO_VAL_F(menial->data.bar.value_lim))
-        menial->data.bar.value_lim = 100.0f;
-    
-    /* 未配置使用默认值 */
-    if (menial->data.bar.time == 0 && menial->data.bar.ext_slider)
-        menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_EXT_SLIDER_TIME;
-    if (menial->data.bar.time == 0 && menial->data.bar.ext_switch)
-        menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_EXT_SWITCH_TIME;
-    if (menial->data.bar.time == 0)
-        menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_TIME;
-    
-    scui_coord3_t value_d = menial->data.bar.value_lim;
-    menial->data.bar.time = menial->data.bar.time * value_d / 100.0f;
-    menial->data.bar.tick = 0;
-}
-
-/*@brief 控件反初始化(子类型)
- *@param menial 控件实例
- */
-void scui_menial_bar_recycle(scui_menial_t *menial)
+void scui_menial_bar_burn(scui_menial_t *menial)
 {
 }
 
@@ -257,29 +259,29 @@ void scui_menial_bar_invoke(scui_event_t *event)
         /* 渐变方向与绘制方向是一致的 */
         
         /* 绘制背景: */
-        scui_area_t src_area = widget->clip;
-        draw_dsc.graph.src_area = src_area;
+        scui_area_t dst_part = widget->clip;
+        draw_dsc.graph.dst_part = dst_part;
         
         scui_widget_draw_graph(widget->myself, NULL,
             widget->alpha, menial->data.bar.color[0], &draw_dsc);
         
         /* 绘制前景: */
-        src_area = widget->clip;
+        dst_part = widget->clip;
         scui_coord3_t value_d = menial->data.bar.value_lim;
         scui_coord3_t value_c = menial->data.bar.value_cur;
         scui_coord3_t value_m = menial->data.bar.radius * 2;
-        scui_coord3_t value_l = scui_min(src_area.w, src_area.h);
+        scui_coord3_t value_l = scui_min(dst_part.w, dst_part.h);
         if (value_m < 0) value_m = value_l;
         value_m = scui_clamp(value_m, 0, value_l);
         
         if (menial->data.bar.way) {
-            src_area.h = value_m + scui_map(value_c, 0.0f, value_d, 0, src_area.h - value_m);
-            src_area.h = scui_clamp(src_area.h, value_m, widget->clip.h);
+            dst_part.h = value_m + scui_map(value_c, 0.0f, value_d, 0, dst_part.h - value_m);
+            dst_part.h = scui_clamp(dst_part.h, value_m, widget->clip.h);
         } else {
-            src_area.w = value_m + scui_map(value_c, 0.0f, value_d, 0, src_area.w - value_m);
-            src_area.w = scui_clamp(src_area.w, value_m, widget->clip.w);
+            dst_part.w = value_m + scui_map(value_c, 0.0f, value_d, 0, dst_part.w - value_m);
+            dst_part.w = scui_clamp(dst_part.w, value_m, widget->clip.w);
         }
-        draw_dsc.graph.src_area = src_area;
+        draw_dsc.graph.dst_part = dst_part;
         
         scui_widget_draw_graph(widget->myself, NULL,
             widget->alpha, menial->data.bar.color[1], &draw_dsc);
@@ -313,18 +315,18 @@ void scui_menial_bar_invoke(scui_event_t *event)
         
         scui_event_mask_over(event);
         scui_point_t ptr_c = event->ptr_e;
-        scui_area_t  src_area = widget->clip;
-        scui_area_m_to_s(&src_area, &src_area);
+        scui_area_t  dst_part = widget->clip;
+        scui_area_m_to_s(&dst_part, &dst_part);
         widget->state.indev_ptr_hold = true;
         
         scui_coord3_t value_c = 0.0f;
         scui_coord3_t value_d = menial->data.bar.value_lim;
         /* 取最后的落点计算百分比值就地更新 */
         if (menial->data.bar.way) {
-            value_c = scui_map(ptr_c.y, src_area.y1, src_area.y2, 0.0f, value_d);
+            value_c = scui_map(ptr_c.y, dst_part.y1, dst_part.y2, 0.0f, value_d);
             value_c = scui_clamp(value_c, 0.0f, value_d);
         } else {
-            value_c = scui_map(ptr_c.x, src_area.x1, src_area.x2, 0.0f, value_d);
+            value_c = scui_map(ptr_c.x, dst_part.x1, dst_part.x2, 0.0f, value_d);
             value_c = scui_clamp(value_c, 0.0f, value_d);
         }
         
