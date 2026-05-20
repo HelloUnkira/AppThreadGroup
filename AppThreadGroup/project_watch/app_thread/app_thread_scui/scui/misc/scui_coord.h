@@ -27,10 +27,6 @@ typedef union {
         scui_coord_t x;
         scui_coord_t y;
     };
-    struct {
-        scui_coord_t w;
-        scui_coord_t h;
-    };
     scui_coord_t meta[2];
 } scui_point_t;
 

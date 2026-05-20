@@ -46,9 +46,39 @@ void scui_menial_btn_invoke(scui_event_t *event)
     scui_menial_t *menial = (void *)widget;
     
     switch (event->type) {
-    case scui_event_ptr_move:
+    case scui_event_ptr_down:{
+        if (!scui_widget_event_inside(event))
+             break;
+        
+        scui_object_state_set(event->object, scui_object_state_pre);
+        break;
+    }
+    case scui_event_ptr_up: {
+        scui_object_type_t state = scui_object_type_none;
+        scui_object_state_get(event->object, &state);
+        if (state != scui_object_state_pre) break;
+        
+        if (menial->data.btn.check) {
+            scui_object_type_t state_l = scui_object_type_none;
+            scui_object_state_l_get(event->object, &state_l);
+            
+            if (state_l == scui_object_state_def) {
+                scui_object_state_set(event->object, scui_object_state_chk);
+                break;
+            }
+            if (state_l == scui_object_state_chk) {
+                scui_object_state_set(event->object, scui_object_state_def);
+                break;
+            }
+        }
+        
+        scui_object_state_set(event->object, scui_object_state_def);
+        break;
+    }
+    case scui_event_ptr_move: {
         scui_event_mask_over(event);
         break;
+    }
     case scui_event_ptr_click: {
         scui_event_mask_over(event);
         

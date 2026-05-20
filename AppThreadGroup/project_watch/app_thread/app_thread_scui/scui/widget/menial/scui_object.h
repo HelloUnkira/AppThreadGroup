@@ -9,25 +9,30 @@
 typedef enum {
     scui_object_type_none = 0,
     
-    /* field part: */
-    scui_object_part_s = 0x100,
+    scui_object_state_s,
+    /* field state<s>: */
+    scui_object_state_def,
+    scui_object_state_pre,
+    scui_object_state_chk,
+    /* field state<e>: */
+    scui_object_state_e,
+    
+    scui_object_part_s,
+    /* field part<s>: */
     /* 背景/前景/边界/盒子/阴影 */
     scui_object_part_rect_bg,       /* 背景 */
     scui_object_part_rect_fg,       /* 前景 */
     scui_object_part_rect_edge,     /* 边界(可选扩充) */
     scui_object_part_rect_box,      /* 盒子(可选扩充) */
     scui_object_part_rect_sha,      /* 阴影(可选扩充) */
+    
+    scui_object_part_arc_bg,        /* 背景 */
+    scui_object_part_arc_fg,        /* 前景 */
+    /* field part<e>: */
     scui_object_part_e,
     
-    /* field state: */
-    scui_object_state_s = 0x200,
-    scui_object_state_def,
-    scui_object_state_pre,
-    scui_object_state_chk,
-    scui_object_state_e,
-    
-    /* field style: */
-    scui_object_style_s = 0x300,
+    scui_object_style_s,
+    /* field style<s>: */
     scui_object_style_rect_alpha,
     scui_object_style_rect_color,
     scui_object_style_rect_align,
@@ -37,21 +42,34 @@ typedef enum {
     scui_object_style_rect_side_width,
     scui_object_style_rect_color_grad,
     scui_object_style_rect_multi,
+    
+    scui_object_style_arc_alpha,
+    scui_object_style_arc_color,
+    scui_object_style_arc_angle_s,
+    scui_object_style_arc_angle_e,
+    scui_object_style_arc_center,
+    scui_object_style_arc_radius,
+    scui_object_style_arc_side_width,
+    scui_object_style_arc_color_grad,
+    scui_object_style_arc_multi,
+    /* field style<e>: */
     scui_object_style_e,
     
 } scui_object_type_t;
 
 typedef union {
     scui_alpha_t   alpha;
+    scui_point_t   point;
     scui_multi_t   number;
     scui_color32_t color32;
     scui_opt_pos_t align;
     
     /* 组合值: */
     struct {
-    scui_sbitfd_t shadow:1;
-    scui_sbitfd_t grad_w:1;
-    scui_sbitfd_t grad:1;
+    scui_sbitfd_t round:1;  /* arc */
+    scui_sbitfd_t shadow:1; /* rect */
+    scui_sbitfd_t grad_w:1; /* rect,arc */
+    scui_sbitfd_t grad:1;   /* rect,arc */
     } multi;
 } scui_object_data_t;
 
@@ -61,7 +79,7 @@ typedef struct {
     scui_object_type_t state;   /* 状态 */
     scui_object_type_t style;   /* 样式 */
     scui_object_data_t data;    /* 属性数据 */
-    scui_sbitfd_t      use:1;   /* 有效 */
+    scui_sbitfd_t      use:1;   /* 内部:有效 */
 } scui_object_prop_t;
 
 /* transition */

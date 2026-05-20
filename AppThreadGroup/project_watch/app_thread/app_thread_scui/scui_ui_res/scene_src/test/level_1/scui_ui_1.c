@@ -37,6 +37,25 @@ void scui_ui_scene_1_menial_btn_event_proc(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
+void scui_ui_scene_1_menial_arc_event_proc(scui_event_t *event)
+{
+    scui_menial_arc_event_cb(event);
+    
+    
+    
+    switch (event->type) {
+    case scui_event_update_value: {
+        scui_coord3_t angle = 0.0f;
+        scui_menial_arc_current_angle(event->object, &angle);
+        // SCUI_LOG_WARN("event %u widget %u angle:%.2f", event->type, event->object, angle);
+        break;
+    }
+    }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
 void scui_ui_scene_1_menial_bar_event_proc(scui_event_t *event)
 {
     scui_menial_bar_event_cb(event);
@@ -73,11 +92,11 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
             scui_ui_res_local->menial_arc_w = -1;
         
         // scui_menial_arc_update_value(scui_ui_res_local->menial_arc_1,
-        //     scui_ui_res_local->menial_arc_v, true);
+        //     scui_ui_res_local->menial_arc_v, false);
         scui_menial_arc_update_value(scui_ui_res_local->menial_arc_2,
-            scui_ui_res_local->menial_arc_v, true);
+            scui_ui_res_local->menial_arc_v, false);
         scui_menial_arc_update_value(scui_ui_res_local->menial_arc_3,
-            scui_ui_res_local->menial_arc_v, true);
+            scui_ui_res_local->menial_arc_v, false);
         #endif
         
         #if 1
@@ -154,7 +173,7 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         scui_coord_t arc_ofs_y = btn_ofs_y + 60 + 10;
         menial_maker.widget.clip.w = 100;
         menial_maker.widget.clip.h = 100;
-        menial_maker.widget.event_cb = NULL;
+        menial_maker.widget.event_cb = scui_ui_scene_1_menial_arc_event_proc;
         menial_maker.type = scui_menial_type_arc;
         menial_maker.data = menial_data_zero;
         menial_maker.data.arc.color[0].color_s.full = 0xFF000080;

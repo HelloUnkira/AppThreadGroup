@@ -84,12 +84,13 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
     scui_event_define(event, widget->myself, true, scui_event_update_value, NULL);
     scui_event_notify(&event);
     
+    bool way = menial->data.bar.way;
     scui_object_prop_t prop_def = {0};
     scui_object_tran_t tran_def = {0};
     prop_def.part  = scui_object_part_rect_fg;
     prop_def.state = scui_object_state_def;
-    prop_def.style = scui_object_style_rect_height;
-    prop_def.style = menial->data.bar.way ? prop_def.style : scui_object_style_rect_width;
+    if (way) prop_def.style = scui_object_style_rect_height;
+    else prop_def.style = scui_object_style_rect_width;
     scui_object_prop_sync(handle, &prop_def);
     
     #if 1
@@ -102,21 +103,22 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
     if (value_m < 0) value_m = value_l;
     value_m = scui_clamp(value_m, 0, value_l);
     
-    scui_coord_t size_max = menial->data.bar.way ? dst_part.h : dst_part.w;
+    scui_coord_t size_max = way ? dst_part.h : dst_part.w;
     scui_coord_t size_min = scui_map(value_c, 0.0f, value_d, 0, size_max - value_m);
     size_min = scui_clamp(value_m + size_min, value_m, size_max);
     #endif
     
-    tran_def.part    = scui_object_part_rect_fg;
-    tran_def.state_p = scui_object_state_def;
-    tran_def.state_n = scui_object_state_def;
+    tran_def.part    = prop_def.part;
+    tran_def.state_p = prop_def.state;
+    tran_def.state_n = prop_def.state;
     tran_def.style   = prop_def.style;
     tran_def.data_p.number = prop_def.data.number;
     tran_def.data_n.number = scui_map(value, 0.0f, value_d, size_min, size_max);
+    SCUI_LOG_INFO("tran(%d->%d)", tran_def.data_p.number, tran_def.data_n.number);
     
     if (anim) {
-        scui_coord_t size_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
-        tran_def.time = scui_map(size_dif, 0, size_max, 0, menial->data.bar.time);
+        scui_coord_t val_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
+        tran_def.time = scui_map(val_dif, 0, size_max, 0, menial->data.bar.time);
         
         /* 过渡动画更新 */
         scui_object_tran_add(handle, &tran_def);
@@ -133,7 +135,6 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
 /*@brief 控件当前值(子类型)
  *@param handle 控件句柄
  *@param value  目标进度
- *@param anim   动画更新
  */
 void scui_menial_bar_current_value(scui_handle_t handle, scui_coord3_t *value)
 {
@@ -224,7 +225,6 @@ void scui_menial_bar_event_cb(scui_event_t *event)
         scui_object_rect_t rect = {
             .area.w   = widget_clip.w,
             .area.h   = widget_clip.h,
-            .index    = 0,
             .alpha[0] = scui_alpha_cover,
             .alpha[1] = scui_alpha_cover,
             .color[0] = data->bar.color[0],
@@ -236,13 +236,13 @@ void scui_menial_bar_event_cb(scui_event_t *event)
         };
         
         rect.state = scui_object_state_def;
-        rect.index = 0;scui_object_prop_rect(event->object, &rect);
-        rect.index = 1;scui_object_prop_rect(event->object, &rect);
+        rect.index = 0; scui_object_prop_rect(event->object, &rect);
+        rect.index = 1; scui_object_prop_rect(event->object, &rect);
         
-        /* 需要按下变色, 考虑 */
+        /* 需要按下变色时考虑(需要过渡动画) */
         // rect.state = scui_object_state_pre;
-        // rect.index = 0;scui_object_prop_rect(event->object, &rect);
-        // rect.index = 1;scui_object_prop_rect(event->object, &rect);
+        // rect.index = 0; scui_object_prop_rect(event->object, &rect);
+        // rect.index = 1; scui_object_prop_rect(event->object, &rect);
         
         scui_menial_bar_update_value(event->object, 0.0f, false);
         break;

@@ -407,6 +407,19 @@ void scui_object_check_set(scui_handle_t handle, bool check)
 }
 
 /*@brief 对象控件状态获取
+ *@param handle  控件句柄
+ *@param state_l 控件状态
+ */
+void scui_object_state_l_get(scui_handle_t handle, scui_object_type_t *state_l)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_object_t *object = (void *)widget;
+    
+    *state_l = object->state_l;
+}
+
+/*@brief 对象控件状态获取
  *@param handle 控件句柄
  *@param state  控件状态
  */
@@ -482,6 +495,7 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
     
     /* 内部样式: */
     switch (prop.style) {
+    case scui_object_style_arc_alpha:
     case scui_object_style_rect_alpha: {
         scui_alpha_t alpha_p = local_tran->data_p.alpha;
         scui_alpha_t alpha_n = local_tran->data_n.alpha;
@@ -489,6 +503,8 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         SCUI_LOG_INFO("alpha:%d", prop.data.alpha);
         break;
     }
+    case scui_object_style_arc_color:
+    case scui_object_style_arc_color_grad:
     case scui_object_style_rect_color:
     case scui_object_style_rect_color_grad: {
         scui_color32_t color32_p = local_tran->data_p.color32;
@@ -497,13 +513,10 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         SCUI_LOG_INFO("color:0x%x", prop.data.color32.full);
         break;
     }
-    case scui_object_style_rect_align: {
-        scui_object_data_t data_p = local_tran->data_p;
-        scui_object_data_t data_n = local_tran->data_n;
-        prop.data.align = pct_c <= 50 ? data_p.align: data_n.align;
-        SCUI_LOG_INFO("align:%x", prop.data.align);
-        break;
-    }
+    case scui_object_style_arc_angle_s:
+    case scui_object_style_arc_angle_e:
+    case scui_object_style_arc_radius:
+    case scui_object_style_arc_side_width:
     case scui_object_style_rect_width:
     case scui_object_style_rect_height:
     case scui_object_style_rect_radius:
@@ -514,17 +527,14 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         SCUI_LOG_INFO("number:%d", prop.data.number);
         break;
     }
-    case scui_object_style_rect_multi: {
+    default: {
+        /* 默认过渡,状态跃迁即可,但是真的需要??? */
         scui_object_data_t data_p = local_tran->data_p;
         scui_object_data_t data_n = local_tran->data_n;
-        prop.data.multi = pct_c <= 50 ? data_p.multi: data_n.multi;
-        SCUI_LOG_INFO("shadow:%d", prop.data.multi.shadow);
-        SCUI_LOG_INFO("grad_w:%d", prop.data.multi.grad_w);
-        SCUI_LOG_INFO("grad:%d",   prop.data.multi.grad);
+        prop.data = pct_c <= 50 ? data_p: data_n;
+        SCUI_LOG_INFO("really need tran ???");
         break;
     }
-    default:
-        break;
     }
     
     /* 同步更新prop(直接add即可) */
@@ -572,50 +582,6 @@ void scui_object_invoke(scui_event_t *event)
                 scui_object_tran_sync(widget->myself, idx);
                 continue;
             }
-        }
-        break;
-    }
-    case scui_event_ptr_down:{
-        if (!scui_widget_event_inside(event))
-             break;
-        
-        if (object->press) {
-            
-            scui_object_state_set(event->object, scui_object_state_pre);
-        } else {
-            
-            if (object->check) {
-                if (object->state_c == scui_object_state_def) {
-                    scui_object_state_set(event->object, scui_object_state_chk);
-                    break;
-                }
-                if (object->state_c == scui_object_state_chk) {
-                    scui_object_state_set(event->object, scui_object_state_def);
-                    break;
-                }
-            }
-        }
-        break;
-    }
-    case scui_event_ptr_up: {
-        
-        if (object->press) {
-            if (object->state_c != scui_object_state_pre)
-                break;
-            
-            if (object->check) {
-                if (object->state_l == scui_object_state_def) {
-                    scui_object_state_set(event->object, scui_object_state_chk);
-                    break;
-                }
-                if (object->state_l == scui_object_state_chk) {
-                    scui_object_state_set(event->object, scui_object_state_def);
-                    break;
-                }
-            }
-            
-            scui_object_state_set(event->object, scui_object_state_def);
-            break;
         }
         break;
     }

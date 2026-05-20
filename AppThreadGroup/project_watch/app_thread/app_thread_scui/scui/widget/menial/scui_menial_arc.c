@@ -7,92 +7,6 @@
 
 #include "scui.h"
 
-#if SCUI_DRAW_USE_THORVG
-/* 矢量绘图引擎(thorvg): */
-#include "thorvg_capi.h"
-
-static void scui_menial_tvg_cb(scui_draw_dsc_t *draw_dsc)
-{
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->graph.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
-    scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
-    scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
-    scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
-    scui_point_t    src_center  =  draw_dsc->graph.src_center;
-    scui_coord_t    src_angle_s =  draw_dsc->graph.src_angle_s;
-    scui_coord_t    src_angle_e =  draw_dsc->graph.src_angle_e;
-    scui_sbitfd_t   src_round   =  draw_dsc->graph.src_round;
-    scui_sbitfd_t   src_grad_w  =  draw_dsc->graph.src_grad_w;
-    scui_sbitfd_t   src_grad    =  draw_dsc->graph.src_grad;
-    /* draw dsc args<e> */
-    
-    if (src_radius <= 0)
-        return;
-    
-    Tvg_Canvas   *canvas = draw_dsc->graph.src_tvg_canvas;
-    scui_point_t  offset = draw_dsc->graph.src_tvg_offset;
-    
-    /* 固定:取用画笔并配置信息 */
-    Tvg_Paint *paint = tvg_shape_new();
-    tvg_paint_set_opacity(paint, src_alpha);
-    
-    scui_coord_t full = (src_width == 0 || src_width >= src_radius) ? 1 : 0;
-    scui_coord_t s_width = (src_width == 0 || src_width >= src_radius) ? 0 : src_width;
-    
-    /* 一个弧形扇形 */
-    scui_coord_t a_s  = src_angle_s;
-    scui_coord_t a_l  = src_angle_e  - src_angle_s;
-    scui_coord_t c_x  = src_center.x - offset.x;
-    scui_coord_t c_y  = src_center.y - offset.y;
-    tvg_shape_append_arc(paint, c_x, c_y, src_radius, a_s, a_l, full);
-    if (src_round) tvg_shape_set_stroke_cap(paint, TVG_STROKE_CAP_ROUND);
-    
-    if (src_grad) {
-        uint8_t g_a[2] = {0}, g_r[2] = {0}, g_g[2] = {0}, g_b[2] = {0};
-        g_a[0] = src_color.color_s.ch.a; g_a[1] = src_color.color_e.ch.a;
-        g_r[0] = src_color.color_s.ch.r; g_r[1] = src_color.color_e.ch.r;
-        g_g[0] = src_color.color_s.ch.g; g_g[1] = src_color.color_e.ch.g;
-        g_b[0] = src_color.color_s.ch.b; g_b[1] = src_color.color_e.ch.b;
-        
-        Tvg_Color_Stop g_cs[2] = {0};
-        g_cs[0] = (Tvg_Color_Stop){0.0, .r = g_r[0], .g = g_g[0], .b = g_b[0], .a = g_a[0],};
-        g_cs[1] = (Tvg_Color_Stop){1.0, .r = g_r[1], .g = g_g[1], .b = g_b[1], .a = g_a[1],};
-        
-        Tvg_Gradient *p_grad = tvg_linear_gradient_new();
-        if (src_grad_w) tvg_linear_gradient_set(p_grad, c_x, c_y - src_radius, c_x, c_y + src_radius);
-        else tvg_linear_gradient_set(p_grad, c_x - src_radius, c_y, c_x + src_radius, c_y);
-        tvg_gradient_set_color_stops(p_grad, g_cs, 2);
-        if (full) tvg_shape_set_linear_gradient(paint, p_grad);
-        else tvg_shape_set_stroke_linear_gradient(paint, p_grad);
-        tvg_shape_set_stroke_width(paint, s_width);
-    } else {
-        uint8_t f_a = 0, f_r = 0, f_g = 0, f_b = 0;
-        uint8_t s_a = 0, s_r = 0, s_g = 0, s_b = 0;
-        
-        if (src_width == 0 || src_width >= src_radius) {
-            f_a = src_color.color.ch.a;
-            f_r = src_color.color.ch.r;
-            f_g = src_color.color.ch.g;
-            f_b = src_color.color.ch.b;
-        } else {
-            s_a = src_color.color.ch.a;
-            s_r = src_color.color.ch.r;
-            s_g = src_color.color.ch.g;
-            s_b = src_color.color.ch.b;
-            s_width = src_width;
-        }
-        
-        tvg_shape_set_fill_color(paint, f_r, f_g, f_b, f_a);
-        tvg_shape_set_stroke_color(paint, s_r, s_g, s_b, s_a);
-        tvg_shape_set_stroke_width(paint, s_width);
-    }
-    
-    tvg_canvas_push(canvas, paint);
-}
-#endif
-
 /*@brief 控件构造(子类型)
  *@param maker inst是构造器
  *@param inst  构造器或实例
@@ -115,24 +29,24 @@ void scui_menial_arc_make(bool maker, void *inst)
             menial->data.arc.angle_e = 360.0f;
         }
         
+        if (menial->data.arc.spinner) {
+            menial->data.arc.angle_s = 0.0f;
+            menial->data.arc.angle_e = 360.0f;
+            SCUI_ASSERT(menial->data.arc.width != 0);
+        }
+        
         /* 未配置使用默认值 */
         if (menial->data.arc.time == 0)
             menial->data.arc.time  = SCUI_WIDGET_MENIAL_ARC_TIME;
         
-        /* 默认从零点开始 */
         scui_coord3_t angle_s = menial->data.arc.angle_s;
         scui_coord3_t angle_e = menial->data.arc.angle_e;
-        menial->data.arc.angle_dist = scui_dist(angle_s, angle_e);
-        menial->data.arc.angle_cur  = menial->data.arc.anti ? angle_e : angle_s;
-        menial->data.arc.angle_way  = 0;
+        scui_coord3_t angle_d = scui_dist(angle_s, angle_e);
+        menial->data.arc.angle_d = angle_d;
         
-        if (menial->data.arc.spinner) {
+        if (!menial->data.arc.spinner) {
             /* spinner的time不做计算, 默认按360度给入 */
-            menial->data.arc.tick = 0;
-        } else {
-            scui_coord3_t angle_d = menial->data.arc.angle_dist;
             menial->data.arc.time = menial->data.arc.time * angle_d / 360.0f;
-            menial->data.arc.tick = 0;
         }
     }
 }
@@ -160,30 +74,63 @@ void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, boo
         return;
     }
     
-    /* 动画更新 */
+    if (menial->data.arc.spinner)
+        return;
+    
+    menial->data.arc.angle_c = angle;
+    scui_event_define(event, widget->myself, true, scui_event_update_value, NULL);
+    scui_event_notify(&event);
+    
+    bool anti = menial->data.arc.anti;
+    scui_object_prop_t prop_def = {0};
+    scui_object_tran_t tran_def = {0};
+    prop_def.part  = scui_object_part_arc_fg;
+    prop_def.state = scui_object_state_def;
+    if (anti) prop_def.style = scui_object_style_arc_angle_s;
+    else prop_def.style = scui_object_style_arc_angle_e;
+    scui_object_prop_sync(handle, &prop_def);
+    
+    tran_def.part    = prop_def.part;
+    tran_def.state_p = prop_def.state;
+    tran_def.state_n = prop_def.state;
+    tran_def.style   = prop_def.style;
+    tran_def.data_p.number = prop_def.data.number;
+    tran_def.data_n.number = menial->data.arc.angle_c;
+    SCUI_LOG_INFO("tran(%d->%d)", tran_def.data_p.number, tran_def.data_n.number);
+    
     if (anim) {
-        menial->data.arc.angle_way = menial->data.arc.angle_cur <= angle ? +1.0f : -1.0f;
-        /* 让angle_cur到达angle即可 */
-        scui_coord3_t angle_s = menial->data.arc.angle_s;
-        scui_coord3_t angle_e = menial->data.arc.angle_e;
-        scui_coord3_t angle_d = menial->data.arc.angle_dist;
-        scui_coord3_t angle_c = scui_dist(menial->data.arc.angle_cur, angle);
-        menial->data.arc.tick = scui_map(angle_c, 0.0f, angle_d, 0, menial->data.arc.time);
-        /* 值过小:直接更新 */
-        if (menial->data.arc.tick < SCUI_ANIMA_TICK) {
-            menial->data.arc.angle_cur = angle;
-            menial->data.arc.angle_way = 0;
-            menial->data.arc.tick = 0;
-            scui_widget_draw(widget->myself, NULL, false);
-        }
+        scui_coord3_t angle_d = menial->data.arc.angle_d;
+        scui_coord3_t val_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
+        tran_def.time = scui_map(val_dif, 0, angle_d, 0, menial->data.bar.time);
+        
+        /* 过渡动画更新 */
+        scui_object_tran_add(handle, &tran_def);
+        scui_object_tran_work(handle, &tran_def);
+    } else {
+        /* 直接更新(过渡动画移除) */
+        scui_object_tran_del(handle, &tran_def);
+        
+        prop_def.data.number = tran_def.data_n.number;
+        scui_object_prop_add(handle, &prop_def);
+    }
+}
+
+/*@brief 控件当前值(子类型)
+ *@param handle 控件句柄
+ *@param angle  目标角度
+ */
+void scui_menial_arc_current_angle(scui_handle_t handle, scui_coord3_t *angle)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
+    
+    if (menial->type != scui_menial_type_arc) {
+        SCUI_LOG_ERROR("error invoke");
         return;
     }
     
-    /* 直接更新 */
-    menial->data.arc.angle_cur = angle;
-    menial->data.arc.angle_way = 0;
-    menial->data.arc.tick = 0;
-    scui_widget_draw(widget->myself, NULL, false);
+    *angle = menial->data.arc.angle_c;
 }
 
 /*@brief 控件更新值(子类型)
@@ -223,72 +170,16 @@ void scui_menial_arc_invoke(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         
-        if (menial->data.arc.tick <= 0)
         if (menial->data.arc.spinner) {
-            menial->data.arc.angle_cur = 0.0f;
-            menial->data.arc.angle_way = +1.0f;
-            menial->data.arc.tick = menial->data.arc.time;
-        }
-        /* 简单的退出 */
-        if (menial->data.arc.tick <= 0)
-            break;
-        
-        scui_coord_t tick = event->tick;
-        menial->data.arc.tick -= tick;
-        
-        scui_coord3_t angle_d = menial->data.arc.angle_dist;
-        scui_coord3_t angle_c = scui_map(tick, 0, menial->data.arc.time, 0.0f, angle_d);
-        menial->data.arc.angle_cur += menial->data.arc.angle_way * angle_c;
-        scui_widget_draw(widget->myself, NULL, false);
-        break;
-    }
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             return;
-        
-        scui_draw_dsc_t draw_dsc = {0};
-        draw_dsc.type = scui_draw_type_pixel_tvg;
-        draw_dsc.graph.src_center = menial->data.arc.center;
-        draw_dsc.graph.src_width  = menial->data.arc.width;
-        draw_dsc.graph.src_radius = menial->data.arc.radius;
-        draw_dsc.graph.src_round  = menial->data.arc.round;
-        draw_dsc.graph.src_grad_w = menial->data.arc.gradw;
-        draw_dsc.graph.src_grad   = menial->data.arc.grad;
-        #if SCUI_DRAW_USE_THORVG
-        draw_dsc.graph.src_tvg_cb = scui_menial_tvg_cb;
-        #endif
-        
-        draw_dsc.graph.src_center.x += widget->clip.x;
-        draw_dsc.graph.src_center.y += widget->clip.y;
-        draw_dsc.graph.src_radius   -= menial->data.arc.width / 2 + 1;
-        
-        /* 绘制背景: */
-        draw_dsc.graph.src_angle_s = menial->data.arc.angle_s;
-        draw_dsc.graph.src_angle_e = menial->data.arc.angle_e;
-        
-        /* 加载圆环修饰 */
-        if (menial->data.arc.spinner) {
-            draw_dsc.graph.src_angle_s = 0.0f;
-            draw_dsc.graph.src_angle_e = 360.0f;
-        }
-        
-        scui_widget_draw_graph(widget->myself, NULL,
-            widget->alpha, menial->data.arc.color[0], &draw_dsc);
-        
-        /* 绘制前景: */
-        if (menial->data.arc.anti) {
-            draw_dsc.graph.src_angle_s = menial->data.arc.angle_cur;
-            draw_dsc.graph.src_angle_e = menial->data.arc.angle_e;
-        } else {
-            draw_dsc.graph.src_angle_s = menial->data.arc.angle_s;
-            draw_dsc.graph.src_angle_e = menial->data.arc.angle_cur;
-        }
-        
-        /* 加载圆环修饰 */
-        if (menial->data.arc.spinner) {
-            scui_coord_t angle_d = menial->data.arc.angle_dist;
-            scui_coord_t angle_w = menial->data.arc.anti ? -1 : +1;
-            scui_coord_t angle_c = menial->data.arc.angle_cur;
+            scui_coord3_t angle_d = menial->data.arc.angle_d;
+            menial->data.arc.angle_c += scui_map(event->tick, 0, menial->data.arc.time, 0.0f, angle_d);
+            if (menial->data.arc.angle_c > 360) menial->data.arc.angle_c -= 360;
+            
+            /* 加载圆环前景(angle_s, angle_e) */
+            scui_coord3_t angle_s = menial->data.arc.angle_s;
+            scui_coord3_t angle_e = menial->data.arc.angle_e;
+            scui_coord_t  angle_w = menial->data.arc.anti ? -1 : +1;
+            scui_coord_t  angle_c = menial->data.arc.angle_c;
             angle_c = scui_map(angle_c, 0, angle_d, 0, 360);
             /* angle_c映射到[0, 360]度中去(有精度损失但不影响) */
             scui_map_cb_t path_map = scui_map_ease_out;
@@ -297,24 +188,88 @@ void scui_menial_arc_invoke(scui_event_t *event)
             
             SCUI_LOG_INFO("angle:%d", angle_c);
             scui_coord_t  angle_p = scui_mabs(angle_c % 180, 180);
-            scui_coord3_t angle_s = menial->data.arc.angle_s;
-            scui_coord3_t angle_e = menial->data.arc.angle_s;
             angle_s += angle_w * path_map(angle_p, 0, 180, 0, 360);
             angle_e += angle_w * scui_map(angle_p, 0, 180, 0, 360) + angle_w * angle_d;
             
-            draw_dsc.graph.src_angle_s = angle_s;
-            draw_dsc.graph.src_angle_e = angle_e;
+            /* 加载圆环背景(0, 360) */
+            scui_object_prop_t prop_def = {0};
+            prop_def.part  = scui_object_part_arc_bg;
+            prop_def.state = scui_object_state_def;
+            
+            prop_def.data.number = 0;
+            prop_def.style = scui_object_style_arc_angle_s;
+            scui_object_prop_add(event->object, &prop_def);
+            
+            prop_def.data.number = 360;
+            prop_def.style = scui_object_style_arc_angle_e;
+            scui_object_prop_add(event->object, &prop_def);
+            
+            /* 加载圆环前景(angle_s, angle_e) */
+            prop_def.part  = scui_object_part_arc_fg;
+            prop_def.state = scui_object_state_def;
+            
+            prop_def.data.number = angle_s;
+            prop_def.style = scui_object_style_arc_angle_s;
+            scui_object_prop_add(event->object, &prop_def);
+            
+            prop_def.data.number = angle_e;
+            prop_def.style = scui_object_style_arc_angle_e;
+            scui_object_prop_add(event->object, &prop_def);
         }
-        
-        scui_widget_draw_graph(widget->myself, NULL,
-            widget->alpha, menial->data.arc.color[1], &draw_dsc);
-        
-        if (menial->data.bar.grad)
-            scui_widget_draw_dither(widget->myself, NULL);
-        
         break;
     }
     default:
         break;
+    }
+}
+
+/*@brief 事件处理回调(子类型)(样板)
+ *@param event 事件
+ */
+void scui_menial_arc_event_cb(scui_event_t *event)
+{
+    scui_menial_data_t *data = NULL;
+    scui_menial_data_inst(event->object, &data);
+    
+    switch (event->type) {
+    case scui_event_create: {
+        scui_area_t widget_clip = scui_widget_clip(event->object);
+        scui_object_arc_t   arc = {
+            .alpha[0] = scui_alpha_cover,
+            .alpha[1] = scui_alpha_cover,
+            .color[0] = data->arc.color[0],
+            .color[1] = data->arc.color[1],
+            .width    = data->arc.width,
+            .center.x = widget_clip.w / 2,
+            .center.y = widget_clip.h / 2,
+            .angle_s  = 0,
+            .angle_e  = 360,
+            .radius   = data->arc.radius,
+            .round    = data->arc.round,
+            .grad_w   = data->arc.gradw,
+            .grad     = data->arc.grad,
+        };
+        
+        arc.state = scui_object_state_def;
+        arc.index = 0; scui_object_prop_arc(event->object, &arc);
+        arc.index = 1; scui_object_prop_arc(event->object, &arc);
+        
+        scui_menial_arc_update_value(event->object, 0.0f, false);
+        break;
+    }
+    case scui_event_draw: {
+        if (!scui_event_check_execute(event))
+             return;
+        
+        scui_object_prop_t prop = {0};
+        prop.part = scui_object_part_arc_bg;
+        scui_object_state_get(event->object, &prop.state);
+        scui_object_draw_arc(event->object,  &prop);
+        
+        prop.part = scui_object_part_arc_fg;
+        scui_object_state_get(event->object, &prop.state);
+        scui_object_draw_arc(event->object,  &prop);
+        break;
+    }
     }
 }
