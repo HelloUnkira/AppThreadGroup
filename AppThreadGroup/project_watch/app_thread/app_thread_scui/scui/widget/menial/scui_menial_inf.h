@@ -42,6 +42,19 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
  */
 void scui_menial_bar_current_value(scui_handle_t handle, scui_coord3_t *value);
 
+/*@brief 控件数据列表更新(子类型)
+ *@param handle    控件句柄
+ *@param vlist_min 数据列表
+ *@param vlist_max 数据列表
+ */
+void scui_menial_cht_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max);
+
+/*@brief 控件数据列表更新(子类型)
+ *@param handle    控件句柄
+ *@param vlist_dot 数据列表
+ */
+void scui_menial_cht_line_data(scui_handle_t handle, scui_coord_t *vlist_dot);
+
 /******************************************************************************/
 /******************************************************************************/
 /******************************************************************************/
@@ -61,5 +74,10 @@ void scui_menial_arc_event_cb(scui_event_t *event);
  *@param event 事件
  */
 void scui_menial_bar_event_cb(scui_event_t *event);
+
+/*@brief 事件处理回调(子类型)(样板)
+ *@param event 事件
+ */
+void scui_menial_cht_event_cb(scui_event_t *event);
 
 #endif

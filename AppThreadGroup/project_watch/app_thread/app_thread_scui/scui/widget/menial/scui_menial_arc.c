@@ -69,13 +69,9 @@ void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, boo
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_menial_t *menial = (void *)widget;
     
-    if (menial->type != scui_menial_type_arc) {
-        SCUI_LOG_ERROR("error invoke");
-        return;
-    }
-    
-    if (menial->data.arc.spinner)
-        return;
+    SCUI_ASSERT(menial->type == scui_menial_type_arc);
+    if (menial->data.arc.spinner) return;
+    /* spinner不使用此接口 */
     
     menial->data.arc.angle_c = angle;
     scui_event_define(event, widget->myself, true, scui_event_update_value, NULL);
@@ -125,10 +121,9 @@ void scui_menial_arc_current_angle(scui_handle_t handle, scui_coord3_t *angle)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_menial_t *menial = (void *)widget;
     
-    if (menial->type != scui_menial_type_arc) {
-        SCUI_LOG_ERROR("error invoke");
-        return;
-    }
+    SCUI_ASSERT(menial->type == scui_menial_type_arc);
+    if (menial->data.arc.spinner) return;
+    /* spinner不使用此接口 */
     
     *angle = menial->data.arc.angle_c;
 }
@@ -144,10 +139,9 @@ void scui_menial_arc_update_value(scui_handle_t handle, scui_coord3_t value, boo
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_menial_t *menial = (void *)widget;
     
-    if (menial->type != scui_menial_type_arc) {
-        SCUI_LOG_ERROR("error invoke");
-        return;
-    }
+    SCUI_ASSERT(menial->type == scui_menial_type_arc);
+    if (menial->data.arc.spinner) return;
+    /* spinner不使用此接口 */
     
     /*  */
     value = scui_clamp(value, 0.0f, 100.0f);

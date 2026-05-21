@@ -64,10 +64,7 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_menial_t *menial = (void *)widget;
     
-    if (menial->type != scui_menial_type_bar) {
-        SCUI_LOG_ERROR("error invoke");
-        return;
-    }
+    SCUI_ASSERT(menial->type == scui_menial_type_bar);
     
     /* 这可以实现丝滑到分段效果 */
     value = scui_clamp(value, 0.0f, menial->data.bar.value_lim);
@@ -142,10 +139,7 @@ void scui_menial_bar_current_value(scui_handle_t handle, scui_coord3_t *value)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_menial_t *menial = (void *)widget;
     
-    if (menial->type != scui_menial_type_bar) {
-        SCUI_LOG_ERROR("error invoke");
-        return;
-    }
+    SCUI_ASSERT(menial->type == scui_menial_type_bar);
     
     *value = menial->data.bar.value_cur;
 }

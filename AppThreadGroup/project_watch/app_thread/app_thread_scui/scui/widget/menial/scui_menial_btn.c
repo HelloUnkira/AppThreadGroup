@@ -110,6 +110,7 @@ void scui_menial_btn_event_cb(scui_event_t *event)
             .alpha[0] = scui_alpha_cover,
             .width[0] = data->btn.width,
             .radius   = data->btn.radius,
+            .align    = scui_opt_pos_c,
         };
         
         scui_object_press_set(event->object, true);

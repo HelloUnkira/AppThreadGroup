@@ -496,6 +496,7 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
     /* 内部样式: */
     switch (prop.style) {
     case scui_object_style_arc_alpha:
+    case scui_object_style_line_alpha:
     case scui_object_style_rect_alpha: {
         scui_alpha_t alpha_p = local_tran->data_p.alpha;
         scui_alpha_t alpha_n = local_tran->data_n.alpha;
@@ -505,6 +506,7 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
     }
     case scui_object_style_arc_color:
     case scui_object_style_arc_color_grad:
+    case scui_object_style_line_color:
     case scui_object_style_rect_color:
     case scui_object_style_rect_color_grad: {
         scui_color32_t color32_p = local_tran->data_p.color32;
@@ -513,14 +515,8 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         SCUI_LOG_INFO("color:0x%x", prop.data.color32.full);
         break;
     }
-    case scui_object_style_arc_angle_s:
-    case scui_object_style_arc_angle_e:
-    case scui_object_style_arc_radius:
-    case scui_object_style_arc_side_width:
     case scui_object_style_rect_width:
-    case scui_object_style_rect_height:
-    case scui_object_style_rect_radius:
-    case scui_object_style_rect_side_width: {
+    case scui_object_style_rect_height: {
         scui_multi_t number_p = local_tran->data_p.number;
         scui_multi_t number_n = local_tran->data_n.number;
         prop.data.number = scui_map(pct_c, 0, 100, number_p, number_n);

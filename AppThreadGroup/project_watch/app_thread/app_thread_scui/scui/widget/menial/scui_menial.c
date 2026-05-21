@@ -30,6 +30,11 @@ static void scui_menial_info_map_find(scui_menial_type_t type, scui_menial_sub_i
             .burn   = scui_menial_bar_burn,
             .invoke = scui_menial_bar_invoke,
         },
+        [scui_menial_type_cht] = {
+            .make   = scui_menial_cht_make,
+            .burn   = scui_menial_cht_burn,
+            .invoke = scui_menial_cht_invoke,
+        },
     };
     
     SCUI_ASSERT(info != NULL);

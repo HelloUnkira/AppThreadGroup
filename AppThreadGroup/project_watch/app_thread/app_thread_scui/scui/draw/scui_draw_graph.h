@@ -260,6 +260,8 @@ typedef struct {
         scui_coord_t        src_radius;     /* 弧, 圆半径 */
         scui_point_t        src_pos_1;      /* 坐标点 */
         scui_point_t        src_pos_2;      /* 坐标点 */
+        scui_point_t       *src_vpos;       /* 坐标点序列 */
+        scui_coord_t        src_vpos_c;     /* 坐标点序列数 */
         scui_sbitfd_t       src_round:1;    /* 圆角标记:弧端点 */
         scui_sbitfd_t       src_shadow:1;   /* 阴影标记:圆角矩形 */
         scui_sbitfd_t       src_grad_w:1;   /* 渐变方向:水平或垂直 */

@@ -28,6 +28,8 @@ typedef enum {
     
     scui_object_part_arc_bg,        /* 背景 */
     scui_object_part_arc_fg,        /* 前景 */
+    
+    scui_object_part_line,          /* 背景 */
     /* field part<e>: */
     scui_object_part_e,
     
@@ -35,6 +37,7 @@ typedef enum {
     /* field style<s>: */
     scui_object_style_rect_alpha,
     scui_object_style_rect_color,
+    scui_object_style_rect_point,
     scui_object_style_rect_align,
     scui_object_style_rect_width,
     scui_object_style_rect_height,
@@ -52,24 +55,34 @@ typedef enum {
     scui_object_style_arc_side_width,
     scui_object_style_arc_color_grad,
     scui_object_style_arc_multi,
+    
+    scui_object_style_line_alpha,
+    scui_object_style_line_color,
+    scui_object_style_line_area,
+    scui_object_style_line_vpos,
+    scui_object_style_line_vpos_num,
+    scui_object_style_line_side_width,
+    scui_object_style_line_multi,
     /* field style<e>: */
     scui_object_style_e,
     
 } scui_object_type_t;
 
 typedef union {
-    scui_alpha_t   alpha;
-    scui_point_t   point;
-    scui_multi_t   number;
+    scui_area_t  area;
+    scui_point_t point;
+    scui_alpha_t alpha;
+    scui_multi_t number;
     scui_color32_t color32;
     scui_opt_pos_t align;
+    void *pointer;
     
     /* 组合值: */
     struct {
-    scui_sbitfd_t round:1;  /* arc */
-    scui_sbitfd_t shadow:1; /* rect */
-    scui_sbitfd_t grad_w:1; /* rect,arc */
-    scui_sbitfd_t grad:1;   /* rect,arc */
+    scui_sbitfd_t round:1;      /* arc */
+    scui_sbitfd_t shadow:1;     /* rect */
+    scui_sbitfd_t grad_w:1;     /* rect,arc */
+    scui_sbitfd_t grad:1;       /* rect,arc */
     } multi;
 } scui_object_data_t;
 

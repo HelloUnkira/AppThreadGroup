@@ -169,5 +169,34 @@ bool scui_object_draw_arc(scui_handle_t handle, scui_object_prop_t *prop);
 void scui_object_prop_arc(scui_handle_t handle, scui_object_arc_t *arc);
 
 /*****************************************************************************/
+/* 自定义的经典效果: */
+
+typedef struct {
+    scui_object_type_t part;
+    scui_object_type_t state;
+    
+    scui_coord_t  index;        /* 部件索引[0] */
+    scui_alpha_t  alpha;        /* 部件透明度 */
+    scui_color_t  color;        /* 部件色调 */
+    scui_area_t   area;         /* 区域 */
+    scui_point_t *vpos;         /* 端点序列 */
+    scui_coord_t  vpos_num;     /* 端点序列数 */
+    scui_coord_t  width;        /* 线宽 */
+    scui_sbitfd_t round:1;      /* 端点 */
+    
+} scui_object_line_t;
+
+/*@brief 对象控件绘制线条
+ *@param handle 对象控件句柄
+ *@param prop   属性(part;state)
+ *@retval 成功失败
+ */
+bool scui_object_draw_line(scui_handle_t handle, scui_object_prop_t *prop);
+
+/*@brief 对象控件添加经典线条属性
+ *@param handle 对象控件句柄
+ *@param line    线条属性
+ */
+void scui_object_prop_line(scui_handle_t handle, scui_object_line_t *line);
 
 #endif

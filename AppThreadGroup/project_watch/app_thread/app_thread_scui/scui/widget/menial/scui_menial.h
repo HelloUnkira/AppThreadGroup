@@ -6,6 +6,7 @@ typedef enum {
     scui_menial_type_btn,
     scui_menial_type_arc,
     scui_menial_type_bar,
+    scui_menial_type_cht,
     scui_menial_type_num,
 } scui_menial_type_t;
 
@@ -54,6 +55,23 @@ typedef union {
         scui_sbitfd_t way:1;        /* 方向(水平:0;垂直:1) */
     } bar;
     
+    /* field(cht): */
+    struct {
+        scui_sbitfd_t type:2;       /* 0:hist;1:line; */
+        scui_sbitfd_t round:1;      /* 端点圆角 */
+        scui_area_t   area;         /* 区域 */
+        scui_color_t  color;        /* 颜色 */
+        scui_coord_t  value_min;    /* 最小取值 */
+        scui_coord_t  value_max;    /* 最大取值 */
+        scui_coord_t  number;       /* 条目数量 */
+        scui_coord_t  space;        /* 条目间隙 */
+        scui_coord_t  width;        /* 线宽 */
+        scui_coord_t *vlist_min;    /* 内部:hist */
+        scui_coord_t *vlist_max;    /* 内部:hist */
+        scui_coord_t *vlist_dot;    /* 内部:line */
+        scui_point_t *vlist_pos;    /* 内部:line(bak) */
+    } cht;
+    
     /* keep add... */
     
 } scui_menial_data_t;
@@ -99,14 +117,17 @@ typedef struct {
 
 /* menial_type:<s> */
 void scui_menial_btn_make(bool maker, void *inst);
-void scui_menial_arc_make(bool maker, void *inst);
-void scui_menial_bar_make(bool maker, void *inst);
 void scui_menial_btn_burn(scui_menial_t *menial);
-void scui_menial_arc_burn(scui_menial_t *menial);
-void scui_menial_bar_burn(scui_menial_t *menial);
 void scui_menial_btn_invoke(scui_event_t *event);
+void scui_menial_arc_make(bool maker, void *inst);
+void scui_menial_arc_burn(scui_menial_t *menial);
 void scui_menial_arc_invoke(scui_event_t *event);
+void scui_menial_bar_make(bool maker, void *inst);
+void scui_menial_bar_burn(scui_menial_t *menial);
 void scui_menial_bar_invoke(scui_event_t *event);
+void scui_menial_cht_make(bool maker, void *inst);
+void scui_menial_cht_burn(scui_menial_t *menial);
+void scui_menial_cht_invoke(scui_event_t *event);
 /* menial_type:<e> */
 
 /*@brief 控件构造

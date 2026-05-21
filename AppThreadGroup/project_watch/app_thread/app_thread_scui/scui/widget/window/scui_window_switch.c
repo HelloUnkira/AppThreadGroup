@@ -597,6 +597,8 @@ void scui_window_switch_event(scui_event_t *event)
             scui_point_t point = scui_window_switch.point;
             scui_event_mask_over(event);
             
+            #if 0
+            /* 落点跟随(动画永远到达落点) */
             if (scui_window_switch.pos == scui_opt_pos_l)
                 scui_window_move_anima_auto(point.x, event->ptr_e.x, SCUI_HOR_RES, 0);
             if (scui_window_switch.pos == scui_opt_pos_r)
@@ -605,6 +607,40 @@ void scui_window_switch_event(scui_event_t *event)
                 scui_window_move_anima_auto(point.y, event->ptr_e.y, SCUI_VER_RES, 0);
             if (scui_window_switch.pos == scui_opt_pos_d)
                 scui_window_move_anima_auto(point.y, event->ptr_e.y - SCUI_VER_RES, SCUI_VER_RES, 0);
+            #else
+            /* 位移补充(动画移动距离) */
+            scui_point_t offset = {0};
+            offset.x = point.x + event->ptr_e.x - event->ptr_s.x;
+            offset.y = point.y + event->ptr_e.y - event->ptr_s.y;
+            /* 从动画取出未使用完的位移, 构建一个新位移 */
+            if (scui_window_switch.anima != SCUI_HANDLE_INVALID) {
+                scui_anima_t *anima = NULL;
+                if (scui_anima_inst(scui_window_switch.anima, &anima)) {
+                    
+                    if (scui_opt_bits_check(scui_window_switch.dir, scui_opt_dir_hor))
+                        offset.x += anima->value_e - anima->value_c;
+                    if (scui_opt_bits_check(scui_window_switch.dir, scui_opt_dir_ver))
+                        offset.y += anima->value_e - anima->value_c;
+                }
+            }
+            
+            if (scui_window_switch.pos == scui_opt_pos_l) {
+                offset.x = scui_clamp(offset.x, 0, +SCUI_HOR_RES);
+                scui_window_move_anima_auto(point.x, offset.x, SCUI_HOR_RES, 0);
+            }
+            if (scui_window_switch.pos == scui_opt_pos_r) {
+                offset.x = scui_clamp(offset.x, -SCUI_HOR_RES, 0);
+                scui_window_move_anima_auto(point.x, offset.x, SCUI_HOR_RES, 0);
+            }
+            if (scui_window_switch.pos == scui_opt_pos_u) {
+                offset.y = scui_clamp(offset.y, 0, +SCUI_VER_RES);
+                scui_window_move_anima_auto(point.y, offset.y, SCUI_VER_RES, 0);
+            }
+            if (scui_window_switch.pos == scui_opt_pos_d) {
+                offset.y = scui_clamp(offset.y, -SCUI_VER_RES, 0);
+                scui_window_move_anima_auto(point.y, offset.y, SCUI_VER_RES, 0);
+            }
+            #endif
         }
         break;
     }
@@ -618,35 +654,18 @@ void scui_window_switch_event(scui_event_t *event)
                 scui_window_move_anima_inout(scui_window_switch.list[0], false);
                 break;
             }
+            
+            /* 通过计算显示面积确认入场或出场 */
             scui_point_t point = scui_window_switch.point;
-            if (scui_mabs(point.x, SCUI_HOR_RES) < SCUI_HOR_RES * 1 / 3 &&
-                scui_mabs(point.y, SCUI_VER_RES) < SCUI_VER_RES * 1 / 3) {
-                if (scui_window_switch.pos == scui_opt_pos_u ||
-                    scui_window_switch.pos == scui_opt_pos_l) {
-                    scui_window_move_anima_inout(scui_window_switch.list[0], true);
-                    SCUI_LOG_DEBUG("");
-                }
-            } else {
-                if (scui_window_switch.pos == scui_opt_pos_u ||
-                    scui_window_switch.pos == scui_opt_pos_l) {
-                    scui_window_move_anima_inout(scui_window_switch.list[0], false);
-                    SCUI_LOG_DEBUG("");
-                }
-            }
-            if (scui_mabs(point.x, SCUI_HOR_RES) < SCUI_HOR_RES * 2 / 3 &&
-                scui_mabs(point.y, SCUI_VER_RES) < SCUI_VER_RES * 2 / 3) {
-                if (scui_window_switch.pos == scui_opt_pos_d ||
-                    scui_window_switch.pos == scui_opt_pos_r) {
-                    scui_window_move_anima_inout(scui_window_switch.list[0], false);
-                    SCUI_LOG_DEBUG("");
-                }
-            } else {
-                if (scui_window_switch.pos == scui_opt_pos_d ||
-                    scui_window_switch.pos == scui_opt_pos_r) {
-                    scui_window_move_anima_inout(scui_window_switch.list[0], true);
-                    SCUI_LOG_DEBUG("");
-                }
-            }
+            scui_area_t area_c = {0};
+            area_c.x1 = scui_max(point.x, 0);
+            area_c.y1 = scui_max(point.y, 0);
+            area_c.x2 = scui_min(point.x + SCUI_HOR_RES, SCUI_HOR_RES);
+            area_c.y2 = scui_min(point.y + SCUI_VER_RES, SCUI_VER_RES);
+            scui_area_m_by_s(&area_c, &area_c);
+            scui_multi_t area_s = (scui_multi_t)1 * area_c.w * area_c.h;
+            scui_multi_t area_t = (scui_multi_t)1 * SCUI_HOR_RES * SCUI_VER_RES / 2;
+            scui_window_move_anima_inout(scui_window_switch.list[0], area_s >= area_t);
         }
         break;
     }

@@ -75,6 +75,15 @@ void scui_ui_scene_1_menial_bar_event_proc(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
+void scui_ui_scene_1_menial_cht_event_proc(scui_event_t *event)
+{
+    scui_menial_cht_event_cb(event);
+    
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
 void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
 {
     static scui_coord_t arc_val = 0;
@@ -320,6 +329,60 @@ void scui_ui_scene_1_scroll_page_2_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_create: {
+        
+        scui_menial_data_t menial_data_zero = {0};
+        scui_menial_maker_t menial_maker = {0};
+        scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
+        menial_maker.widget.type = scui_widget_type_menial;
+        menial_maker.widget.parent = event->object;
+        
+        #if 1
+        // menial_cht:
+        scui_coord_t vlist[100] = {0};
+        scui_coord_t vlist_min[100] = {0};
+        scui_coord_t vlist_max[100] = {0};
+        for (uint32_t idx = 0; idx < 100; idx++) {
+            vlist_min[idx] =  60 + (uint32_t)scui_rand(0xFF) % 40;   //统一底点就是柱状图,否则为股价图
+            vlist_max[idx] = 220 - (uint32_t)scui_rand(0xFF) % 40;
+            vlist[idx] = 60 + (uint32_t)scui_rand(0xFF) % ((220 - 60));
+        }
+        
+        menial_maker.widget.style.fully_bg = true;
+        menial_maker.widget.color.color.full = 0xFF4F4F4F;
+        menial_maker.widget.clip.y = SCUI_VER_RES *  1 / 25;
+        menial_maker.widget.clip.w = SCUI_HOR_RES * 11 / 25;
+        menial_maker.widget.clip.h = SCUI_VER_RES * 11 / 25;
+        menial_maker.widget.event_cb = scui_ui_scene_1_menial_cht_event_proc;
+        menial_maker.type = scui_menial_type_cht;
+        menial_maker.data = menial_data_zero;
+        menial_maker.data.cht.round = true;
+        menial_maker.data.cht.area.x = 10;
+        menial_maker.data.cht.area.y = 10;
+        menial_maker.data.cht.area.w = menial_maker.widget.clip.w - 10 * 2;
+        menial_maker.data.cht.area.h = menial_maker.widget.clip.h - 10 * 2;
+        menial_maker.data.cht.color.color.full = 0xFFFF0000;
+        menial_maker.data.cht.value_min = 60;
+        menial_maker.data.cht.value_max = 220;
+        
+        
+        
+        menial_maker.widget.clip.x = SCUI_HOR_RES *  1 / 25;
+        menial_maker.data.cht.type   = 0;
+        menial_maker.data.cht.number = 15;
+        menial_maker.data.cht.space  = 4;
+        menial_maker.data.cht.width  = 6;
+        scui_widget_create(&menial_maker, &menial_handle);
+        scui_menial_cht_hist_data(menial_handle, vlist_min, vlist_max);
+        
+        menial_maker.widget.clip.x = SCUI_HOR_RES * 13 / 25;
+        menial_maker.data.cht.type   = 1;
+        menial_maker.data.cht.number = 30;
+        menial_maker.data.cht.space  = 4;
+        menial_maker.data.cht.width  = 2;
+        scui_widget_create(&menial_maker, &menial_handle);
+        scui_menial_cht_line_data(menial_handle, vlist);
+        
+        #endif
         
         break;
     }
