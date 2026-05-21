@@ -23,10 +23,6 @@ static struct {
  */
 void scui_ui_scene_1_menial_btn_event_proc(scui_event_t *event)
 {
-    scui_menial_btn_event_cb(event);
-    
-    
-    
     switch (event->type) {
     case scui_event_button_click:
         SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
@@ -39,10 +35,6 @@ void scui_ui_scene_1_menial_btn_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_1_menial_arc_event_proc(scui_event_t *event)
 {
-    scui_menial_arc_event_cb(event);
-    
-    
-    
     switch (event->type) {
     case scui_event_update_value: {
         scui_coord3_t angle = 0.0f;
@@ -58,10 +50,6 @@ void scui_ui_scene_1_menial_arc_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_1_menial_bar_event_proc(scui_event_t *event)
 {
-    scui_menial_bar_event_cb(event);
-    
-    
-    
     switch (event->type) {
     case scui_event_update_value: {
         scui_coord3_t value = 0.0f;
@@ -77,8 +65,6 @@ void scui_ui_scene_1_menial_bar_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_1_menial_cht_event_proc(scui_event_t *event)
 {
-    scui_menial_cht_event_cb(event);
-    
 }
 
 /*@brief 控件事件响应回调

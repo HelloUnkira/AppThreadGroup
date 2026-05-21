@@ -7,34 +7,41 @@
  */
 
 typedef enum {
-    scui_object_type_none = 0,
+    scui_object_type_none  = 0,
+    scui_object_type_part  = 0x1000,
+    scui_object_type_state = 0x2000,
+    scui_object_type_style = 0x3000,
+    scui_object_type_limit = 0x0FFF,
+    scui_object_type_mask  = 0x00FF,
     
-    scui_object_state_s,
-    /* field state<s>: */
+    scui_object_type_sub   = 0x0000,
+    scui_object_type_sub1  = 0x0100,
+    scui_object_type_sub2  = 0x0200,
+    scui_object_type_sub3  = 0x0300,
+    
+    /*************************************************************************/
+    scui_object_state_sub = scui_object_type_state + scui_object_type_sub,
+    
     scui_object_state_def,
     scui_object_state_pre,
     scui_object_state_chk,
-    /* field state<e>: */
-    scui_object_state_e,
     
-    scui_object_part_s,
-    /* field part<s>: */
+    /*************************************************************************/
+    scui_object_part_sub = scui_object_type_part + scui_object_type_sub,
+    
     /* 背景/前景/边界/盒子/阴影 */
-    scui_object_part_rect_bg,       /* 背景 */
-    scui_object_part_rect_fg,       /* 前景 */
-    scui_object_part_rect_edge,     /* 边界(可选扩充) */
-    scui_object_part_rect_box,      /* 盒子(可选扩充) */
-    scui_object_part_rect_sha,      /* 阴影(可选扩充) */
+    scui_object_part_rect_bg,   /* 背景 */
+    scui_object_part_rect_fg,   /* 前景 */
+    scui_object_part_rect_edge, /* 边界(可选扩充) */
+    scui_object_part_rect_box,  /* 盒子(可选扩充) */
+    scui_object_part_rect_sha,  /* 阴影(可选扩充) */
+    scui_object_part_arc_bg,    /* 背景 */
+    scui_object_part_arc_fg,    /* 前景 */
+    scui_object_part_line,      /*  */
     
-    scui_object_part_arc_bg,        /* 背景 */
-    scui_object_part_arc_fg,        /* 前景 */
+    /*************************************************************************/
+    scui_object_style_rect_s = scui_object_type_style + scui_object_type_sub1,
     
-    scui_object_part_line,          /* 背景 */
-    /* field part<e>: */
-    scui_object_part_e,
-    
-    scui_object_style_s,
-    /* field style<s>: */
     scui_object_style_rect_alpha,
     scui_object_style_rect_color,
     scui_object_style_rect_point,
@@ -46,6 +53,10 @@ typedef enum {
     scui_object_style_rect_color_grad,
     scui_object_style_rect_multi,
     
+    scui_object_style_rect_e,
+    /*************************************************************************/
+    scui_object_style_arc_s = scui_object_type_style + scui_object_type_sub2,
+    
     scui_object_style_arc_alpha,
     scui_object_style_arc_color,
     scui_object_style_arc_angle_s,
@@ -56,6 +67,10 @@ typedef enum {
     scui_object_style_arc_color_grad,
     scui_object_style_arc_multi,
     
+    scui_object_style_arc_e,
+    /*************************************************************************/
+    scui_object_style_line_s = scui_object_type_style + scui_object_type_sub3,
+    
     scui_object_style_line_alpha,
     scui_object_style_line_color,
     scui_object_style_line_area,
@@ -63,10 +78,15 @@ typedef enum {
     scui_object_style_line_vpos_num,
     scui_object_style_line_side_width,
     scui_object_style_line_multi,
-    /* field style<e>: */
-    scui_object_style_e,
+    
+    scui_object_style_line_e,
+    /*************************************************************************/
     
 } scui_object_type_t;
+
+#define scui_object_part_idx(part)      (scui_object_type_mask & (scui_object_part_##part   - 1))
+#define scui_object_state_idx(state)    (scui_object_type_mask & (scui_object_state_##state - 1))
+#define scui_object_style_idx(style)    (scui_object_type_mask & (scui_object_style_##style - 1))
 
 typedef union {
     scui_area_t  area;

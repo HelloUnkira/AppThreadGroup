@@ -87,20 +87,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
         scui_event_notify(&event);
         break;
     }
-    default:
-        break;
-    }
-}
-
-/*@brief 事件处理回调(子类型)(样板)
- *@param event 事件
- */
-void scui_menial_btn_event_cb(scui_event_t *event)
-{
-    scui_menial_data_t *data = NULL;
-    scui_menial_data_inst(event->object, &data);
     
-    switch (event->type) {
     case scui_event_create: {
         scui_area_t widget_clip = scui_widget_clip(event->object);
         scui_object_rect_t rect = {
@@ -108,13 +95,13 @@ void scui_menial_btn_event_cb(scui_event_t *event)
             .area.h   = widget_clip.h,
             .index    = 0,
             .alpha[0] = scui_alpha_cover,
-            .width[0] = data->btn.width,
-            .radius   = data->btn.radius,
+            .width[0] = menial->data.btn.width,
+            .radius   = menial->data.btn.radius,
             .align    = scui_opt_pos_c,
         };
         
         scui_object_press_set(event->object, true);
-        scui_object_check_set(event->object, data->btn.check);
+        scui_object_check_set(event->object, menial->data.btn.check);
         
         /* def<->pre */
         if (true) {
@@ -124,7 +111,7 @@ void scui_menial_btn_event_cb(scui_event_t *event)
             scui_object_prop_rect(event->object, &rect);
         }
         /* chk */
-        if (data->btn.check) {
+        if (menial->data.btn.check) {
             
             rect.state = scui_object_state_chk;
             scui_object_prop_rect(event->object, &rect);
@@ -146,14 +133,14 @@ void scui_menial_btn_event_cb(scui_event_t *event)
             tran_pre.state_n = scui_object_state_pre;
             tran_def.part = scui_object_part_rect_bg;
             tran_pre.part = scui_object_part_rect_bg;
-            tran_def.time = data->btn.time;
-            tran_pre.time = data->btn.time;
+            tran_def.time = menial->data.btn.time;
+            tran_pre.time = menial->data.btn.time;
             
             /* color bg prop */
             prop_def.style = scui_object_style_rect_color;
             prop_pre.style = scui_object_style_rect_color;
-            prop_def.data.color32 = data->btn.color[0].color_l;
-            prop_pre.data.color32 = data->btn.color[0].color_d;
+            prop_def.data.color32 = menial->data.btn.color[0].color_l;
+            prop_pre.data.color32 = menial->data.btn.color[0].color_d;
             scui_object_prop_add(event->object, &prop_def);
             scui_object_prop_add(event->object, &prop_pre);
             /* color bg tran */
@@ -165,18 +152,18 @@ void scui_menial_btn_event_cb(scui_event_t *event)
             /* width && height prop */
             prop_def.style = scui_object_style_rect_width;
             prop_pre.style = scui_object_style_rect_width;
-            prop_def.data.number = (scui_multi_t)widget_clip.w * data->btn.lim / 100;
+            prop_def.data.number = (scui_multi_t)widget_clip.w * menial->data.btn.lim / 100;
             prop_pre.data.number = (scui_multi_t)widget_clip.w * 100 / 100;
             scui_object_prop_add(event->object, &prop_def);
             scui_object_prop_add(event->object, &prop_pre);
             prop_def.style = scui_object_style_rect_height;
             prop_pre.style = scui_object_style_rect_height;
-            prop_def.data.number = (scui_multi_t)widget_clip.h * data->btn.lim / 100;
+            prop_def.data.number = (scui_multi_t)widget_clip.h * menial->data.btn.lim / 100;
             prop_pre.data.number = (scui_multi_t)widget_clip.h * 100 / 100;
             scui_object_prop_add(event->object, &prop_def);
             scui_object_prop_add(event->object, &prop_pre);
             
-            if (!data->btn.fixed) {
+            if (!menial->data.btn.fixed) {
                 /* width && height tran */
                 tran_def.style = scui_object_style_rect_width;
                 tran_pre.style = scui_object_style_rect_width;
@@ -190,7 +177,7 @@ void scui_menial_btn_event_cb(scui_event_t *event)
         }
         
         /* chk<->pre */
-        if (data->btn.check) {
+        if (menial->data.btn.check) {
             scui_object_prop_t prop_chk = {0};
             scui_object_prop_t prop_pre = {0};
             scui_object_tran_t tran_chk = {0};
@@ -205,14 +192,14 @@ void scui_menial_btn_event_cb(scui_event_t *event)
             tran_pre.state_n = scui_object_state_pre;
             tran_chk.part = scui_object_part_rect_bg;
             tran_pre.part = scui_object_part_rect_bg;
-            tran_chk.time = data->btn.time;
-            tran_pre.time = data->btn.time;
+            tran_chk.time = menial->data.btn.time;
+            tran_pre.time = menial->data.btn.time;
             
             /* color bg prop */
             prop_chk.style = scui_object_style_rect_color;
             prop_pre.style = scui_object_style_rect_color;
-            prop_chk.data.color32 = data->btn.color[1].color_l;
-            prop_pre.data.color32 = data->btn.color[1].color_d;
+            prop_chk.data.color32 = menial->data.btn.color[1].color_l;
+            prop_pre.data.color32 = menial->data.btn.color[1].color_d;
             scui_object_prop_add(event->object, &prop_chk);
             scui_object_prop_add(event->object, &prop_pre);
             /* color bg tran */
@@ -224,18 +211,18 @@ void scui_menial_btn_event_cb(scui_event_t *event)
             /* width && height prop */
             prop_chk.style = scui_object_style_rect_width;
             prop_pre.style = scui_object_style_rect_width;
-            prop_chk.data.number = (scui_multi_t)widget_clip.w * data->btn.lim / 100;
+            prop_chk.data.number = (scui_multi_t)widget_clip.w * menial->data.btn.lim / 100;
             prop_pre.data.number = (scui_multi_t)widget_clip.w * 100 / 100;
             scui_object_prop_add(event->object, &prop_chk);
             scui_object_prop_add(event->object, &prop_pre);
             prop_chk.style = scui_object_style_rect_height;
             prop_pre.style = scui_object_style_rect_height;
-            prop_chk.data.number = (scui_multi_t)widget_clip.h * data->btn.lim / 100;
+            prop_chk.data.number = (scui_multi_t)widget_clip.h * menial->data.btn.lim / 100;
             prop_pre.data.number = (scui_multi_t)widget_clip.h * 100 / 100;
             scui_object_prop_add(event->object, &prop_chk);
             scui_object_prop_add(event->object, &prop_pre);
             
-            if (!data->btn.fixed) {
+            if (!menial->data.btn.fixed) {
                 /* width && height tran */
                 tran_chk.style = scui_object_style_rect_width;
                 tran_pre.style = scui_object_style_rect_width;

@@ -59,9 +59,13 @@ void scui_object_burn(scui_handle_t handle)
  */
 static bool scui_object_prop_check(scui_object_prop_t *prop)
 {
-    if (prop->part  > scui_object_part_s  && prop->part  < scui_object_part_e  &&
-        prop->state > scui_object_state_s && prop->state < scui_object_state_e &&
-        prop->style > scui_object_style_s && prop->style < scui_object_style_e)
+    const scui_object_type_t scui_object_type_part_l  = scui_object_type_part  + scui_object_type_limit;
+    const scui_object_type_t scui_object_type_state_l = scui_object_type_state + scui_object_type_limit;
+    const scui_object_type_t scui_object_type_style_l = scui_object_type_style + scui_object_type_limit;
+    
+    if (prop->part  > scui_object_type_part  && prop->part  < scui_object_type_part_l  &&
+        prop->state > scui_object_type_state && prop->state < scui_object_type_state_l &&
+        prop->style > scui_object_type_style && prop->style < scui_object_type_style_l)
         return true;
     
     return false;
@@ -189,10 +193,14 @@ bool scui_object_prop_sync(scui_handle_t handle, scui_object_prop_t *prop)
  */
 static bool scui_object_tran_check(scui_object_tran_t *tran)
 {
-    if (tran->part    > scui_object_part_s  && tran->part    < scui_object_part_e  &&
-        tran->state_p > scui_object_state_s && tran->state_p < scui_object_state_e &&
-        tran->state_n > scui_object_state_s && tran->state_n < scui_object_state_e &&
-        tran->style   > scui_object_style_s && tran->style   < scui_object_style_e)
+    const scui_object_type_t scui_object_type_part_l  = scui_object_type_part  + scui_object_type_limit;
+    const scui_object_type_t scui_object_type_state_l = scui_object_type_state + scui_object_type_limit;
+    const scui_object_type_t scui_object_type_style_l = scui_object_type_style + scui_object_type_limit;
+    
+    if (tran->part    > scui_object_type_part  && tran->part    < scui_object_type_part_l  &&
+        tran->state_p > scui_object_type_state && tran->state_p < scui_object_type_state_l &&
+        tran->state_n > scui_object_type_state && tran->state_n < scui_object_type_state_l &&
+        tran->style   > scui_object_type_style && tran->style   < scui_object_type_style_l)
         return true;
     
     return false;

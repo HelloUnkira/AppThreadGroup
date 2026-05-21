@@ -200,20 +200,7 @@ void scui_menial_bar_invoke(scui_event_t *event)
     case scui_event_ptr_up:
         widget->state.indev_ptr_hold = false;
         break;
-    default:
-        break;
-    }
-}
-
-/*@brief 事件处理回调(子类型)(样板)
- *@param event 事件
- */
-void scui_menial_bar_event_cb(scui_event_t *event)
-{
-    scui_menial_data_t *data = NULL;
-    scui_menial_data_inst(event->object, &data);
     
-    switch (event->type) {
     case scui_event_create: {
         scui_area_t widget_clip = scui_widget_clip(event->object);
         scui_object_rect_t rect = {
@@ -221,12 +208,12 @@ void scui_menial_bar_event_cb(scui_event_t *event)
             .area.h   = widget_clip.h,
             .alpha[0] = scui_alpha_cover,
             .alpha[1] = scui_alpha_cover,
-            .color[0] = data->bar.color[0],
-            .color[1] = data->bar.color[1],
-            .radius   = data->bar.radius,
+            .color[0] = menial->data.bar.color[0],
+            .color[1] = menial->data.bar.color[1],
+            .radius   = menial->data.bar.radius,
             .align    = scui_opt_pos_l | scui_opt_pos_u,
-            .grad_w   = data->bar.way,
-            .grad     = data->bar.grad,
+            .grad_w   = menial->data.bar.way,
+            .grad     = menial->data.bar.grad,
         };
         
         rect.state = scui_object_state_def;

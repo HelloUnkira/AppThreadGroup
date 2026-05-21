@@ -131,73 +131,17 @@ void scui_menial_cht_invoke(scui_event_t *event)
     scui_menial_t *menial = (void *)widget;
     
     switch (event->type) {
-    case scui_event_draw: {
-        
-        if (scui_event_check_prepare(event)) {
-            
-            switch (menial->data.cht.type) {
-            default:SCUI_ASSERT(false);break;
-            case 0: {
-                break;
-            }
-            case 1: {
-                scui_point_t offset = menial->data.cht.area.pos;
-                for (scui_coord_t idx = 0; idx + 1 < menial->data.cht.number; idx++) {
-                    scui_coord_t offset_1y = scui_map(menial->data.cht.vlist_dot[idx + 0],
-                        menial->data.cht.value_min, menial->data.cht.value_max, menial->data.cht.area.h, 0);
-                    scui_coord_t offset_2y = scui_map(menial->data.cht.vlist_dot[idx + 1],
-                        menial->data.cht.value_min, menial->data.cht.value_max, menial->data.cht.area.h, 0);
-                    
-                    scui_point_t offset_1 = {.x = offset.x, .y = offset.y + offset_1y};
-                    scui_point_t offset_2 = {.x = offset.x + menial->data.cht.space, .y = offset.y + offset_2y};
-                    
-                    menial->data.cht.vlist_pos[idx + 0] = offset_1;
-                    menial->data.cht.vlist_pos[idx + 1] = offset_2;
-                    
-                    offset.x += menial->data.cht.width + menial->data.cht.space;
-                }
-                
-                scui_object_prop_t prop = {
-                    .part  = scui_object_part_line,
-                    .state = scui_object_state_def,
-                    .style = scui_object_style_line_vpos,
-                    .data.pointer = menial->data.cht.vlist_pos,
-                };
-                scui_object_prop_add(event->object, &prop);
-                break;
-            }
-            }
-        }
-        
-        if (scui_event_check_finish(event)) {
-            
-        }
-    }
-    default:
-        break;
-    }
-}
-
-/*@brief 事件处理回调(子类型)(样板)
- *@param event 事件
- */
-void scui_menial_cht_event_cb(scui_event_t *event)
-{
-    scui_menial_data_t *data = NULL;
-    scui_menial_data_inst(event->object, &data);
-    
-    switch (event->type) {
     case scui_event_create: {
         scui_area_t widget_clip = scui_widget_clip(event->object);
-        switch (data->cht.type) {
+        switch (menial->data.cht.type) {
         default:SCUI_ASSERT(false);break;
         case 0: {
             scui_object_rect_t rect = {
                 .state    = scui_object_state_def,
-                .area.w   = data->cht.width,
+                .area.w   = menial->data.cht.width,
                 .alpha[0] = scui_alpha_cover,
-                .color[0] = data->cht.color,
-                .radius   = data->cht.round ? -1 : 0,
+                .color[0] = menial->data.cht.color,
+                .radius   = menial->data.cht.round ? -1 : 0,
             };
             
             scui_object_prop_rect(event->object, &rect);
@@ -207,11 +151,11 @@ void scui_menial_cht_event_cb(scui_event_t *event)
             scui_object_line_t line = {
                 .state      = scui_object_state_def,
                 .alpha      = scui_alpha_cover,
-                .color      = data->cht.color,
-                .area       = data->cht.area,
-                .vpos_num   = data->cht.number,
-                .width      = data->cht.width,
-                .round      = data->cht.round,
+                .color      = menial->data.cht.color,
+                .area       = menial->data.cht.area,
+                .vpos_num   = menial->data.cht.number,
+                .width      = menial->data.cht.width,
+                .round      = menial->data.cht.round,
             };
             
             scui_object_prop_line(event->object, &line);
@@ -224,25 +168,25 @@ void scui_menial_cht_event_cb(scui_event_t *event)
         if (!scui_event_check_execute(event))
              return;
         
-        switch (data->cht.type) {
+        switch (menial->data.cht.type) {
         default:SCUI_ASSERT(false);break;
         case 0: {
             scui_object_prop_t prop = {0};
             prop.part = scui_object_part_rect_bg;
             scui_object_state_get(event->object, &prop.state);
             
-            scui_point_t offset = data->cht.area.pos;
-            for (scui_coord_t idx = 0; idx < data->cht.number; idx++) {
-                scui_coord_t offset_1y = scui_map(data->cht.vlist_min[idx],
-                    data->cht.value_min, data->cht.value_max, data->cht.area.h, 0);
-                scui_coord_t offset_2y = scui_map(data->cht.vlist_max[idx],
-                    data->cht.value_min, data->cht.value_max, data->cht.area.h, 0);
+            scui_point_t offset = menial->data.cht.area.pos;
+            for (scui_coord_t idx = 0; idx < menial->data.cht.number; idx++) {
+                scui_coord_t offset_1y = scui_map(menial->data.cht.vlist_min[idx],
+                    menial->data.cht.value_min, menial->data.cht.value_max, menial->data.cht.area.h, 0);
+                scui_coord_t offset_2y = scui_map(menial->data.cht.vlist_max[idx],
+                    menial->data.cht.value_min, menial->data.cht.value_max, menial->data.cht.area.h, 0);
                 
                 scui_point_t point = offset;
-                offset.x += data->cht.width + data->cht.space;
+                offset.x += menial->data.cht.width + menial->data.cht.space;
                 
                 /* 值为0, 不进行绘制 */
-                if (offset_1y - offset_2y < data->cht.width)
+                if (offset_1y - offset_2y < menial->data.cht.width)
                     continue;
                 
                 prop.data.point = point;
@@ -258,14 +202,33 @@ void scui_menial_cht_event_cb(scui_event_t *event)
         }
         case 1: {
             
-            scui_object_prop_t prop = {0};
-            prop.part = scui_object_part_line;
-            scui_object_state_get(event->object, &prop.state);
+            scui_point_t offset = menial->data.cht.area.pos;
+            for (scui_coord_t idx = 0; idx + 1 < menial->data.cht.number; idx++) {
+                scui_coord_t offset_1y = scui_map(menial->data.cht.vlist_dot[idx + 0],
+                    menial->data.cht.value_min, menial->data.cht.value_max, menial->data.cht.area.h, 0);
+                scui_coord_t offset_2y = scui_map(menial->data.cht.vlist_dot[idx + 1],
+                    menial->data.cht.value_min, menial->data.cht.value_max, menial->data.cht.area.h, 0);
+                
+                scui_point_t offset_1 = {.x = offset.x, .y = offset.y + offset_1y};
+                scui_point_t offset_2 = {.x = offset.x + menial->data.cht.space, .y = offset.y + offset_2y};
+                
+                menial->data.cht.vlist_pos[idx + 0] = offset_1;
+                menial->data.cht.vlist_pos[idx + 1] = offset_2;
+                
+                offset.x += menial->data.cht.width + menial->data.cht.space;
+            }
+            
+            scui_object_prop_t prop = {
+                .part  = scui_object_part_line,
+                .state = scui_object_state_def,
+                .style = scui_object_style_line_vpos,
+                .data.pointer = menial->data.cht.vlist_pos,
+            };
+            scui_object_prop_add(event->object, &prop);
             scui_object_draw_line(event->object, &prop);
             break;
         }
         }
-        break;
     }
     default:
         break;

@@ -55,29 +55,4 @@ void scui_menial_cht_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, sc
  */
 void scui_menial_cht_line_data(scui_handle_t handle, scui_coord_t *vlist_dot);
 
-/******************************************************************************/
-/******************************************************************************/
-/******************************************************************************/
-/* 自定义参考配置模板: */
-
-/*@brief 事件处理回调(子类型)(样板)
- *@param event 事件
- */
-void scui_menial_btn_event_cb(scui_event_t *event);
-
-/*@brief 事件处理回调(子类型)(样板)
- *@param event 事件
- */
-void scui_menial_arc_event_cb(scui_event_t *event);
-
-/*@brief 事件处理回调(子类型)(样板)
- *@param event 事件
- */
-void scui_menial_bar_event_cb(scui_event_t *event);
-
-/*@brief 事件处理回调(子类型)(样板)
- *@param event 事件
- */
-void scui_menial_cht_event_cb(scui_event_t *event);
-
 #endif

@@ -212,36 +212,22 @@ void scui_menial_arc_invoke(scui_event_t *event)
         }
         break;
     }
-    default:
-        break;
-    }
-}
-
-/*@brief 事件处理回调(子类型)(样板)
- *@param event 事件
- */
-void scui_menial_arc_event_cb(scui_event_t *event)
-{
-    scui_menial_data_t *data = NULL;
-    scui_menial_data_inst(event->object, &data);
-    
-    switch (event->type) {
     case scui_event_create: {
         scui_area_t widget_clip = scui_widget_clip(event->object);
         scui_object_arc_t   arc = {
             .alpha[0] = scui_alpha_cover,
             .alpha[1] = scui_alpha_cover,
-            .color[0] = data->arc.color[0],
-            .color[1] = data->arc.color[1],
-            .width    = data->arc.width,
+            .color[0] = menial->data.arc.color[0],
+            .color[1] = menial->data.arc.color[1],
+            .width    = menial->data.arc.width,
             .center.x = widget_clip.w / 2,
             .center.y = widget_clip.h / 2,
             .angle_s  = 0,
             .angle_e  = 360,
-            .radius   = data->arc.radius,
-            .round    = data->arc.round,
-            .grad_w   = data->arc.gradw,
-            .grad     = data->arc.grad,
+            .radius   = menial->data.arc.radius,
+            .round    = menial->data.arc.round,
+            .grad_w   = menial->data.arc.gradw,
+            .grad     = menial->data.arc.grad,
         };
         
         arc.state = scui_object_state_def;
@@ -265,5 +251,7 @@ void scui_menial_arc_event_cb(scui_event_t *event)
         scui_object_draw_arc(event->object,  &prop);
         break;
     }
+    default:
+        break;
     }
 }
