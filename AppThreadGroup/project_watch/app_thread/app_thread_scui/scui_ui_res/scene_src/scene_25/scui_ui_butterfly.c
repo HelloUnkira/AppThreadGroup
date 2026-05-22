@@ -98,7 +98,7 @@ static void scui_ui_scene_butterfly_face_ready(scui_face3_t face3_list[4])
     #if 1
     // 空间建模为原点xy平面
     
-    size2 = scui_image_s2(image_antenna);
+    size2 = scui_image_size2(image_antenna);
     scui_face3_t face3_antenna = {
         .point3[0] = {.x = +0,       .y = -size2.h - 1,},
         .point3[1] = {.x = +size2.w, .y = -size2.h - 1,},
@@ -106,7 +106,7 @@ static void scui_ui_scene_butterfly_face_ready(scui_face3_t face3_list[4])
         .point3[3] = {.x = +0,       .y = +0 - 1,},
     };
     
-    size2 = scui_image_s2(image_trunk);
+    size2 = scui_image_size2(image_trunk);
     scui_face3_t face3_trunk = {
         .point3[0] = {.x = -size2.w + 1, .y = -size2.h / 2,},
         .point3[1] = {.x = +0 + 1,       .y = -size2.h / 2,},
@@ -114,7 +114,7 @@ static void scui_ui_scene_butterfly_face_ready(scui_face3_t face3_list[4])
         .point3[3] = {.x = -size2.w + 1, .y = +size2.h / 2,},
     };
     
-    size2 = scui_image_s2(image_wing0);
+    size2 = scui_image_size2(image_wing0);
     scui_face3_t face3_wing0 = {
         .point3[0] = {.x = +0 - 2,       .y = -size2.h + 2,},
         .point3[1] = {.x = +size2.w - 2, .y = -size2.h + 2,},
@@ -122,7 +122,7 @@ static void scui_ui_scene_butterfly_face_ready(scui_face3_t face3_list[4])
         .point3[3] = {.x = +0 - 2,       .y = +0 + 2,},
     };
     
-    size2 = scui_image_s2(image_wing1);
+    size2 = scui_image_size2(image_wing1);
     scui_face3_t face3_wing1 = {
         .point3[0] = {.x = +0 - 2,       .y = -0 + 2,},
         .point3[1] = {.x = +size2.w - 2, .y = -0 + 2,},
@@ -367,7 +367,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
             for (uint8_t idx = 0; idx < matrix_num; idx++) {
                 
                 scui_face3_t face3 = list_face3[idx];
-                scui_size2_t size2 = scui_image_s2(list_image[idx]);
+                scui_size2_t size2 = scui_image_size2(list_image[idx]);
                 scui_area3_transform_by_matrix(&face3, &matrix_list[idx]);
                 scui_area3_offset(&face3, &offset);
                 // 面处理最后: 对面进行最后一次更新

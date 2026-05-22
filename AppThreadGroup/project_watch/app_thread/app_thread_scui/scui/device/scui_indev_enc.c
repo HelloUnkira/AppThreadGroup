@@ -58,6 +58,8 @@ void scui_indev_enc_notify(scui_indev_data_t *data)
     }
     /* 直接作为系统事件发送给管理器即可 */
     scui_event_define(event, SCUI_HANDLE_SYSTEM, false, type, scui_event_enc_absorb);
+    if (type == scui_event_enc_fdir) event.enc_way = 0;
+    if (type == scui_event_enc_bdir) event.enc_way = 1;
     event.enc_diff = scui_abs(data->enc.enc_diff);
     scui_indev_enc_event_check(&event);
 }

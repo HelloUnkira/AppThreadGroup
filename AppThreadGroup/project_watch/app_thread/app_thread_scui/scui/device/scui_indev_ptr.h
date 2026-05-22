@@ -28,10 +28,4 @@ void scui_indev_ptr_notify(scui_indev_data_t *data);
  */
 void scui_indev_ptr_ready(void);
 
-/*@brief 输入设备手势方向计算
- *@param event 输入设备事件
- *@retval 手势方向
- */
-scui_opt_dir_t scui_indev_ptr_dir(scui_event_t *event);
-
 #endif

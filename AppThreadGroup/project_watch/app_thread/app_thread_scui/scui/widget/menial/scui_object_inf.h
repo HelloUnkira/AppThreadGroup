@@ -91,6 +91,60 @@ void scui_object_state_set(scui_handle_t handle, scui_object_type_t state);
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+/* 简要宏化简数据类型转换: */
+
+#define scui_object_data_area(val)          ((scui_object_data_t){.area     = val,})
+#define scui_object_data_point(val)         ((scui_object_data_t){.point    = val,})
+#define scui_object_data_alpha(val)         ((scui_object_data_t){.alpha    = val,})
+#define scui_object_data_number(val)        ((scui_object_data_t){.number   = val,})
+#define scui_object_data_color32(val)       ((scui_object_data_t){.color32  = val,})
+#define scui_object_data_align(val)         ((scui_object_data_t){.align    = val,})
+#define scui_object_data_pointer(val)       ((scui_object_data_t){.pointer  = val,})
+#define scui_object_data_multi(val)         ((scui_object_data_t){.multi    = val,})
+
+/*****************************************************************************/
+/* 简要宏化简属性过渡的添加: */
+
+/* scui_object_prop_add宏化简 */
+#define scui_object_prop_new(handle_v, part_v, style_v, state_v, data_v)        \
+do {                                                                            \
+    scui_object_prop_t scui_op_i = {                                            \
+        .part  = scui_object_part_##part_v,                                     \
+        .style = scui_object_style_##style_v,                                   \
+        .state = scui_object_state_##state_v,                                   \
+        .data  = data_v,};                                                      \
+    scui_object_prop_add(handle_v, &scui_op_i);                                 \
+} while (0)                                                                     \
+
+/* scui_object_tran_add宏化简 */
+#define scui_object_tran_new(handle_v, part_v, style_v, state_p_v, state_n_v,   \
+    data_p_v, data_n_v, path_v, time_v, delay_v)                                \
+do {                                                                            \
+    scui_object_tran_t scui_ot_i = {                                            \
+        .part    = scui_object_part_##part_v,                                   \
+        .style   = scui_object_style_##style_v,                                 \
+        .state_p = scui_object_state_##state_p_v,                               \
+        .state_n = scui_object_state_##state_n_v,                               \
+        .data_p  = data_p_v,                                                    \
+        .data_n  = data_n_v,                                                    \
+        .path    = path_v,                                                      \
+        .time    = time_v,                                                      \
+        .delay   = delay_v,                                                     \
+    };                                                                          \
+    scui_object_tran_add(handle_v, &scui_ot_i);                                 \
+} while (0)                                                                     \
+
+/* scui_object_tran_add宏二次化简 */
+#define scui_object_tran_new2(handle_v, part_v, style_v, state_p_v, state_n_v,  \
+    data_p_v, data_n_v, path_v, time_v, delay_v)                                \
+do {                                                                            \
+    scui_object_tran_new(handle_v, part_v, style_v, state_p_v, state_n_v,       \
+    data_p_v, data_n_v, path_v, time_v, delay_v);                               \
+    scui_object_tran_new(handle_v, part_v, style_v, state_n_v, state_p_v,       \
+    data_n_v, data_p_v, path_v, time_v, delay_v);                               \
+} while (0)                                                                     \
+
+/*****************************************************************************/
 /* 标准部件样式属性配置及绘制: */
 
 typedef struct {

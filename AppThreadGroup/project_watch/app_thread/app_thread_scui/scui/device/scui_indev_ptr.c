@@ -57,6 +57,33 @@ static void scui_indev_ptr_event_check(scui_event_t *event)
     #endif
 }
 
+
+/*@brief 输入设备手势方向计算
+ *@param event 输入设备事件
+ *@retval 手势方向
+ */
+static scui_opt_dir_t scui_indev_ptr_event_dir(scui_event_t *event)
+{
+    if (scui_event_type_ptr(event->type)) {
+        scui_coord_t dist_x = scui_dist(event->ptr_s.x, event->ptr_e.x);
+        scui_coord_t dist_y = scui_dist(event->ptr_s.y, event->ptr_e.y);
+        
+        if (dist_x >= dist_y) {
+            if (event->ptr_s.x >= event->ptr_e.x)
+                return scui_opt_dir_rtl;
+            if (event->ptr_s.x <= event->ptr_e.x)
+                return scui_opt_dir_ltr;
+        }
+        if (dist_x <= dist_y) {
+            if (event->ptr_s.y >= event->ptr_e.y)
+                return scui_opt_dir_dtu;
+            if (event->ptr_s.y <= event->ptr_e.y)
+                return scui_opt_dir_utd;
+        }
+    }
+    return scui_opt_dir_none;
+}
+
 /*@brief 输入设备事件合并
  */
 void scui_indev_ptr_event_merge(void)
@@ -125,6 +152,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 event.type  = scui_event_ptr_fling;
                 event.ptr_s = scui_indev_ptr.ptr_last;
                 event.ptr_e = point;
+                event.ptr_dir = scui_indev_ptr_event_dir(&event);
                 SCUI_LOG_INFO("scui_event_ptr_fling:(dist:%d, rate:%d)", last_r, last_v);
                 scui_indev_ptr_event_check(&event);
             } else
@@ -135,6 +163,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 event.absorb = scui_event_ptr_move_absorb,
                 event.ptr_s  = scui_indev_ptr.ptr_last;
                 event.ptr_e  = point;
+                event.ptr_dir = scui_indev_ptr_event_dir(&event);
                 SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                 scui_indev_ptr_event_check(&event);
             }
@@ -196,6 +225,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                     event.absorb = scui_event_ptr_move_absorb,
                     event.ptr_s  = scui_indev_ptr.ptr_last;
                     event.ptr_e  = point;
+                    event.ptr_dir = scui_indev_ptr_event_dir(&event);
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", near_v, near_v);
                     scui_indev_ptr_event_check(&event);
@@ -223,30 +253,4 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
  */
 void scui_indev_ptr_ready(void)
 {
-}
-
-/*@brief 输入设备手势方向计算
- *@param event 输入设备事件
- *@retval 手势方向
- */
-scui_opt_dir_t scui_indev_ptr_dir(scui_event_t *event)
-{
-    if (scui_event_type_ptr(event->type)) {
-        scui_coord_t dist_x = scui_dist(event->ptr_s.x, event->ptr_e.x);
-        scui_coord_t dist_y = scui_dist(event->ptr_s.y, event->ptr_e.y);
-        
-        if (dist_x >= dist_y) {
-            if (event->ptr_s.x >= event->ptr_e.x)
-                return scui_opt_dir_rtl;
-            if (event->ptr_s.x <= event->ptr_e.x)
-                return scui_opt_dir_ltr;
-        }
-        if (dist_x <= dist_y) {
-            if (event->ptr_s.y >= event->ptr_e.y)
-                return scui_opt_dir_dtu;
-            if (event->ptr_s.y <= event->ptr_e.y)
-                return scui_opt_dir_utd;
-        }
-    }
-    return scui_opt_dir_none;
 }

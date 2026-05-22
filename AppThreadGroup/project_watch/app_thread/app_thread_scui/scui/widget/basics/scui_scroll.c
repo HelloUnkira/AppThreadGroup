@@ -1393,17 +1393,15 @@ void scui_scroll_invoke(scui_event_t *event)
             widget->state.indev_key_hold)
             break;
         
-        scui_opt_dir_t event_dir = scui_indev_ptr_dir(event);
-        SCUI_LOG_INFO("dir:%u", event_dir);
-        
         /* 忽略的方向不支持 */
-        if (scui_scroll_edge_skip(event->object, event_dir))
+        SCUI_LOG_INFO("dir:%u", event->ptr_dir);
+        if (scui_scroll_edge_skip(event->object, event->ptr_dir))
             break;
         
         if (!scroll->lock_move) {
             
             /* 不匹配的方向不支持 */
-            if (!scui_opt_bits_check(event_dir, scroll->dir))
+            if (!scui_opt_bits_check(event->ptr_dir, scroll->dir))
                 break;
             
             /* 控件已经滚动中了 */

@@ -232,9 +232,9 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
         #elif SCUI_UI_SPREAD_FLING_WAY == 0
         if (true)
         #elif SCUI_UI_SPREAD_FLING_WAY == 1
-        if (scui_opt_bits_check(scui_indev_ptr_dir(event), scui_opt_dir_hor))
+        if (scui_opt_bits_check(event->ptr_dir, scui_opt_dir_hor))
         #elif SCUI_UI_SPREAD_FLING_WAY == 2
-        if (scui_opt_bits_check(scui_indev_ptr_dir(event), scui_opt_dir_ver))
+        if (scui_opt_bits_check(event->ptr_dir, scui_opt_dir_ver))
         #else
         #error "unsupport"
         if (false)

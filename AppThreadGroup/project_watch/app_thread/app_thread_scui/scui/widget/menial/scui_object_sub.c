@@ -399,10 +399,8 @@ void scui_object_prop_rect(scui_handle_t handle, scui_object_sub_t *sub)
     
     const scui_multi_t src_style_ofs = scui_object_style_rect_s + 1;
     const scui_coord_t src_style_num = scui_object_style_rect_e - scui_object_style_rect_s - 1;
-    scui_object_prop_t local_prop = {
-        .part  = sub->part,
-        .state = sub->state,
-    };
+    scui_object_prop_t local_prop = {.part = sub->part,.state = sub->state,};
+    
     for (scui_coord_t idx = 0; idx < src_style_num; idx++) {
         local_prop.style = src_style_ofs + idx;
         local_prop.data  = sub->list[idx];
@@ -499,10 +497,8 @@ void scui_object_prop_arc(scui_handle_t handle, scui_object_sub_t *sub)
     
     const scui_multi_t src_style_ofs = scui_object_style_arc_s + 1;
     const scui_coord_t src_style_num = scui_object_style_arc_e - scui_object_style_arc_s - 1;
-    scui_object_prop_t local_prop = {
-        .part  = sub->part,
-        .state = sub->state,
-    };
+    scui_object_prop_t local_prop = {.part = sub->part,.state = sub->state,};
+    
     for (scui_coord_t idx = 0; idx < src_style_num; idx++) {
         local_prop.style = src_style_ofs + idx;
         local_prop.data  = sub->list[idx];
@@ -575,10 +571,8 @@ void scui_object_prop_line(scui_handle_t handle, scui_object_sub_t *sub)
     
     const scui_multi_t src_style_ofs = scui_object_style_line_s + 1;
     const scui_coord_t src_style_num = scui_object_style_line_e - scui_object_style_line_s - 1;
-    scui_object_prop_t local_prop = {
-        .part  = sub->part,
-        .state = sub->state,
-    };
+    scui_object_prop_t local_prop = {.part = sub->part,.state = sub->state,};
+    
     for (scui_coord_t idx = 0; idx < src_style_num; idx++) {
         local_prop.style = src_style_ofs + idx;
         local_prop.data  = sub->list[idx];

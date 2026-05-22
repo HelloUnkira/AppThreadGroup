@@ -1,6 +1,12 @@
 #ifndef SCUI_MENIAL_INF_H
 #define SCUI_MENIAL_INF_H
 
+/*@brief 仆从控件子类型
+ *@param handle 控件句柄
+ *@param type   子类型
+ */
+void scui_menial_type_sub(scui_handle_t handle, scui_menial_type_t *type);
+
 /*@brief 仆从控件数据实例
  *@param handle 控件句柄
  *@param data   数据实例

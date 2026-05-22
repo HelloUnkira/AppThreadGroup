@@ -120,121 +120,62 @@ void scui_menial_btn_invoke(scui_event_t *event)
             scui_object_prop_rect(event->object, &sub);
         }
         
+        scui_multi_t scale_w = (scui_multi_t)widget_clip.w * menial->data.btn.lim / 100;
+        scui_multi_t scale_h = (scui_multi_t)widget_clip.h * menial->data.btn.lim / 100;
+        scui_multi_t default_w = widget_clip.w;
+        scui_multi_t default_h = widget_clip.h;
+        
         /* def<->pre */
         if (true) {
-            scui_object_prop_t prop_def = {0};
-            scui_object_prop_t prop_pre = {0};
-            scui_object_tran_t tran_def = {0};
-            scui_object_tran_t tran_pre = {0};
-            prop_def.part  = scui_object_part_rect_bg;
-            prop_pre.part  = scui_object_part_rect_bg;
-            prop_def.state = scui_object_state_def;
-            prop_pre.state = scui_object_state_pre;
-            tran_def.state_p = scui_object_state_pre;
-            tran_def.state_n = scui_object_state_def;
-            tran_pre.state_p = scui_object_state_def;
-            tran_pre.state_n = scui_object_state_pre;
-            tran_def.part = scui_object_part_rect_bg;
-            tran_pre.part = scui_object_part_rect_bg;
-            tran_def.time = menial->data.btn.time;
-            tran_pre.time = menial->data.btn.time;
-            
             /* color bg prop */
-            prop_def.style = scui_object_style_rect_color;
-            prop_pre.style = scui_object_style_rect_color;
-            prop_def.data.color32 = menial->data.btn.color[0].color_l;
-            prop_pre.data.color32 = menial->data.btn.color[0].color_d;
-            scui_object_prop_add(event->object, &prop_def);
-            scui_object_prop_add(event->object, &prop_pre);
+            scui_object_prop_new(event->object, rect_bg, rect_color, def, scui_object_data_color32(menial->data.btn.color[0].color_l));
+            scui_object_prop_new(event->object, rect_bg, rect_color, pre, scui_object_data_color32(menial->data.btn.color[0].color_d));
+            
             /* color bg tran */
-            tran_def.style = scui_object_style_rect_color;
-            tran_pre.style = scui_object_style_rect_color;
-            scui_object_tran_add_by(event->object, &tran_def);
-            scui_object_tran_add_by(event->object, &tran_pre);
+            scui_object_tran_new2(event->object, rect_bg, rect_color, def, pre,
+                scui_object_data_color32(menial->data.btn.color[0].color_l),
+                scui_object_data_color32(menial->data.btn.color[0].color_d),
+                NULL, menial->data.btn.time, 0);
             
             /* width && height prop */
-            prop_def.style = scui_object_style_rect_width;
-            prop_pre.style = scui_object_style_rect_width;
-            prop_def.data.number = (scui_multi_t)widget_clip.w * menial->data.btn.lim / 100;
-            prop_pre.data.number = (scui_multi_t)widget_clip.w * 100 / 100;
-            scui_object_prop_add(event->object, &prop_def);
-            scui_object_prop_add(event->object, &prop_pre);
-            prop_def.style = scui_object_style_rect_height;
-            prop_pre.style = scui_object_style_rect_height;
-            prop_def.data.number = (scui_multi_t)widget_clip.h * menial->data.btn.lim / 100;
-            prop_pre.data.number = (scui_multi_t)widget_clip.h * 100 / 100;
-            scui_object_prop_add(event->object, &prop_def);
-            scui_object_prop_add(event->object, &prop_pre);
+            scui_object_prop_new(event->object, rect_bg, rect_width,  def, scui_object_data_number(scale_w));
+            scui_object_prop_new(event->object, rect_bg, rect_width,  pre, scui_object_data_number(default_w));
+            scui_object_prop_new(event->object, rect_bg, rect_height, def, scui_object_data_number(scale_h));
+            scui_object_prop_new(event->object, rect_bg, rect_height, pre, scui_object_data_number(default_h));
             
             if (!menial->data.btn.fixed) {
                 /* width && height tran */
-                tran_def.style = scui_object_style_rect_width;
-                tran_pre.style = scui_object_style_rect_width;
-                scui_object_tran_add_by(event->object, &tran_def);
-                scui_object_tran_add_by(event->object, &tran_pre);
-                tran_def.style = scui_object_style_rect_height;
-                tran_pre.style = scui_object_style_rect_height;
-                scui_object_tran_add_by(event->object, &tran_def);
-                scui_object_tran_add_by(event->object, &tran_pre);
+                scui_object_tran_new2(event->object, rect_bg, rect_width,  def, pre, scui_object_data_number(scale_w),
+                    scui_object_data_number(default_w), NULL, menial->data.btn.time, 0);
+                scui_object_tran_new2(event->object, rect_bg, rect_height, def, pre, scui_object_data_number(scale_h),
+                    scui_object_data_number(default_h), NULL, menial->data.btn.time, 0);
             }
         }
         
         /* chk<->pre */
         if (menial->data.btn.check) {
-            scui_object_prop_t prop_chk = {0};
-            scui_object_prop_t prop_pre = {0};
-            scui_object_tran_t tran_chk = {0};
-            scui_object_tran_t tran_pre = {0};
-            prop_chk.part  = scui_object_part_rect_bg;
-            prop_pre.part  = scui_object_part_rect_bg;
-            prop_chk.state = scui_object_state_chk;
-            prop_pre.state = scui_object_state_pre;
-            tran_chk.state_p = scui_object_state_pre;
-            tran_chk.state_n = scui_object_state_chk;
-            tran_pre.state_p = scui_object_state_chk;
-            tran_pre.state_n = scui_object_state_pre;
-            tran_chk.part = scui_object_part_rect_bg;
-            tran_pre.part = scui_object_part_rect_bg;
-            tran_chk.time = menial->data.btn.time;
-            tran_pre.time = menial->data.btn.time;
-            
             /* color bg prop */
-            prop_chk.style = scui_object_style_rect_color;
-            prop_pre.style = scui_object_style_rect_color;
-            prop_chk.data.color32 = menial->data.btn.color[1].color_l;
-            prop_pre.data.color32 = menial->data.btn.color[1].color_d;
-            scui_object_prop_add(event->object, &prop_chk);
-            scui_object_prop_add(event->object, &prop_pre);
+            scui_object_prop_new(event->object, rect_bg, rect_color, chk, scui_object_data_color32(menial->data.btn.color[1].color_l));
+            scui_object_prop_new(event->object, rect_bg, rect_color, pre, scui_object_data_color32(menial->data.btn.color[1].color_d));
+            
             /* color bg tran */
-            tran_chk.style = scui_object_style_rect_color;
-            tran_pre.style = scui_object_style_rect_color;
-            scui_object_tran_add_by(event->object, &tran_chk);
-            scui_object_tran_add_by(event->object, &tran_pre);
+            scui_object_tran_new2(event->object, rect_bg, rect_color, chk, pre,
+                scui_object_data_color32(menial->data.btn.color[1].color_l),
+                scui_object_data_color32(menial->data.btn.color[1].color_d),
+                NULL, menial->data.btn.time, 0);
             
             /* width && height prop */
-            prop_chk.style = scui_object_style_rect_width;
-            prop_pre.style = scui_object_style_rect_width;
-            prop_chk.data.number = (scui_multi_t)widget_clip.w * menial->data.btn.lim / 100;
-            prop_pre.data.number = (scui_multi_t)widget_clip.w * 100 / 100;
-            scui_object_prop_add(event->object, &prop_chk);
-            scui_object_prop_add(event->object, &prop_pre);
-            prop_chk.style = scui_object_style_rect_height;
-            prop_pre.style = scui_object_style_rect_height;
-            prop_chk.data.number = (scui_multi_t)widget_clip.h * menial->data.btn.lim / 100;
-            prop_pre.data.number = (scui_multi_t)widget_clip.h * 100 / 100;
-            scui_object_prop_add(event->object, &prop_chk);
-            scui_object_prop_add(event->object, &prop_pre);
+            scui_object_prop_new(event->object, rect_bg, rect_width,  chk, scui_object_data_number(scale_w));
+            scui_object_prop_new(event->object, rect_bg, rect_width,  pre, scui_object_data_number(default_w));
+            scui_object_prop_new(event->object, rect_bg, rect_height, chk, scui_object_data_number(scale_h));
+            scui_object_prop_new(event->object, rect_bg, rect_height, pre, scui_object_data_number(default_h));
             
             if (!menial->data.btn.fixed) {
                 /* width && height tran */
-                tran_chk.style = scui_object_style_rect_width;
-                tran_pre.style = scui_object_style_rect_width;
-                scui_object_tran_add_by(event->object, &tran_chk);
-                scui_object_tran_add_by(event->object, &tran_pre);
-                tran_chk.style = scui_object_style_rect_height;
-                tran_pre.style = scui_object_style_rect_height;
-                scui_object_tran_add_by(event->object, &tran_chk);
-                scui_object_tran_add_by(event->object, &tran_pre);
+                scui_object_tran_new2(event->object, rect_bg, rect_width,  chk, pre, scui_object_data_number(scale_w),
+                    scui_object_data_number(default_w), NULL, menial->data.btn.time, 0);
+                scui_object_tran_new2(event->object, rect_bg, rect_height, chk, pre, scui_object_data_number(scale_h),
+                    scui_object_data_number(default_h), NULL, menial->data.btn.time, 0);
             }
         }
         break;

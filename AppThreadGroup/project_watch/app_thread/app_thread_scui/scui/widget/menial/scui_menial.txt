@@ -1,14 +1,5 @@
-plan:
+在object实现样式动画以供menial继承
+在object实现TVG的泛用小部件绘制(不完备)
+在menial实现特殊目标的DIY化(不完备)
+继续扩充实现menial即可......
 
-1.将prop和tran改为阶段性动态扩充
-2.将object实现四级可选绘制插件
-3.抽象一些常用的prop给上层使用
-4.抽象一些常用的tran给上层使用
-
-
-未完成:
-
-1. Chart 折线图
-Line + Point
-2. Chart 柱状图
-多个 Bar 组合

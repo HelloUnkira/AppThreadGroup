@@ -43,24 +43,27 @@ typedef struct {
     union {
         /* 输入事件数据<ptr> */
         struct {
-            scui_point_t ptr_c;
-            scui_coord_t ptr_cnt;
-            scui_coord_t ptr_tick;
+            scui_point_t    ptr_c;
+            scui_coord_t    ptr_cnt;
+            scui_coord_t    ptr_tick;
         };
         struct {
-            scui_point_t ptr_s;
-            scui_point_t ptr_e;
+            scui_point_t    ptr_s;
+            scui_point_t    ptr_e;
+            scui_opt_dir_t  ptr_dir;
         };
         /* 输入事件数据<enc> */
         struct {
-            scui_coord_t enc_diff;
+            /* 0:正转;1:反转; */
+            scui_sbitfd_t   enc_way:1;
+            scui_coord_t    enc_diff;
         };
         /* 输入事件数据<key> */
         struct {
-            scui_coord_t key_id;
-            scui_coord_t key_val;
-            scui_coord_t key_cnt;
-            scui_coord_t key_tick;
+            scui_coord_t    key_id;
+            scui_coord_t    key_val;
+            scui_coord_t    key_cnt;
+            scui_coord_t    key_tick;
         };
         /* scui迟延调度事件信息: */
         struct {

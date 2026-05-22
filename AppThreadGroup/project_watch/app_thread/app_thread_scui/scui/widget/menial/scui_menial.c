@@ -81,6 +81,10 @@ void scui_menial_make(void *inst, void *inst_maker, scui_handle_t *handle)
     menial_info->make(false, menial);
     SCUI_ASSERT(menial->type > scui_menial_type_none);
     SCUI_ASSERT(menial->type < scui_menial_type_num);
+    
+    /* 样式应用 */
+    void SCUI_WIDGET_MENIAL_STYLE_DEF(scui_handle_t handle);
+    SCUI_WIDGET_MENIAL_STYLE_DEF(widget->myself);
 }
 
 /*@brief 控件析构
@@ -99,6 +103,19 @@ void scui_menial_burn(scui_handle_t handle)
     
     /* 析构派生控件实例 */
     scui_object_burn(widget->myself);
+}
+
+/*@brief 仆从控件子类型
+ *@param handle 控件句柄
+ *@param type   子类型
+ */
+void scui_menial_type_sub(scui_handle_t handle, scui_menial_type_t *type)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
+    
+    *type = menial->type;
 }
 
 /*@brief 仆从控件数据实例

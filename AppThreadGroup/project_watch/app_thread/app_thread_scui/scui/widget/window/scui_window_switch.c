@@ -584,8 +584,7 @@ void scui_window_switch_event(scui_event_t *event)
         /* 窗口正在切换时,中止更新切换目标 */
         if (!scui_window_switch.lock_move) {
             
-            scui_opt_dir_t event_dir = scui_indev_ptr_dir(event);
-            if (scui_window_switch_event_catch(event, event_dir, 0)) {
+            if (scui_window_switch_event_catch(event, event->ptr_dir, 0)) {
                 scui_window_switch.lock_move  = true;
                 scui_window_switch.mask_fling = event->type != scui_event_ptr_move;
                 scui_event_mask_over(event);

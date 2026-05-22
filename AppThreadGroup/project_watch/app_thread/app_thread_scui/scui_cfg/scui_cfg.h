@@ -213,9 +213,10 @@
 /* roller:按键, 动画速度[ptr, enc, key, auto] */
 #define SCUI_WIDGET_ROLLER_SPD_ANIM                 {1000, 75, 75, 75}
 
-/* object:属性和过渡扩充步进 */
+/* object:属性和过渡扩充步进, 主体样式 */
 #define SCUI_WIDGET_OBJECT_PROP_STEP                (3)
 #define SCUI_WIDGET_OBJECT_TRAN_STEP                (6)
+#define SCUI_WIDGET_MENIAL_STYLE_DEF                scui_menial_style_apply
 /* menial(btn):缩放限制百分比 */
 #define SCUI_WIDGET_MENIAL_BTN_TIME                 (100)
 #define SCUI_WIDGET_MENIAL_BTN_PCT                  (90)
