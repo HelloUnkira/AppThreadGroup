@@ -91,23 +91,55 @@ void scui_object_state_set(scui_handle_t handle, scui_object_type_t state);
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-/* 自定义的经典效果: */
+/* 标准部件样式属性配置及绘制: */
 
 typedef struct {
     scui_object_type_t part;
     scui_object_type_t state;
+    /* 本结构打包初始化无效??? */
     
-    scui_area_t    area;        /* 部件宽高 */
-    scui_coord_t   index;       /* 部件索引[0, 4] */
-    scui_alpha_t   alpha[5];    /* 部件透明度(背景,前景,边界,盒子,阴影) */
-    scui_color_t   color[5];    /* 部件源色调(s->e) */
-    scui_coord_t   width[5];    /* 部件宽度(边框) */
-    scui_coord_t   radius;      /* 部件圆角(背景) */
-    scui_opt_pos_t align;       /* 部件对齐 */
-    scui_sbitfd_t  grad_w:1;    /* 渐变方向 */
-    scui_sbitfd_t  grad:1;      /* 渐变标记 */
-    
-} scui_object_rect_t;
+    union {
+    scui_object_data_t list[0];
+    struct {
+    scui_object_data_t alpha;           /* 部件透明度 */
+    scui_object_data_t color;           /* 部件色调 */
+    scui_object_data_t point;           /* 部件偏移点 */
+    scui_object_data_t align;           /* 部件对齐 */
+    scui_object_data_t width;           /* 部件宽 */
+    scui_object_data_t height;          /* 部件高 */
+    scui_object_data_t radius;          /* 部件圆角(背景) */
+    scui_object_data_t side_width;      /* 部件宽度(边框) */
+    scui_object_data_t color_grad;      /* 部件色调(渐变) */
+    scui_object_data_t multi;           /* 部件渐变标记/方向 */
+    } rect;
+    struct {
+    scui_object_data_t alpha;           /* 部件透明度 */
+    scui_object_data_t color;           /* 部件色调 */
+    scui_object_data_t angle_s;         /* 角度 */
+    scui_object_data_t angle_e;         /* 角度 */
+    scui_object_data_t center;          /* 中心 */
+    scui_object_data_t radius;          /* 半径 */
+    scui_object_data_t side_width;      /* 弧宽(扇形:<= 0;弧型:>0) */
+    scui_object_data_t color_grad;      /* 部件色调(渐变) */
+    scui_object_data_t multi;           /* 端点,渐变标记/方向 */
+    } arc;
+    struct {
+    scui_object_data_t alpha;           /* 部件透明度 */
+    scui_object_data_t color;           /* 部件色调 */
+    scui_object_data_t area;            /* 区域 */
+    scui_object_data_t vpos;            /* 端点序列 */
+    scui_object_data_t vpos_num;        /* 端点序列数 */
+    scui_object_data_t side_width;      /* 线宽 */
+    scui_object_data_t multi;           /* 端点 */
+    } line;
+    };
+} scui_object_sub_t;
+
+/*@brief 对象控件添加经典矩形属性
+ *@param handle 对象控件句柄
+ *@param sub    矩形属性
+ */
+void scui_object_prop_rect(scui_handle_t handle, scui_object_sub_t *sub);
 
 /*@brief 对象控件绘制矩形
  *@param handle 对象控件句柄
@@ -116,44 +148,11 @@ typedef struct {
  */
 bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop);
 
-/*@brief 对象控件添加经典矩形属性
+/*@brief 对象控件添加经典圆弧属性
  *@param handle 对象控件句柄
- *@param rect   矩形属性
+ *@param sub    圆弧属性
  */
-void scui_object_prop_rect(scui_handle_t handle, scui_object_rect_t *rect);
-
-/*@brief 对象控件绘制矩形
- *@param handle 对象控件句柄
- *@param prop   属性(state)
- *@retval 成功失败
- */
-bool scui_object_draw_rect_x(scui_handle_t handle, scui_object_prop_t *prop);
-
-/*@brief 对象控件添加经典矩形属性
- *@param handle 对象控件句柄
- *@param rect   矩形属性
- */
-void scui_object_prop_rect_x(scui_handle_t handle, scui_object_rect_t *rect);
-
-/*****************************************************************************/
-/* 自定义的经典效果: */
-
-typedef struct {
-    scui_object_type_t part;
-    scui_object_type_t state;
-    
-    scui_coord_t  index;        /* 部件索引[0, 1] */
-    scui_alpha_t  alpha[2];     /* 部件透明度 */
-    scui_color_t  color[2];     /* 部件色调(s->e) */
-    scui_coord_t  width;        /* 弧宽(扇形:<= 0;弧型:>0) */
-    scui_point_t  center;       /* 中心 */
-    scui_coord_t  angle_s;      /* 角度 */
-    scui_coord_t  angle_e;      /* 角度 */
-    scui_coord_t  radius;       /* 半径 */
-    scui_sbitfd_t round:1;      /* 端点 */
-    scui_sbitfd_t grad_w:1;     /* 渐变方向 */
-    scui_sbitfd_t grad:1;       /* 渐变标记 */
-} scui_object_arc_t;
+void scui_object_prop_arc(scui_handle_t handle, scui_object_sub_t *sub);
 
 /*@brief 对象控件绘制圆弧
  *@param handle 对象控件句柄
@@ -162,29 +161,11 @@ typedef struct {
  */
 bool scui_object_draw_arc(scui_handle_t handle, scui_object_prop_t *prop);
 
-/*@brief 对象控件添加经典圆弧属性
+/*@brief 对象控件添加经典线条属性
  *@param handle 对象控件句柄
- *@param arc    圆弧属性
+ *@param sub    线条属性
  */
-void scui_object_prop_arc(scui_handle_t handle, scui_object_arc_t *arc);
-
-/*****************************************************************************/
-/* 自定义的经典效果: */
-
-typedef struct {
-    scui_object_type_t part;
-    scui_object_type_t state;
-    
-    scui_coord_t  index;        /* 部件索引[0] */
-    scui_alpha_t  alpha;        /* 部件透明度 */
-    scui_color_t  color;        /* 部件色调 */
-    scui_area_t   area;         /* 区域 */
-    scui_point_t *vpos;         /* 端点序列 */
-    scui_coord_t  vpos_num;     /* 端点序列数 */
-    scui_coord_t  width;        /* 线宽 */
-    scui_sbitfd_t round:1;      /* 端点 */
-    
-} scui_object_line_t;
+void scui_object_prop_line(scui_handle_t handle, scui_object_sub_t *sub);
 
 /*@brief 对象控件绘制线条
  *@param handle 对象控件句柄
@@ -192,11 +173,5 @@ typedef struct {
  *@retval 成功失败
  */
 bool scui_object_draw_line(scui_handle_t handle, scui_object_prop_t *prop);
-
-/*@brief 对象控件添加经典线条属性
- *@param handle 对象控件句柄
- *@param line    线条属性
- */
-void scui_object_prop_line(scui_handle_t handle, scui_object_line_t *line);
 
 #endif

@@ -90,31 +90,34 @@ void scui_menial_btn_invoke(scui_event_t *event)
     
     case scui_event_create: {
         scui_area_t widget_clip = scui_widget_clip(event->object);
-        scui_object_rect_t rect = {
-            .area.w   = widget_clip.w,
-            .area.h   = widget_clip.h,
-            .index    = 0,
-            .alpha[0] = scui_alpha_cover,
-            .width[0] = menial->data.btn.width,
-            .radius   = menial->data.btn.radius,
-            .align    = scui_opt_pos_c,
-        };
+        scui_object_sub_t sub = {0};
+        
+        sub.rect.alpha.alpha       = scui_alpha_cover;
+        sub.rect.align.align       = scui_opt_pos_c;
+        sub.rect.width.number      = widget_clip.w;
+        sub.rect.height.number     = widget_clip.h;
+        sub.rect.radius.number     = menial->data.btn.radius;
+        sub.rect.side_width.number = menial->data.btn.width;
         
         scui_object_press_set(event->object, true);
         scui_object_check_set(event->object, menial->data.btn.check);
         
         /* def<->pre */
         if (true) {
-            rect.state = scui_object_state_def;
-            scui_object_prop_rect(event->object, &rect);
-            rect.state = scui_object_state_pre;
-            scui_object_prop_rect(event->object, &rect);
+            sub.part  = scui_object_part_rect_bg;
+            sub.state = scui_object_state_def;
+            scui_object_prop_rect(event->object, &sub);
+            
+            sub.part  = scui_object_part_rect_bg;
+            sub.state = scui_object_state_pre;
+            scui_object_prop_rect(event->object, &sub);
         }
         /* chk */
         if (menial->data.btn.check) {
             
-            rect.state = scui_object_state_chk;
-            scui_object_prop_rect(event->object, &rect);
+            sub.part  = scui_object_part_rect_bg;
+            sub.state = scui_object_state_chk;
+            scui_object_prop_rect(event->object, &sub);
         }
         
         /* def<->pre */

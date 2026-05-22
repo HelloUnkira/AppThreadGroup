@@ -214,25 +214,30 @@ void scui_menial_arc_invoke(scui_event_t *event)
     }
     case scui_event_create: {
         scui_area_t widget_clip = scui_widget_clip(event->object);
-        scui_object_arc_t   arc = {
-            .alpha[0] = scui_alpha_cover,
-            .alpha[1] = scui_alpha_cover,
-            .color[0] = menial->data.arc.color[0],
-            .color[1] = menial->data.arc.color[1],
-            .width    = menial->data.arc.width,
-            .center.x = widget_clip.w / 2,
-            .center.y = widget_clip.h / 2,
-            .angle_s  = 0,
-            .angle_e  = 360,
-            .radius   = menial->data.arc.radius,
-            .round    = menial->data.arc.round,
-            .grad_w   = menial->data.arc.gradw,
-            .grad     = menial->data.arc.grad,
-        };
+        scui_object_sub_t sub = {0};
         
-        arc.state = scui_object_state_def;
-        arc.index = 0; scui_object_prop_arc(event->object, &arc);
-        arc.index = 1; scui_object_prop_arc(event->object, &arc);
+        sub.arc.alpha.alpha        = scui_alpha_cover;
+        sub.arc.angle_s.number     = 0;
+        sub.arc.angle_e.number     = 360;
+        sub.arc.center.point.x     = widget_clip.w / 2;
+        sub.arc.center.point.y     = widget_clip.h / 2;
+        sub.arc.radius.number      = menial->data.arc.radius;
+        sub.arc.side_width.number  = menial->data.arc.width;
+        sub.arc.multi.multi.round  = menial->data.arc.round;
+        sub.arc.multi.multi.grad_w = menial->data.arc.gradw;
+        sub.arc.multi.multi.grad   = menial->data.arc.grad;
+        
+        sub.part  = scui_object_part_arc_bg;
+        sub.state = scui_object_state_def;
+        sub.arc.color.color32 = menial->data.arc.color[0].color_s;
+        sub.arc.color_grad.color32 = menial->data.arc.color[0].color_e;
+        scui_object_prop_arc(event->object, &sub);
+        
+        sub.part  = scui_object_part_arc_fg;
+        sub.state = scui_object_state_def;
+        sub.arc.color.color32 = menial->data.arc.color[1].color_s;
+        sub.arc.color_grad.color32 = menial->data.arc.color[1].color_e;
+        scui_object_prop_arc(event->object, &sub);
         
         scui_menial_arc_update_value(event->object, 0.0f, false);
         break;

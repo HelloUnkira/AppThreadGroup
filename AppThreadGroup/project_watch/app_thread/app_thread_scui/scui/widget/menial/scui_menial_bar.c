@@ -203,27 +203,30 @@ void scui_menial_bar_invoke(scui_event_t *event)
     
     case scui_event_create: {
         scui_area_t widget_clip = scui_widget_clip(event->object);
-        scui_object_rect_t rect = {
-            .area.w   = widget_clip.w,
-            .area.h   = widget_clip.h,
-            .alpha[0] = scui_alpha_cover,
-            .alpha[1] = scui_alpha_cover,
-            .color[0] = menial->data.bar.color[0],
-            .color[1] = menial->data.bar.color[1],
-            .radius   = menial->data.bar.radius,
-            .align    = scui_opt_pos_l | scui_opt_pos_u,
-            .grad_w   = menial->data.bar.way,
-            .grad     = menial->data.bar.grad,
-        };
+        scui_object_sub_t sub = {0};
         
-        rect.state = scui_object_state_def;
-        rect.index = 0; scui_object_prop_rect(event->object, &rect);
-        rect.index = 1; scui_object_prop_rect(event->object, &rect);
+        sub.rect.alpha.alpha           = scui_alpha_cover;
+        sub.rect.align.align           = scui_opt_pos_l | scui_opt_pos_u;
+        sub.rect.width.number          = widget_clip.w;
+        sub.rect.height.number         = widget_clip.h;
+        sub.rect.radius.number         = menial->data.bar.radius;
+        sub.rect.multi.multi.grad_w    = menial->data.bar.way;
+        sub.rect.multi.multi.grad      = menial->data.bar.grad;
+        
+        sub.part  = scui_object_part_rect_bg;
+        sub.state = scui_object_state_def;
+        sub.rect.color.color32 = menial->data.bar.color[0].color_s;
+        sub.rect.color_grad.color32 = menial->data.bar.color[0].color_e;
+        scui_object_prop_rect(event->object, &sub);
+        
+        sub.part  = scui_object_part_rect_fg;
+        sub.state = scui_object_state_def;
+        sub.rect.color.color32 = menial->data.bar.color[1].color_s;
+        sub.rect.color_grad.color32 = menial->data.bar.color[1].color_e;
+        scui_object_prop_rect(event->object, &sub);
         
         /* 需要按下变色时考虑(需要过渡动画) */
-        // rect.state = scui_object_state_pre;
-        // rect.index = 0; scui_object_prop_rect(event->object, &rect);
-        // rect.index = 1; scui_object_prop_rect(event->object, &rect);
+        // sub.state = scui_object_state_pre;
         
         scui_menial_bar_update_value(event->object, 0.0f, false);
         break;

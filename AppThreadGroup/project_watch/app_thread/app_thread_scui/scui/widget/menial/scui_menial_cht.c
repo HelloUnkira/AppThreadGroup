@@ -136,29 +136,31 @@ void scui_menial_cht_invoke(scui_event_t *event)
         switch (menial->data.cht.type) {
         default:SCUI_ASSERT(false);break;
         case 0: {
-            scui_object_rect_t rect = {
-                .state    = scui_object_state_def,
-                .area.w   = menial->data.cht.width,
-                .alpha[0] = scui_alpha_cover,
-                .color[0] = menial->data.cht.color,
-                .radius   = menial->data.cht.round ? -1 : 0,
-            };
+            scui_object_sub_t sub = {0};
             
-            scui_object_prop_rect(event->object, &rect);
+            sub.rect.alpha.alpha       = scui_alpha_cover;
+            sub.rect.color.color32     = menial->data.cht.color.color;
+            sub.rect.width.number      = menial->data.cht.width;
+            sub.rect.radius.number     = menial->data.cht.round ? -1 : 0;
+            
+            sub.part  = scui_object_part_rect_bg;
+            sub.state = scui_object_state_def;
+            scui_object_prop_rect(event->object, &sub);
             break;
         }
         case 1: {
-            scui_object_line_t line = {
-                .state      = scui_object_state_def,
-                .alpha      = scui_alpha_cover,
-                .color      = menial->data.cht.color,
-                .area       = menial->data.cht.area,
-                .vpos_num   = menial->data.cht.number,
-                .width      = menial->data.cht.width,
-                .round      = menial->data.cht.round,
-            };
+            scui_object_sub_t sub = {0};
             
-            scui_object_prop_line(event->object, &line);
+            sub.line.alpha.alpha       = scui_alpha_cover;
+            sub.line.color.color32     = menial->data.cht.color.color;
+            sub.line.area.area         = menial->data.cht.area;
+            sub.line.vpos_num.number   = menial->data.cht.number;
+            sub.line.side_width.number = menial->data.cht.width;
+            sub.line.multi.multi.round = menial->data.cht.round;
+            
+            sub.part  = scui_object_part_line;
+            sub.state = scui_object_state_def;
+            scui_object_prop_line(event->object, &sub);
             break;
         }
         }
