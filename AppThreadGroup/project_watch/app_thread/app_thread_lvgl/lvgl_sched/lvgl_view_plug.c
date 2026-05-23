@@ -9,28 +9,19 @@ extern lvgl_view_sched_t lvgl_view_sched;
 
 /* 弹窗事件界面丢弃表 */
 /* 弹窗事件界面默认按优先级加入到显示中去, 但是这里可以填表选择丢弃的指定弹窗 */
-static const bool ui_plug_global_popup_discard[ui_plug_global_event_popup_num][ui_plug_global_event_popup_num] = {
+static const bool lvgl_plug_global_popup_discard[lvgl_plug_global_event_popup_num][lvgl_plug_global_event_popup_num] = {
     // [当前显示的弹窗界面对应的全局事件][现在需要判定的弹窗界面对应的全局事件] = 是否丢弃
 
 };
 
-// 可选事件优先级, 按等级(准备了7个,不够就自行调整数字)
-#define UI_PLUG_GLOBAL_POPUP_PRIO_LOWEST            (0x01)
-#define UI_PLUG_GLOBAL_POPUP_PRIO_LOW                (0x10)
-#define UI_PLUG_GLOBAL_POPUP_PRIO_NORMAL_BELOW        (0x70)
-#define UI_PLUG_GLOBAL_POPUP_PRIO_NORMAL            (0x80)
-#define UI_PLUG_GLOBAL_POPUP_PRIO_NORMAL_ABOVE        (0x90)
-#define UI_PLUG_GLOBAL_POPUP_PRIO_HIGH                (0xE0)
-#define UI_PLUG_GLOBAL_POPUP_PRIO_HIGHEST            (0xFF)
-
 /* 全局弹窗事件映射表 */
-static const ui_plug_global_popup_t ui_plug_global_popup_table[ui_plug_global_event_popup_num] = {
+static const lvgl_plug_global_popup_t lvgl_plug_global_popup_table[lvgl_plug_global_event_popup_num] = {
     // [事件] = {.page_id = 界面ID号, .prio = 优先级(数字越大优先级越高[0, 0xFF])},
     
 };
 
 // show_page_id > page_id --- return true;
-static bool ui_plug_global_popup_page_prio_cb(uint32_t show_page_id, uint32_t page_id)
+static bool lvgl_plug_global_popup_page_prio_cb(uint32_t show_page_id, uint32_t page_id)
 {
     LV_LOG_INFO("%s %d", __func__, __LINE__);
     /* 息屏状态下的AOD界面, 默认最高优先级 */
@@ -40,14 +31,14 @@ static bool ui_plug_global_popup_page_prio_cb(uint32_t show_page_id, uint32_t pa
     
     /* 查优先级信息 */
     uint32_t show_page_id_prio = 0;
-    for (uint32_t idx = 0; idx < ARRAY_LEN(ui_plug_global_popup_table); idx++) 
+    for (uint32_t idx = 0; idx < ARRAY_LEN(lvgl_plug_global_popup_table); idx++) 
     {
-        if (ui_plug_global_popup_table[idx].page_id != show_page_id)
+        if (lvgl_plug_global_popup_table[idx].page_id != show_page_id)
         {
             continue;
         }
 
-        show_page_id_prio = ui_plug_global_popup_table[idx].prio;
+        show_page_id_prio = lvgl_plug_global_popup_table[idx].prio;
         break;
     }
     LV_LOG_INFO("%s %d", __func__, __LINE__);
@@ -57,14 +48,14 @@ static bool ui_plug_global_popup_page_prio_cb(uint32_t show_page_id, uint32_t pa
     
     /* 查优先级信息 */
     uint32_t page_id_prio = 0;
-    for (uint32_t idx = 0; idx < ARRAY_LEN(ui_plug_global_popup_table); idx++) 
+    for (uint32_t idx = 0; idx < ARRAY_LEN(lvgl_plug_global_popup_table); idx++) 
     {
-        if (ui_plug_global_popup_table[idx].page_id != page_id)
+        if (lvgl_plug_global_popup_table[idx].page_id != page_id)
         {
             continue;
         }
 
-        page_id_prio = ui_plug_global_popup_table[idx].prio;
+        page_id_prio = lvgl_plug_global_popup_table[idx].prio;
         break;
     }
     
@@ -74,23 +65,23 @@ static bool ui_plug_global_popup_page_prio_cb(uint32_t show_page_id, uint32_t pa
 }
 
 /* 界面弹窗 */
-void ui_plug_global_popup_event_proc_cb(ui_plug_global_event_t global_event, bool sleep_tag)
+void lvgl_plug_global_popup_event_proc_cb(lvgl_plug_global_event_t global_event, bool sleep_tag)
 {
-    if (global_event >= ui_plug_global_event_popup_num)
+    if (global_event >= lvgl_plug_global_event_popup_num)
         return;
     
     /* 检查需要弹窗的界面优先级情况 */
     uint32_t priority_cur = 0;
     uint32_t page_id_cur = lvgl_view_id_unknown;
-    for (uint32_t idx = 0; idx < ARRAY_LEN(ui_plug_global_popup_table); idx++) 
+    for (uint32_t idx = 0; idx < ARRAY_LEN(lvgl_plug_global_popup_table); idx++) 
     {
         if (idx != global_event)
         {
             continue;
         }
         
-        page_id_cur  = ui_plug_global_popup_table[idx].page_id;
-        priority_cur = ui_plug_global_popup_table[idx].prio;
+        page_id_cur  = lvgl_plug_global_popup_table[idx].page_id;
+        priority_cur = lvgl_plug_global_popup_table[idx].prio;
         break;
     }
     // 断言:没有找到事件的对应界面ID号, 事件弹窗优先级大于0
@@ -103,21 +94,21 @@ void ui_plug_global_popup_event_proc_cb(ui_plug_global_event_t global_event, boo
         /* 查优先级信息 */
         uint32_t priority_top = 0;
         uint32_t stack_top = lvgl_view_stack_node(top);
-        uint32_t event_top = ui_plug_global_event_none;
+        uint32_t event_top = lvgl_plug_global_event_none;
         // 息屏特殊界面, 绕过它
         if (stack_top == lvgl_view_id_standby)
             continue;
         
         // 先查这个事件是否在优先级表中, 如果没有退出此流程
-        for (uint32_t idx = 0; idx < ARRAY_LEN(ui_plug_global_popup_table); idx++) 
+        for (uint32_t idx = 0; idx < ARRAY_LEN(lvgl_plug_global_popup_table); idx++) 
         {
-            if (ui_plug_global_popup_table[idx].page_id != stack_top)
+            if (lvgl_plug_global_popup_table[idx].page_id != stack_top)
             {
                 continue;
             }
             
             event_top = idx;
-            priority_top = ui_plug_global_popup_table[idx].prio;
+            priority_top = lvgl_plug_global_popup_table[idx].prio;
             break;
         }
         /* 遇到了低优先级界面, 查询结束 */
@@ -125,7 +116,7 @@ void ui_plug_global_popup_event_proc_cb(ui_plug_global_event_t global_event, boo
             break;
         
         // 低优先级弹窗, 检查是否丢弃
-        if (ui_plug_global_popup_discard[event_top][global_event])
+        if (lvgl_plug_global_popup_discard[event_top][global_event])
             return;
     }
     
@@ -134,18 +125,18 @@ void ui_plug_global_popup_event_proc_cb(ui_plug_global_event_t global_event, boo
         lvgl_view_stack_add_prio_by(page_id_cur, false,
 
             lvgl_view_tr_none, LV_DIR_NONE,
-            ui_plug_global_popup_page_prio_cb);
+            lvgl_plug_global_popup_page_prio_cb);
     } else {
         // 按优先级压入栈中
         lvgl_view_stack_add_prio(page_id_cur, false,
-            ui_plug_global_popup_page_prio_cb);
+            lvgl_plug_global_popup_page_prio_cb);
     }
 }
 
 /* 界面弹窗退出 */
-void ui_plug_global_popup_quit_event_proc_cb(ui_plug_global_event_t global_event, bool sleep_tag)
+void lvgl_plug_global_popup_quit_event_proc_cb(lvgl_plug_global_event_t global_event, bool sleep_tag)
 {
-    uint32_t page_id = ui_plug_global_popup_table[global_event].page_id;
+    uint32_t page_id = lvgl_plug_global_popup_table[global_event].page_id;
     if (page_id != 0) lvgl_view_stack_del(page_id);
 }
 
@@ -153,7 +144,7 @@ void ui_plug_global_popup_quit_event_proc_cb(ui_plug_global_event_t global_event
 
 /* 这个模组填充所有外源事件 */
 /* 包括且不限于各种界面弹窗等等 */
-void ui_plug_global_event_proc_cb(ui_plug_global_event_t global_event, bool sleep_tag)
+void lvgl_plug_global_event_proc_cb(lvgl_plug_global_event_t global_event, bool sleep_tag)
 {
     // 默认的外源事件都更新一次时间, 保持活跃态
     if (!sleep_tag) lv_disp_trig_activity(NULL);
@@ -162,17 +153,17 @@ void ui_plug_global_event_proc_cb(ui_plug_global_event_t global_event, bool slee
     // 特殊系统事件
     switch (global_event) 
     {
-        case ui_plug_global_event_sleep_enter:
-            ui_plug_check_time_enter_sleep();
+        case lvgl_plug_global_event_sleep_enter:
+            lvgl_plug_check_time_enter_sleep();
             return;
-        case ui_plug_global_event_sleep_exit:
-            ui_plug_check_time_exit_sleep();
+        case lvgl_plug_global_event_sleep_exit:
+            lvgl_plug_check_time_exit_sleep();
             return;
-        case ui_plug_global_event_deep_sleep_enter:
-            ui_plug_check_time_enter_deep_sleep();
+        case lvgl_plug_global_event_deep_sleep_enter:
+            lvgl_plug_check_time_enter_deep_sleep();
             return;
-        case ui_plug_global_event_deep_sleep_exit:
-            ui_plug_check_time_exit_deep_sleep();
+        case lvgl_plug_global_event_deep_sleep_exit:
+            lvgl_plug_check_time_exit_deep_sleep();
             return;
     }
     
@@ -183,26 +174,26 @@ void ui_plug_global_event_proc_cb(ui_plug_global_event_t global_event, bool slee
     }
     
     // 最后再响应事件弹窗
-    ui_plug_global_popup_event_proc_cb(global_event, sleep_tag);
+    lvgl_plug_global_popup_event_proc_cb(global_event, sleep_tag);
     #endif
 }
 
 #if 1
 // 息屏倒计时以及息屏返回主界面倒计时
-static ui_plug_check_time_t ui_plug_check_time = {0};
+static lvgl_plug_check_time_t lvgl_plug_check_time = {0};
 
-void ui_plug_check_time_enter_deep_sleep(void)
+void lvgl_plug_check_time_enter_deep_sleep(void)
 {
     #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
-    if (ui_plug_check_time.dlps_tag)
+    if (lvgl_plug_check_time.dlps_tag)
         return;
-    ui_plug_check_time.dlps_tag = true;
+    lvgl_plug_check_time.dlps_tag = true;
     LV_LOG_INFO("%s", __func__);
     // 关掉监控定时器自己
-    // ui_plug_check_time_pause();
+    // lvgl_plug_check_time_pause();
     
     #if 1
     // 实际动作在这个if宏包裹
@@ -210,33 +201,33 @@ void ui_plug_check_time_enter_deep_sleep(void)
     #endif
 }
 
-void ui_plug_check_time_exit_deep_sleep(void)
+void lvgl_plug_check_time_exit_deep_sleep(void)
 {
     #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
-    if (!ui_plug_check_time.dlps_tag)
+    if (!lvgl_plug_check_time.dlps_tag)
         return;
-    ui_plug_check_time.dlps_tag = false;
+    lvgl_plug_check_time.dlps_tag = false;
     LV_LOG_INFO("%s", __func__);
     // 启用监控定时器自己
-    // ui_plug_check_time_resume();
+    // lvgl_plug_check_time_resume();
     
     #if 1
     // 实际动作在这个if宏包裹
     #endif
 }
 
-void ui_plug_check_time_enter_sleep(void)
+void lvgl_plug_check_time_enter_sleep(void)
 {
     #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
-    if (ui_plug_check_time.sleep_tag)
+    if (lvgl_plug_check_time.sleep_tag)
         return;
-    ui_plug_check_time.sleep_tag = true;
+    lvgl_plug_check_time.sleep_tag = true;
     LV_LOG_INFO("%s", __func__);
     
     lvgl_view_stack_add_by(lvgl_view_id_standby, false,
@@ -249,18 +240,18 @@ void ui_plug_check_time_enter_sleep(void)
     #endif
 }
 
-void ui_plug_check_time_exit_sleep(void)
+void lvgl_plug_check_time_exit_sleep(void)
 {
     #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
     /* 退出dlps和退出sleep是同步进行的 */
-    ui_plug_check_time_exit_deep_sleep();
+    lvgl_plug_check_time_exit_deep_sleep();
     
-    if (!ui_plug_check_time.sleep_tag)
+    if (!lvgl_plug_check_time.sleep_tag)
         return;
-    ui_plug_check_time.sleep_tag = false;
+    lvgl_plug_check_time.sleep_tag = false;
     LV_LOG_INFO("%s", __func__);
     
     // 关掉息屏界面
@@ -268,8 +259,8 @@ void ui_plug_check_time_exit_sleep(void)
         lvgl_view_tr_none, LV_DIR_NONE);
     
     // 复位倒吊状态
-    ui_plug_check_time.dlps = true;
-    ui_plug_check_time.back = true;
+    lvgl_plug_check_time.dlps = true;
+    lvgl_plug_check_time.back = true;
     
     #if 1
     // 实际动作在这个if宏包裹
@@ -279,81 +270,81 @@ void ui_plug_check_time_exit_sleep(void)
 }
 
 /* 填0使用默认的状态值, 默认填0即可 */
-void ui_plug_check_time_reset(uint8_t over_time, uint8_t idle_time)
+void lvgl_plug_check_time_reset(uint8_t over_time, uint8_t idle_time)
 {
-    ui_plug_check_time.over_time_bak = over_time != 0 ? over_time : ui_plug_check_time.over_time_def;
-    ui_plug_check_time.idle_time_bak = idle_time != 0 ? idle_time : ui_plug_check_time.idle_time_def;
+    lvgl_plug_check_time.over_time_bak = over_time != 0 ? over_time : lvgl_plug_check_time.over_time_def;
+    lvgl_plug_check_time.idle_time_bak = idle_time != 0 ? idle_time : lvgl_plug_check_time.idle_time_def;
     
-    ui_plug_check_time.dlps = true;
-    ui_plug_check_time.back = true;
-    ui_plug_check_time.over_time = ui_plug_check_time.over_time_bak;
-    ui_plug_check_time.idle_time = ui_plug_check_time.idle_time_bak;
+    lvgl_plug_check_time.dlps = true;
+    lvgl_plug_check_time.back = true;
+    lvgl_plug_check_time.over_time = lvgl_plug_check_time.over_time_bak;
+    lvgl_plug_check_time.idle_time = lvgl_plug_check_time.idle_time_bak;
 }
 
 // 谨慎使用:修改系统默认值(那俩个宏枚举量)
-void ui_plug_check_time_def_reset(uint8_t over_time, uint8_t idle_time)
+void lvgl_plug_check_time_def_reset(uint8_t over_time, uint8_t idle_time)
 {
-    ui_plug_check_time.over_time_def = over_time != 0 ? over_time : LVGL_VIEW_CHECK_TIME_OVER;
-    ui_plug_check_time.idle_time_def = idle_time != 0 ? idle_time : LVGL_VIEW_CHECK_TIME_IDLE;
+    lvgl_plug_check_time.over_time_def = over_time != 0 ? over_time : LVGL_VIEW_CHECK_TIME_OVER;
+    lvgl_plug_check_time.idle_time_def = idle_time != 0 ? idle_time : LVGL_VIEW_CHECK_TIME_IDLE;
 
-    ui_plug_check_time_reset(0, 0);
+    lvgl_plug_check_time_reset(0, 0);
 }
 
 /* 填0使用默认的状态值, 默认填0即可 */
-void ui_plug_check_time_once_reset(uint8_t over_time, uint8_t idle_time)
+void lvgl_plug_check_time_once_reset(uint8_t over_time, uint8_t idle_time)
 {
-    ui_plug_check_time.once = true;
-    ui_plug_check_time.over_time_once = over_time != 0 ? over_time : ui_plug_check_time.over_time_def;
-    ui_plug_check_time.idle_time_once = idle_time != 0 ? idle_time : ui_plug_check_time.idle_time_def;
+    lvgl_plug_check_time.once = true;
+    lvgl_plug_check_time.over_time_once = over_time != 0 ? over_time : lvgl_plug_check_time.over_time_def;
+    lvgl_plug_check_time.idle_time_once = idle_time != 0 ? idle_time : lvgl_plug_check_time.idle_time_def;
     
-    ui_plug_check_time.dlps = true;
-    ui_plug_check_time.back = true;
-    ui_plug_check_time.over_time = ui_plug_check_time.over_time_once;
-    ui_plug_check_time.idle_time = ui_plug_check_time.idle_time_once;
+    lvgl_plug_check_time.dlps = true;
+    lvgl_plug_check_time.back = true;
+    lvgl_plug_check_time.over_time = lvgl_plug_check_time.over_time_once;
+    lvgl_plug_check_time.idle_time = lvgl_plug_check_time.idle_time_once;
 }
 
 // 一秒执行一次
-void ui_plug_check_time_update(void)
+void lvgl_plug_check_time_update(void)
 {
-    LV_LOG_WARN("%d - %d", ui_plug_check_time.over_time, ui_plug_check_time.idle_time);
+    LV_LOG_WARN("%d - %d", lvgl_plug_check_time.over_time, lvgl_plug_check_time.idle_time);
     
     /* 合并到lvgl流程(未活跃时间小于1秒, 这里复位到开始) */
     if (lv_disp_get_inactive_time(NULL) < 1000) {
-        if (ui_plug_check_time.once) {
-            ui_plug_check_time.over_time = ui_plug_check_time.over_time_once;
-            ui_plug_check_time.idle_time = ui_plug_check_time.idle_time_once;
+        if (lvgl_plug_check_time.once) {
+            lvgl_plug_check_time.over_time = lvgl_plug_check_time.over_time_once;
+            lvgl_plug_check_time.idle_time = lvgl_plug_check_time.idle_time_once;
         } else {
-            ui_plug_check_time.over_time = ui_plug_check_time.over_time_bak;
-            ui_plug_check_time.idle_time = ui_plug_check_time.idle_time_bak;
+            lvgl_plug_check_time.over_time = lvgl_plug_check_time.over_time_bak;
+            lvgl_plug_check_time.idle_time = lvgl_plug_check_time.idle_time_bak;
          }
     }
     
     
     
     /* 约减超时等待 */
-    if (ui_plug_check_time.over_time != 0 &&
-        ui_plug_check_time.over_time != LVGL_VIEW_CHECK_TIME_OVER_MAX)
-        ui_plug_check_time.over_time--;
+    if (lvgl_plug_check_time.over_time != 0 &&
+        lvgl_plug_check_time.over_time != LVGL_VIEW_CHECK_TIME_OVER_MAX)
+        lvgl_plug_check_time.over_time--;
     /* 主界面超时等待结束发送休眠请求 */
-    if (ui_plug_check_time.over_time == 0) {
-        if (ui_plug_check_time.dlps) {
-            ui_plug_check_time.dlps = false;
+    if (lvgl_plug_check_time.over_time == 0) {
+        if (lvgl_plug_check_time.dlps) {
+            lvgl_plug_check_time.dlps = false;
             LV_LOG_WARN("ui idle dlps enter");
-            ui_plug_check_time.once = false;
+            lvgl_plug_check_time.once = false;
             
-            ui_plug_check_time_enter_sleep();
+            lvgl_plug_check_time_enter_sleep();
         } else {
             bool dlps_tag = false;
             /* 约减空闲等待 */
-            if (ui_plug_check_time.idle_time != 0 &&
-                ui_plug_check_time.idle_time != LVGL_VIEW_CHECK_TIME_IDLE_MAX)
-                ui_plug_check_time.idle_time--;
+            if (lvgl_plug_check_time.idle_time != 0 &&
+                lvgl_plug_check_time.idle_time != LVGL_VIEW_CHECK_TIME_IDLE_MAX)
+                lvgl_plug_check_time.idle_time--;
             /* 空闲等待结束回到主界面 */
-            if (ui_plug_check_time.idle_time == LVGL_VIEW_CHECK_TIME_IDLE_MAX)
+            if (lvgl_plug_check_time.idle_time == LVGL_VIEW_CHECK_TIME_IDLE_MAX)
                 dlps_tag = true;
-            if (ui_plug_check_time.idle_time == 0) {
-                if (ui_plug_check_time.back) {
-                    ui_plug_check_time.back = false;
+            if (lvgl_plug_check_time.idle_time == 0) {
+                if (lvgl_plug_check_time.back) {
+                    lvgl_plug_check_time.back = false;
                     LV_LOG_WARN("ui idle back home");
                     
                     lvgl_view_stack_reset_by(lvgl_view_id_home_watch, true,
@@ -367,58 +358,58 @@ void ui_plug_check_time_update(void)
                 // 这里甚至已经完全结束了, 可以彻底进入低功耗模式
                 // 但这有要求, 唤醒时要保证重新启用定时器
                 // 先待定写到此处
-                ui_plug_check_time_enter_deep_sleep();
+                lvgl_plug_check_time_enter_deep_sleep();
             }
         }
     }
 }
 
-static void ui_plug_check_time_update_timer_cb(lv_timer_t *t)
+static void lvgl_plug_check_time_update_timer_cb(lv_timer_t *t)
 {
-    ui_plug_check_time_update();
+    lvgl_plug_check_time_update();
 }
 
-void ui_plug_check_time_ready(void)
+void lvgl_plug_check_time_ready(void)
 {
     #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
-    ui_plug_check_time.dlps = true;
-    ui_plug_check_time.back = true;
-    ui_plug_check_time.over_time = LVGL_VIEW_CHECK_TIME_OVER;
-    ui_plug_check_time.idle_time = LVGL_VIEW_CHECK_TIME_IDLE;
-    ui_plug_check_time.over_time_bak = LVGL_VIEW_CHECK_TIME_OVER;
-    ui_plug_check_time.idle_time_bak = LVGL_VIEW_CHECK_TIME_IDLE;
-    ui_plug_check_time.over_time_def = LVGL_VIEW_CHECK_TIME_OVER;
-    ui_plug_check_time.idle_time_def = LVGL_VIEW_CHECK_TIME_IDLE;
-    ui_plug_check_time.sleep_tag = false;
+    lvgl_plug_check_time.dlps = true;
+    lvgl_plug_check_time.back = true;
+    lvgl_plug_check_time.over_time = LVGL_VIEW_CHECK_TIME_OVER;
+    lvgl_plug_check_time.idle_time = LVGL_VIEW_CHECK_TIME_IDLE;
+    lvgl_plug_check_time.over_time_bak = LVGL_VIEW_CHECK_TIME_OVER;
+    lvgl_plug_check_time.idle_time_bak = LVGL_VIEW_CHECK_TIME_IDLE;
+    lvgl_plug_check_time.over_time_def = LVGL_VIEW_CHECK_TIME_OVER;
+    lvgl_plug_check_time.idle_time_def = LVGL_VIEW_CHECK_TIME_IDLE;
+    lvgl_plug_check_time.sleep_tag = false;
     
-    ui_plug_check_time.timer = lv_timer_create(ui_plug_check_time_update_timer_cb, 1000, NULL);
-    lv_timer_resume(ui_plug_check_time.timer);
+    lvgl_plug_check_time.timer = lv_timer_create(lvgl_plug_check_time_update_timer_cb, 1000, NULL);
+    lv_timer_resume(lvgl_plug_check_time.timer);
     // 这种定时器, 一定是常启动的
     
-    ui_plug_check_time_reset(0, 0);
+    lvgl_plug_check_time_reset(0, 0);
 }
 
-void ui_plug_check_time_pause(void)
+void lvgl_plug_check_time_pause(void)
 {
     #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
     LV_LOG_INFO("%s", __func__);
-    lv_timer_pause(ui_plug_check_time.timer);
+    lv_timer_pause(lvgl_plug_check_time.timer);
 }
 
-void ui_plug_check_time_resume(void)
+void lvgl_plug_check_time_resume(void)
 {
     #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
     LV_LOG_INFO("%s", __func__);
-    lv_timer_resume(ui_plug_check_time.timer);
+    lv_timer_resume(lvgl_plug_check_time.timer);
 }
 
 #endif
@@ -429,7 +420,7 @@ lv_coord_t s_global_swipe_touch_x0 = 0;
 lv_coord_t s_global_swipe_touch_y0 = 0;
 bool s_global_swipe_obj_bubble = false;
 
-void ui_plug_swipe_pressed_cb(lv_event_t * e)
+void lvgl_plug_swipe_pressed_cb(lv_event_t * e)
 {
     (void)e;
     lv_indev_t * indev = lv_indev_get_act();
@@ -442,7 +433,7 @@ void ui_plug_swipe_pressed_cb(lv_event_t * e)
     s_global_swipe_obj_bubble = false;
 }
 
-void ui_plug_swipe_release_cb(lv_event_t * e)
+void lvgl_plug_swipe_release_cb(lv_event_t * e)
 {
     (void)e;
     lv_indev_t * indev = lv_indev_get_act();
@@ -502,7 +493,7 @@ void ui_plug_swipe_release_cb(lv_event_t * e)
     }
 }
 
-void ui_plug_page_jump_click_event_cb(lv_event_t * e)
+void lvgl_plug_page_jump_click_event_cb(lv_event_t * e)
 {
     // 获取当前输入设备
     lv_indev_t * indev = lv_indev_get_act();
@@ -581,17 +572,17 @@ bool yc_is_valid_click(lv_event_t *e)
     return true;
 }
 
-static bool ui_plug_view_event_stop = false;
-void ui_plug_watch_global_view_event_stop(bool stop)
+static bool lvgl_plug_view_event_stop = false;
+void lvgl_plug_watch_global_view_event_stop(bool stop)
 {
-    ui_plug_view_event_stop = stop;
+    lvgl_plug_view_event_stop = stop;
 }
 
 static lv_point_t s_global_touch_press = {0};
 static lv_point_t s_global_touch_dist_max = {0};
 static int32_t s_global_touch_dist_pow2 = 0;
 
-bool ui_plug_watch_global_move_check(void)
+bool lvgl_plug_watch_global_move_check(void)
 {
     // 抖动值, 不为0, 在这个值为半径的圆内, 都视为不移动
     const int32_t dither_val  = UI_PLUG_WATCH_GLOBAL_SHORT_CLICK_DITHER;
@@ -599,7 +590,7 @@ bool ui_plug_watch_global_move_check(void)
     return s_global_touch_dist_pow2 > dither_pow2;
 }
 
-void ui_plug_watch_global_view_event_cb(lv_event_t * e)
+void lvgl_plug_watch_global_view_event_cb(lv_event_t * e)
 {
     lv_obj_t* obj = lv_event_get_target(e);
     
@@ -626,7 +617,7 @@ void ui_plug_watch_global_view_event_cb(lv_event_t * e)
             s_global_touch_dist_max     = touch_current;
         }
         
-        if (ui_plug_watch_global_move_check()) {
+        if (lvgl_plug_watch_global_move_check()) {
             // 补丁:不再发送LV_EVENT_SHORT_CLICK
             lv_indev_t *indev = lv_indev_get_act();
             // indev->proc.short_click_lock = true;
@@ -637,7 +628,7 @@ void ui_plug_watch_global_view_event_cb(lv_event_t * e)
 
 
     
-    if (ui_plug_view_event_stop)
+    if (lvgl_plug_view_event_stop)
         return;
     
     switch (lv_event_get_code(e)) {
@@ -648,10 +639,10 @@ void ui_plug_watch_global_view_event_cb(lv_event_t * e)
         break;
         
     case LV_EVENT_PRESSED:
-        ui_plug_swipe_pressed_cb(e);
+        lvgl_plug_swipe_pressed_cb(e);
         break;
     case LV_EVENT_RELEASED:
-        ui_plug_swipe_release_cb(e);
+        lvgl_plug_swipe_release_cb(e);
         break;
     }
 }
@@ -660,20 +651,20 @@ void ui_plug_watch_global_view_event_cb(lv_event_t * e)
 
 static lv_coord_t ui_global_enc_way  = 0;
 static lv_coord_t ui_global_enc_step = 0;
-static void (*ui_plug_watch_global_enc_cb)(uint8_t way, uint8_t step) = NULL;
+static void (*lvgl_plug_watch_global_enc_cb)(uint8_t way, uint8_t step) = NULL;
 
-void ui_plug_watch_global_enc_cb_register(void (*enc_cb)(uint8_t way, uint8_t step))
+void lvgl_plug_watch_global_enc_cb_register(void (*enc_cb)(uint8_t way, uint8_t step))
 {
-    ui_plug_watch_global_enc_cb = enc_cb;
+    lvgl_plug_watch_global_enc_cb = enc_cb;
 }
 
-void ui_plug_watch_global_enc_async_call(void *user_data)
+void lvgl_plug_watch_global_enc_async_call(void *user_data)
 {
     static uint32_t enc_event_tick_t = 0;
     static uint32_t enc_event_val_t  = 0;
     static lv_dir_t enc_event_dir_t  = 0;
     
-    if (!ui_plug_check_time.sleep_tag)
+    if (!lvgl_plug_check_time.sleep_tag)
         lv_disp_trig_activity(NULL);
     
     if (ui_global_enc_step == 0)
@@ -696,8 +687,8 @@ void ui_plug_watch_global_enc_async_call(void *user_data)
     else enc_way = +1;
     
     // 如果外源注册了编码器全局响应, 这里不再做处理
-    if (ui_plug_watch_global_enc_cb != NULL) {
-        ui_plug_watch_global_enc_cb(enc_way, enc_step);
+    if (lvgl_plug_watch_global_enc_cb != NULL) {
+        lvgl_plug_watch_global_enc_cb(enc_way, enc_step);
         return;
     }
     
@@ -809,25 +800,25 @@ void ui_plug_watch_global_enc_async_call(void *user_data)
 }
 
 static uint32_t s_key1_click_page_id = 0;
-static void (*ui_plug_watch_global_key0_cb)(uint8_t key_event) = NULL;
-static void (*ui_plug_watch_global_key1_cb)(uint8_t key_event) = NULL;
+static void (*lvgl_plug_watch_global_key0_cb)(uint8_t key_event) = NULL;
+static void (*lvgl_plug_watch_global_key1_cb)(uint8_t key_event) = NULL;
 
-uint32_t ui_plug_watch_global_key1_click_jump_page_id(uint32_t page_id)
+uint32_t lvgl_plug_watch_global_key1_click_jump_page_id(uint32_t page_id)
 {
     s_key1_click_page_id = page_id;
 }
 
-void ui_plug_watch_global_key0_cb_register(void (*key_cb)(uint8_t key_event))
+void lvgl_plug_watch_global_key0_cb_register(void (*key_cb)(uint8_t key_event))
 {
-    ui_plug_watch_global_key0_cb = key_cb;
+    lvgl_plug_watch_global_key0_cb = key_cb;
 }
 
-void ui_plug_watch_global_key1_cb_register(void (*key_cb)(uint8_t key_event))
+void lvgl_plug_watch_global_key1_cb_register(void (*key_cb)(uint8_t key_event))
 {
-    ui_plug_watch_global_key1_cb = key_cb;
+    lvgl_plug_watch_global_key1_cb = key_cb;
 }
 
-void ui_plug_watch_global_key0_async_call(void *user_data)
+void lvgl_plug_watch_global_key0_async_call(void *user_data)
 {
     uintptr_t key_event = (uintptr_t)user_data;
     // 其他的双击三击等等都参考此写法即可
@@ -839,8 +830,8 @@ void ui_plug_watch_global_key0_async_call(void *user_data)
     }
     
     // 如果外源注册了按键全局响应, 这里不再做处理
-    if (ui_plug_watch_global_key0_cb != NULL) {
-        ui_plug_watch_global_key0_cb(key_event);
+    if (lvgl_plug_watch_global_key0_cb != NULL) {
+        lvgl_plug_watch_global_key0_cb(key_event);
         return;
     }
     
@@ -899,7 +890,7 @@ void ui_plug_watch_global_key0_async_call(void *user_data)
     }
 }
 
-void ui_plug_watch_global_key1_async_call(void *user_data)
+void lvgl_plug_watch_global_key1_async_call(void *user_data)
 {
     uintptr_t key_event = (uintptr_t)user_data;
     // 其他的双击三击等等都参考此写法即可
@@ -911,8 +902,8 @@ void ui_plug_watch_global_key1_async_call(void *user_data)
     }
     
     // 如果外源注册了按键全局响应, 这里不再做处理
-    if (ui_plug_watch_global_key1_cb != NULL) {
-        ui_plug_watch_global_key1_cb(key_event);
+    if (lvgl_plug_watch_global_key1_cb != NULL) {
+        lvgl_plug_watch_global_key1_cb(key_event);
         return;
     }
     
@@ -940,20 +931,20 @@ void ui_plug_watch_global_key1_async_call(void *user_data)
 }
 
 /* 外部注册回调使用该接口通知事件 */
-void ui_plug_global_event_notify(ui_plug_global_event_t global_event)
+void lvgl_plug_global_event_notify(lvgl_plug_global_event_t global_event)
 {
-    if (ui_plug_check_time.sleep_tag) {
+    if (lvgl_plug_check_time.sleep_tag) {
         // 退出低功耗(这里是真实亮屏)
         switch (global_event) {
-        case ui_plug_global_event_deep_sleep_exit:
-        case ui_plug_global_event_sleep_exit:
+        case lvgl_plug_global_event_deep_sleep_exit:
+        case lvgl_plug_global_event_sleep_exit:
             break;
         }
     } else {
         // 进入低功耗(这里是真实熄屏)
         switch (global_event) {
-        case ui_plug_global_event_deep_sleep_enter:
-        case ui_plug_global_event_sleep_enter:
+        case lvgl_plug_global_event_deep_sleep_enter:
+        case lvgl_plug_global_event_sleep_enter:
             break;
         }
     }
@@ -961,16 +952,16 @@ void ui_plug_global_event_notify(ui_plug_global_event_t global_event)
     
     
     // 事件产生时是否为息屏状态???
-    bool sleep_tag = ui_plug_check_time.sleep_tag;
+    bool sleep_tag = lvgl_plug_check_time.sleep_tag;
     // os_taskq_post_msg("ui", 7, 'u', 'i', 'e', 'v', 't', global_event, sleep_tag);
     
     
     
-    if (ui_plug_check_time.sleep_tag) {
+    if (lvgl_plug_check_time.sleep_tag) {
         // 退出低功耗(这里是真实亮屏)
         switch (global_event) {
-        case ui_plug_global_event_deep_sleep_exit:
-        case ui_plug_global_event_sleep_exit:
+        case lvgl_plug_global_event_deep_sleep_exit:
+        case lvgl_plug_global_event_sleep_exit:
             break;
         }
         // 唤醒事件分俩类，如果只是唤醒，这里return丢弃掉
@@ -981,8 +972,8 @@ void ui_plug_global_event_notify(ui_plug_global_event_t global_event)
         
         // 进入低功耗(这里是真实熄屏)
         switch (global_event) {
-        case ui_plug_global_event_deep_sleep_enter:
-        case ui_plug_global_event_sleep_enter:
+        case lvgl_plug_global_event_deep_sleep_enter:
+        case lvgl_plug_global_event_sleep_enter:
             break;
         }
         // 结构保留...
@@ -993,7 +984,7 @@ void ui_plug_global_event_notify(ui_plug_global_event_t global_event)
 /* way(0:正转;1:反转),val(步进值1~n) */
 void lvgl_view_enc_notify(uintptr_t way, uintptr_t val)
 {
-    if (ui_plug_check_time.sleep_tag)
+    if (lvgl_plug_check_time.sleep_tag)
         return;
     
     val = LV_ABS(val);
@@ -1012,15 +1003,15 @@ void lvgl_view_enc_notify(uintptr_t way, uintptr_t val)
     #if 1
     // os_taskq_post_msg("ui", 6, 'u', 'i', 'e', 'n', 'c', way);
     #else
-    lv_async_call_cancel(ui_plug_watch_global_enc_async_call, NULL);
-    lv_async_call(ui_plug_watch_global_enc_async_call, NULL);
+    lv_async_call_cancel(lvgl_plug_watch_global_enc_async_call, NULL);
+    lv_async_call(lvgl_plug_watch_global_enc_async_call, NULL);
     #endif
 }
 
 uint32_t lvgl_view_event_custom = 0;
 lvgl_view_event_custom_t lvgl_view_event_custom_param = {0};
 
-void ui_plug_event_ready(void)
+void lvgl_plug_event_ready(void)
 {
     lvgl_view_event_custom = lv_event_register_id();
 }
@@ -1036,15 +1027,15 @@ void key_event_cb_deal(void *arg)
     switch (-1) {// switch (key->event) {
     case 0: // case KEY_ACTION_CLICK:
         LV_LOG_WARN("global key:%d event click", key->value);
-        if (ui_plug_check_time.sleep_tag) {
-            ui_plug_global_event_notify(ui_plug_global_event_sleep_exit);
+        if (lvgl_plug_check_time.sleep_tag) {
+            lvgl_plug_global_event_notify(lvgl_plug_global_event_sleep_exit);
             return;    // 息屏唤醒:丢弃这个按键事件
         }
         break;
     case 1: // case KEY_ACTION_LONG:
         LV_LOG_WARN("global key:%d event long",  key->value);
-        if (ui_plug_check_time.sleep_tag) {
-            ui_plug_global_event_notify(ui_plug_global_event_sleep_exit);
+        if (lvgl_plug_check_time.sleep_tag) {
+            lvgl_plug_global_event_notify(lvgl_plug_global_event_sleep_exit);
             return;    // 息屏唤醒:丢弃这个按键事件
         }
         break;
@@ -1062,10 +1053,10 @@ void key_event_cb_deal(void *arg)
     }
     #else
     if (key->value == KEY_IO_NUM0) {
-        lv_async_call(ui_plug_watch_global_key0_async_call, (void *)(uintptr_t)(key->event));
+        lv_async_call(lvgl_plug_watch_global_key0_async_call, (void *)(uintptr_t)(key->event));
     }
     if (key->value == KEY_IO_NUM1) {
-        lv_async_call(ui_plug_watch_global_key1_async_call, (void *)(uintptr_t)(key->event));
+        lv_async_call(lvgl_plug_watch_global_key1_async_call, (void *)(uintptr_t)(key->event));
     }
     #endif
     #endif

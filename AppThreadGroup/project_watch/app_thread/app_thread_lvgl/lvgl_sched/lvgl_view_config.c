@@ -1,4 +1,5 @@
 #include "lvgl_view_sched.h"
+#include "lvgl_lib.h"
 
 static void lvgl_view_config_create_empty(lv_obj_t *page);
 static void lvgl_view_config_destroy_empty(lv_obj_t *page);
