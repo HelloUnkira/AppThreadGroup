@@ -79,7 +79,7 @@ static void app_lv_check_time_timer_handler(void *timer)
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
         .module = app_thread_lvgl_sched,
-        .event  = app_thread_lvgl_sched_check_time,
+        // .event  = app_thread_lvgl_sched_check_time,
     };
     app_thread_package_notify(&package);
 }

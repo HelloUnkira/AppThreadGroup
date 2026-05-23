@@ -69,7 +69,7 @@ void app_lv_wheel_update(void *wheel, uint32_t size)
     app_thread_package_t package = {
         .thread  = app_thread_id_lvgl,
         .module  = app_thread_lvgl_sched,
-        .event   = app_thread_lvgl_sched_wheel,
+        // .event   = app_thread_lvgl_sched_wheel,
         .dynamic = true,
         .data    = data,
         .size    = size,
@@ -85,7 +85,7 @@ void app_lv_scene_start(void)
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
         .module = app_thread_lvgl_ui,
-        .event  = app_thread_lvgl_ui_scene_start,
+        // .event  = app_thread_lvgl_ui_scene_start,
     };
     app_thread_package_notify(&package);
 }
@@ -98,7 +98,7 @@ void app_lv_scene_stop(void)
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
         .module = app_thread_lvgl_ui,
-        .event  = app_thread_lvgl_ui_scene_stop,
+        // .event  = app_thread_lvgl_ui_scene_stop,
     };
     app_thread_package_notify(&package);
 }
@@ -112,10 +112,10 @@ void app_lv_scene_dlps(bool status)
         .thread = app_thread_id_lvgl,
         .module = app_thread_lvgl_sched,
     };
-    if (status)
-        package.event = app_thread_lvgl_sched_dlps_enter;
-    else
-        package.event = app_thread_lvgl_sched_dlps_exit;
+    //if (status)
+    //    package.event = app_thread_lvgl_sched_dlps_enter;
+    //else
+    //    package.event = app_thread_lvgl_sched_dlps_exit;
     app_thread_package_notify(&package);
 }
 
@@ -127,7 +127,7 @@ void app_lv_scene_shutdown(void)
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
         .module = app_thread_lvgl_ui,
-        .event  = app_thread_lvgl_ui_scene_shutdown,
+        //.event  = app_thread_lvgl_ui_scene_shutdown,
     };
     app_thread_package_notify(&package);
 }

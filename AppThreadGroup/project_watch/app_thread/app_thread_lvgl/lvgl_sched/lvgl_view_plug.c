@@ -1,5 +1,5 @@
-#include "app_lv_view_sched.h"
-extern app_lv_view_sched_t app_lv_view_sched;
+#include "lvgl_view_sched.h"
+extern lvgl_view_sched_t lvgl_view_sched;
 
 /*@beirf:
  *这部分不属于调度系统, 作为全局插件存在
@@ -35,7 +35,7 @@ static bool ui_plug_global_popup_page_prio_cb(uint32_t show_page_id, uint32_t pa
     LV_LOG_INFO("%s %d", __func__, __LINE__);
     /* 息屏状态下的AOD界面, 默认最高优先级 */
     /* 理论上没有任何弹窗优先级高于它, 因为弹窗显示前需要退出息屏状态 */
-    if (show_page_id == app_lv_view_id_standby)
+    if (show_page_id == lvgl_view_id_standby)
         return true;
     
     /* 查优先级信息 */
@@ -81,7 +81,7 @@ void ui_plug_global_popup_event_proc_cb(ui_plug_global_event_t global_event, boo
     
     /* 检查需要弹窗的界面优先级情况 */
     uint32_t priority_cur = 0;
-    uint32_t page_id_cur = app_lv_view_id_unknown;
+    uint32_t page_id_cur = lvgl_view_id_unknown;
     for (uint32_t idx = 0; idx < ARRAY_LEN(ui_plug_global_popup_table); idx++) 
     {
         if (idx != global_event)
@@ -98,14 +98,14 @@ void ui_plug_global_popup_event_proc_cb(ui_plug_global_event_t global_event, boo
     LV_ASSERT(priority_cur > 0 && priority_cur <= 0xFF);
     
     // 倒着查, 如果遇到一个高优先级事件与当前低优先级事件匹配到, 确认是否丢弃该事件
-    for (uint32_t top = app_lv_view_stack_nest(); top > 0; top--) {
+    for (uint32_t top = lvgl_view_stack_nest(); top > 0; top--) {
         
         /* 查优先级信息 */
         uint32_t priority_top = 0;
-        uint32_t stack_top = app_lv_view_stack_node(top);
+        uint32_t stack_top = lvgl_view_stack_node(top);
         uint32_t event_top = ui_plug_global_event_none;
         // 息屏特殊界面, 绕过它
-        if (stack_top == app_lv_view_id_standby)
+        if (stack_top == lvgl_view_id_standby)
             continue;
         
         // 先查这个事件是否在优先级表中, 如果没有退出此流程
@@ -131,13 +131,13 @@ void ui_plug_global_popup_event_proc_cb(ui_plug_global_event_t global_event, boo
     
     if (sleep_tag) {
         // 待定中:提醒事件不要动画
-        app_lv_view_stack_add_prio_by(page_id_cur, false,
+        lvgl_view_stack_add_prio_by(page_id_cur, false,
 
-            app_lv_view_transform_type_none, LV_DIR_NONE,
+            lvgl_view_tr_none, LV_DIR_NONE,
             ui_plug_global_popup_page_prio_cb);
     } else {
         // 按优先级压入栈中
-        app_lv_view_stack_add_prio(page_id_cur, false,
+        lvgl_view_stack_add_prio(page_id_cur, false,
             ui_plug_global_popup_page_prio_cb);
     }
 }
@@ -146,7 +146,7 @@ void ui_plug_global_popup_event_proc_cb(ui_plug_global_event_t global_event, boo
 void ui_plug_global_popup_quit_event_proc_cb(ui_plug_global_event_t global_event, bool sleep_tag)
 {
     uint32_t page_id = ui_plug_global_popup_table[global_event].page_id;
-    if (page_id != 0) app_lv_view_stack_del(page_id);
+    if (page_id != 0) lvgl_view_stack_del(page_id);
 }
 
 #endif
@@ -193,7 +193,7 @@ static ui_plug_check_time_t ui_plug_check_time = {0};
 
 void ui_plug_check_time_enter_deep_sleep(void)
 {
-    #if APP_LV_VIEW_CHECK_TIME_USE == 0
+    #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
@@ -212,7 +212,7 @@ void ui_plug_check_time_enter_deep_sleep(void)
 
 void ui_plug_check_time_exit_deep_sleep(void)
 {
-    #if APP_LV_VIEW_CHECK_TIME_USE == 0
+    #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
@@ -230,7 +230,7 @@ void ui_plug_check_time_exit_deep_sleep(void)
 
 void ui_plug_check_time_enter_sleep(void)
 {
-    #if APP_LV_VIEW_CHECK_TIME_USE == 0
+    #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
@@ -239,8 +239,8 @@ void ui_plug_check_time_enter_sleep(void)
     ui_plug_check_time.sleep_tag = true;
     LV_LOG_INFO("%s", __func__);
     
-    app_lv_view_stack_add_by(app_lv_view_id_standby, false,
-        app_lv_view_transform_type_none, LV_DIR_NONE);
+    lvgl_view_stack_add_by(lvgl_view_id_standby, false,
+        lvgl_view_tr_none, LV_DIR_NONE);
     
     #if 1
     // 实际动作在这个if宏包裹
@@ -251,7 +251,7 @@ void ui_plug_check_time_enter_sleep(void)
 
 void ui_plug_check_time_exit_sleep(void)
 {
-    #if APP_LV_VIEW_CHECK_TIME_USE == 0
+    #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
@@ -264,8 +264,8 @@ void ui_plug_check_time_exit_sleep(void)
     LV_LOG_INFO("%s", __func__);
     
     // 关掉息屏界面
-    app_lv_view_stack_del_by(app_lv_view_id_standby,
-        app_lv_view_transform_type_none, LV_DIR_NONE);
+    lvgl_view_stack_del_by(lvgl_view_id_standby,
+        lvgl_view_tr_none, LV_DIR_NONE);
     
     // 复位倒吊状态
     ui_plug_check_time.dlps = true;
@@ -293,8 +293,8 @@ void ui_plug_check_time_reset(uint8_t over_time, uint8_t idle_time)
 // 谨慎使用:修改系统默认值(那俩个宏枚举量)
 void ui_plug_check_time_def_reset(uint8_t over_time, uint8_t idle_time)
 {
-    ui_plug_check_time.over_time_def = over_time != 0 ? over_time : APP_LV_VIEW_CHECK_TIME_OVER;
-    ui_plug_check_time.idle_time_def = idle_time != 0 ? idle_time : APP_LV_VIEW_CHECK_TIME_IDLE;
+    ui_plug_check_time.over_time_def = over_time != 0 ? over_time : LVGL_VIEW_CHECK_TIME_OVER;
+    ui_plug_check_time.idle_time_def = idle_time != 0 ? idle_time : LVGL_VIEW_CHECK_TIME_IDLE;
 
     ui_plug_check_time_reset(0, 0);
 }
@@ -332,7 +332,7 @@ void ui_plug_check_time_update(void)
     
     /* 约减超时等待 */
     if (ui_plug_check_time.over_time != 0 &&
-        ui_plug_check_time.over_time != APP_LV_VIEW_CHECK_TIME_OVER_MAX)
+        ui_plug_check_time.over_time != LVGL_VIEW_CHECK_TIME_OVER_MAX)
         ui_plug_check_time.over_time--;
     /* 主界面超时等待结束发送休眠请求 */
     if (ui_plug_check_time.over_time == 0) {
@@ -346,18 +346,18 @@ void ui_plug_check_time_update(void)
             bool dlps_tag = false;
             /* 约减空闲等待 */
             if (ui_plug_check_time.idle_time != 0 &&
-                ui_plug_check_time.idle_time != APP_LV_VIEW_CHECK_TIME_IDLE_MAX)
+                ui_plug_check_time.idle_time != LVGL_VIEW_CHECK_TIME_IDLE_MAX)
                 ui_plug_check_time.idle_time--;
             /* 空闲等待结束回到主界面 */
-            if (ui_plug_check_time.idle_time == APP_LV_VIEW_CHECK_TIME_IDLE_MAX)
+            if (ui_plug_check_time.idle_time == LVGL_VIEW_CHECK_TIME_IDLE_MAX)
                 dlps_tag = true;
             if (ui_plug_check_time.idle_time == 0) {
                 if (ui_plug_check_time.back) {
                     ui_plug_check_time.back = false;
                     LV_LOG_WARN("ui idle back home");
                     
-                    app_lv_view_stack_reset_by(app_lv_view_id_home_watch, true,
-                        app_lv_view_transform_type_none, LV_DIR_NONE);
+                    lvgl_view_stack_reset_by(lvgl_view_id_home_watch, true,
+                        lvgl_view_tr_none, LV_DIR_NONE);
                     
                     dlps_tag = true;
                 }
@@ -380,18 +380,18 @@ static void ui_plug_check_time_update_timer_cb(lv_timer_t *t)
 
 void ui_plug_check_time_ready(void)
 {
-    #if APP_LV_VIEW_CHECK_TIME_USE == 0
+    #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
     ui_plug_check_time.dlps = true;
     ui_plug_check_time.back = true;
-    ui_plug_check_time.over_time = APP_LV_VIEW_CHECK_TIME_OVER;
-    ui_plug_check_time.idle_time = APP_LV_VIEW_CHECK_TIME_IDLE;
-    ui_plug_check_time.over_time_bak = APP_LV_VIEW_CHECK_TIME_OVER;
-    ui_plug_check_time.idle_time_bak = APP_LV_VIEW_CHECK_TIME_IDLE;
-    ui_plug_check_time.over_time_def = APP_LV_VIEW_CHECK_TIME_OVER;
-    ui_plug_check_time.idle_time_def = APP_LV_VIEW_CHECK_TIME_IDLE;
+    ui_plug_check_time.over_time = LVGL_VIEW_CHECK_TIME_OVER;
+    ui_plug_check_time.idle_time = LVGL_VIEW_CHECK_TIME_IDLE;
+    ui_plug_check_time.over_time_bak = LVGL_VIEW_CHECK_TIME_OVER;
+    ui_plug_check_time.idle_time_bak = LVGL_VIEW_CHECK_TIME_IDLE;
+    ui_plug_check_time.over_time_def = LVGL_VIEW_CHECK_TIME_OVER;
+    ui_plug_check_time.idle_time_def = LVGL_VIEW_CHECK_TIME_IDLE;
     ui_plug_check_time.sleep_tag = false;
     
     ui_plug_check_time.timer = lv_timer_create(ui_plug_check_time_update_timer_cb, 1000, NULL);
@@ -403,7 +403,7 @@ void ui_plug_check_time_ready(void)
 
 void ui_plug_check_time_pause(void)
 {
-    #if APP_LV_VIEW_CHECK_TIME_USE == 0
+    #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
@@ -413,7 +413,7 @@ void ui_plug_check_time_pause(void)
 
 void ui_plug_check_time_resume(void)
 {
-    #if APP_LV_VIEW_CHECK_TIME_USE == 0
+    #if LVGL_VIEW_CHECK_TIME_USE == 0
     return;
     #endif
     
@@ -461,9 +461,9 @@ void ui_plug_swipe_release_cb(lv_event_t * e)
         s_global_swipe_touch_y0 = 0;
         
         // 界面跳转或者跟手运动的时候, 不响应右滑
-        if (app_lv_view_sched.anim_lock ||
-            app_lv_view_sched.move_lock ||
-            app_lv_view_sched.jump_lock) {
+        if (lvgl_view_sched.anim_lock ||
+            lvgl_view_sched.move_lock ||
+            lvgl_view_sched.jump_lock) {
             LV_LOG_WARN("view switch");
             return;
         }
@@ -472,14 +472,14 @@ void ui_plug_swipe_release_cb(lv_event_t * e)
         if (s_global_swipe_obj_bubble)
             return;
         
-        app_lv_view_id_t page_id = app_lv_view_sched.page_c;
+        lvgl_view_id_t page_id = lvgl_view_sched.page_c;
         
         
-        app_lv_view_event_custom_param.type = app_lv_view_event_custom_swipe_r;
-        app_lv_view_event_custom_param.stop = false;
-        lv_obj_t *page_c = lv_obj_get_child(app_lv_view_sched.view_c, 0);
-        lv_event_send(page_c, APP_LV_VIEW_EVENT_CUSTOM, APP_LV_VIEW_EVENT_CUSTOM_PARAM);
-        if (app_lv_view_event_custom_param.stop)
+        lvgl_view_event_custom_param.type = lvgl_view_event_custom_swipe_r;
+        lvgl_view_event_custom_param.stop = false;
+        lv_obj_t *page_c = lv_obj_get_child(lvgl_view_sched.view_c, 0);
+        lv_event_send(page_c, LVGL_VIEW_EVENT_CUSTOM, LVGL_VIEW_EVENT_CUSTOM_PARAM);
+        if (lvgl_view_event_custom_param.stop)
             return;
         
 
@@ -491,13 +491,13 @@ void ui_plug_swipe_release_cb(lv_event_t * e)
         // if (page_id == xxxxx)
         //     return;
 
-        if (page_id && app_lv_view_stack_nest() > 1)
+        if (page_id && lvgl_view_stack_nest() > 1)
         {
             // 补丁:不再发送LV_EVENT_SHORT_CLICK
             lv_indev_t *indev = lv_indev_get_act();
             // indev->proc.short_click_lock = true;
 
-            app_lv_view_stack_del(page_id);
+            lvgl_view_stack_del(page_id);
         }
     }
 }
@@ -529,11 +529,11 @@ void ui_plug_page_jump_click_event_cb(lv_event_t * e)
 
     // 否则执行页面跳转
     // const char *page_name = (const char *)lv_event_get_user_data(e);
-    uint32_t page_id = (uint32_t)lv_event_get_user_data(e);
+    lvgl_view_id_t page_id = (uintptr_t)lv_event_get_user_data(e);
     if (page_id) 
     {
         LV_LOG_INFO("-----跳转-----\n");
-        app_lv_view_stack_add(page_id, false);
+        lvgl_view_stack_add(page_id, false);
     }
 }
 
@@ -617,8 +617,8 @@ void ui_plug_watch_global_view_event_cb(lv_event_t * e)
         lv_indev_t *indev = lv_indev_get_act();
         lv_indev_get_point(indev, &touch_current);
         
-        int32_t touch_dist_x = app_lv_view_dist(s_global_touch_press.x, touch_current.x);
-        int32_t touch_dist_y = app_lv_view_dist(s_global_touch_press.y, touch_current.y);
+        int32_t touch_dist_x = lvgl_view_dist(s_global_touch_press.x, touch_current.x);
+        int32_t touch_dist_y = lvgl_view_dist(s_global_touch_press.y, touch_current.y);
         int32_t touch_dist_pow2 = touch_dist_x * touch_dist_x + touch_dist_y * touch_dist_y;
         
         if (s_global_touch_dist_pow2 < touch_dist_pow2) {
@@ -643,7 +643,7 @@ void ui_plug_watch_global_view_event_cb(lv_event_t * e)
     switch (lv_event_get_code(e)) {
     case LV_EVENT_PRESSING:
         // 存在控件可滚动中, 不要响应
-        if (app_lv_view_sched_obj_scrollable_bubble(obj, LV_DIR_RIGHT, NULL, NULL))
+        if (lvgl_view_obj_bubble_scrollable(obj, LV_DIR_RIGHT, NULL, NULL))
             s_global_swipe_obj_bubble = true;
         break;
         
@@ -680,9 +680,9 @@ void ui_plug_watch_global_enc_async_call(void *user_data)
         return;
     
     /* 界面跳转时屏蔽编码器工作 */
-    if (app_lv_view_sched.anim_lock ||
-        app_lv_view_sched.move_lock ||
-        app_lv_view_sched.jump_lock) {
+    if (lvgl_view_sched.anim_lock ||
+        lvgl_view_sched.move_lock ||
+        lvgl_view_sched.jump_lock) {
         LV_LOG_WARN("view switch");
         ui_global_enc_step = 0;
         return;
@@ -701,13 +701,13 @@ void ui_plug_watch_global_enc_async_call(void *user_data)
         return;
     }
     
-    app_lv_view_event_custom_param.type = app_lv_view_event_custom_enc;
-    app_lv_view_event_custom_param.stop = false;
-    app_lv_view_event_custom_param.enc.way = enc_way;
-    app_lv_view_event_custom_param.enc.step = enc_step;
-    lv_obj_t *page_c = lv_obj_get_child(app_lv_view_sched.view_c, 0);
-    lv_event_send(page_c, APP_LV_VIEW_EVENT_CUSTOM, APP_LV_VIEW_EVENT_CUSTOM_PARAM);
-    if (app_lv_view_event_custom_param.stop)
+    lvgl_view_event_custom_param.type = lvgl_view_event_custom_enc;
+    lvgl_view_event_custom_param.stop = false;
+    lvgl_view_event_custom_param.enc.way = enc_way;
+    lvgl_view_event_custom_param.enc.step = enc_step;
+    lv_obj_t *page_c = lv_obj_get_child(lvgl_view_sched.view_c, 0);
+    lv_event_send(page_c, LVGL_VIEW_EVENT_CUSTOM, LVGL_VIEW_EVENT_CUSTOM_PARAM);
+    if (lvgl_view_event_custom_param.stop)
         return;
     
     lv_dir_t enc_dir = LV_DIR_NONE;
@@ -717,9 +717,9 @@ void ui_plug_watch_global_enc_async_call(void *user_data)
     LV_LOG_INFO("enc_dir:%x", enc_dir);
     
     /* 判断当前界面是否可以滚动 */
-    app_lv_view_config_t *config = app_lv_view_id_inst(app_lv_view_sched.page_c);
-    if (config->enc_scroll_way != LV_DIR_NONE)
-        enc_dir &= config->enc_scroll_way;
+    lvgl_view_config_t *config = lvgl_view_id_inst(lvgl_view_sched.page_c);
+    if (config->enc_s_way != LV_DIR_NONE)
+        enc_dir &= config->enc_s_way;
     
     #if 1
     // 滚动条目
@@ -734,14 +734,14 @@ void ui_plug_watch_global_enc_async_call(void *user_data)
     if ((enc_dir & (LV_DIR_TOP | LV_DIR_LEFT)) != 0) {
         
         if ((enc_dir & LV_DIR_TOP) != 0)
-        if (app_lv_view_sched_obj_scrollable(page_c, LV_DIR_TOP, &obj_scrollable, &obj_dist)) {
+        if (lvgl_view_obj_tree_scrollable(page_c, LV_DIR_TOP, &obj_scrollable, &obj_dist)) {
             LV_LOG_INFO("obj_scrollable:%p", obj_scrollable);
             lv_obj_scroll_by(obj_scrollable, 0, -LV_MIN(obj_diff_y, obj_dist), true);
             return;
         }
         
         if ((enc_dir & LV_DIR_LEFT) != 0)
-        if (app_lv_view_sched_obj_scrollable(page_c, LV_DIR_LEFT, &obj_scrollable, &obj_dist)) {
+        if (lvgl_view_obj_tree_scrollable(page_c, LV_DIR_LEFT, &obj_scrollable, &obj_dist)) {
             LV_LOG_INFO("obj_scrollable:%p", obj_scrollable);
             lv_obj_scroll_by(obj_scrollable, -LV_MIN(obj_diff_x, obj_dist), 0, true);
             return;
@@ -751,14 +751,14 @@ void ui_plug_watch_global_enc_async_call(void *user_data)
     if ((enc_dir & (LV_DIR_BOTTOM | LV_DIR_RIGHT)) != 0) {
         
         if ((enc_dir & LV_DIR_BOTTOM) != 0)
-        if (app_lv_view_sched_obj_scrollable(page_c, LV_DIR_BOTTOM, &obj_scrollable, &obj_dist)) {
+        if (lvgl_view_obj_tree_scrollable(page_c, LV_DIR_BOTTOM, &obj_scrollable, &obj_dist)) {
             LV_LOG_INFO("obj_scrollable:%p", obj_scrollable);
             lv_obj_scroll_by(obj_scrollable, 0, +LV_MIN(obj_diff_y, obj_dist), true);
             return;
         }
         
         if ((enc_dir & LV_DIR_RIGHT) != 0)
-        if (app_lv_view_sched_obj_scrollable(page_c, LV_DIR_RIGHT, &obj_scrollable, &obj_dist)) {
+        if (lvgl_view_obj_tree_scrollable(page_c, LV_DIR_RIGHT, &obj_scrollable, &obj_dist)) {
             LV_LOG_INFO("obj_scrollable:%p", obj_scrollable);
             lv_obj_scroll_by(obj_scrollable, +LV_MIN(obj_diff_x, obj_dist), 0, true);
             return;
@@ -787,22 +787,22 @@ void ui_plug_watch_global_enc_async_call(void *user_data)
         
         if ((enc_dir & LV_DIR_TOP) != 0 && config->enc_b && config->page_b != 0) {
             LV_LOG_WARN("enc switch");
-            app_lv_view_stack_cover(config->page_b);
+            lvgl_view_stack_cover(config->page_b);
             return;
         }
         if ((enc_dir & LV_DIR_BOTTOM) != 0 && config->enc_t && config->page_t != 0) {
             LV_LOG_WARN("enc switch");
-            app_lv_view_stack_cover(config->page_t);
+            lvgl_view_stack_cover(config->page_t);
             return;
         }
         if ((enc_dir & LV_DIR_LEFT) != 0 && config->enc_r && config->page_r != 0) {
             LV_LOG_WARN("enc switch");
-            app_lv_view_stack_cover(config->page_r);
+            lvgl_view_stack_cover(config->page_r);
             return;
         }
         if ((enc_dir & LV_DIR_RIGHT) != 0 && config->enc_l && config->page_l != 0) {
             LV_LOG_WARN("enc switch");
-            app_lv_view_stack_cover(config->page_l);
+            lvgl_view_stack_cover(config->page_l);
             return;
         }
     }
@@ -834,8 +834,8 @@ void ui_plug_watch_global_key0_async_call(void *user_data)
 
     // 超时息屏退出:::
     lv_disp_trig_activity(NULL);
-    if (app_lv_view_stack_top() == app_lv_view_id_standby) {
-        app_lv_view_stack_del(app_lv_view_id_standby);
+    if (lvgl_view_stack_top() == lvgl_view_id_standby) {
+        lvgl_view_stack_del(lvgl_view_id_standby);
     }
     
     // 如果外源注册了按键全局响应, 这里不再做处理
@@ -844,32 +844,32 @@ void ui_plug_watch_global_key0_async_call(void *user_data)
         return;
     }
     
-    app_lv_view_event_custom_param.type = app_lv_view_event_custom_key0;
-    app_lv_view_event_custom_param.stop = false;
-    app_lv_view_event_custom_param.key.event = key_event;
-    lv_obj_t *page_c = lv_obj_get_child(app_lv_view_sched.view_c, 0);
-    lv_event_send(page_c, APP_LV_VIEW_EVENT_CUSTOM, APP_LV_VIEW_EVENT_CUSTOM_PARAM);
-    if (app_lv_view_event_custom_param.stop)
+    lvgl_view_event_custom_param.type = lvgl_view_event_custom_key0;
+    lvgl_view_event_custom_param.stop = false;
+    lvgl_view_event_custom_param.key.event = key_event;
+    lv_obj_t *page_c = lv_obj_get_child(lvgl_view_sched.view_c, 0);
+    lv_event_send(page_c, LVGL_VIEW_EVENT_CUSTOM, LVGL_VIEW_EVENT_CUSTOM_PARAM);
+    if (lvgl_view_event_custom_param.stop)
         return;
     
     if (false) // if (key_event == KEY_ACTION_CLICK)
     {
-        uint32_t stack_nest = app_lv_view_stack_nest();
-        uint32_t stack_top  = app_lv_view_stack_top();
+        uint32_t stack_nest = lvgl_view_stack_nest();
+        uint32_t stack_top  = lvgl_view_stack_top();
         
         // 浮窗跳回它们的主界面, 这里写浮窗的句柄
         // 并不一定是主表盘, 任意节目自己的浮窗都是返回它自己
-        if (stack_top == app_lv_view_id_home_t ||
-            stack_top == app_lv_view_id_home_b) {
+        if (stack_top == lvgl_view_id_home_t ||
+            stack_top == lvgl_view_id_home_b) {
             
-            app_lv_view_stack_reset(app_lv_view_id_home_watch, false);
+            lvgl_view_stack_reset(lvgl_view_id_home_watch, false);
             return;
         }
         
         // 这里可以补充特殊需求, 如主表盘单击休眠(可选), 或者跳转到列表界面
-        if (stack_top == app_lv_view_id_home_watch) {
+        if (stack_top == lvgl_view_id_home_watch) {
             // 跳转到列表界面
-            // app_lv_view_stack_add(app_lv_view_id_menu, false);
+            // lvgl_view_stack_add(lvgl_view_id_menu, false);
             return;
         }
         
@@ -879,23 +879,23 @@ void ui_plug_watch_global_key0_async_call(void *user_data)
         
         // 一个默认流程, 任意界面返回上一层
         if (stack_nest > 1) {
-            app_lv_view_stack_del(stack_top);
+            lvgl_view_stack_del(stack_top);
             return;
         } else {
             // 一级界面回到主表盘
-            app_lv_view_stack_reset(app_lv_view_id_home_watch, false);
+            lvgl_view_stack_reset(lvgl_view_id_home_watch, false);
         }
     }
     if (false) // if (key_event == KEY_ACTION_LONG)
     {
-        uint32_t stack_nest = app_lv_view_stack_nest();
-        uint32_t stack_top  = app_lv_view_stack_top();
+        uint32_t stack_nest = lvgl_view_stack_nest();
+        uint32_t stack_top  = lvgl_view_stack_top();
         
         // 参上
         
         // 如任意界面长按跳转到开关机界面(弹窗)
         // 并且退出开关机界面返回到任意节目
-        // app_lv_view_stack_add(/* 开关机界面句柄 */, false);
+        // lvgl_view_stack_add(/* 开关机界面句柄 */, false);
     }
 }
 
@@ -906,8 +906,8 @@ void ui_plug_watch_global_key1_async_call(void *user_data)
     
     // 超时息屏退出:::
     lv_disp_trig_activity(NULL);
-    if (app_lv_view_stack_top() == app_lv_view_id_standby) {
-        app_lv_view_stack_del(app_lv_view_id_standby);
+    if (lvgl_view_stack_top() == lvgl_view_id_standby) {
+        lvgl_view_stack_del(lvgl_view_id_standby);
     }
     
     // 如果外源注册了按键全局响应, 这里不再做处理
@@ -916,12 +916,12 @@ void ui_plug_watch_global_key1_async_call(void *user_data)
         return;
     }
     
-    app_lv_view_event_custom_param.type = app_lv_view_event_custom_key1;
-    app_lv_view_event_custom_param.stop = false;
-    app_lv_view_event_custom_param.key.event = key_event;
-    lv_obj_t *page_c = lv_obj_get_child(app_lv_view_sched.view_c, 0);
-    lv_event_send(page_c, APP_LV_VIEW_EVENT_CUSTOM, APP_LV_VIEW_EVENT_CUSTOM_PARAM);
-    if (app_lv_view_event_custom_param.stop)
+    lvgl_view_event_custom_param.type = lvgl_view_event_custom_key1;
+    lvgl_view_event_custom_param.stop = false;
+    lvgl_view_event_custom_param.key.event = key_event;
+    lv_obj_t *page_c = lv_obj_get_child(lvgl_view_sched.view_c, 0);
+    lv_event_send(page_c, LVGL_VIEW_EVENT_CUSTOM, LVGL_VIEW_EVENT_CUSTOM_PARAM);
+    if (lvgl_view_event_custom_param.stop)
         return;
     
     if (false) // if (key_event == KEY_ACTION_CLICK)
@@ -929,7 +929,7 @@ void ui_plug_watch_global_key1_async_call(void *user_data)
         if (s_key1_click_page_id != 0) {
 
 
-            app_lv_view_stack_add(s_key1_click_page_id, false);
+            lvgl_view_stack_add(s_key1_click_page_id, false);
         } else {
             // 默认跳到运动列表界面
         }
@@ -991,7 +991,7 @@ void ui_plug_global_event_notify(ui_plug_global_event_t global_event)
 }
 
 /* way(0:正转;1:反转),val(步进值1~n) */
-void app_lv_view_enc_notify(uintptr_t way, uintptr_t val)
+void lvgl_view_enc_notify(uintptr_t way, uintptr_t val)
 {
     if (ui_plug_check_time.sleep_tag)
         return;
@@ -1017,12 +1017,12 @@ void app_lv_view_enc_notify(uintptr_t way, uintptr_t val)
     #endif
 }
 
-uint32_t app_lv_view_event_custom = 0;
-app_lv_view_event_custom_t app_lv_view_event_custom_param = {0};
+uint32_t lvgl_view_event_custom = 0;
+lvgl_view_event_custom_t lvgl_view_event_custom_param = {0};
 
 void ui_plug_event_ready(void)
 {
-    app_lv_view_event_custom = lv_event_register_id();
+    lvgl_view_event_custom = lv_event_register_id();
 }
 
 void key_event_cb_deal(void *arg)
@@ -1055,10 +1055,10 @@ void key_event_cb_deal(void *arg)
     #else
     #if 0
     if (key->value == KEY_IO_NUM0) {
-        app_lv_view_enc_notify(0, 1);
+        lvgl_view_enc_notify(0, 1);
     }
     if (key->value == KEY_IO_NUM1) {
-        app_lv_view_enc_notify(1, 1);
+        lvgl_view_enc_notify(1, 1);
     }
     #else
     if (key->value == KEY_IO_NUM0) {

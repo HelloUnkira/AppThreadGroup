@@ -1,5 +1,5 @@
-#ifndef APP_LV_VIEW_PLUG_H
-#define APP_LV_VIEW_PLUG_H
+#ifndef LVGL_VIEW_PLUG_H
+#define LVGL_VIEW_PLUG_H
 
 typedef enum {
     ui_plug_global_event_none = 0,
@@ -35,11 +35,11 @@ typedef struct {
 
 
 
-#define APP_LV_VIEW_CHECK_TIME_OVER_MAX  0xFF       /* 一直界面常亮 */
-#define APP_LV_VIEW_CHECK_TIME_IDLE_MAX  0xFF       /* 一直空闲等待(息屏后不自动返回主界面) */
-#define APP_LV_VIEW_CHECK_TIME_OVER      5          /* 界面空闲亮屏等待时间 */
-#define APP_LV_VIEW_CHECK_TIME_IDLE      5          /* 息屏后返回主界面空闲等待时间 */
-#define APP_LV_VIEW_CHECK_TIME_USE       0          /* 模组禁用 */
+#define LVGL_VIEW_CHECK_TIME_OVER_MAX  0xFF       /* 一直界面常亮 */
+#define LVGL_VIEW_CHECK_TIME_IDLE_MAX  0xFF       /* 一直空闲等待(息屏后不自动返回主界面) */
+#define LVGL_VIEW_CHECK_TIME_OVER      5          /* 界面空闲亮屏等待时间 */
+#define LVGL_VIEW_CHECK_TIME_IDLE      5          /* 息屏后返回主界面空闲等待时间 */
+#define LVGL_VIEW_CHECK_TIME_USE       0          /* 模组禁用 */
 
 
 
@@ -79,9 +79,9 @@ void ui_plug_check_time_def_reset(uint8_t over_time, uint8_t idle_time);
 void ui_plug_check_time_once_reset(uint8_t over_time, uint8_t idle_time);
 
 // 界面常亮:
-// ui_plug_check_time_reset(APP_LV_VIEW_CHECK_TIME_OVER_MAX, 0);
+// ui_plug_check_time_reset(LVGL_VIEW_CHECK_TIME_OVER_MAX, 0);
 // 界面息屏后不自动返回主界面:
-// ui_plug_check_time_reset(0, APP_LV_VIEW_CHECK_TIME_IDLE_MAX);
+// ui_plug_check_time_reset(0, LVGL_VIEW_CHECK_TIME_IDLE_MAX);
 // 恢复默认设置:
 // ui_plug_check_time_reset(0, 0);
 
@@ -102,7 +102,7 @@ void yc_swipe_pressed_cb(lv_event_t * e);
 bool yc_is_valid_click(lv_event_t *e);
 
 /* way(0:正转;1:反转),val(步进值1~n) */
-void app_lv_view_enc_notify(uintptr_t way, uintptr_t val);
+void lvgl_view_enc_notify(uintptr_t way, uintptr_t val);
 
 /* 这个模组填充所有外源事件 */
 /* 包括且不限于各种界面弹窗等等 */
@@ -123,15 +123,15 @@ void ui_plug_watch_global_key1_cb_register(void (*key_cb)(uint8_t key_event));
 void ui_plug_watch_global_enc_cb_register(void (*enc_cb)(uint8_t way, uint8_t step));
 
 typedef enum {
-    app_lv_view_event_custom_swipe_r,        // 右滑返回
-    app_lv_view_event_custom_key0,        // 按键0:上按键
-    app_lv_view_event_custom_key1,        // 按键1:下按键
-    app_lv_view_event_custom_enc,            // 编码器
-} app_lv_view_event_custom_type_t;
+    lvgl_view_event_custom_swipe_r,        // 右滑返回
+    lvgl_view_event_custom_key0,        // 按键0:上按键
+    lvgl_view_event_custom_key1,        // 按键1:下按键
+    lvgl_view_event_custom_enc,            // 编码器
+} lvgl_view_event_custom_type_t;
 
 // 插件:自定义事件:
 typedef struct {
-    app_lv_view_event_custom_type_t type;
+    lvgl_view_event_custom_type_t type;
     union {
     
     // 右滑返回事件携带数据
@@ -155,15 +155,15 @@ typedef struct {
     // 事件吸收标记
     uint8_t stop:1;
     
-} app_lv_view_event_custom_t;
+} lvgl_view_event_custom_t;
 
-extern uint32_t app_lv_view_event_custom;
-extern app_lv_view_event_custom_t app_lv_view_event_custom_param;
+extern uint32_t lvgl_view_event_custom;
+extern lvgl_view_event_custom_t lvgl_view_event_custom_param;
 
 // 事件项
-#define APP_LV_VIEW_EVENT_CUSTOM                  app_lv_view_event_custom
-#define APP_LV_VIEW_EVENT_CUSTOM_PARAM        &app_lv_view_event_custom_param
-#define APP_LV_VIEW_EVENT_CUSTOM_STOP(param)    ((param)->stop = true)
+#define LVGL_VIEW_EVENT_CUSTOM                  lvgl_view_event_custom
+#define LVGL_VIEW_EVENT_CUSTOM_PARAM        &lvgl_view_event_custom_param
+#define LVGL_VIEW_EVENT_CUSTOM_STOP(param)    ((param)->stop = true)
 
 void ui_plug_event_ready(void);
 

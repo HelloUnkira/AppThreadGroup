@@ -10,7 +10,7 @@
 #include "app_dev_lib.h"
 #include "app_thread_group.h"
 #include "app_third_fatfs.h"
-#include "app_lv_lib.h"
+#include "lvgl_lib.h"
 
 /*@brief 子线程服务例程就绪部
  */
@@ -18,8 +18,6 @@ static void app_thread_lvgl_routine_ready_cb(void)
 {
     /* 初始化文件系统 */
     app_third_fatfs_init();
-    /* 反初始化文件系统 */
-    // app_third_fatfs_deinit();
     /* 框架初始化 */
     lv_init();
     /* 初始化与lvgl绑定的驱动设备 */
@@ -28,13 +26,10 @@ static void app_thread_lvgl_routine_ready_cb(void)
     app_dev_gui_enc_ready(&app_dev_gui_enc);
     app_dev_gui_key_ready(&app_dev_gui_key);
     app_dev_gui_drv_ready(&app_dev_gui_drv);
-    /* lvgl初始化 */
-    app_lv_ready();
-    /* 模组初始化 */
-    app_lv_timer_ready();
-    app_lv_check_time_ready();
-    /* 初始化启动lvgl调度定时器 */
-    app_lv_timer_start();
+    /*  */
+    lvgl_lib_ready();
+    app_lvgl_timer_ready();
+    app_lvgl_timer_start();
 }
 
 /*@brief 子线程服务例程处理部
@@ -88,21 +83,10 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
             if (app_lv_scene_get_nest() == 1) {
                 app_lv_scene_t *current = NULL;
                 app_lv_scene_get_top(&current);
-                if (current != &app_lv_ui_watch_face)
-                    app_lv_scene_cover(&app_lv_ui_watch_face);
             }
             #endif
-            /*  */
-            if (package->dynamic)
-                app_mem_free(package->data);
-        }
-        /* lvgl场景计时检查 */
-        if (package->event == app_thread_lvgl_sched_check_time)
-            app_lv_check_time_update();
         /* 与lvgl绑定的驱动设备进入DLPS */
         if (package->event == app_thread_lvgl_sched_dlps_enter) {
-            /* 进入dlps界面 */
-            app_lv_scene_add(&app_lv_ui_dlps, false);
             /* 关闭设备(业务需求,不就地关闭鼠标,鼠标需要有唤醒能力) */
             app_dev_gui_disp_dlps_enter(&app_dev_gui_disp);
             app_dev_gui_key_dlps_enter(&app_dev_gui_key);
@@ -111,17 +95,11 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
         }
         /* 与lvgl绑定的驱动设备退出DLPS */
         if (package->event == app_thread_lvgl_sched_dlps_exit) {
-            /* 计时重置 */
-            app_lv_check_time_reset(0, 0);
-            app_lv_check_time_exec(true);
             /* 开启设备 */
             app_dev_gui_disp_dlps_exit(&app_dev_gui_disp);
             app_dev_gui_key_dlps_exit(&app_dev_gui_key);
             app_dev_gui_enc_dlps_exit(&app_dev_gui_enc);
             app_dev_gui_ptr_dlps_exit(&app_dev_gui_ptr);
-            /* 退出dlps界面 */
-            app_lv_scene_t *scene = NULL;
-            app_lv_scene_del(&scene);
         }
         return true;
     }
@@ -137,15 +115,8 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
         
         /* 启动UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_start) {
-            app_lv_event_default_config(NULL, true, NULL);
-            app_lv_check_time_reset(0, 0);
-            app_lv_check_time_exec(true);
             APP_SYS_LOG_WARN("ui scene start");
-            app_lv_scene_reset(&app_lv_ui_watch_face, false);
-            app_lv_scene_add(&app_lv_ui_start, false);
             /* 设置默认字体和默认尺寸 */
-            app_lv_multi_font_type_config(APP_LV_MULTI_FONT_TYPE_DEFAULT);
-            app_lv_multi_font_size_config(APP_LV_MULTI_FONT_SIZE_DEFAULT);
             /* 更新lvgl设备 */
             app_dev_gui_disp_dlps_exit(&app_dev_gui_disp);
             app_dev_gui_key_dlps_exit(&app_dev_gui_key);
@@ -154,13 +125,8 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
         }
         /* 终止UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_stop) {
-            app_lv_event_default_config(NULL, false, NULL);
-            app_lv_check_time_reset(0, 0);
-            app_lv_check_time_exec(true);
-            app_module_system_dlps_set(false);
             APP_SYS_LOG_WARN("ui scene stop");
-            app_lv_scene_reset(&app_lv_ui_watch_face, false);
-            app_lv_scene_add(&app_lv_ui_stop, false);
+            app_module_system_dlps_set(false);
             /* 更新lvgl设备 */
             app_dev_gui_disp_dlps_enter(&app_dev_gui_disp);
             app_dev_gui_key_dlps_enter(&app_dev_gui_key);
@@ -169,13 +135,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
         }
         /* 进入UI场景(关机) */
         if (package->event == app_thread_lvgl_ui_scene_shutdown) {
-            /* 禁用UI的一切交互,仅保留按压事件响应 */
-            app_lv_event_default_config(NULL, true, NULL);
-            app_lv_check_time_reset(0, 0);
-            app_lv_check_time_exec(false);
             APP_SYS_LOG_WARN("ui scene shutdown");
-            app_lv_scene_reset(&app_lv_ui_watch_face, false);
-            app_lv_scene_add(&app_lv_ui_dlps, false);
             /* 更新lvgl设备 */
             app_dev_gui_disp_dlps_enter(&app_dev_gui_disp);
             app_dev_gui_key_dlps_enter(&app_dev_gui_key);
@@ -187,24 +147,15 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
         
         /* 倒计时提醒 */
         if (package->event == app_thread_lvgl_ui_countdown_remind) {
-            app_lv_ui_scene_remind(&app_lv_ui_countdown_remind);
         }
         /* 提醒闹钟 */
         if (package->event == app_thread_lvgl_ui_remind_alarm) {
-            app_module_remind_package_t *remind = package->data;
-            remind->remind_group;
-            remind->remind_item;
-            remind->remind_type;
-            if (package->dynamic)
-                app_mem_free(package->data);
         }
         /* 提醒走动 */
         if (package->event == app_thread_lvgl_ui_remind_sedentary) {
-            app_lv_ui_scene_remind(&app_lv_ui_remind_sedentary);
         }
         /* 提醒喝水 */
         if (package->event == app_thread_lvgl_ui_remind_drink) {
-            app_lv_ui_scene_remind(&app_lv_ui_remind_drink);
         }
         
         /* 集成场景(结束) */
