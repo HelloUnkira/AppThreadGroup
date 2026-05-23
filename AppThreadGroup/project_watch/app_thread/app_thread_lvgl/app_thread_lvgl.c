@@ -75,16 +75,6 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
             }
             *record = false;
         }
-        /* lvgl wheel更新事件 */
-        if (package->event == app_thread_lvgl_sched_wheel) {
-            app_lv_wheel_update_handle(package->data);
-            #if 0
-            /* 补充:如果调度主界面不是主界面,重定位它 */
-            if (app_lv_scene_get_nest() == 1) {
-                app_lv_scene_t *current = NULL;
-                app_lv_scene_get_top(&current);
-            }
-            #endif
         /* 与lvgl绑定的驱动设备进入DLPS */
         if (package->event == app_thread_lvgl_sched_dlps_enter) {
             /* 关闭设备(业务需求,不就地关闭鼠标,鼠标需要有唤醒能力) */

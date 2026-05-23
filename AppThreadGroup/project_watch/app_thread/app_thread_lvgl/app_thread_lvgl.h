@@ -20,7 +20,6 @@ typedef enum {
     app_thread_lvgl_sched_e,
     /* GUI场景事件 */
     app_thread_lvgl_ui_s = 0,
-    app_thread_lvgl_ui_scene_wheel,                 /* UI场景轮盘配置 */
     app_thread_lvgl_ui_scene_start,                 /* UI场景进入 */
     app_thread_lvgl_ui_scene_stop,                  /* UI场景退出 */
     app_thread_lvgl_ui_scene_shutdown,              /* UI场景关机 */
