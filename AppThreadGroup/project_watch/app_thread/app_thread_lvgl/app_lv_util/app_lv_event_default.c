@@ -2,8 +2,6 @@
  *    lvgl事件
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -38,7 +36,7 @@ static void app_lv_event_default_gesture_cb(lv_event_t *e)
     switch (lv_event_get_code(e)) {
     case LV_EVENT_GESTURE: {
         lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-        APP_SYS_LOG_WARN("LV_EVENT_GESTURE:%x", dir);
+        LV_LOG_WARN("LV_EVENT_GESTURE:%x", dir);
         /* 左右滑动回到上一层 */
         if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
             
@@ -89,25 +87,26 @@ static bool app_lv_event_default_key_long_cb(lv_event_t *e)
     case LV_EVENT_KEY: {
         uint32_t key = lv_indev_get_key(lv_indev_get_act());
         catch_key_enter = (key == LV_KEY_ENTER ? true : false);
-        APP_SYS_LOG_INFO("LV_EVENT_KEY:%u", key);
+        LV_LOG_INFO("LV_EVENT_KEY:%u", key);
         break;
     }
     case LV_EVENT_LONG_PRESSED:
         count_key_enter++;
-        APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED:%u %u", catch_key_enter, count_key_enter);
+        LV_LOG_INFO("LV_EVENT_LONG_PRESSED:%u %u", catch_key_enter, count_key_enter);
         break;
     case LV_EVENT_LONG_PRESSED_REPEAT:
         count_key_enter++;
-        APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED_REPEAT:%u %u", catch_key_enter, count_key_enter);
+        LV_LOG_INFO("LV_EVENT_LONG_PRESSED_REPEAT:%u %u", catch_key_enter, count_key_enter);
         break;
     default:
         break;
     }
     /* 同时抓获目标按键及其按压次数达标 */
     if (catch_key_enter && count_key_enter >= 3 * 10) {
-        APP_SYS_LOG_WARN("catch key enter long click");
+        LV_LOG_WARN("catch key enter long click");
         /* 忽略掉当次按下,剩下的所有事件 */
         lv_indev_wait_release(lv_event_get_indev(e));
+        #if 0
         /* 选择不同的流程 */
         if (app_module_system_mode_get() == app_module_data_center_system_mode_shutdown) {
             /* 电量不足为低电量模式,充足为正常模式 */
@@ -118,6 +117,7 @@ static bool app_lv_event_default_key_long_cb(lv_event_t *e)
             app_module_system_mode_set(app_module_data_center_system_mode_shutdown);
             app_module_system_valid_set(false);
         }
+        #endif
         catch_key_enter = false;
         count_key_enter = 0;
         return true;
@@ -126,10 +126,12 @@ static bool app_lv_event_default_key_long_cb(lv_event_t *e)
         return true;
     }
     else {
+        #if 0
         /* 关机模式:只允许响应按键及其相关事件 */
         if (app_module_system_mode_get() == app_module_data_center_system_mode_shutdown)
             return true;
         /* 正常模式:响应其他事件 */
+        #endif
     }
     
     return false;
@@ -142,7 +144,7 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
     switch (lv_event_get_code(e)) {
     case LV_EVENT_KEY: {
         uint32_t key = lv_indev_get_key(lv_indev_get_act());
-        APP_SYS_LOG_INFO("LV_EVENT_KEY:%u", key);
+        LV_LOG_INFO("LV_EVENT_KEY:%u", key);
         /* DLPS界面退出 */
         if (app_module_system_dlps_get()) {
             if (key == LV_KEY_ENTER)
@@ -253,11 +255,11 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
         break;
     }
     case LV_EVENT_FOCUSED: {
-        APP_SYS_LOG_INFO("LV_EVENT_FOCUSED");
+        LV_LOG_INFO("LV_EVENT_FOCUSED");
         break;
     }
     case LV_EVENT_DEFOCUSED: {
-        APP_SYS_LOG_INFO("LV_EVENT_DEFOCUSED");
+        LV_LOG_INFO("LV_EVENT_DEFOCUSED");
         /* 更新焦点后及时退出编辑模式 */
         lv_group_t *group = app_lv_group_inst();
         lv_indev_t *defocus_indev = lv_event_get_param(e);
@@ -276,7 +278,7 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
         break;
     }
     case LV_EVENT_CLICKED: {
-        APP_SYS_LOG_INFO("LV_EVENT_CLICKED");
+        LV_LOG_INFO("LV_EVENT_CLICKED");
         /* DLPS界面退出 */
         if (lv_indev_get_type(lv_indev_get_act()) == LV_INDEV_TYPE_POINTER)
             app_module_system_dlps_set(false);
@@ -302,7 +304,7 @@ static void app_lv_event_default_encode_cb(lv_event_t *e)
         // 编码器顺时针旋转一个单位
         if (key == APP_LV_EVENT_CLOCKWISE ||
             key == APP_LV_EVENT_CLOCKWISE_ANTI)
-            APP_SYS_LOG_INFO("LV_EVENT_KEY: redirect to encode:%d", key);
+            LV_LOG_INFO("LV_EVENT_KEY: redirect to encode:%d", key);
         
         break;
     }
@@ -331,13 +333,13 @@ void app_lv_event_default_cb(lv_event_t *e)
     
     switch (lv_event_get_code(e)) {
     case LV_EVENT_SCROLL_BEGIN:
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_BEGIN");
+        LV_LOG_INFO("LV_EVENT_SCROLL_BEGIN");
         break;
     case LV_EVENT_SCROLL:
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL");
+        LV_LOG_INFO("LV_EVENT_SCROLL");
         break;
     case LV_EVENT_SCROLL_END:
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_END");
+        LV_LOG_INFO("LV_EVENT_SCROLL_END");
         break;
     default:
         break;

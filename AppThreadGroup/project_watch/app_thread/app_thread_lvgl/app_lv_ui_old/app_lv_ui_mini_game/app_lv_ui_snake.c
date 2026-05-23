@@ -1,6 +1,4 @@
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -27,7 +25,7 @@ static void app_lv_event_ui_default_redirect(lv_event_t *e)
     /* 手势事件重定向为指定动作 */
     if (code == LV_EVENT_GESTURE) {
         lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-        APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
+        LV_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
         
         /* 过滤掉相反的操作以防止停掉运行 */
         if ((app_lv_ui_res_local->direct == LV_DIR_RIGHT && dir == LV_DIR_LEFT) ||

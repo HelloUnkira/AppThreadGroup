@@ -2,8 +2,6 @@
  *    lvgl轮盘场景事件抓取
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -175,7 +173,7 @@ static void app_lv_wheel_event_press(app_lv_wheel_src_t *wheel_src, lv_point_t p
     /* 未抓获滑动 */
     if (wheel_src->scroll_way == LV_DIR_NONE || state == 0)
         return;
-    APP_SYS_LOG_INFO("LV_EVENT_PRESSING");
+    LV_LOG_INFO("LV_EVENT_PRESSING");
     lv_obj_t *obj = wheel->sibling[wheel_src->obj_idx]->root;
     /* 设置动画迭代参数 */
     if (wheel_src->scroll_way == LV_DIR_HOR)
@@ -247,32 +245,32 @@ void app_lv_wheel_event_cb(lv_event_t * e)
     switch(lv_event_get_code(e)) {
     case LV_EVENT_GESTURE: {
         lv_dir_t dir = lv_indev_get_gesture_dir(indev);
-        APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
+        LV_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
         /* 对于手势我们需要做一些额外的处理,但做在默认事件响应中 */
         break;
     }
     /* 窗口内部产生的滚动,此周期内的滑动完全放弃(不响应) */
     case LV_EVENT_SCROLL_BEGIN: {
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_BEGIN");
+        LV_LOG_INFO("LV_EVENT_SCROLL_BEGIN");
         wheel_src->scroll = true;
         break;
     }
     case LV_EVENT_SCROLL_END: {
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_END");
+        LV_LOG_INFO("LV_EVENT_SCROLL_END");
         wheel_src->scroll = true;
         break;
     }
     case LV_EVENT_SCROLL: {
-        APP_SYS_LOG_DEBUG("LV_EVENT_SCROLL");
+        LV_LOG_INFO("LV_EVENT_SCROLL");
         wheel_src->scroll = true;
         if (lv_indev_get_scroll_obj(indev) != NULL) {
             lv_obj_t *obj = lv_indev_get_scroll_obj(indev);
-            APP_SYS_LOG_DEBUG("scroll_x:%d",        lv_obj_get_scroll_x(obj));
-            APP_SYS_LOG_DEBUG("scroll_y:%d",        lv_obj_get_scroll_y(obj));
-            APP_SYS_LOG_DEBUG("scroll_top:%d",      lv_obj_get_scroll_top(obj));
-            APP_SYS_LOG_DEBUG("scroll_bottom:%d",   lv_obj_get_scroll_bottom(obj));
-            APP_SYS_LOG_DEBUG("scroll_left:%d",     lv_obj_get_scroll_left(obj));
-            APP_SYS_LOG_DEBUG("scroll_right:%d",    lv_obj_get_scroll_right(obj));
+            LV_LOG_INFO("scroll_x:%d",        lv_obj_get_scroll_x(obj));
+            LV_LOG_INFO("scroll_y:%d",        lv_obj_get_scroll_y(obj));
+            LV_LOG_INFO("scroll_top:%d",      lv_obj_get_scroll_top(obj));
+            LV_LOG_INFO("scroll_bottom:%d",   lv_obj_get_scroll_bottom(obj));
+            LV_LOG_INFO("scroll_left:%d",     lv_obj_get_scroll_left(obj));
+            LV_LOG_INFO("scroll_right:%d",    lv_obj_get_scroll_right(obj));
         }
         break;
     }
@@ -284,7 +282,7 @@ void app_lv_wheel_event_cb(lv_event_t * e)
         /* 重复事件锁检查 */
         if (wheel_src->event_lock)
             break;
-        APP_SYS_LOG_INFO("LV_EVENT_PRESSED");
+        LV_LOG_INFO("LV_EVENT_PRESSED");
         wheel_src->event_lock = true;
         wheel_src->click_pos  = point;
         wheel_src->touch_over = false;
@@ -321,7 +319,7 @@ void app_lv_wheel_event_cb(lv_event_t * e)
         if (wheel_src->touch_over)
             break;
         wheel_src->event_lock = false;
-        APP_SYS_LOG_INFO("LV_EVENT_RELEASED");
+        LV_LOG_INFO("LV_EVENT_RELEASED");
         /* 子窗口滚动锁定 */
         if (wheel_src->scroll) {
             wheel_src->click_pos = point;

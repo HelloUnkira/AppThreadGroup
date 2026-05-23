@@ -2,8 +2,6 @@
  *    lvgl超时回主界面以及息屏
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -19,7 +17,7 @@ static app_lv_check_time_t app_lv_check_time   = {0};
  */
 void app_lv_check_time_reset(uint8_t over_time, uint8_t idle_time)
 {
-    APP_SYS_LOG_INFO("");
+    LV_LOG_INFO("");
     app_mutex_process(&app_lv_check_time_mutex, app_mutex_take);
     app_lv_check_time.over_time_bak = over_time != 0 ? over_time : APP_LV_CHECK_TIME_OVER;
     app_lv_check_time.idle_time_bak = idle_time != 0 ? idle_time : APP_LV_CHECK_TIME_IDLE;

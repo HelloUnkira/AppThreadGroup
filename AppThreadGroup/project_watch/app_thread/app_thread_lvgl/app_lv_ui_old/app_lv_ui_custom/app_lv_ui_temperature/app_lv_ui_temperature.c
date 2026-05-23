@@ -1,6 +1,4 @@
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -44,7 +42,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     
     char temp_digit[20] = {0};
     sprintf(temp_digit, "%.2f", app_lv_ui_temperature_presenter.get_value());
-    APP_SYS_LOG_INFO("temp_digit:%s", temp_digit);
+    LV_LOG_INFO("temp_digit:%s", temp_digit);
     lv_label_set_text_fmt(app_lv_ui_res_local->temp, "Temperature:%s", temp_digit);
 }
 

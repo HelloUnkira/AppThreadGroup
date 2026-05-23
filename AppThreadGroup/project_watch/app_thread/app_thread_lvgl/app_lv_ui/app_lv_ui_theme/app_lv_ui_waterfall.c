@@ -1,6 +1,4 @@
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -31,17 +29,17 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     const char *img_min_str = app_lv_pic_str_find(app_lv_ui_res_local->list[0].idx_pic + APP_LV_UI_WATERFALL_OFS_MIN);
     if (lv_img_decoder_get_info(img_max_str, &img_max_header) != LV_RES_OK ||
         lv_img_decoder_get_info(img_min_str, &img_min_header) != LV_RES_OK) {
-        APP_SYS_LOG_WARN("can't take pic src");
-        APP_SYS_LOG_WARN("%s", img_max_str);
-        APP_SYS_LOG_WARN("%s", img_min_str);
+        LV_LOG_WARN("can't take pic src");
+        LV_LOG_WARN("%s", img_max_str);
+        LV_LOG_WARN("%s", img_min_str);
         return;
     }
     /* 获得图片的宽和高(应该是一样的长度) */
     if (img_max_header.w != img_max_header.h ||
         img_min_header.w != img_min_header.h) {
-        APP_SYS_LOG_WARN("pic is not quadrate");
-        APP_SYS_LOG_WARN("%s<w:%d,h:%d>", img_max_str, img_max_header.w, img_max_header.h);
-        APP_SYS_LOG_WARN("%s<w:%d,h:%d>", img_min_str, img_min_header.w, img_min_header.h);
+        LV_LOG_WARN("pic is not quadrate");
+        LV_LOG_WARN("%s<w:%d,h:%d>", img_max_str, img_max_header.w, img_max_header.h);
+        LV_LOG_WARN("%s<w:%d,h:%d>", img_min_str, img_min_header.w, img_min_header.h);
         return;
     }
     
@@ -61,7 +59,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
         APP_SYS_ASSERT(img_max_header.h * APP_LV_UI_WATERFALL_NUM >= LV_VER_RES);
         app_lv_ui_res_local->ofs_base = (img_max_header.h * APP_LV_UI_WATERFALL_NUM - LV_VER_RES) / 2 + app_lv_style_ver_pct(2);
         lv_obj_scroll_to_y(app_lv_ui_res_local->obj_list, app_lv_ui_res_local->ofs_base, LV_ANIM_OFF);
-        APP_SYS_LOG_DEBUG("ofs_base:%d", app_lv_ui_res_local->ofs_base);
+        LV_LOG_INFO("ofs_base:%d", app_lv_ui_res_local->ofs_base);
         return;
     }
 
@@ -72,8 +70,8 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     lv_sqrt(center_x * center_x + center_y * center_y, &sqrt_res, 0x8000);
     lv_coord_t roll_ofs = lv_obj_get_scroll_y(app_lv_ui_res_local->obj_list) - app_lv_ui_res_local->ofs_base;
     lv_coord_t distance = sqrt_res.i;
-    APP_SYS_LOG_DEBUG("roll_ofs:%d", roll_ofs);
-    APP_SYS_LOG_DEBUG("distance:%d", distance);
+    LV_LOG_INFO("roll_ofs:%d", roll_ofs);
+    LV_LOG_INFO("distance:%d", distance);
     
     /* 垂直调节,计算图片中心到显示中心的位置映射 */
     for (uint32_t idx = 0; idx < child_cnt; idx++) {
@@ -115,22 +113,22 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
             dis = sqrt_res.i;
             lv_obj_center(img);
         }
-        APP_SYS_LOG_DEBUG("idx:%d ofs:%d dis:%d", idx, ofs, dis);
+        LV_LOG_INFO("idx:%d ofs:%d dis:%d", idx, ofs, dis);
         /* 中心点在显示内,进行比例映射 */
         int32_t pic_ofs = app_sys_map(dis, (int32_t)distance, 0, APP_LV_UI_WATERFALL_OFS_MIN, APP_LV_UI_WATERFALL_OFS_MAX);
-        APP_SYS_LOG_DEBUG("idx:%d pic_ofs:%d", idx, pic_ofs);
+        LV_LOG_INFO("idx:%d pic_ofs:%d", idx, pic_ofs);
         /* 更新图片资源 */
         lv_img_header_t img_header = {0};
         const char *img_str = app_lv_pic_str_find(app_lv_ui_res_local->list[idx].idx_pic + pic_ofs);
         if (lv_img_decoder_get_info(img_str, &img_header) != LV_RES_OK) {
-            APP_SYS_LOG_WARN("can't take pic src");
-            APP_SYS_LOG_WARN("%s", img_str);
+            LV_LOG_WARN("can't take pic src");
+            LV_LOG_WARN("%s", img_str);
             continue;
         }
         /* 获得图片的宽和高(应该是一样的长度) */
         if (img_header.w != img_header.h) {
-            APP_SYS_LOG_WARN("pic is not quadrate");
-            APP_SYS_LOG_WARN("%s<w:%d,h:%d>", img_str, img_header.w, img_header.h);
+            LV_LOG_WARN("pic is not quadrate");
+            LV_LOG_WARN("%s<w:%d,h:%d>", img_str, img_header.w, img_header.h);
             continue;
         }
         lv_img_set_src(img, img_str);
@@ -139,13 +137,13 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
         if (type == app_lv_ui_local_list_left) {
             lv_coord_t obj_w_half = (LV_HOR_RES - img_max_header.w) / 2 / 2;
             lv_coord_t pic_x_ofs = app_sys_map(dis, (int32_t)distance, 0, 0, obj_w_half);
-            APP_SYS_LOG_DEBUG("idx:%d, obj_w_half:%d pic_x_ofs:%d", idx, obj_w_half, pic_x_ofs);
+            LV_LOG_INFO("idx:%d, obj_w_half:%d pic_x_ofs:%d", idx, obj_w_half, pic_x_ofs);
             lv_obj_align(img, LV_ALIGN_RIGHT_MID, -pic_x_ofs, 0);
         }
         if (type == app_lv_ui_local_list_right) {
             lv_coord_t obj_w_half = (LV_HOR_RES - img_max_header.w) / 2 / 2;
             lv_coord_t pic_x_ofs = app_sys_map(dis, (int32_t)distance, 0, 0, obj_w_half);
-            APP_SYS_LOG_DEBUG("idx:%d, obj_w_half:%d pic_x_ofs:%d", idx, obj_w_half, pic_x_ofs);
+            LV_LOG_INFO("idx:%d, obj_w_half:%d pic_x_ofs:%d", idx, obj_w_half, pic_x_ofs);
             lv_obj_align(img, LV_ALIGN_LEFT_MID,  +pic_x_ofs, 0);
         }
     }
@@ -172,14 +170,14 @@ static void app_lv_ui_list_scroll_cb(lv_event_t *e)
         lv_img_header_t img_max_header = {0};
         const char *img_max_str = app_lv_pic_str_find(app_lv_ui_res_local->list[0].idx_pic + APP_LV_UI_WATERFALL_OFS_MAX);
         if (lv_img_decoder_get_info(img_max_str, &img_max_header) != LV_RES_OK) {
-            APP_SYS_LOG_WARN("can't take pic src");
-            APP_SYS_LOG_WARN("%s", img_max_str);
+            LV_LOG_WARN("can't take pic src");
+            LV_LOG_WARN("%s", img_max_str);
             break;
         }
         /* 获得图片的宽和高(应该是一样的长度) */
         if (img_max_header.w != img_max_header.h) {
-            APP_SYS_LOG_WARN("pic is not quadrate");
-            APP_SYS_LOG_WARN("%s<w:%d,h:%d>", img_max_str, img_max_header.w, img_max_header.h);
+            LV_LOG_WARN("pic is not quadrate");
+            LV_LOG_WARN("%s<w:%d,h:%d>", img_max_str, img_max_header.w, img_max_header.h);
             break;
         }
         lv_coord_t roll_ofs = lv_obj_get_scroll_y(app_lv_ui_res_local->obj_list) - app_lv_ui_res_local->ofs_base;

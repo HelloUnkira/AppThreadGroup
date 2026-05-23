@@ -1,6 +1,4 @@
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -18,7 +16,7 @@ static struct {
  */
 static void app_lv_ui_fs_info_append(char *str)
 {
-    APP_SYS_LOG_INFO(str);
+    LV_LOG_INFO(str);
     uint32_t fs_info_size_new = app_lv_ui_res_local->fs_info_size + strlen(str) + 1;
     app_lv_ui_res_local->fs_info = lv_mem_realloc(app_lv_ui_res_local->fs_info, fs_info_size_new + 1);
     lv_memset_00(app_lv_ui_res_local->fs_info + app_lv_ui_res_local->fs_info_size,
@@ -26,10 +24,10 @@ static void app_lv_ui_fs_info_append(char *str)
     app_lv_ui_res_local->fs_info_size = fs_info_size_new;
     strcat(app_lv_ui_res_local->fs_info, str);
     strcat(app_lv_ui_res_local->fs_info, "\n");
-    APP_SYS_LOG_DEBUG("");
-    APP_SYS_LOG_DEBUG("%u", app_lv_ui_res_local->fs_info_size);
-    APP_SYS_LOG_DEBUG_RAW(app_lv_ui_res_local->fs_info);
-    APP_SYS_LOG_DEBUG("");
+    LV_LOG_INFO("");
+    LV_LOG_INFO("%u", app_lv_ui_res_local->fs_info_size);
+    LV_LOG_INFO(app_lv_ui_res_local->fs_info);
+    LV_LOG_INFO("");
 }
 
 /*@brief lvgl ui数据交互回调
@@ -43,14 +41,14 @@ static void app_lv_ui_fs_walk(char path[256], char file[256])
     app_lv_ui_fs_info_append(path);
     
     if ((retval = lv_fs_dir_open(&rddir, path)) != LV_FS_RES_OK) {
-        APP_SYS_LOG_WARN("lv_fs_dir_open %s fail:%d", path, retval);
+        LV_LOG_WARN("lv_fs_dir_open %s fail:%d", path, retval);
         return;
     }
     
     while (true) {
         strcpy(file, "");
         if ((retval = lv_fs_dir_read(&rddir, file)) != LV_FS_RES_OK) {
-            APP_SYS_LOG_WARN("lv_fs_dir_read fail:%d", retval);
+            LV_LOG_WARN("lv_fs_dir_read fail:%d", retval);
             break;
         }
         
@@ -74,7 +72,7 @@ static void app_lv_ui_fs_walk(char path[256], char file[256])
     }
     
     if ((retval = lv_fs_dir_close(&rddir)) != LV_FS_RES_OK) {
-        APP_SYS_LOG_WARN("lv_fs_dir_close %s fail:%d", path, retval);
+        LV_LOG_WARN("lv_fs_dir_close %s fail:%d", path, retval);
         return;
     }
 }

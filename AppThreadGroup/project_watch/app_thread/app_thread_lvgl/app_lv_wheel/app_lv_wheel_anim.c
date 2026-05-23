@@ -2,8 +2,6 @@
  *    lvgl轮盘场景移动动画
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -35,7 +33,7 @@ void app_lv_wheel_anim_exec_cb(void *var, int32_t val)
             if (wheel_src->obj_idx == 1) /* Scroll From Right */
                 scroll_dis = wheel_w - val;
             lv_coord_t opa = scroll_dis * 255 / wheel_w;
-            APP_SYS_LOG_DEBUG("scroll_dis:%u opa:%u", scroll_dis, opa);
+            LV_LOG_INFO("scroll_dis:%u opa:%u", scroll_dis, opa);
             app_lv_style_opa_update(obj_sib, opa);
         }
         if (wheel_src->scroll_way == LV_DIR_VER) {
@@ -47,7 +45,7 @@ void app_lv_wheel_anim_exec_cb(void *var, int32_t val)
             if (wheel_src->obj_idx == 3) /* Scroll From Right */
                 scroll_dis = wheel_h - val;
             lv_coord_t opa = scroll_dis * 255 / wheel_h;
-            APP_SYS_LOG_DEBUG("scroll_dis:%u opa:%u", scroll_dis, opa);
+            LV_LOG_INFO("scroll_dis:%u opa:%u", scroll_dis, opa);
             app_lv_style_opa_update(obj_sib, opa);
         }
         break;
@@ -80,7 +78,7 @@ void app_lv_wheel_anim_exec_cb(void *var, int32_t val)
  */
 void app_lv_wheel_anim_start_cb(lv_anim_t *a)
 {
-    APP_SYS_LOG_INFO("");
+    LV_LOG_INFO("");
     app_lv_wheel_src_t *wheel_src = a->var;
     /* 这里应该中断吗??? */
     if (wheel_src->obj_idx >= 4)
@@ -88,14 +86,14 @@ void app_lv_wheel_anim_start_cb(lv_anim_t *a)
     APP_SYS_ASSERT(wheel_src->obj_idx < 4);
     /* 动画特效:撞墙动画 */
     lv_anim_set_path_cb(a, lv_anim_path_bounce);
-    APP_SYS_LOG_WARN("wheel prepare:<%u,%u>", wheel_src->obj_idx, wheel_src->scroll_way);
+    LV_LOG_WARN("wheel prepare:<%u,%u>", wheel_src->obj_idx, wheel_src->scroll_way);
 }
 
 /*@brief 跟手动画结束回调
  */
 void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
 {
-    APP_SYS_LOG_INFO("");
+    LV_LOG_INFO("");
     app_lv_wheel_src_t *wheel_src = a->var;
     /* 这里应该中断吗??? */
     if (wheel_src->obj_idx >= 4)
@@ -117,7 +115,7 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
             wheel_src->scroll_way = LV_DIR_NONE;
             if (!wheel_src->cover)
                  wheel_src->obj_idx = 4;
-            APP_SYS_LOG_WARN("wheel finish");
+            LV_LOG_WARN("wheel finish");
         }
         break;
     }
@@ -133,7 +131,7 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
             wheel_src->touch_over = false;
             wheel_src->scroll_way = LV_DIR_NONE;
             wheel_src->obj_idx = 4;
-            APP_SYS_LOG_WARN("wheel finish");
+            LV_LOG_WARN("wheel finish");
         }
         /* 覆盖标记位有效时(中心窗口已经发生改变) */
         if (wheel_src->cover) {

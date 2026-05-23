@@ -1,6 +1,4 @@
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -31,13 +29,13 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     lv_img_header_t img_header = {0};
     const char *img_str = app_lv_pic_str_find(app_lv_ui_res_local->list[0].idx_pic + APP_LV_UI_THUMB_WHEEL_OFS);
     if (lv_img_decoder_get_info(img_str, &img_header) != LV_RES_OK) {
-        APP_SYS_LOG_WARN("can't take pic src:%s", img_str);
+        LV_LOG_WARN("can't take pic src:%s", img_str);
         return;
     }
     /* 获得图片的宽和高(应该是一样的长度) */
     if (img_header.w != img_header.h) {
-        APP_SYS_LOG_WARN("pic is not quadrate");
-        APP_SYS_LOG_WARN("%s<w:%d,h:%d>", img_str, img_header.w, img_header.h);
+        LV_LOG_WARN("pic is not quadrate");
+        LV_LOG_WARN("%s<w:%d,h:%d>", img_str, img_header.w, img_header.h);
         return;
     }
     
@@ -47,22 +45,22 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     lv_coord_t pic_distance = LV_MIN(LV_HOR_RES, LV_VER_RES) / 2 - pic_diameter / 2 - APP_LV_UI_THUMB_WHEEL_SPAN;
     int16_t angle_bse = app_lv_ui_res_local->iter_angle / APP_LV_UI_THUMB_WHEEL_UNIT;
     int16_t angle_ofs = app_lv_ui_res_local->iter_angle % APP_LV_UI_THUMB_WHEEL_UNIT;
-    APP_SYS_LOG_DEBUG("pic_diameter:%d", pic_diameter);
-    APP_SYS_LOG_DEBUG("pic_distance:%d", pic_distance);
-    APP_SYS_LOG_DEBUG("angle_bse:%d", angle_bse);
-    APP_SYS_LOG_DEBUG("angle_ofs:%d", angle_ofs);
+    LV_LOG_INFO("pic_diameter:%d", pic_diameter);
+    LV_LOG_INFO("pic_distance:%d", pic_distance);
+    LV_LOG_INFO("angle_bse:%d", angle_bse);
+    LV_LOG_INFO("angle_ofs:%d", angle_ofs);
     
     for (int16_t angle = 0; angle < 360; angle += APP_LV_UI_THUMB_WHEEL_UNIT) {
         lv_coord_t pic_x = ((int32_t)lv_trigo_cos(angle + angle_ofs) * pic_distance) >> LV_TRIGO_SHIFT;
         lv_coord_t pic_y = ((int32_t)lv_trigo_sin(angle + angle_ofs) * pic_distance) >> LV_TRIGO_SHIFT;
-        APP_SYS_LOG_DEBUG("<pic_x,pic_y><%d,%d>", pic_x, pic_y);
+        LV_LOG_INFO("<pic_x,pic_y><%d,%d>", pic_x, pic_y);
         lv_coord_t pic_pos_x = circle_x + pic_x - pic_diameter / 2;
         lv_coord_t pic_pos_y = circle_y + pic_y - pic_diameter / 2;
-        APP_SYS_LOG_DEBUG("<pic_pos_x,pic_pos_y><%d,%d>", pic_pos_x, pic_pos_y);
+        LV_LOG_INFO("<pic_pos_x,pic_pos_y><%d,%d>", pic_pos_x, pic_pos_y);
         
         int16_t idx = angle / APP_LV_UI_THUMB_WHEEL_UNIT;
         int16_t pic_ofs = app_sys_mabs(idx - angle_bse, (int16_t)app_lv_ui_res_local->list_num);
-        APP_SYS_LOG_DEBUG("<idx, pic_ofs><%d, %d>", idx, pic_ofs);
+        LV_LOG_INFO("<idx, pic_ofs><%d, %d>", idx, pic_ofs);
         const char *img_str = app_lv_pic_str_find(app_lv_ui_res_local->list[pic_ofs].idx_pic + APP_LV_UI_THUMB_WHEEL_OFS);
         lv_img_set_src(app_lv_ui_res_local->img_list[idx], img_str);
         lv_obj_set_pos(app_lv_ui_res_local->img_list[idx], pic_pos_x, pic_pos_y);

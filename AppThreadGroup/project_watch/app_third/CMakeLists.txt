@@ -6,12 +6,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_json       ${CMAKE_CURRENT_SOUR
 
 # 载入第三方库(lvgl库)
 if (app_thread_group_use_lvgl)
-FIND_TARGET_H_PATH(target_path ${CMAKE_CURRENT_SOURCE_DIR}/lib_lvgl)
-target_include_directories(app_third SYSTEM PUBLIC ${target_path})
-
-target_link_libraries(app_dev PUBLIC lvgl)
-target_link_libraries(app_dev PUBLIC lvgl_demos)
-target_link_libraries(app_dev PUBLIC lvgl_examples)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_lvgl       ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_lvgl)
 endif()
 
 # 载入第三方库(scui库)
@@ -22,11 +17,6 @@ target_include_directories(app_third SYSTEM PUBLIC ${target_path})
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_lz4        ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_lz4)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_thorvg     ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_lib_thorvg)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_rlottie    ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_lib_rlottie)
-endif()
-
-# 载入第三方库(lvgl库)
-if (app_thread_group_use_lvgl)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_lvgl       ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_lvgl)
 endif()
 
 # git 根目录执行命令添加子仓库:

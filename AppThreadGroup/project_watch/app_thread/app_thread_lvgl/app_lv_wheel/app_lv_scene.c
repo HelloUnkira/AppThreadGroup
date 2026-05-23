@@ -2,8 +2,6 @@
  *    lvgl单场景调度
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -26,7 +24,7 @@ void app_lv_scene_sched(app_lv_scene_sched_t *sched)
         sched->scene->hide(sched->scene);
         break;
     default:
-        APP_SYS_LOG_WARN("catch error event%u:", sched->event);
+        LV_LOG_WARN("catch error event%u:", sched->event);
         break;
     }
 }

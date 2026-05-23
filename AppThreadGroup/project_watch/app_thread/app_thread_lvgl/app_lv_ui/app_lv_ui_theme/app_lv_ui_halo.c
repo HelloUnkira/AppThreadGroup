@@ -1,6 +1,4 @@
 
-#define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -33,17 +31,17 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     const char *img_min_str = app_lv_pic_str_find(app_lv_ui_res_local->list[0].idx_pic + APP_LV_UI_HALO_OFS_MIN);
     if (lv_img_decoder_get_info(img_max_str, &img_max_header) != LV_RES_OK ||
         lv_img_decoder_get_info(img_min_str, &img_min_header) != LV_RES_OK) {
-        APP_SYS_LOG_WARN("can't take pic src");
-        APP_SYS_LOG_WARN("%s", img_max_str);
-        APP_SYS_LOG_WARN("%s", img_min_str);
+        LV_LOG_WARN("can't take pic src");
+        LV_LOG_WARN("%s", img_max_str);
+        LV_LOG_WARN("%s", img_min_str);
         return;
     }
     /* 获得图片的宽和高(应该是一样的长度) */
     if (img_max_header.w != img_max_header.h ||
         img_min_header.w != img_min_header.h) {
-        APP_SYS_LOG_WARN("pic is not quadrate");
-        APP_SYS_LOG_WARN("%s<w:%d,h:%d>", img_max_str, img_max_header.w, img_max_header.h);
-        APP_SYS_LOG_WARN("%s<w:%d,h:%d>", img_min_str, img_min_header.w, img_min_header.h);
+        LV_LOG_WARN("pic is not quadrate");
+        LV_LOG_WARN("%s<w:%d,h:%d>", img_max_str, img_max_header.w, img_max_header.h);
+        LV_LOG_WARN("%s<w:%d,h:%d>", img_min_str, img_min_header.w, img_min_header.h);
         return;
     }
     
@@ -52,79 +50,79 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     /* 俩个圈,一个大圈一个小圈交替变化 */
     lv_coord_t ring_dis_max = LV_MIN(LV_HOR_RES, LV_VER_RES) / 2 - img_max_header.w / 2 - APP_LV_UI_HALO_SPAN_MAX;
     lv_coord_t ring_dis_min = img_min_header.w / 2 + APP_LV_UI_HALO_SPAN_MIN;
-    APP_SYS_LOG_INFO("ring_dis_max:%d", ring_dis_max);
-    APP_SYS_LOG_INFO("ring_dis_min:%d", ring_dis_min);
+    LV_LOG_INFO("ring_dis_max:%d", ring_dis_max);
+    LV_LOG_INFO("ring_dis_min:%d", ring_dis_min);
     /* 小圈位置,大圈位置,交替变化的偏转起点与终点 */
     app_lv_ui_res_local->iter_route = ring_dis_max - ring_dis_min;
-    APP_SYS_LOG_INFO("iter_skew:%d",  app_lv_ui_res_local->iter_skew);
-    APP_SYS_LOG_INFO("iter_route:%d", app_lv_ui_res_local->iter_route);
+    LV_LOG_INFO("iter_skew:%d",  app_lv_ui_res_local->iter_skew);
+    LV_LOG_INFO("iter_route:%d", app_lv_ui_res_local->iter_route);
     /* 根据起始结束之间的位移计算图片映射,确认每隔多少个单位图片变化一次 */
     lv_coord_t ring_ofs_skew = app_sys_mabs(app_lv_ui_res_local->iter_skew, ring_dis_max - ring_dis_min);
     lv_coord_t ring_dis_span = app_lv_ui_res_local->iter_route / (APP_LV_UI_HALO_OFS_MAX - APP_LV_UI_HALO_OFS_MIN);
-    APP_SYS_LOG_INFO("ring_dis_span:%d", ring_dis_span);
+    LV_LOG_INFO("ring_dis_span:%d", ring_dis_span);
     /* 当次的skew需要选择的图片尺寸以及对应尺寸的直径 */
     lv_coord_t pic_ofs_max  = APP_LV_UI_HALO_OFS_MAX - ring_ofs_skew / ring_dis_span;
     lv_coord_t pic_ofs_min  = APP_LV_UI_HALO_OFS_MIN + ring_ofs_skew / ring_dis_span;
     pic_ofs_max = pic_ofs_max >= APP_LV_UI_HALO_OFS_MIN ? pic_ofs_max : APP_LV_UI_HALO_OFS_MIN;
     pic_ofs_min = pic_ofs_min <= APP_LV_UI_HALO_OFS_MAX ? pic_ofs_min : APP_LV_UI_HALO_OFS_MAX;
-    APP_SYS_LOG_INFO("pic_ofs_max:%d", pic_ofs_max);
-    APP_SYS_LOG_INFO("pic_ofs_min:%d", pic_ofs_min);
+    LV_LOG_INFO("pic_ofs_max:%d", pic_ofs_max);
+    LV_LOG_INFO("pic_ofs_min:%d", pic_ofs_min);
     const char *img_max_cur_str = app_lv_pic_str_find(app_lv_ui_res_local->list[0].idx_pic + pic_ofs_max);
     const char *img_min_cur_str = app_lv_pic_str_find(app_lv_ui_res_local->list[0].idx_pic + pic_ofs_min);
     if (lv_img_decoder_get_info(img_max_cur_str, &img_max_header) != LV_RES_OK ||
         lv_img_decoder_get_info(img_min_cur_str, &img_min_header) != LV_RES_OK) {
-        APP_SYS_LOG_WARN("can't take pic src");
-        APP_SYS_LOG_WARN("%s", img_max_cur_str);
-        APP_SYS_LOG_WARN("%s", img_min_cur_str);
+        LV_LOG_WARN("can't take pic src");
+        LV_LOG_WARN("%s", img_max_cur_str);
+        LV_LOG_WARN("%s", img_min_cur_str);
         return;
     }
     /* 获得图片的宽和高(应该是一样的长度) */
     if (img_max_header.w != img_max_header.h ||
         img_min_header.w != img_min_header.h) {
-        APP_SYS_LOG_WARN("pic src is not quadrate");
-        APP_SYS_LOG_WARN("%s<w:%d,h:%d>", img_max_cur_str, img_max_header.w, img_max_header.h);
-        APP_SYS_LOG_WARN("%s<w:%d,h:%d>", img_min_cur_str, img_min_header.w, img_min_header.h);
+        LV_LOG_WARN("pic src is not quadrate");
+        LV_LOG_WARN("%s<w:%d,h:%d>", img_max_cur_str, img_max_header.w, img_max_header.h);
+        LV_LOG_WARN("%s<w:%d,h:%d>", img_min_cur_str, img_min_header.w, img_min_header.h);
         return;
     }
     lv_coord_t pic_dis_max = img_max_header.w;
     lv_coord_t pic_dis_min = img_min_header.w;
-    APP_SYS_LOG_INFO("pic_dis_max:%d", pic_dis_max);
-    APP_SYS_LOG_INFO("pic_dis_min:%d", pic_dis_min);
+    LV_LOG_INFO("pic_dis_max:%d", pic_dis_max);
+    LV_LOG_INFO("pic_dis_min:%d", pic_dis_min);
     /* 先计算理论的max和min */
     ring_dis_max -= ring_ofs_skew;  // 这是理论上的max
     ring_dis_min += ring_ofs_skew;  // 这是理论上的min
-    APP_SYS_LOG_INFO("ring_dis_max:%d", ring_dis_max);
-    APP_SYS_LOG_INFO("ring_dis_min:%d", ring_dis_min);
+    LV_LOG_INFO("ring_dis_max:%d", ring_dis_max);
+    LV_LOG_INFO("ring_dis_min:%d", ring_dis_min);
     /* skew影响的当次显示图片组的偏转 */
     int16_t skew_bse = (int16_t)LV_ABS(app_lv_ui_res_local->iter_skew) / (int16_t)app_lv_ui_res_local->iter_route;
     int16_t skew_ofs = (int16_t)LV_ABS(app_lv_ui_res_local->iter_skew) % (int16_t)app_lv_ui_res_local->iter_route;
-    APP_SYS_LOG_INFO("skew_bse:%d", skew_bse);
-    APP_SYS_LOG_INFO("skew_ofs:%d", skew_ofs);
+    LV_LOG_INFO("skew_bse:%d", skew_bse);
+    LV_LOG_INFO("skew_ofs:%d", skew_ofs);
     /* 这里加一个映射让它内外动的时候做一次环形偏转 */
     int16_t angle_bse = skew_bse * (360 / APP_LV_UI_HALO_UNIT);
     int16_t angle_ofs = app_sys_map(skew_ofs, 0, (int16_t)app_lv_ui_res_local->iter_route, 0, APP_LV_UI_HALO_UNIT / 2);
-    APP_SYS_LOG_INFO("angle_bse:%d", angle_bse);
-    APP_SYS_LOG_INFO("angle_ofs:%d", angle_ofs);
+    LV_LOG_INFO("angle_bse:%d", angle_bse);
+    LV_LOG_INFO("angle_ofs:%d", angle_ofs);
     int16_t angle_ofs1 = angle_ofs;
     int16_t angle_ofs2 = APP_LV_UI_HALO_UNIT / 2 - angle_ofs;
-    APP_SYS_LOG_INFO("angle_ofs1:%d", angle_ofs1);
-    APP_SYS_LOG_INFO("angle_ofs2:%d", angle_ofs2);
-    APP_SYS_LOG_INFO("pic_off:%d, pic_min:%d", APP_LV_UI_HALO_OFS_MAX - skew_bse / ring_dis_span, APP_LV_UI_HALO_OFS_MIN);
-    APP_SYS_LOG_INFO("pic_off:%d, pic_max:%d", APP_LV_UI_HALO_OFS_MIN + skew_bse / ring_dis_span, APP_LV_UI_HALO_OFS_MAX);
+    LV_LOG_INFO("angle_ofs1:%d", angle_ofs1);
+    LV_LOG_INFO("angle_ofs2:%d", angle_ofs2);
+    LV_LOG_INFO("pic_off:%d, pic_min:%d", APP_LV_UI_HALO_OFS_MAX - skew_bse / ring_dis_span, APP_LV_UI_HALO_OFS_MIN);
+    LV_LOG_INFO("pic_off:%d, pic_max:%d", APP_LV_UI_HALO_OFS_MIN + skew_bse / ring_dis_span, APP_LV_UI_HALO_OFS_MAX);
     /* 先画外部大圈圈,它跟随偏移量向内部收缩 */
     /* 外部大圈圈是向正迭代,顺时钟为+ */
     for (int16_t angle = 0; angle < 360; angle += APP_LV_UI_HALO_UNIT) {
         lv_coord_t pic_x = ((lv_coord_t)lv_trigo_cos(angle + angle_ofs1) * ring_dis_max) >> LV_TRIGO_SHIFT;
         lv_coord_t pic_y = ((lv_coord_t)lv_trigo_sin(angle + angle_ofs1) * ring_dis_max) >> LV_TRIGO_SHIFT;
-        APP_SYS_LOG_DEBUG("<pic_x,pic_y><%d,%d>", pic_x, pic_y);
+        LV_LOG_INFO("<pic_x,pic_y><%d,%d>", pic_x, pic_y);
         lv_coord_t pic_pos_x = circle_x + pic_x - pic_dis_max / 2;
         lv_coord_t pic_pos_y = circle_y + pic_y - pic_dis_max / 2;
-        APP_SYS_LOG_DEBUG("<pic_pos_x,pic_pos_y><%d,%d>", pic_pos_x, pic_pos_y);
+        LV_LOG_INFO("<pic_pos_x,pic_pos_y><%d,%d>", pic_pos_x, pic_pos_y);
         
         int16_t idx = angle / APP_LV_UI_HALO_UNIT;
         int16_t ofs = app_lv_ui_res_local->iter_skew >= 0 ? 0 : (360 / APP_LV_UI_HALO_UNIT);
         int16_t pic_ofs = app_sys_mabs(idx - angle_bse - ofs, (int16_t)app_lv_ui_res_local->list_num);
-        APP_SYS_LOG_DEBUG("<idx, pic_ofs><%d, %d>", idx, pic_ofs);
+        LV_LOG_INFO("<idx, pic_ofs><%d, %d>", idx, pic_ofs);
         const char *img_str = app_lv_pic_str_find(app_lv_ui_res_local->list[pic_ofs].idx_pic + pic_ofs_max);
         lv_img_set_src(app_lv_ui_res_local->img_list_max[idx], img_str);
         lv_obj_set_pos(app_lv_ui_res_local->img_list_max[idx], pic_pos_x, pic_pos_y);
@@ -134,15 +132,15 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     for (int16_t angle = 0; angle < 360; angle += APP_LV_UI_HALO_UNIT) {
         lv_coord_t pic_x = ((lv_coord_t)lv_trigo_cos(angle + angle_ofs2) * ring_dis_min) >> LV_TRIGO_SHIFT;
         lv_coord_t pic_y = ((lv_coord_t)lv_trigo_sin(angle + angle_ofs2) * ring_dis_min) >> LV_TRIGO_SHIFT;
-        APP_SYS_LOG_DEBUG("<pic_x,pic_y><%d,%d>", pic_x, pic_y);
+        LV_LOG_INFO("<pic_x,pic_y><%d,%d>", pic_x, pic_y);
         lv_coord_t pic_pos_x = circle_x + pic_x - pic_dis_min / 2;
         lv_coord_t pic_pos_y = circle_y + pic_y - pic_dis_min / 2;
-        APP_SYS_LOG_DEBUG("<pic_pos_x,pic_pos_y><%d,%d>", pic_pos_x, pic_pos_y);
+        LV_LOG_INFO("<pic_pos_x,pic_pos_y><%d,%d>", pic_pos_x, pic_pos_y);
         
         int16_t idx = angle / APP_LV_UI_HALO_UNIT;
         int16_t ofs = app_lv_ui_res_local->iter_skew >= 0 ? (360 / APP_LV_UI_HALO_UNIT) : 0;
         int16_t pic_ofs = app_sys_mabs(idx - angle_bse - ofs, (int16_t)app_lv_ui_res_local->list_num);
-        APP_SYS_LOG_DEBUG("<idx, pic_ofs><%d, %d>", idx, pic_ofs);
+        LV_LOG_INFO("<idx, pic_ofs><%d, %d>", idx, pic_ofs);
         const char *img_str = app_lv_pic_str_find(app_lv_ui_res_local->list[pic_ofs].idx_pic + pic_ofs_min);
         lv_img_set_src(app_lv_ui_res_local->img_list_min[idx], img_str);
         lv_obj_set_pos(app_lv_ui_res_local->img_list_min[idx], pic_pos_x, pic_pos_y);
