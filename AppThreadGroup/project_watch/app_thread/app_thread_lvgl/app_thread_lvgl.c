@@ -30,6 +30,7 @@ static void app_thread_lvgl_routine_ready_cb(void)
     lvgl_lib_ready();
     lvgl_theme_ready();
     lvgl_view_sched_ready();
+    lvgl_view_event_ready();
     lvgl_view_sched_config_slide(lvgl_view_tr_move);
     lvgl_view_sched_config_jump(lvgl_view_tr_move, LV_DIR_LEFT);
     

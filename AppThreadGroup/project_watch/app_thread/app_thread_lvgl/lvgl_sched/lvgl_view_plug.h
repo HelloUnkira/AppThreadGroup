@@ -14,28 +14,28 @@ typedef enum
 {
     lvgl_plug_global_event_none = 0,
     // 全局弹窗事件枚举量-------------->起始点
-
-
-
+    
+    
+    
     lvgl_plug_global_event_popup_num,
     // 全局弹窗事件枚举量-------------->结束点
-
-
-
+    
+    
+    
     /*!!!不需要触发弹窗的全局事件, 移到下面来!!!
      *节约上面的量数量信息, 比如说关闭一个可能存在的弹窗事件
      */
-
-
-
-
-
+    
+    
+    
+    
+    
     // 进出低功耗模式
     lvgl_plug_global_event_sleep_enter,
     lvgl_plug_global_event_sleep_exit,
     lvgl_plug_global_event_deep_sleep_enter,      // 待定研究中
     lvgl_plug_global_event_deep_sleep_exit,       // 待定研究中
-
+    
 } lvgl_plug_global_event_t;
 
 typedef struct
@@ -119,7 +119,7 @@ void lvgl_view_enc_notify(uintptr_t way, uintptr_t val);
 /* 这个模组填充所有外源事件 */
 /* 包括且不限于各种界面弹窗等等 */
 void lvgl_plug_global_event_proc_cb(lvgl_plug_global_event_t global_event,
-                                    bool sleep_tag);
+    bool sleep_tag);
 
 /* 外部注册回调使用该接口通知事件 */
 void lvgl_plug_global_event_notify(lvgl_plug_global_event_t global_event);
@@ -135,57 +135,6 @@ void lvgl_plug_watch_global_key1_cb_register(void (*key_cb)(uint8_t key_event));
 // 界面注册编码器回调(way:+1;-1; step:步进值), 不使用的时候注册为NULL
 void lvgl_plug_watch_global_enc_cb_register(void (*enc_cb)(uint8_t way,
         uint8_t step));
-
-typedef enum
-{
-    lvgl_view_event_custom_swipe_r,        // 右滑返回
-    lvgl_view_event_custom_key0,        // 按键0:上按键
-    lvgl_view_event_custom_key1,        // 按键1:下按键
-    lvgl_view_event_custom_enc,            // 编码器
-} lvgl_view_event_custom_type_t;
-
-// 插件:自定义事件:
-typedef struct
-{
-    lvgl_view_event_custom_type_t type;
-    union
-    {
-
-        // 右滑返回事件携带数据
-        struct
-        {
-            void *occupy;
-        } swipe_r;
-
-        // 按键事件携带数据
-        struct
-        {
-            uint8_t event;    // key_driver.h文件中: enum key_action
-        } key;
-
-        // 编码器事件携带数据
-        struct
-        {
-            int8_t  way;    // 正转反转:+-1;
-            int32_t step;    // 步进值:转了几个格子;
-        } enc;
-
-    };
-
-    // 事件吸收标记
-    uint8_t stop: 1;
-
-} lvgl_view_event_custom_t;
-
-extern uint32_t lvgl_view_event_custom;
-extern lvgl_view_event_custom_t lvgl_view_event_custom_param;
-
-// 事件项
-#define LVGL_VIEW_EVENT_CUSTOM                  lvgl_view_event_custom
-#define LVGL_VIEW_EVENT_CUSTOM_PARAM        &lvgl_view_event_custom_param
-#define LVGL_VIEW_EVENT_CUSTOM_STOP(param)    ((param)->stop = true)
-
-void lvgl_plug_event_ready(void);
 
 // 计算数组长度
 #ifndef ARRAY_LEN

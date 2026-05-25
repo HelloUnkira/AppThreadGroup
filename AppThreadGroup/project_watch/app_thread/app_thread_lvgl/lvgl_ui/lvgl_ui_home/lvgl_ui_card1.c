@@ -2,7 +2,8 @@
 
 void lvgl_ui_card1_create(lv_obj_t *page)
 {
-    lv_color_t color = lv_color_make(lv_rand(0, 0xFF), lv_rand(0, 0xFF), lv_rand(0, 0xFF));
+    lv_color_t color = lv_color_make(lv_rand(0, 0xFF), lv_rand(0, 0xFF), lv_rand(0,
+                0xFF));
     lv_obj_set_style_bg_color(page, color, 0);
     
     lv_obj_t *label = lv_label_create(page);

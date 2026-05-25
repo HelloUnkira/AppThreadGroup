@@ -44,6 +44,7 @@
 #include "lvgl.h"
 #include "lv_conf.h"
 #include "lv_drv_conf.h"
+#include "lvgl_lib.h"
 #elif APP_DEV_GUI_IS_SCUI
 /* dependency */
 #include "scui.h"

@@ -43,15 +43,12 @@ void app_dev_gui_enc_lv_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * indev
     
     (void)indev_drv;
     
-    lv_key_t key = LV_KEY_ENTER;
-    if (cfg->enc_diff > 0)
-        key = LV_KEY_LEFT;
-    if (cfg->enc_diff < 0)
-        key = LV_KEY_RIGHT;
+    uint32_t key = LV_KEY_DEL;  // 搞一个默认无用事件
+    if (cfg->enc_diff > 0) key = LVGL_VIEW_EVENT_ENC_BDIR | LV_ABS(cfg->enc_diff);
+    if (cfg->enc_diff < 0) key = LVGL_VIEW_EVENT_ENC_FDIR | LV_ABS(cfg->enc_diff);
+    
     /* 传递给lvgl的旋钮事件 */
-    indev_data->state    = cfg->state ?
-                           LV_INDEV_STATE_PRESSED :
-                           LV_INDEV_STATE_RELEASED;
+    indev_data->state    = cfg->enc_diff != 0 ? LV_INDEV_STATE_PRESSED : LV_INDEV_STATE_RELEASED;
     indev_data->enc_diff = cfg->enc_diff;
     indev_data->key      = key;
     cfg->enc_diff = 0;
