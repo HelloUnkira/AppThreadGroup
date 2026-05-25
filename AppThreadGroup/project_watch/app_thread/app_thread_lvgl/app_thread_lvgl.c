@@ -28,6 +28,14 @@ static void app_thread_lvgl_routine_ready_cb(void)
     app_dev_gui_drv_ready(&app_dev_gui_drv);
     /*  */
     lvgl_lib_ready();
+    lvgl_theme_ready();
+    lvgl_view_sched_ready();
+    lvgl_view_sched_config_slide(lvgl_view_tr_move);
+    lvgl_view_sched_config_jump(lvgl_view_tr_move, LV_DIR_LEFT);
+    
+    // 初始在主表盘界面
+    lvgl_view_stack_reset(lvgl_view_id_home_watch, false);
+    
     app_lvgl_timer_ready();
     app_lvgl_timer_start();
 }

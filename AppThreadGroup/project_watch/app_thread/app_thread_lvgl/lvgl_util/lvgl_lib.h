@@ -9,6 +9,11 @@
 #include "lv_conf.h"
 #include "lv_drv_conf.h"
 
+//
+#include "lvgl_theme.h"
+#include "lvgl_view_sched.h"
+#include "lvgl_ui.h"
+
 void lvgl_lib_ready(void);
 
 void app_lvgl_tick_exec_update(void);
