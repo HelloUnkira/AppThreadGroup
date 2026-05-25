@@ -1,5 +1,4 @@
 #include "lvgl_view_sched.h"
-
 extern lvgl_view_sched_t lvgl_view_sched;
 
 static void lvgl_view_stack_update_rcd(uint32_t page)

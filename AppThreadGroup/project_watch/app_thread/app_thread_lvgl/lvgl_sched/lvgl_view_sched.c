@@ -223,15 +223,15 @@ bool lvgl_view_obj_tree_scrollable(lv_obj_t *obj, lv_dir_t dir,
 static void lvgl_view_src_make(void)
 {
     #if LVGL_VIEW_CVS_USE
-    LV_LOG_WARN("snapshot view_c:\n");
-    LV_LOG_WARN("snapshot view_t:\n");
+    LV_LOG_INFO("snapshot view_c:\n");
+    LV_LOG_INFO("snapshot view_t:\n");
     lv_snapshot_take_to_buf(lvgl_view_sched.view_c, lvgl_view_sched.view_cvs_cf,
         &lvgl_view_sched.view_sps_c, lvgl_view_sched.buffer_c,
         lvgl_view_sched.buffer_size);
     lv_snapshot_take_to_buf(lvgl_view_sched.view_t, lvgl_view_sched.view_cvs_cf,
         &lvgl_view_sched.view_sps_t, lvgl_view_sched.buffer_t,
         lvgl_view_sched.buffer_size);
-    LV_LOG_WARN("snapshot over\n");
+    LV_LOG_INFO("snapshot over\n");
     // 显示滑动特效控件, 隐藏原始界面
     lv_obj_clear_flag(lvgl_view_sched.view_cvs, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(lvgl_view_sched.view_c, LV_OBJ_FLAG_HIDDEN);

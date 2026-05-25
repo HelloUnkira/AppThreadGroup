@@ -9,6 +9,15 @@
 #define LVGL_VIEW_EVENT_ENC_CNT         (1)
 #define LVGL_VIEW_EVENT_ENC_SPAN        (500)
 
+// LV_EVENT_SHORT_CLICK抖动监测
+// 如果从按下到抬起中所有的点都落在以下数字
+// 为一个圆心的区域内, 那么我们认为这符合点击的特点(不可为0)
+#define LVGL_VIEW_EVENT_SHORT_CLICK_DITHER          (8)
+
+// 右滑动手势的判定门限
+#define LVGL_VIEW_EVENT_SWIPE_R_DX      (60)
+#define LVGL_VIEW_EVENT_SWIPE_R_DY      (30)
+
 
 typedef enum
 {
