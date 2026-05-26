@@ -13,7 +13,7 @@
 
 #if 0
 #elif APP_DEV_GUI_IS_LVGL
-#include "app_lv_lib.h"
+#include "lvgl_lib.h"
 #elif APP_DEV_GUI_IS_SCUI
 #include "app_scui_lib.h"
 #else
@@ -33,7 +33,7 @@ void app_module_system_dlps_set(bool dlps)
         
         #if 0
         #elif APP_DEV_GUI_IS_LVGL
-        app_lv_scene_dlps(dlps);
+        app_lvgl_scene_dlps(dlps);
         #elif APP_DEV_GUI_IS_SCUI
         app_scui_window_dlps(dlps);
         #else

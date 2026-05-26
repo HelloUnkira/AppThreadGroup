@@ -18,12 +18,20 @@
 #define LVGL_VIEW_EVENT_SWIPE_R_DX      (60)
 #define LVGL_VIEW_EVENT_SWIPE_R_DY      (30)
 
-
 typedef enum
 {
+    // 系统事件
     lvgl_view_event_type_enc,           // 编码器
     lvgl_view_event_type_key,           // 按键
+    // 系统事件(其他)
+    lvgl_view_event_type_sleep_deep_enter,
+    lvgl_view_event_type_sleep_deep_exit,
+    lvgl_view_event_type_sleep_enter,
+    lvgl_view_event_type_sleep_exit,
+    
+    // 项目补充事件
     lvgl_view_event_type_swipe_r,       // 右滑返回
+    
 } lvgl_view_event_type_t;
 
 // 插件:自定义事件:
@@ -64,8 +72,12 @@ typedef struct
 // lv_obj_add_event_cb(page, event_cb, lvgl_view_event_id(), NULL);
 // lvgl_view_event_param_t *param = lv_event_get_param(e);
 
-void lvgl_view_event_ready(void);
-void lvgl_view_event_stop(void);
 uint32_t lvgl_view_event_id(void);
+lv_obj_t *lvgl_view_event_obj(void);
+void lvgl_view_event_ready(void);
+
+// 外源发送一个全局事件, 到达指定的目标
+void lvgl_view_event_send(lvgl_view_event_param_t *param);
+void lvgl_view_event_stop(lvgl_view_event_param_t *param);
 
 #endif

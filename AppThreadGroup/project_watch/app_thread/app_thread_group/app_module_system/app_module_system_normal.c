@@ -12,7 +12,7 @@
 
 #if 0
 #elif APP_DEV_GUI_IS_LVGL
-#include "app_lv_lib.h"
+#include "lvgl_lib.h"
 #elif APP_DEV_GUI_IS_SCUI
 #include "app_scui_lib.h"
 #else
@@ -58,7 +58,7 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
         
         #if 0
         #elif APP_DEV_GUI_IS_LVGL
-        app_lv_scene_start();
+        app_lvgl_scene_start();
         #elif APP_DEV_GUI_IS_SCUI
         app_scui_window_start();
         #else
@@ -77,7 +77,7 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
         
         #if 0
         #elif APP_DEV_GUI_IS_LVGL
-        app_lv_scene_stop();
+        app_lvgl_scene_stop();
         #elif APP_DEV_GUI_IS_SCUI
         app_scui_window_stop();
         #else

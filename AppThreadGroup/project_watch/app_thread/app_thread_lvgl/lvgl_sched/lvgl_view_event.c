@@ -36,15 +36,13 @@ static void lvgl_view_event_enc_cb(lv_event_t *e)
     }
     
     // 先发送给界面
-    lvgl_view_event_param_t *custom = lvgl_view_sched.event_param;
-    custom->type = lvgl_view_event_type_enc;
-    custom->stop = false;
-    custom->enc.way = key_id;
-    custom->enc.step = key_val;
+    lvgl_view_event_param_t custom = {0};
+    custom.type = lvgl_view_event_type_enc;
+    custom.enc.way = key_id;
+    custom.enc.step = key_val;
     lv_obj_t *page_c = lv_obj_get_child(lvgl_view_sched.view_c, 0);
-    lv_event_send(page_c, lvgl_view_event_id(), custom);
-    
-    if (custom->stop)
+    lv_event_send(page_c, lvgl_view_event_id(), &custom);
+    if (custom.stop)
     {
         return;
     }
@@ -201,15 +199,13 @@ static void lvgl_view_event_key_cb(lv_event_t *e)
     }
     
     // 先发送给界面
-    lvgl_view_event_param_t *custom = lvgl_view_sched.event_param;
-    custom->type = lvgl_view_event_type_key;
-    custom->stop = false;
-    custom->key.key_id = key;
-    custom->key.key_event = code;
+    lvgl_view_event_param_t custom = {0};
+    custom.type = lvgl_view_event_type_key;
+    custom.key.key_id = key;
+    custom.key.key_event = code;
     lv_obj_t *page_c = lv_obj_get_child(lvgl_view_sched.view_c, 0);
-    lv_event_send(page_c, lvgl_view_event_id(), custom);
-    
-    if (custom->stop)
+    lv_event_send(page_c, lvgl_view_event_id(), &custom);
+    if (custom.stop)
     {
         return;
     }
@@ -223,9 +219,11 @@ static void lvgl_view_event_key_cb(lv_event_t *e)
     {
         LV_LOG_WARN("LV_EVENT_SHORT_CLICKED");
         
-        if (stack_top == lvgl_view_id_standby)
+        // 任意按键事件都该唤醒设备
+        if (lvgl_ctime_sleep_tag())
         {
-            lvgl_view_stack_del(lvgl_view_id_standby);
+            lvgl_ctime_sleep_quit();
+            break;
         }
         
         if (key == LV_KEY_ENTER)
@@ -271,7 +269,12 @@ static void lvgl_view_event_key_cb(lv_event_t *e)
 
 static void lvgl_view_event_cb(lv_event_t *e)
 {
+    // 自定义的事件号不能处理
     lv_event_code_t code = lv_event_get_code(e);
+    if (code == lvgl_view_event_id())
+    {
+        return;
+    }
     
     switch (code)
     {
@@ -312,24 +315,28 @@ static void lvgl_view_event_cb(lv_event_t *e)
     lvgl_view_event_key_cb(e);
 }
 
-static void lvgl_view_event_short_click_filter(void)
+static void lvgl_view_event_ptr_cb(lv_event_t *e)
 {
-    // 这里强行改为长按压
-    // 正确完整做法是补充一个类似的变量
-    // 外界将这个变量修改后去用来过滤事件发送的地方
-    // 补丁:不再发送LV_EVENT_SHORT_CLICK
-    lv_indev_t *indev = lv_indev_get_act();
-    indev->proc.long_pr_sent = true;
-}
-
-// 这个问题为了解决当你快速
-// 在一个很小的区域内滑动生成LV_EVENT_SHORT_CLICK时
-// 这个回调会将其过滤掉并且阻止它被上报给界面
-static void lvgl_view_event_short_click_filter_event_cb(lv_event_t *e)
-{
+    // 自定义的事件号不能处理
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code == lvgl_view_event_id())
+    {
+        return;
+    }
+    
+    // 这个问题为了解决当你快速
+    // 在一个很小的区域内滑动生成LV_EVENT_SHORT_CLICK时
+    // 这个回调会将其过滤掉并且阻止它被上报给界面
+    // LV_EVENT_SHORT_CLICK:
     static lv_point_t touch_press = {0};
     static lv_point_t touch_dist_max = {0};
     static int32_t touch_dist_pow2 = 0;
+    
+    // custom: swipe right
+    static lv_point_t swipe_touch = {0};
+    static bool swipe_obj_scrollable = false;
+    
+    
     
     switch (lv_event_get_code(e))
     {
@@ -337,56 +344,10 @@ static void lvgl_view_event_short_click_filter_event_cb(lv_event_t *e)
     {
         lv_indev_t *indev = lv_indev_get_act();
         lv_indev_get_point(indev, &touch_press);
+        lv_indev_get_point(indev, &swipe_touch);
+        swipe_obj_scrollable = false;
         touch_dist_max = touch_press;
         touch_dist_pow2 = 0;
-        break;
-    }
-    
-    case LV_EVENT_PRESSING:
-    case LV_EVENT_RELEASED:
-    {
-        lv_point_t touch_current = {0};
-        lv_indev_t *indev = lv_indev_get_act();
-        lv_indev_get_point(indev, &touch_current);
-        
-        int32_t touch_dist_x = lvgl_view_dist(touch_press.x, touch_current.x);
-        int32_t touch_dist_y = lvgl_view_dist(touch_press.y, touch_current.y);
-        int32_t touch_dist_pow2 = touch_dist_x * touch_dist_x + touch_dist_y *
-            touch_dist_y;
-            
-        if (touch_dist_pow2 < touch_dist_pow2)
-        {
-            touch_dist_pow2 = touch_dist_pow2;
-            touch_dist_max = touch_current;
-        }
-        
-        // 抖动值, 不为0, 在这个值为半径的圆内, 都视为不移动
-        const int32_t dither_val  = LVGL_VIEW_EVENT_SHORT_CLICK_DITHER;
-        const int32_t dither_pow2 = dither_val * dither_val;
-        if (touch_dist_pow2 > dither_pow2)
-        {
-            lvgl_view_event_short_click_filter();
-        }
-        
-        break;
-    }
-    }
-}
-
-static void lvgl_view_event_swipe_r_event_cb(lv_event_t *e)
-{
-    static lv_point_t swipe_touch = {0};
-    static bool swipe_obj_scrollable = false;
-    
-    switch (lv_event_get_code(e))
-    {
-    case LV_EVENT_PRESSED:
-    {
-        lv_point_t point;
-        lv_indev_t *indev = lv_indev_get_act();
-        lv_indev_get_point(indev, &point);
-        swipe_obj_scrollable = false;
-        swipe_touch = point;
         
         // 存在控件可滚动中, 不要响应
         lv_obj_t *obj = lv_event_get_target(e);
@@ -397,16 +358,43 @@ static void lvgl_view_event_swipe_r_event_cb(lv_event_t *e)
         break;
     }
     
+    case LV_EVENT_PRESSING:
     case LV_EVENT_RELEASED:
     {
         lv_point_t point;
         lv_indev_t *indev = lv_indev_get_act();
         lv_indev_get_point(indev, &point);
         
+        
+        int32_t touch_dist_x = lvgl_view_dist(touch_press.x, point.x);
+        int32_t touch_dist_y = lvgl_view_dist(touch_press.y, point.y);
+        int32_t touch_dist_pow2 = touch_dist_x * touch_dist_x + touch_dist_y *
+            touch_dist_y;
+            
+        if (touch_dist_pow2 < touch_dist_pow2)
+        {
+            touch_dist_pow2 = touch_dist_pow2;
+            touch_dist_max  = point;
+        }
+        
+        // 抖动值, 不为0, 在这个值为半径的圆内, 都视为不移动
+        const int32_t dither_val  = LVGL_VIEW_EVENT_SHORT_CLICK_DITHER;
+        if (touch_dist_pow2 > dither_val * dither_val)
+        {
+            #if 1
+            // 这里强行改为长按压
+            // 正确完整做法是补充一个类似的变量
+            // 外界将这个变量修改后去用来过滤事件发送的地方
+            // 补丁:不再发送LV_EVENT_SHORT_CLICK
+            lv_indev_t *indev = lv_indev_get_act();
+            indev->proc.long_pr_sent = true;
+            #endif
+        }
+        
         // 界面跳转时屏蔽右滑手势检测
         if (lvgl_view_sched_work())
         {
-            LV_LOG_WARN("view switch");
+            LV_LOG_INFO("view switch");
             break;
         }
         
@@ -419,20 +407,24 @@ static void lvgl_view_event_swipe_r_event_cb(lv_event_t *e)
         if (point.x - swipe_touch.x > LVGL_VIEW_EVENT_SWIPE_R_DX &&
             LV_ABS(point.y - swipe_touch.y) < LVGL_VIEW_EVENT_SWIPE_R_DY)
         {
-            // 先发送给界面
-            lvgl_view_event_param_t *custom = lvgl_view_sched.event_param;
-            custom->type = lvgl_view_event_type_swipe_r;
-            custom->stop = false;
-            lv_obj_t *page_c = lv_obj_get_child(lvgl_view_sched.view_c, 0);
-            lv_event_send(page_c, lvgl_view_event_id(), custom);
+            #if 1
+            // 这里强行改为长按压
+            // 正确完整做法是补充一个类似的变量
+            // 外界将这个变量修改后去用来过滤事件发送的地方
+            // 补丁:不再发送LV_EVENT_SHORT_CLICK
+            lv_indev_t *indev = lv_indev_get_act();
+            indev->proc.long_pr_sent = true;
+            #endif
             
-            if (custom->stop)
+            // 先发送给界面
+            lvgl_view_event_param_t custom = {0};
+            custom.type = lvgl_view_event_type_swipe_r;
+            lv_obj_t *page_c = lv_obj_get_child(lvgl_view_sched.view_c, 0);
+            lv_event_send(page_c, lvgl_view_event_id(), &custom);
+            if (custom.stop)
             {
                 return;
             }
-            
-            // 进行事件的短按过滤
-            lvgl_view_event_short_click_filter();
             
             lvgl_view_id_t page_id = lvgl_view_sched.page_c;
             if (page_id && lvgl_view_stack_nest() > 1)
@@ -452,38 +444,38 @@ static void lvgl_view_event_swipe_r_event_cb(lv_event_t *e)
     }
 }
 
+uint32_t lvgl_view_event_id(void)
+{
+    return lvgl_view_sched.event_id;
+}
+
+lv_obj_t *lvgl_view_event_obj(void)
+{
+    return lvgl_view_sched.view_indev;
+}
+
 void lvgl_view_event_ready(void)
 {
-    static lvgl_view_event_param_t lvgl_view_event_param = {0};
-    lvgl_view_sched.event_param = &lvgl_view_event_param;
-    lvgl_view_sched.event_id = lv_event_register_id();
-    
     extern lv_group_t *lvgl_indev_group;
     LV_ASSERT(lvgl_indev_group != NULL);
     
+    lvgl_view_sched.event_id = lv_event_register_id();
     lv_group_add_obj(lvgl_indev_group, lvgl_view_sched.view_indev);
     lv_group_focus_obj(lvgl_view_sched.view_indev);
     lv_group_focus_freeze(lvgl_indev_group, true);
     
+    lv_obj_add_event_cb(lvgl_view_sched.view_root, lvgl_view_event_ptr_cb,
+        LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(lvgl_view_sched.view_indev, lvgl_view_event_cb,
         LV_EVENT_ALL, NULL);
-    
-    lv_obj_add_event_cb(lvgl_view_sched.view_root,
-        lvgl_view_event_short_click_filter_event_cb,
-        LV_EVENT_ALL, NULL);
-    
-    lv_obj_add_event_cb(lvgl_view_sched.view_root,
-        lvgl_view_event_swipe_r_event_cb,
-        LV_EVENT_ALL, NULL);
 }
 
-void lvgl_view_event_stop(void)
+void lvgl_view_event_send(lvgl_view_event_param_t *param)
 {
-    lvgl_view_event_param_t *custom = lvgl_view_sched.event_param;
-    custom->stop = true;
+    lv_event_send(lvgl_view_sched.view_indev, lvgl_view_event_id(), param);
 }
 
-uint32_t lvgl_view_event_id(void)
+void lvgl_view_event_stop(lvgl_view_event_param_t *param)
 {
-    return lvgl_view_sched.event_id;
+    param->stop = true;
 }

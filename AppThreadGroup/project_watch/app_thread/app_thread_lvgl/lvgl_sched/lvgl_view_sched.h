@@ -9,20 +9,23 @@
 #include "lvgl_view_config.h"
 #include "lvgl_view_transform.h"
 #include "lvgl_view_stack.h"
-#include "lvgl_view_plug.h"
+
+// 外源引入
+#include "lvgl_lib.h"
 
 // 资源缓存方案
 // 若使用canvas,则为假渲染方案,需大内存支持
 // 不使用canvas,则为真渲染方案,需transform样式支持
 // 不使用canvas要支持lv_obj_set_style_transform_xxx(lv 9以上版本支持)
-#define LVGL_VIEW_CVS_USE             (1)
+#define LVGL_VIEW_CVS_USE               (1)
 
 // 像素移动LV_HOR_RES需要的时间
-#define LVGL_VIEW_ANIM_SPEED          (225)
+#define LVGL_VIEW_ANIM_SPEED            (225)
 
 // 补充宏定义
-#define lvgl_view_mabs(x, m)          (((x) % (m) + (m)) % (m))
-#define lvgl_view_dist(x, y)          ((x) > (y) ? (x) - (y) : (y) - (x))
+#define lvgl_view_mabs(x, m)            (((x) % (m) + (m)) % (m))
+#define lvgl_view_dist(x, y)            ((x) > (y) ? (x) - (y) : (y) - (x))
+#define lvgl_view_arr_len(arr)          (sizeof(arr)/sizeof(arr[0]))
 
 // 界面创建销毁,焦点获取与丢失回调:
 typedef void (*lvgl_view_create_t)(lv_obj_t *page);
@@ -103,9 +106,8 @@ typedef struct
     lvgl_view_tr_t jump_type_cfg;
     lv_dir_t jump_dir_cfg;
     
-    // 全局事件转移
+    // 事件转移:按键,编码器
     uint32_t event_id;
-    void *event_param;
     
     // 全局按键值保存
     uint32_t key_id;

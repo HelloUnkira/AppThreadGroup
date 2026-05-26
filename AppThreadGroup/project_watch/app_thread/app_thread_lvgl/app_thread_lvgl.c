@@ -33,6 +33,8 @@ static void app_thread_lvgl_routine_ready_cb(void)
     lvgl_view_event_ready();
     lvgl_view_sched_config_slide(lvgl_view_tr_move);
     lvgl_view_sched_config_jump(lvgl_view_tr_move, LV_DIR_LEFT);
+    /*  */
+    lvgl_ctime_ready();
     
     // 初始在主表盘界面
     lvgl_view_stack_reset(lvgl_view_id_home_watch, false);
@@ -86,14 +88,22 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
         }
         /* 与lvgl绑定的驱动设备进入DLPS */
         if (package->event == app_thread_lvgl_sched_dlps_enter) {
+            lvgl_view_event_param_t param = {0};
+            param.type = lvgl_view_event_type_sleep_enter;
+            lvgl_view_event_send(&param);
+            
             /* 关闭设备(业务需求,不就地关闭鼠标,鼠标需要有唤醒能力) */
             app_dev_gui_disp_dlps_enter(&app_dev_gui_disp);
-            app_dev_gui_key_dlps_enter(&app_dev_gui_key);
+            // app_dev_gui_key_dlps_enter(&app_dev_gui_key);
             app_dev_gui_enc_dlps_enter(&app_dev_gui_enc);
-            // app_dev_gui_ptr_dlps_enter(&app_dev_gui_ptr);
+            app_dev_gui_ptr_dlps_enter(&app_dev_gui_ptr);
         }
         /* 与lvgl绑定的驱动设备退出DLPS */
         if (package->event == app_thread_lvgl_sched_dlps_exit) {
+            lvgl_view_event_param_t param = {0};
+            param.type = lvgl_view_event_type_sleep_exit;
+            lvgl_view_event_send(&param);
+            
             /* 开启设备 */
             app_dev_gui_disp_dlps_exit(&app_dev_gui_disp);
             app_dev_gui_key_dlps_exit(&app_dev_gui_key);
@@ -115,6 +125,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
         /* 启动UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_start) {
             APP_SYS_LOG_WARN("ui scene start");
+            lvgl_ctime_resume();
             /* 设置默认字体和默认尺寸 */
             /* 更新lvgl设备 */
             app_dev_gui_disp_dlps_exit(&app_dev_gui_disp);
@@ -125,6 +136,8 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
         /* 终止UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_stop) {
             APP_SYS_LOG_WARN("ui scene stop");
+            lvgl_ctime_pause();
+            
             app_module_system_dlps_set(false);
             /* 更新lvgl设备 */
             app_dev_gui_disp_dlps_enter(&app_dev_gui_disp);

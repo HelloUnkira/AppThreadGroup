@@ -12,7 +12,7 @@
 
 #if 0
 #elif APP_DEV_GUI_IS_LVGL
-#include "app_lv_lib.h"
+#include "lvgl_lib.h"
 #elif APP_DEV_GUI_IS_SCUI
 #include "app_scui_lib.h"
 #else
@@ -28,7 +28,7 @@ bool app_module_system_mode_shutdown_ctrl(app_module_clock_t clock[1], app_modul
         
         #if 0
         #elif APP_DEV_GUI_IS_LVGL
-        app_lv_scene_shutdown();
+        app_lvgl_scene_shutdown();
         #elif APP_DEV_GUI_IS_SCUI
         app_scui_window_shutdown();
         #else
