@@ -11,10 +11,10 @@ target_sources(app_thread PRIVATE ${SOURCES})
 if (app_thread_group_use_lvgl)
 # 本地Python脚本执行,更新源
 set(PYTHON "python.exe")
-execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_res/app_lv_lang/app_lv_lang.py
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_res/app_lv_lang)
-execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_res/app_lv_pic/app_lv_pic.py
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_res/app_lv_pic)
+execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_discard/app_lv_res/app_lv_lang/app_lv_lang.py
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_discard/app_lv_res/app_lv_lang)
+execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_discard/app_lv_res/app_lv_pic/app_lv_pic.py
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_discard/app_lv_res/app_lv_pic)
 
 # 注意:  
 # 依赖资源文件:  
@@ -25,9 +25,9 @@ execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/ap
 # 上面的资源文件与可执行文件应该在同一文件夹下面  
 
 # 文件迁移到调试
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_res/lvgl_font/*")
+file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_discard/app_lv_res/lvgl_font/*")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_main/lvgl_font)
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_res/lvgl_pic/*")
+file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_lvgl/app_lv_discard/app_lv_res/lvgl_pic/*")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_main/lvgl_pic)
 
 file(GLOB_RECURSE SOURCES app_thread_lvgl/*.c)
