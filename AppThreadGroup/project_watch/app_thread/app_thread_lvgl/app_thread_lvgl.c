@@ -35,6 +35,7 @@ static void app_thread_lvgl_routine_ready_cb(void)
     lvgl_view_sched_config_jump(lvgl_view_tr_move, LV_DIR_LEFT);
     /*  */
     lvgl_ctime_ready();
+    lvgl_popup_ready();
     
     // 初始在主表盘界面
     lvgl_view_stack_reset(lvgl_view_id_home_watch, false);
@@ -126,7 +127,6 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
         if (package->event == app_thread_lvgl_ui_scene_start) {
             APP_SYS_LOG_WARN("ui scene start");
             lvgl_ctime_resume();
-            /* 设置默认字体和默认尺寸 */
             /* 更新lvgl设备 */
             app_dev_gui_disp_dlps_exit(&app_dev_gui_disp);
             app_dev_gui_key_dlps_exit(&app_dev_gui_key);

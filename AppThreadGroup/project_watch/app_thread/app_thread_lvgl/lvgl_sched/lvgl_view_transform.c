@@ -482,30 +482,30 @@ void lvgl_view_transform_async_cb(void *user_data)
     
     switch (lvgl_view_sched.transform_type)
     {
-    default:
-    case lvgl_view_tr_move:
-        lvgl_view_transform_move();
-        break;
-        
-    case lvgl_view_tr_cover_in:
-    case lvgl_view_tr_cover_out:
-        lvgl_view_transform_cover();
-        break;
-        
-    case lvgl_view_tr_zoom1:
-    case lvgl_view_tr_zoom2:
-        lvgl_view_transform_zoom();
-        break;
-        
-    case lvgl_view_tr_center_in:
-    case lvgl_view_tr_center_out:
-    case lvgl_view_tr_center_inout:
-        lvgl_view_transform_center();
-        break;
-        
-    case lvgl_view_tr_rotate:
-        lvgl_view_transform_rotate();
-        break;
+        default:
+        case lvgl_view_tr_move:
+            lvgl_view_transform_move();
+            break;
+            
+        case lvgl_view_tr_cover_in:
+        case lvgl_view_tr_cover_out:
+            lvgl_view_transform_cover();
+            break;
+            
+        case lvgl_view_tr_zoom1:
+        case lvgl_view_tr_zoom2:
+            lvgl_view_transform_zoom();
+            break;
+            
+        case lvgl_view_tr_center_in:
+        case lvgl_view_tr_center_out:
+        case lvgl_view_tr_center_inout:
+            lvgl_view_transform_center();
+            break;
+            
+        case lvgl_view_tr_rotate:
+            lvgl_view_transform_rotate();
+            break;
     }
     
     //

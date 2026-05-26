@@ -14,6 +14,7 @@
 #include "lvgl_theme.h"
 #include "lvgl_view_sched.h"
 #include "lvgl_ctime.h"
+#include "lvgl_popup.h"
 #include "lvgl_ui.h"
 
 void lvgl_lib_ready(void);

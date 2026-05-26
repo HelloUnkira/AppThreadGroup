@@ -16,87 +16,95 @@ static void lvgl_ctime_event_cb(lv_event_t *e)
     }
     
     lvgl_view_event_param_t *param = lv_event_get_param(e);
+    
     switch (param->type)
     {
-    case lvgl_view_event_type_sleep_deep_enter: {
-        if (lvgl_ctime.dlps_tag)
+        case lvgl_view_event_type_sleep_deep_enter:
         {
-            return;
-        }
-        
-        LV_LOG_WARN("%s", "lvgl_view_event_type_sleep_deep_enter");
-        lvgl_ctime.dlps_tag = true;
-        // 关掉监控定时器自己
-        lvgl_ctime_pause();
-        
-        #if 1
-        // 实际动作在这个宏包裹
-        /* CPU都给关掉, 除去RTC,GSensor和KEY其他全关了 */
-        #endif
-        break;
-    }
-    case lvgl_view_event_type_sleep_deep_exit: {
-        if (!lvgl_ctime.dlps_tag)
-        {
-            return;
-        }
-        
-        lvgl_ctime.dlps_tag = false;
-        LV_LOG_WARN("%s", "lvgl_view_event_type_sleep_deep_exit");
-        // 启用监控定时器自己
-        lvgl_ctime_resume();
-        
-        #if 1
-        // 实际动作在这个宏包裹
-        // 重新打开CPU, 不再挂起
-        #endif
-        break;
-    }
-    case lvgl_view_event_type_sleep_enter: {
-        if (lvgl_ctime.sleep_tag)
-        {
-            return;
-        }
-        
-        lvgl_ctime.sleep_tag = true;
-        LV_LOG_WARN("%s", "lvgl_view_event_type_sleep_enter");
-        
-        lvgl_view_stack_add_by(lvgl_view_id_standby, false,
-            lvgl_view_tr_none, LV_DIR_NONE);
+            if (lvgl_ctime.dlps_tag)
+            {
+                return;
+            }
             
-        #if 1
-        // 实际动作在这个宏包裹
-        #endif
-        break;
-    }
-    case lvgl_view_event_type_sleep_exit: {
-        
-        /* 退出dlps和退出sleep是同步进行的 */
-        lvgl_view_event_param_t param = {0};
-        param.type = lvgl_view_event_type_sleep_deep_exit;
-        lvgl_view_event_send(&param);
-        
-        if (!lvgl_ctime.sleep_tag)
-        {
-            return;
+            LV_LOG_WARN("%s", "lvgl_view_event_type_sleep_deep_enter");
+            lvgl_ctime.dlps_tag = true;
+            // 关掉监控定时器自己
+            lvgl_ctime_pause();
+            
+            #if 1
+            // 实际动作在这个宏包裹
+            /* CPU都给关掉, 除去RTC,GSensor和KEY其他全关了 */
+            #endif
+            break;
         }
         
-        lvgl_ctime.sleep_tag = false;
-        LV_LOG_WARN("%s", "lvgl_view_event_type_sleep_exit");
-        
-        // 复位倒吊状态
-        lvgl_ctime.over = true;
-        lvgl_ctime.idle = true;
-        
-        // 关掉息屏界面
-        lvgl_view_stack_del_by(lvgl_view_id_standby,
-            lvgl_view_tr_none, LV_DIR_NONE);
+        case lvgl_view_event_type_sleep_deep_exit:
+        {
+            if (!lvgl_ctime.dlps_tag)
+            {
+                return;
+            }
             
-        #if 1
-        // 实际动作在这个宏包裹
-        #endif
-        break;
-    }
+            lvgl_ctime.dlps_tag = false;
+            LV_LOG_WARN("%s", "lvgl_view_event_type_sleep_deep_exit");
+            // 启用监控定时器自己
+            lvgl_ctime_resume();
+            
+            #if 1
+            // 实际动作在这个宏包裹
+            // 重新打开CPU, 不再挂起
+            #endif
+            break;
+        }
+        
+        case lvgl_view_event_type_sleep_enter:
+        {
+            if (lvgl_ctime.sleep_tag)
+            {
+                return;
+            }
+            
+            lvgl_ctime.sleep_tag = true;
+            LV_LOG_WARN("%s", "lvgl_view_event_type_sleep_enter");
+            
+            lvgl_view_stack_add_by(lvgl_view_id_standby, false,
+                lvgl_view_tr_none, LV_DIR_NONE);
+                
+            #if 1
+            // 实际动作在这个宏包裹
+            #endif
+            break;
+        }
+        
+        case lvgl_view_event_type_sleep_exit:
+        {
+        
+            /* 退出dlps和退出sleep是同步进行的 */
+            lvgl_view_event_param_t param = {0};
+            param.type = lvgl_view_event_type_sleep_deep_exit;
+            lvgl_view_event_send(&param);
+            
+            if (!lvgl_ctime.sleep_tag)
+            {
+                return;
+            }
+            
+            lvgl_ctime.sleep_tag = false;
+            LV_LOG_WARN("%s", "lvgl_view_event_type_sleep_exit");
+            
+            // 复位倒吊状态
+            lvgl_ctime.over = true;
+            lvgl_ctime.idle = true;
+            
+            // 关掉息屏界面
+            lvgl_view_stack_del_by(lvgl_view_id_standby,
+                lvgl_view_tr_none, LV_DIR_NONE);
+                
+            #if 1
+            // 实际动作在这个宏包裹
+            #endif
+            break;
+        }
     }
 }
 
@@ -145,9 +153,9 @@ void lvgl_ctime_update(lv_timer_t *t)
 {
     if (lvgl_ctime.over_time % 10 == 0 &&
         lvgl_ctime.idle_time % 10 == 0)
-    LV_LOG_WARN("%d - %d", lvgl_ctime.over_time / 10,
-        lvgl_ctime.idle_time / 10);
-        
+        LV_LOG_WARN("%d - %d", lvgl_ctime.over_time / 10,
+            lvgl_ctime.idle_time / 10);
+            
     /* 合并到lvgl流程(未活跃时间小于1秒, 这里复位到开始) */
     if (lv_disp_get_inactive_time(NULL) < 200)
     {
@@ -209,7 +217,7 @@ void lvgl_ctime_update(lv_timer_t *t)
                     
                     lvgl_view_stack_reset_by(lvgl_view_id_home_watch, true,
                         lvgl_view_tr_none, LV_DIR_NONE);
-                    
+                        
                     dlps_tag = true;
                 }
             }
@@ -246,10 +254,10 @@ void lvgl_ctime_ready(void)
     // 事件响应回调悬挂到目标控件上去
     lv_obj_add_event_cb(lvgl_view_event_obj(), lvgl_ctime_event_cb,
         LV_EVENT_ALL, NULL);
-    
+        
     lvgl_ctime.timer = lv_timer_create(
             lvgl_ctime_update, 100, NULL);
-    
+            
     // 这种定时器, 一定是常启动的
     lv_timer_resume(lvgl_ctime.timer);
     
@@ -286,5 +294,5 @@ void lvgl_ctime_sleep_quit(void)
 
 bool lvgl_ctime_sleep_tag(void)
 {
-    return ;
+    return lvgl_ctime.sleep_tag;
 }

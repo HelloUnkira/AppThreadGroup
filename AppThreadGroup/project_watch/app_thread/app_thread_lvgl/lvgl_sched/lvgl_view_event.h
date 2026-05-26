@@ -29,8 +29,14 @@ typedef enum
     lvgl_view_event_type_sleep_enter,
     lvgl_view_event_type_sleep_exit,
     
-    // 项目补充事件
-    lvgl_view_event_type_swipe_r,       // 右滑返回
+    // 项目补充事件(右滑返回)
+    lvgl_view_event_type_swipe_r,
+    // 项目补充事件(弹窗提醒...)
+    lvgl_view_event_type_popup_s,
+    lvgl_view_event_type_remind_xxx,
+    // keep add...
+    lvgl_view_event_type_popup_e,
+    lvgl_view_event_type_popup_num = lvgl_view_event_type_popup_e - lvgl_view_event_type_popup_s - 1,
     
 } lvgl_view_event_type_t;
 

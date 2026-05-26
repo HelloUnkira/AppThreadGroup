@@ -42,26 +42,26 @@ void lvgl_view_stack_update(uint32_t page, uint8_t type)
     
     switch (type)
     {
-    case 0:
-        lvgl_view_sched.stack[lvgl_view_sched.stack_top - 1] = page;
-        lvgl_view_stack_update_rcd(page);
-        break;
-        
-    case 1:
-        lvgl_view_sched.stack_top++;
-        lvgl_view_sched.stack[lvgl_view_sched.stack_top - 1] = page;
-        lvgl_view_stack_update_rcd(page);
-        break;
-        
-    case 2:
-        LV_ASSERT(handle_top == page);
-        lvgl_view_sched.stack_top--;
-        break;
-        
-    default:
-        LV_LOG_ERROR("unknown type");
-        LV_ASSERT(false);
-        break;
+        case 0:
+            lvgl_view_sched.stack[lvgl_view_sched.stack_top - 1] = page;
+            lvgl_view_stack_update_rcd(page);
+            break;
+            
+        case 1:
+            lvgl_view_sched.stack_top++;
+            lvgl_view_sched.stack[lvgl_view_sched.stack_top - 1] = page;
+            lvgl_view_stack_update_rcd(page);
+            break;
+            
+        case 2:
+            LV_ASSERT(handle_top == page);
+            lvgl_view_sched.stack_top--;
+            break;
+            
+        default:
+            LV_LOG_ERROR("unknown type");
+            LV_ASSERT(false);
+            break;
     }
     
     lvgl_view_stack_check();

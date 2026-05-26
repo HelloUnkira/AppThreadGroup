@@ -536,345 +536,345 @@ static void lvgl_view_slide_event_cb(lv_event_t *e)
     
     switch (code)
     {
-    case LV_EVENT_PRESSED:
-    {
-        lv_indev_t *indev = lv_indev_get_act();
-        lv_indev_get_point(indev, &lvgl_view_sched.touch_last);
-        lvgl_view_sched.touch_press = lvgl_view_sched.touch_last;
-        lvgl_view_sched.touch_curr  = lvgl_view_sched.touch_last;
-        lvgl_view_sched.touch_dist  = lvgl_view_sched.touch_last;
-        lvgl_view_sched.touch_skip  = false;
-        break;
-    }
-    
-    case LV_EVENT_PRESSING:
-    {
-        lv_indev_t *indev = lv_indev_get_act();
-        lv_indev_get_point(indev, &lvgl_view_sched.touch_curr);
-        lv_disp_trig_activity(NULL);
-        
-        // 第一次滑动事件监听
-        if (!lvgl_view_sched.move_lock)
+        case LV_EVENT_PRESSED:
         {
-            lv_dir_t slide_dir = lvgl_view_slide_way();
+            lv_indev_t *indev = lv_indev_get_act();
+            lv_indev_get_point(indev, &lvgl_view_sched.touch_last);
+            lvgl_view_sched.touch_press = lvgl_view_sched.touch_last;
+            lvgl_view_sched.touch_curr  = lvgl_view_sched.touch_last;
+            lvgl_view_sched.touch_dist  = lvgl_view_sched.touch_last;
+            lvgl_view_sched.touch_skip  = false;
+            break;
+        }
+        
+        case LV_EVENT_PRESSING:
+        {
+            lv_indev_t *indev = lv_indev_get_act();
+            lv_indev_get_point(indev, &lvgl_view_sched.touch_curr);
+            lv_disp_trig_activity(NULL);
             
-            // 子控件滚动不做窗口切换
-            if (lvgl_view_sched.view_c != NULL)
+            // 第一次滑动事件监听
+            if (!lvgl_view_sched.move_lock)
             {
-                if (lvgl_view_obj_bubble_scrollable(obj, slide_dir, NULL, NULL))
+                lv_dir_t slide_dir = lvgl_view_slide_way();
+                
+                // 子控件滚动不做窗口切换
+                if (lvgl_view_sched.view_c != NULL)
                 {
-                    lvgl_view_sched.touch_skip = true;
-                    // LV_LOG_WARN("view inner scrollable now");
+                    if (lvgl_view_obj_bubble_scrollable(obj, slide_dir, NULL, NULL))
+                    {
+                        lvgl_view_sched.touch_skip = true;
+                        // LV_LOG_WARN("view inner scrollable now");
+                        break;
+                    }
+                    
+                    // LV_LOG_WARN("view inner scrollable not find");
+                }
+                
+                // 子控件滚动过不做窗口切换
+                if (lvgl_view_sched.touch_skip)
+                {
+                    LV_LOG_WARN("view switch");
                     break;
                 }
                 
-                // LV_LOG_WARN("view inner scrollable not find");
-            }
-            
-            // 子控件滚动过不做窗口切换
-            if (lvgl_view_sched.touch_skip)
-            {
-                LV_LOG_WARN("view switch");
-                break;
-            }
-            
-            if (lvgl_view_sched.anim_lock)
-            {
-                LV_LOG_WARN("view switch");
-                break;
-            }
-            
-            if (lvgl_view_sched.jump_lock)
-            {
-                LV_LOG_WARN("view switch");
-                break;
-            }
-            
-            if (lvgl_view_sched.page_c != 0 && slide_dir != LV_DIR_NONE)
-            {
-                // 更新到对应的界面的回调, 创建需要使用到的目标界面
-                lvgl_view_config_t *config_c = lvgl_view_id_config(lvgl_view_sched.page_c);
-                lvgl_view_config_t *config_t = NULL;
-                LV_ASSERT(config_c->create  != NULL);
-                LV_ASSERT(config_c->destroy != NULL);
-                uint32_t transform = 0;
-                
-                
-                lv_point_t point_t = {0};
-                
-                // 如果不存在对应界面的创建函数, 那意味着无法到达
-                if (config_c->page_r != 0 && slide_dir == LV_DIR_LEFT)
+                if (lvgl_view_sched.anim_lock)
                 {
-                    lvgl_view_sched.page_t = config_c->page_r;
-                    transform = config_c->transform_r;
-                    point_t.x += LV_HOR_RES;
-                    config_t = lvgl_view_id_config(config_c->page_r);
+                    LV_LOG_WARN("view switch");
+                    break;
                 }
                 
-                if (config_c->page_l != 0 && slide_dir == LV_DIR_RIGHT)
+                if (lvgl_view_sched.jump_lock)
                 {
-                    lvgl_view_sched.page_t = config_c->page_l;
-                    transform = config_c->transform_l;
-                    point_t.x -= LV_HOR_RES;
-                    config_t = lvgl_view_id_config(config_c->page_l);
+                    LV_LOG_WARN("view switch");
+                    break;
                 }
                 
-                if (config_c->page_t != 0 && slide_dir == LV_DIR_BOTTOM)
+                if (lvgl_view_sched.page_c != 0 && slide_dir != LV_DIR_NONE)
                 {
-                    lvgl_view_sched.page_t = config_c->page_t;
-                    transform = config_c->transform_t;
-                    point_t.y -= LV_VER_RES;
-                    config_t = lvgl_view_id_config(config_c->page_t);
-                }
-                
-                if (config_c->page_b != 0 && slide_dir == LV_DIR_TOP)
-                {
-                    lvgl_view_sched.page_t = config_c->page_b;
-                    transform = config_c->transform_b;
-                    point_t.y += LV_VER_RES;
-                    config_t = lvgl_view_id_config(config_c->page_b);
-                }
-                
-                if (config_t != NULL)
-                {
-                    LV_ASSERT(config_t->create  != NULL);
-                    LV_ASSERT(config_t->destroy != NULL);
-                    #if 0
+                    // 更新到对应的界面的回调, 创建需要使用到的目标界面
+                    lvgl_view_config_t *config_c = lvgl_view_id_config(lvgl_view_sched.page_c);
+                    lvgl_view_config_t *config_t = NULL;
+                    LV_ASSERT(config_c->create  != NULL);
+                    LV_ASSERT(config_c->destroy != NULL);
+                    uint32_t transform = 0;
                     
-                    /* 主显示未创建, 创建主显示(待定中...) */
-                    if (lvgl_view_sched.view_c == NULL)
+                    
+                    lv_point_t point_t = {0};
+                    
+                    // 如果不存在对应界面的创建函数, 那意味着无法到达
+                    if (config_c->page_r != 0 && slide_dir == LV_DIR_LEFT)
                     {
-                        lv_obj_t *view = lv_obj_create(lvgl_view_sched.view_root);
+                        lvgl_view_sched.page_t = config_c->page_r;
+                        transform = config_c->transform_r;
+                        point_t.x += LV_HOR_RES;
+                        config_t = lvgl_view_id_config(config_c->page_r);
+                    }
+                    
+                    if (config_c->page_l != 0 && slide_dir == LV_DIR_RIGHT)
+                    {
+                        lvgl_view_sched.page_t = config_c->page_l;
+                        transform = config_c->transform_l;
+                        point_t.x -= LV_HOR_RES;
+                        config_t = lvgl_view_id_config(config_c->page_l);
+                    }
+                    
+                    if (config_c->page_t != 0 && slide_dir == LV_DIR_BOTTOM)
+                    {
+                        lvgl_view_sched.page_t = config_c->page_t;
+                        transform = config_c->transform_t;
+                        point_t.y -= LV_VER_RES;
+                        config_t = lvgl_view_id_config(config_c->page_t);
+                    }
+                    
+                    if (config_c->page_b != 0 && slide_dir == LV_DIR_TOP)
+                    {
+                        lvgl_view_sched.page_t = config_c->page_b;
+                        transform = config_c->transform_b;
+                        point_t.y += LV_VER_RES;
+                        config_t = lvgl_view_id_config(config_c->page_b);
+                    }
+                    
+                    if (config_t != NULL)
+                    {
+                        LV_ASSERT(config_t->create  != NULL);
+                        LV_ASSERT(config_t->destroy != NULL);
+                        #if 0
                         
-                        if (lvgl_view_sched.view_event_cb != NULL)
+                        /* 主显示未创建, 创建主显示(待定中...) */
+                        if (lvgl_view_sched.view_c == NULL)
                         {
-                            lv_obj_add_event_cb(view, lvgl_view_sched.view_event_cb, LV_EVENT_ALL, view);
+                            lv_obj_t *view = lv_obj_create(lvgl_view_sched.view_root);
+                            
+                            if (lvgl_view_sched.view_event_cb != NULL)
+                            {
+                                lv_obj_add_event_cb(view, lvgl_view_sched.view_event_cb, LV_EVENT_ALL, view);
+                            }
+                            
+                            lv_obj_set_size(view, LV_HOR_RES, LV_VER_RES);
+                            lv_obj_clear_flag(view, LV_OBJ_FLAG_SCROLLABLE);
+                            lvgl_view_sched.view_c = view;
+                            lv_obj_t *page = lv_obj_create(view);
+                            lv_obj_set_size(page, LV_HOR_RES, LV_VER_RES);
+                            lv_obj_clear_flag(page, LV_OBJ_FLAG_SCROLLABLE);
+                            create_c(page);
+                            lvgl_view_event_bubble(view);
                         }
                         
-                        lv_obj_set_size(view, LV_HOR_RES, LV_VER_RES);
-                        lv_obj_clear_flag(view, LV_OBJ_FLAG_SCROLLABLE);
-                        lvgl_view_sched.view_c = view;
-                        lv_obj_t *page = lv_obj_create(view);
-                        lv_obj_set_size(page, LV_HOR_RES, LV_VER_RES);
-                        lv_obj_clear_flag(page, LV_OBJ_FLAG_SCROLLABLE);
-                        create_c(page);
-                        lvgl_view_event_bubble(view);
-                    }
-                    
-                    #else
-                    LV_ASSERT(lvgl_view_sched.view_c != NULL);
-                    #endif
-                    lvgl_view_obj_scroll_lock(lvgl_view_sched.view_c, true);
-                    
-                    /* 目标显示未创建, 创建目标显示 */
-                    if (lvgl_view_sched.view_t == NULL)
-                    {
-                        lv_obj_t *view = lv_obj_create(lvgl_view_sched.view_root);
+                        #else
+                        LV_ASSERT(lvgl_view_sched.view_c != NULL);
+                        #endif
+                        lvgl_view_obj_scroll_lock(lvgl_view_sched.view_c, true);
                         
-                        if (lvgl_view_sched.view_event_cb != NULL)
+                        /* 目标显示未创建, 创建目标显示 */
+                        if (lvgl_view_sched.view_t == NULL)
                         {
-                            lv_obj_add_event_cb(view, lvgl_view_sched.view_event_cb, LV_EVENT_ALL, view);
+                            lv_obj_t *view = lv_obj_create(lvgl_view_sched.view_root);
+                            
+                            if (lvgl_view_sched.view_event_cb != NULL)
+                            {
+                                lv_obj_add_event_cb(view, lvgl_view_sched.view_event_cb, LV_EVENT_ALL, view);
+                            }
+                            
+                            lv_obj_set_pos(view, point_t.x, point_t.y);
+                            lv_obj_set_size(view, LV_HOR_RES, LV_VER_RES);
+                            lv_obj_clear_flag(view, LV_OBJ_FLAG_SCROLLABLE);
+                            lvgl_view_sched.view_t = view;
+                            
+                            lv_obj_t *page = lv_obj_create(view);
+                            lv_obj_set_size(page, LV_HOR_RES, LV_VER_RES);
+                            lv_obj_clear_flag(page, LV_OBJ_FLAG_SCROLLABLE);
+                            config_t->create(page);
+                            lvgl_view_event_bubble(view);
                         }
                         
-                        lv_obj_set_pos(view, point_t.x, point_t.y);
-                        lv_obj_set_size(view, LV_HOR_RES, LV_VER_RES);
-                        lv_obj_clear_flag(view, LV_OBJ_FLAG_SCROLLABLE);
-                        lvgl_view_sched.view_t = view;
+                        /* 现在将移动锁予以标记 */
+                        lvgl_view_sched.move_lock = true;
+                        lvgl_view_src_make();
+                        //
+                        lvgl_view_sched.pct = 0;
+                        lvgl_view_sched.point_c = (lv_point_t)
+                        {
+                            0
+                        };
+                        lvgl_view_sched.point_t = (lv_point_t)
+                        {
+                            0
+                        };
                         
-                        lv_obj_t *page = lv_obj_create(view);
-                        lv_obj_set_size(page, LV_HOR_RES, LV_VER_RES);
-                        lv_obj_clear_flag(page, LV_OBJ_FLAG_SCROLLABLE);
-                        config_t->create(page);
-                        lvgl_view_event_bubble(view);
+                        // 做一下通配处理
+                        if (transform == lvgl_view_tr_none ||
+                            transform == lvgl_view_tr_auto)
+                        {
+                            transform  = lvgl_view_sched.slide_type_cfg;
+                        }
+                        
+                        lvgl_view_sched.slide_dir = slide_dir;
+                        lvgl_view_sched.transform_type = transform;
+                        LV_ASSERT(lvgl_view_sched.slide_dir & LV_DIR_ALL);
+                        LV_ASSERT(lvgl_view_sched.transform_type > lvgl_view_tr_single_s);
+                        LV_ASSERT(lvgl_view_sched.transform_type < lvgl_view_tr_single_e);
+                        
                     }
-                    
-                    /* 现在将移动锁予以标记 */
-                    lvgl_view_sched.move_lock = true;
-                    lvgl_view_src_make();
-                    //
-                    lvgl_view_sched.pct = 0;
-                    lvgl_view_sched.point_c = (lv_point_t)
-                    {
-                        0
-                    };
-                    lvgl_view_sched.point_t = (lv_point_t)
-                    {
-                        0
-                    };
-                    
-                    // 做一下通配处理
-                    if (transform == lvgl_view_tr_none ||
-                        transform == lvgl_view_tr_auto)
-                    {
-                        transform  = lvgl_view_sched.slide_type_cfg;
-                    }
-                    
-                    lvgl_view_sched.slide_dir = slide_dir;
-                    lvgl_view_sched.transform_type = transform;
-                    LV_ASSERT(lvgl_view_sched.slide_dir & LV_DIR_ALL);
-                    LV_ASSERT(lvgl_view_sched.transform_type > lvgl_view_tr_single_s);
-                    LV_ASSERT(lvgl_view_sched.transform_type < lvgl_view_tr_single_e);
-                    
-                }
-            }
-        }
-        
-        lv_point_t point = lvgl_view_sched.touch_curr;
-        lv_point_t point_c = lvgl_view_sched.point_c;
-        
-        // 持续滑动中
-        if (lvgl_view_sched.move_lock)
-        {
-            // 启用一个动画, 对画布进行图形变换
-            
-            #if 0
-            /* 落点跟随风格:动画永远带着界面跑到手指落点 */
-            if (lvgl_view_sched.slide_dir == LV_DIR_RIGHT)
-            {
-                lvgl_view_slide_anim_auto(point_c.x, point.x, LV_HOR_RES, 0);
-            }
-            
-            if (lvgl_view_sched.slide_dir == LV_DIR_LEFT)
-            {
-                lvgl_view_slide_anim_auto(point_c.x, point.x - LV_HOR_RES, LV_HOR_RES, 0);
-            }
-            
-            if (lvgl_view_sched.slide_dir == LV_DIR_BOTTOM)
-            {
-                lvgl_view_slide_anim_auto(point_c.y, point.y, LV_VER_RES, 0);
-            }
-            
-            if (lvgl_view_sched.slide_dir == LV_DIR_TOP)
-            {
-                lvgl_view_slide_anim_auto(point_c.y, point.y - LV_VER_RES, LV_VER_RES, 0);
-            }
-            
-            #else
-            /* 位移风格:动画只补充移位 */
-            lv_point_t offset = {0};
-            offset.x = point_c.x + lvgl_view_sched.touch_curr.x -
-                lvgl_view_sched.touch_dist.x;
-            offset.y = point_c.y + lvgl_view_sched.touch_curr.y -
-                lvgl_view_sched.touch_dist.y;
-            
-            /* 将上一次动画中没有用完的位移取出 */
-            if (lvgl_view_sched.anim != 0)
-            {
-                int32_t val_c = lvgl_view_sched.anim->current_value;
-                int32_t val_s = lvgl_view_sched.anim->start_value;
-                int32_t val_e = lvgl_view_sched.anim->end_value;
-            
-                // 这里偷懒, 直接从anim取未完成位移, 正常应该本地保存一个备份的
-                if ((lvgl_view_sched.slide_dir & LV_DIR_HOR) != 0)
-                {
-                    offset.x += val_e - val_c;
-                }
-            
-                if ((lvgl_view_sched.slide_dir & LV_DIR_VER) != 0)
-                {
-                    offset.y += val_e - val_c;
                 }
             }
             
-            
-            if (lvgl_view_sched.slide_dir == LV_DIR_RIGHT)
-            {
-                offset.x = LV_CLAMP(0, offset.x, +LV_HOR_RES);
-                lvgl_view_slide_anim_auto(point_c.x, offset.x, LV_HOR_RES, 0);
-            }
-            
-            if (lvgl_view_sched.slide_dir == LV_DIR_LEFT)
-            {
-                offset.x = LV_CLAMP(-LV_HOR_RES, offset.x, 0);
-                lvgl_view_slide_anim_auto(point_c.x, offset.x, LV_HOR_RES, 0);
-            }
-            
-            if (lvgl_view_sched.slide_dir == LV_DIR_BOTTOM)
-            {
-                offset.y = LV_CLAMP(0, offset.y, +LV_VER_RES);
-                lvgl_view_slide_anim_auto(point_c.y, offset.y, LV_VER_RES, 0);
-            }
-            
-            if (lvgl_view_sched.slide_dir == LV_DIR_TOP)
-            {
-                offset.y = LV_CLAMP(-LV_VER_RES, offset.y, 0);
-                lvgl_view_slide_anim_auto(point_c.y, offset.y, LV_VER_RES, 0);
-            }
-            
-            lvgl_view_sched.touch_dist = lvgl_view_sched.touch_curr;
-            #endif
-        }
-        
-        break;
-    }
-    
-    case LV_EVENT_RELEASED:
-    {
-        if (lvgl_view_sched.move_lock)
-        {
-            lvgl_view_sched.move_lock = false;
-            
-            lv_indev_t *indev = lv_indev_get_act();
-            lv_indev_get_point(indev, &lvgl_view_sched.touch_curr);
             lv_point_t point = lvgl_view_sched.touch_curr;
+            lv_point_t point_c = lvgl_view_sched.point_c;
             
-            #if 1
-            lv_area_t area_c = {0};
-            area_c.x1 = LV_MAX(lvgl_view_sched.point_c.x, 0);
-            area_c.y1 = LV_MAX(lvgl_view_sched.point_c.y, 0);
-            area_c.x2 = LV_MIN(LV_HOR_RES, LV_HOR_RES + lvgl_view_sched.point_c.x) - 1;
-            area_c.y2 = LV_MIN(LV_VER_RES, LV_VER_RES + lvgl_view_sched.point_c.y) - 1;
-            int32_t w = lv_area_get_width(&area_c);
-            int32_t h = lv_area_get_height(&area_c);
-            bool inout = ((w * h) > ((int32_t)LV_HOR_RES * (int32_t)LV_VER_RES / 2));
-            lvgl_view_slide_anim_inout(inout);
-            
-            #else
-            
-            if (lvgl_view_mabs(point.x, LV_HOR_RES) < LV_HOR_RES * 1 / 3 &&
-                lvgl_view_mabs(point.y, LV_VER_RES) < LV_VER_RES * 1 / 3)
+            // 持续滑动中
+            if (lvgl_view_sched.move_lock)
             {
-                if (lvgl_view_sched.slide_dir == LV_DIR_BOTTOM ||
-                    lvgl_view_sched.slide_dir == LV_DIR_RIGHT)
+                // 启用一个动画, 对画布进行图形变换
+                
+                #if 0
+                /* 落点跟随风格:动画永远带着界面跑到手指落点 */
+                if (lvgl_view_sched.slide_dir == LV_DIR_RIGHT)
                 {
-                    lvgl_view_slide_anim_inout(true);
+                    lvgl_view_slide_anim_auto(point_c.x, point.x, LV_HOR_RES, 0);
                 }
-            }
-            else
-            {
-                if (lvgl_view_sched.slide_dir == LV_DIR_BOTTOM ||
-                    lvgl_view_sched.slide_dir == LV_DIR_RIGHT)
+                
+                if (lvgl_view_sched.slide_dir == LV_DIR_LEFT)
                 {
-                    lvgl_view_slide_anim_inout(false);
+                    lvgl_view_slide_anim_auto(point_c.x, point.x - LV_HOR_RES, LV_HOR_RES, 0);
                 }
+                
+                if (lvgl_view_sched.slide_dir == LV_DIR_BOTTOM)
+                {
+                    lvgl_view_slide_anim_auto(point_c.y, point.y, LV_VER_RES, 0);
+                }
+                
+                if (lvgl_view_sched.slide_dir == LV_DIR_TOP)
+                {
+                    lvgl_view_slide_anim_auto(point_c.y, point.y - LV_VER_RES, LV_VER_RES, 0);
+                }
+                
+                #else
+                /* 位移风格:动画只补充移位 */
+                lv_point_t offset = {0};
+                offset.x = point_c.x + lvgl_view_sched.touch_curr.x -
+                    lvgl_view_sched.touch_dist.x;
+                offset.y = point_c.y + lvgl_view_sched.touch_curr.y -
+                    lvgl_view_sched.touch_dist.y;
+                
+                /* 将上一次动画中没有用完的位移取出 */
+                if (lvgl_view_sched.anim != 0)
+                {
+                    int32_t val_c = lvgl_view_sched.anim->current_value;
+                    int32_t val_s = lvgl_view_sched.anim->start_value;
+                    int32_t val_e = lvgl_view_sched.anim->end_value;
+                
+                    // 这里偷懒, 直接从anim取未完成位移, 正常应该本地保存一个备份的
+                    if ((lvgl_view_sched.slide_dir & LV_DIR_HOR) != 0)
+                    {
+                        offset.x += val_e - val_c;
+                    }
+                
+                    if ((lvgl_view_sched.slide_dir & LV_DIR_VER) != 0)
+                    {
+                        offset.y += val_e - val_c;
+                    }
+                }
+                
+                
+                if (lvgl_view_sched.slide_dir == LV_DIR_RIGHT)
+                {
+                    offset.x = LV_CLAMP(0, offset.x, +LV_HOR_RES);
+                    lvgl_view_slide_anim_auto(point_c.x, offset.x, LV_HOR_RES, 0);
+                }
+                
+                if (lvgl_view_sched.slide_dir == LV_DIR_LEFT)
+                {
+                    offset.x = LV_CLAMP(-LV_HOR_RES, offset.x, 0);
+                    lvgl_view_slide_anim_auto(point_c.x, offset.x, LV_HOR_RES, 0);
+                }
+                
+                if (lvgl_view_sched.slide_dir == LV_DIR_BOTTOM)
+                {
+                    offset.y = LV_CLAMP(0, offset.y, +LV_VER_RES);
+                    lvgl_view_slide_anim_auto(point_c.y, offset.y, LV_VER_RES, 0);
+                }
+                
+                if (lvgl_view_sched.slide_dir == LV_DIR_TOP)
+                {
+                    offset.y = LV_CLAMP(-LV_VER_RES, offset.y, 0);
+                    lvgl_view_slide_anim_auto(point_c.y, offset.y, LV_VER_RES, 0);
+                }
+                
+                lvgl_view_sched.touch_dist = lvgl_view_sched.touch_curr;
+                #endif
             }
             
-            if (lvgl_view_mabs(point.x, LV_HOR_RES) < LV_HOR_RES * 2 / 3 &&
-                lvgl_view_mabs(point.y, LV_VER_RES) < LV_VER_RES * 2 / 3)
-            {
-                if (lvgl_view_sched.slide_dir == LV_DIR_TOP ||
-                    lvgl_view_sched.slide_dir == LV_DIR_LEFT)
-                {
-                    lvgl_view_slide_anim_inout(false);
-                }
-            }
-            else
-            {
-                if (lvgl_view_sched.slide_dir == LV_DIR_TOP ||
-                    lvgl_view_sched.slide_dir == LV_DIR_LEFT)
-                {
-                    lvgl_view_slide_anim_inout(true);
-                }
-            }
-            
-            #endif
+            break;
         }
         
-        break;
-    }
-    
-    default:
-        break;
+        case LV_EVENT_RELEASED:
+        {
+            if (lvgl_view_sched.move_lock)
+            {
+                lvgl_view_sched.move_lock = false;
+                
+                lv_indev_t *indev = lv_indev_get_act();
+                lv_indev_get_point(indev, &lvgl_view_sched.touch_curr);
+                lv_point_t point = lvgl_view_sched.touch_curr;
+                
+                #if 1
+                lv_area_t area_c = {0};
+                area_c.x1 = LV_MAX(lvgl_view_sched.point_c.x, 0);
+                area_c.y1 = LV_MAX(lvgl_view_sched.point_c.y, 0);
+                area_c.x2 = LV_MIN(LV_HOR_RES, LV_HOR_RES + lvgl_view_sched.point_c.x) - 1;
+                area_c.y2 = LV_MIN(LV_VER_RES, LV_VER_RES + lvgl_view_sched.point_c.y) - 1;
+                int32_t w = lv_area_get_width(&area_c);
+                int32_t h = lv_area_get_height(&area_c);
+                bool inout = ((w * h) > ((int32_t)LV_HOR_RES * (int32_t)LV_VER_RES / 2));
+                lvgl_view_slide_anim_inout(inout);
+                
+                #else
+                
+                if (lvgl_view_mabs(point.x, LV_HOR_RES) < LV_HOR_RES * 1 / 3 &&
+                    lvgl_view_mabs(point.y, LV_VER_RES) < LV_VER_RES * 1 / 3)
+                {
+                    if (lvgl_view_sched.slide_dir == LV_DIR_BOTTOM ||
+                        lvgl_view_sched.slide_dir == LV_DIR_RIGHT)
+                    {
+                        lvgl_view_slide_anim_inout(true);
+                    }
+                }
+                else
+                {
+                    if (lvgl_view_sched.slide_dir == LV_DIR_BOTTOM ||
+                        lvgl_view_sched.slide_dir == LV_DIR_RIGHT)
+                    {
+                        lvgl_view_slide_anim_inout(false);
+                    }
+                }
+                
+                if (lvgl_view_mabs(point.x, LV_HOR_RES) < LV_HOR_RES * 2 / 3 &&
+                    lvgl_view_mabs(point.y, LV_VER_RES) < LV_VER_RES * 2 / 3)
+                {
+                    if (lvgl_view_sched.slide_dir == LV_DIR_TOP ||
+                        lvgl_view_sched.slide_dir == LV_DIR_LEFT)
+                    {
+                        lvgl_view_slide_anim_inout(false);
+                    }
+                }
+                else
+                {
+                    if (lvgl_view_sched.slide_dir == LV_DIR_TOP ||
+                        lvgl_view_sched.slide_dir == LV_DIR_LEFT)
+                    {
+                        lvgl_view_slide_anim_inout(true);
+                    }
+                }
+                
+                #endif
+            }
+            
+            break;
+        }
+        
+        default:
+            break;
     }
 }
 
