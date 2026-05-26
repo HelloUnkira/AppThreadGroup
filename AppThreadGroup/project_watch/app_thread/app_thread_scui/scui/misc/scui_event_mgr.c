@@ -106,7 +106,7 @@ static void scui_event_adjust_prior(scui_event_t *event)
 {
     scui_event_prior_t event_sys_prior[scui_event_sys_num] = {
         
-        [scui_event_sched_delay]    = scui_event_prior_real,
+        [scui_event_sched_async]    = scui_event_prior_real,
         [scui_event_focus_lost]     = scui_event_prior_high,
         [scui_event_focus_get]      = scui_event_prior_high,
         [scui_event_show]           = scui_event_prior_high,
@@ -235,7 +235,7 @@ static void scui_event_respond(scui_event_t *event)
     case scui_event_sched_none:
         scui_event_mask_over(event);
         return;
-    case scui_event_sched_delay:
+    case scui_event_sched_async:
         event->sched(event->handle);
         scui_event_mask_over(event);
         return;

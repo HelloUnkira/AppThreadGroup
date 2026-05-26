@@ -95,7 +95,7 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
 /*@brief 控件显示
  *@param handle 控件句柄
  */
-static void scui_widget_show_delay(scui_handle_t handle)
+static void scui_widget_show_async(scui_handle_t handle)
 {
     /* 尝试构建控件布局树 */
     scui_widget_layout_tree(handle);
@@ -121,27 +121,10 @@ static void scui_widget_show_delay(scui_handle_t handle)
     scui_widget_draw(widget->myself, NULL, only);
 }
 
-/*@brief 控件显示
- *@param handle 控件句柄
- *@param delay  迟延调度
- */
-void scui_widget_show(scui_handle_t handle, bool delay)
-{
-    if (delay) {
-        scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_delay, NULL);
-        event.style.prior = scui_event_prior_real;
-        event.sched       = scui_widget_show_delay;
-        event.handle      = handle;
-        scui_event_notify(&event);
-        return;
-    }
-    scui_widget_show_delay(handle);
-}
-
 /*@brief 控件隐藏
  *@param handle 控件句柄
  */
-static void scui_widget_hide_delay(scui_handle_t handle)
+static void scui_widget_hide_async(scui_handle_t handle)
 {
     if (scui_handle_unmap(handle))
         return;
@@ -168,21 +151,38 @@ static void scui_widget_hide_delay(scui_handle_t handle)
         scui_widget_refr(widget->myself, false);
 }
 
-/*@brief 控件隐藏
+/*@brief 控件显示
  *@param handle 控件句柄
- *@param delay  迟延调度
+ *@param async  迟延调度
  */
-void scui_widget_hide(scui_handle_t handle, bool delay)
+void scui_widget_show(scui_handle_t handle, bool async)
 {
-    if (delay) {
-        scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_delay, NULL);
+    if (async) {
+        scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_async, NULL);
         event.style.prior = scui_event_prior_real;
-        event.sched       = scui_widget_hide_delay;
+        event.sched       = scui_widget_show_async;
         event.handle      = handle;
         scui_event_notify(&event);
         return;
     }
-    scui_widget_hide_delay(handle);
+    scui_widget_show_async(handle);
+}
+
+/*@brief 控件隐藏
+ *@param handle 控件句柄
+ *@param async  迟延调度
+ */
+void scui_widget_hide(scui_handle_t handle, bool async)
+{
+    if (async) {
+        scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_async, NULL);
+        event.style.prior = scui_event_prior_real;
+        event.sched       = scui_widget_hide_async;
+        event.handle      = handle;
+        scui_event_notify(&event);
+        return;
+    }
+    scui_widget_hide_async(handle);
 }
 
 /*@brief 清除事件的所有自定义回调

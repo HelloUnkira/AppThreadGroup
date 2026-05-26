@@ -222,15 +222,15 @@ void scui_widget_refr(scui_handle_t handle, bool sync);
 
 /*@brief 控件显示
  *@param handle 控件句柄
- *@param delay  迟延调度
+ *@param async  迟延调度
  */
-void scui_widget_show(scui_handle_t handle, bool delay);
+void scui_widget_show(scui_handle_t handle, bool async);
 
 /*@brief 控件隐藏
  *@param handle 控件句柄
- *@param delay  迟延调度
+ *@param async  迟延调度
  */
-void scui_widget_hide(scui_handle_t handle, bool delay);
+void scui_widget_hide(scui_handle_t handle, bool async);
 
 /*@brief 清除事件的所有自定义回调
  *@param handle 控件句柄
