@@ -12,18 +12,28 @@ typedef struct {
     uint8_t refr_hold:2;
     uint8_t draw_idx:1;
     
-    #if SCUI_MEM_FEAT_MINI
+    #if SCUI_FRAME_BUFFER_SEG_USE
     scui_area_t clip_seg;
     scui_area_t clip_seg_refr[2];
     #endif
 } scui_frame_buffer_t;
 
-#if SCUI_MEM_FEAT_MINI
+static inline scui_area_t  scui_frame_buffer_area(void)
+{return (scui_area_t){.w = SCUI_HOR_RES,.h = SCUI_VER_RES,};}
 
-/*@brief 获得帧缓冲区段区域
- *@param clip_seg 段区域
+#if SCUI_FRAME_BUFFER_SEG_USE
+
+/*@brief 绘制画布段偏移重定向
+ *@param dst_surface 绘制画布
+ *@param dst_clip    绘制画布剪切域
+ *@param dst_ofs     绘制画布偏移
+ *@param src_clip    源画布剪切域
+ *@param seg_ofs     画布段偏移
+ *@retval 有效无效
  */
-void scui_frame_buffer_seg(scui_area_t *clip_seg);
+bool scui_frame_buffer_clip_seg(scui_surface_t *dst_surface,
+    scui_area_t *dst_clip, scui_point_t *dst_ofs,
+    scui_area_t *src_clip, scui_point_t *seg_ofs);
 
 /*@brief 就绪帧缓冲区段区域
  */

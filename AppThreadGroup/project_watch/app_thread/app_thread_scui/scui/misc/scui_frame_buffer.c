@@ -9,14 +9,61 @@
 
 static scui_frame_buffer_t scui_frame_buffer = {0};
 
-#if SCUI_MEM_FEAT_MINI
+#if SCUI_FRAME_BUFFER_SEG_USE
 
-/*@brief 获得帧缓冲区段区域
- *@param clip_seg 段区域
+/*@brief 绘制画布段偏移重定向
+ *@param dst_surface 绘制画布
+ *@param dst_clip    绘制画布剪切域
+ *@param dst_ofs     绘制画布偏移
+ *@param src_clip    源画布剪切域
+ *@param seg_ofs     画布段偏移
+ *@retval 有效无效
  */
-void scui_frame_buffer_seg(scui_area_t *clip_seg)
+bool scui_frame_buffer_clip_seg(scui_surface_t *dst_surface,
+    scui_area_t *dst_clip, scui_point_t *dst_ofs,
+    scui_area_t *src_clip, scui_point_t *seg_ofs)
 {
-    *clip_seg = scui_frame_buffer.clip_seg;
+    /* 绘制目标重定向仅发生在帧缓冲渲染 */
+    if (dst_surface->pixel != scui_frame_buffer_draw()->pixel &&
+        dst_surface->pixel != scui_frame_buffer_refr()->pixel)
+        return true;
+    
+    /* 帧缓冲区段区域 */
+    /* 将段剪切域偏移追加到该目标上 */
+    scui_area_t dst_clip_seg = *dst_clip;
+    scui_area_t clip_seg = scui_frame_buffer.clip_seg;
+    if (!scui_area_inter2(dst_clip, &clip_seg))
+         goto over;
+    if (seg_ofs != NULL) {
+        seg_ofs->x = +(clip_seg.x);
+        seg_ofs->y = +(clip_seg.y);
+    }
+    if (dst_ofs != NULL) {
+        dst_ofs->x = +(dst_clip->x - dst_clip_seg.x);
+        dst_ofs->y = +(dst_clip->y - dst_clip_seg.y);
+    }
+    /* 源剪切域相对目标剪切域 */
+    if (src_clip != NULL) {
+        scui_point_t src_ofs = {
+            .x = +(dst_clip->x - dst_clip_seg.x),
+            .y = +(dst_clip->y - dst_clip_seg.y),
+        };
+        if (scui_area_limit_offset(src_clip, &src_ofs));
+        else goto over;
+    }
+    
+    /* 在结果去除段偏移以映射到surface上 */
+    dst_clip->x -= clip_seg.x;
+    dst_clip->y -= clip_seg.y;
+    
+    SCUI_ASSERT(dst_clip->x + dst_clip->w <= 0 + clip_seg.w);
+    SCUI_ASSERT(dst_clip->y + dst_clip->h <= 0 + clip_seg.h);
+    return true;
+    
+    over:
+    dst_clip->w = 0;
+    dst_clip->h = 0;
+    return false;
 }
 
 /*@brief 就绪帧缓冲区段区域
@@ -125,7 +172,7 @@ void scui_frame_buffer_refr_toggle(void)
     scui_frame_buffer.draw_idx = 0;
     #endif
     
-    #if SCUI_MEM_FEAT_MINI
+    #if SCUI_FRAME_BUFFER_SEG_USE
     #if SCUI_FRAME_BUFFER_ASYNC
     scui_frame_buffer.clip_seg_refr[1 - scui_frame_buffer.draw_idx] = scui_frame_buffer.clip_seg;
     #else
@@ -153,7 +200,7 @@ void scui_frame_buffer_refr_routine(void (*refr)(scui_surface_t *surface, scui_a
     
     if (refr) {
         
-        #if SCUI_MEM_FEAT_MINI
+        #if SCUI_FRAME_BUFFER_SEG_USE
         scui_area_t clip_seg = scui_frame_buffer.clip_seg_refr[1 - scui_frame_buffer.draw_idx];
         SCUI_LOG_INFO("clip seg:<%d, %d, %d, %d>", clip_seg.x, clip_seg.y, clip_seg.w, clip_seg.h);
         refr(surface, &clip_seg);

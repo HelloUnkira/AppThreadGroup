@@ -586,9 +586,8 @@ void scui_widget_event_dispatch(scui_event_t *event)
             if (scui_event_check_prepare(event)) {
                 /* 无独立画布, 异步绘制(此处忽略) */
                 if (!surface_only && !event->style.sync) return;
-                
                 /* 无独立画布, 同步绘制 --> 就地直达绘制画布 */
-                if (!surface_only && event->style.sync) {
+                if (!surface_only &&  event->style.sync) {
                     scui_surface_t *surface_fb = scui_frame_buffer_draw();
                     scui_widget_surface_remap(widget->myself, surface_fb);
                 }
@@ -630,18 +629,25 @@ void scui_widget_event_dispatch(scui_event_t *event)
             
             /* 工步调度:finish */
             if (scui_event_check_finish(event)) {
+                bool refr = true;
+                
                 /* 无独立画布, 异步绘制(此处忽略) */
                 if (!surface_only && !event->style.sync) return;
+                /* 无独立画布, 同步绘制(此处标记) */
+                if (!surface_only &&  event->style.sync) refr = false;
+                /* 异步刷新中已经产生同步绘制 */
+                /* 同步绘制不能再产生异步刷新 */
+                /* 此处流程需要提前退出 */
                 
                 /* 执行绘制任务序列调度 */
                 scui_tick_stat(scui_tick_stat_draw_rcd);
                 scui_draw_task_dispatch();
                 scui_tick_stat(scui_tick_stat_draw_sum);
-                
-                /* 绘制结束, 产生一次异步刷新 */
-                scui_widget_refr(widget->myself, false);
                 /* 绘制结束, 去除surface剪切域 */
                 scui_widget_clip_clear(widget, true);
+                
+                /* 绘制结束, 产生一次异步刷新 */
+                if (refr) scui_widget_refr(widget->myself, false);
             }
             
             /* 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘 */

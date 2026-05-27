@@ -80,7 +80,7 @@ void scui_monitor_event_cb(scui_event_t *event)
                 100 * tick_stat.sched_sum   / elapse_curr,
                 100 * tick_stat.draw_sum    / elapse_curr,
                 100 * tick_stat.draw_sum_hw / elapse_curr,
-                tick_stat.refr_fps,
+                tick_stat.refr_fps * 1000 * 1000 / elapse_curr,
             };
             
             uint32_t color[] = {
@@ -221,10 +221,6 @@ void scui_monitor_event_cb(scui_event_t *event)
         break;
     }
     case scui_event_draw:
-        #if SCUI_MEM_FEAT_MINI == 0
-        scui_widget_alpha_set(event->object, scui_alpha_cover, false);
-        scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
-        #endif
         break;
     case scui_event_focus_get:
         break;
@@ -246,6 +242,7 @@ void scui_monitor_show(bool buffer)
         scui_handle_t window_handle = SCUI_HANDLE_INVALID;
         window_maker.widget.type = scui_widget_type_window;
         window_maker.widget.style.sched_anima = true;
+        window_maker.widget.style.fully_bg = buffer;
         window_maker.widget.clip.x = 10;
         window_maker.widget.clip.y = SCUI_VER_RES - 70;
         window_maker.widget.clip.w = SCUI_HOR_RES - 10 * 2;

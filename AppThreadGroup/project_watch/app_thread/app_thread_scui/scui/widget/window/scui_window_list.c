@@ -138,9 +138,9 @@ static void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
 static void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handle_t *ofs)
 {
     scui_surface_t *surface_fb = scui_frame_buffer_draw();
+    scui_multi_t idx = (scui_multi_t)num - 1;
     
-    int32_t idx = (int32_t)num - 1;
-    for (idx = (int32_t)num - 1; idx >= 0; idx--) {
+    for (idx = idx; idx >= 0; idx--) {
         scui_widget_t *widget = list[idx];
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         SCUI_ASSERT(scui_handle_remap(widget->myself));
@@ -169,8 +169,13 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     SCUI_ASSERT(switch_cfg_type > scui_window_switch_single_s);
     SCUI_ASSERT(switch_cfg_type < scui_window_switch_single_e);
     
+    /* 底图清空 */
+    void scui_window_transform_clean(void);
+    scui_window_transform_clean();
+    
     #if SCUI_MEM_FEAT_MINI
     /* 小内存方案无独立画布 */
+    SCUI_ASSERT(num == 0);
     return;
     #endif
     
@@ -188,12 +193,6 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     
     /* 直接渲染复用常规窗口移动变换(此时相当于不移动) */
     if (mode_simple) switch_type = scui_window_switch_move;
-    
-    /* 底图清空 */
-    scui_color_t dst_pixel = {0};
-    scui_surface_t *dst_surface = scui_frame_buffer_draw();
-    scui_area_t dst_clip = scui_surface_area(dst_surface);
-    scui_draw_area_fill(true, dst_surface, dst_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
     
     /* 目前所有的画布混合都只有俩个, move除外 */
     if (switch_type >= scui_window_switch_single_s &&
@@ -275,11 +274,6 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
 static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
 {
     #if SCUI_MEM_FEAT_MINI
-    /* 底图清空 */
-    scui_surface_t *dst_surface = scui_frame_buffer_draw();
-    scui_area_t dst_clip = scui_surface_area(dst_surface);
-    scui_draw_area_fill(true, dst_surface, &dst_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
-    
     scui_widget_t *widget_cur = NULL;
     scui_widget_t *widget_tar = NULL;
     scui_alpha_t alpha_cur = scui_alpha_cover;
@@ -335,6 +329,12 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
             SCUI_ASSERT(widget->clip_set.clip.y == 0);
             dst_clip.x = widget->clip.x;
             dst_clip.y = widget->clip.y;
+            
+            /* 给目标独立画布追加段偏移 */
+            #if SCUI_FRAME_BUFFER_SEG_USE
+            if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
+                 continue;
+            #endif
             
             scui_tick_stat(scui_tick_stat_draw_rcd);
             scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
@@ -394,8 +394,8 @@ static void scui_window_surface_ready(void)
         else
             scui_window_list.widget_1[scui_window_list.widget_1_num++] = widget;
         
-        /* 小内存方案没有窗口独立画布混合 */
         #if SCUI_MEM_FEAT_MINI
+        /* 小内存方案没有窗口独立画布混合 */
         if (scui_widget_surface_only(widget))
             SCUI_ASSERT(false);
         #endif
@@ -486,13 +486,13 @@ static void scui_window_surface_blend(void)
  */
 static void scui_window_surface_refresh(void)
 {
-    #if SCUI_MEM_FEAT_MINI
+    #if SCUI_FRAME_BUFFER_SEG_USE
     scui_window_surface_ready();
     /* 在此处启动段绘制 */
     scui_frame_buffer_seg_ready();
     for (bool seg_valid = true; seg_valid; seg_valid) {
+        /* 混合绘制子段 */
         scui_window_surface_blend();
-        /* 混合绘制刷新流程结束 */
         /* 使用绘制启动刷新流程 */
         scui_frame_buffer_refr_toggle();
         /* 等待绘制目标刷新 */

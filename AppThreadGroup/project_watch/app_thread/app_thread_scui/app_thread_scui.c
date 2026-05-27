@@ -188,14 +188,14 @@ static void app_thread_scui_ready(void)
  */
 static void app_thread_scui_routine_ready_cb(void)
 {
-    app_thread_scui_ready();
-    
     /* 初始化与scui绑定的驱动设备 */
     app_dev_gui_disp_ready(&app_dev_gui_disp);
     app_dev_gui_ptr_ready(&app_dev_gui_ptr);
     app_dev_gui_enc_ready(&app_dev_gui_enc);
     app_dev_gui_key_ready(&app_dev_gui_key);
     app_dev_gui_drv_ready(&app_dev_gui_drv);
+    /* 初始化scui系统及其资源 */
+    app_thread_scui_ready();
     /* 初始化启动scui调度定时器 */
     app_scui_timer_ready();
     app_scui_timer_start();

@@ -65,7 +65,7 @@ void scui_ready(void)
     scui_coord_t surface_rem  = sizeof(scui_color_wt_t) - surface.pbyte;
     scui_multi_t surface_size = surface.ver_res * surface.stride + surface_rem;
     
-    #if SCUI_MEM_FEAT_MINI
+    #if SCUI_FRAME_BUFFER_SEG_USE
     clip.h = SCUI_FRAME_BUFFER_SEG;
     surface.ver_res = SCUI_FRAME_BUFFER_SEG;
     surface_size = surface.ver_res * surface.stride + surface_rem;
@@ -159,7 +159,7 @@ void scui_custom_show(void)
     
     /* 启用scui性能监控 */
     #if SCUI_MONITOR_USE
-    scui_monitor_show(false || !SCUI_MEM_FEAT_MINI);
+    scui_monitor_show(false);
     #endif
     
     /* 启用monkey test */

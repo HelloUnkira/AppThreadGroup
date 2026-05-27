@@ -135,6 +135,7 @@
 
 /* 帧缓冲异步(同步:1块;异步:2块;) */
 #define SCUI_FRAME_BUFFER_ASYNC                     (2)
+#define SCUI_FRAME_BUFFER_SEG_USE                   (0 && !SCUI_MEM_FEAT_MINI)
 #define SCUI_FRAME_BUFFER_SEG                       (95 /* 95 SCUI_VER_RES / 3 */)
 
 /* 绘制任务序列 */
@@ -182,7 +183,7 @@
 /* 窗口切换动画速度[ptr, enc, key, auto, jump] */
 #define SCUI_WINDOW_LIST_LIMIT                      (10)
 #define SCUI_WINDOW_STACK_NEST                      (20)
-#define SCUI_WINDOW_SWITCH_MODE                     (1 && !SCUI_MEM_FEAT_MINI)
+#define SCUI_WINDOW_SWITCH_MODE                     (1 && !SCUI_FRAME_BUFFER_SEG_USE)
 #define SCUI_WINDOW_SWITCH_MOVE_SPD                 {2000, 1700, 1700, 1000, 300}
 #define SCUI_WINDOW_PRELOAD_USE                     (0)
 
