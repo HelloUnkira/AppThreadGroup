@@ -176,14 +176,20 @@ void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
         scui_area_t src_clip = scui_surface_area(src_surface);
         scui_area_t widget_clip = list[idx]->clip;
         
-        if (scui_window_switch_type() == scui_window_switch_zoom1)
-        if (list[idx]->myself == scui_window_active_curr()) {
+        if (scui_window_switch_type() == scui_window_switch_zoom1) {
             
-            if (!scui_window_transform_clip(list[idx], &dst_clip, &src_clip))
-                 continue;
-            
-            scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
-            continue;
+            if (list[idx]->myself == scui_window_active_curr()) {
+                
+                if (!scui_window_transform_clip(list[idx], &dst_clip, &src_clip))
+                     continue;
+                #if SCUI_FRAME_BUFFER_SEG
+                if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
+                     continue;
+                #endif
+                
+                scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
+                continue;
+            }
         }
         
         scui_coord_t pct = 0;
@@ -208,6 +214,15 @@ void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
         scui_point_t dst_anchor = scui_area_center(&dst_clip_s);
         scui_point_t src_center = scui_area_center(&src_clip);
         
+        #if SCUI_FRAME_BUFFER_SEG
+        scui_point_t seg_offset = {0};
+        if (!scui_frame_buffer_clip_seg(dst_surface,
+             &dst_clip, NULL, NULL, &seg_offset)) continue;
+        
+        dst_anchor.x -= seg_offset.x;
+        dst_anchor.y -= seg_offset.y;
+        #endif
+        
         scui_alpha_t alpha = src_surface->alpha;
         src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));
         scui_draw_area_2d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
@@ -224,10 +239,13 @@ void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
 {
     /* 交换窗口绘制顺序 */
     if (scui_window_switch_type() == scui_window_switch_center_out) {
-        scui_widget_t *widget_0 = list[0];
-        scui_widget_t *widget_1 = list[1];
-        list[0] = widget_1;
-        list[1] = widget_0;
+        
+        if (list[0]->myself != scui_window_active_curr()) {
+            scui_widget_t *widget_0 = list[0];
+            scui_widget_t *widget_1 = list[1];
+            list[0] = widget_1;
+            list[1] = widget_0;
+        }
     }
     
     for (scui_multi_t idx = 0; idx < num; idx++) {
@@ -249,6 +267,11 @@ void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
             
             if (list[idx]->myself != scui_window_active_curr()) {
                 
+                #if SCUI_FRAME_BUFFER_SEG
+                if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
+                     continue;
+                #endif
+                
                 scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
                 continue;
             }
@@ -258,6 +281,11 @@ void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
             scale_d = scui_map(pct, 0, 100, 20, 100) / 100.0f;
             
             if (list[idx]->myself == scui_window_active_curr()) {
+                
+                #if SCUI_FRAME_BUFFER_SEG
+                if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
+                     continue;
+                #endif
                 
                 scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
                 continue;
@@ -297,6 +325,15 @@ void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
         
         scui_point_t dst_anchor = scui_area_center(&dst_clip_s);
         scui_point_t src_center = scui_area_center(&src_clip);
+        
+        #if SCUI_FRAME_BUFFER_SEG
+        scui_point_t seg_offset = {0};
+        if (!scui_frame_buffer_clip_seg(dst_surface,
+             &dst_clip, NULL, NULL, &seg_offset)) continue;
+        
+        dst_anchor.x -= seg_offset.x;
+        dst_anchor.y -= seg_offset.y;
+        #endif
         
         scui_alpha_t alpha = src_surface->alpha;
         src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));
@@ -354,6 +391,15 @@ void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
         dst_anchor.y += dst_clip.h;
         src_center.y += src_clip.h;
         
+        #if SCUI_FRAME_BUFFER_SEG
+        scui_point_t seg_offset = {0};
+        if (!scui_frame_buffer_clip_seg(dst_surface,
+             &dst_clip, NULL, NULL, &seg_offset)) continue;
+        
+        dst_anchor.x -= seg_offset.x;
+        dst_anchor.y -= seg_offset.y;
+        #endif
+        
         scui_alpha_t alpha = src_surface->alpha;
         src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));
         scui_draw_area_2d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
@@ -400,6 +446,15 @@ void scui_window_transform_rotate_1(scui_widget_t **list, scui_handle_t num)
         
         scui_point_t dst_anchor = scui_area_center(&dst_clip);
         scui_point_t src_center = scui_area_center(&src_clip);
+        
+        #if SCUI_FRAME_BUFFER_SEG
+        scui_point_t seg_offset = {0};
+        if (!scui_frame_buffer_clip_seg(dst_surface,
+             &dst_clip, NULL, NULL, &seg_offset)) continue;
+        
+        dst_anchor.x -= seg_offset.x;
+        dst_anchor.y -= seg_offset.y;
+        #endif
         
         scui_alpha_t alpha = src_surface->alpha;
         src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));

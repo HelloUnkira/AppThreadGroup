@@ -198,6 +198,13 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     case scui_window_switch_move:
     case scui_window_switch_cover_in:
     case scui_window_switch_cover_out:
+    case scui_window_switch_zoom1:
+    case scui_window_switch_zoom2:
+    case scui_window_switch_center_in:
+    case scui_window_switch_center_out:
+    case scui_window_switch_center_inout:
+    case scui_window_switch_rotate:
+    case scui_window_switch_rotate_1:
         break;
     }
     #endif
