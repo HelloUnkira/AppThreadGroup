@@ -140,8 +140,9 @@ void scui_custom_ready(void)
     scui_lang_set(&lang_type);
     
     /* 窗口交互风格 */
-    scui_window_switch_set_cfg_dir(scui_opt_dir_rtl);
-    scui_window_switch_set_cfg_type(scui_window_switch_move);
+    scui_window_switch_set_jump_dir(scui_opt_dir_rtl);
+    scui_window_switch_set_jump_type(scui_window_switch_center_inout);
+    scui_window_switch_set_move_type(scui_window_switch_move);
     
     /* 窗口交互参数 */
     scui_handle_t shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;

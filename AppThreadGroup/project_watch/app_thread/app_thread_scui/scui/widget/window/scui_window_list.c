@@ -164,11 +164,6 @@ static void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scu
  */
 static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
 {
-    scui_window_switch_type_t switch_cfg_type = scui_window_switch_none;
-    scui_window_switch_get_cfg_type(&switch_cfg_type);
-    SCUI_ASSERT(switch_cfg_type > scui_window_switch_single_s);
-    SCUI_ASSERT(switch_cfg_type < scui_window_switch_single_e);
-    
     /* 底图清空 */
     void scui_window_transform_clean(void);
     scui_window_transform_clean();
@@ -181,16 +176,12 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     
     scui_window_switch_type_t switch_type = scui_window_switch_type();
     if (switch_type == scui_window_switch_none)
-        switch_type  = switch_cfg_type;
+        switch_type  = scui_window_switch_move;
     
-    bool mode_simple = false;
-    /* 1.单一窗口直接渲染 */
-    mode_simple = mode_simple || num == 1;
-    /* 2.多窗口叠加不应用特效渲染 */
-    mode_simple = mode_simple || false;
-    /* 3.仅窗口切换时应用特效渲染 */
+    /* 单一窗口直接渲染 */
+    bool mode_simple = num == 1;
+    /* 仅窗口切换时应用特效渲染 */
     mode_simple = mode_simple || !scui_widget_scroll_state(0x02);
-    
     /* 直接渲染复用常规窗口移动变换(此时相当于不移动) */
     if (mode_simple) switch_type = scui_window_switch_move;
     
@@ -199,21 +190,6 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         switch_type <= scui_window_switch_single_e &&
         switch_type != scui_window_switch_move)
         SCUI_ASSERT(num == 2);
-    
-    /* 窗口特效变换钩子 */
-    void scui_window_transform_move(    scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_cover(   scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_zoom(    scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_center(  scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_rotate(  scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_rotate1( scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_circle(  scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_grid(    scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_flip1(   scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_flip2(   scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_flap1(   scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_flap2(   scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_cube(    scui_widget_t **list, scui_handle_t num);
     
     /* 多画布混合变换 */
     switch (switch_type) {

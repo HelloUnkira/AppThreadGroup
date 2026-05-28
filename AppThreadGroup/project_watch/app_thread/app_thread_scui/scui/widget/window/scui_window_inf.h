@@ -102,24 +102,34 @@ void scui_window_local_res_set(scui_handle_t handle, scui_handle_t size);
 /*************************************************************************************************/
 
 /*@brief 获取窗口切换风格
- *@param cfg_type 窗口切换风格
+ *@param move_type 窗口切换风格
  */
-void scui_window_switch_get_cfg_type(scui_window_switch_type_t *cfg_type);
+void scui_window_switch_get_move_type(scui_window_switch_type_t *move_type);
 
 /*@brief 设置窗口切换风格
- *@param cfg_type 窗口切换风格
+ *@param move_type 窗口切换风格
  */
-void scui_window_switch_set_cfg_type(scui_window_switch_type_t cfg_type);
+void scui_window_switch_set_move_type(scui_window_switch_type_t move_type);
+
+/*@brief 获取窗口切换风格
+ *@param jump_type 窗口切换风格
+ */
+void scui_window_switch_get_jump_type(scui_window_switch_type_t *jump_type);
+
+/*@brief 设置窗口切换风格
+ *@param jump_type 窗口切换风格
+ */
+void scui_window_switch_set_jump_type(scui_window_switch_type_t jump_type);
 
 /*@brief 获取窗口切换方向
- *@param cfg_dir 窗口切换方向
+ *@param jump_dir 窗口切换方向
  */
-void scui_window_switch_get_cfg_dir(scui_opt_dir_t *cfg_dir);
+void scui_window_switch_get_jump_dir(scui_opt_dir_t *jump_dir);
 
 /*@brief 设置窗口切换方向
- *@param cfg_dir 窗口切换方向
+ *@param jump_dir 窗口切换方向
  */
-void scui_window_switch_set_cfg_dir(scui_opt_dir_t cfg_dir);
+void scui_window_switch_set_jump_dir(scui_opt_dir_t jump_dir);
 
 /*************************************************************************************************/
 /*************************************************************************************************/

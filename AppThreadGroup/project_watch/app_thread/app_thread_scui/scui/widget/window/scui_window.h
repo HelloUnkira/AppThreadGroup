@@ -97,8 +97,9 @@ typedef enum {
 typedef struct {
     scui_handle_t  list[SCUI_WINDOW_LIST_LIMIT];
     scui_handle_t  type;            /* 窗口切换风格(当前) */
-    scui_handle_t  cfg_type;        /* 窗口切换风格(配置) */
-    scui_opt_dir_t cfg_dir;         /* 窗口切换方向(配置) */
+    scui_handle_t  move_type;       /* 窗口切换风格(配置:跟手滑动) */
+    scui_handle_t  jump_type;       /* 窗口切换风格(配置:跳转) */
+    scui_opt_dir_t jump_dir;        /* 窗口切换方向(配置:跳转) */
     scui_opt_dir_t dir;             /* 窗口切换方向(当前) */
     scui_opt_pos_t pos;             /* 窗口切换位置(当前) */
     scui_point_t   point;           /* 窗口切换偏移(坐标点) */
@@ -193,6 +194,26 @@ scui_coord_t scui_window_switch_pct(void);
  *@param event 事件
  */
 void scui_window_switch_event(scui_event_t *event);
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+#define SCUI_WINDOW_SWITCH_DECLARE(name)    void name(scui_widget_t **list, scui_handle_t num)
+/*************************************************************************************************/
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_move);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_cover);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_zoom);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_center);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_rotate);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_rotate1);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_circle);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_grid);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_flip1);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_flip2);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_flap1);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_flap2);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_cube);
 
 /*************************************************************************************************/
 /*************************************************************************************************/

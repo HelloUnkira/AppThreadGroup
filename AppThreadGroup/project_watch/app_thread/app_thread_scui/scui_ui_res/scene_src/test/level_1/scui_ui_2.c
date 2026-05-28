@@ -236,13 +236,25 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             break;
         
         SCUI_LOG_WARN("scui_event_key_click");
-        scui_window_switch_type_t cfg_type = 0;
-        scui_window_switch_get_cfg_type(&cfg_type);
-        cfg_type++;
+        scui_window_switch_type_t jump_type = 0;
+        scui_window_switch_type_t move_type = 0;
+        scui_window_switch_get_jump_type(&jump_type);
+        scui_window_switch_get_move_type(&move_type);
+        jump_type++;
+        move_type++;
         
-        if (cfg_type <= scui_window_switch_single_s) cfg_type = scui_window_switch_single_e - 1;
-        if (cfg_type >= scui_window_switch_single_e) cfg_type = scui_window_switch_single_s + 1;
-        scui_window_switch_set_cfg_type(cfg_type);
+        if (jump_type <= scui_window_switch_single_s)
+            jump_type  = scui_window_switch_single_e - 1;
+        if (jump_type >= scui_window_switch_single_e)
+            jump_type  = scui_window_switch_single_s + 1;
+        
+        if (move_type <= scui_window_switch_single_s)
+            move_type  = scui_window_switch_single_e - 1;
+        if (move_type >= scui_window_switch_single_e)
+            move_type  = scui_window_switch_single_s + 1;
+        
+        scui_window_switch_set_jump_type(jump_type);
+        scui_window_switch_set_move_type(move_type);
         
         scui_event_mask_over(event);
         break;
