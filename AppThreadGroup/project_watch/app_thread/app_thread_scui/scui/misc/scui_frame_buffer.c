@@ -9,7 +9,7 @@
 
 static scui_frame_buffer_t scui_frame_buffer = {0};
 
-#if SCUI_FRAME_BUFFER_SEG_USE
+#if SCUI_FRAME_BUFFER_SEG
 
 /*@brief 绘制画布段偏移重定向
  *@param dst_surface 绘制画布
@@ -83,7 +83,7 @@ bool scui_frame_buffer_seg_offset(void)
     scui_coord_t ver_res = SCUI_VER_RES;
     scui_area_t clip_seg = scui_frame_buffer.clip_seg;
     
-    clip_seg.y += SCUI_FRAME_BUFFER_SEG;
+    clip_seg.y += SCUI_FRAME_BUFFER_SEG_LINE;
     if (clip_seg.y + clip_seg.h > ver_res)
         clip_seg.h = ver_res - clip_seg.y;
     scui_frame_buffer.clip_seg = clip_seg;
@@ -172,7 +172,7 @@ void scui_frame_buffer_refr_toggle(void)
     scui_frame_buffer.draw_idx = 0;
     #endif
     
-    #if SCUI_FRAME_BUFFER_SEG_USE
+    #if SCUI_FRAME_BUFFER_SEG
     #if SCUI_FRAME_BUFFER_ASYNC
     scui_frame_buffer.clip_seg_refr[1 - scui_frame_buffer.draw_idx] = scui_frame_buffer.clip_seg;
     #else
@@ -200,7 +200,7 @@ void scui_frame_buffer_refr_routine(void (*refr)(scui_surface_t *surface, scui_a
     
     if (refr) {
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         scui_area_t clip_seg = scui_frame_buffer.clip_seg_refr[1 - scui_frame_buffer.draw_idx];
         SCUI_LOG_INFO("clip seg:<%d, %d, %d, %d>", clip_seg.x, clip_seg.y, clip_seg.w, clip_seg.h);
         refr(surface, &clip_seg);

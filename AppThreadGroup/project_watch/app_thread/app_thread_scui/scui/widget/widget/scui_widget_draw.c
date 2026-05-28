@@ -170,7 +170,7 @@ void scui_widget_draw_ctx_string(scui_handle_t handle, scui_area_t *target, scui
         src_clip.w =  (str_args->clip.w);
         src_clip.h =  (str_args->clip.h);
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         scui_point_t dst_offset = {0};
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, &dst_offset, NULL, NULL)) continue;
@@ -224,7 +224,7 @@ void scui_widget_draw_ctx_symbol(scui_handle_t handle, scui_area_t *target, scui
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         scui_point_t dst_offset = {0};
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, &dst_offset, &src_clip, NULL)) continue;
@@ -255,7 +255,7 @@ void scui_widget_draw_ctx_color(scui_handle_t handle, scui_area_t *target, scui_
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
@@ -284,7 +284,7 @@ void scui_widget_draw_ctx_color_grad(scui_handle_t handle, scui_area_t *target, 
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
@@ -314,7 +314,7 @@ void scui_widget_draw_ctx_dither(scui_handle_t handle, scui_area_t *target, scui
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
@@ -343,7 +343,7 @@ void scui_widget_draw_ctx_blur(scui_handle_t handle, scui_area_t *target, scui_w
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
@@ -433,7 +433,7 @@ void scui_widget_draw_ctx_image(scui_handle_t handle, scui_area_t *target, scui_
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         scui_point_t dst_offset = {0};
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, &src_clip, &dst_offset, NULL)) continue;
@@ -500,7 +500,7 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         scui_point_t seg_offset = {0};
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
@@ -555,7 +555,7 @@ void scui_widget_draw_ctx_image_rotate(scui_handle_t handle, scui_area_t *target
             .y = dst_clip.y - target->y,
         };
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         scui_point_t seg_offset = {0};
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
@@ -613,7 +613,7 @@ void scui_widget_draw_ctx_image_2d(scui_handle_t handle, scui_area_t *target, sc
             .y = dst_clip.y - target->y,
         };
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         scui_point_t seg_offset = {0};
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
@@ -640,7 +640,7 @@ void scui_widget_draw_ctx_image_3d(scui_handle_t handle, scui_area_t *target, sc
     scui_handle_t image = draw_dsc->image;
     scui_area_t  *clip  = draw_dsc->clip;
     
-    #if SCUI_FRAME_BUFFER_SEG_USE
+    #if SCUI_FRAME_BUFFER_SEG
     /* 该接口无独立画布的段绘制下还未调试 */
     if (!scui_widget_surface_only(widget))
          return;
@@ -666,7 +666,7 @@ void scui_widget_draw_ctx_image_3d(scui_handle_t handle, scui_area_t *target, sc
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
@@ -692,7 +692,7 @@ void scui_widget_draw_ctx_ring(scui_handle_t handle, scui_area_t *target, scui_w
     scui_coord_t  percent = draw_dsc->percent;
     scui_handle_t image_e = draw_dsc->image_e;
     
-    #if SCUI_FRAME_BUFFER_SEG_USE
+    #if SCUI_FRAME_BUFFER_SEG
     /* 该接口无独立画布的段绘制下还未调试 */
     if (!scui_widget_surface_only(widget))
          return;
@@ -744,7 +744,7 @@ void scui_widget_draw_ctx_ring(scui_handle_t handle, scui_area_t *target, scui_w
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         scui_point_t seg_offset = {0};
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
@@ -767,7 +767,7 @@ void scui_widget_draw_ctx_graph(scui_handle_t handle, scui_area_t *target, scui_
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    #if SCUI_FRAME_BUFFER_SEG_USE
+    #if SCUI_FRAME_BUFFER_SEG
     /* 该接口无独立画布的段绘制下还未调试 */
     if (!scui_widget_surface_only(widget))
          return;
@@ -785,7 +785,7 @@ void scui_widget_draw_ctx_graph(scui_handle_t handle, scui_area_t *target, scui_
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
+        #if SCUI_FRAME_BUFFER_SEG
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif

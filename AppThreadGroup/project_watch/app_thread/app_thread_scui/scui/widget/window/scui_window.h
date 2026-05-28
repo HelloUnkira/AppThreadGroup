@@ -79,17 +79,17 @@ typedef enum {
     scui_window_switch_center_out,      /* 中心淡出 */
     scui_window_switch_center_inout,    /* 中心淡入淡出 */
     
-    scui_window_switch_rotate,          /* 旋转渐变(鬼点子, 中心点) */
-    scui_window_switch_rotate1,         /* 旋转渐变(鬼点子, 边缘点) */
+    scui_window_switch_rotate,          /* 旋转渐变(鬼点子, 边缘点) */
+    scui_window_switch_rotate_1,        /* 旋转渐变(鬼点子, 中心点) */
     scui_window_switch_circle,          /* 圈格缩放(鬼点子) */
     scui_window_switch_grid,            /* 网格缩放(鬼点子) */
     
     scui_window_switch_flip1,           /* 中心轴翻页(2.5D) */
     scui_window_switch_flip2,           /* 仿真页翻页(2.5D) */
     
-    scui_window_switch_flap1,           /* 中心轴翻版(2.5D) */
-    scui_window_switch_flap2,           /* 分段式翻版(2.5D) */
-    scui_window_switch_cube,            /* 正方体旋转(2.5D) */
+    scui_window_switch_flap1,           /* 中心轴翻版(2.5D, 未细调) */
+    scui_window_switch_flap2,           /* 分段式翻版(2.5D, 未细调) */
+    scui_window_switch_cube,            /* 正方体旋转(2.5D, 未细调) */
     
     scui_window_switch_single_e,
 } scui_window_switch_type_t;
@@ -206,7 +206,7 @@ SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_cover);
 SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_zoom);
 SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_center);
 SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_rotate);
-SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_rotate1);
+SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_rotate_1);
 SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_circle);
 SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_grid);
 SCUI_WINDOW_SWITCH_DECLARE(scui_window_transform_flip1);

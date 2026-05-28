@@ -191,6 +191,17 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         switch_type != scui_window_switch_move)
         SCUI_ASSERT(num == 2);
     
+    /* 分段绘制的支持度尚不完整 */
+    #if SCUI_FRAME_BUFFER_SEG
+    switch (switch_type) {
+    default: switch_type = scui_window_switch_move; break;
+    case scui_window_switch_move:
+    case scui_window_switch_cover_in:
+    case scui_window_switch_cover_out:
+        break;
+    }
+    #endif
+    
     /* 多画布混合变换 */
     switch (switch_type) {
     default:
@@ -215,8 +226,8 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     case scui_window_switch_rotate:
          scui_window_transform_rotate(list, num);
          break;
-    case scui_window_switch_rotate1:
-         scui_window_transform_rotate1(list, num);
+    case scui_window_switch_rotate_1:
+         scui_window_transform_rotate_1(list, num);
          break;
     case scui_window_switch_circle:
          scui_window_transform_circle(list, num);
@@ -307,7 +318,7 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
             dst_clip.y = widget->clip.y;
             
             /* 给目标独立画布追加段偏移 */
-            #if SCUI_FRAME_BUFFER_SEG_USE
+            #if SCUI_FRAME_BUFFER_SEG
             if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
                  continue;
             #endif
@@ -462,7 +473,7 @@ static void scui_window_surface_blend(void)
  */
 static void scui_window_surface_refresh(void)
 {
-    #if SCUI_FRAME_BUFFER_SEG_USE
+    #if SCUI_FRAME_BUFFER_SEG
     scui_window_surface_ready();
     /* 在此处启动段绘制 */
     scui_frame_buffer_seg_ready();

@@ -42,12 +42,6 @@ static bool scui_window_transform_clip(scui_widget_t *widget, scui_area_t *dst_c
     if (!scui_area_limit_offset(src_clip, &src_offset))
          return false;
     
-    /* 给目标独立画布追加段偏移 */
-    #if SCUI_FRAME_BUFFER_SEG_USE
-    if (!scui_frame_buffer_clip_seg(dst_surface, dst_clip, NULL, src_clip, NULL))
-         return false;
-    #endif
-    
     return true;
 }
 
@@ -78,6 +72,10 @@ void scui_window_transform_move(scui_widget_t **list, scui_handle_t num)
         
         if (!scui_window_transform_clip(list[idx], &dst_clip, &src_clip))
              continue;
+        #if SCUI_FRAME_BUFFER_SEG
+        if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
+             continue;
+        #endif
         
         scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
     }
@@ -103,7 +101,7 @@ void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num)
             
             if (list[idx]->myself == scui_window_active_curr()) {
                 
-                #if SCUI_FRAME_BUFFER_SEG_USE
+                #if SCUI_FRAME_BUFFER_SEG
                 if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
                      continue;
                 #endif
@@ -117,6 +115,10 @@ void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num)
                 
                 if (!scui_window_transform_clip(list[idx], &dst_clip, &src_clip))
                      continue;
+                #if SCUI_FRAME_BUFFER_SEG
+                if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
+                     continue;
+                #endif
                 
                 scui_alpha_t alpha = src_surface->alpha;
                 src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(scui_window_switch_pct()));
@@ -130,7 +132,7 @@ void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num)
             
             if (list[idx]->myself != scui_window_active_curr()) {
                 
-                #if SCUI_FRAME_BUFFER_SEG_USE
+                #if SCUI_FRAME_BUFFER_SEG
                 if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
                      continue;
                 #endif
@@ -144,6 +146,10 @@ void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num)
                 
                 if (!scui_window_transform_clip(list[idx], &dst_clip, &src_clip))
                      continue;
+                #if SCUI_FRAME_BUFFER_SEG
+                if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
+                     continue;
+                #endif
                 
                 scui_alpha_t alpha = src_surface->alpha;
                 src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(100 - scui_window_switch_pct()));
@@ -168,12 +174,7 @@ void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
         scui_area_t src_clip = scui_surface_area(src_surface);
-        
-        float scale_d = 0;
-        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_hor))
-            scale_d = scui_map(src_clip.w, 0, src_surface->hor_res, 50, 100) / 100.0f;
-        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_ver))
-            scale_d = scui_map(src_clip.h, 0, src_surface->ver_res, 50, 100) / 100.0f;
+        scui_area_t widget_clip = list[idx]->clip;
         
         if (scui_window_switch_type() == scui_window_switch_zoom1)
         if (list[idx]->myself == scui_window_active_curr()) {
@@ -185,56 +186,33 @@ void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
             continue;
         }
         
-        SCUI_LOG_INFO("scale_d:%f", scale_d);
-        scui_matrix_t inv_matrix = {0};
-        scui_matrix_identity(&inv_matrix);
-        scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.x,    .y = +dst_clip.y,});
-        scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
-        scui_matrix_scale(&inv_matrix, &(scui_point2_t){.x = scale_d,.y = scale_d,});
-        scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
-        
-        #if 1 /* 扩充源区域的取点范围,保证到达边界 */
-        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_hor)) {
-            scui_coord_t delta = (scui_multi_t)src_clip.w * SCUI_SCALE_COF / (scale_d * SCUI_SCALE_COF) - src_clip.w;
-            src_clip.w = scui_min(src_surface->hor_res, src_clip.w + delta);
-            
-            if (src_clip.x > 0) {
-                scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -delta,});
-                src_clip.x = scui_max(0, src_clip.x - delta);
-            }
-        }
-        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_ver)) {
-            scui_coord_t delta = (scui_multi_t)src_clip.h * SCUI_SCALE_COF / (scale_d * SCUI_SCALE_COF) - src_clip.h;
-            src_clip.h = scui_min(src_surface->ver_res, src_clip.h + delta);
-            
-            if (src_clip.y > 0) {
-                scui_matrix_translate(&inv_matrix, &(scui_point2_t){.y = -delta,});
-                src_clip.y = scui_max(0, src_clip.y - delta);
-            }
-        }
-        #endif
-        
-        /* scui_matrix_check(&inv_matrix); */
-        /* scui_matrix_t matrix = inv_matrix; */
-        scui_matrix_inverse(&inv_matrix);
-        
         scui_coord_t pct = 0;
         if (list[idx]->myself == scui_window_active_curr())
             pct = 100 - scui_window_switch_pct();
         if (list[idx]->myself != scui_window_active_curr())
             pct = scui_window_switch_pct();
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
-        if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
-             continue;
-        #endif
+        float scale_d = scui_map(pct, 0, 100, 80, 100) / 100.0f;
+        SCUI_LOG_INFO("scale_d:%f", scale_d);
+        scui_point_t src_scale = {
+            .x = scale_d * SCUI_SCALE_COF,
+            .y = scale_d * SCUI_SCALE_COF,
+        };
+        
+        scui_area_t dst_clip_s = widget_clip;
+        dst_clip_s.w *= scale_d;
+        dst_clip_s.h *= scale_d;
+        dst_clip_s.x += (widget_clip.w - dst_clip_s.w) / 2;
+        dst_clip_s.y += (widget_clip.h - dst_clip_s.h) / 2;
+        
+        scui_point_t dst_anchor = scui_area_center(&dst_clip_s);
+        scui_point_t src_center = scui_area_center(&src_clip);
         
         scui_alpha_t alpha = src_surface->alpha;
         src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));
-        scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
-            SCUI_COLOR_UNUSED, inv_matrix, (scui_matrix_t){0});
+        scui_draw_area_2d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+            SCUI_COLOR_UNUSED, src_scale, 0, dst_anchor, src_center);
         src_surface->alpha = alpha;
-        continue;
     }
 }
 
@@ -244,6 +222,14 @@ void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
 {
+    /* 交换窗口绘制顺序 */
+    if (scui_window_switch_type() == scui_window_switch_center_out) {
+        scui_widget_t *widget_0 = list[0];
+        scui_widget_t *widget_1 = list[1];
+        list[0] = widget_1;
+        list[1] = widget_0;
+    }
+    
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
@@ -252,23 +238,26 @@ void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
         scui_area_t src_clip = scui_surface_area(src_surface);
-                
-        float scale_d = 0;
-        if (scui_window_switch_type() == scui_window_switch_center_in)
-            scale_d = scui_map(scui_window_switch_pct(), 100, 0,   0, 100) / 100.0f;
-        if (scui_window_switch_type() == scui_window_switch_center_out)
-            scale_d = scui_map(scui_window_switch_pct(), 100, 0, 200, 100) / 100.0f;
-        SCUI_LOG_INFO("pct:%d, scale_d:%f", scui_window_switch_pct(), scale_d);
         
-        if (scui_window_switch_type() == scui_window_switch_center_in ||
-            scui_window_switch_type() == scui_window_switch_center_out) {
+        float scale_d = 0;
+        scui_coord_t pct = 0;
+        
+        if (scui_window_switch_type() == scui_window_switch_center_in) {
+            pct = scui_window_switch_pct();
+            scale_d = scui_map(pct, 0, 100, 100, 20) / 100.0f;
+            pct = 100 - scui_window_switch_pct();
             
             if (list[idx]->myself != scui_window_active_curr()) {
                 
-                #if SCUI_FRAME_BUFFER_SEG_USE
-                if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, &src_clip, NULL))
-                     continue;
-                #endif
+                scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
+                continue;
+            }
+        }
+        if (scui_window_switch_type() == scui_window_switch_center_out) {
+            pct = scui_window_switch_pct();
+            scale_d = scui_map(pct, 0, 100, 20, 100) / 100.0f;
+            
+            if (list[idx]->myself == scui_window_active_curr()) {
                 
                 scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
                 continue;
@@ -276,47 +265,43 @@ void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
         }
         
         if (scui_window_switch_type() == scui_window_switch_center_inout) {
+            pct = scui_window_switch_pct();
+            
+            if (list[idx]->myself == scui_window_active_curr() && pct > 50) continue;
+            if (list[idx]->myself != scui_window_active_curr() && pct < 50) continue;
             
             if (list[idx]->myself == scui_window_active_curr())
-            if (scui_window_switch_pct() > 50) continue;
+                scale_d = scui_map(pct, 50,   0, 0, 100) / 100.0f;
             if (list[idx]->myself != scui_window_active_curr())
-            if (scui_window_switch_pct() < 50) continue;
+                scale_d = scui_map(pct, 50, 100, 0, 100) / 100.0f;
+            SCUI_LOG_INFO("pct:%d, scale_d:%f", pct, scale_d);
             
             if (list[idx]->myself == scui_window_active_curr())
-                scale_d = scui_map(scui_window_switch_pct(), 50,   0, 0, 100) / 100.0f;
+                pct = scui_map(pct,   0, 50, 100, 0);
             if (list[idx]->myself != scui_window_active_curr())
-                scale_d = scui_map(scui_window_switch_pct(), 50, 100, 0, 100) / 100.0f;
-            SCUI_LOG_INFO("pct:%d, scale_d:%f", scui_window_switch_pct(), scale_d);
-        }
-        
-        scui_matrix_t inv_matrix = {0};
-        scui_matrix_identity(&inv_matrix);
-        scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
-        scui_matrix_scale(&inv_matrix, &(scui_point2_t){.x = scale_d,.y = scale_d,});
-        scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
-        /* scui_matrix_check(&inv_matrix); */
-        scui_matrix_t src_matrix = inv_matrix;
-        scui_matrix_inverse(&inv_matrix);
-        
-        scui_coord_t pct = 100 - scui_window_switch_pct();
-        if (scui_window_switch_type() == scui_window_switch_center_inout) {
-            
-            if (list[idx]->myself == scui_window_active_curr())
-                pct = scui_map(scui_window_switch_pct(),   0, 50, 100, 0);
-            if (list[idx]->myself != scui_window_active_curr())
-                pct = scui_map(scui_window_switch_pct(), 100, 50, 100, 0);
+                pct = scui_map(pct, 100, 50, 100, 0);
             SCUI_LOG_INFO("pct:%d", pct);
         }
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
-        if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, NULL, NULL))
-             continue;
-        #endif
+        SCUI_LOG_INFO("pct:%d, scale_d:%f", pct, scale_d);
+        scui_point_t src_scale = {
+            .x = scale_d * SCUI_SCALE_COF,
+            .y = scale_d * SCUI_SCALE_COF,
+        };
+        
+        scui_area_t dst_clip_s = dst_clip;
+        dst_clip_s.w *= scale_d;
+        dst_clip_s.h *= scale_d;
+        dst_clip_s.x += (dst_clip.w - dst_clip_s.w) / 2;
+        dst_clip_s.y += (dst_clip.h - dst_clip_s.h) / 2;
+        
+        scui_point_t dst_anchor = scui_area_center(&dst_clip_s);
+        scui_point_t src_center = scui_area_center(&src_clip);
         
         scui_alpha_t alpha = src_surface->alpha;
         src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));
-        scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
-            SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
+        scui_draw_area_2d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+            SCUI_COLOR_UNUSED, src_scale, 0, dst_anchor, src_center);
         src_surface->alpha = alpha;
     }
 }
@@ -339,36 +324,40 @@ void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
         scui_surface_t *src_surface = list[idx]->surface;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
-        
-        scui_area_t dst_clip = scui_surface_area(dst_surface);
+        scui_area_t dst_clip = scui_frame_buffer_area();
         scui_area_t src_clip = scui_surface_area(src_surface);
         
-        scui_coord_t angle = 0, pct = scui_window_switch_pct();
-        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_ltr)) angle = +pct * 3.6;
-        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_rtl)) angle = -pct * 3.6;
+        scui_multi_t angle = 0, angle_total = 75;
+        scui_coord_t pct = scui_window_switch_pct();
+        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_ltr))
+            angle = + pct * angle_total / 100;
+        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_rtl))
+            angle = - pct * angle_total / 100;
         
-        if (list[idx]->myself == scui_window_active_curr()) if (pct >= 50) continue;
-        if (list[idx]->myself != scui_window_active_curr()) if (pct <= 50) continue;
-        pct = pct <= 50 ? 100 - pct * 2 : (pct - 50) * 2;
+        if (list[idx]->myself != scui_window_active_curr()) {
+            if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_ltr)) angle -= angle_total;
+            if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_rtl)) angle += angle_total;
+        }
         
-        scui_matrix_t inv_matrix = {0};
-        scui_matrix_identity(&inv_matrix);
-        scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
-        scui_matrix_rotate_a(&inv_matrix, angle, 0x00);
-        scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
-        /* scui_matrix_check(&inv_matrix); */
-        scui_matrix_t src_matrix = inv_matrix;
-        scui_matrix_inverse(&inv_matrix);
+        if (list[idx]->myself == scui_window_active_curr())
+            pct = 100 - pct;
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
-        if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, NULL, NULL))
-             continue;
-        #endif
+        SCUI_LOG_INFO("pct:%d, angle:%f", pct, angle);
+        angle *= SCUI_SCALE_COF;
+        scui_point_t src_scale = {
+            .x = 1.0 * SCUI_SCALE_COF,
+            .y = 1.0 * SCUI_SCALE_COF,
+        };
+        
+        scui_point_t dst_anchor = scui_area_center(&dst_clip);
+        scui_point_t src_center = scui_area_center(&src_clip);
+        dst_anchor.y += dst_clip.h;
+        src_center.y += src_clip.h;
         
         scui_alpha_t alpha = src_surface->alpha;
         src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));
-        scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
-            SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
+        scui_draw_area_2d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+            SCUI_COLOR_UNUSED, src_scale, angle, dst_anchor, src_center);
         src_surface->alpha = alpha;
     }
 }
@@ -377,7 +366,7 @@ void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_window_transform_rotate1(scui_widget_t **list, scui_handle_t num)
+void scui_window_transform_rotate_1(scui_widget_t **list, scui_handle_t num)
 {
     /* 这是特殊的变换, 只有水平变换, 没有垂直变换 */
     if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_ver)) {
@@ -391,43 +380,32 @@ void scui_window_transform_rotate1(scui_widget_t **list, scui_handle_t num)
         scui_surface_t *src_surface = list[idx]->surface;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
-        
-        scui_area_t dst_clip = scui_surface_area(dst_surface);
+        scui_area_t dst_clip = scui_frame_buffer_area();
         scui_area_t src_clip = scui_surface_area(src_surface);
         
-        scui_coord_t angle_total = 75, angle = 0, pct = scui_window_switch_pct();
-        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_ltr))
-            angle = 270 + pct * angle_total / 100;
-        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_rtl))
-            angle = 270 - pct * angle_total / 100;
+        scui_multi_t angle = 0, pct = scui_window_switch_pct();
+        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_ltr)) angle = +pct * 3.6;
+        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_rtl)) angle = -pct * 3.6;
         
-        if (list[idx]->myself != scui_window_active_curr()) {
-        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_ltr)) angle -= angle_total;
-        if (scui_opt_bits_check(scui_window_switch_dir(), scui_opt_dir_rtl)) angle += angle_total;
-        }
+        if (list[idx]->myself == scui_window_active_curr()) if (pct >= 50) continue;
+        if (list[idx]->myself != scui_window_active_curr()) if (pct <= 50) continue;
+        pct = pct <= 50 ? 100 - pct * 2 : (pct - 50) * 2;
         
-        scui_multi_t radius  = dst_clip.h;
-        scui_multi_t point_x = radius * scui_cos4096((int32_t)angle) >> 12;
-        scui_multi_t point_y = radius * scui_sin4096((int32_t)angle) >> 12;
-        point_x = dst_clip.w / 2     + point_x;
-        point_y = dst_clip.h * 3 / 2 + point_y;
+        SCUI_LOG_INFO("pct:%d, angle:%f", pct, angle);
+        angle *= SCUI_SCALE_COF;
+        scui_point_t src_scale = {
+            .x = 1.0 * SCUI_SCALE_COF,
+            .y = 1.0 * SCUI_SCALE_COF,
+        };
         
-        scui_matrix_t inv_matrix = {0};
-        scui_matrix_identity(&inv_matrix);
-        scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +point_x,.y = +point_y,});
-        scui_matrix_rotate_a(&inv_matrix, angle - 270, 0x00);
-        scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
-        /* scui_matrix_check(&inv_matrix); */
-        scui_matrix_t src_matrix = inv_matrix;
-        scui_matrix_inverse(&inv_matrix);
+        scui_point_t dst_anchor = scui_area_center(&dst_clip);
+        scui_point_t src_center = scui_area_center(&src_clip);
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
-        if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, NULL, NULL))
-             continue;
-        #endif
-        
-        scui_draw_area_3d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
-            SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
+        scui_alpha_t alpha = src_surface->alpha;
+        src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(pct));
+        scui_draw_area_2d_blend(true, dst_surface, dst_clip, src_surface, src_clip,
+            SCUI_COLOR_UNUSED, src_scale, angle, dst_anchor, src_center);
+        src_surface->alpha = alpha;
     }
 }
 
@@ -448,11 +426,6 @@ void scui_window_transform_circle(scui_widget_t **list, scui_handle_t num)
         scui_area_t src_clip = scui_surface_area(src_surface);
         
         if (list[idx]->myself != scui_window_active_curr()) {
-            
-            #if SCUI_FRAME_BUFFER_SEG_USE
-            if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, NULL, NULL))
-                 continue;
-            #endif
             
             scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
             continue;
@@ -513,11 +486,6 @@ void scui_window_transform_circle(scui_widget_t **list, scui_handle_t num)
             dst_clip = clip_seg[idx_j][idx_i];
             src_clip = clip_seg[idx_j][idx_i];
             
-            #if SCUI_FRAME_BUFFER_SEG_USE
-            if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, NULL, NULL))
-                 continue;
-            #endif
-            
             if (dist_dr >= dist_ds) {
                 scui_alpha_t alpha = src_surface->alpha;
                 src_surface->alpha = scui_map(dist_ds, 0, dist_dr, alpha, alpha / 2);
@@ -546,11 +514,6 @@ void scui_window_transform_grid(scui_widget_t **list, scui_handle_t num)
         scui_area_t src_clip = scui_surface_area(src_surface);
         
         if (list[idx]->myself != scui_window_active_curr()) {
-            
-            #if SCUI_FRAME_BUFFER_SEG_USE
-            if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, NULL, NULL))
-                 continue;
-            #endif
             
             scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
             continue;
@@ -605,11 +568,6 @@ void scui_window_transform_grid(scui_widget_t **list, scui_handle_t num)
             clip_seg[idx_j][idx_i].h -= scale_h;
             dst_clip = clip_seg[idx_j][idx_i];
             src_clip = clip_seg[idx_j][idx_i];
-            
-            #if SCUI_FRAME_BUFFER_SEG_USE
-            if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, NULL, NULL))
-                 continue;
-            #endif
             
             scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
         }
@@ -898,11 +856,6 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
         scui_matrix_t src_matrix = inv_matrix;
         scui_matrix_inverse(&inv_matrix);
         
-        #if SCUI_FRAME_BUFFER_SEG_USE
-        if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, NULL, NULL))
-             continue;
-        #endif
-        
         if (face_idx[idx] == 0 || face_idx[idx] == 1) {
             /* 绘制俩个窗口面 */
             scui_surface_t *src_surface = face_idx[idx] == 1 ? src_surface_a : src_surface_i;
@@ -1089,11 +1042,6 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
             /* scui_matrix_check(&inv_matrix); */
             scui_matrix_t src_matrix = inv_matrix;
             scui_matrix_inverse(&inv_matrix);
-            
-            #if SCUI_FRAME_BUFFER_SEG_USE
-            if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, NULL, NULL))
-                 continue;
-            #endif
             
             if (face_idx[idx] == 0 || face_idx[idx] == 1) {
                 /* 绘制俩个窗口面 */
@@ -1292,11 +1240,6 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
         /* scui_matrix_check(&inv_matrix); */
         scui_matrix_t src_matrix = inv_matrix;
         scui_matrix_inverse(&inv_matrix);
-        
-        #if SCUI_FRAME_BUFFER_SEG_USE
-        if (!scui_frame_buffer_clip_seg(dst_surface, &dst_clip, NULL, NULL, NULL))
-             continue;
-        #endif
         
         /* 绘制俩个窗口面 */
         scui_surface_t *src_surface = face_idx[idx] == 1 ? src_surface_a : src_surface_i;

@@ -65,9 +65,9 @@ void scui_ready(void)
     scui_coord_t surface_rem  = sizeof(scui_color_wt_t) - surface.pbyte;
     scui_multi_t surface_size = surface.ver_res * surface.stride + surface_rem;
     
-    #if SCUI_FRAME_BUFFER_SEG_USE
-    clip.h = SCUI_FRAME_BUFFER_SEG;
-    surface.ver_res = SCUI_FRAME_BUFFER_SEG;
+    #if SCUI_FRAME_BUFFER_SEG
+    clip.h = SCUI_FRAME_BUFFER_SEG_LINE;
+    surface.ver_res = SCUI_FRAME_BUFFER_SEG_LINE;
     surface_size = surface.ver_res * surface.stride + surface_rem;
     #endif
     
@@ -141,7 +141,7 @@ void scui_custom_ready(void)
     
     /* 窗口交互风格 */
     scui_window_switch_set_jump_dir(scui_opt_dir_rtl);
-    scui_window_switch_set_jump_type(scui_window_switch_center_inout);
+    scui_window_switch_set_jump_type(scui_window_switch_center_out);
     scui_window_switch_set_move_type(scui_window_switch_move);
     
     /* 窗口交互参数 */

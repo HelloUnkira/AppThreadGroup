@@ -12,7 +12,7 @@ typedef struct {
     uint8_t refr_hold:2;
     uint8_t draw_idx:1;
     
-    #if SCUI_FRAME_BUFFER_SEG_USE
+    #if SCUI_FRAME_BUFFER_SEG
     scui_area_t clip_seg;
     scui_area_t clip_seg_refr[2];
     #endif
@@ -21,7 +21,7 @@ typedef struct {
 static inline scui_area_t  scui_frame_buffer_area(void)
 {return (scui_area_t){.w = SCUI_HOR_RES,.h = SCUI_VER_RES,};}
 
-#if SCUI_FRAME_BUFFER_SEG_USE
+#if SCUI_FRAME_BUFFER_SEG
 
 /*@brief 绘制画布段偏移重定向
  *@param dst_surface 绘制画布
