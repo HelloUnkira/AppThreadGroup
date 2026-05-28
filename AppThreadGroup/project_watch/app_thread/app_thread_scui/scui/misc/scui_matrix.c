@@ -324,10 +324,22 @@ void scui_matrix_identity(scui_matrix_t *matrix)
  */
 void scui_matrix_translate(scui_matrix_t *matrix, scui_point2_t *offset)
 {
-    /* 平移是非线性变换 */
-    /* 3D空间下平移:不支持 */
-    /* 2D平面上平移:支持 */
+    if (SCUI_IS_ZERO_VAL_F(matrix->meta[0][0] - 1.0f) &&
+        SCUI_IS_ZERO_VAL_F(matrix->meta[0][1] - 0.0f) &&
+        SCUI_IS_ZERO_VAL_F(matrix->meta[1][0] - 0.0f) &&
+        SCUI_IS_ZERO_VAL_F(matrix->meta[1][1] - 1.0f) &&
+        SCUI_IS_ZERO_VAL_F(matrix->meta[2][0] - 0.0f) &&
+        SCUI_IS_ZERO_VAL_F(matrix->meta[2][1] - 0.0f) &&
+        SCUI_IS_ZERO_VAL_F(matrix->meta[2][2] - 1.0f)) {
+        /* 干净矩阵直接改值即可, 无需乘法运算 */
+        matrix->meta[0][2] += offset->x;
+        matrix->meta[1][2] += offset->y;
+        return;
+    }
     
+    /* 平移是非线性变换 */
+    /* 2D平面上平移:支持 */
+    /* 3D空间下平移:不支持 */
     scui_matrix_t matrix_t = {
         .meta = {
             {1.0f, 0.0f, offset->x},

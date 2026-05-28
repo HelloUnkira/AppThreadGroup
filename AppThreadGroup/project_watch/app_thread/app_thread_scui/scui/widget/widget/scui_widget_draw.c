@@ -666,14 +666,27 @@ void scui_widget_draw_ctx_image_3d(scui_handle_t handle, scui_area_t *target, sc
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
+        scui_matrix_t inv_matrix = *draw_dsc->inv_matrix;
+        scui_matrix_t src_matrix = *draw_dsc->matrix;
+        
         #if SCUI_FRAME_BUFFER_SEG
+        scui_point_t seg_offset = {0};
         if (!scui_frame_buffer_clip_seg(widget->surface,
-             &dst_clip, NULL, NULL, NULL)) continue;
+             &dst_clip, NULL, NULL, &seg_offset)) continue;
+        
+        scui_point2_t matrix_ofs_s = {0};
+        scui_point2_t matrix_ofs_i = {0};
+        matrix_ofs_s.x = -seg_offset.x;
+        matrix_ofs_s.y = -seg_offset.y;
+        matrix_ofs_i.x = +seg_offset.x;
+        matrix_ofs_i.y = +seg_offset.y;
+        scui_matrix_translate(&src_matrix, &matrix_ofs_s);
+        scui_matrix_translate(&inv_matrix, &matrix_ofs_i);
         #endif
         
         scui_draw_image_3d(false, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha, SCUI_COLOR_UNUSED,
-            *draw_dsc->inv_matrix, *draw_dsc->matrix);
+            inv_matrix, src_matrix);
     }
 }
 

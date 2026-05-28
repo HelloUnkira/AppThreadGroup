@@ -545,6 +545,10 @@ void scui_draw_ctx_area_3d_blend(scui_draw_dsc_t *draw_dsc)
     if (!scui_area_inter(&src_clip_v, &src_area, src_clip))
          return;
     
+    /* 补丁:奇异矩阵不做计算 */
+    if (scui_matrix_invalid(src_matrix)) return;
+    if (scui_matrix_invalid(inv_matrix)) return;
+    
     /* 利用原图进行一次源初变换,以修饰限制目标区域 */
     if (src_matrix != NULL && !scui_matrix_invalid(src_matrix)) {
         
@@ -676,9 +680,9 @@ void scui_draw_ctx_area_3d_fill(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    /* 如果逆矩阵是无效矩阵, 则不做使用 */
-    if (scui_matrix_invalid(inv_matrix))
-        return;
+    /* 补丁:奇异矩阵不做计算 */
+    if (scui_matrix_invalid(src_matrix)) return;
+    if (scui_matrix_invalid(inv_matrix)) return;
     
     /* 利用原图进行一次源初变换,以修饰限制目标区域 */
     if (src_matrix != NULL && !scui_matrix_invalid(src_matrix)) {

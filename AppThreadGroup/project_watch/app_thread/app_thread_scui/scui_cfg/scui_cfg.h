@@ -136,7 +136,7 @@
 /* 帧缓冲异步(同步:1块;异步:2块;) */
 #define SCUI_FRAME_BUFFER_ASYNC                     (2)
 
-/* 帧缓冲分段 */
+/* 帧缓冲分段(未完成,开发中......) */
 #define SCUI_FRAME_BUFFER_SEG                       (0 && !SCUI_MEM_FEAT_MINI)
 #define SCUI_FRAME_BUFFER_SEG_LINE                  (SCUI_VER_RES / 3)
 

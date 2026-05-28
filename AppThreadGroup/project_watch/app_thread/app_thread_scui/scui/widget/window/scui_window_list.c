@@ -191,24 +191,6 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         switch_type != scui_window_switch_move)
         SCUI_ASSERT(num == 2);
     
-    /* 分段绘制的支持度尚不完整 */
-    #if SCUI_FRAME_BUFFER_SEG
-    switch (switch_type) {
-    default: switch_type = scui_window_switch_move; break;
-    case scui_window_switch_move:
-    case scui_window_switch_cover_in:
-    case scui_window_switch_cover_out:
-    case scui_window_switch_zoom1:
-    case scui_window_switch_zoom2:
-    case scui_window_switch_center_in:
-    case scui_window_switch_center_out:
-    case scui_window_switch_center_inout:
-    case scui_window_switch_rotate:
-    case scui_window_switch_rotate_1:
-        break;
-    }
-    #endif
-    
     /* 多画布混合变换 */
     switch (switch_type) {
     default:
