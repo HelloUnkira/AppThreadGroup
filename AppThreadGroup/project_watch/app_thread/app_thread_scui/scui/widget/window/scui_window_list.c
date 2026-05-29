@@ -89,7 +89,7 @@ static void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
     scui_handle_t idx_t = num;
     for (scui_multi_t idx = 0; idx < num; idx++) {
         scui_widget_t *widget = list[idx];
-        if (widget->myself == scui_window_active_last(0)) {
+        if (widget->myself == scui_window_active_curr()) {
             idx_t = idx;
         }
     }
@@ -126,7 +126,7 @@ static void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
         scui_widget_t *widget = list[idx];
         SCUI_LOG_INFO("object:%u<x:%d,y:%d,w:%d,h:%d><active:%d>", widget->myself,
                       widget->clip.x, widget->clip.y, widget->clip.w, widget->clip.h,
-                      widget->myself == scui_window_active_last(0));
+                      widget->myself == scui_window_active_curr());
     }
 }
 
@@ -584,42 +584,54 @@ void scui_window_event_dispatch(scui_event_t *event)
  */
 void scui_window_active(scui_handle_t handle)
 {
-    SCUI_ASSERT(scui_handle_remap(handle));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+    if (handle != SCUI_HANDLE_SYSTEM) {
+        SCUI_ASSERT(scui_handle_remap(handle));
+        scui_widget_t *widget = scui_handle_source_check(handle);
+        SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+    }
     
-    if (scui_window_active_curr() == handle) {
+    if (scui_window_list.acts_rcd[0] == handle) {
         scui_widget_draw(handle, NULL, false);
         SCUI_LOG_INFO("redundant operation");
         return;
     }
     
-    #if 1
     /* 焦点必须在窗口列表中 */
-    bool acts_cur_check = false;
+    bool acts_cur_check = handle == SCUI_HANDLE_SYSTEM;
     for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
         if (scui_window_list.acts_cur[idx] != handle) continue;
+        if (acts_cur_check) break;
         acts_cur_check = true;
         break;
     }
     SCUI_ASSERT(acts_cur_check);
-    #endif
+    
     
     /* 清除当前活跃窗口, 后记录新的窗口 */
-    for (scui_multi_t idx = SCUI_WINDOW_LIST_LIMIT - 1; idx > 0; idx--)
-        scui_window_list.acts_rcd[idx] = scui_window_list.acts_rcd[idx - 1];
-        scui_window_list.acts_rcd[0] = handle;
+    bool acts_valid_last = true;
+    bool acts_valid_curr = handle != SCUI_HANDLE_SYSTEM;
+    if (scui_window_list.acts_rcd[0] == SCUI_HANDLE_SYSTEM) {
+        scui_window_list.acts_rcd[0]  = handle;
+        acts_valid_last  = false;
+    } else {
+        for (scui_multi_t idx = SCUI_WINDOW_LIST_LIMIT - 1; idx > 0; idx--)
+            scui_window_list.acts_rcd[idx] = scui_window_list.acts_rcd[idx - 1];
+            scui_window_list.acts_rcd[0] = handle;
+    }
+    
+    scui_handle_t handle_last = scui_window_list.acts_rcd[1];
+    scui_handle_t handle_curr = scui_window_list.acts_rcd[0];
     
     /* 先失活旧的焦点窗口 */
-    if (scui_handle_remap(scui_window_active_last(1))) {
-        scui_event_define(event, scui_window_active_last(1), true, scui_event_focus_lost, NULL);
+    if (acts_valid_last && scui_handle_remap(handle_last)) {
+        scui_event_define(event, handle_last, true, scui_event_focus_lost, NULL);
         SCUI_LOG_WARN("window %u focus lost", event.object);
         scui_event_notify(&event);
     }
     
     /* 后激活新的焦点窗口 */
-    if (scui_handle_remap(scui_window_active_curr())) {
-        scui_event_define(event, scui_window_active_curr(), true, scui_event_focus_get, NULL);
+    if (acts_valid_curr && scui_handle_remap(handle_curr)) {
+        scui_event_define(event, handle_curr, true, scui_event_focus_get, NULL);
         SCUI_LOG_WARN("window %u focus get", event.object);
         scui_event_notify(&event);
     }
@@ -637,5 +649,12 @@ scui_handle_t scui_window_active_last(scui_handle_t index)
 {
     SCUI_ASSERT(index < SCUI_WINDOW_LIST_LIMIT);
     /* SCUI_ASSERT(scui_handle_remap(scui_window_list.acts_rcd[index])); */
-    return scui_window_list.acts_rcd[index];
+    if (index != 0) return scui_window_list.acts_rcd[index];
+    
+    /* 活跃记录(特殊情况,临时失活): */
+    if (scui_window_list.acts_rcd[0] != SCUI_HANDLE_SYSTEM)
+        return scui_window_list.acts_rcd[0];
+    
+    SCUI_ASSERT(scui_window_list.acts_rcd[1] != SCUI_HANDLE_SYSTEM);
+    return scui_window_list.acts_rcd[1];
 }

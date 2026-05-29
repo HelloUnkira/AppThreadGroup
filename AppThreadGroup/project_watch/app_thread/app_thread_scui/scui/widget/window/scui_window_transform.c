@@ -709,14 +709,13 @@ void scui_window_transform_flip1(scui_widget_t **list, scui_handle_t num)
         if (!scui_frame_buffer_clip_seg(dst_surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
         
-        scui_point2_t matrix_ofs_s = {0};
         scui_point2_t matrix_ofs_i = {0};
-        matrix_ofs_s.x = -seg_offset.x;
-        matrix_ofs_s.y = -seg_offset.y;
-        matrix_ofs_i.x = +seg_offset.x;
-        matrix_ofs_i.y = +seg_offset.y;
-        scui_matrix_translate(&src_matrix, &matrix_ofs_s);
+        matrix_ofs_i.x = seg_offset.x;
+        matrix_ofs_i.y = seg_offset.y;
         scui_matrix_translate(&inv_matrix, &matrix_ofs_i);
+        
+        src_matrix = inv_matrix;
+        scui_matrix_inverse(&src_matrix);
         #endif
         
         scui_draw_area_3d_blend(true, dst_surface, dst_clip,
@@ -955,14 +954,13 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
         if (!scui_frame_buffer_clip_seg(dst_surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
         
-        scui_point2_t matrix_ofs_s = {0};
         scui_point2_t matrix_ofs_i = {0};
-        matrix_ofs_s.x = -seg_offset.x;
-        matrix_ofs_s.y = -seg_offset.y;
-        matrix_ofs_i.x = +seg_offset.x;
-        matrix_ofs_i.y = +seg_offset.y;
-        scui_matrix_translate(&src_matrix, &matrix_ofs_s);
+        matrix_ofs_i.x = seg_offset.x;
+        matrix_ofs_i.y = seg_offset.y;
         scui_matrix_translate(&inv_matrix, &matrix_ofs_i);
+        
+        src_matrix = inv_matrix;
+        scui_matrix_inverse(&src_matrix);
         #endif
         
         if (face_idx[idx] == 0 || face_idx[idx] == 1) {
@@ -1000,10 +998,9 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
             src_clip.x = scui_window_switch_pct() * size2.w / 100;
             
             #if SCUI_FRAME_BUFFER_SEG
-            scui_matrix_translate(&src_matrix, &matrix_ofs_s);
             scui_matrix_translate(&inv_matrix, &matrix_ofs_i);
-            /* 光影有问题, 还未调试完毕 */
-            continue;
+            src_matrix = inv_matrix;
+            scui_matrix_inverse(&src_matrix);
             #endif
             
             scui_draw_image_3d(true, dst_surface, dst_clip, shadow, src_clip,
@@ -1161,14 +1158,13 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
             if (!scui_frame_buffer_clip_seg(dst_surface,
                  &dst_clip, NULL, NULL, &seg_offset)) continue;
             
-            scui_point2_t matrix_ofs_s = {0};
             scui_point2_t matrix_ofs_i = {0};
-            matrix_ofs_s.x = -seg_offset.x;
-            matrix_ofs_s.y = -seg_offset.y;
-            matrix_ofs_i.x = +seg_offset.x;
-            matrix_ofs_i.y = +seg_offset.y;
-            scui_matrix_translate(&src_matrix, &matrix_ofs_s);
+            matrix_ofs_i.x = seg_offset.x;
+            matrix_ofs_i.y = seg_offset.y;
             scui_matrix_translate(&inv_matrix, &matrix_ofs_i);
+            
+            src_matrix = inv_matrix;
+            scui_matrix_inverse(&src_matrix);
             #endif
             
             if (face_idx[idx] == 0 || face_idx[idx] == 1) {
@@ -1209,10 +1205,9 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
                 src_clip.y = size2.h * seg_idx;
                 
                 #if SCUI_FRAME_BUFFER_SEG
-                scui_matrix_translate(&src_matrix, &matrix_ofs_s);
                 scui_matrix_translate(&inv_matrix, &matrix_ofs_i);
-                /* 光影有问题, 还未调试完毕 */
-                continue;
+                src_matrix = inv_matrix;
+                scui_matrix_inverse(&src_matrix);
                 #endif
                 
                 scui_draw_image_3d(true, dst_surface, dst_clip, shadow, src_clip,
@@ -1376,14 +1371,13 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
         if (!scui_frame_buffer_clip_seg(dst_surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
         
-        scui_point2_t matrix_ofs_s = {0};
         scui_point2_t matrix_ofs_i = {0};
-        matrix_ofs_s.x = -seg_offset.x;
-        matrix_ofs_s.y = -seg_offset.y;
-        matrix_ofs_i.x = +seg_offset.x;
-        matrix_ofs_i.y = +seg_offset.y;
-        scui_matrix_translate(&src_matrix, &matrix_ofs_s);
+        matrix_ofs_i.x = seg_offset.x;
+        matrix_ofs_i.y = seg_offset.y;
         scui_matrix_translate(&inv_matrix, &matrix_ofs_i);
+        
+        src_matrix = inv_matrix;
+        scui_matrix_inverse(&src_matrix);
         #endif
         
         /* 绘制俩个窗口面 */
@@ -1411,10 +1405,9 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
             src_clip.x = scui_window_switch_pct() * size2.w / 100;
             
             #if SCUI_FRAME_BUFFER_SEG
-            scui_matrix_translate(&src_matrix, &matrix_ofs_s);
             scui_matrix_translate(&inv_matrix, &matrix_ofs_i);
-            /* 光影有问题, 还未调试完毕 */
-            continue;
+            src_matrix = inv_matrix;
+            scui_matrix_inverse(&src_matrix);
             #endif
             
             scui_draw_image_3d(true, dst_surface, dst_clip, shadow, src_clip,

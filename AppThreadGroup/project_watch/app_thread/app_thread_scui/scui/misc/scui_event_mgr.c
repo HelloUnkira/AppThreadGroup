@@ -264,7 +264,7 @@ static void scui_event_respond(scui_event_t *event)
     /* 系统事件发给活跃窗口 */
     if (scui_event_type_sys(event->type)) {
         if (event->object == SCUI_HANDLE_SYSTEM)
-            event->object  = scui_window_active_last(0);
+            event->object  = scui_window_active_curr();
         
         /* 本事件无活跃窗口接收 */
         if (scui_handle_unmap(event->object)) {

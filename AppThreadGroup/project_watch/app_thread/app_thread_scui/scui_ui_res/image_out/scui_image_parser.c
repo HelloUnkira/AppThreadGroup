@@ -2289,12 +2289,30 @@ static const scui_image_t prj_image_src_00_3d_Trans_Light_rawpng = {
 	.pixel.size_bin		 = 0x1215e,
 };
 
+static const scui_image_t prj_image_src_00_3d_Trans_Light_raw_HPbmp = {
+	.format				 = scui_pixel_cf_bmp565,
+	.type				 = scui_image_type_lz4,
+	.pixel.width		 = 0x3a4,
+	.pixel.height		 = 0x1d2,
+	.pixel.data_bin		 = 0x507bd8,
+	.pixel.size_bin		 = 0x4cd36,
+};
+
+static const scui_image_t prj_image_src_00_3d_Trans_Light_raw_HPpng = {
+	.format				 = scui_pixel_cf_bmp8565,
+	.type				 = scui_image_type_png,
+	.pixel.width		 = 0x3a4,
+	.pixel.height		 = 0x1d2,
+	.pixel.data_bin		 = 0x55490e,
+	.pixel.size_bin		 = 0xa927f,
+};
+
 static const scui_image_t prj_image_src_00_3d_Wave_Board00png = {
 	.format				 = scui_pixel_cf_bmp8565,
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0x507bd8,
+	.pixel.data_bin		 = 0x5fdb8d,
 	.pixel.size_bin		 = 0x4448,
 };
 
@@ -2303,7 +2321,7 @@ static const scui_image_t prj_image_src_00_3d_Wave_Board01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0x50c020,
+	.pixel.data_bin		 = 0x601fd5,
 	.pixel.size_bin		 = 0x8e40,
 };
 
@@ -2312,7 +2330,7 @@ static const scui_image_t prj_image_src_00_3d_Wave_Board02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0x514e60,
+	.pixel.data_bin		 = 0x60ae15,
 	.pixel.size_bin		 = 0x6260,
 };
 
@@ -2321,7 +2339,7 @@ static const scui_image_t prj_image_src_00_3d_Wave_Board03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0x51b0c0,
+	.pixel.data_bin		 = 0x611075,
 	.pixel.size_bin		 = 0x612c,
 };
 
@@ -2330,7 +2348,7 @@ static const scui_image_t prj_image_src_00_3d_Wave_Board04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0x5211ec,
+	.pixel.data_bin		 = 0x6171a1,
 	.pixel.size_bin		 = 0x509d,
 };
 
@@ -2339,7 +2357,7 @@ static const scui_image_t prj_image_src_00_theme_01_onpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x15e,
 	.pixel.height		 = 0x4f,
-	.pixel.data_bin		 = 0x526289,
+	.pixel.data_bin		 = 0x61c23e,
 	.pixel.size_bin		 = 0xeb8,
 };
 
@@ -2348,7 +2366,7 @@ static const scui_image_t prj_image_src_00_theme_02_ringbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x4e,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0x527141,
+	.pixel.data_bin		 = 0x61d0f6,
 	.pixel.size_bin		 = 0x788,
 };
 
@@ -2357,7 +2375,7 @@ static const scui_image_t prj_image_src_00_theme_03_underpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x15e,
 	.pixel.height		 = 0x50,
-	.pixel.data_bin		 = 0x5278c9,
+	.pixel.data_bin		 = 0x61d87e,
 	.pixel.size_bin		 = 0xed6,
 };
 
@@ -2366,7 +2384,7 @@ static const scui_image_t prj_image_src_00_theme_icon_00_heart_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x52879f,
+	.pixel.data_bin		 = 0x61e754,
 	.pixel.size_bin		 = 0x3dc,
 };
 
@@ -2375,7 +2393,7 @@ static const scui_image_t prj_image_src_00_theme_icon_00_heart_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x528b7b,
+	.pixel.data_bin		 = 0x61eb30,
 	.pixel.size_bin		 = 0x5c9,
 };
 
@@ -2384,7 +2402,7 @@ static const scui_image_t prj_image_src_00_theme_icon_00_heart_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x529144,
+	.pixel.data_bin		 = 0x61f0f9,
 	.pixel.size_bin		 = 0x829,
 };
 
@@ -2393,7 +2411,7 @@ static const scui_image_t prj_image_src_00_theme_icon_00_heart_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x52996d,
+	.pixel.data_bin		 = 0x61f922,
 	.pixel.size_bin		 = 0xab3,
 };
 
@@ -2402,7 +2420,7 @@ static const scui_image_t prj_image_src_00_theme_icon_00_heart_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x52a420,
+	.pixel.data_bin		 = 0x6203d5,
 	.pixel.size_bin		 = 0xdde,
 };
 
@@ -2411,7 +2429,7 @@ static const scui_image_t prj_image_src_00_theme_icon_00_heart_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x52b1fe,
+	.pixel.data_bin		 = 0x6211b3,
 	.pixel.size_bin		 = 0x10b0,
 };
 
@@ -2420,7 +2438,7 @@ static const scui_image_t prj_image_src_00_theme_icon_00_heart_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x52c2ae,
+	.pixel.data_bin		 = 0x622263,
 	.pixel.size_bin		 = 0x13af,
 };
 
@@ -2429,7 +2447,7 @@ static const scui_image_t prj_image_src_00_theme_icon_00_heart_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x52d65d,
+	.pixel.data_bin		 = 0x623612,
 	.pixel.size_bin		 = 0x16ef,
 };
 
@@ -2438,7 +2456,7 @@ static const scui_image_t prj_image_src_00_theme_icon_00_heart_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x52ed4c,
+	.pixel.data_bin		 = 0x624d01,
 	.pixel.size_bin		 = 0x1a73,
 };
 
@@ -2447,7 +2465,7 @@ static const scui_image_t prj_image_src_00_theme_icon_00_heart_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5307bf,
+	.pixel.data_bin		 = 0x626774,
 	.pixel.size_bin		 = 0xc1f,
 };
 
@@ -2456,7 +2474,7 @@ static const scui_image_t prj_image_src_00_theme_icon_01_spo2_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x5313de,
+	.pixel.data_bin		 = 0x627393,
 	.pixel.size_bin		 = 0x41f,
 };
 
@@ -2465,7 +2483,7 @@ static const scui_image_t prj_image_src_00_theme_icon_01_spo2_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5317fd,
+	.pixel.data_bin		 = 0x6277b2,
 	.pixel.size_bin		 = 0x6d5,
 };
 
@@ -2474,7 +2492,7 @@ static const scui_image_t prj_image_src_00_theme_icon_01_spo2_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x531ed2,
+	.pixel.data_bin		 = 0x627e87,
 	.pixel.size_bin		 = 0x9d6,
 };
 
@@ -2483,7 +2501,7 @@ static const scui_image_t prj_image_src_00_theme_icon_01_spo2_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5328a8,
+	.pixel.data_bin		 = 0x62885d,
 	.pixel.size_bin		 = 0xceb,
 };
 
@@ -2492,7 +2510,7 @@ static const scui_image_t prj_image_src_00_theme_icon_01_spo2_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x533593,
+	.pixel.data_bin		 = 0x629548,
 	.pixel.size_bin		 = 0x105d,
 };
 
@@ -2501,7 +2519,7 @@ static const scui_image_t prj_image_src_00_theme_icon_01_spo2_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5345f0,
+	.pixel.data_bin		 = 0x62a5a5,
 	.pixel.size_bin		 = 0x14aa,
 };
 
@@ -2510,7 +2528,7 @@ static const scui_image_t prj_image_src_00_theme_icon_01_spo2_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x535a9a,
+	.pixel.data_bin		 = 0x62ba4f,
 	.pixel.size_bin		 = 0x188f,
 };
 
@@ -2519,7 +2537,7 @@ static const scui_image_t prj_image_src_00_theme_icon_01_spo2_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x537329,
+	.pixel.data_bin		 = 0x62d2de,
 	.pixel.size_bin		 = 0x1c89,
 };
 
@@ -2528,7 +2546,7 @@ static const scui_image_t prj_image_src_00_theme_icon_01_spo2_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x538fb2,
+	.pixel.data_bin		 = 0x62ef67,
 	.pixel.size_bin		 = 0x206b,
 };
 
@@ -2537,7 +2555,7 @@ static const scui_image_t prj_image_src_00_theme_icon_01_spo2_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x53b01d,
+	.pixel.data_bin		 = 0x630fd2,
 	.pixel.size_bin		 = 0xe62,
 };
 
@@ -2546,7 +2564,7 @@ static const scui_image_t prj_image_src_00_theme_icon_02_message_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x53be7f,
+	.pixel.data_bin		 = 0x631e34,
 	.pixel.size_bin		 = 0x3de,
 };
 
@@ -2555,7 +2573,7 @@ static const scui_image_t prj_image_src_00_theme_icon_02_message_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x53c25d,
+	.pixel.data_bin		 = 0x632212,
 	.pixel.size_bin		 = 0x616,
 };
 
@@ -2564,7 +2582,7 @@ static const scui_image_t prj_image_src_00_theme_icon_02_message_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x53c873,
+	.pixel.data_bin		 = 0x632828,
 	.pixel.size_bin		 = 0x8e3,
 };
 
@@ -2573,7 +2591,7 @@ static const scui_image_t prj_image_src_00_theme_icon_02_message_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x53d156,
+	.pixel.data_bin		 = 0x63310b,
 	.pixel.size_bin		 = 0xb44,
 };
 
@@ -2582,7 +2600,7 @@ static const scui_image_t prj_image_src_00_theme_icon_02_message_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x53dc9a,
+	.pixel.data_bin		 = 0x633c4f,
 	.pixel.size_bin		 = 0xee7,
 };
 
@@ -2591,7 +2609,7 @@ static const scui_image_t prj_image_src_00_theme_icon_02_message_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x53eb81,
+	.pixel.data_bin		 = 0x634b36,
 	.pixel.size_bin		 = 0x1218,
 };
 
@@ -2600,7 +2618,7 @@ static const scui_image_t prj_image_src_00_theme_icon_02_message_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x53fd99,
+	.pixel.data_bin		 = 0x635d4e,
 	.pixel.size_bin		 = 0x1560,
 };
 
@@ -2609,7 +2627,7 @@ static const scui_image_t prj_image_src_00_theme_icon_02_message_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5412f9,
+	.pixel.data_bin		 = 0x6372ae,
 	.pixel.size_bin		 = 0x195d,
 };
 
@@ -2618,7 +2636,7 @@ static const scui_image_t prj_image_src_00_theme_icon_02_message_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x542c56,
+	.pixel.data_bin		 = 0x638c0b,
 	.pixel.size_bin		 = 0x1ca1,
 };
 
@@ -2627,7 +2645,7 @@ static const scui_image_t prj_image_src_00_theme_icon_02_message_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5448f7,
+	.pixel.data_bin		 = 0x63a8ac,
 	.pixel.size_bin		 = 0xb91,
 };
 
@@ -2636,7 +2654,7 @@ static const scui_image_t prj_image_src_00_theme_icon_04_call_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x545488,
+	.pixel.data_bin		 = 0x63b43d,
 	.pixel.size_bin		 = 0x488,
 };
 
@@ -2645,7 +2663,7 @@ static const scui_image_t prj_image_src_00_theme_icon_04_call_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x545910,
+	.pixel.data_bin		 = 0x63b8c5,
 	.pixel.size_bin		 = 0x77f,
 };
 
@@ -2654,7 +2672,7 @@ static const scui_image_t prj_image_src_00_theme_icon_04_call_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x54608f,
+	.pixel.data_bin		 = 0x63c044,
 	.pixel.size_bin		 = 0xb1e,
 };
 
@@ -2663,7 +2681,7 @@ static const scui_image_t prj_image_src_00_theme_icon_04_call_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x546bad,
+	.pixel.data_bin		 = 0x63cb62,
 	.pixel.size_bin		 = 0xeae,
 };
 
@@ -2672,7 +2690,7 @@ static const scui_image_t prj_image_src_00_theme_icon_04_call_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x547a5b,
+	.pixel.data_bin		 = 0x63da10,
 	.pixel.size_bin		 = 0x12e6,
 };
 
@@ -2681,7 +2699,7 @@ static const scui_image_t prj_image_src_00_theme_icon_04_call_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x548d41,
+	.pixel.data_bin		 = 0x63ecf6,
 	.pixel.size_bin		 = 0x17eb,
 };
 
@@ -2690,7 +2708,7 @@ static const scui_image_t prj_image_src_00_theme_icon_04_call_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x54a52c,
+	.pixel.data_bin		 = 0x6404e1,
 	.pixel.size_bin		 = 0x1db5,
 };
 
@@ -2699,7 +2717,7 @@ static const scui_image_t prj_image_src_00_theme_icon_04_call_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x54c2e1,
+	.pixel.data_bin		 = 0x642296,
 	.pixel.size_bin		 = 0x2344,
 };
 
@@ -2708,7 +2726,7 @@ static const scui_image_t prj_image_src_00_theme_icon_04_call_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x54e625,
+	.pixel.data_bin		 = 0x6445da,
 	.pixel.size_bin		 = 0x292d,
 };
 
@@ -2717,7 +2735,7 @@ static const scui_image_t prj_image_src_00_theme_icon_04_call_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x550f52,
+	.pixel.data_bin		 = 0x646f07,
 	.pixel.size_bin		 = 0x1040,
 };
 
@@ -2726,7 +2744,7 @@ static const scui_image_t prj_image_src_00_theme_icon_05_sport_record_01_00png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x551f92,
+	.pixel.data_bin		 = 0x647f47,
 	.pixel.size_bin		 = 0x3a8,
 };
 
@@ -2735,7 +2753,7 @@ static const scui_image_t prj_image_src_00_theme_icon_05_sport_record_02_01png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x55233a,
+	.pixel.data_bin		 = 0x6482ef,
 	.pixel.size_bin		 = 0x5b7,
 };
 
@@ -2744,7 +2762,7 @@ static const scui_image_t prj_image_src_00_theme_icon_05_sport_record_03_02png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5528f1,
+	.pixel.data_bin		 = 0x6488a6,
 	.pixel.size_bin		 = 0x7ea,
 };
 
@@ -2753,7 +2771,7 @@ static const scui_image_t prj_image_src_00_theme_icon_05_sport_record_04_03png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5530db,
+	.pixel.data_bin		 = 0x649090,
 	.pixel.size_bin		 = 0xa6e,
 };
 
@@ -2762,7 +2780,7 @@ static const scui_image_t prj_image_src_00_theme_icon_05_sport_record_05_04png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x553b49,
+	.pixel.data_bin		 = 0x649afe,
 	.pixel.size_bin		 = 0xd7a,
 };
 
@@ -2771,7 +2789,7 @@ static const scui_image_t prj_image_src_00_theme_icon_05_sport_record_06_05png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5548c3,
+	.pixel.data_bin		 = 0x64a878,
 	.pixel.size_bin		 = 0x10f3,
 };
 
@@ -2780,7 +2798,7 @@ static const scui_image_t prj_image_src_00_theme_icon_05_sport_record_07_06png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5559b6,
+	.pixel.data_bin		 = 0x64b96b,
 	.pixel.size_bin		 = 0x13cd,
 };
 
@@ -2789,7 +2807,7 @@ static const scui_image_t prj_image_src_00_theme_icon_05_sport_record_08_07png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x556d83,
+	.pixel.data_bin		 = 0x64cd38,
 	.pixel.size_bin		 = 0x17ae,
 };
 
@@ -2798,7 +2816,7 @@ static const scui_image_t prj_image_src_00_theme_icon_05_sport_record_09_08png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x558531,
+	.pixel.data_bin		 = 0x64e4e6,
 	.pixel.size_bin		 = 0x1a6d,
 };
 
@@ -2807,7 +2825,7 @@ static const scui_image_t prj_image_src_00_theme_icon_05_sport_record_10_09bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x559f9e,
+	.pixel.data_bin		 = 0x64ff53,
 	.pixel.size_bin		 = 0xc67,
 };
 
@@ -2816,7 +2834,7 @@ static const scui_image_t prj_image_src_00_theme_icon_06_activity_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x55ac05,
+	.pixel.data_bin		 = 0x650bba,
 	.pixel.size_bin		 = 0x439,
 };
 
@@ -2825,7 +2843,7 @@ static const scui_image_t prj_image_src_00_theme_icon_06_activity_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x55b03e,
+	.pixel.data_bin		 = 0x650ff3,
 	.pixel.size_bin		 = 0x6c7,
 };
 
@@ -2834,7 +2852,7 @@ static const scui_image_t prj_image_src_00_theme_icon_06_activity_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x55b705,
+	.pixel.data_bin		 = 0x6516ba,
 	.pixel.size_bin		 = 0x960,
 };
 
@@ -2843,7 +2861,7 @@ static const scui_image_t prj_image_src_00_theme_icon_06_activity_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x55c065,
+	.pixel.data_bin		 = 0x65201a,
 	.pixel.size_bin		 = 0xc15,
 };
 
@@ -2852,7 +2870,7 @@ static const scui_image_t prj_image_src_00_theme_icon_06_activity_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x55cc7a,
+	.pixel.data_bin		 = 0x652c2f,
 	.pixel.size_bin		 = 0xfbe,
 };
 
@@ -2861,7 +2879,7 @@ static const scui_image_t prj_image_src_00_theme_icon_06_activity_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x55dc38,
+	.pixel.data_bin		 = 0x653bed,
 	.pixel.size_bin		 = 0x1365,
 };
 
@@ -2870,7 +2888,7 @@ static const scui_image_t prj_image_src_00_theme_icon_06_activity_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x55ef9d,
+	.pixel.data_bin		 = 0x654f52,
 	.pixel.size_bin		 = 0x16eb,
 };
 
@@ -2879,7 +2897,7 @@ static const scui_image_t prj_image_src_00_theme_icon_06_activity_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x560688,
+	.pixel.data_bin		 = 0x65663d,
 	.pixel.size_bin		 = 0x1a77,
 };
 
@@ -2888,7 +2906,7 @@ static const scui_image_t prj_image_src_00_theme_icon_06_activity_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5620ff,
+	.pixel.data_bin		 = 0x6580b4,
 	.pixel.size_bin		 = 0x1ef0,
 };
 
@@ -2897,7 +2915,7 @@ static const scui_image_t prj_image_src_00_theme_icon_06_activity_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x563fef,
+	.pixel.data_bin		 = 0x659fa4,
 	.pixel.size_bin		 = 0xbc6,
 };
 
@@ -2906,7 +2924,7 @@ static const scui_image_t prj_image_src_00_theme_icon_07_dial_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x564bb5,
+	.pixel.data_bin		 = 0x65ab6a,
 	.pixel.size_bin		 = 0x291,
 };
 
@@ -2915,7 +2933,7 @@ static const scui_image_t prj_image_src_00_theme_icon_07_dial_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x564e46,
+	.pixel.data_bin		 = 0x65adfb,
 	.pixel.size_bin		 = 0x383,
 };
 
@@ -2924,7 +2942,7 @@ static const scui_image_t prj_image_src_00_theme_icon_07_dial_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5651c9,
+	.pixel.data_bin		 = 0x65b17e,
 	.pixel.size_bin		 = 0x4c0,
 };
 
@@ -2933,7 +2951,7 @@ static const scui_image_t prj_image_src_00_theme_icon_07_dial_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x565689,
+	.pixel.data_bin		 = 0x65b63e,
 	.pixel.size_bin		 = 0x5c6,
 };
 
@@ -2942,7 +2960,7 @@ static const scui_image_t prj_image_src_00_theme_icon_07_dial_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x565c4f,
+	.pixel.data_bin		 = 0x65bc04,
 	.pixel.size_bin		 = 0x762,
 };
 
@@ -2951,7 +2969,7 @@ static const scui_image_t prj_image_src_00_theme_icon_07_dial_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5663b1,
+	.pixel.data_bin		 = 0x65c366,
 	.pixel.size_bin		 = 0x8d7,
 };
 
@@ -2960,7 +2978,7 @@ static const scui_image_t prj_image_src_00_theme_icon_07_dial_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x566c88,
+	.pixel.data_bin		 = 0x65cc3d,
 	.pixel.size_bin		 = 0x9ed,
 };
 
@@ -2969,7 +2987,7 @@ static const scui_image_t prj_image_src_00_theme_icon_07_dial_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x567675,
+	.pixel.data_bin		 = 0x65d62a,
 	.pixel.size_bin		 = 0xb80,
 };
 
@@ -2978,7 +2996,7 @@ static const scui_image_t prj_image_src_00_theme_icon_07_dial_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5681f5,
+	.pixel.data_bin		 = 0x65e1aa,
 	.pixel.size_bin		 = 0xcaf,
 };
 
@@ -2987,7 +3005,7 @@ static const scui_image_t prj_image_src_00_theme_icon_07_dial_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x568ea4,
+	.pixel.data_bin		 = 0x65ee59,
 	.pixel.size_bin		 = 0x77d,
 };
 
@@ -2996,7 +3014,7 @@ static const scui_image_t prj_image_src_00_theme_icon_09_find_phone_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x569621,
+	.pixel.data_bin		 = 0x65f5d6,
 	.pixel.size_bin		 = 0x49c,
 };
 
@@ -3005,7 +3023,7 @@ static const scui_image_t prj_image_src_00_theme_icon_09_find_phone_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x569abd,
+	.pixel.data_bin		 = 0x65fa72,
 	.pixel.size_bin		 = 0x76a,
 };
 
@@ -3014,7 +3032,7 @@ static const scui_image_t prj_image_src_00_theme_icon_09_find_phone_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x56a227,
+	.pixel.data_bin		 = 0x6601dc,
 	.pixel.size_bin		 = 0xab5,
 };
 
@@ -3023,7 +3041,7 @@ static const scui_image_t prj_image_src_00_theme_icon_09_find_phone_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x56acdc,
+	.pixel.data_bin		 = 0x660c91,
 	.pixel.size_bin		 = 0xe08,
 };
 
@@ -3032,7 +3050,7 @@ static const scui_image_t prj_image_src_00_theme_icon_09_find_phone_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x56bae4,
+	.pixel.data_bin		 = 0x661a99,
 	.pixel.size_bin		 = 0x12f0,
 };
 
@@ -3041,7 +3059,7 @@ static const scui_image_t prj_image_src_00_theme_icon_09_find_phone_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x56cdd4,
+	.pixel.data_bin		 = 0x662d89,
 	.pixel.size_bin		 = 0x1776,
 };
 
@@ -3050,7 +3068,7 @@ static const scui_image_t prj_image_src_00_theme_icon_09_find_phone_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x56e54a,
+	.pixel.data_bin		 = 0x6644ff,
 	.pixel.size_bin		 = 0x1c80,
 };
 
@@ -3059,7 +3077,7 @@ static const scui_image_t prj_image_src_00_theme_icon_09_find_phone_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5701ca,
+	.pixel.data_bin		 = 0x66617f,
 	.pixel.size_bin		 = 0x2215,
 };
 
@@ -3068,7 +3086,7 @@ static const scui_image_t prj_image_src_00_theme_icon_09_find_phone_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5723df,
+	.pixel.data_bin		 = 0x668394,
 	.pixel.size_bin		 = 0x27de,
 };
 
@@ -3077,7 +3095,7 @@ static const scui_image_t prj_image_src_00_theme_icon_09_find_phone_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x574bbd,
+	.pixel.data_bin		 = 0x66ab72,
 	.pixel.size_bin		 = 0xecf,
 };
 
@@ -3086,7 +3104,7 @@ static const scui_image_t prj_image_src_00_theme_icon_10_word_colock_01_00png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x575a8c,
+	.pixel.data_bin		 = 0x66ba41,
 	.pixel.size_bin		 = 0x4c6,
 };
 
@@ -3095,7 +3113,7 @@ static const scui_image_t prj_image_src_00_theme_icon_10_word_colock_02_01png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x575f52,
+	.pixel.data_bin		 = 0x66bf07,
 	.pixel.size_bin		 = 0x7f3,
 };
 
@@ -3104,7 +3122,7 @@ static const scui_image_t prj_image_src_00_theme_icon_10_word_colock_03_02png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x576745,
+	.pixel.data_bin		 = 0x66c6fa,
 	.pixel.size_bin		 = 0xb3d,
 };
 
@@ -3113,7 +3131,7 @@ static const scui_image_t prj_image_src_00_theme_icon_10_word_colock_04_03png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x577282,
+	.pixel.data_bin		 = 0x66d237,
 	.pixel.size_bin		 = 0xf51,
 };
 
@@ -3122,7 +3140,7 @@ static const scui_image_t prj_image_src_00_theme_icon_10_word_colock_05_04png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5781d3,
+	.pixel.data_bin		 = 0x66e188,
 	.pixel.size_bin		 = 0x1384,
 };
 
@@ -3131,7 +3149,7 @@ static const scui_image_t prj_image_src_00_theme_icon_10_word_colock_06_05png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x579557,
+	.pixel.data_bin		 = 0x66f50c,
 	.pixel.size_bin		 = 0x1877,
 };
 
@@ -3140,7 +3158,7 @@ static const scui_image_t prj_image_src_00_theme_icon_10_word_colock_07_06png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x57adce,
+	.pixel.data_bin		 = 0x670d83,
 	.pixel.size_bin		 = 0x1d07,
 };
 
@@ -3149,7 +3167,7 @@ static const scui_image_t prj_image_src_00_theme_icon_10_word_colock_08_07png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x57cad5,
+	.pixel.data_bin		 = 0x672a8a,
 	.pixel.size_bin		 = 0x2297,
 };
 
@@ -3158,7 +3176,7 @@ static const scui_image_t prj_image_src_00_theme_icon_10_word_colock_09_08png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x57ed6c,
+	.pixel.data_bin		 = 0x674d21,
 	.pixel.size_bin		 = 0x286f,
 };
 
@@ -3167,7 +3185,7 @@ static const scui_image_t prj_image_src_00_theme_icon_10_word_colock_10_09bmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5815db,
+	.pixel.data_bin		 = 0x677590,
 	.pixel.size_bin		 = 0x1344,
 };
 
@@ -3176,7 +3194,7 @@ static const scui_image_t prj_image_src_00_theme_icon_11_weather_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x58291f,
+	.pixel.data_bin		 = 0x6788d4,
 	.pixel.size_bin		 = 0x411,
 };
 
@@ -3185,7 +3203,7 @@ static const scui_image_t prj_image_src_00_theme_icon_11_weather_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x582d30,
+	.pixel.data_bin		 = 0x678ce5,
 	.pixel.size_bin		 = 0x659,
 };
 
@@ -3194,7 +3212,7 @@ static const scui_image_t prj_image_src_00_theme_icon_11_weather_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x583389,
+	.pixel.data_bin		 = 0x67933e,
 	.pixel.size_bin		 = 0x924,
 };
 
@@ -3203,7 +3221,7 @@ static const scui_image_t prj_image_src_00_theme_icon_11_weather_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x583cad,
+	.pixel.data_bin		 = 0x679c62,
 	.pixel.size_bin		 = 0xc20,
 };
 
@@ -3212,7 +3230,7 @@ static const scui_image_t prj_image_src_00_theme_icon_11_weather_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5848cd,
+	.pixel.data_bin		 = 0x67a882,
 	.pixel.size_bin		 = 0xf44,
 };
 
@@ -3221,7 +3239,7 @@ static const scui_image_t prj_image_src_00_theme_icon_11_weather_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x585811,
+	.pixel.data_bin		 = 0x67b7c6,
 	.pixel.size_bin		 = 0x1326,
 };
 
@@ -3230,7 +3248,7 @@ static const scui_image_t prj_image_src_00_theme_icon_11_weather_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x586b37,
+	.pixel.data_bin		 = 0x67caec,
 	.pixel.size_bin		 = 0x169a,
 };
 
@@ -3239,7 +3257,7 @@ static const scui_image_t prj_image_src_00_theme_icon_11_weather_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5881d1,
+	.pixel.data_bin		 = 0x67e186,
 	.pixel.size_bin		 = 0x1aa5,
 };
 
@@ -3248,7 +3266,7 @@ static const scui_image_t prj_image_src_00_theme_icon_11_weather_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x589c76,
+	.pixel.data_bin		 = 0x67fc2b,
 	.pixel.size_bin		 = 0x1e5f,
 };
 
@@ -3257,7 +3275,7 @@ static const scui_image_t prj_image_src_00_theme_icon_11_weather_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x58bad5,
+	.pixel.data_bin		 = 0x681a8a,
 	.pixel.size_bin		 = 0xcb4,
 };
 
@@ -3266,7 +3284,7 @@ static const scui_image_t prj_image_src_00_theme_icon_12_music_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x58c789,
+	.pixel.data_bin		 = 0x68273e,
 	.pixel.size_bin		 = 0x4a1,
 };
 
@@ -3275,7 +3293,7 @@ static const scui_image_t prj_image_src_00_theme_icon_12_music_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x58cc2a,
+	.pixel.data_bin		 = 0x682bdf,
 	.pixel.size_bin		 = 0x766,
 };
 
@@ -3284,7 +3302,7 @@ static const scui_image_t prj_image_src_00_theme_icon_12_music_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x58d390,
+	.pixel.data_bin		 = 0x683345,
 	.pixel.size_bin		 = 0xa7f,
 };
 
@@ -3293,7 +3311,7 @@ static const scui_image_t prj_image_src_00_theme_icon_12_music_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x58de0f,
+	.pixel.data_bin		 = 0x683dc4,
 	.pixel.size_bin		 = 0xe4c,
 };
 
@@ -3302,7 +3320,7 @@ static const scui_image_t prj_image_src_00_theme_icon_12_music_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x58ec5b,
+	.pixel.data_bin		 = 0x684c10,
 	.pixel.size_bin		 = 0x129f,
 };
 
@@ -3311,7 +3329,7 @@ static const scui_image_t prj_image_src_00_theme_icon_12_music_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x58fefa,
+	.pixel.data_bin		 = 0x685eaf,
 	.pixel.size_bin		 = 0x17bd,
 };
 
@@ -3320,7 +3338,7 @@ static const scui_image_t prj_image_src_00_theme_icon_12_music_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5916b7,
+	.pixel.data_bin		 = 0x68766c,
 	.pixel.size_bin		 = 0x1ceb,
 };
 
@@ -3329,7 +3347,7 @@ static const scui_image_t prj_image_src_00_theme_icon_12_music_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5933a2,
+	.pixel.data_bin		 = 0x689357,
 	.pixel.size_bin		 = 0x227d,
 };
 
@@ -3338,7 +3356,7 @@ static const scui_image_t prj_image_src_00_theme_icon_12_music_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x59561f,
+	.pixel.data_bin		 = 0x68b5d4,
 	.pixel.size_bin		 = 0x2882,
 };
 
@@ -3347,7 +3365,7 @@ static const scui_image_t prj_image_src_00_theme_icon_12_music_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x597ea1,
+	.pixel.data_bin		 = 0x68de56,
 	.pixel.size_bin		 = 0xfbb,
 };
 
@@ -3356,7 +3374,7 @@ static const scui_image_t prj_image_src_00_theme_icon_13_altitude_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x598e5c,
+	.pixel.data_bin		 = 0x68ee11,
 	.pixel.size_bin		 = 0x46b,
 };
 
@@ -3365,7 +3383,7 @@ static const scui_image_t prj_image_src_00_theme_icon_13_altitude_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5992c7,
+	.pixel.data_bin		 = 0x68f27c,
 	.pixel.size_bin		 = 0x6fb,
 };
 
@@ -3374,7 +3392,7 @@ static const scui_image_t prj_image_src_00_theme_icon_13_altitude_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5999c2,
+	.pixel.data_bin		 = 0x68f977,
 	.pixel.size_bin		 = 0xa3e,
 };
 
@@ -3383,7 +3401,7 @@ static const scui_image_t prj_image_src_00_theme_icon_13_altitude_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x59a400,
+	.pixel.data_bin		 = 0x6903b5,
 	.pixel.size_bin		 = 0xd84,
 };
 
@@ -3392,7 +3410,7 @@ static const scui_image_t prj_image_src_00_theme_icon_13_altitude_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x59b184,
+	.pixel.data_bin		 = 0x691139,
 	.pixel.size_bin		 = 0x1133,
 };
 
@@ -3401,7 +3419,7 @@ static const scui_image_t prj_image_src_00_theme_icon_13_altitude_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x59c2b7,
+	.pixel.data_bin		 = 0x69226c,
 	.pixel.size_bin		 = 0x1537,
 };
 
@@ -3410,7 +3428,7 @@ static const scui_image_t prj_image_src_00_theme_icon_13_altitude_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x59d7ee,
+	.pixel.data_bin		 = 0x6937a3,
 	.pixel.size_bin		 = 0x1960,
 };
 
@@ -3419,7 +3437,7 @@ static const scui_image_t prj_image_src_00_theme_icon_13_altitude_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x59f14e,
+	.pixel.data_bin		 = 0x695103,
 	.pixel.size_bin		 = 0x1df7,
 };
 
@@ -3428,7 +3446,7 @@ static const scui_image_t prj_image_src_00_theme_icon_13_altitude_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5a0f45,
+	.pixel.data_bin		 = 0x696efa,
 	.pixel.size_bin		 = 0x227f,
 };
 
@@ -3437,7 +3455,7 @@ static const scui_image_t prj_image_src_00_theme_icon_13_altitude_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5a31c4,
+	.pixel.data_bin		 = 0x699179,
 	.pixel.size_bin		 = 0xd3a,
 };
 
@@ -3446,7 +3464,7 @@ static const scui_image_t prj_image_src_00_theme_icon_14_settings_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x5a3efe,
+	.pixel.data_bin		 = 0x699eb3,
 	.pixel.size_bin		 = 0x511,
 };
 
@@ -3455,7 +3473,7 @@ static const scui_image_t prj_image_src_00_theme_icon_14_settings_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5a440f,
+	.pixel.data_bin		 = 0x69a3c4,
 	.pixel.size_bin		 = 0x7dd,
 };
 
@@ -3464,7 +3482,7 @@ static const scui_image_t prj_image_src_00_theme_icon_14_settings_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5a4bec,
+	.pixel.data_bin		 = 0x69aba1,
 	.pixel.size_bin		 = 0xb6a,
 };
 
@@ -3473,7 +3491,7 @@ static const scui_image_t prj_image_src_00_theme_icon_14_settings_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5a5756,
+	.pixel.data_bin		 = 0x69b70b,
 	.pixel.size_bin		 = 0xf4b,
 };
 
@@ -3482,7 +3500,7 @@ static const scui_image_t prj_image_src_00_theme_icon_14_settings_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5a66a1,
+	.pixel.data_bin		 = 0x69c656,
 	.pixel.size_bin		 = 0x1346,
 };
 
@@ -3491,7 +3509,7 @@ static const scui_image_t prj_image_src_00_theme_icon_14_settings_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5a79e7,
+	.pixel.data_bin		 = 0x69d99c,
 	.pixel.size_bin		 = 0x1803,
 };
 
@@ -3500,7 +3518,7 @@ static const scui_image_t prj_image_src_00_theme_icon_14_settings_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5a91ea,
+	.pixel.data_bin		 = 0x69f19f,
 	.pixel.size_bin		 = 0x1cee,
 };
 
@@ -3509,7 +3527,7 @@ static const scui_image_t prj_image_src_00_theme_icon_14_settings_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5aaed8,
+	.pixel.data_bin		 = 0x6a0e8d,
 	.pixel.size_bin		 = 0x225c,
 };
 
@@ -3518,7 +3536,7 @@ static const scui_image_t prj_image_src_00_theme_icon_14_settings_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5ad134,
+	.pixel.data_bin		 = 0x6a30e9,
 	.pixel.size_bin		 = 0x27bd,
 };
 
@@ -3527,7 +3545,7 @@ static const scui_image_t prj_image_src_00_theme_icon_14_settings_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5af8f1,
+	.pixel.data_bin		 = 0x6a58a6,
 	.pixel.size_bin		 = 0x1190,
 };
 
@@ -3536,7 +3554,7 @@ static const scui_image_t prj_image_src_00_theme_icon_15_take_photo_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x5b0a81,
+	.pixel.data_bin		 = 0x6a6a36,
 	.pixel.size_bin		 = 0x522,
 };
 
@@ -3545,7 +3563,7 @@ static const scui_image_t prj_image_src_00_theme_icon_15_take_photo_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5b0fa3,
+	.pixel.data_bin		 = 0x6a6f58,
 	.pixel.size_bin		 = 0x874,
 };
 
@@ -3554,7 +3572,7 @@ static const scui_image_t prj_image_src_00_theme_icon_15_take_photo_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5b1817,
+	.pixel.data_bin		 = 0x6a77cc,
 	.pixel.size_bin		 = 0xc03,
 };
 
@@ -3563,7 +3581,7 @@ static const scui_image_t prj_image_src_00_theme_icon_15_take_photo_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5b241a,
+	.pixel.data_bin		 = 0x6a83cf,
 	.pixel.size_bin		 = 0x1034,
 };
 
@@ -3572,7 +3590,7 @@ static const scui_image_t prj_image_src_00_theme_icon_15_take_photo_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5b344e,
+	.pixel.data_bin		 = 0x6a9403,
 	.pixel.size_bin		 = 0x1556,
 };
 
@@ -3581,7 +3599,7 @@ static const scui_image_t prj_image_src_00_theme_icon_15_take_photo_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5b49a4,
+	.pixel.data_bin		 = 0x6aa959,
 	.pixel.size_bin		 = 0x1a76,
 };
 
@@ -3590,7 +3608,7 @@ static const scui_image_t prj_image_src_00_theme_icon_15_take_photo_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5b641a,
+	.pixel.data_bin		 = 0x6ac3cf,
 	.pixel.size_bin		 = 0x1f7e,
 };
 
@@ -3599,7 +3617,7 @@ static const scui_image_t prj_image_src_00_theme_icon_15_take_photo_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5b8398,
+	.pixel.data_bin		 = 0x6ae34d,
 	.pixel.size_bin		 = 0x25ef,
 };
 
@@ -3608,7 +3626,7 @@ static const scui_image_t prj_image_src_00_theme_icon_15_take_photo_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5ba987,
+	.pixel.data_bin		 = 0x6b093c,
 	.pixel.size_bin		 = 0x2bfe,
 };
 
@@ -3617,7 +3635,7 @@ static const scui_image_t prj_image_src_00_theme_icon_15_take_photo_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5bd585,
+	.pixel.data_bin		 = 0x6b353a,
 	.pixel.size_bin		 = 0x15a5,
 };
 
@@ -3626,7 +3644,7 @@ static const scui_image_t prj_image_src_00_theme_icon_16_stopwatch_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x5beb2a,
+	.pixel.data_bin		 = 0x6b4adf,
 	.pixel.size_bin		 = 0x56b,
 };
 
@@ -3635,7 +3653,7 @@ static const scui_image_t prj_image_src_00_theme_icon_16_stopwatch_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5bf095,
+	.pixel.data_bin		 = 0x6b504a,
 	.pixel.size_bin		 = 0x8ff,
 };
 
@@ -3644,7 +3662,7 @@ static const scui_image_t prj_image_src_00_theme_icon_16_stopwatch_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5bf994,
+	.pixel.data_bin		 = 0x6b5949,
 	.pixel.size_bin		 = 0xd0f,
 };
 
@@ -3653,7 +3671,7 @@ static const scui_image_t prj_image_src_00_theme_icon_16_stopwatch_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5c06a3,
+	.pixel.data_bin		 = 0x6b6658,
 	.pixel.size_bin		 = 0x1167,
 };
 
@@ -3662,7 +3680,7 @@ static const scui_image_t prj_image_src_00_theme_icon_16_stopwatch_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5c180a,
+	.pixel.data_bin		 = 0x6b77bf,
 	.pixel.size_bin		 = 0x1696,
 };
 
@@ -3671,7 +3689,7 @@ static const scui_image_t prj_image_src_00_theme_icon_16_stopwatch_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5c2ea0,
+	.pixel.data_bin		 = 0x6b8e55,
 	.pixel.size_bin		 = 0x1c65,
 };
 
@@ -3680,7 +3698,7 @@ static const scui_image_t prj_image_src_00_theme_icon_16_stopwatch_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5c4b05,
+	.pixel.data_bin		 = 0x6baaba,
 	.pixel.size_bin		 = 0x2264,
 };
 
@@ -3689,7 +3707,7 @@ static const scui_image_t prj_image_src_00_theme_icon_16_stopwatch_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5c6d69,
+	.pixel.data_bin		 = 0x6bcd1e,
 	.pixel.size_bin		 = 0x2902,
 };
 
@@ -3698,7 +3716,7 @@ static const scui_image_t prj_image_src_00_theme_icon_16_stopwatch_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5c966b,
+	.pixel.data_bin		 = 0x6bf620,
 	.pixel.size_bin		 = 0x2fa6,
 };
 
@@ -3707,7 +3725,7 @@ static const scui_image_t prj_image_src_00_theme_icon_16_stopwatch_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5cc611,
+	.pixel.data_bin		 = 0x6c25c6,
 	.pixel.size_bin		 = 0x11a5,
 };
 
@@ -3716,7 +3734,7 @@ static const scui_image_t prj_image_src_00_theme_icon_17_alarms_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x5cd7b6,
+	.pixel.data_bin		 = 0x6c376b,
 	.pixel.size_bin		 = 0x3bb,
 };
 
@@ -3725,7 +3743,7 @@ static const scui_image_t prj_image_src_00_theme_icon_17_alarms_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5cdb71,
+	.pixel.data_bin		 = 0x6c3b26,
 	.pixel.size_bin		 = 0x5a1,
 };
 
@@ -3734,7 +3752,7 @@ static const scui_image_t prj_image_src_00_theme_icon_17_alarms_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5ce112,
+	.pixel.data_bin		 = 0x6c40c7,
 	.pixel.size_bin		 = 0x7b5,
 };
 
@@ -3743,7 +3761,7 @@ static const scui_image_t prj_image_src_00_theme_icon_17_alarms_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5ce8c7,
+	.pixel.data_bin		 = 0x6c487c,
 	.pixel.size_bin		 = 0x9fa,
 };
 
@@ -3752,7 +3770,7 @@ static const scui_image_t prj_image_src_00_theme_icon_17_alarms_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5cf2c1,
+	.pixel.data_bin		 = 0x6c5276,
 	.pixel.size_bin		 = 0xc79,
 };
 
@@ -3761,7 +3779,7 @@ static const scui_image_t prj_image_src_00_theme_icon_17_alarms_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5cff3a,
+	.pixel.data_bin		 = 0x6c5eef,
 	.pixel.size_bin		 = 0xf58,
 };
 
@@ -3770,7 +3788,7 @@ static const scui_image_t prj_image_src_00_theme_icon_17_alarms_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5d0e92,
+	.pixel.data_bin		 = 0x6c6e47,
 	.pixel.size_bin		 = 0x1208,
 };
 
@@ -3779,7 +3797,7 @@ static const scui_image_t prj_image_src_00_theme_icon_17_alarms_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5d209a,
+	.pixel.data_bin		 = 0x6c804f,
 	.pixel.size_bin		 = 0x14d0,
 };
 
@@ -3788,7 +3806,7 @@ static const scui_image_t prj_image_src_00_theme_icon_17_alarms_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5d356a,
+	.pixel.data_bin		 = 0x6c951f,
 	.pixel.size_bin		 = 0x1783,
 };
 
@@ -3797,7 +3815,7 @@ static const scui_image_t prj_image_src_00_theme_icon_17_alarms_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5d4ced,
+	.pixel.data_bin		 = 0x6caca2,
 	.pixel.size_bin		 = 0xcfe,
 };
 
@@ -3806,7 +3824,7 @@ static const scui_image_t prj_image_src_00_theme_icon_18_timer_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x5d59eb,
+	.pixel.data_bin		 = 0x6cb9a0,
 	.pixel.size_bin		 = 0x442,
 };
 
@@ -3815,7 +3833,7 @@ static const scui_image_t prj_image_src_00_theme_icon_18_timer_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5d5e2d,
+	.pixel.data_bin		 = 0x6cbde2,
 	.pixel.size_bin		 = 0x6ae,
 };
 
@@ -3824,7 +3842,7 @@ static const scui_image_t prj_image_src_00_theme_icon_18_timer_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5d64db,
+	.pixel.data_bin		 = 0x6cc490,
 	.pixel.size_bin		 = 0x961,
 };
 
@@ -3833,7 +3851,7 @@ static const scui_image_t prj_image_src_00_theme_icon_18_timer_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5d6e3c,
+	.pixel.data_bin		 = 0x6ccdf1,
 	.pixel.size_bin		 = 0xc7e,
 };
 
@@ -3842,7 +3860,7 @@ static const scui_image_t prj_image_src_00_theme_icon_18_timer_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5d7aba,
+	.pixel.data_bin		 = 0x6cda6f,
 	.pixel.size_bin		 = 0xfb0,
 };
 
@@ -3851,7 +3869,7 @@ static const scui_image_t prj_image_src_00_theme_icon_18_timer_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5d8a6a,
+	.pixel.data_bin		 = 0x6cea1f,
 	.pixel.size_bin		 = 0x13b7,
 };
 
@@ -3860,7 +3878,7 @@ static const scui_image_t prj_image_src_00_theme_icon_18_timer_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5d9e21,
+	.pixel.data_bin		 = 0x6cfdd6,
 	.pixel.size_bin		 = 0x1714,
 };
 
@@ -3869,7 +3887,7 @@ static const scui_image_t prj_image_src_00_theme_icon_18_timer_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5db535,
+	.pixel.data_bin		 = 0x6d14ea,
 	.pixel.size_bin		 = 0x1ca3,
 };
 
@@ -3878,7 +3896,7 @@ static const scui_image_t prj_image_src_00_theme_icon_18_timer_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5dd1d8,
+	.pixel.data_bin		 = 0x6d318d,
 	.pixel.size_bin		 = 0x208b,
 };
 
@@ -3887,7 +3905,7 @@ static const scui_image_t prj_image_src_00_theme_icon_18_timer_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5df263,
+	.pixel.data_bin		 = 0x6d5218,
 	.pixel.size_bin		 = 0xea0,
 };
 
@@ -3896,7 +3914,7 @@ static const scui_image_t prj_image_src_00_theme_icon_20_voice_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x5e0103,
+	.pixel.data_bin		 = 0x6d60b8,
 	.pixel.size_bin		 = 0x2e9,
 };
 
@@ -3905,7 +3923,7 @@ static const scui_image_t prj_image_src_00_theme_icon_20_voice_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5e03ec,
+	.pixel.data_bin		 = 0x6d63a1,
 	.pixel.size_bin		 = 0x51a,
 };
 
@@ -3914,7 +3932,7 @@ static const scui_image_t prj_image_src_00_theme_icon_20_voice_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5e0906,
+	.pixel.data_bin		 = 0x6d68bb,
 	.pixel.size_bin		 = 0x613,
 };
 
@@ -3923,7 +3941,7 @@ static const scui_image_t prj_image_src_00_theme_icon_20_voice_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5e0f19,
+	.pixel.data_bin		 = 0x6d6ece,
 	.pixel.size_bin		 = 0x7d0,
 };
 
@@ -3932,7 +3950,7 @@ static const scui_image_t prj_image_src_00_theme_icon_20_voice_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5e16e9,
+	.pixel.data_bin		 = 0x6d769e,
 	.pixel.size_bin		 = 0xa40,
 };
 
@@ -3941,7 +3959,7 @@ static const scui_image_t prj_image_src_00_theme_icon_20_voice_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5e2129,
+	.pixel.data_bin		 = 0x6d80de,
 	.pixel.size_bin		 = 0xbe6,
 };
 
@@ -3950,7 +3968,7 @@ static const scui_image_t prj_image_src_00_theme_icon_20_voice_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5e2d0f,
+	.pixel.data_bin		 = 0x6d8cc4,
 	.pixel.size_bin		 = 0xd2c,
 };
 
@@ -3959,7 +3977,7 @@ static const scui_image_t prj_image_src_00_theme_icon_20_voice_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5e3a3b,
+	.pixel.data_bin		 = 0x6d99f0,
 	.pixel.size_bin		 = 0xf35,
 };
 
@@ -3968,7 +3986,7 @@ static const scui_image_t prj_image_src_00_theme_icon_20_voice_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5e4970,
+	.pixel.data_bin		 = 0x6da925,
 	.pixel.size_bin		 = 0x1112,
 };
 
@@ -3977,7 +3995,7 @@ static const scui_image_t prj_image_src_00_theme_icon_20_voice_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5e5a82,
+	.pixel.data_bin		 = 0x6dba37,
 	.pixel.size_bin		 = 0x9bf,
 };
 
@@ -3986,7 +4004,7 @@ static const scui_image_t prj_image_src_00_theme_icon_21_flashlight_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x5e6441,
+	.pixel.data_bin		 = 0x6dc3f6,
 	.pixel.size_bin		 = 0x3ef,
 };
 
@@ -3995,7 +4013,7 @@ static const scui_image_t prj_image_src_00_theme_icon_21_flashlight_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5e6830,
+	.pixel.data_bin		 = 0x6dc7e5,
 	.pixel.size_bin		 = 0x60f,
 };
 
@@ -4004,7 +4022,7 @@ static const scui_image_t prj_image_src_00_theme_icon_21_flashlight_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5e6e3f,
+	.pixel.data_bin		 = 0x6dcdf4,
 	.pixel.size_bin		 = 0x8a7,
 };
 
@@ -4013,7 +4031,7 @@ static const scui_image_t prj_image_src_00_theme_icon_21_flashlight_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5e76e6,
+	.pixel.data_bin		 = 0x6dd69b,
 	.pixel.size_bin		 = 0xb5d,
 };
 
@@ -4022,7 +4040,7 @@ static const scui_image_t prj_image_src_00_theme_icon_21_flashlight_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5e8243,
+	.pixel.data_bin		 = 0x6de1f8,
 	.pixel.size_bin		 = 0xf31,
 };
 
@@ -4031,7 +4049,7 @@ static const scui_image_t prj_image_src_00_theme_icon_21_flashlight_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5e9174,
+	.pixel.data_bin		 = 0x6df129,
 	.pixel.size_bin		 = 0x12f2,
 };
 
@@ -4040,7 +4058,7 @@ static const scui_image_t prj_image_src_00_theme_icon_21_flashlight_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5ea466,
+	.pixel.data_bin		 = 0x6e041b,
 	.pixel.size_bin		 = 0x15f4,
 };
 
@@ -4049,7 +4067,7 @@ static const scui_image_t prj_image_src_00_theme_icon_21_flashlight_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5eba5a,
+	.pixel.data_bin		 = 0x6e1a0f,
 	.pixel.size_bin		 = 0x19e4,
 };
 
@@ -4058,7 +4076,7 @@ static const scui_image_t prj_image_src_00_theme_icon_21_flashlight_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5ed43e,
+	.pixel.data_bin		 = 0x6e33f3,
 	.pixel.size_bin		 = 0x1ba1,
 };
 
@@ -4067,7 +4085,7 @@ static const scui_image_t prj_image_src_00_theme_icon_21_flashlight_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5eefdf,
+	.pixel.data_bin		 = 0x6e4f94,
 	.pixel.size_bin		 = 0xbe6,
 };
 
@@ -4076,7 +4094,7 @@ static const scui_image_t prj_image_src_00_theme_icon_22_calculator_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x5efbc5,
+	.pixel.data_bin		 = 0x6e5b7a,
 	.pixel.size_bin		 = 0x3f5,
 };
 
@@ -4085,7 +4103,7 @@ static const scui_image_t prj_image_src_00_theme_icon_22_calculator_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5effba,
+	.pixel.data_bin		 = 0x6e5f6f,
 	.pixel.size_bin		 = 0x611,
 };
 
@@ -4094,7 +4112,7 @@ static const scui_image_t prj_image_src_00_theme_icon_22_calculator_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5f05cb,
+	.pixel.data_bin		 = 0x6e6580,
 	.pixel.size_bin		 = 0x84d,
 };
 
@@ -4103,7 +4121,7 @@ static const scui_image_t prj_image_src_00_theme_icon_22_calculator_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5f0e18,
+	.pixel.data_bin		 = 0x6e6dcd,
 	.pixel.size_bin		 = 0x97f,
 };
 
@@ -4112,7 +4130,7 @@ static const scui_image_t prj_image_src_00_theme_icon_22_calculator_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5f1797,
+	.pixel.data_bin		 = 0x6e774c,
 	.pixel.size_bin		 = 0xdae,
 };
 
@@ -4121,7 +4139,7 @@ static const scui_image_t prj_image_src_00_theme_icon_22_calculator_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5f2545,
+	.pixel.data_bin		 = 0x6e84fa,
 	.pixel.size_bin		 = 0x10ee,
 };
 
@@ -4130,7 +4148,7 @@ static const scui_image_t prj_image_src_00_theme_icon_22_calculator_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5f3633,
+	.pixel.data_bin		 = 0x6e95e8,
 	.pixel.size_bin		 = 0x137d,
 };
 
@@ -4139,7 +4157,7 @@ static const scui_image_t prj_image_src_00_theme_icon_22_calculator_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5f49b0,
+	.pixel.data_bin		 = 0x6ea965,
 	.pixel.size_bin		 = 0x16e9,
 };
 
@@ -4148,7 +4166,7 @@ static const scui_image_t prj_image_src_00_theme_icon_22_calculator_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5f6099,
+	.pixel.data_bin		 = 0x6ec04e,
 	.pixel.size_bin		 = 0x1a70,
 };
 
@@ -4157,7 +4175,7 @@ static const scui_image_t prj_image_src_00_theme_icon_22_calculator_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5f7b09,
+	.pixel.data_bin		 = 0x6edabe,
 	.pixel.size_bin		 = 0xeb1,
 };
 
@@ -4166,7 +4184,7 @@ static const scui_image_t prj_image_src_00_theme_icon_23_compass_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x5f89ba,
+	.pixel.data_bin		 = 0x6ee96f,
 	.pixel.size_bin		 = 0x387,
 };
 
@@ -4175,7 +4193,7 @@ static const scui_image_t prj_image_src_00_theme_icon_23_compass_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x5f8d41,
+	.pixel.data_bin		 = 0x6eecf6,
 	.pixel.size_bin		 = 0x524,
 };
 
@@ -4184,7 +4202,7 @@ static const scui_image_t prj_image_src_00_theme_icon_23_compass_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x5f9265,
+	.pixel.data_bin		 = 0x6ef21a,
 	.pixel.size_bin		 = 0x763,
 };
 
@@ -4193,7 +4211,7 @@ static const scui_image_t prj_image_src_00_theme_icon_23_compass_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x5f99c8,
+	.pixel.data_bin		 = 0x6ef97d,
 	.pixel.size_bin		 = 0x954,
 };
 
@@ -4202,7 +4220,7 @@ static const scui_image_t prj_image_src_00_theme_icon_23_compass_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x5fa31c,
+	.pixel.data_bin		 = 0x6f02d1,
 	.pixel.size_bin		 = 0xc12,
 };
 
@@ -4211,7 +4229,7 @@ static const scui_image_t prj_image_src_00_theme_icon_23_compass_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x5faf2e,
+	.pixel.data_bin		 = 0x6f0ee3,
 	.pixel.size_bin		 = 0xed4,
 };
 
@@ -4220,7 +4238,7 @@ static const scui_image_t prj_image_src_00_theme_icon_23_compass_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x5fbe02,
+	.pixel.data_bin		 = 0x6f1db7,
 	.pixel.size_bin		 = 0x1169,
 };
 
@@ -4229,7 +4247,7 @@ static const scui_image_t prj_image_src_00_theme_icon_23_compass_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x5fcf6b,
+	.pixel.data_bin		 = 0x6f2f20,
 	.pixel.size_bin		 = 0x146d,
 };
 
@@ -4238,7 +4256,7 @@ static const scui_image_t prj_image_src_00_theme_icon_23_compass_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x5fe3d8,
+	.pixel.data_bin		 = 0x6f438d,
 	.pixel.size_bin		 = 0x1692,
 };
 
@@ -4247,7 +4265,7 @@ static const scui_image_t prj_image_src_00_theme_icon_23_compass_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x5ffa6a,
+	.pixel.data_bin		 = 0x6f5a1f,
 	.pixel.size_bin		 = 0xc4c,
 };
 
@@ -4256,7 +4274,7 @@ static const scui_image_t prj_image_src_00_theme_icon_24_stress_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x6006b6,
+	.pixel.data_bin		 = 0x6f666b,
 	.pixel.size_bin		 = 0x50f,
 };
 
@@ -4265,7 +4283,7 @@ static const scui_image_t prj_image_src_00_theme_icon_24_stress_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x600bc5,
+	.pixel.data_bin		 = 0x6f6b7a,
 	.pixel.size_bin		 = 0x840,
 };
 
@@ -4274,7 +4292,7 @@ static const scui_image_t prj_image_src_00_theme_icon_24_stress_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x601405,
+	.pixel.data_bin		 = 0x6f73ba,
 	.pixel.size_bin		 = 0xbbc,
 };
 
@@ -4283,7 +4301,7 @@ static const scui_image_t prj_image_src_00_theme_icon_24_stress_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x601fc1,
+	.pixel.data_bin		 = 0x6f7f76,
 	.pixel.size_bin		 = 0xf5e,
 };
 
@@ -4292,7 +4310,7 @@ static const scui_image_t prj_image_src_00_theme_icon_24_stress_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x602f1f,
+	.pixel.data_bin		 = 0x6f8ed4,
 	.pixel.size_bin		 = 0x1414,
 };
 
@@ -4301,7 +4319,7 @@ static const scui_image_t prj_image_src_00_theme_icon_24_stress_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x604333,
+	.pixel.data_bin		 = 0x6fa2e8,
 	.pixel.size_bin		 = 0x18ad,
 };
 
@@ -4310,7 +4328,7 @@ static const scui_image_t prj_image_src_00_theme_icon_24_stress_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x605be0,
+	.pixel.data_bin		 = 0x6fbb95,
 	.pixel.size_bin		 = 0x1c91,
 };
 
@@ -4319,7 +4337,7 @@ static const scui_image_t prj_image_src_00_theme_icon_24_stress_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x607871,
+	.pixel.data_bin		 = 0x6fd826,
 	.pixel.size_bin		 = 0x2396,
 };
 
@@ -4328,7 +4346,7 @@ static const scui_image_t prj_image_src_00_theme_icon_24_stress_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x609c07,
+	.pixel.data_bin		 = 0x6ffbbc,
 	.pixel.size_bin		 = 0x27e6,
 };
 
@@ -4337,7 +4355,7 @@ static const scui_image_t prj_image_src_00_theme_icon_24_stress_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x60c3ed,
+	.pixel.data_bin		 = 0x7023a2,
 	.pixel.size_bin		 = 0x12ec,
 };
 
@@ -4346,7 +4364,7 @@ static const scui_image_t prj_image_src_00_theme_icon_25_breathe_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x60d6d9,
+	.pixel.data_bin		 = 0x70368e,
 	.pixel.size_bin		 = 0x509,
 };
 
@@ -4355,7 +4373,7 @@ static const scui_image_t prj_image_src_00_theme_icon_25_breathe_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x60dbe2,
+	.pixel.data_bin		 = 0x703b97,
 	.pixel.size_bin		 = 0x83d,
 };
 
@@ -4364,7 +4382,7 @@ static const scui_image_t prj_image_src_00_theme_icon_25_breathe_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x60e41f,
+	.pixel.data_bin		 = 0x7043d4,
 	.pixel.size_bin		 = 0xc40,
 };
 
@@ -4373,7 +4391,7 @@ static const scui_image_t prj_image_src_00_theme_icon_25_breathe_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x60f05f,
+	.pixel.data_bin		 = 0x705014,
 	.pixel.size_bin		 = 0x10a6,
 };
 
@@ -4382,7 +4400,7 @@ static const scui_image_t prj_image_src_00_theme_icon_25_breathe_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x610105,
+	.pixel.data_bin		 = 0x7060ba,
 	.pixel.size_bin		 = 0x1627,
 };
 
@@ -4391,7 +4409,7 @@ static const scui_image_t prj_image_src_00_theme_icon_25_breathe_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x61172c,
+	.pixel.data_bin		 = 0x7076e1,
 	.pixel.size_bin		 = 0x1bc9,
 };
 
@@ -4400,7 +4418,7 @@ static const scui_image_t prj_image_src_00_theme_icon_25_breathe_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x6132f5,
+	.pixel.data_bin		 = 0x7092aa,
 	.pixel.size_bin		 = 0x215c,
 };
 
@@ -4409,7 +4427,7 @@ static const scui_image_t prj_image_src_00_theme_icon_25_breathe_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x615451,
+	.pixel.data_bin		 = 0x70b406,
 	.pixel.size_bin		 = 0x28df,
 };
 
@@ -4418,7 +4436,7 @@ static const scui_image_t prj_image_src_00_theme_icon_25_breathe_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x617d30,
+	.pixel.data_bin		 = 0x70dce5,
 	.pixel.size_bin		 = 0x2f0d,
 };
 
@@ -4427,7 +4445,7 @@ static const scui_image_t prj_image_src_00_theme_icon_25_breathe_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x61ac3d,
+	.pixel.data_bin		 = 0x710bf2,
 	.pixel.size_bin		 = 0x18e8,
 };
 
@@ -4436,7 +4454,7 @@ static const scui_image_t prj_image_src_00_theme_icon_26_soprt_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x61c525,
+	.pixel.data_bin		 = 0x7124da,
 	.pixel.size_bin		 = 0x4c3,
 };
 
@@ -4445,7 +4463,7 @@ static const scui_image_t prj_image_src_00_theme_icon_26_soprt_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x61c9e8,
+	.pixel.data_bin		 = 0x71299d,
 	.pixel.size_bin		 = 0x80b,
 };
 
@@ -4454,7 +4472,7 @@ static const scui_image_t prj_image_src_00_theme_icon_26_soprt_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x61d1f3,
+	.pixel.data_bin		 = 0x7131a8,
 	.pixel.size_bin		 = 0xbc1,
 };
 
@@ -4463,7 +4481,7 @@ static const scui_image_t prj_image_src_00_theme_icon_26_soprt_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x61ddb4,
+	.pixel.data_bin		 = 0x713d69,
 	.pixel.size_bin		 = 0x1011,
 };
 
@@ -4472,7 +4490,7 @@ static const scui_image_t prj_image_src_00_theme_icon_26_soprt_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x61edc5,
+	.pixel.data_bin		 = 0x714d7a,
 	.pixel.size_bin		 = 0x152d,
 };
 
@@ -4481,7 +4499,7 @@ static const scui_image_t prj_image_src_00_theme_icon_26_soprt_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x6202f2,
+	.pixel.data_bin		 = 0x7162a7,
 	.pixel.size_bin		 = 0x1a93,
 };
 
@@ -4490,7 +4508,7 @@ static const scui_image_t prj_image_src_00_theme_icon_26_soprt_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x621d85,
+	.pixel.data_bin		 = 0x717d3a,
 	.pixel.size_bin		 = 0x20ef,
 };
 
@@ -4499,7 +4517,7 @@ static const scui_image_t prj_image_src_00_theme_icon_26_soprt_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x623e74,
+	.pixel.data_bin		 = 0x719e29,
 	.pixel.size_bin		 = 0x2787,
 };
 
@@ -4508,7 +4526,7 @@ static const scui_image_t prj_image_src_00_theme_icon_26_soprt_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x6265fb,
+	.pixel.data_bin		 = 0x71c5b0,
 	.pixel.size_bin		 = 0x2e46,
 };
 
@@ -4517,7 +4535,7 @@ static const scui_image_t prj_image_src_00_theme_icon_26_soprt_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x629441,
+	.pixel.data_bin		 = 0x71f3f6,
 	.pixel.size_bin		 = 0x1094,
 };
 
@@ -4526,7 +4544,7 @@ static const scui_image_t prj_image_src_00_theme_icon_27_sleep_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x62a4d5,
+	.pixel.data_bin		 = 0x72048a,
 	.pixel.size_bin		 = 0x422,
 };
 
@@ -4535,7 +4553,7 @@ static const scui_image_t prj_image_src_00_theme_icon_27_sleep_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x62a8f7,
+	.pixel.data_bin		 = 0x7208ac,
 	.pixel.size_bin		 = 0x68c,
 };
 
@@ -4544,7 +4562,7 @@ static const scui_image_t prj_image_src_00_theme_icon_27_sleep_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x62af83,
+	.pixel.data_bin		 = 0x720f38,
 	.pixel.size_bin		 = 0x944,
 };
 
@@ -4553,7 +4571,7 @@ static const scui_image_t prj_image_src_00_theme_icon_27_sleep_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x62b8c7,
+	.pixel.data_bin		 = 0x72187c,
 	.pixel.size_bin		 = 0xb98,
 };
 
@@ -4562,7 +4580,7 @@ static const scui_image_t prj_image_src_00_theme_icon_27_sleep_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x62c45f,
+	.pixel.data_bin		 = 0x722414,
 	.pixel.size_bin		 = 0xf35,
 };
 
@@ -4571,7 +4589,7 @@ static const scui_image_t prj_image_src_00_theme_icon_27_sleep_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x62d394,
+	.pixel.data_bin		 = 0x723349,
 	.pixel.size_bin		 = 0x12e4,
 };
 
@@ -4580,7 +4598,7 @@ static const scui_image_t prj_image_src_00_theme_icon_27_sleep_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x62e678,
+	.pixel.data_bin		 = 0x72462d,
 	.pixel.size_bin		 = 0x166f,
 };
 
@@ -4589,7 +4607,7 @@ static const scui_image_t prj_image_src_00_theme_icon_27_sleep_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x62fce7,
+	.pixel.data_bin		 = 0x725c9c,
 	.pixel.size_bin		 = 0x1ab5,
 };
 
@@ -4598,7 +4616,7 @@ static const scui_image_t prj_image_src_00_theme_icon_27_sleep_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x63179c,
+	.pixel.data_bin		 = 0x727751,
 	.pixel.size_bin		 = 0x1df0,
 };
 
@@ -4607,7 +4625,7 @@ static const scui_image_t prj_image_src_00_theme_icon_27_sleep_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x63358c,
+	.pixel.data_bin		 = 0x729541,
 	.pixel.size_bin		 = 0xef9,
 };
 
@@ -4616,7 +4634,7 @@ static const scui_image_t prj_image_src_00_theme_icon_28_period_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x634485,
+	.pixel.data_bin		 = 0x72a43a,
 	.pixel.size_bin		 = 0x549,
 };
 
@@ -4625,7 +4643,7 @@ static const scui_image_t prj_image_src_00_theme_icon_28_period_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x6349ce,
+	.pixel.data_bin		 = 0x72a983,
 	.pixel.size_bin		 = 0x8f2,
 };
 
@@ -4634,7 +4652,7 @@ static const scui_image_t prj_image_src_00_theme_icon_28_period_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x6352c0,
+	.pixel.data_bin		 = 0x72b275,
 	.pixel.size_bin		 = 0xd10,
 };
 
@@ -4643,7 +4661,7 @@ static const scui_image_t prj_image_src_00_theme_icon_28_period_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x635fd0,
+	.pixel.data_bin		 = 0x72bf85,
 	.pixel.size_bin		 = 0x11cf,
 };
 
@@ -4652,7 +4670,7 @@ static const scui_image_t prj_image_src_00_theme_icon_28_period_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x63719f,
+	.pixel.data_bin		 = 0x72d154,
 	.pixel.size_bin		 = 0x1748,
 };
 
@@ -4661,7 +4679,7 @@ static const scui_image_t prj_image_src_00_theme_icon_28_period_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x6388e7,
+	.pixel.data_bin		 = 0x72e89c,
 	.pixel.size_bin		 = 0x1dab,
 };
 
@@ -4670,7 +4688,7 @@ static const scui_image_t prj_image_src_00_theme_icon_28_period_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x63a692,
+	.pixel.data_bin		 = 0x730647,
 	.pixel.size_bin		 = 0x2363,
 };
 
@@ -4679,7 +4697,7 @@ static const scui_image_t prj_image_src_00_theme_icon_28_period_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x63c9f5,
+	.pixel.data_bin		 = 0x7329aa,
 	.pixel.size_bin		 = 0x2a87,
 };
 
@@ -4688,7 +4706,7 @@ static const scui_image_t prj_image_src_00_theme_icon_28_period_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x63f47c,
+	.pixel.data_bin		 = 0x735431,
 	.pixel.size_bin		 = 0x312b,
 };
 
@@ -4697,7 +4715,7 @@ static const scui_image_t prj_image_src_00_theme_icon_28_period_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x6425a7,
+	.pixel.data_bin		 = 0x73855c,
 	.pixel.size_bin		 = 0x1ef3,
 };
 
@@ -4706,7 +4724,7 @@ static const scui_image_t prj_image_src_00_theme_icon_29_discover_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x64449a,
+	.pixel.data_bin		 = 0x73a44f,
 	.pixel.size_bin		 = 0x3b6,
 };
 
@@ -4715,7 +4733,7 @@ static const scui_image_t prj_image_src_00_theme_icon_29_discover_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x644850,
+	.pixel.data_bin		 = 0x73a805,
 	.pixel.size_bin		 = 0x5b8,
 };
 
@@ -4724,7 +4742,7 @@ static const scui_image_t prj_image_src_00_theme_icon_29_discover_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x644e08,
+	.pixel.data_bin		 = 0x73adbd,
 	.pixel.size_bin		 = 0x80e,
 };
 
@@ -4733,7 +4751,7 @@ static const scui_image_t prj_image_src_00_theme_icon_29_discover_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x645616,
+	.pixel.data_bin		 = 0x73b5cb,
 	.pixel.size_bin		 = 0xa21,
 };
 
@@ -4742,7 +4760,7 @@ static const scui_image_t prj_image_src_00_theme_icon_29_discover_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x646037,
+	.pixel.data_bin		 = 0x73bfec,
 	.pixel.size_bin		 = 0xd40,
 };
 
@@ -4751,7 +4769,7 @@ static const scui_image_t prj_image_src_00_theme_icon_29_discover_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x646d77,
+	.pixel.data_bin		 = 0x73cd2c,
 	.pixel.size_bin		 = 0x106e,
 };
 
@@ -4760,7 +4778,7 @@ static const scui_image_t prj_image_src_00_theme_icon_29_discover_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x647de5,
+	.pixel.data_bin		 = 0x73dd9a,
 	.pixel.size_bin		 = 0x1317,
 };
 
@@ -4769,7 +4787,7 @@ static const scui_image_t prj_image_src_00_theme_icon_29_discover_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x6490fc,
+	.pixel.data_bin		 = 0x73f0b1,
 	.pixel.size_bin		 = 0x15bf,
 };
 
@@ -4778,7 +4796,7 @@ static const scui_image_t prj_image_src_00_theme_icon_29_discover_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x64a6bb,
+	.pixel.data_bin		 = 0x740670,
 	.pixel.size_bin		 = 0x195b,
 };
 
@@ -4787,7 +4805,7 @@ static const scui_image_t prj_image_src_00_theme_icon_29_discover_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x64c016,
+	.pixel.data_bin		 = 0x741fcb,
 	.pixel.size_bin		 = 0xbe7,
 };
 
@@ -4796,7 +4814,7 @@ static const scui_image_t prj_image_src_00_theme_icon_30_theme_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x64cbfd,
+	.pixel.data_bin		 = 0x742bb2,
 	.pixel.size_bin		 = 0x509,
 };
 
@@ -4805,7 +4823,7 @@ static const scui_image_t prj_image_src_00_theme_icon_30_theme_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x64d106,
+	.pixel.data_bin		 = 0x7430bb,
 	.pixel.size_bin		 = 0x841,
 };
 
@@ -4814,7 +4832,7 @@ static const scui_image_t prj_image_src_00_theme_icon_30_theme_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x64d947,
+	.pixel.data_bin		 = 0x7438fc,
 	.pixel.size_bin		 = 0xbcd,
 };
 
@@ -4823,7 +4841,7 @@ static const scui_image_t prj_image_src_00_theme_icon_30_theme_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x64e514,
+	.pixel.data_bin		 = 0x7444c9,
 	.pixel.size_bin		 = 0xf20,
 };
 
@@ -4832,7 +4850,7 @@ static const scui_image_t prj_image_src_00_theme_icon_30_theme_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x64f434,
+	.pixel.data_bin		 = 0x7453e9,
 	.pixel.size_bin		 = 0x13e5,
 };
 
@@ -4841,7 +4859,7 @@ static const scui_image_t prj_image_src_00_theme_icon_30_theme_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x650819,
+	.pixel.data_bin		 = 0x7467ce,
 	.pixel.size_bin		 = 0x18e0,
 };
 
@@ -4850,7 +4868,7 @@ static const scui_image_t prj_image_src_00_theme_icon_30_theme_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x6520f9,
+	.pixel.data_bin		 = 0x7480ae,
 	.pixel.size_bin		 = 0x1cc8,
 };
 
@@ -4859,7 +4877,7 @@ static const scui_image_t prj_image_src_00_theme_icon_30_theme_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x653dc1,
+	.pixel.data_bin		 = 0x749d76,
 	.pixel.size_bin		 = 0x225e,
 };
 
@@ -4868,7 +4886,7 @@ static const scui_image_t prj_image_src_00_theme_icon_30_theme_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x65601f,
+	.pixel.data_bin		 = 0x74bfd4,
 	.pixel.size_bin		 = 0x2635,
 };
 
@@ -4877,7 +4895,7 @@ static const scui_image_t prj_image_src_00_theme_icon_30_theme_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x658654,
+	.pixel.data_bin		 = 0x74e609,
 	.pixel.size_bin		 = 0x101b,
 };
 
@@ -4886,7 +4904,7 @@ static const scui_image_t prj_image_src_00_theme_icon_31_about_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x65966f,
+	.pixel.data_bin		 = 0x74f624,
 	.pixel.size_bin		 = 0x4a5,
 };
 
@@ -4895,7 +4913,7 @@ static const scui_image_t prj_image_src_00_theme_icon_31_about_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x659b14,
+	.pixel.data_bin		 = 0x74fac9,
 	.pixel.size_bin		 = 0x73d,
 };
 
@@ -4904,7 +4922,7 @@ static const scui_image_t prj_image_src_00_theme_icon_31_about_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x65a251,
+	.pixel.data_bin		 = 0x750206,
 	.pixel.size_bin		 = 0xa49,
 };
 
@@ -4913,7 +4931,7 @@ static const scui_image_t prj_image_src_00_theme_icon_31_about_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x65ac9a,
+	.pixel.data_bin		 = 0x750c4f,
 	.pixel.size_bin		 = 0xdee,
 };
 
@@ -4922,7 +4940,7 @@ static const scui_image_t prj_image_src_00_theme_icon_31_about_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x65ba88,
+	.pixel.data_bin		 = 0x751a3d,
 	.pixel.size_bin		 = 0x1207,
 };
 
@@ -4931,7 +4949,7 @@ static const scui_image_t prj_image_src_00_theme_icon_31_about_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x65cc8f,
+	.pixel.data_bin		 = 0x752c44,
 	.pixel.size_bin		 = 0x15b9,
 };
 
@@ -4940,7 +4958,7 @@ static const scui_image_t prj_image_src_00_theme_icon_31_about_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x65e248,
+	.pixel.data_bin		 = 0x7541fd,
 	.pixel.size_bin		 = 0x1ad5,
 };
 
@@ -4949,7 +4967,7 @@ static const scui_image_t prj_image_src_00_theme_icon_31_about_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x65fd1d,
+	.pixel.data_bin		 = 0x755cd2,
 	.pixel.size_bin		 = 0x1ff2,
 };
 
@@ -4958,7 +4976,7 @@ static const scui_image_t prj_image_src_00_theme_icon_31_about_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x661d0f,
+	.pixel.data_bin		 = 0x757cc4,
 	.pixel.size_bin		 = 0x250c,
 };
 
@@ -4967,7 +4985,7 @@ static const scui_image_t prj_image_src_00_theme_icon_31_about_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x66421b,
+	.pixel.data_bin		 = 0x75a1d0,
 	.pixel.size_bin		 = 0x1068,
 };
 
@@ -4976,7 +4994,7 @@ static const scui_image_t prj_image_src_00_theme_icon_32_brightness_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x665283,
+	.pixel.data_bin		 = 0x75b238,
 	.pixel.size_bin		 = 0x476,
 };
 
@@ -4985,7 +5003,7 @@ static const scui_image_t prj_image_src_00_theme_icon_32_brightness_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x6656f9,
+	.pixel.data_bin		 = 0x75b6ae,
 	.pixel.size_bin		 = 0x787,
 };
 
@@ -4994,7 +5012,7 @@ static const scui_image_t prj_image_src_00_theme_icon_32_brightness_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x665e80,
+	.pixel.data_bin		 = 0x75be35,
 	.pixel.size_bin		 = 0xb2c,
 };
 
@@ -5003,7 +5021,7 @@ static const scui_image_t prj_image_src_00_theme_icon_32_brightness_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x6669ac,
+	.pixel.data_bin		 = 0x75c961,
 	.pixel.size_bin		 = 0xf3a,
 };
 
@@ -5012,7 +5030,7 @@ static const scui_image_t prj_image_src_00_theme_icon_32_brightness_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x6678e6,
+	.pixel.data_bin		 = 0x75d89b,
 	.pixel.size_bin		 = 0x1401,
 };
 
@@ -5021,7 +5039,7 @@ static const scui_image_t prj_image_src_00_theme_icon_32_brightness_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x668ce7,
+	.pixel.data_bin		 = 0x75ec9c,
 	.pixel.size_bin		 = 0x1856,
 };
 
@@ -5030,7 +5048,7 @@ static const scui_image_t prj_image_src_00_theme_icon_32_brightness_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x66a53d,
+	.pixel.data_bin		 = 0x7604f2,
 	.pixel.size_bin		 = 0x1ed1,
 };
 
@@ -5039,7 +5057,7 @@ static const scui_image_t prj_image_src_00_theme_icon_32_brightness_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x66c40e,
+	.pixel.data_bin		 = 0x7623c3,
 	.pixel.size_bin		 = 0x24a5,
 };
 
@@ -5048,7 +5066,7 @@ static const scui_image_t prj_image_src_00_theme_icon_32_brightness_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x66e8b3,
+	.pixel.data_bin		 = 0x764868,
 	.pixel.size_bin		 = 0x2a66,
 };
 
@@ -5057,7 +5075,7 @@ static const scui_image_t prj_image_src_00_theme_icon_32_brightness_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x671319,
+	.pixel.data_bin		 = 0x7672ce,
 	.pixel.size_bin		 = 0x1098,
 };
 
@@ -5066,7 +5084,7 @@ static const scui_image_t prj_image_src_00_theme_icon_33_passwoed_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x6723b1,
+	.pixel.data_bin		 = 0x768366,
 	.pixel.size_bin		 = 0x420,
 };
 
@@ -5075,7 +5093,7 @@ static const scui_image_t prj_image_src_00_theme_icon_33_passwoed_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x6727d1,
+	.pixel.data_bin		 = 0x768786,
 	.pixel.size_bin		 = 0x6a5,
 };
 
@@ -5084,7 +5102,7 @@ static const scui_image_t prj_image_src_00_theme_icon_33_passwoed_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x672e76,
+	.pixel.data_bin		 = 0x768e2b,
 	.pixel.size_bin		 = 0x975,
 };
 
@@ -5093,7 +5111,7 @@ static const scui_image_t prj_image_src_00_theme_icon_33_passwoed_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x6737eb,
+	.pixel.data_bin		 = 0x7697a0,
 	.pixel.size_bin		 = 0xcd6,
 };
 
@@ -5102,7 +5120,7 @@ static const scui_image_t prj_image_src_00_theme_icon_33_passwoed_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x6744c1,
+	.pixel.data_bin		 = 0x76a476,
 	.pixel.size_bin		 = 0x102a,
 };
 
@@ -5111,7 +5129,7 @@ static const scui_image_t prj_image_src_00_theme_icon_33_passwoed_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x6754eb,
+	.pixel.data_bin		 = 0x76b4a0,
 	.pixel.size_bin		 = 0x1481,
 };
 
@@ -5120,7 +5138,7 @@ static const scui_image_t prj_image_src_00_theme_icon_33_passwoed_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x67696c,
+	.pixel.data_bin		 = 0x76c921,
 	.pixel.size_bin		 = 0x18c7,
 };
 
@@ -5129,7 +5147,7 @@ static const scui_image_t prj_image_src_00_theme_icon_33_passwoed_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x678233,
+	.pixel.data_bin		 = 0x76e1e8,
 	.pixel.size_bin		 = 0x1d87,
 };
 
@@ -5138,7 +5156,7 @@ static const scui_image_t prj_image_src_00_theme_icon_33_passwoed_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x679fba,
+	.pixel.data_bin		 = 0x76ff6f,
 	.pixel.size_bin		 = 0x225e,
 };
 
@@ -5147,7 +5165,7 @@ static const scui_image_t prj_image_src_00_theme_icon_33_passwoed_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x67c218,
+	.pixel.data_bin		 = 0x7721cd,
 	.pixel.size_bin		 = 0xd2c,
 };
 
@@ -5156,7 +5174,7 @@ static const scui_image_t prj_image_src_00_theme_icon_34_sound_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x67cf44,
+	.pixel.data_bin		 = 0x772ef9,
 	.pixel.size_bin		 = 0x405,
 };
 
@@ -5165,7 +5183,7 @@ static const scui_image_t prj_image_src_00_theme_icon_34_sound_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x67d349,
+	.pixel.data_bin		 = 0x7732fe,
 	.pixel.size_bin		 = 0x640,
 };
 
@@ -5174,7 +5192,7 @@ static const scui_image_t prj_image_src_00_theme_icon_34_sound_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x67d989,
+	.pixel.data_bin		 = 0x77393e,
 	.pixel.size_bin		 = 0x8a2,
 };
 
@@ -5183,7 +5201,7 @@ static const scui_image_t prj_image_src_00_theme_icon_34_sound_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x67e22b,
+	.pixel.data_bin		 = 0x7741e0,
 	.pixel.size_bin		 = 0xb7c,
 };
 
@@ -5192,7 +5210,7 @@ static const scui_image_t prj_image_src_00_theme_icon_34_sound_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x67eda7,
+	.pixel.data_bin		 = 0x774d5c,
 	.pixel.size_bin		 = 0xedf,
 };
 
@@ -5201,7 +5219,7 @@ static const scui_image_t prj_image_src_00_theme_icon_34_sound_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x67fc86,
+	.pixel.data_bin		 = 0x775c3b,
 	.pixel.size_bin		 = 0x1236,
 };
 
@@ -5210,7 +5228,7 @@ static const scui_image_t prj_image_src_00_theme_icon_34_sound_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x680ebc,
+	.pixel.data_bin		 = 0x776e71,
 	.pixel.size_bin		 = 0x158e,
 };
 
@@ -5219,7 +5237,7 @@ static const scui_image_t prj_image_src_00_theme_icon_34_sound_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x68244a,
+	.pixel.data_bin		 = 0x7783ff,
 	.pixel.size_bin		 = 0x18a0,
 };
 
@@ -5228,7 +5246,7 @@ static const scui_image_t prj_image_src_00_theme_icon_34_sound_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x683cea,
+	.pixel.data_bin		 = 0x779c9f,
 	.pixel.size_bin		 = 0x1c7b,
 };
 
@@ -5237,7 +5255,7 @@ static const scui_image_t prj_image_src_00_theme_icon_34_sound_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x685965,
+	.pixel.data_bin		 = 0x77b91a,
 	.pixel.size_bin		 = 0xcc9,
 };
 
@@ -5246,7 +5264,7 @@ static const scui_image_t prj_image_src_00_theme_icon_35_time_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x68662e,
+	.pixel.data_bin		 = 0x77c5e3,
 	.pixel.size_bin		 = 0x3fa,
 };
 
@@ -5255,7 +5273,7 @@ static const scui_image_t prj_image_src_00_theme_icon_35_time_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x686a28,
+	.pixel.data_bin		 = 0x77c9dd,
 	.pixel.size_bin		 = 0x622,
 };
 
@@ -5264,7 +5282,7 @@ static const scui_image_t prj_image_src_00_theme_icon_35_time_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x68704a,
+	.pixel.data_bin		 = 0x77cfff,
 	.pixel.size_bin		 = 0x8b4,
 };
 
@@ -5273,7 +5291,7 @@ static const scui_image_t prj_image_src_00_theme_icon_35_time_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x6878fe,
+	.pixel.data_bin		 = 0x77d8b3,
 	.pixel.size_bin		 = 0xb6b,
 };
 
@@ -5282,7 +5300,7 @@ static const scui_image_t prj_image_src_00_theme_icon_35_time_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x688469,
+	.pixel.data_bin		 = 0x77e41e,
 	.pixel.size_bin		 = 0xe87,
 };
 
@@ -5291,7 +5309,7 @@ static const scui_image_t prj_image_src_00_theme_icon_35_time_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x6892f0,
+	.pixel.data_bin		 = 0x77f2a5,
 	.pixel.size_bin		 = 0x121a,
 };
 
@@ -5300,7 +5318,7 @@ static const scui_image_t prj_image_src_00_theme_icon_35_time_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x68a50a,
+	.pixel.data_bin		 = 0x7804bf,
 	.pixel.size_bin		 = 0x1509,
 };
 
@@ -5309,7 +5327,7 @@ static const scui_image_t prj_image_src_00_theme_icon_35_time_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x68ba13,
+	.pixel.data_bin		 = 0x7819c8,
 	.pixel.size_bin		 = 0x185c,
 };
 
@@ -5318,7 +5336,7 @@ static const scui_image_t prj_image_src_00_theme_icon_35_time_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x68d26f,
+	.pixel.data_bin		 = 0x783224,
 	.pixel.size_bin		 = 0x1cd1,
 };
 
@@ -5327,7 +5345,7 @@ static const scui_image_t prj_image_src_00_theme_icon_35_time_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x68ef40,
+	.pixel.data_bin		 = 0x784ef5,
 	.pixel.size_bin		 = 0xbef,
 };
 
@@ -5336,7 +5354,7 @@ static const scui_image_t prj_image_src_00_theme_icon_37_dnd_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x68fb2f,
+	.pixel.data_bin		 = 0x785ae4,
 	.pixel.size_bin		 = 0x39b,
 };
 
@@ -5345,7 +5363,7 @@ static const scui_image_t prj_image_src_00_theme_icon_37_dnd_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x68feca,
+	.pixel.data_bin		 = 0x785e7f,
 	.pixel.size_bin		 = 0x53d,
 };
 
@@ -5354,7 +5372,7 @@ static const scui_image_t prj_image_src_00_theme_icon_37_dnd_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x690407,
+	.pixel.data_bin		 = 0x7863bc,
 	.pixel.size_bin		 = 0x781,
 };
 
@@ -5363,7 +5381,7 @@ static const scui_image_t prj_image_src_00_theme_icon_37_dnd_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x690b88,
+	.pixel.data_bin		 = 0x786b3d,
 	.pixel.size_bin		 = 0x96c,
 };
 
@@ -5372,7 +5390,7 @@ static const scui_image_t prj_image_src_00_theme_icon_37_dnd_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x6914f4,
+	.pixel.data_bin		 = 0x7874a9,
 	.pixel.size_bin		 = 0xbee,
 };
 
@@ -5381,7 +5399,7 @@ static const scui_image_t prj_image_src_00_theme_icon_37_dnd_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x6920e2,
+	.pixel.data_bin		 = 0x788097,
 	.pixel.size_bin		 = 0xeb1,
 };
 
@@ -5390,7 +5408,7 @@ static const scui_image_t prj_image_src_00_theme_icon_37_dnd_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x692f93,
+	.pixel.data_bin		 = 0x788f48,
 	.pixel.size_bin		 = 0x1146,
 };
 
@@ -5399,7 +5417,7 @@ static const scui_image_t prj_image_src_00_theme_icon_37_dnd_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x6940d9,
+	.pixel.data_bin		 = 0x78a08e,
 	.pixel.size_bin		 = 0x1401,
 };
 
@@ -5408,7 +5426,7 @@ static const scui_image_t prj_image_src_00_theme_icon_37_dnd_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x6954da,
+	.pixel.data_bin		 = 0x78b48f,
 	.pixel.size_bin		 = 0x1711,
 };
 
@@ -5417,7 +5435,7 @@ static const scui_image_t prj_image_src_00_theme_icon_37_dnd_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x696beb,
+	.pixel.data_bin		 = 0x78cba0,
 	.pixel.size_bin		 = 0xb61,
 };
 
@@ -5426,7 +5444,7 @@ static const scui_image_t prj_image_src_00_theme_icon_38_aod_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x69774c,
+	.pixel.data_bin		 = 0x78d701,
 	.pixel.size_bin		 = 0x44b,
 };
 
@@ -5435,7 +5453,7 @@ static const scui_image_t prj_image_src_00_theme_icon_38_aod_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x697b97,
+	.pixel.data_bin		 = 0x78db4c,
 	.pixel.size_bin		 = 0x6cb,
 };
 
@@ -5444,7 +5462,7 @@ static const scui_image_t prj_image_src_00_theme_icon_38_aod_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x698262,
+	.pixel.data_bin		 = 0x78e217,
 	.pixel.size_bin		 = 0x9dd,
 };
 
@@ -5453,7 +5471,7 @@ static const scui_image_t prj_image_src_00_theme_icon_38_aod_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x698c3f,
+	.pixel.data_bin		 = 0x78ebf4,
 	.pixel.size_bin		 = 0xcfd,
 };
 
@@ -5462,7 +5480,7 @@ static const scui_image_t prj_image_src_00_theme_icon_38_aod_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x69993c,
+	.pixel.data_bin		 = 0x78f8f1,
 	.pixel.size_bin		 = 0x1099,
 };
 
@@ -5471,7 +5489,7 @@ static const scui_image_t prj_image_src_00_theme_icon_38_aod_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x69a9d5,
+	.pixel.data_bin		 = 0x79098a,
 	.pixel.size_bin		 = 0x14f6,
 };
 
@@ -5480,7 +5498,7 @@ static const scui_image_t prj_image_src_00_theme_icon_38_aod_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x69becb,
+	.pixel.data_bin		 = 0x791e80,
 	.pixel.size_bin		 = 0x1919,
 };
 
@@ -5489,7 +5507,7 @@ static const scui_image_t prj_image_src_00_theme_icon_38_aod_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x69d7e4,
+	.pixel.data_bin		 = 0x793799,
 	.pixel.size_bin		 = 0x1eb7,
 };
 
@@ -5498,7 +5516,7 @@ static const scui_image_t prj_image_src_00_theme_icon_38_aod_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x69f69b,
+	.pixel.data_bin		 = 0x795650,
 	.pixel.size_bin		 = 0x2331,
 };
 
@@ -5507,7 +5525,7 @@ static const scui_image_t prj_image_src_00_theme_icon_38_aod_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x6a19cc,
+	.pixel.data_bin		 = 0x797981,
 	.pixel.size_bin		 = 0xffa,
 };
 
@@ -5516,7 +5534,7 @@ static const scui_image_t prj_image_src_00_theme_icon_39_system_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x6a29c6,
+	.pixel.data_bin		 = 0x79897b,
 	.pixel.size_bin		 = 0x512,
 };
 
@@ -5525,7 +5543,7 @@ static const scui_image_t prj_image_src_00_theme_icon_39_system_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x6a2ed8,
+	.pixel.data_bin		 = 0x798e8d,
 	.pixel.size_bin		 = 0x857,
 };
 
@@ -5534,7 +5552,7 @@ static const scui_image_t prj_image_src_00_theme_icon_39_system_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x6a372f,
+	.pixel.data_bin		 = 0x7996e4,
 	.pixel.size_bin		 = 0xc49,
 };
 
@@ -5543,7 +5561,7 @@ static const scui_image_t prj_image_src_00_theme_icon_39_system_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x6a4378,
+	.pixel.data_bin		 = 0x79a32d,
 	.pixel.size_bin		 = 0x1080,
 };
 
@@ -5552,7 +5570,7 @@ static const scui_image_t prj_image_src_00_theme_icon_39_system_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x6a53f8,
+	.pixel.data_bin		 = 0x79b3ad,
 	.pixel.size_bin		 = 0x15a3,
 };
 
@@ -5561,7 +5579,7 @@ static const scui_image_t prj_image_src_00_theme_icon_39_system_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x6a699b,
+	.pixel.data_bin		 = 0x79c950,
 	.pixel.size_bin		 = 0x1a3e,
 };
 
@@ -5570,7 +5588,7 @@ static const scui_image_t prj_image_src_00_theme_icon_39_system_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x6a83d9,
+	.pixel.data_bin		 = 0x79e38e,
 	.pixel.size_bin		 = 0x2043,
 };
 
@@ -5579,7 +5597,7 @@ static const scui_image_t prj_image_src_00_theme_icon_39_system_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x6aa41c,
+	.pixel.data_bin		 = 0x7a03d1,
 	.pixel.size_bin		 = 0x2729,
 };
 
@@ -5588,7 +5606,7 @@ static const scui_image_t prj_image_src_00_theme_icon_39_system_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x6acb45,
+	.pixel.data_bin		 = 0x7a2afa,
 	.pixel.size_bin		 = 0x2d98,
 };
 
@@ -5597,7 +5615,7 @@ static const scui_image_t prj_image_src_00_theme_icon_39_system_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x6af8dd,
+	.pixel.data_bin		 = 0x7a5892,
 	.pixel.size_bin		 = 0x131a,
 };
 
@@ -5606,7 +5624,7 @@ static const scui_image_t prj_image_src_00_theme_icon_40_down_key_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x6b0bf7,
+	.pixel.data_bin		 = 0x7a6bac,
 	.pixel.size_bin		 = 0x464,
 };
 
@@ -5615,7 +5633,7 @@ static const scui_image_t prj_image_src_00_theme_icon_40_down_key_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x6b105b,
+	.pixel.data_bin		 = 0x7a7010,
 	.pixel.size_bin		 = 0x6f5,
 };
 
@@ -5624,7 +5642,7 @@ static const scui_image_t prj_image_src_00_theme_icon_40_down_key_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x6b1750,
+	.pixel.data_bin		 = 0x7a7705,
 	.pixel.size_bin		 = 0x9ef,
 };
 
@@ -5633,7 +5651,7 @@ static const scui_image_t prj_image_src_00_theme_icon_40_down_key_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x6b213f,
+	.pixel.data_bin		 = 0x7a80f4,
 	.pixel.size_bin		 = 0xd7f,
 };
 
@@ -5642,7 +5660,7 @@ static const scui_image_t prj_image_src_00_theme_icon_40_down_key_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x6b2ebe,
+	.pixel.data_bin		 = 0x7a8e73,
 	.pixel.size_bin		 = 0x1177,
 };
 
@@ -5651,7 +5669,7 @@ static const scui_image_t prj_image_src_00_theme_icon_40_down_key_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x6b4035,
+	.pixel.data_bin		 = 0x7a9fea,
 	.pixel.size_bin		 = 0x15f6,
 };
 
@@ -5660,7 +5678,7 @@ static const scui_image_t prj_image_src_00_theme_icon_40_down_key_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x6b562b,
+	.pixel.data_bin		 = 0x7ab5e0,
 	.pixel.size_bin		 = 0x1a7e,
 };
 
@@ -5669,7 +5687,7 @@ static const scui_image_t prj_image_src_00_theme_icon_40_down_key_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x6b70a9,
+	.pixel.data_bin		 = 0x7ad05e,
 	.pixel.size_bin		 = 0x1f97,
 };
 
@@ -5678,7 +5696,7 @@ static const scui_image_t prj_image_src_00_theme_icon_40_down_key_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x6b9040,
+	.pixel.data_bin		 = 0x7aeff5,
 	.pixel.size_bin		 = 0x24ee,
 };
 
@@ -5687,7 +5705,7 @@ static const scui_image_t prj_image_src_00_theme_icon_40_down_key_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x6bb52e,
+	.pixel.data_bin		 = 0x7b14e3,
 	.pixel.size_bin		 = 0xd6c,
 };
 
@@ -5696,7 +5714,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_blood_pressure_01_00png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x6bc29a,
+	.pixel.data_bin		 = 0x7b224f,
 	.pixel.size_bin		 = 0x42e,
 };
 
@@ -5705,7 +5723,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_blood_pressure_02_01png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x6bc6c8,
+	.pixel.data_bin		 = 0x7b267d,
 	.pixel.size_bin		 = 0x68a,
 };
 
@@ -5714,7 +5732,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_blood_pressure_03_02png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x6bcd52,
+	.pixel.data_bin		 = 0x7b2d07,
 	.pixel.size_bin		 = 0x94f,
 };
 
@@ -5723,7 +5741,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_blood_pressure_04_03png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x6bd6a1,
+	.pixel.data_bin		 = 0x7b3656,
 	.pixel.size_bin		 = 0xc1f,
 };
 
@@ -5732,7 +5750,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_blood_pressure_05_04png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x6be2c0,
+	.pixel.data_bin		 = 0x7b4275,
 	.pixel.size_bin		 = 0xfb7,
 };
 
@@ -5741,7 +5759,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_blood_pressure_06_05png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x6bf277,
+	.pixel.data_bin		 = 0x7b522c,
 	.pixel.size_bin		 = 0x1393,
 };
 
@@ -5750,7 +5768,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_blood_pressure_07_06png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x6c060a,
+	.pixel.data_bin		 = 0x7b65bf,
 	.pixel.size_bin		 = 0x1708,
 };
 
@@ -5759,7 +5777,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_blood_pressure_08_07png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x6c1d12,
+	.pixel.data_bin		 = 0x7b7cc7,
 	.pixel.size_bin		 = 0x1ae2,
 };
 
@@ -5768,7 +5786,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_blood_pressure_09_08png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x6c37f4,
+	.pixel.data_bin		 = 0x7b97a9,
 	.pixel.size_bin		 = 0x1ee2,
 };
 
@@ -5777,7 +5795,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_blood_pressure_10_09bmp
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x6c56d6,
+	.pixel.data_bin		 = 0x7bb68b,
 	.pixel.size_bin		 = 0xd92,
 };
 
@@ -5786,7 +5804,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_mood_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x6c6468,
+	.pixel.data_bin		 = 0x7bc41d,
 	.pixel.size_bin		 = 0x390,
 };
 
@@ -5795,7 +5813,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_mood_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x6c67f8,
+	.pixel.data_bin		 = 0x7bc7ad,
 	.pixel.size_bin		 = 0x566,
 };
 
@@ -5804,7 +5822,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_mood_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x6c6d5e,
+	.pixel.data_bin		 = 0x7bcd13,
 	.pixel.size_bin		 = 0x73c,
 };
 
@@ -5813,7 +5831,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_mood_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x6c749a,
+	.pixel.data_bin		 = 0x7bd44f,
 	.pixel.size_bin		 = 0x905,
 };
 
@@ -5822,7 +5840,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_mood_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x6c7d9f,
+	.pixel.data_bin		 = 0x7bdd54,
 	.pixel.size_bin		 = 0xb55,
 };
 
@@ -5831,7 +5849,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_mood_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x6c88f4,
+	.pixel.data_bin		 = 0x7be8a9,
 	.pixel.size_bin		 = 0xdac,
 };
 
@@ -5840,7 +5858,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_mood_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x6c96a0,
+	.pixel.data_bin		 = 0x7bf655,
 	.pixel.size_bin		 = 0xf00,
 };
 
@@ -5849,7 +5867,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_mood_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x6ca5a0,
+	.pixel.data_bin		 = 0x7c0555,
 	.pixel.size_bin		 = 0x116a,
 };
 
@@ -5858,7 +5876,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_mood_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x6cb70a,
+	.pixel.data_bin		 = 0x7c16bf,
 	.pixel.size_bin		 = 0x13df,
 };
 
@@ -5867,7 +5885,7 @@ static const scui_image_t prj_image_src_00_theme_icon_41_mood_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x6ccae9,
+	.pixel.data_bin		 = 0x7c2a9e,
 	.pixel.size_bin		 = 0xbbe,
 };
 
@@ -5876,7 +5894,7 @@ static const scui_image_t prj_image_src_00_theme_icon_42_measurement_01_00png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0x6cd6a7,
+	.pixel.data_bin		 = 0x7c365c,
 	.pixel.size_bin		 = 0x3ba,
 };
 
@@ -5885,7 +5903,7 @@ static const scui_image_t prj_image_src_00_theme_icon_42_measurement_02_01png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0x6cda61,
+	.pixel.data_bin		 = 0x7c3a16,
 	.pixel.size_bin		 = 0x5c5,
 };
 
@@ -5894,7 +5912,7 @@ static const scui_image_t prj_image_src_00_theme_icon_42_measurement_03_02png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x6ce026,
+	.pixel.data_bin		 = 0x7c3fdb,
 	.pixel.size_bin		 = 0x827,
 };
 
@@ -5903,7 +5921,7 @@ static const scui_image_t prj_image_src_00_theme_icon_42_measurement_04_03png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x6ce84d,
+	.pixel.data_bin		 = 0x7c4802,
 	.pixel.size_bin		 = 0xa99,
 };
 
@@ -5912,7 +5930,7 @@ static const scui_image_t prj_image_src_00_theme_icon_42_measurement_05_04png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x6cf2e6,
+	.pixel.data_bin		 = 0x7c529b,
 	.pixel.size_bin		 = 0xd47,
 };
 
@@ -5921,7 +5939,7 @@ static const scui_image_t prj_image_src_00_theme_icon_42_measurement_06_05png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0x6d002d,
+	.pixel.data_bin		 = 0x7c5fe2,
 	.pixel.size_bin		 = 0x10d4,
 };
 
@@ -5930,7 +5948,7 @@ static const scui_image_t prj_image_src_00_theme_icon_42_measurement_07_06png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0x6d1101,
+	.pixel.data_bin		 = 0x7c70b6,
 	.pixel.size_bin		 = 0x1425,
 };
 
@@ -5939,7 +5957,7 @@ static const scui_image_t prj_image_src_00_theme_icon_42_measurement_08_07png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x6d2526,
+	.pixel.data_bin		 = 0x7c84db,
 	.pixel.size_bin		 = 0x164c,
 };
 
@@ -5948,7 +5966,7 @@ static const scui_image_t prj_image_src_00_theme_icon_42_measurement_09_08png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x6d3b72,
+	.pixel.data_bin		 = 0x7c9b27,
 	.pixel.size_bin		 = 0x1ad1,
 };
 
@@ -5957,7 +5975,7 @@ static const scui_image_t prj_image_src_00_theme_icon_42_measurement_10_09bmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x76,
-	.pixel.data_bin		 = 0x6d5643,
+	.pixel.data_bin		 = 0x7cb5f8,
 	.pixel.size_bin		 = 0xc45,
 };
 
@@ -5966,7 +5984,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_aipng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6d6288,
+	.pixel.data_bin		 = 0x7cc23d,
 	.pixel.size_bin		 = 0x515d,
 };
 
@@ -5975,7 +5993,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_alipaypng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6db3e5,
+	.pixel.data_bin		 = 0x7d139a,
 	.pixel.size_bin		 = 0x416f,
 };
 
@@ -5984,7 +6002,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_baidupng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6df554,
+	.pixel.data_bin		 = 0x7d5509,
 	.pixel.size_bin		 = 0x3907,
 };
 
@@ -5993,7 +6011,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_bookpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6e2e5b,
+	.pixel.data_bin		 = 0x7d8e10,
 	.pixel.size_bin		 = 0x4139,
 };
 
@@ -6002,7 +6020,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_bppng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6e6f94,
+	.pixel.data_bin		 = 0x7dcf49,
 	.pixel.size_bin		 = 0x3b8a,
 };
 
@@ -6011,7 +6029,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_breathepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6eab1e,
+	.pixel.data_bin		 = 0x7e0ad3,
 	.pixel.size_bin		 = 0x4578,
 };
 
@@ -6020,7 +6038,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_calculatorpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6ef096,
+	.pixel.data_bin		 = 0x7e504b,
 	.pixel.size_bin		 = 0x3cf6,
 };
 
@@ -6029,7 +6047,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_calendarpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6f2d8c,
+	.pixel.data_bin		 = 0x7e8d41,
 	.pixel.size_bin		 = 0x392c,
 };
 
@@ -6038,7 +6056,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_camerapng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6f66b8,
+	.pixel.data_bin		 = 0x7ec66d,
 	.pixel.size_bin		 = 0x411a,
 };
 
@@ -6047,7 +6065,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_cardpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6fa7d2,
+	.pixel.data_bin		 = 0x7f0787,
 	.pixel.size_bin		 = 0x3676,
 };
 
@@ -6056,7 +6074,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_clockpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x6fde48,
+	.pixel.data_bin		 = 0x7f3dfd,
 	.pixel.size_bin		 = 0x3fef,
 };
 
@@ -6065,7 +6083,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_compasspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x701e37,
+	.pixel.data_bin		 = 0x7f7dec,
 	.pixel.size_bin		 = 0x3f7b,
 };
 
@@ -6074,7 +6092,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_contactspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x705db2,
+	.pixel.data_bin		 = 0x7fbd67,
 	.pixel.size_bin		 = 0x3ac6,
 };
 
@@ -6083,7 +6101,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_datapng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x709878,
+	.pixel.data_bin		 = 0x7ff82d,
 	.pixel.size_bin		 = 0x4585,
 };
 
@@ -6092,7 +6110,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_gamepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x70ddfd,
+	.pixel.data_bin		 = 0x803db2,
 	.pixel.size_bin		 = 0x3bce,
 };
 
@@ -6101,7 +6119,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_heartratepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x7119cb,
+	.pixel.data_bin		 = 0x807980,
 	.pixel.size_bin		 = 0x3ce6,
 };
 
@@ -6110,7 +6128,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_lefunpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x7156b1,
+	.pixel.data_bin		 = 0x80b666,
 	.pixel.size_bin		 = 0x4545,
 };
 
@@ -6119,7 +6137,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_lefunAIpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x719bf6,
+	.pixel.data_bin		 = 0x80fbab,
 	.pixel.size_bin		 = 0x4724,
 };
 
@@ -6128,7 +6146,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_messagepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x71e31a,
+	.pixel.data_bin		 = 0x8142cf,
 	.pixel.size_bin		 = 0x40c3,
 };
 
@@ -6137,7 +6155,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_musicpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x7223dd,
+	.pixel.data_bin		 = 0x818392,
 	.pixel.size_bin		 = 0x3c3c,
 };
 
@@ -6146,7 +6164,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_passwordpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x726019,
+	.pixel.data_bin		 = 0x81bfce,
 	.pixel.size_bin		 = 0x3ad8,
 };
 
@@ -6155,7 +6173,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_phonepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x729af1,
+	.pixel.data_bin		 = 0x81faa6,
 	.pixel.size_bin		 = 0x42e1,
 };
 
@@ -6164,7 +6182,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_photopng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x72ddd2,
+	.pixel.data_bin		 = 0x823d87,
 	.pixel.size_bin		 = 0x3ce3,
 };
 
@@ -6173,7 +6191,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_physiologypng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x731ab5,
+	.pixel.data_bin		 = 0x827a6a,
 	.pixel.size_bin		 = 0x46c8,
 };
 
@@ -6182,7 +6200,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_pressurepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x73617d,
+	.pixel.data_bin		 = 0x82c132,
 	.pixel.size_bin		 = 0x381c,
 };
 
@@ -6191,7 +6209,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_recordingpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x739999,
+	.pixel.data_bin		 = 0x82f94e,
 	.pixel.size_bin		 = 0x4165,
 };
 
@@ -6200,7 +6218,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_restartpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x73dafe,
+	.pixel.data_bin		 = 0x833ab3,
 	.pixel.size_bin		 = 0x4a11,
 };
 
@@ -6209,7 +6227,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_restorepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x74250f,
+	.pixel.data_bin		 = 0x8384c4,
 	.pixel.size_bin		 = 0x3cb5,
 };
 
@@ -6218,7 +6236,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_setpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x7461c4,
+	.pixel.data_bin		 = 0x83c179,
 	.pixel.size_bin		 = 0x45bc,
 };
 
@@ -6227,7 +6245,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_Shutdownpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x74a780,
+	.pixel.data_bin		 = 0x840735,
 	.pixel.size_bin		 = 0x4072,
 };
 
@@ -6236,7 +6254,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_sleeppng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x74e7f2,
+	.pixel.data_bin		 = 0x8447a7,
 	.pixel.size_bin		 = 0x3ebe,
 };
 
@@ -6245,7 +6263,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_Somatosensorypng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x7526b0,
+	.pixel.data_bin		 = 0x848665,
 	.pixel.size_bin		 = 0x3944,
 };
 
@@ -6254,7 +6272,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_spo2png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x755ff4,
+	.pixel.data_bin		 = 0x84bfa9,
 	.pixel.size_bin		 = 0x3c7d,
 };
 
@@ -6263,7 +6281,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_sportpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x759c71,
+	.pixel.data_bin		 = 0x84fc26,
 	.pixel.size_bin		 = 0x3a73,
 };
 
@@ -6272,7 +6290,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_sport_recordpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x75d6e4,
+	.pixel.data_bin		 = 0x853699,
 	.pixel.size_bin		 = 0x3ade,
 };
 
@@ -6281,7 +6299,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_Stopwatchpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x7611c2,
+	.pixel.data_bin		 = 0x857177,
 	.pixel.size_bin		 = 0x3f2f,
 };
 
@@ -6290,7 +6308,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_styluspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x7650f1,
+	.pixel.data_bin		 = 0x85b0a6,
 	.pixel.size_bin		 = 0x3800,
 };
 
@@ -6299,7 +6317,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_timerpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x7688f1,
+	.pixel.data_bin		 = 0x85e8a6,
 	.pixel.size_bin		 = 0x412b,
 };
 
@@ -6308,7 +6326,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_videopng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x76ca1c,
+	.pixel.data_bin		 = 0x8629d1,
 	.pixel.size_bin		 = 0x380d,
 };
 
@@ -6317,7 +6335,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_walletpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x770229,
+	.pixel.data_bin		 = 0x8661de,
 	.pixel.size_bin		 = 0x3aa0,
 };
 
@@ -6326,7 +6344,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_watchfacepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x773cc9,
+	.pixel.data_bin		 = 0x869c7e,
 	.pixel.size_bin		 = 0x4858,
 };
 
@@ -6335,7 +6353,7 @@ static const scui_image_t prj_image_src_00_theme_menu_menu_weatherpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6e,
-	.pixel.data_bin		 = 0x778521,
+	.pixel.data_bin		 = 0x86e4d6,
 	.pixel.size_bin		 = 0x3d28,
 };
 
@@ -6344,7 +6362,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77c249,
+	.pixel.data_bin		 = 0x8721fe,
 	.pixel.size_bin		 = 0x5f,
 };
 
@@ -6353,7 +6371,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77c2a8,
+	.pixel.data_bin		 = 0x87225d,
 	.pixel.size_bin		 = 0x382,
 };
 
@@ -6362,7 +6380,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77c62a,
+	.pixel.data_bin		 = 0x8725df,
 	.pixel.size_bin		 = 0x4b8,
 };
 
@@ -6371,7 +6389,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77cae2,
+	.pixel.data_bin		 = 0x872a97,
 	.pixel.size_bin		 = 0x52e,
 };
 
@@ -6380,7 +6398,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77d010,
+	.pixel.data_bin		 = 0x872fc5,
 	.pixel.size_bin		 = 0x5a4,
 };
 
@@ -6389,7 +6407,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77d5b4,
+	.pixel.data_bin		 = 0x873569,
 	.pixel.size_bin		 = 0x5e9,
 };
 
@@ -6398,7 +6416,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77db9d,
+	.pixel.data_bin		 = 0x873b52,
 	.pixel.size_bin		 = 0x63b,
 };
 
@@ -6407,7 +6425,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77e1d8,
+	.pixel.data_bin		 = 0x87418d,
 	.pixel.size_bin		 = 0x682,
 };
 
@@ -6416,7 +6434,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77e85a,
+	.pixel.data_bin		 = 0x87480f,
 	.pixel.size_bin		 = 0x6b5,
 };
 
@@ -6425,7 +6443,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77ef0f,
+	.pixel.data_bin		 = 0x874ec4,
 	.pixel.size_bin		 = 0x6e6,
 };
 
@@ -6434,7 +6452,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77f5f5,
+	.pixel.data_bin		 = 0x8755aa,
 	.pixel.size_bin		 = 0x709,
 };
 
@@ -6443,7 +6461,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x77fcfe,
+	.pixel.data_bin		 = 0x875cb3,
 	.pixel.size_bin		 = 0x73b,
 };
 
@@ -6452,7 +6470,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x780439,
+	.pixel.data_bin		 = 0x8763ee,
 	.pixel.size_bin		 = 0x749,
 };
 
@@ -6461,7 +6479,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x780b82,
+	.pixel.data_bin		 = 0x876b37,
 	.pixel.size_bin		 = 0x77c,
 };
 
@@ -6470,7 +6488,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_15_14bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x7812fe,
+	.pixel.data_bin		 = 0x8772b3,
 	.pixel.size_bin		 = 0x78b,
 };
 
@@ -6479,7 +6497,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_16_15bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x781a89,
+	.pixel.data_bin		 = 0x877a3e,
 	.pixel.size_bin		 = 0x799,
 };
 
@@ -6488,7 +6506,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_17_16bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x782222,
+	.pixel.data_bin		 = 0x8781d7,
 	.pixel.size_bin		 = 0x7b7,
 };
 
@@ -6497,7 +6515,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_18_17bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x7829d9,
+	.pixel.data_bin		 = 0x87898e,
 	.pixel.size_bin		 = 0x7ca,
 };
 
@@ -6506,7 +6524,7 @@ static const scui_image_t prj_image_src_01_kaiji_icon_logo_19_18bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0x7831a3,
+	.pixel.data_bin		 = 0x879158,
 	.pixel.size_bin		 = 0x7c0,
 };
 
@@ -6515,7 +6533,7 @@ static const scui_image_t prj_image_src_02_weather_01_dot_1png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x783963,
+	.pixel.data_bin		 = 0x879918,
 	.pixel.size_bin		 = 0x187,
 };
 
@@ -6524,7 +6542,7 @@ static const scui_image_t prj_image_src_02_weather_02_dot_2png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x8,
-	.pixel.data_bin		 = 0x783aea,
+	.pixel.data_bin		 = 0x879a9f,
 	.pixel.size_bin		 = 0xf6,
 };
 
@@ -6533,7 +6551,7 @@ static const scui_image_t prj_image_src_02_weather_03_no_databmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x7a,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0x783be0,
+	.pixel.data_bin		 = 0x879b95,
 	.pixel.size_bin		 = 0x667,
 };
 
@@ -6542,7 +6560,7 @@ static const scui_image_t prj_image_src_02_weather_04_ring_air_qualitybmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0xf6,
-	.pixel.data_bin		 = 0x784247,
+	.pixel.data_bin		 = 0x87a1fc,
 	.pixel.size_bin		 = 0xc1f,
 };
 
@@ -6551,7 +6569,7 @@ static const scui_image_t prj_image_src_02_weather_05_ring_uvbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0xf6,
-	.pixel.data_bin		 = 0x784e66,
+	.pixel.data_bin		 = 0x87ae1b,
 	.pixel.size_bin		 = 0x102f,
 };
 
@@ -6560,7 +6578,7 @@ static const scui_image_t prj_image_src_02_weather_06_arrow_downbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x3a,
 	.pixel.height		 = 0x3a,
-	.pixel.data_bin		 = 0x785e95,
+	.pixel.data_bin		 = 0x87be4a,
 	.pixel.size_bin		 = 0x28c,
 };
 
@@ -6569,7 +6587,7 @@ static const scui_image_t prj_image_src_02_weather_07_arrow_upbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x3a,
 	.pixel.height		 = 0x3a,
-	.pixel.data_bin		 = 0x786121,
+	.pixel.data_bin		 = 0x87c0d6,
 	.pixel.size_bin		 = 0x27f,
 };
 
@@ -6578,7 +6596,7 @@ static const scui_image_t prj_image_src_02_weather_08_linebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x174,
 	.pixel.height		 = 0x2,
-	.pixel.data_bin		 = 0x7863a0,
+	.pixel.data_bin		 = 0x87c355,
 	.pixel.size_bin		 = 0x28,
 };
 
@@ -6587,7 +6605,7 @@ static const scui_image_t prj_image_src_02_weather_char_now_01_enbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x1a,
-	.pixel.data_bin		 = 0x7863c8,
+	.pixel.data_bin		 = 0x87c37d,
 	.pixel.size_bin		 = 0x30b,
 };
 
@@ -6596,7 +6614,7 @@ static const scui_image_t prj_image_src_02_weather_char_now_02_zhbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x1a,
-	.pixel.data_bin		 = 0x7866d3,
+	.pixel.data_bin		 = 0x87c688,
 	.pixel.size_bin		 = 0x331,
 };
 
@@ -6605,7 +6623,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_00_sun_01_00
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x786a04,
+	.pixel.data_bin		 = 0x87c9b9,
 	.pixel.size_bin		 = 0x4a9,
 };
 
@@ -6614,7 +6632,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_00_sun_02_01
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x786ead,
+	.pixel.data_bin		 = 0x87ce62,
 	.pixel.size_bin		 = 0xabd,
 };
 
@@ -6623,7 +6641,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_00_sun_03_02
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78796a,
+	.pixel.data_bin		 = 0x87d91f,
 	.pixel.size_bin		 = 0xac3,
 };
 
@@ -6632,7 +6650,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_00_sun_04_03
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78842d,
+	.pixel.data_bin		 = 0x87e3e2,
 	.pixel.size_bin		 = 0xb04,
 };
 
@@ -6641,7 +6659,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_00_sun_05_04
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x788f31,
+	.pixel.data_bin		 = 0x87eee6,
 	.pixel.size_bin		 = 0xafc,
 };
 
@@ -6650,7 +6668,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_00_sun_06_05
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x789a2d,
+	.pixel.data_bin		 = 0x87f9e2,
 	.pixel.size_bin		 = 0xab9,
 };
 
@@ -6659,7 +6677,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_00_sun_07_06
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78a4e6,
+	.pixel.data_bin		 = 0x88049b,
 	.pixel.size_bin		 = 0xab0,
 };
 
@@ -6668,7 +6686,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_01_05_thunde
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78af96,
+	.pixel.data_bin		 = 0x880f4b,
 	.pixel.size_bin		 = 0x8d2,
 };
 
@@ -6677,7 +6695,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_01_cloudy_01
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78b868,
+	.pixel.data_bin		 = 0x88181d,
 	.pixel.size_bin		 = 0x6f3,
 };
 
@@ -6686,7 +6704,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_01_cloudy_02
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78bf5b,
+	.pixel.data_bin		 = 0x881f10,
 	.pixel.size_bin		 = 0x7af,
 };
 
@@ -6695,7 +6713,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_01_cloudy_03
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78c70a,
+	.pixel.data_bin		 = 0x8826bf,
 	.pixel.size_bin		 = 0x7d1,
 };
 
@@ -6704,7 +6722,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_01_cloudy_04
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78cedb,
+	.pixel.data_bin		 = 0x882e90,
 	.pixel.size_bin		 = 0x7ea,
 };
 
@@ -6713,7 +6731,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_01_cloudy_05
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78d6c5,
+	.pixel.data_bin		 = 0x88367a,
 	.pixel.size_bin		 = 0x7e1,
 };
 
@@ -6722,7 +6740,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_01_cloudy_06
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78dea6,
+	.pixel.data_bin		 = 0x883e5b,
 	.pixel.size_bin		 = 0x7cc,
 };
 
@@ -6731,7 +6749,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_01_cloudy_07
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78e672,
+	.pixel.data_bin		 = 0x884627,
 	.pixel.size_bin		 = 0x7d8,
 };
 
@@ -6740,7 +6758,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_06_sleetb
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78ee4a,
+	.pixel.data_bin		 = 0x884dff,
 	.pixel.size_bin		 = 0x6de,
 };
 
@@ -6749,7 +6767,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78f528,
+	.pixel.data_bin		 = 0x8854dd,
 	.pixel.size_bin		 = 0x63f,
 };
 
@@ -6758,7 +6776,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x78fb67,
+	.pixel.data_bin		 = 0x885b1c,
 	.pixel.size_bin		 = 0x62a,
 };
 
@@ -6767,7 +6785,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x790191,
+	.pixel.data_bin		 = 0x886146,
 	.pixel.size_bin		 = 0x5fa,
 };
 
@@ -6776,7 +6794,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79078b,
+	.pixel.data_bin		 = 0x886740,
 	.pixel.size_bin		 = 0x5cd,
 };
 
@@ -6785,7 +6803,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x790d58,
+	.pixel.data_bin		 = 0x886d0d,
 	.pixel.size_bin		 = 0x576,
 };
 
@@ -6794,7 +6812,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7912ce,
+	.pixel.data_bin		 = 0x887283,
 	.pixel.size_bin		 = 0x5a1,
 };
 
@@ -6803,7 +6821,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79186f,
+	.pixel.data_bin		 = 0x887824,
 	.pixel.size_bin		 = 0x5c9,
 };
 
@@ -6812,7 +6830,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x791e38,
+	.pixel.data_bin		 = 0x887ded,
 	.pixel.size_bin		 = 0x5e0,
 };
 
@@ -6821,7 +6839,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x792418,
+	.pixel.data_bin		 = 0x8883cd,
 	.pixel.size_bin		 = 0x5c9,
 };
 
@@ -6830,7 +6848,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7929e1,
+	.pixel.data_bin		 = 0x888996,
 	.pixel.size_bin		 = 0x5a1,
 };
 
@@ -6839,7 +6857,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x792f82,
+	.pixel.data_bin		 = 0x888f37,
 	.pixel.size_bin		 = 0x576,
 };
 
@@ -6848,7 +6866,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7934f8,
+	.pixel.data_bin		 = 0x8894ad,
 	.pixel.size_bin		 = 0x5cd,
 };
 
@@ -6857,7 +6875,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x793ac5,
+	.pixel.data_bin		 = 0x889a7a,
 	.pixel.size_bin		 = 0x5fa,
 };
 
@@ -6866,7 +6884,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_02_negative_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7940bf,
+	.pixel.data_bin		 = 0x88a074,
 	.pixel.size_bin		 = 0x62a,
 };
 
@@ -6875,7 +6893,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_03_08_modera
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7946e9,
+	.pixel.data_bin		 = 0x88a69e,
 	.pixel.size_bin		 = 0x72a,
 };
 
@@ -6884,7 +6902,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_03_shower_01
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x794e13,
+	.pixel.data_bin		 = 0x88adc8,
 	.pixel.size_bin		 = 0x736,
 };
 
@@ -6893,7 +6911,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_03_shower_02
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x795549,
+	.pixel.data_bin		 = 0x88b4fe,
 	.pixel.size_bin		 = 0x82d,
 };
 
@@ -6902,7 +6920,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_03_shower_03
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x795d76,
+	.pixel.data_bin		 = 0x88bd2b,
 	.pixel.size_bin		 = 0x8f2,
 };
 
@@ -6911,7 +6929,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_03_shower_04
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x796668,
+	.pixel.data_bin		 = 0x88c61d,
 	.pixel.size_bin		 = 0x925,
 };
 
@@ -6920,7 +6938,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_03_shower_05
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x796f8d,
+	.pixel.data_bin		 = 0x88cf42,
 	.pixel.size_bin		 = 0x97c,
 };
 
@@ -6929,7 +6947,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_03_shower_06
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x797909,
+	.pixel.data_bin		 = 0x88d8be,
 	.pixel.size_bin		 = 0x945,
 };
 
@@ -6938,7 +6956,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_03_shower_07
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79824e,
+	.pixel.data_bin		 = 0x88e203,
 	.pixel.size_bin		 = 0x876,
 };
 
@@ -6947,7 +6965,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_04_09_heavy_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x798ac4,
+	.pixel.data_bin		 = 0x88ea79,
 	.pixel.size_bin		 = 0x798,
 };
 
@@ -6956,7 +6974,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_04_thunderst
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79925c,
+	.pixel.data_bin		 = 0x88f211,
 	.pixel.size_bin		 = 0x49b,
 };
 
@@ -6965,7 +6983,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_04_thunderst
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7996f7,
+	.pixel.data_bin		 = 0x88f6ac,
 	.pixel.size_bin		 = 0x533,
 };
 
@@ -6974,7 +6992,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_04_thunderst
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x799c2a,
+	.pixel.data_bin		 = 0x88fbdf,
 	.pixel.size_bin		 = 0x577,
 };
 
@@ -6983,7 +7001,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_04_thunderst
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79a1a1,
+	.pixel.data_bin		 = 0x890156,
 	.pixel.size_bin		 = 0x658,
 };
 
@@ -6992,7 +7010,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_04_thunderst
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79a7f9,
+	.pixel.data_bin		 = 0x8907ae,
 	.pixel.size_bin		 = 0x99b,
 };
 
@@ -7001,7 +7019,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_04_thunderst
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79b194,
+	.pixel.data_bin		 = 0x891149,
 	.pixel.size_bin		 = 0x62f,
 };
 
@@ -7010,7 +7028,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_04_thunderst
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79b7c3,
+	.pixel.data_bin		 = 0x891778,
 	.pixel.size_bin		 = 0x9ca,
 };
 
@@ -7019,7 +7037,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_04_thunderst
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79c18d,
+	.pixel.data_bin		 = 0x892142,
 	.pixel.size_bin		 = 0x915,
 };
 
@@ -7028,7 +7046,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_05_11_heavy_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79caa2,
+	.pixel.data_bin		 = 0x892a57,
 	.pixel.size_bin		 = 0x6d0,
 };
 
@@ -7037,7 +7055,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_06_12_torren
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79d172,
+	.pixel.data_bin		 = 0x893127,
 	.pixel.size_bin		 = 0x746,
 };
 
@@ -7046,7 +7064,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_07_13_snow_s
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79d8b8,
+	.pixel.data_bin		 = 0x89386d,
 	.pixel.size_bin		 = 0x7eb,
 };
 
@@ -7055,7 +7073,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_07_light_rai
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79e0a3,
+	.pixel.data_bin		 = 0x894058,
 	.pixel.size_bin		 = 0x49b,
 };
 
@@ -7064,7 +7082,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_07_light_rai
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79e53e,
+	.pixel.data_bin		 = 0x8944f3,
 	.pixel.size_bin		 = 0x51e,
 };
 
@@ -7073,7 +7091,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_07_light_rai
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79ea5c,
+	.pixel.data_bin		 = 0x894a11,
 	.pixel.size_bin		 = 0x554,
 };
 
@@ -7082,7 +7100,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_07_light_rai
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79efb0,
+	.pixel.data_bin		 = 0x894f65,
 	.pixel.size_bin		 = 0x580,
 };
 
@@ -7091,7 +7109,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_07_light_rai
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79f530,
+	.pixel.data_bin		 = 0x8954e5,
 	.pixel.size_bin		 = 0x604,
 };
 
@@ -7100,7 +7118,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_07_light_rai
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x79fb34,
+	.pixel.data_bin		 = 0x895ae9,
 	.pixel.size_bin		 = 0x5fd,
 };
 
@@ -7109,7 +7127,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_07_light_rai
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a0131,
+	.pixel.data_bin		 = 0x8960e6,
 	.pixel.size_bin		 = 0x62f,
 };
 
@@ -7118,7 +7136,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_08_15_modera
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a0760,
+	.pixel.data_bin		 = 0x896715,
 	.pixel.size_bin		 = 0x5a7,
 };
 
@@ -7127,7 +7145,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_09_16_heavy_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a0d07,
+	.pixel.data_bin		 = 0x896cbc,
 	.pixel.size_bin		 = 0x61a,
 };
 
@@ -7136,7 +7154,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_10_17_blizza
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a1321,
+	.pixel.data_bin		 = 0x8972d6,
 	.pixel.size_bin		 = 0x69b,
 };
 
@@ -7145,7 +7163,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_10_rainstorm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a19bc,
+	.pixel.data_bin		 = 0x897971,
 	.pixel.size_bin		 = 0x4c8,
 };
 
@@ -7154,7 +7172,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_10_rainstorm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a1e84,
+	.pixel.data_bin		 = 0x897e39,
 	.pixel.size_bin		 = 0x537,
 };
 
@@ -7163,7 +7181,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_10_rainstorm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a23bb,
+	.pixel.data_bin		 = 0x898370,
 	.pixel.size_bin		 = 0x618,
 };
 
@@ -7172,7 +7190,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_10_rainstorm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a29d3,
+	.pixel.data_bin		 = 0x898988,
 	.pixel.size_bin		 = 0x6ad,
 };
 
@@ -7181,7 +7199,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_10_rainstorm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a3080,
+	.pixel.data_bin		 = 0x899035,
 	.pixel.size_bin		 = 0x661,
 };
 
@@ -7190,7 +7208,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_10_rainstorm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a36e1,
+	.pixel.data_bin		 = 0x899696,
 	.pixel.size_bin		 = 0x5c5,
 };
 
@@ -7199,7 +7217,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_10_rainstorm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a3ca6,
+	.pixel.data_bin		 = 0x899c5b,
 	.pixel.size_bin		 = 0x5cd,
 };
 
@@ -7208,7 +7226,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_11_18_fogbmp
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a4273,
+	.pixel.data_bin		 = 0x89a228,
 	.pixel.size_bin		 = 0x50c,
 };
 
@@ -7217,7 +7235,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_12_19_freezi
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a477f,
+	.pixel.data_bin		 = 0x89a734,
 	.pixel.size_bin		 = 0x706,
 };
 
@@ -7226,7 +7244,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_13_20_sandst
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a4e85,
+	.pixel.data_bin		 = 0x89ae3a,
 	.pixel.size_bin		 = 0x57a,
 };
 
@@ -7235,7 +7253,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_14_21_light_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a53ff,
+	.pixel.data_bin		 = 0x89b3b4,
 	.pixel.size_bin		 = 0x6f4,
 };
 
@@ -7244,7 +7262,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_14_light_sno
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a5af3,
+	.pixel.data_bin		 = 0x89baa8,
 	.pixel.size_bin		 = 0x4c8,
 };
 
@@ -7253,7 +7271,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_14_light_sno
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a5fbb,
+	.pixel.data_bin		 = 0x89bf70,
 	.pixel.size_bin		 = 0x51c,
 };
 
@@ -7262,7 +7280,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_14_light_sno
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a64d7,
+	.pixel.data_bin		 = 0x89c48c,
 	.pixel.size_bin		 = 0x5f4,
 };
 
@@ -7271,7 +7289,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_14_light_sno
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a6acb,
+	.pixel.data_bin		 = 0x89ca80,
 	.pixel.size_bin		 = 0x682,
 };
 
@@ -7280,7 +7298,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_14_light_sno
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a714d,
+	.pixel.data_bin		 = 0x89d102,
 	.pixel.size_bin		 = 0x626,
 };
 
@@ -7289,7 +7307,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_14_light_sno
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a7773,
+	.pixel.data_bin		 = 0x89d728,
 	.pixel.size_bin		 = 0x5a3,
 };
 
@@ -7298,7 +7316,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_14_light_sno
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a7d16,
+	.pixel.data_bin		 = 0x89dccb,
 	.pixel.size_bin		 = 0x599,
 };
 
@@ -7307,7 +7325,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_15_22_modera
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a82af,
+	.pixel.data_bin		 = 0x89e264,
 	.pixel.size_bin		 = 0x778,
 };
 
@@ -7316,7 +7334,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_16_23_torren
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a8a27,
+	.pixel.data_bin		 = 0x89e9dc,
 	.pixel.size_bin		 = 0x6f1,
 };
 
@@ -7325,7 +7343,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_17_24_heavy_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a9118,
+	.pixel.data_bin		 = 0x89f0cd,
 	.pixel.size_bin		 = 0x6a9,
 };
 
@@ -7334,7 +7352,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_18_25_heavy_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a97c1,
+	.pixel.data_bin		 = 0x89f776,
 	.pixel.size_bin		 = 0x75e,
 };
 
@@ -7343,7 +7361,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_19_26_light_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7a9f1f,
+	.pixel.data_bin		 = 0x89fed4,
 	.pixel.size_bin		 = 0x574,
 };
 
@@ -7352,7 +7370,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_20_27_modera
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7aa493,
+	.pixel.data_bin		 = 0x8a0448,
 	.pixel.size_bin		 = 0x5f1,
 };
 
@@ -7361,7 +7379,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_21_28_as_big
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7aaa84,
+	.pixel.data_bin		 = 0x8a0a39,
 	.pixel.size_bin		 = 0x688,
 };
 
@@ -7370,7 +7388,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_22_29_dustbm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7ab10c,
+	.pixel.data_bin		 = 0x8a10c1,
 	.pixel.size_bin		 = 0x4a9,
 };
 
@@ -7379,7 +7397,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_23_30_jansab
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7ab5b5,
+	.pixel.data_bin		 = 0x8a156a,
 	.pixel.size_bin		 = 0x7c6,
 };
 
@@ -7388,7 +7406,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_24_31_strong
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7abd7b,
+	.pixel.data_bin		 = 0x8a1d30,
 	.pixel.size_bin		 = 0xb76,
 };
 
@@ -7397,7 +7415,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_25_32_hazebm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7ac8f1,
+	.pixel.data_bin		 = 0x8a28a6,
 	.pixel.size_bin		 = 0x96f,
 };
 
@@ -7406,7 +7424,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_big_26_33_unknow
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0x7ad260,
+	.pixel.data_bin		 = 0x8a3215,
 	.pixel.size_bin		 = 0x6e4,
 };
 
@@ -7415,7 +7433,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_01_00_sunp
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7ad944,
+	.pixel.data_bin		 = 0x8a38f9,
 	.pixel.size_bin		 = 0x43b,
 };
 
@@ -7424,7 +7442,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_02_01_clou
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7add7f,
+	.pixel.data_bin		 = 0x8a3d34,
 	.pixel.size_bin		 = 0x410,
 };
 
@@ -7433,7 +7451,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_03_02_nega
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7ae18f,
+	.pixel.data_bin		 = 0x8a4144,
 	.pixel.size_bin		 = 0x2bc,
 };
 
@@ -7442,7 +7460,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_04_03_show
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7ae44b,
+	.pixel.data_bin		 = 0x8a4400,
 	.pixel.size_bin		 = 0x51b,
 };
 
@@ -7451,7 +7469,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_05_04_thun
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7ae966,
+	.pixel.data_bin		 = 0x8a491b,
 	.pixel.size_bin		 = 0x55e,
 };
 
@@ -7460,7 +7478,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_06_05_thun
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7aeec4,
+	.pixel.data_bin		 = 0x8a4e79,
 	.pixel.size_bin		 = 0x548,
 };
 
@@ -7469,7 +7487,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_07_06_slee
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7af40c,
+	.pixel.data_bin		 = 0x8a53c1,
 	.pixel.size_bin		 = 0x425,
 };
 
@@ -7478,7 +7496,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_08_07_ligh
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7af831,
+	.pixel.data_bin		 = 0x8a57e6,
 	.pixel.size_bin		 = 0x3e0,
 };
 
@@ -7487,7 +7505,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_09_08_mode
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7afc11,
+	.pixel.data_bin		 = 0x8a5bc6,
 	.pixel.size_bin		 = 0x44e,
 };
 
@@ -7496,7 +7514,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_10_09_heav
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b005f,
+	.pixel.data_bin		 = 0x8a6014,
 	.pixel.size_bin		 = 0x4bf,
 };
 
@@ -7505,7 +7523,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_11_10_rain
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b051e,
+	.pixel.data_bin		 = 0x8a64d3,
 	.pixel.size_bin		 = 0x3e3,
 };
 
@@ -7514,7 +7532,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_12_11_heav
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b0901,
+	.pixel.data_bin		 = 0x8a68b6,
 	.pixel.size_bin		 = 0x402,
 };
 
@@ -7523,7 +7541,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_13_12_torr
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b0d03,
+	.pixel.data_bin		 = 0x8a6cb8,
 	.pixel.size_bin		 = 0x483,
 };
 
@@ -7532,7 +7550,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_14_13_snow
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b1186,
+	.pixel.data_bin		 = 0x8a713b,
 	.pixel.size_bin		 = 0x498,
 };
 
@@ -7541,7 +7559,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_15_14_ligh
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b161e,
+	.pixel.data_bin		 = 0x8a75d3,
 	.pixel.size_bin		 = 0x312,
 };
 
@@ -7550,7 +7568,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_16_15_mode
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b1930,
+	.pixel.data_bin		 = 0x8a78e5,
 	.pixel.size_bin		 = 0x34f,
 };
 
@@ -7559,7 +7577,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_17_16_heav
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b1c7f,
+	.pixel.data_bin		 = 0x8a7c34,
 	.pixel.size_bin		 = 0x394,
 };
 
@@ -7568,7 +7586,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_18_17_bliz
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b2013,
+	.pixel.data_bin		 = 0x8a7fc8,
 	.pixel.size_bin		 = 0x3d8,
 };
 
@@ -7577,7 +7595,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_19_18_fogp
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b23eb,
+	.pixel.data_bin		 = 0x8a83a0,
 	.pixel.size_bin		 = 0x357,
 };
 
@@ -7586,7 +7604,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_20_19_free
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b2742,
+	.pixel.data_bin		 = 0x8a86f7,
 	.pixel.size_bin		 = 0x433,
 };
 
@@ -7595,7 +7613,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_21_20_sand
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b2b75,
+	.pixel.data_bin		 = 0x8a8b2a,
 	.pixel.size_bin		 = 0x32d,
 };
 
@@ -7604,7 +7622,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_22_21_ligh
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b2ea2,
+	.pixel.data_bin		 = 0x8a8e57,
 	.pixel.size_bin		 = 0x448,
 };
 
@@ -7613,7 +7631,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_23_22_mode
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b32ea,
+	.pixel.data_bin		 = 0x8a929f,
 	.pixel.size_bin		 = 0x4ce,
 };
 
@@ -7622,7 +7640,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_24_23_torr
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b37b8,
+	.pixel.data_bin		 = 0x8a976d,
 	.pixel.size_bin		 = 0x44e,
 };
 
@@ -7631,7 +7649,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_25_24_heav
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b3c06,
+	.pixel.data_bin		 = 0x8a9bbb,
 	.pixel.size_bin		 = 0x3d2,
 };
 
@@ -7640,7 +7658,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_26_25_heav
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b3fd8,
+	.pixel.data_bin		 = 0x8a9f8d,
 	.pixel.size_bin		 = 0x482,
 };
 
@@ -7649,7 +7667,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_27_26_ligh
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b445a,
+	.pixel.data_bin		 = 0x8aa40f,
 	.pixel.size_bin		 = 0x34d,
 };
 
@@ -7658,7 +7676,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_28_27_mode
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b47a7,
+	.pixel.data_bin		 = 0x8aa75c,
 	.pixel.size_bin		 = 0x37e,
 };
 
@@ -7667,7 +7685,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_29_28_as_b
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b4b25,
+	.pixel.data_bin		 = 0x8aaada,
 	.pixel.size_bin		 = 0x3ae,
 };
 
@@ -7676,7 +7694,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_30_29_dust
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b4ed3,
+	.pixel.data_bin		 = 0x8aae88,
 	.pixel.size_bin		 = 0x30e,
 };
 
@@ -7685,7 +7703,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_31_30_jans
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b51e1,
+	.pixel.data_bin		 = 0x8ab196,
 	.pixel.size_bin		 = 0x45c,
 };
 
@@ -7694,7 +7712,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_32_31_stro
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b563d,
+	.pixel.data_bin		 = 0x8ab5f2,
 	.pixel.size_bin		 = 0x5b3,
 };
 
@@ -7703,7 +7721,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_33_32_haze
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b5bf0,
+	.pixel.data_bin		 = 0x8abba5,
 	.pixel.size_bin		 = 0x529,
 };
 
@@ -7712,7 +7730,7 @@ static const scui_image_t prj_image_src_02_weather_icon_weather_small_34_33_unkn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0x7b6119,
+	.pixel.data_bin		 = 0x8ac0ce,
 	.pixel.size_bin		 = 0x439,
 };
 
@@ -7721,7 +7739,7 @@ static const scui_image_t prj_image_src_03_activity_01_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0x7b6552,
+	.pixel.data_bin		 = 0x8ac507,
 	.pixel.size_bin		 = 0x18f,
 };
 
@@ -7730,7 +7748,7 @@ static const scui_image_t prj_image_src_03_activity_01_icon_disbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0x7b66e1,
+	.pixel.data_bin		 = 0x8ac696,
 	.pixel.size_bin		 = 0x23a,
 };
 
@@ -7739,7 +7757,7 @@ static const scui_image_t prj_image_src_03_activity_02_icon_dispng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0x7b691b,
+	.pixel.data_bin		 = 0x8ac8d0,
 	.pixel.size_bin		 = 0x552,
 };
 
@@ -7748,7 +7766,7 @@ static const scui_image_t prj_image_src_03_activity_03_icon_kcalbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0x7b6e6d,
+	.pixel.data_bin		 = 0x8ace22,
 	.pixel.size_bin		 = 0x25b,
 };
 
@@ -7757,7 +7775,7 @@ static const scui_image_t prj_image_src_03_activity_04_icon_kcalpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0x7b70c8,
+	.pixel.data_bin		 = 0x8ad07d,
 	.pixel.size_bin		 = 0x576,
 };
 
@@ -7766,7 +7784,7 @@ static const scui_image_t prj_image_src_03_activity_05_icon_stepsbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0x7b763e,
+	.pixel.data_bin		 = 0x8ad5f3,
 	.pixel.size_bin		 = 0x2ed,
 };
 
@@ -7775,7 +7793,7 @@ static const scui_image_t prj_image_src_03_activity_06_icon_stepspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0x7b792b,
+	.pixel.data_bin		 = 0x8ad8e0,
 	.pixel.size_bin		 = 0x5ac,
 };
 
@@ -7784,7 +7802,7 @@ static const scui_image_t prj_image_src_03_activity_bar_01_barbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0x7b7ed7,
+	.pixel.data_bin		 = 0x8ade8c,
 	.pixel.size_bin		 = 0x55,
 };
 
@@ -7793,7 +7811,7 @@ static const scui_image_t prj_image_src_03_activity_bar_02_dot_caloriesbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0x7b7f2c,
+	.pixel.data_bin		 = 0x8adee1,
 	.pixel.size_bin		 = 0x75,
 };
 
@@ -7802,7 +7820,7 @@ static const scui_image_t prj_image_src_03_activity_bar_03_dot_distancebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0x7b7fa1,
+	.pixel.data_bin		 = 0x8adf56,
 	.pixel.size_bin		 = 0x73,
 };
 
@@ -7811,7 +7829,7 @@ static const scui_image_t prj_image_src_03_activity_bar_04_dot_stepsbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0x7b8014,
+	.pixel.data_bin		 = 0x8adfc9,
 	.pixel.size_bin		 = 0x76,
 };
 
@@ -7820,7 +7838,7 @@ static const scui_image_t prj_image_src_03_activity_ring_big_max_01_bjbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0x7b808a,
+	.pixel.data_bin		 = 0x8ae03f,
 	.pixel.size_bin		 = 0x20db,
 };
 
@@ -7829,7 +7847,7 @@ static const scui_image_t prj_image_src_03_activity_ring_big_max_02_bj_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0x7ba165,
+	.pixel.data_bin		 = 0x8b011a,
 	.pixel.size_bin		 = 0x12e,
 };
 
@@ -7838,7 +7856,7 @@ static const scui_image_t prj_image_src_03_activity_ring_big_max_03_bj_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ca,
 	.pixel.height		 = 0x1ca,
-	.pixel.data_bin		 = 0x7ba293,
+	.pixel.data_bin		 = 0x8b0248,
 	.pixel.size_bin		 = 0x12ea,
 };
 
@@ -7847,7 +7865,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_01_bjbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x32,
 	.pixel.height		 = 0x32,
-	.pixel.data_bin		 = 0x7bb57d,
+	.pixel.data_bin		 = 0x8b1532,
 	.pixel.size_bin		 = 0x3b3,
 };
 
@@ -7856,7 +7874,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_calories_01_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bb930,
+	.pixel.data_bin		 = 0x8b18e5,
 	.pixel.size_bin		 = 0x1d1,
 };
 
@@ -7865,7 +7883,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_calories_02_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bbb01,
+	.pixel.data_bin		 = 0x8b1ab6,
 	.pixel.size_bin		 = 0x213,
 };
 
@@ -7874,7 +7892,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_calories_03_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bbd14,
+	.pixel.data_bin		 = 0x8b1cc9,
 	.pixel.size_bin		 = 0x23b,
 };
 
@@ -7883,7 +7901,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_calories_04_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bbf4f,
+	.pixel.data_bin		 = 0x8b1f04,
 	.pixel.size_bin		 = 0x292,
 };
 
@@ -7892,7 +7910,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_calories_05_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bc1e1,
+	.pixel.data_bin		 = 0x8b2196,
 	.pixel.size_bin		 = 0x2c0,
 };
 
@@ -7901,7 +7919,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_calories_06_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bc4a1,
+	.pixel.data_bin		 = 0x8b2456,
 	.pixel.size_bin		 = 0x2f3,
 };
 
@@ -7910,7 +7928,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_calories_07_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bc794,
+	.pixel.data_bin		 = 0x8b2749,
 	.pixel.size_bin		 = 0x314,
 };
 
@@ -7919,7 +7937,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_calories_08_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bcaa8,
+	.pixel.data_bin		 = 0x8b2a5d,
 	.pixel.size_bin		 = 0x333,
 };
 
@@ -7928,7 +7946,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_calories_09_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bcddb,
+	.pixel.data_bin		 = 0x8b2d90,
 	.pixel.size_bin		 = 0x351,
 };
 
@@ -7937,7 +7955,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_calories_10_1
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bd12c,
+	.pixel.data_bin		 = 0x8b30e1,
 	.pixel.size_bin		 = 0x371,
 };
 
@@ -7946,7 +7964,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_distance_01_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bd49d,
+	.pixel.data_bin		 = 0x8b3452,
 	.pixel.size_bin		 = 0x1bb,
 };
 
@@ -7955,7 +7973,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_distance_02_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bd658,
+	.pixel.data_bin		 = 0x8b360d,
 	.pixel.size_bin		 = 0x1dd,
 };
 
@@ -7964,7 +7982,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_distance_03_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bd835,
+	.pixel.data_bin		 = 0x8b37ea,
 	.pixel.size_bin		 = 0x1fa,
 };
 
@@ -7973,7 +7991,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_distance_04_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bda2f,
+	.pixel.data_bin		 = 0x8b39e4,
 	.pixel.size_bin		 = 0x234,
 };
 
@@ -7982,7 +8000,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_distance_05_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bdc63,
+	.pixel.data_bin		 = 0x8b3c18,
 	.pixel.size_bin		 = 0x24d,
 };
 
@@ -7991,7 +8009,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_distance_06_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7bdeb0,
+	.pixel.data_bin		 = 0x8b3e65,
 	.pixel.size_bin		 = 0x28f,
 };
 
@@ -8000,7 +8018,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_distance_07_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7be13f,
+	.pixel.data_bin		 = 0x8b40f4,
 	.pixel.size_bin		 = 0x2ba,
 };
 
@@ -8009,7 +8027,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_distance_08_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7be3f9,
+	.pixel.data_bin		 = 0x8b43ae,
 	.pixel.size_bin		 = 0x2e1,
 };
 
@@ -8018,7 +8036,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_distance_09_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7be6da,
+	.pixel.data_bin		 = 0x8b468f,
 	.pixel.size_bin		 = 0x309,
 };
 
@@ -8027,7 +8045,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_distance_10_1
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x7be9e3,
+	.pixel.data_bin		 = 0x8b4998,
 	.pixel.size_bin		 = 0x30f,
 };
 
@@ -8036,7 +8054,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_steps_01_01pn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x7becf2,
+	.pixel.data_bin		 = 0x8b4ca7,
 	.pixel.size_bin		 = 0x1c0,
 };
 
@@ -8045,7 +8063,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_steps_02_02pn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x7beeb2,
+	.pixel.data_bin		 = 0x8b4e67,
 	.pixel.size_bin		 = 0x1cc,
 };
 
@@ -8054,7 +8072,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_steps_03_03pn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x7bf07e,
+	.pixel.data_bin		 = 0x8b5033,
 	.pixel.size_bin		 = 0x204,
 };
 
@@ -8063,7 +8081,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_steps_04_04pn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x7bf282,
+	.pixel.data_bin		 = 0x8b5237,
 	.pixel.size_bin		 = 0x219,
 };
 
@@ -8072,7 +8090,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_steps_05_05pn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x7bf49b,
+	.pixel.data_bin		 = 0x8b5450,
 	.pixel.size_bin		 = 0x21d,
 };
 
@@ -8081,7 +8099,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_steps_06_06pn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x7bf6b8,
+	.pixel.data_bin		 = 0x8b566d,
 	.pixel.size_bin		 = 0x244,
 };
 
@@ -8090,7 +8108,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_steps_07_07pn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x7bf8fc,
+	.pixel.data_bin		 = 0x8b58b1,
 	.pixel.size_bin		 = 0x24b,
 };
 
@@ -8099,7 +8117,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_steps_08_08pn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x7bfb47,
+	.pixel.data_bin		 = 0x8b5afc,
 	.pixel.size_bin		 = 0x260,
 };
 
@@ -8108,7 +8126,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_steps_09_09pn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x7bfda7,
+	.pixel.data_bin		 = 0x8b5d5c,
 	.pixel.size_bin		 = 0x282,
 };
 
@@ -8117,7 +8135,7 @@ static const scui_image_t prj_image_src_03_activity_ring_small_min_steps_10_10pn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x7c0029,
+	.pixel.data_bin		 = 0x8b5fde,
 	.pixel.size_bin		 = 0x2c4,
 };
 
@@ -8126,7 +8144,7 @@ static const scui_image_t prj_image_src_05_hr_main_02_goupng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0x7c02ed,
+	.pixel.data_bin		 = 0x8b62a2,
 	.pixel.size_bin		 = 0x53c,
 };
 
@@ -8135,7 +8153,7 @@ static const scui_image_t prj_image_src_05_hr_main_03_heartbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x43,
-	.pixel.data_bin		 = 0x7c0829,
+	.pixel.data_bin		 = 0x8b67de,
 	.pixel.size_bin		 = 0x5a7,
 };
 
@@ -8144,7 +8162,7 @@ static const scui_image_t prj_image_src_05_hr_main_04_heart_jingxibmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x7c0dd0,
+	.pixel.data_bin		 = 0x8b6d85,
 	.pixel.size_bin		 = 0x22d,
 };
 
@@ -8153,7 +8171,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x7c0ffd,
+	.pixel.data_bin		 = 0x8b6fb2,
 	.pixel.size_bin		 = 0x69b3,
 };
 
@@ -8162,7 +8180,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x7c79b0,
+	.pixel.data_bin		 = 0x8bd965,
 	.pixel.size_bin		 = 0x6b4c,
 };
 
@@ -8171,7 +8189,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x7ce4fc,
+	.pixel.data_bin		 = 0x8c44b1,
 	.pixel.size_bin		 = 0x701b,
 };
 
@@ -8180,7 +8198,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x7d5517,
+	.pixel.data_bin		 = 0x8cb4cc,
 	.pixel.size_bin		 = 0x776c,
 };
 
@@ -8189,7 +8207,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x7dcc83,
+	.pixel.data_bin		 = 0x8d2c38,
 	.pixel.size_bin		 = 0x80c6,
 };
 
@@ -8198,7 +8216,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x7e4d49,
+	.pixel.data_bin		 = 0x8dacfe,
 	.pixel.size_bin		 = 0x8aeb,
 };
 
@@ -8207,7 +8225,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x7ed834,
+	.pixel.data_bin		 = 0x8e37e9,
 	.pixel.size_bin		 = 0x9473,
 };
 
@@ -8216,7 +8234,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x7f6ca7,
+	.pixel.data_bin		 = 0x8ecc5c,
 	.pixel.size_bin		 = 0x9cf9,
 };
 
@@ -8225,7 +8243,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x8009a0,
+	.pixel.data_bin		 = 0x8f6955,
 	.pixel.size_bin		 = 0xa3f0,
 };
 
@@ -8234,7 +8252,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x80ad90,
+	.pixel.data_bin		 = 0x900d45,
 	.pixel.size_bin		 = 0xa8e8,
 };
 
@@ -8243,7 +8261,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_big_01_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x108,
-	.pixel.data_bin		 = 0x815678,
+	.pixel.data_bin		 = 0x90b62d,
 	.pixel.size_bin		 = 0xa9c6,
 };
 
@@ -8252,7 +8270,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_middle_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x82003e,
+	.pixel.data_bin		 = 0x915ff3,
 	.pixel.size_bin		 = 0x486,
 };
 
@@ -8261,7 +8279,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_middle_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x8204c4,
+	.pixel.data_bin		 = 0x916479,
 	.pixel.size_bin		 = 0x4a4,
 };
 
@@ -8270,7 +8288,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_middle_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x820968,
+	.pixel.data_bin		 = 0x91691d,
 	.pixel.size_bin		 = 0x4f5,
 };
 
@@ -8279,7 +8297,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_middle_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x820e5d,
+	.pixel.data_bin		 = 0x916e12,
 	.pixel.size_bin		 = 0x511,
 };
 
@@ -8288,7 +8306,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_middle_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x82136e,
+	.pixel.data_bin		 = 0x917323,
 	.pixel.size_bin		 = 0x546,
 };
 
@@ -8297,7 +8315,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_middle_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x8218b4,
+	.pixel.data_bin		 = 0x917869,
 	.pixel.size_bin		 = 0x574,
 };
 
@@ -8306,7 +8324,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_middle_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x821e28,
+	.pixel.data_bin		 = 0x917ddd,
 	.pixel.size_bin		 = 0x59c,
 };
 
@@ -8315,7 +8333,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_middle_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x8223c4,
+	.pixel.data_bin		 = 0x918379,
 	.pixel.size_bin		 = 0x62d,
 };
 
@@ -8324,7 +8342,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_middle_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0x8229f1,
+	.pixel.data_bin		 = 0x9189a6,
 	.pixel.size_bin		 = 0x65d,
 };
 
@@ -8333,7 +8351,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_small_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3c,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x82304e,
+	.pixel.data_bin		 = 0x919003,
 	.pixel.size_bin		 = 0xa29,
 };
 
@@ -8342,7 +8360,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_small_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3c,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x823a77,
+	.pixel.data_bin		 = 0x919a2c,
 	.pixel.size_bin		 = 0xaf2,
 };
 
@@ -8351,7 +8369,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_small_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3c,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x824569,
+	.pixel.data_bin		 = 0x91a51e,
 	.pixel.size_bin		 = 0xb3d,
 };
 
@@ -8360,7 +8378,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_small_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3c,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x8250a6,
+	.pixel.data_bin		 = 0x91b05b,
 	.pixel.size_bin		 = 0xb69,
 };
 
@@ -8369,7 +8387,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_small_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3c,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x825c0f,
+	.pixel.data_bin		 = 0x91bbc4,
 	.pixel.size_bin		 = 0xb70,
 };
 
@@ -8378,7 +8396,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_small_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3c,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x82677f,
+	.pixel.data_bin		 = 0x91c734,
 	.pixel.size_bin		 = 0xbc9,
 };
 
@@ -8387,7 +8405,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_small_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3c,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x827348,
+	.pixel.data_bin		 = 0x91d2fd,
 	.pixel.size_bin		 = 0xbdc,
 };
 
@@ -8396,7 +8414,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_small_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3c,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x827f24,
+	.pixel.data_bin		 = 0x91ded9,
 	.pixel.size_bin		 = 0xc01,
 };
 
@@ -8405,7 +8423,7 @@ static const scui_image_t prj_image_src_05_hr_main_gif_small_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x3c,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0x828b25,
+	.pixel.data_bin		 = 0x91eada,
 	.pixel.size_bin		 = 0xc2b,
 };
 
@@ -8414,7 +8432,7 @@ static const scui_image_t prj_image_src_05_hr_settings_01_illustratebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x36,
 	.pixel.height		 = 0x36,
-	.pixel.data_bin		 = 0x829750,
+	.pixel.data_bin		 = 0x91f705,
 	.pixel.size_bin		 = 0x291,
 };
 
@@ -8423,7 +8441,7 @@ static const scui_image_t prj_image_src_06_spo2_01_spo2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0x8299e1,
+	.pixel.data_bin		 = 0x91f996,
 	.pixel.size_bin		 = 0xaae,
 };
 
@@ -8432,7 +8450,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x82a48f,
+	.pixel.data_bin		 = 0x920444,
 	.pixel.size_bin		 = 0x162f,
 };
 
@@ -8441,7 +8459,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x82babe,
+	.pixel.data_bin		 = 0x921a73,
 	.pixel.size_bin		 = 0x1f6e,
 };
 
@@ -8450,7 +8468,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x82da2c,
+	.pixel.data_bin		 = 0x9239e1,
 	.pixel.size_bin		 = 0x29e3,
 };
 
@@ -8459,7 +8477,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x83040f,
+	.pixel.data_bin		 = 0x9263c4,
 	.pixel.size_bin		 = 0x2a4b,
 };
 
@@ -8468,7 +8486,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x832e5a,
+	.pixel.data_bin		 = 0x928e0f,
 	.pixel.size_bin		 = 0x27be,
 };
 
@@ -8477,7 +8495,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x835618,
+	.pixel.data_bin		 = 0x92b5cd,
 	.pixel.size_bin		 = 0x2325,
 };
 
@@ -8486,7 +8504,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x83793d,
+	.pixel.data_bin		 = 0x92d8f2,
 	.pixel.size_bin		 = 0x1ad8,
 };
 
@@ -8495,7 +8513,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x839415,
+	.pixel.data_bin		 = 0x92f3ca,
 	.pixel.size_bin		 = 0x18aa,
 };
 
@@ -8504,7 +8522,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x83acbf,
+	.pixel.data_bin		 = 0x930c74,
 	.pixel.size_bin		 = 0x1a56,
 };
 
@@ -8513,7 +8531,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x83c715,
+	.pixel.data_bin		 = 0x9326ca,
 	.pixel.size_bin		 = 0x1977,
 };
 
@@ -8522,7 +8540,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x83e08c,
+	.pixel.data_bin		 = 0x934041,
 	.pixel.size_bin		 = 0x1913,
 };
 
@@ -8531,7 +8549,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x83f99f,
+	.pixel.data_bin		 = 0x935954,
 	.pixel.size_bin		 = 0x18fc,
 };
 
@@ -8540,7 +8558,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x84129b,
+	.pixel.data_bin		 = 0x937250,
 	.pixel.size_bin		 = 0x1cda,
 };
 
@@ -8549,7 +8567,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x842f75,
+	.pixel.data_bin		 = 0x938f2a,
 	.pixel.size_bin		 = 0x247a,
 };
 
@@ -8558,7 +8576,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_15_14bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x8453ef,
+	.pixel.data_bin		 = 0x93b3a4,
 	.pixel.size_bin		 = 0x27cc,
 };
 
@@ -8567,7 +8585,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_16_15bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x847bbb,
+	.pixel.data_bin		 = 0x93db70,
 	.pixel.size_bin		 = 0x2878,
 };
 
@@ -8576,7 +8594,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_17_16bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x84a433,
+	.pixel.data_bin		 = 0x9403e8,
 	.pixel.size_bin		 = 0x2356,
 };
 
@@ -8585,7 +8603,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_18_17bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x84c789,
+	.pixel.data_bin		 = 0x94273e,
 	.pixel.size_bin		 = 0x1d0e,
 };
 
@@ -8594,7 +8612,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_19_18bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x84e497,
+	.pixel.data_bin		 = 0x94444c,
 	.pixel.size_bin		 = 0x1635,
 };
 
@@ -8603,7 +8621,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_20_19bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x84facc,
+	.pixel.data_bin		 = 0x945a81,
 	.pixel.size_bin		 = 0x1cf4,
 };
 
@@ -8612,7 +8630,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_21_20bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x8517c0,
+	.pixel.data_bin		 = 0x947775,
 	.pixel.size_bin		 = 0x2533,
 };
 
@@ -8621,7 +8639,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_22_21bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x853cf3,
+	.pixel.data_bin		 = 0x949ca8,
 	.pixel.size_bin		 = 0x29b0,
 };
 
@@ -8630,7 +8648,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_23_22bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x8566a3,
+	.pixel.data_bin		 = 0x94c658,
 	.pixel.size_bin		 = 0x28c4,
 };
 
@@ -8639,7 +8657,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_24_23bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x858f67,
+	.pixel.data_bin		 = 0x94ef1c,
 	.pixel.size_bin		 = 0x2537,
 };
 
@@ -8648,7 +8666,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_25_24bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x85b49e,
+	.pixel.data_bin		 = 0x951453,
 	.pixel.size_bin		 = 0x1f92,
 };
 
@@ -8657,7 +8675,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_26_25bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x85d430,
+	.pixel.data_bin		 = 0x9533e5,
 	.pixel.size_bin		 = 0x1667,
 };
 
@@ -8666,7 +8684,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_27_26bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x85ea97,
+	.pixel.data_bin		 = 0x954a4c,
 	.pixel.size_bin		 = 0x14a8,
 };
 
@@ -8675,7 +8693,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_28_27bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x85ff3f,
+	.pixel.data_bin		 = 0x955ef4,
 	.pixel.size_bin		 = 0x1699,
 };
 
@@ -8684,7 +8702,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_29_28bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x8615d8,
+	.pixel.data_bin		 = 0x95758d,
 	.pixel.size_bin		 = 0x181d,
 };
 
@@ -8693,7 +8711,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_30_29bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x862df5,
+	.pixel.data_bin		 = 0x958daa,
 	.pixel.size_bin		 = 0x1beb,
 };
 
@@ -8702,7 +8720,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_31_30bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x8649e0,
+	.pixel.data_bin		 = 0x95a995,
 	.pixel.size_bin		 = 0x1f59,
 };
 
@@ -8711,7 +8729,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_32_31bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x866939,
+	.pixel.data_bin		 = 0x95c8ee,
 	.pixel.size_bin		 = 0x21a2,
 };
 
@@ -8720,7 +8738,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_33_32bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x868adb,
+	.pixel.data_bin		 = 0x95ea90,
 	.pixel.size_bin		 = 0x284f,
 };
 
@@ -8729,7 +8747,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_34_33bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x86b32a,
+	.pixel.data_bin		 = 0x9612df,
 	.pixel.size_bin		 = 0x2c39,
 };
 
@@ -8738,7 +8756,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_35_34bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x86df63,
+	.pixel.data_bin		 = 0x963f18,
 	.pixel.size_bin		 = 0x2899,
 };
 
@@ -8747,7 +8765,7 @@ static const scui_image_t prj_image_src_06_spo2_gif_36_35bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xde,
 	.pixel.height		 = 0xde,
-	.pixel.data_bin		 = 0x8707fc,
+	.pixel.data_bin		 = 0x9667b1,
 	.pixel.size_bin		 = 0x1b19,
 };
 
@@ -8756,7 +8774,7 @@ static const scui_image_t prj_image_src_07_alarm_01_addbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0x872315,
+	.pixel.data_bin		 = 0x9682ca,
 	.pixel.size_bin		 = 0x3c9,
 };
 
@@ -8765,7 +8783,7 @@ static const scui_image_t prj_image_src_07_alarm_02_goupng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0x8726de,
+	.pixel.data_bin		 = 0x968693,
 	.pixel.size_bin		 = 0x51f,
 };
 
@@ -8774,7 +8792,7 @@ static const scui_image_t prj_image_src_07_alarm_03_morebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x872bfd,
+	.pixel.data_bin		 = 0x968bb2,
 	.pixel.size_bin		 = 0x167,
 };
 
@@ -8783,7 +8801,7 @@ static const scui_image_t prj_image_src_07_alarm_04_snoonbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0x872d64,
+	.pixel.data_bin		 = 0x968d19,
 	.pixel.size_bin		 = 0x634,
 };
 
@@ -8792,7 +8810,7 @@ static const scui_image_t prj_image_src_08_stopwatch_01_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ce,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0x873398,
+	.pixel.data_bin		 = 0x96934d,
 	.pixel.size_bin		 = 0x3c2c,
 };
 
@@ -8801,7 +8819,7 @@ static const scui_image_t prj_image_src_08_stopwatch_02_linepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xa,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0x876fc4,
+	.pixel.data_bin		 = 0x96cf79,
 	.pixel.size_bin		 = 0x23e,
 };
 
@@ -8810,7 +8828,7 @@ static const scui_image_t prj_image_src_08_stopwatch_btn_01_jici_1bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x877202,
+	.pixel.data_bin		 = 0x96d1b7,
 	.pixel.size_bin		 = 0x57c,
 };
 
@@ -8819,7 +8837,7 @@ static const scui_image_t prj_image_src_08_stopwatch_btn_02_jici_2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x87777e,
+	.pixel.data_bin		 = 0x96d733,
 	.pixel.size_bin		 = 0x5ad,
 };
 
@@ -8828,7 +8846,7 @@ static const scui_image_t prj_image_src_08_stopwatch_btn_03_pausedbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x877d2b,
+	.pixel.data_bin		 = 0x96dce0,
 	.pixel.size_bin		 = 0x412,
 };
 
@@ -8837,7 +8855,7 @@ static const scui_image_t prj_image_src_08_stopwatch_btn_04_play_1bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x87813d,
+	.pixel.data_bin		 = 0x96e0f2,
 	.pixel.size_bin		 = 0x472,
 };
 
@@ -8846,7 +8864,7 @@ static const scui_image_t prj_image_src_08_stopwatch_btn_05_play_2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x8785af,
+	.pixel.data_bin		 = 0x96e564,
 	.pixel.size_bin		 = 0x413,
 };
 
@@ -8855,7 +8873,7 @@ static const scui_image_t prj_image_src_08_stopwatch_btn_06_retrybmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x8789c2,
+	.pixel.data_bin		 = 0x96e977,
 	.pixel.size_bin		 = 0x5f5,
 };
 
@@ -8864,7 +8882,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x878fb7,
+	.pixel.data_bin		 = 0x96ef6c,
 	.pixel.size_bin		 = 0x46,
 };
 
@@ -8873,7 +8891,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x878ffd,
+	.pixel.data_bin		 = 0x96efb2,
 	.pixel.size_bin		 = 0x5f,
 };
 
@@ -8882,7 +8900,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x87905c,
+	.pixel.data_bin		 = 0x96f011,
 	.pixel.size_bin		 = 0xa7,
 };
 
@@ -8891,7 +8909,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x879103,
+	.pixel.data_bin		 = 0x96f0b8,
 	.pixel.size_bin		 = 0x16c,
 };
 
@@ -8900,7 +8918,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x87926f,
+	.pixel.data_bin		 = 0x96f224,
 	.pixel.size_bin		 = 0x72,
 };
 
@@ -8909,7 +8927,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x8792e1,
+	.pixel.data_bin		 = 0x96f296,
 	.pixel.size_bin		 = 0x151,
 };
 
@@ -8918,7 +8936,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x879432,
+	.pixel.data_bin		 = 0x96f3e7,
 	.pixel.size_bin		 = 0x166,
 };
 
@@ -8927,7 +8945,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x879598,
+	.pixel.data_bin		 = 0x96f54d,
 	.pixel.size_bin		 = 0x118,
 };
 
@@ -8936,7 +8954,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x8796b0,
+	.pixel.data_bin		 = 0x96f665,
 	.pixel.size_bin		 = 0x176,
 };
 
@@ -8945,7 +8963,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x879826,
+	.pixel.data_bin		 = 0x96f7db,
 	.pixel.size_bin		 = 0x192,
 };
 
@@ -8954,7 +8972,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x8799b8,
+	.pixel.data_bin		 = 0x96f96d,
 	.pixel.size_bin		 = 0x119,
 };
 
@@ -8963,7 +8981,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x879ad1,
+	.pixel.data_bin		 = 0x96fa86,
 	.pixel.size_bin		 = 0x1a9,
 };
 
@@ -8972,7 +8990,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x879c7a,
+	.pixel.data_bin		 = 0x96fc2f,
 	.pixel.size_bin		 = 0x17e,
 };
 
@@ -8981,7 +8999,7 @@ static const scui_image_t prj_image_src_08_stopwatch_num_green_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0x879df8,
+	.pixel.data_bin		 = 0x96fdad,
 	.pixel.size_bin		 = 0x82,
 };
 
@@ -8990,7 +9008,7 @@ static const scui_image_t prj_image_src_08_stress_01_stressbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x45,
-	.pixel.data_bin		 = 0x879e7a,
+	.pixel.data_bin		 = 0x96fe2f,
 	.pixel.size_bin		 = 0xb3f,
 };
 
@@ -8999,7 +9017,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87a9b9,
+	.pixel.data_bin		 = 0x97096e,
 	.pixel.size_bin		 = 0x33,
 };
 
@@ -9008,7 +9026,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87a9ec,
+	.pixel.data_bin		 = 0x9709a1,
 	.pixel.size_bin		 = 0x46,
 };
 
@@ -9017,7 +9035,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87aa32,
+	.pixel.data_bin		 = 0x9709e7,
 	.pixel.size_bin		 = 0x8b,
 };
 
@@ -9026,7 +9044,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87aabd,
+	.pixel.data_bin		 = 0x970a72,
 	.pixel.size_bin		 = 0x114,
 };
 
@@ -9035,7 +9053,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87abd1,
+	.pixel.data_bin		 = 0x970b86,
 	.pixel.size_bin		 = 0x59,
 };
 
@@ -9044,7 +9062,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87ac2a,
+	.pixel.data_bin		 = 0x970bdf,
 	.pixel.size_bin		 = 0xef,
 };
 
@@ -9053,7 +9071,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87ad19,
+	.pixel.data_bin		 = 0x970cce,
 	.pixel.size_bin		 = 0xfd,
 };
 
@@ -9062,7 +9080,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87ae16,
+	.pixel.data_bin		 = 0x970dcb,
 	.pixel.size_bin		 = 0xcd,
 };
 
@@ -9071,7 +9089,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87aee3,
+	.pixel.data_bin		 = 0x970e98,
 	.pixel.size_bin		 = 0x10e,
 };
 
@@ -9080,7 +9098,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87aff1,
+	.pixel.data_bin		 = 0x970fa6,
 	.pixel.size_bin		 = 0x10e,
 };
 
@@ -9089,7 +9107,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87b0ff,
+	.pixel.data_bin		 = 0x9710b4,
 	.pixel.size_bin		 = 0xba,
 };
 
@@ -9098,7 +9116,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87b1b9,
+	.pixel.data_bin		 = 0x97116e,
 	.pixel.size_bin		 = 0x12c,
 };
 
@@ -9107,7 +9125,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87b2e5,
+	.pixel.data_bin		 = 0x97129a,
 	.pixel.size_bin		 = 0x101,
 };
 
@@ -9116,7 +9134,7 @@ static const scui_image_t prj_image_src_08_stress_22_num_blue_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0x87b3e6,
+	.pixel.data_bin		 = 0x97139b,
 	.pixel.size_bin		 = 0x56,
 };
 
@@ -9125,7 +9143,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87b43c,
+	.pixel.data_bin		 = 0x9713f1,
 	.pixel.size_bin		 = 0x5a,
 };
 
@@ -9134,7 +9152,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87b496,
+	.pixel.data_bin		 = 0x97144b,
 	.pixel.size_bin		 = 0x77,
 };
 
@@ -9143,7 +9161,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87b50d,
+	.pixel.data_bin		 = 0x9714c2,
 	.pixel.size_bin		 = 0xe3,
 };
 
@@ -9152,7 +9170,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87b5f0,
+	.pixel.data_bin		 = 0x9715a5,
 	.pixel.size_bin		 = 0x1f8,
 };
 
@@ -9161,7 +9179,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87b7e8,
+	.pixel.data_bin		 = 0x97179d,
 	.pixel.size_bin		 = 0x7d,
 };
 
@@ -9170,7 +9188,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87b865,
+	.pixel.data_bin		 = 0x97181a,
 	.pixel.size_bin		 = 0x1a7,
 };
 
@@ -9179,7 +9197,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87ba0c,
+	.pixel.data_bin		 = 0x9719c1,
 	.pixel.size_bin		 = 0x1c7,
 };
 
@@ -9188,7 +9206,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87bbd3,
+	.pixel.data_bin		 = 0x971b88,
 	.pixel.size_bin		 = 0x15f,
 };
 
@@ -9197,7 +9215,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87bd32,
+	.pixel.data_bin		 = 0x971ce7,
 	.pixel.size_bin		 = 0x1d2,
 };
 
@@ -9206,7 +9224,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87bf04,
+	.pixel.data_bin		 = 0x971eb9,
 	.pixel.size_bin		 = 0x1ef,
 };
 
@@ -9215,7 +9233,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87c0f3,
+	.pixel.data_bin		 = 0x9720a8,
 	.pixel.size_bin		 = 0x14d,
 };
 
@@ -9224,7 +9242,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87c240,
+	.pixel.data_bin		 = 0x9721f5,
 	.pixel.size_bin		 = 0x235,
 };
 
@@ -9233,7 +9251,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87c475,
+	.pixel.data_bin		 = 0x97242a,
 	.pixel.size_bin		 = 0x1f7,
 };
 
@@ -9242,7 +9260,7 @@ static const scui_image_t prj_image_src_08_stress_44_num_blue_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0x87c66c,
+	.pixel.data_bin		 = 0x972621,
 	.pixel.size_bin		 = 0xb5,
 };
 
@@ -9251,7 +9269,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x87c721,
+	.pixel.data_bin		 = 0x9726d6,
 	.pixel.size_bin		 = 0x8c8e,
 };
 
@@ -9260,7 +9278,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x8853af,
+	.pixel.data_bin		 = 0x97b364,
 	.pixel.size_bin		 = 0x8ec9,
 };
 
@@ -9269,7 +9287,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x88e278,
+	.pixel.data_bin		 = 0x98422d,
 	.pixel.size_bin		 = 0x8ecb,
 };
 
@@ -9278,7 +9296,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x897143,
+	.pixel.data_bin		 = 0x98d0f8,
 	.pixel.size_bin		 = 0x8bb1,
 };
 
@@ -9287,7 +9305,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x89fcf4,
+	.pixel.data_bin		 = 0x995ca9,
 	.pixel.size_bin		 = 0x80da,
 };
 
@@ -9296,7 +9314,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x8a7dce,
+	.pixel.data_bin		 = 0x99dd83,
 	.pixel.size_bin		 = 0x5a72,
 };
 
@@ -9305,7 +9323,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x8ad840,
+	.pixel.data_bin		 = 0x9a37f5,
 	.pixel.size_bin		 = 0x2e1b,
 };
 
@@ -9314,7 +9332,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x8b065b,
+	.pixel.data_bin		 = 0x9a6610,
 	.pixel.size_bin		 = 0x5bda,
 };
 
@@ -9323,7 +9341,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x8b6235,
+	.pixel.data_bin		 = 0x9ac1ea,
 	.pixel.size_bin		 = 0x8653,
 };
 
@@ -9332,7 +9350,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x8be888,
+	.pixel.data_bin		 = 0x9b483d,
 	.pixel.size_bin		 = 0x952d,
 };
 
@@ -9341,7 +9359,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x8c7db5,
+	.pixel.data_bin		 = 0x9bdd6a,
 	.pixel.size_bin		 = 0x9d4c,
 };
 
@@ -9350,7 +9368,7 @@ static const scui_image_t prj_image_src_08_stress_icon_gif_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10e,
 	.pixel.height		 = 0x10c,
-	.pixel.data_bin		 = 0x8d1b01,
+	.pixel.data_bin		 = 0x9c7ab6,
 	.pixel.size_bin		 = 0xa27f,
 };
 
@@ -9359,7 +9377,7 @@ static const scui_image_t prj_image_src_09_timer_01_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xac,
 	.pixel.height		 = 0xac,
-	.pixel.data_bin		 = 0x8dbd80,
+	.pixel.data_bin		 = 0x9d1d35,
 	.pixel.size_bin		 = 0xc0f,
 };
 
@@ -9368,7 +9386,7 @@ static const scui_image_t prj_image_src_09_timer_02_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0x8dc98f,
+	.pixel.data_bin		 = 0x9d2944,
 	.pixel.size_bin		 = 0x6e,
 };
 
@@ -9377,7 +9395,7 @@ static const scui_image_t prj_image_src_09_timer_03_ringbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0x8dc9fd,
+	.pixel.data_bin		 = 0x9d29b2,
 	.pixel.size_bin		 = 0x14b0,
 };
 
@@ -9386,7 +9404,7 @@ static const scui_image_t prj_image_src_09_timer_04_ringbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ce,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0x8ddead,
+	.pixel.data_bin		 = 0x9d3e62,
 	.pixel.size_bin		 = 0x2434,
 };
 
@@ -9395,7 +9413,7 @@ static const scui_image_t prj_image_src_09_timer_btn_01_clousebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x8e02e1,
+	.pixel.data_bin		 = 0x9d6296,
 	.pixel.size_bin		 = 0x34f,
 };
 
@@ -9404,7 +9422,7 @@ static const scui_image_t prj_image_src_09_timer_btn_02_pausedbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x8e0630,
+	.pixel.data_bin		 = 0x9d65e5,
 	.pixel.size_bin		 = 0x388,
 };
 
@@ -9413,7 +9431,7 @@ static const scui_image_t prj_image_src_09_timer_btn_03_play_bigbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0x8e09b8,
+	.pixel.data_bin		 = 0x9d696d,
 	.pixel.size_bin		 = 0x435,
 };
 
@@ -9422,7 +9440,7 @@ static const scui_image_t prj_image_src_09_timer_btn_04_play_smallbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x8e0ded,
+	.pixel.data_bin		 = 0x9d6da2,
 	.pixel.size_bin		 = 0x3ee,
 };
 
@@ -9431,7 +9449,7 @@ static const scui_image_t prj_image_src_09_timer_btn_05_retrybmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x8e11db,
+	.pixel.data_bin		 = 0x9d7190,
 	.pixel.size_bin		 = 0x5fc,
 };
 
@@ -9440,7 +9458,7 @@ static const scui_image_t prj_image_src_10_sport_01_addbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x64,
 	.pixel.height		 = 0x64,
-	.pixel.data_bin		 = 0x8e17d7,
+	.pixel.data_bin		 = 0x9d778c,
 	.pixel.size_bin		 = 0x2fa,
 };
 
@@ -9449,7 +9467,7 @@ static const scui_image_t prj_image_src_10_sport_01_icon_bj_dabmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x186,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0x8e1ad1,
+	.pixel.data_bin		 = 0x9d7a86,
 	.pixel.size_bin		 = 0x52e,
 };
 
@@ -9458,7 +9476,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_02_deletebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x9c,
 	.pixel.height		 = 0xe4,
-	.pixel.data_bin		 = 0x8e1fff,
+	.pixel.data_bin		 = 0x9d7fb4,
 	.pixel.size_bin		 = 0x452,
 };
 
@@ -9467,7 +9485,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_category_01_tuijianbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xb4,
-	.pixel.data_bin		 = 0x8e2451,
+	.pixel.data_bin		 = 0x9d8406,
 	.pixel.size_bin		 = 0x4a60,
 };
 
@@ -9476,7 +9494,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_category_02_icebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xb4,
-	.pixel.data_bin		 = 0x8e6eb1,
+	.pixel.data_bin		 = 0x9dce66,
 	.pixel.size_bin		 = 0x5377,
 };
 
@@ -9485,7 +9503,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_category_03_jianshenbmp
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xb4,
-	.pixel.data_bin		 = 0x8ec228,
+	.pixel.data_bin		 = 0x9e21dd,
 	.pixel.size_bin		 = 0x4161,
 };
 
@@ -9494,7 +9512,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_category_04_ballbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xb4,
-	.pixel.data_bin		 = 0x8f0389,
+	.pixel.data_bin		 = 0x9e633e,
 	.pixel.size_bin		 = 0x3049,
 };
 
@@ -9503,7 +9521,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_category_05_waterbmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xb4,
-	.pixel.data_bin		 = 0x8f33d2,
+	.pixel.data_bin		 = 0x9e9387,
 	.pixel.size_bin		 = 0x4ca2,
 };
 
@@ -9512,7 +9530,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_category_06_dancebmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xb4,
-	.pixel.data_bin		 = 0x8f8074,
+	.pixel.data_bin		 = 0x9ee029,
 	.pixel.size_bin		 = 0x2cb1,
 };
 
@@ -9521,7 +9539,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_category_07_jixianbmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xb4,
-	.pixel.data_bin		 = 0x8fad25,
+	.pixel.data_bin		 = 0x9f0cda,
 	.pixel.size_bin		 = 0x520a,
 };
 
@@ -9530,7 +9548,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_category_08_xiuxianbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xb4,
-	.pixel.data_bin		 = 0x8fff2f,
+	.pixel.data_bin		 = 0x9f5ee4,
 	.pixel.size_bin		 = 0x50fa,
 };
 
@@ -9539,7 +9557,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_category_09_otherbmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xb4,
-	.pixel.data_bin		 = 0x905029,
+	.pixel.data_bin		 = 0x9fafde,
 	.pixel.size_bin		 = 0x4526,
 };
 
@@ -9548,7 +9566,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_01_00png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x90954f,
+	.pixel.data_bin		 = 0x9ff504,
 	.pixel.size_bin		 = 0xf7b,
 };
 
@@ -9557,7 +9575,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_02_01png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x90a4ca,
+	.pixel.data_bin		 = 0xa0047f,
 	.pixel.size_bin		 = 0xf5d,
 };
 
@@ -9566,7 +9584,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_03_02png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x90b427,
+	.pixel.data_bin		 = 0xa013dc,
 	.pixel.size_bin		 = 0xf2d,
 };
 
@@ -9575,7 +9593,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_04_03png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x90c354,
+	.pixel.data_bin		 = 0xa02309,
 	.pixel.size_bin		 = 0xf2c,
 };
 
@@ -9584,7 +9602,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_05_04png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x90d280,
+	.pixel.data_bin		 = 0xa03235,
 	.pixel.size_bin		 = 0xf6d,
 };
 
@@ -9593,7 +9611,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_06_05png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x90e1ed,
+	.pixel.data_bin		 = 0xa041a2,
 	.pixel.size_bin		 = 0xf90,
 };
 
@@ -9602,7 +9620,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_07_06png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x90f17d,
+	.pixel.data_bin		 = 0xa05132,
 	.pixel.size_bin		 = 0xfd5,
 };
 
@@ -9611,7 +9629,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_08_07png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x910152,
+	.pixel.data_bin		 = 0xa06107,
 	.pixel.size_bin		 = 0xfcb,
 };
 
@@ -9620,7 +9638,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_09_08png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91111d,
+	.pixel.data_bin		 = 0xa070d2,
 	.pixel.size_bin		 = 0xf92,
 };
 
@@ -9629,7 +9647,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_10_09png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9120af,
+	.pixel.data_bin		 = 0xa08064,
 	.pixel.size_bin		 = 0xf99,
 };
 
@@ -9638,7 +9656,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_11_10png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x913048,
+	.pixel.data_bin		 = 0xa08ffd,
 	.pixel.size_bin		 = 0xfb2,
 };
 
@@ -9647,7 +9665,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_12_11png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x913ffa,
+	.pixel.data_bin		 = 0xa09faf,
 	.pixel.size_bin		 = 0xfbc,
 };
 
@@ -9656,7 +9674,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_13_12png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x914fb6,
+	.pixel.data_bin		 = 0xa0af6b,
 	.pixel.size_bin		 = 0xfe4,
 };
 
@@ -9665,7 +9683,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_14_13png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x915f9a,
+	.pixel.data_bin		 = 0xa0bf4f,
 	.pixel.size_bin		 = 0xfcd,
 };
 
@@ -9674,7 +9692,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_15_14png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x916f67,
+	.pixel.data_bin		 = 0xa0cf1c,
 	.pixel.size_bin		 = 0xff3,
 };
 
@@ -9683,7 +9701,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_cycling_16_15png = 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x917f5a,
+	.pixel.data_bin		 = 0xa0df0f,
 	.pixel.size_bin		 = 0xfbf,
 };
 
@@ -9692,7 +9710,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_01_00png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x918f19,
+	.pixel.data_bin		 = 0xa0eece,
 	.pixel.size_bin		 = 0xa40,
 };
 
@@ -9701,7 +9719,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_02_01png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x919959,
+	.pixel.data_bin		 = 0xa0f90e,
 	.pixel.size_bin		 = 0xa24,
 };
 
@@ -9710,7 +9728,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_03_02png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91a37d,
+	.pixel.data_bin		 = 0xa10332,
 	.pixel.size_bin		 = 0x9ff,
 };
 
@@ -9719,7 +9737,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_04_03png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91ad7c,
+	.pixel.data_bin		 = 0xa10d31,
 	.pixel.size_bin		 = 0x930,
 };
 
@@ -9728,7 +9746,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_05_04png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91b6ac,
+	.pixel.data_bin		 = 0xa11661,
 	.pixel.size_bin		 = 0x78e,
 };
 
@@ -9737,7 +9755,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_06_05png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91be3a,
+	.pixel.data_bin		 = 0xa11def,
 	.pixel.size_bin		 = 0x8d1,
 };
 
@@ -9746,7 +9764,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_07_06png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91c70b,
+	.pixel.data_bin		 = 0xa126c0,
 	.pixel.size_bin		 = 0x94b,
 };
 
@@ -9755,7 +9773,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_08_07png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91d056,
+	.pixel.data_bin		 = 0xa1300b,
 	.pixel.size_bin		 = 0x99e,
 };
 
@@ -9764,7 +9782,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_09_08png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91d9f4,
+	.pixel.data_bin		 = 0xa139a9,
 	.pixel.size_bin		 = 0xa2b,
 };
 
@@ -9773,7 +9791,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_10_09png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91e41f,
+	.pixel.data_bin		 = 0xa143d4,
 	.pixel.size_bin		 = 0x9ee,
 };
 
@@ -9782,7 +9800,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_11_10png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91ee0d,
+	.pixel.data_bin		 = 0xa14dc2,
 	.pixel.size_bin		 = 0x9f9,
 };
 
@@ -9791,7 +9809,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_12_11png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x91f806,
+	.pixel.data_bin		 = 0xa157bb,
 	.pixel.size_bin		 = 0x983,
 };
 
@@ -9800,7 +9818,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_13_12png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x920189,
+	.pixel.data_bin		 = 0xa1613e,
 	.pixel.size_bin		 = 0x894,
 };
 
@@ -9809,7 +9827,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_14_13png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x920a1d,
+	.pixel.data_bin		 = 0xa169d2,
 	.pixel.size_bin		 = 0x87e,
 };
 
@@ -9818,7 +9836,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_15_14png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92129b,
+	.pixel.data_bin		 = 0xa17250,
 	.pixel.size_bin		 = 0x909,
 };
 
@@ -9827,7 +9845,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_16_15png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x921ba4,
+	.pixel.data_bin		 = 0xa17b59,
 	.pixel.size_bin		 = 0xa32,
 };
 
@@ -9836,7 +9854,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_17_16png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9225d6,
+	.pixel.data_bin		 = 0xa1858b,
 	.pixel.size_bin		 = 0xa2a,
 };
 
@@ -9845,7 +9863,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inrunning_18_17png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x923000,
+	.pixel.data_bin		 = 0xa18fb5,
 	.pixel.size_bin		 = 0x9d1,
 };
 
@@ -9854,7 +9872,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_01_00png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9239d1,
+	.pixel.data_bin		 = 0xa19986,
 	.pixel.size_bin		 = 0xb04,
 };
 
@@ -9863,7 +9881,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_02_01png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9244d5,
+	.pixel.data_bin		 = 0xa1a48a,
 	.pixel.size_bin		 = 0xad1,
 };
 
@@ -9872,7 +9890,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_03_02png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x924fa6,
+	.pixel.data_bin		 = 0xa1af5b,
 	.pixel.size_bin		 = 0xa31,
 };
 
@@ -9881,7 +9899,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_04_03png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9259d7,
+	.pixel.data_bin		 = 0xa1b98c,
 	.pixel.size_bin		 = 0x9a1,
 };
 
@@ -9890,7 +9908,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_05_04png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x926378,
+	.pixel.data_bin		 = 0xa1c32d,
 	.pixel.size_bin		 = 0x867,
 };
 
@@ -9899,7 +9917,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_06_05png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x926bdf,
+	.pixel.data_bin		 = 0xa1cb94,
 	.pixel.size_bin		 = 0x728,
 };
 
@@ -9908,7 +9926,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_07_06png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x927307,
+	.pixel.data_bin		 = 0xa1d2bc,
 	.pixel.size_bin		 = 0x783,
 };
 
@@ -9917,7 +9935,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_08_07png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x927a8a,
+	.pixel.data_bin		 = 0xa1da3f,
 	.pixel.size_bin		 = 0x8cc,
 };
 
@@ -9926,7 +9944,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_09_08png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x928356,
+	.pixel.data_bin		 = 0xa1e30b,
 	.pixel.size_bin		 = 0x9d0,
 };
 
@@ -9935,7 +9953,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_10_09png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x928d26,
+	.pixel.data_bin		 = 0xa1ecdb,
 	.pixel.size_bin		 = 0xa14,
 };
 
@@ -9944,7 +9962,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_11_10png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92973a,
+	.pixel.data_bin		 = 0xa1f6ef,
 	.pixel.size_bin		 = 0xacc,
 };
 
@@ -9953,7 +9971,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_12_11png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92a206,
+	.pixel.data_bin		 = 0xa201bb,
 	.pixel.size_bin		 = 0xa83,
 };
 
@@ -9962,7 +9980,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_13_12png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92ac89,
+	.pixel.data_bin		 = 0xa20c3e,
 	.pixel.size_bin		 = 0x9ce,
 };
 
@@ -9971,7 +9989,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_14_13png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92b657,
+	.pixel.data_bin		 = 0xa2160c,
 	.pixel.size_bin		 = 0x8e6,
 };
 
@@ -9980,7 +9998,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_15_14png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92bf3d,
+	.pixel.data_bin		 = 0xa21ef2,
 	.pixel.size_bin		 = 0x84c,
 };
 
@@ -9989,7 +10007,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_16_15png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92c789,
+	.pixel.data_bin		 = 0xa2273e,
 	.pixel.size_bin		 = 0x780,
 };
 
@@ -9998,7 +10016,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_17_16png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92cf09,
+	.pixel.data_bin		 = 0xa22ebe,
 	.pixel.size_bin		 = 0x7d4,
 };
 
@@ -10007,7 +10025,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_18_17png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92d6dd,
+	.pixel.data_bin		 = 0xa23692,
 	.pixel.size_bin		 = 0x8ef,
 };
 
@@ -10016,7 +10034,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_19_18png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92dfcc,
+	.pixel.data_bin		 = 0xa23f81,
 	.pixel.size_bin		 = 0x9e7,
 };
 
@@ -10025,7 +10043,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_inwalking_20_19png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92e9b3,
+	.pixel.data_bin		 = 0xa24968,
 	.pixel.size_bin		 = 0xa34,
 };
 
@@ -10034,7 +10052,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_01_00png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92f3e7,
+	.pixel.data_bin		 = 0xa2539c,
 	.pixel.size_bin		 = 0xa40,
 };
 
@@ -10043,7 +10061,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_02_01png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x92fe27,
+	.pixel.data_bin		 = 0xa25ddc,
 	.pixel.size_bin		 = 0xa68,
 };
 
@@ -10052,7 +10070,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_03_02png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93088f,
+	.pixel.data_bin		 = 0xa26844,
 	.pixel.size_bin		 = 0xa71,
 };
 
@@ -10061,7 +10079,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_04_03png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x931300,
+	.pixel.data_bin		 = 0xa272b5,
 	.pixel.size_bin		 = 0xa1b,
 };
 
@@ -10070,7 +10088,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_05_04png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x931d1b,
+	.pixel.data_bin		 = 0xa27cd0,
 	.pixel.size_bin		 = 0x862,
 };
 
@@ -10079,7 +10097,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_06_05png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93257d,
+	.pixel.data_bin		 = 0xa28532,
 	.pixel.size_bin		 = 0x97a,
 };
 
@@ -10088,7 +10106,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_07_06png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x932ef7,
+	.pixel.data_bin		 = 0xa28eac,
 	.pixel.size_bin		 = 0x9e4,
 };
 
@@ -10097,7 +10115,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_08_07png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9338db,
+	.pixel.data_bin		 = 0xa29890,
 	.pixel.size_bin		 = 0xa6f,
 };
 
@@ -10106,7 +10124,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_09_08png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93434a,
+	.pixel.data_bin		 = 0xa2a2ff,
 	.pixel.size_bin		 = 0xafc,
 };
 
@@ -10115,7 +10133,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_10_09png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x934e46,
+	.pixel.data_bin		 = 0xa2adfb,
 	.pixel.size_bin		 = 0xad2,
 };
 
@@ -10124,7 +10142,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_11_10png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x935918,
+	.pixel.data_bin		 = 0xa2b8cd,
 	.pixel.size_bin		 = 0xaf2,
 };
 
@@ -10133,7 +10151,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_12_11png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93640a,
+	.pixel.data_bin		 = 0xa2c3bf,
 	.pixel.size_bin		 = 0xa91,
 };
 
@@ -10142,7 +10160,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_13_12png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x936e9b,
+	.pixel.data_bin		 = 0xa2ce50,
 	.pixel.size_bin		 = 0x964,
 };
 
@@ -10151,7 +10169,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_14_13png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9377ff,
+	.pixel.data_bin		 = 0xa2d7b4,
 	.pixel.size_bin		 = 0x947,
 };
 
@@ -10160,7 +10178,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_15_14png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x938146,
+	.pixel.data_bin		 = 0xa2e0fb,
 	.pixel.size_bin		 = 0x9b7,
 };
 
@@ -10169,7 +10187,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_16_15png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x938afd,
+	.pixel.data_bin		 = 0xa2eab2,
 	.pixel.size_bin		 = 0xad9,
 };
 
@@ -10178,7 +10196,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_17_16png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9395d6,
+	.pixel.data_bin		 = 0xa2f58b,
 	.pixel.size_bin		 = 0xa9f,
 };
 
@@ -10187,7 +10205,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outrunning_18_17png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93a075,
+	.pixel.data_bin		 = 0xa3002a,
 	.pixel.size_bin		 = 0x9d1,
 };
 
@@ -10196,7 +10214,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_01_00png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93aa46,
+	.pixel.data_bin		 = 0xa309fb,
 	.pixel.size_bin		 = 0xb04,
 };
 
@@ -10205,7 +10223,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_02_01png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93b54a,
+	.pixel.data_bin		 = 0xa314ff,
 	.pixel.size_bin		 = 0xb61,
 };
 
@@ -10214,7 +10232,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_03_02png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93c0ab,
+	.pixel.data_bin		 = 0xa32060,
 	.pixel.size_bin		 = 0xad8,
 };
 
@@ -10223,7 +10241,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_04_03png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93cb83,
+	.pixel.data_bin		 = 0xa32b38,
 	.pixel.size_bin		 = 0xa5b,
 };
 
@@ -10232,7 +10250,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_05_04png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93d5de,
+	.pixel.data_bin		 = 0xa33593,
 	.pixel.size_bin		 = 0x924,
 };
 
@@ -10241,7 +10259,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_06_05png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93df02,
+	.pixel.data_bin		 = 0xa33eb7,
 	.pixel.size_bin		 = 0x831,
 };
 
@@ -10250,7 +10268,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_07_06png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93e733,
+	.pixel.data_bin		 = 0xa346e8,
 	.pixel.size_bin		 = 0x899,
 };
 
@@ -10259,7 +10277,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_08_07png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93efcc,
+	.pixel.data_bin		 = 0xa34f81,
 	.pixel.size_bin		 = 0x9a7,
 };
 
@@ -10268,7 +10286,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_09_08png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x93f973,
+	.pixel.data_bin		 = 0xa35928,
 	.pixel.size_bin		 = 0xab3,
 };
 
@@ -10277,7 +10295,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_10_09png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x940426,
+	.pixel.data_bin		 = 0xa363db,
 	.pixel.size_bin		 = 0xaa9,
 };
 
@@ -10286,7 +10304,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_11_10png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x940ecf,
+	.pixel.data_bin		 = 0xa36e84,
 	.pixel.size_bin		 = 0xb5d,
 };
 
@@ -10295,7 +10313,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_12_11png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x941a2c,
+	.pixel.data_bin		 = 0xa379e1,
 	.pixel.size_bin		 = 0xb05,
 };
 
@@ -10304,7 +10322,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_13_12png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x942531,
+	.pixel.data_bin		 = 0xa384e6,
 	.pixel.size_bin		 = 0xa8c,
 };
 
@@ -10313,7 +10331,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_14_13png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x942fbd,
+	.pixel.data_bin		 = 0xa38f72,
 	.pixel.size_bin		 = 0x9b7,
 };
 
@@ -10322,7 +10340,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_15_14png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x943974,
+	.pixel.data_bin		 = 0xa39929,
 	.pixel.size_bin		 = 0x84c,
 };
 
@@ -10331,7 +10349,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_16_15png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9441c0,
+	.pixel.data_bin		 = 0xa3a175,
 	.pixel.size_bin		 = 0x780,
 };
 
@@ -10340,7 +10358,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_17_16png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x944940,
+	.pixel.data_bin		 = 0xa3a8f5,
 	.pixel.size_bin		 = 0x7d4,
 };
 
@@ -10349,7 +10367,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_18_17png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x945114,
+	.pixel.data_bin		 = 0xa3b0c9,
 	.pixel.size_bin		 = 0x8ef,
 };
 
@@ -10358,7 +10376,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_19_18png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x945a03,
+	.pixel.data_bin		 = 0xa3b9b8,
 	.pixel.size_bin		 = 0x9e7,
 };
 
@@ -10367,7 +10385,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_outwalking_20_19png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9463ea,
+	.pixel.data_bin		 = 0xa3c39f,
 	.pixel.size_bin		 = 0xa34,
 };
 
@@ -10376,7 +10394,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_01_00png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x946e1e,
+	.pixel.data_bin		 = 0xa3cdd3,
 	.pixel.size_bin		 = 0xd41,
 };
 
@@ -10385,7 +10403,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_02_01png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x947b5f,
+	.pixel.data_bin		 = 0xa3db14,
 	.pixel.size_bin		 = 0xd21,
 };
 
@@ -10394,7 +10412,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_03_02png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x948880,
+	.pixel.data_bin		 = 0xa3e835,
 	.pixel.size_bin		 = 0xc9e,
 };
 
@@ -10403,7 +10421,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_04_03png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x94951e,
+	.pixel.data_bin		 = 0xa3f4d3,
 	.pixel.size_bin		 = 0xbb5,
 };
 
@@ -10412,7 +10430,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_05_04png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x94a0d3,
+	.pixel.data_bin		 = 0xa40088,
 	.pixel.size_bin		 = 0xa9e,
 };
 
@@ -10421,7 +10439,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_06_05png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x94ab71,
+	.pixel.data_bin		 = 0xa40b26,
 	.pixel.size_bin		 = 0xbb1,
 };
 
@@ -10430,7 +10448,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_07_06png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x94b722,
+	.pixel.data_bin		 = 0xa416d7,
 	.pixel.size_bin		 = 0xc62,
 };
 
@@ -10439,7 +10457,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_08_07png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x94c384,
+	.pixel.data_bin		 = 0xa42339,
 	.pixel.size_bin		 = 0xce6,
 };
 
@@ -10448,7 +10466,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_09_08png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x94d06a,
+	.pixel.data_bin		 = 0xa4301f,
 	.pixel.size_bin		 = 0xcbe,
 };
 
@@ -10457,7 +10475,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_10_09png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x94dd28,
+	.pixel.data_bin		 = 0xa43cdd,
 	.pixel.size_bin		 = 0xd3b,
 };
 
@@ -10466,7 +10484,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_11_10png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x94ea63,
+	.pixel.data_bin		 = 0xa44a18,
 	.pixel.size_bin		 = 0xcaa,
 };
 
@@ -10475,7 +10493,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_12_11png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x94f70d,
+	.pixel.data_bin		 = 0xa456c2,
 	.pixel.size_bin		 = 0xbf1,
 };
 
@@ -10484,7 +10502,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_13_12png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9502fe,
+	.pixel.data_bin		 = 0xa462b3,
 	.pixel.size_bin		 = 0xabd,
 };
 
@@ -10493,7 +10511,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_14_13png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x950dbb,
+	.pixel.data_bin		 = 0xa46d70,
 	.pixel.size_bin		 = 0xba9,
 };
 
@@ -10502,7 +10520,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_15_14png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x951964,
+	.pixel.data_bin		 = 0xa47919,
 	.pixel.size_bin		 = 0xc9c,
 };
 
@@ -10511,7 +10529,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_treadmill_16_15png 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x952600,
+	.pixel.data_bin		 = 0xa485b5,
 	.pixel.size_bin		 = 0xd0f,
 };
 
@@ -10520,7 +10538,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_01_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95330f,
+	.pixel.data_bin		 = 0xa492c4,
 	.pixel.size_bin		 = 0xd3e,
 };
 
@@ -10529,7 +10547,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_02_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95404d,
+	.pixel.data_bin		 = 0xa4a002,
 	.pixel.size_bin		 = 0xd6a,
 };
 
@@ -10538,7 +10556,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_03_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x954db7,
+	.pixel.data_bin		 = 0xa4ad6c,
 	.pixel.size_bin		 = 0xc3e,
 };
 
@@ -10547,7 +10565,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_04_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9559f5,
+	.pixel.data_bin		 = 0xa4b9aa,
 	.pixel.size_bin		 = 0xba9,
 };
 
@@ -10556,7 +10574,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_05_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95659e,
+	.pixel.data_bin		 = 0xa4c553,
 	.pixel.size_bin		 = 0xb97,
 };
 
@@ -10565,7 +10583,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_06_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x957135,
+	.pixel.data_bin		 = 0xa4d0ea,
 	.pixel.size_bin		 = 0xba6,
 };
 
@@ -10574,7 +10592,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_07_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x957cdb,
+	.pixel.data_bin		 = 0xa4dc90,
 	.pixel.size_bin		 = 0xc14,
 };
 
@@ -10583,7 +10601,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_08_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9588ef,
+	.pixel.data_bin		 = 0xa4e8a4,
 	.pixel.size_bin		 = 0xcf0,
 };
 
@@ -10592,7 +10610,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_09_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9595df,
+	.pixel.data_bin		 = 0xa4f594,
 	.pixel.size_bin		 = 0xd89,
 };
 
@@ -10601,7 +10619,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_10_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95a368,
+	.pixel.data_bin		 = 0xa5031d,
 	.pixel.size_bin		 = 0xdd4,
 };
 
@@ -10610,7 +10628,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_11_1
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95b13c,
+	.pixel.data_bin		 = 0xa510f1,
 	.pixel.size_bin		 = 0xccd,
 };
 
@@ -10619,7 +10637,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_12_1
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95be09,
+	.pixel.data_bin		 = 0xa51dbe,
 	.pixel.size_bin		 = 0xd28,
 };
 
@@ -10628,7 +10646,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_13_1
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95cb31,
+	.pixel.data_bin		 = 0xa52ae6,
 	.pixel.size_bin		 = 0xd26,
 };
 
@@ -10637,7 +10655,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_14_1
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95d857,
+	.pixel.data_bin		 = 0xa5380c,
 	.pixel.size_bin		 = 0xcea,
 };
 
@@ -10646,7 +10664,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_15_1
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95e541,
+	.pixel.data_bin		 = 0xa544f6,
 	.pixel.size_bin		 = 0xd1e,
 };
 
@@ -10655,7 +10673,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_16_1
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95f25f,
+	.pixel.data_bin		 = 0xa55214,
 	.pixel.size_bin		 = 0xc67,
 };
 
@@ -10664,7 +10682,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_17_1
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x95fec6,
+	.pixel.data_bin		 = 0xa55e7b,
 	.pixel.size_bin		 = 0xd47,
 };
 
@@ -10673,7 +10691,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_gif_yongchiyouyong_18_1
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x960c0d,
+	.pixel.data_bin		 = 0xa56bc2,
 	.pixel.size_bin		 = 0xd22,
 };
 
@@ -10682,7 +10700,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_01_000_huwaipa
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x96192f,
+	.pixel.data_bin		 = 0xa578e4,
 	.pixel.size_bin		 = 0xd38,
 };
 
@@ -10691,7 +10709,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_02_001_huwaizo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x962667,
+	.pixel.data_bin		 = 0xa5861c,
 	.pixel.size_bin		 = 0xbbc,
 };
 
@@ -10700,7 +10718,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_03_002_shineiz
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x963223,
+	.pixel.data_bin		 = 0xa591d8,
 	.pixel.size_bin		 = 0xaca,
 };
 
@@ -10709,7 +10727,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_04_003_shineip
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x963ced,
+	.pixel.data_bin		 = 0xa59ca2,
 	.pixel.size_bin		 = 0xc48,
 };
 
@@ -10718,7 +10736,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_05_004_paobuji
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x964935,
+	.pixel.data_bin		 = 0xa5a8ea,
 	.pixel.size_bin		 = 0xe2b,
 };
 
@@ -10727,7 +10745,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_06_005_huwaiqi
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x965760,
+	.pixel.data_bin		 = 0xa5b715,
 	.pixel.size_bin		 = 0x10bb,
 };
 
@@ -10736,7 +10754,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_07_006_shineid
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x96681b,
+	.pixel.data_bin		 = 0xa5c7d0,
 	.pixel.size_bin		 = 0x1292,
 };
 
@@ -10745,7 +10763,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_08_007_yongchi
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x967aad,
+	.pixel.data_bin		 = 0xa5da62,
 	.pixel.size_bin		 = 0xf53,
 };
 
@@ -10754,7 +10772,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_09_008_kaifang
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x968a00,
+	.pixel.data_bin		 = 0xa5e9b5,
 	.pixel.size_bin		 = 0xed0,
 };
 
@@ -10763,7 +10781,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_10_009_tierens
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9698d0,
+	.pixel.data_bin		 = 0xa5f885,
 	.pixel.size_bin		 = 0x1387,
 };
 
@@ -10772,7 +10790,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_11_010_dengsha
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x96ac57,
+	.pixel.data_bin		 = 0xa60c0c,
 	.pixel.size_bin		 = 0xd5c,
 };
 
@@ -10781,7 +10799,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_12_011_tuoyuan
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x96b9b3,
+	.pixel.data_bin		 = 0xa61968,
 	.pixel.size_bin		 = 0xde8,
 };
 
@@ -10790,7 +10808,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_13_012_huahcua
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x96c79b,
+	.pixel.data_bin		 = 0xa62750,
 	.pixel.size_bin		 = 0xe29,
 };
 
@@ -10799,7 +10817,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_14_013_wudaopn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x96d5c4,
+	.pixel.data_bin		 = 0xa63579,
 	.pixel.size_bin		 = 0xafb,
 };
 
@@ -10808,7 +10826,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_15_014_ziyouxu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x96e0bf,
+	.pixel.data_bin		 = 0xa64074,
 	.pixel.size_bin		 = 0xa39,
 };
 
@@ -10817,7 +10835,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_16_015_yibandu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x96eaf8,
+	.pixel.data_bin		 = 0xa64aad,
 	.pixel.size_bin		 = 0xcc7,
 };
 
@@ -10826,7 +10844,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_17_016_yueyepa
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x96f7bf,
+	.pixel.data_bin		 = 0xa65774,
 	.pixel.size_bin		 = 0xced,
 };
 
@@ -10835,7 +10853,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_18_017_jilixun
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9704ac,
+	.pixel.data_bin		 = 0xa66461,
 	.pixel.size_bin		 = 0xd5e,
 };
 
@@ -10844,7 +10862,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_19_019_tabujip
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97120a,
+	.pixel.data_bin		 = 0xa671bf,
 	.pixel.size_bin		 = 0xb8e,
 };
 
@@ -10853,7 +10871,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_20_020_manbuji
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x971d98,
+	.pixel.data_bin		 = 0xa67d4d,
 	.pixel.size_bin		 = 0xb03,
 };
 
@@ -10862,7 +10880,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_21_021_hiitpng
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97289b,
+	.pixel.data_bin		 = 0xa68850,
 	.pixel.size_bin		 = 0xb7c,
 };
 
@@ -10871,7 +10889,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_22_022_jianshe
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x973417,
+	.pixel.data_bin		 = 0xa693cc,
 	.pixel.size_bin		 = 0x98e,
 };
 
@@ -10880,7 +10898,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_23_023_tuantic
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x973da5,
+	.pixel.data_bin		 = 0xa69d5a,
 	.pixel.size_bin		 = 0x132f,
 };
 
@@ -10889,7 +10907,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_24_024_yujiapn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9750d4,
+	.pixel.data_bin		 = 0xa6b089,
 	.pixel.size_bin		 = 0xb59,
 };
 
@@ -10898,7 +10916,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_25_025_maoship
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x975c2d,
+	.pixel.data_bin		 = 0xa6bbe2,
 	.pixel.size_bin		 = 0x709,
 };
 
@@ -10907,7 +10925,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_26_026_niuship
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x976336,
+	.pixel.data_bin		 = 0xa6c2eb,
 	.pixel.size_bin		 = 0x80a,
 };
 
@@ -10916,7 +10934,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_27_027_yanjing
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x976b40,
+	.pixel.data_bin		 = 0xa6caf5,
 	.pixel.size_bin		 = 0x74a,
 };
 
@@ -10925,7 +10943,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_28_028_yingxio
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97728a,
+	.pixel.data_bin		 = 0xa6d23f,
 	.pixel.size_bin		 = 0x7da,
 };
 
@@ -10934,7 +10952,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_29_029_yingxio
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x977a64,
+	.pixel.data_bin		 = 0xa6da19,
 	.pixel.size_bin		 = 0x7c7,
 };
 
@@ -10943,7 +10961,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_30_030_yingxio
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97822b,
+	.pixel.data_bin		 = 0xa6e1e0,
 	.pixel.size_bin		 = 0x4fd,
 };
 
@@ -10952,7 +10970,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_31_031_gunlunp
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x978728,
+	.pixel.data_bin		 = 0xa6e6dd,
 	.pixel.size_bin		 = 0xa25,
 };
 
@@ -10961,7 +10979,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_32_032_tiaoshe
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97914d,
+	.pixel.data_bin		 = 0xa6f102,
 	.pixel.size_bin		 = 0xbce,
 };
 
@@ -10970,7 +10988,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_33_033_pilatis
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x979d1b,
+	.pixel.data_bin		 = 0xa6fcd0,
 	.pixel.size_bin		 = 0x9e0,
 };
 
@@ -10979,7 +10997,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_34_034_hunheji
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97a6fb,
+	.pixel.data_bin		 = 0xa706b0,
 	.pixel.size_bin		 = 0xa8b,
 };
 
@@ -10988,7 +11006,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_35_035_gongnne
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97b186,
+	.pixel.data_bin		 = 0xa7113b,
 	.pixel.size_bin		 = 0xd7d,
 };
 
@@ -10997,7 +11015,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_36_036_tinengp
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97bf03,
+	.pixel.data_bin		 = 0xa71eb8,
 	.pixel.size_bin		 = 0xcf3,
 };
 
@@ -11006,7 +11024,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_37_037_taiquan
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97cbf6,
+	.pixel.data_bin		 = 0xa72bab,
 	.pixel.size_bin		 = 0xbce,
 };
 
@@ -11015,7 +11033,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_38_038_quanjip
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97d7c4,
+	.pixel.data_bin		 = 0xa73779,
 	.pixel.size_bin		 = 0xaf2,
 };
 
@@ -11024,7 +11042,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_39_039_ziyouqu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97e2b6,
+	.pixel.data_bin		 = 0xa7426b,
 	.pixel.size_bin		 = 0xacf,
 };
 
@@ -11033,7 +11051,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_40_040_kongsho
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97ed85,
+	.pixel.data_bin		 = 0xa74d3a,
 	.pixel.size_bin		 = 0xd6b,
 };
 
@@ -11042,7 +11060,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_41_041_jijianp
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x97faf0,
+	.pixel.data_bin		 = 0xa75aa5,
 	.pixel.size_bin		 = 0xe05,
 };
 
@@ -11051,7 +11069,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_42_042_hexinxu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9808f5,
+	.pixel.data_bin		 = 0xa768aa,
 	.pixel.size_bin		 = 0xceb,
 };
 
@@ -11060,7 +11078,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_43_043_quanjiy
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9815e0,
+	.pixel.data_bin		 = 0xa77595,
 	.pixel.size_bin		 = 0xc90,
 };
 
@@ -11069,7 +11087,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_44_044_jiandao
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x982270,
+	.pixel.data_bin		 = 0xa78225,
 	.pixel.size_bin		 = 0xd48,
 };
 
@@ -11078,7 +11096,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_45_045_dangang
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x982fb8,
+	.pixel.data_bin		 = 0xa78f6d,
 	.pixel.size_bin		 = 0x9eb,
 };
 
@@ -11087,7 +11105,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_46_046_shuangg
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9839a3,
+	.pixel.data_bin		 = 0xa79958,
 	.pixel.size_bin		 = 0xb12,
 };
 
@@ -11096,7 +11114,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_47_047_xunhuan
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9844b5,
+	.pixel.data_bin		 = 0xa7a46a,
 	.pixel.size_bin		 = 0xab8,
 };
 
@@ -11105,7 +11123,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_48_048_youyang
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x984f6d,
+	.pixel.data_bin		 = 0xa7af22,
 	.pixel.size_bin		 = 0xb09,
 };
 
@@ -11114,7 +11132,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_49_049_jianmei
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x985a76,
+	.pixel.data_bin		 = 0xa7ba2b,
 	.pixel.size_bin		 = 0xc09,
 };
 
@@ -11123,7 +11141,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_50_050_px90png
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x98667f,
+	.pixel.data_bin		 = 0xa7c634,
 	.pixel.size_bin		 = 0x702,
 };
 
@@ -11132,7 +11150,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_51_051_linghup
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x986d81,
+	.pixel.data_bin		 = 0xa7cd36,
 	.pixel.size_bin		 = 0xf46,
 };
 
@@ -11141,7 +11159,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_52_052_zongheg
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x987cc7,
+	.pixel.data_bin		 = 0xa7dc7c,
 	.pixel.size_bin		 = 0xc87,
 };
 
@@ -11150,7 +11168,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_53_053_palouji
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x98894e,
+	.pixel.data_bin		 = 0xa7e903,
 	.pixel.size_bin		 = 0xb72,
 };
 
@@ -11159,7 +11177,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_54_054_juzhong
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9894c0,
+	.pixel.data_bin		 = 0xa7f475,
 	.pixel.size_bin		 = 0xd75,
 };
 
@@ -11168,7 +11186,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_55_055_barrepn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x98a235,
+	.pixel.data_bin		 = 0xa801ea,
 	.pixel.size_bin		 = 0xdaa,
 };
 
@@ -11177,7 +11195,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_56_056_shoulun
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x98afdf,
+	.pixel.data_bin		 = 0xa80f94,
 	.pixel.size_bin		 = 0x107c,
 };
 
@@ -11186,7 +11204,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_57_057_tianjin
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x98c05b,
+	.pixel.data_bin		 = 0xa82010,
 	.pixel.size_bin		 = 0xd3e,
 };
 
@@ -11195,7 +11213,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_58_058_jiaolip
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x98cd99,
+	.pixel.data_bin		 = 0xa82d4e,
 	.pixel.size_bin		 = 0x100a,
 };
 
@@ -11204,7 +11222,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_59_059_shenxin
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x98dda3,
+	.pixel.data_bin		 = 0xa83d58,
 	.pixel.size_bin		 = 0xb95,
 };
 
@@ -11213,7 +11231,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_60_060_rouruan
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x98e938,
+	.pixel.data_bin		 = 0xa848ed,
 	.pixel.size_bin		 = 0xb1b,
 };
 
@@ -11222,7 +11240,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_61_061_hunheyo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x98f453,
+	.pixel.data_bin		 = 0xa85408,
 	.pixel.size_bin		 = 0x9ce,
 };
 
@@ -11231,7 +11249,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_62_062_chuanto
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x98fe21,
+	.pixel.data_bin		 = 0xa85dd6,
 	.pixel.size_bin		 = 0xd3d,
 };
 
@@ -11240,7 +11258,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_63_063_jiaocha
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x990b5e,
+	.pixel.data_bin		 = 0xa86b13,
 	.pixel.size_bin		 = 0x88c,
 };
 
@@ -11249,7 +11267,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_64_064_ticaopn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9913ea,
+	.pixel.data_bin		 = 0xa8739f,
 	.pixel.size_bin		 = 0xaab,
 };
 
@@ -11258,7 +11276,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_65_065_jietipn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x991e95,
+	.pixel.data_bin		 = 0xa87e4a,
 	.pixel.size_bin		 = 0xbd9,
 };
 
@@ -11267,7 +11285,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_66_066_yibanwu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x992a6e,
+	.pixel.data_bin		 = 0xa88a23,
 	.pixel.size_bin		 = 0xb12,
 };
 
@@ -11276,7 +11294,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_67_067_dupiwup
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x993580,
+	.pixel.data_bin		 = 0xa89535,
 	.pixel.size_bin		 = 0xa6d,
 };
 
@@ -11285,7 +11303,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_68_068_jueshiw
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x993fed,
+	.pixel.data_bin		 = 0xa89fa2,
 	.pixel.size_bin		 = 0xa90,
 };
 
@@ -11294,7 +11312,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_69_069_ladingw
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x994a7d,
+	.pixel.data_bin		 = 0xa8aa32,
 	.pixel.size_bin		 = 0xad4,
 };
 
@@ -11303,7 +11321,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_70_070_baleipn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x995551,
+	.pixel.data_bin		 = 0xa8b506,
 	.pixel.size_bin		 = 0xa96,
 };
 
@@ -11312,7 +11330,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_71_071_jiewupn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x995fe7,
+	.pixel.data_bin		 = 0xa8bf9c,
 	.pixel.size_bin		 = 0xc64,
 };
 
@@ -11321,7 +11339,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_72_072_guangch
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x996c4b,
+	.pixel.data_bin		 = 0xa8cc00,
 	.pixel.size_bin		 = 0xb4e,
 };
 
@@ -11330,7 +11348,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_73_073_zunbapn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x997799,
+	.pixel.data_bin		 = 0xa8d74e,
 	.pixel.size_bin		 = 0xcd2,
 };
 
@@ -11339,7 +11357,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_74_074_shejiao
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x99846b,
+	.pixel.data_bin		 = 0xa8e420,
 	.pixel.size_bin		 = 0x1030,
 };
 
@@ -11348,7 +11366,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_75_075_titawup
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x99949b,
+	.pixel.data_bin		 = 0xa8f450,
 	.pixel.size_bin		 = 0xb10,
 };
 
@@ -11357,7 +11375,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_76_076_yibanxi
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x999fab,
+	.pixel.data_bin		 = 0xa8ff60,
 	.pixel.size_bin		 = 0x950,
 };
 
@@ -11366,7 +11384,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_77_077_lunhuap
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x99a8fb,
+	.pixel.data_bin		 = 0xa908b0,
 	.pixel.size_bin		 = 0xda1,
 };
 
@@ -11375,7 +11393,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_78_078_wushupn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x99b69c,
+	.pixel.data_bin		 = 0xa91651,
 	.pixel.size_bin		 = 0xb0f,
 };
 
@@ -11384,7 +11402,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_79_079_taijipn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x99c1ab,
+	.pixel.data_bin		 = 0xa92160,
 	.pixel.size_bin		 = 0xcc6,
 };
 
@@ -11393,7 +11411,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_80_080_hulaqua
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x99ce71,
+	.pixel.data_bin		 = 0xa92e26,
 	.pixel.size_bin		 = 0x1105,
 };
 
@@ -11402,7 +11420,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_81_081_feipanp
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x99df76,
+	.pixel.data_bin		 = 0xa93f2b,
 	.pixel.size_bin		 = 0xcdf,
 };
 
@@ -11411,7 +11429,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_82_082_feibiao
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x99ec55,
+	.pixel.data_bin		 = 0xa94c0a,
 	.pixel.size_bin		 = 0xb80,
 };
 
@@ -11420,7 +11438,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_83_083_shejian
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x99f7d5,
+	.pixel.data_bin		 = 0xa9578a,
 	.pixel.size_bin		 = 0xdd7,
 };
 
@@ -11429,7 +11447,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_84_084_qimapng
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a05ac,
+	.pixel.data_bin		 = 0xa96561,
 	.pixel.size_bin		 = 0xd83,
 };
 
@@ -11438,7 +11456,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_85_085_duizhan
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a132f,
+	.pixel.data_bin		 = 0xa972e4,
 	.pixel.size_bin		 = 0xf90,
 };
 
@@ -11447,7 +11465,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_86_086_fangfen
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a22bf,
+	.pixel.data_bin		 = 0xa98274,
 	.pixel.size_bin		 = 0x10b8,
 };
 
@@ -11456,7 +11474,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_87_087_bahepng
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a3377,
+	.pixel.data_bin		 = 0xa9932c,
 	.pixel.size_bin		 = 0xe34,
 };
 
@@ -11465,7 +11483,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_88_088_qiuqian
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a41ab,
+	.pixel.data_bin		 = 0xa9a160,
 	.pixel.size_bin		 = 0xe67,
 };
 
@@ -11474,7 +11492,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_89_089_palouti
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a5012,
+	.pixel.data_bin		 = 0xa9afc7,
 	.pixel.size_bin		 = 0xb91,
 };
 
@@ -11483,7 +11501,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_90_090_zhangai
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a5ba3,
+	.pixel.data_bin		 = 0xa9bb58,
 	.pixel.size_bin		 = 0xe41,
 };
 
@@ -11492,7 +11510,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_91_091_diaoyup
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a69e4,
+	.pixel.data_bin		 = 0xa9c999,
 	.pixel.size_bin		 = 0x11b9,
 };
 
@@ -11501,7 +11519,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_92_092_daliepn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a7b9d,
+	.pixel.data_bin		 = 0xa9db52,
 	.pixel.size_bin		 = 0xd21,
 };
 
@@ -11510,7 +11528,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_93_093_huabanc
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a88be,
+	.pixel.data_bin		 = 0xa9e873,
 	.pixel.size_bin		 = 0xba3,
 };
 
@@ -11519,7 +11537,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_94_094_huixian
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9a9461,
+	.pixel.data_bin		 = 0xa9f416,
 	.pixel.size_bin		 = 0xe37,
 };
 
@@ -11528,7 +11546,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_95_095_tuandui
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9aa298,
+	.pixel.data_bin		 = 0xaa024d,
 	.pixel.size_bin		 = 0x128c,
 };
 
@@ -11537,7 +11555,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_96_096_jianshe
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9ab524,
+	.pixel.data_bin		 = 0xaa14d9,
 	.pixel.size_bin		 = 0xca2,
 };
 
@@ -11546,7 +11564,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_97_097_jianxin
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9ac1c6,
+	.pixel.data_bin		 = 0xaa217b,
 	.pixel.size_bin		 = 0xc38,
 };
 
@@ -11555,7 +11573,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_98_098_mashupn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9acdfe,
+	.pixel.data_bin		 = 0xaa2db3,
 	.pixel.size_bin		 = 0xc49,
 };
 
@@ -11564,7 +11582,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_99_099_wanlepn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9ada47,
+	.pixel.data_bin		 = 0xaa39fc,
 	.pixel.size_bin		 = 0x1226,
 };
 
@@ -11573,7 +11591,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9aec6d,
+	.pixel.data_bin		 = 0xaa4c22,
 	.pixel.size_bin		 = 0xbfe,
 };
 
@@ -11582,7 +11600,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9af86b,
+	.pixel.data_bin		 = 0xaa5820,
 	.pixel.size_bin		 = 0xea7,
 };
 
@@ -11591,7 +11609,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b0712,
+	.pixel.data_bin		 = 0xaa66c7,
 	.pixel.size_bin		 = 0xd4c,
 };
 
@@ -11600,7 +11618,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b145e,
+	.pixel.data_bin		 = 0xaa7413,
 	.pixel.size_bin		 = 0xc91,
 };
 
@@ -11609,7 +11627,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b20ef,
+	.pixel.data_bin		 = 0xaa80a4,
 	.pixel.size_bin		 = 0xeaf,
 };
 
@@ -11618,7 +11636,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b2f9e,
+	.pixel.data_bin		 = 0xaa8f53,
 	.pixel.size_bin		 = 0xe78,
 };
 
@@ -11627,7 +11645,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b3e16,
+	.pixel.data_bin		 = 0xaa9dcb,
 	.pixel.size_bin		 = 0xf31,
 };
 
@@ -11636,7 +11654,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b4d47,
+	.pixel.data_bin		 = 0xaaacfc,
 	.pixel.size_bin		 = 0xd46,
 };
 
@@ -11645,7 +11663,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b5a8d,
+	.pixel.data_bin		 = 0xaaba42,
 	.pixel.size_bin		 = 0xb8a,
 };
 
@@ -11654,7 +11672,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b6617,
+	.pixel.data_bin		 = 0xaac5cc,
 	.pixel.size_bin		 = 0xc90,
 };
 
@@ -11663,7 +11681,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b72a7,
+	.pixel.data_bin		 = 0xaad25c,
 	.pixel.size_bin		 = 0xd7c,
 };
 
@@ -11672,7 +11690,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b8023,
+	.pixel.data_bin		 = 0xaadfd8,
 	.pixel.size_bin		 = 0xcc5,
 };
 
@@ -11681,7 +11699,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b8ce8,
+	.pixel.data_bin		 = 0xaaec9d,
 	.pixel.size_bin		 = 0xb4c,
 };
 
@@ -11690,7 +11708,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9b9834,
+	.pixel.data_bin		 = 0xaaf7e9,
 	.pixel.size_bin		 = 0xd32,
 };
 
@@ -11699,7 +11717,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9ba566,
+	.pixel.data_bin		 = 0xab051b,
 	.pixel.size_bin		 = 0x1365,
 };
 
@@ -11708,7 +11726,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9bb8cb,
+	.pixel.data_bin		 = 0xab1880,
 	.pixel.size_bin		 = 0xd16,
 };
 
@@ -11717,7 +11735,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9bc5e1,
+	.pixel.data_bin		 = 0xab2596,
 	.pixel.size_bin		 = 0xfcc,
 };
 
@@ -11726,7 +11744,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9bd5ad,
+	.pixel.data_bin		 = 0xab3562,
 	.pixel.size_bin		 = 0xe39,
 };
 
@@ -11735,7 +11753,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9be3e6,
+	.pixel.data_bin		 = 0xab439b,
 	.pixel.size_bin		 = 0xd89,
 };
 
@@ -11744,7 +11762,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9bf16f,
+	.pixel.data_bin		 = 0xab5124,
 	.pixel.size_bin		 = 0xd94,
 };
 
@@ -11753,7 +11771,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9bff03,
+	.pixel.data_bin		 = 0xab5eb8,
 	.pixel.size_bin		 = 0xb03,
 };
 
@@ -11762,7 +11780,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c0a06,
+	.pixel.data_bin		 = 0xab69bb,
 	.pixel.size_bin		 = 0xfc9,
 };
 
@@ -11771,7 +11789,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c19cf,
+	.pixel.data_bin		 = 0xab7984,
 	.pixel.size_bin		 = 0xf26,
 };
 
@@ -11780,7 +11798,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c28f5,
+	.pixel.data_bin		 = 0xab88aa,
 	.pixel.size_bin		 = 0xd38,
 };
 
@@ -11789,7 +11807,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c362d,
+	.pixel.data_bin		 = 0xab95e2,
 	.pixel.size_bin		 = 0xcb1,
 };
 
@@ -11798,7 +11816,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c42de,
+	.pixel.data_bin		 = 0xaba293,
 	.pixel.size_bin		 = 0xdf4,
 };
 
@@ -11807,7 +11825,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c50d2,
+	.pixel.data_bin		 = 0xabb087,
 	.pixel.size_bin		 = 0xd79,
 };
 
@@ -11816,7 +11834,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c5e4b,
+	.pixel.data_bin		 = 0xabbe00,
 	.pixel.size_bin		 = 0xf4f,
 };
 
@@ -11825,7 +11843,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c6d9a,
+	.pixel.data_bin		 = 0xabcd4f,
 	.pixel.size_bin		 = 0x1194,
 };
 
@@ -11834,7 +11852,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c7f2e,
+	.pixel.data_bin		 = 0xabdee3,
 	.pixel.size_bin		 = 0xebd,
 };
 
@@ -11843,7 +11861,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c8deb,
+	.pixel.data_bin		 = 0xabeda0,
 	.pixel.size_bin		 = 0x10a6,
 };
 
@@ -11852,7 +11870,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9c9e91,
+	.pixel.data_bin		 = 0xabfe46,
 	.pixel.size_bin		 = 0x124a,
 };
 
@@ -11861,7 +11879,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9cb0db,
+	.pixel.data_bin		 = 0xac1090,
 	.pixel.size_bin		 = 0x1206,
 };
 
@@ -11870,7 +11888,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9cc2e1,
+	.pixel.data_bin		 = 0xac2296,
 	.pixel.size_bin		 = 0x10ec,
 };
 
@@ -11879,7 +11897,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9cd3cd,
+	.pixel.data_bin		 = 0xac3382,
 	.pixel.size_bin		 = 0x1385,
 };
 
@@ -11888,7 +11906,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9ce752,
+	.pixel.data_bin		 = 0xac4707,
 	.pixel.size_bin		 = 0x12d7,
 };
 
@@ -11897,7 +11915,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9cfa29,
+	.pixel.data_bin		 = 0xac59de,
 	.pixel.size_bin		 = 0x112d,
 };
 
@@ -11906,7 +11924,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9d0b56,
+	.pixel.data_bin		 = 0xac6b0b,
 	.pixel.size_bin		 = 0xba5,
 };
 
@@ -11915,7 +11933,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9d16fb,
+	.pixel.data_bin		 = 0xac76b0,
 	.pixel.size_bin		 = 0xd0f,
 };
 
@@ -11924,7 +11942,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9d240a,
+	.pixel.data_bin		 = 0xac83bf,
 	.pixel.size_bin		 = 0xf2f,
 };
 
@@ -11933,7 +11951,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9d3339,
+	.pixel.data_bin		 = 0xac92ee,
 	.pixel.size_bin		 = 0xe9a,
 };
 
@@ -11942,7 +11960,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9d41d3,
+	.pixel.data_bin		 = 0xaca188,
 	.pixel.size_bin		 = 0xeb3,
 };
 
@@ -11951,7 +11969,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9d5086,
+	.pixel.data_bin		 = 0xacb03b,
 	.pixel.size_bin		 = 0x116c,
 };
 
@@ -11960,7 +11978,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9d61f2,
+	.pixel.data_bin		 = 0xacc1a7,
 	.pixel.size_bin		 = 0x144b,
 };
 
@@ -11969,7 +11987,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9d763d,
+	.pixel.data_bin		 = 0xacd5f2,
 	.pixel.size_bin		 = 0xf14,
 };
 
@@ -11978,7 +11996,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9d8551,
+	.pixel.data_bin		 = 0xace506,
 	.pixel.size_bin		 = 0xeb9,
 };
 
@@ -11987,7 +12005,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9d940a,
+	.pixel.data_bin		 = 0xacf3bf,
 	.pixel.size_bin		 = 0xe46,
 };
 
@@ -11996,7 +12014,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9da250,
+	.pixel.data_bin		 = 0xad0205,
 	.pixel.size_bin		 = 0xd85,
 };
 
@@ -12005,7 +12023,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9dafd5,
+	.pixel.data_bin		 = 0xad0f8a,
 	.pixel.size_bin		 = 0xdb6,
 };
 
@@ -12014,7 +12032,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9dbd8b,
+	.pixel.data_bin		 = 0xad1d40,
 	.pixel.size_bin		 = 0xe09,
 };
 
@@ -12023,7 +12041,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9dcb94,
+	.pixel.data_bin		 = 0xad2b49,
 	.pixel.size_bin		 = 0xdd5,
 };
 
@@ -12032,7 +12050,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9dd969,
+	.pixel.data_bin		 = 0xad391e,
 	.pixel.size_bin		 = 0xcad,
 };
 
@@ -12041,7 +12059,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9de616,
+	.pixel.data_bin		 = 0xad45cb,
 	.pixel.size_bin		 = 0xd90,
 };
 
@@ -12050,7 +12068,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9df3a6,
+	.pixel.data_bin		 = 0xad535b,
 	.pixel.size_bin		 = 0xd53,
 };
 
@@ -12059,7 +12077,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e00f9,
+	.pixel.data_bin		 = 0xad60ae,
 	.pixel.size_bin		 = 0xe5e,
 };
 
@@ -12068,7 +12086,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e0f57,
+	.pixel.data_bin		 = 0xad6f0c,
 	.pixel.size_bin		 = 0xbe5,
 };
 
@@ -12077,7 +12095,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e1b3c,
+	.pixel.data_bin		 = 0xad7af1,
 	.pixel.size_bin		 = 0x114b,
 };
 
@@ -12086,7 +12104,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e2c87,
+	.pixel.data_bin		 = 0xad8c3c,
 	.pixel.size_bin		 = 0xc84,
 };
 
@@ -12095,7 +12113,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e390b,
+	.pixel.data_bin		 = 0xad98c0,
 	.pixel.size_bin		 = 0xe7b,
 };
 
@@ -12104,7 +12122,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e4786,
+	.pixel.data_bin		 = 0xada73b,
 	.pixel.size_bin		 = 0xd45,
 };
 
@@ -12113,7 +12131,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e54cb,
+	.pixel.data_bin		 = 0xadb480,
 	.pixel.size_bin		 = 0xc4e,
 };
 
@@ -12122,7 +12140,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e6119,
+	.pixel.data_bin		 = 0xadc0ce,
 	.pixel.size_bin		 = 0x11d1,
 };
 
@@ -12131,7 +12149,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e72ea,
+	.pixel.data_bin		 = 0xadd29f,
 	.pixel.size_bin		 = 0xdd1,
 };
 
@@ -12140,7 +12158,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e80bb,
+	.pixel.data_bin		 = 0xade070,
 	.pixel.size_bin		 = 0xca8,
 };
 
@@ -12149,7 +12167,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e8d63,
+	.pixel.data_bin		 = 0xaded18,
 	.pixel.size_bin		 = 0xefe,
 };
 
@@ -12158,7 +12176,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9e9c61,
+	.pixel.data_bin		 = 0xadfc16,
 	.pixel.size_bin		 = 0xac3,
 };
 
@@ -12167,7 +12185,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9ea724,
+	.pixel.data_bin		 = 0xae06d9,
 	.pixel.size_bin		 = 0xd99,
 };
 
@@ -12176,7 +12194,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9eb4bd,
+	.pixel.data_bin		 = 0xae1472,
 	.pixel.size_bin		 = 0x1320,
 };
 
@@ -12185,7 +12203,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9ec7dd,
+	.pixel.data_bin		 = 0xae2792,
 	.pixel.size_bin		 = 0xda9,
 };
 
@@ -12194,7 +12212,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9ed586,
+	.pixel.data_bin		 = 0xae353b,
 	.pixel.size_bin		 = 0xcc3,
 };
 
@@ -12203,7 +12221,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9ee249,
+	.pixel.data_bin		 = 0xae41fe,
 	.pixel.size_bin		 = 0x13c2,
 };
 
@@ -12212,7 +12230,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9ef60b,
+	.pixel.data_bin		 = 0xae55c0,
 	.pixel.size_bin		 = 0xb3e,
 };
 
@@ -12221,7 +12239,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9f0149,
+	.pixel.data_bin		 = 0xae60fe,
 	.pixel.size_bin		 = 0xfc2,
 };
 
@@ -12230,7 +12248,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9f110b,
+	.pixel.data_bin		 = 0xae70c0,
 	.pixel.size_bin		 = 0xd2d,
 };
 
@@ -12239,7 +12257,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9f1e38,
+	.pixel.data_bin		 = 0xae7ded,
 	.pixel.size_bin		 = 0x5e2,
 };
 
@@ -12248,7 +12266,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9f241a,
+	.pixel.data_bin		 = 0xae83cf,
 	.pixel.size_bin		 = 0xd68,
 };
 
@@ -12257,7 +12275,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9f3182,
+	.pixel.data_bin		 = 0xae9137,
 	.pixel.size_bin		 = 0xeaf,
 };
 
@@ -12266,7 +12284,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9f4031,
+	.pixel.data_bin		 = 0xae9fe6,
 	.pixel.size_bin		 = 0x8b2,
 };
 
@@ -12275,7 +12293,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9f48e3,
+	.pixel.data_bin		 = 0xaea898,
 	.pixel.size_bin		 = 0x82a,
 };
 
@@ -12284,7 +12302,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_big_I308001_10_spo
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0x9f510d,
+	.pixel.data_bin		 = 0xaeb0c2,
 	.pixel.size_bin		 = 0xefd,
 };
 
@@ -12293,7 +12311,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_01_000_huwai
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9f600a,
+	.pixel.data_bin		 = 0xaebfbf,
 	.pixel.size_bin		 = 0x7bb,
 };
 
@@ -12302,7 +12320,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_02_001_huwai
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9f67c5,
+	.pixel.data_bin		 = 0xaec77a,
 	.pixel.size_bin		 = 0x735,
 };
 
@@ -12311,7 +12329,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_03_002_shine
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9f6efa,
+	.pixel.data_bin		 = 0xaeceaf,
 	.pixel.size_bin		 = 0x69e,
 };
 
@@ -12320,7 +12338,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_04_003_shine
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9f7598,
+	.pixel.data_bin		 = 0xaed54d,
 	.pixel.size_bin		 = 0x743,
 };
 
@@ -12329,7 +12347,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_05_004_paobu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9f7cdb,
+	.pixel.data_bin		 = 0xaedc90,
 	.pixel.size_bin		 = 0x853,
 };
 
@@ -12338,7 +12356,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_06_005_huwai
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9f852e,
+	.pixel.data_bin		 = 0xaee4e3,
 	.pixel.size_bin		 = 0x9e1,
 };
 
@@ -12347,7 +12365,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_07_006_shine
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9f8f0f,
+	.pixel.data_bin		 = 0xaeeec4,
 	.pixel.size_bin		 = 0xaf4,
 };
 
@@ -12356,7 +12374,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_08_007_yongc
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9f9a03,
+	.pixel.data_bin		 = 0xaef9b8,
 	.pixel.size_bin		 = 0x88b,
 };
 
@@ -12365,7 +12383,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_09_008_kaifa
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9fa28e,
+	.pixel.data_bin		 = 0xaf0243,
 	.pixel.size_bin		 = 0x872,
 };
 
@@ -12374,7 +12392,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_10_009_tiere
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9fab00,
+	.pixel.data_bin		 = 0xaf0ab5,
 	.pixel.size_bin		 = 0xa4f,
 };
 
@@ -12383,7 +12401,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_11_010_dengs
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9fb54f,
+	.pixel.data_bin		 = 0xaf1504,
 	.pixel.size_bin		 = 0x7d7,
 };
 
@@ -12392,7 +12410,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_12_011_tuoyu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9fbd26,
+	.pixel.data_bin		 = 0xaf1cdb,
 	.pixel.size_bin		 = 0x896,
 };
 
@@ -12401,7 +12419,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_13_012_huahc
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9fc5bc,
+	.pixel.data_bin		 = 0xaf2571,
 	.pixel.size_bin		 = 0x7fb,
 };
 
@@ -12410,7 +12428,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_14_013_wudao
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9fcdb7,
+	.pixel.data_bin		 = 0xaf2d6c,
 	.pixel.size_bin		 = 0x6de,
 };
 
@@ -12419,7 +12437,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_15_014_ziyou
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9fd495,
+	.pixel.data_bin		 = 0xaf344a,
 	.pixel.size_bin		 = 0x64a,
 };
 
@@ -12428,7 +12446,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_16_015_yiban
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9fdadf,
+	.pixel.data_bin		 = 0xaf3a94,
 	.pixel.size_bin		 = 0x782,
 };
 
@@ -12437,7 +12455,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_17_016_yueye
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9fe261,
+	.pixel.data_bin		 = 0xaf4216,
 	.pixel.size_bin		 = 0x7f8,
 };
 
@@ -12446,7 +12464,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_18_017_jilix
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9fea59,
+	.pixel.data_bin		 = 0xaf4a0e,
 	.pixel.size_bin		 = 0x799,
 };
 
@@ -12455,7 +12473,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_19_019_tabuj
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9ff1f2,
+	.pixel.data_bin		 = 0xaf51a7,
 	.pixel.size_bin		 = 0x6e2,
 };
 
@@ -12464,7 +12482,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_20_020_manbu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0x9ff8d4,
+	.pixel.data_bin		 = 0xaf5889,
 	.pixel.size_bin		 = 0x730,
 };
 
@@ -12473,7 +12491,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_21_021_hiitp
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa00004,
+	.pixel.data_bin		 = 0xaf5fb9,
 	.pixel.size_bin		 = 0x732,
 };
 
@@ -12482,7 +12500,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_22_022_jians
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa00736,
+	.pixel.data_bin		 = 0xaf66eb,
 	.pixel.size_bin		 = 0x5eb,
 };
 
@@ -12491,7 +12509,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_23_023_tuant
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa00d21,
+	.pixel.data_bin		 = 0xaf6cd6,
 	.pixel.size_bin		 = 0xb54,
 };
 
@@ -12500,7 +12518,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_24_024_yujia
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa01875,
+	.pixel.data_bin		 = 0xaf782a,
 	.pixel.size_bin		 = 0x6ba,
 };
 
@@ -12509,7 +12527,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_25_025_maosh
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa01f2f,
+	.pixel.data_bin		 = 0xaf7ee4,
 	.pixel.size_bin		 = 0x462,
 };
 
@@ -12518,7 +12536,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_26_026_niush
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa02391,
+	.pixel.data_bin		 = 0xaf8346,
 	.pixel.size_bin		 = 0x4d2,
 };
 
@@ -12527,7 +12545,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_27_027_yanji
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa02863,
+	.pixel.data_bin		 = 0xaf8818,
 	.pixel.size_bin		 = 0x4d0,
 };
 
@@ -12536,7 +12554,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_28_028_yingx
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa02d33,
+	.pixel.data_bin		 = 0xaf8ce8,
 	.pixel.size_bin		 = 0x4d3,
 };
 
@@ -12545,7 +12563,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_29_029_yingx
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa03206,
+	.pixel.data_bin		 = 0xaf91bb,
 	.pixel.size_bin		 = 0x4d4,
 };
 
@@ -12554,7 +12572,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_30_030_yingx
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa036da,
+	.pixel.data_bin		 = 0xaf968f,
 	.pixel.size_bin		 = 0x30f,
 };
 
@@ -12563,7 +12581,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_31_031_gunlu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa039e9,
+	.pixel.data_bin		 = 0xaf999e,
 	.pixel.size_bin		 = 0x659,
 };
 
@@ -12572,7 +12590,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_32_032_tiaos
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa04042,
+	.pixel.data_bin		 = 0xaf9ff7,
 	.pixel.size_bin		 = 0x727,
 };
 
@@ -12581,7 +12599,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_33_033_pilat
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa04769,
+	.pixel.data_bin		 = 0xafa71e,
 	.pixel.size_bin		 = 0x5fd,
 };
 
@@ -12590,7 +12608,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_34_034_hunhe
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa04d66,
+	.pixel.data_bin		 = 0xafad1b,
 	.pixel.size_bin		 = 0x66c,
 };
 
@@ -12599,7 +12617,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_35_035_gongn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa053d2,
+	.pixel.data_bin		 = 0xafb387,
 	.pixel.size_bin		 = 0x7f5,
 };
 
@@ -12608,7 +12626,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_36_036_tinen
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa05bc7,
+	.pixel.data_bin		 = 0xafbb7c,
 	.pixel.size_bin		 = 0x779,
 };
 
@@ -12617,7 +12635,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_37_037_taiqu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa06340,
+	.pixel.data_bin		 = 0xafc2f5,
 	.pixel.size_bin		 = 0x6e8,
 };
 
@@ -12626,7 +12644,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_38_038_quanj
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa06a28,
+	.pixel.data_bin		 = 0xafc9dd,
 	.pixel.size_bin		 = 0x69d,
 };
 
@@ -12635,7 +12653,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_39_039_ziyou
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa070c5,
+	.pixel.data_bin		 = 0xafd07a,
 	.pixel.size_bin		 = 0x64b,
 };
 
@@ -12644,7 +12662,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_40_040_kongs
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa07710,
+	.pixel.data_bin		 = 0xafd6c5,
 	.pixel.size_bin		 = 0x814,
 };
 
@@ -12653,7 +12671,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_41_041_jijia
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa07f24,
+	.pixel.data_bin		 = 0xafded9,
 	.pixel.size_bin		 = 0x831,
 };
 
@@ -12662,7 +12680,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_42_042_hexin
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa08755,
+	.pixel.data_bin		 = 0xafe70a,
 	.pixel.size_bin		 = 0x7d0,
 };
 
@@ -12671,7 +12689,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_43_043_quanj
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa08f25,
+	.pixel.data_bin		 = 0xafeeda,
 	.pixel.size_bin		 = 0x786,
 };
 
@@ -12680,7 +12698,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_44_044_jiand
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa096ab,
+	.pixel.data_bin		 = 0xaff660,
 	.pixel.size_bin		 = 0x7a9,
 };
 
@@ -12689,7 +12707,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_45_045_danga
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa09e54,
+	.pixel.data_bin		 = 0xaffe09,
 	.pixel.size_bin		 = 0x5fd,
 };
 
@@ -12698,7 +12716,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_46_046_shuan
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0a451,
+	.pixel.data_bin		 = 0xb00406,
 	.pixel.size_bin		 = 0x6ab,
 };
 
@@ -12707,7 +12725,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_47_047_xunhu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0aafc,
+	.pixel.data_bin		 = 0xb00ab1,
 	.pixel.size_bin		 = 0x6bd,
 };
 
@@ -12716,7 +12734,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_48_048_youya
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0b1b9,
+	.pixel.data_bin		 = 0xb0116e,
 	.pixel.size_bin		 = 0x6db,
 };
 
@@ -12725,7 +12743,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_49_049_jianm
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0b894,
+	.pixel.data_bin		 = 0xb01849,
 	.pixel.size_bin		 = 0x70d,
 };
 
@@ -12734,7 +12752,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_50_050_px90p
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0bfa1,
+	.pixel.data_bin		 = 0xb01f56,
 	.pixel.size_bin		 = 0x474,
 };
 
@@ -12743,7 +12761,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_51_051_lingh
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0c415,
+	.pixel.data_bin		 = 0xb023ca,
 	.pixel.size_bin		 = 0x958,
 };
 
@@ -12752,7 +12770,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_52_052_zongh
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0cd6d,
+	.pixel.data_bin		 = 0xb02d22,
 	.pixel.size_bin		 = 0x739,
 };
 
@@ -12761,7 +12779,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_53_053_palou
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0d4a6,
+	.pixel.data_bin		 = 0xb0345b,
 	.pixel.size_bin		 = 0x74b,
 };
 
@@ -12770,7 +12788,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_54_054_juzho
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0dbf1,
+	.pixel.data_bin		 = 0xb03ba6,
 	.pixel.size_bin		 = 0x840,
 };
 
@@ -12779,7 +12797,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_55_055_barre
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0e431,
+	.pixel.data_bin		 = 0xb043e6,
 	.pixel.size_bin		 = 0x831,
 };
 
@@ -12788,7 +12806,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_56_056_shoul
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0ec62,
+	.pixel.data_bin		 = 0xb04c17,
 	.pixel.size_bin		 = 0x9d8,
 };
 
@@ -12797,7 +12815,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_57_057_tianj
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0f63a,
+	.pixel.data_bin		 = 0xb055ef,
 	.pixel.size_bin		 = 0x811,
 };
 
@@ -12806,7 +12824,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_58_058_jiaol
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa0fe4b,
+	.pixel.data_bin		 = 0xb05e00,
 	.pixel.size_bin		 = 0x95d,
 };
 
@@ -12815,7 +12833,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_59_059_shenx
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa107a8,
+	.pixel.data_bin		 = 0xb0675d,
 	.pixel.size_bin		 = 0x724,
 };
 
@@ -12824,7 +12842,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_60_060_rouru
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa10ecc,
+	.pixel.data_bin		 = 0xb06e81,
 	.pixel.size_bin		 = 0x6c6,
 };
 
@@ -12833,7 +12851,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_61_061_hunhe
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa11592,
+	.pixel.data_bin		 = 0xb07547,
 	.pixel.size_bin		 = 0x657,
 };
 
@@ -12842,7 +12860,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_62_062_chuan
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa11be9,
+	.pixel.data_bin		 = 0xb07b9e,
 	.pixel.size_bin		 = 0x820,
 };
 
@@ -12851,7 +12869,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_63_063_jiaoc
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa12409,
+	.pixel.data_bin		 = 0xb083be,
 	.pixel.size_bin		 = 0x56d,
 };
 
@@ -12860,7 +12878,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_64_064_ticao
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa12976,
+	.pixel.data_bin		 = 0xb0892b,
 	.pixel.size_bin		 = 0x68e,
 };
 
@@ -12869,7 +12887,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_65_065_jieti
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa13004,
+	.pixel.data_bin		 = 0xb08fb9,
 	.pixel.size_bin		 = 0x736,
 };
 
@@ -12878,7 +12896,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_66_066_yiban
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1373a,
+	.pixel.data_bin		 = 0xb096ef,
 	.pixel.size_bin		 = 0x6be,
 };
 
@@ -12887,7 +12905,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_67_067_dupiw
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa13df8,
+	.pixel.data_bin		 = 0xb09dad,
 	.pixel.size_bin		 = 0x665,
 };
 
@@ -12896,7 +12914,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_68_068_juesh
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1445d,
+	.pixel.data_bin		 = 0xb0a412,
 	.pixel.size_bin		 = 0x63e,
 };
 
@@ -12905,7 +12923,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_69_069_ladin
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa14a9b,
+	.pixel.data_bin		 = 0xb0aa50,
 	.pixel.size_bin		 = 0x651,
 };
 
@@ -12914,7 +12932,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_70_070_balei
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa150ec,
+	.pixel.data_bin		 = 0xb0b0a1,
 	.pixel.size_bin		 = 0x669,
 };
 
@@ -12923,7 +12941,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_71_071_jiewu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa15755,
+	.pixel.data_bin		 = 0xb0b70a,
 	.pixel.size_bin		 = 0x77b,
 };
 
@@ -12932,7 +12950,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_72_072_guang
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa15ed0,
+	.pixel.data_bin		 = 0xb0be85,
 	.pixel.size_bin		 = 0x6c4,
 };
 
@@ -12941,7 +12959,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_73_073_zunba
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa16594,
+	.pixel.data_bin		 = 0xb0c549,
 	.pixel.size_bin		 = 0x7aa,
 };
 
@@ -12950,7 +12968,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_74_074_sheji
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa16d3e,
+	.pixel.data_bin		 = 0xb0ccf3,
 	.pixel.size_bin		 = 0x986,
 };
 
@@ -12959,7 +12977,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_75_075_titaw
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa176c4,
+	.pixel.data_bin		 = 0xb0d679,
 	.pixel.size_bin		 = 0x6ad,
 };
 
@@ -12968,7 +12986,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_76_076_yiban
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa17d71,
+	.pixel.data_bin		 = 0xb0dd26,
 	.pixel.size_bin		 = 0x59b,
 };
 
@@ -12977,7 +12995,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_77_077_lunhu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1830c,
+	.pixel.data_bin		 = 0xb0e2c1,
 	.pixel.size_bin		 = 0x818,
 };
 
@@ -12986,7 +13004,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_78_078_wushu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa18b24,
+	.pixel.data_bin		 = 0xb0ead9,
 	.pixel.size_bin		 = 0x6a5,
 };
 
@@ -12995,7 +13013,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_79_079_taiji
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa191c9,
+	.pixel.data_bin		 = 0xb0f17e,
 	.pixel.size_bin		 = 0x7ed,
 };
 
@@ -13004,7 +13022,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_80_080_hulaq
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa199b6,
+	.pixel.data_bin		 = 0xb0f96b,
 	.pixel.size_bin		 = 0x9fc,
 };
 
@@ -13013,7 +13031,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_81_081_feipa
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1a3b2,
+	.pixel.data_bin		 = 0xb10367,
 	.pixel.size_bin		 = 0x7ba,
 };
 
@@ -13022,7 +13040,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_82_082_feibi
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1ab6c,
+	.pixel.data_bin		 = 0xb10b21,
 	.pixel.size_bin		 = 0x6ba,
 };
 
@@ -13031,7 +13049,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_83_083_sheji
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1b226,
+	.pixel.data_bin		 = 0xb111db,
 	.pixel.size_bin		 = 0x83e,
 };
 
@@ -13040,7 +13058,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_84_084_qimap
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1ba64,
+	.pixel.data_bin		 = 0xb11a19,
 	.pixel.size_bin		 = 0x842,
 };
 
@@ -13049,7 +13067,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_85_085_duizh
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1c2a6,
+	.pixel.data_bin		 = 0xb1225b,
 	.pixel.size_bin		 = 0x932,
 };
 
@@ -13058,7 +13076,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_86_086_fangf
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1cbd8,
+	.pixel.data_bin		 = 0xb12b8d,
 	.pixel.size_bin		 = 0x9ad,
 };
 
@@ -13067,7 +13085,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_87_087_bahep
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1d585,
+	.pixel.data_bin		 = 0xb1353a,
 	.pixel.size_bin		 = 0x870,
 };
 
@@ -13076,7 +13094,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_88_088_qiuqi
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1ddf5,
+	.pixel.data_bin		 = 0xb13daa,
 	.pixel.size_bin		 = 0x7ec,
 };
 
@@ -13085,7 +13103,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_89_089_palou
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1e5e1,
+	.pixel.data_bin		 = 0xb14596,
 	.pixel.size_bin		 = 0x74f,
 };
 
@@ -13094,7 +13112,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_90_090_zhang
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1ed30,
+	.pixel.data_bin		 = 0xb14ce5,
 	.pixel.size_bin		 = 0x809,
 };
 
@@ -13103,7 +13121,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_91_091_diaoy
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1f539,
+	.pixel.data_bin		 = 0xb154ee,
 	.pixel.size_bin		 = 0xa04,
 };
 
@@ -13112,7 +13130,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_92_092_dalie
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa1ff3d,
+	.pixel.data_bin		 = 0xb15ef2,
 	.pixel.size_bin		 = 0x7ff,
 };
 
@@ -13121,7 +13139,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_93_093_huaba
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2073c,
+	.pixel.data_bin		 = 0xb166f1,
 	.pixel.size_bin		 = 0x715,
 };
 
@@ -13130,7 +13148,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_94_094_huixi
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa20e51,
+	.pixel.data_bin		 = 0xb16e06,
 	.pixel.size_bin		 = 0x82b,
 };
 
@@ -13139,7 +13157,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_95_095_tuand
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2167c,
+	.pixel.data_bin		 = 0xb17631,
 	.pixel.size_bin		 = 0xa37,
 };
 
@@ -13148,7 +13166,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_96_096_jians
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa220b3,
+	.pixel.data_bin		 = 0xb18068,
 	.pixel.size_bin		 = 0x775,
 };
 
@@ -13157,7 +13175,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_97_097_jianx
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa22828,
+	.pixel.data_bin		 = 0xb187dd,
 	.pixel.size_bin		 = 0x752,
 };
 
@@ -13166,7 +13184,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_98_098_mashu
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa22f7a,
+	.pixel.data_bin		 = 0xb18f2f,
 	.pixel.size_bin		 = 0x78f,
 };
 
@@ -13175,7 +13193,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_99_099_wanle
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa23709,
+	.pixel.data_bin		 = 0xb196be,
 	.pixel.size_bin		 = 0xae1,
 };
 
@@ -13184,7 +13202,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa241ea,
+	.pixel.data_bin		 = 0xb1a19f,
 	.pixel.size_bin		 = 0x730,
 };
 
@@ -13193,7 +13211,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2491a,
+	.pixel.data_bin		 = 0xb1a8cf,
 	.pixel.size_bin		 = 0x8dd,
 };
 
@@ -13202,7 +13220,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa251f7,
+	.pixel.data_bin		 = 0xb1b1ac,
 	.pixel.size_bin		 = 0x7d1,
 };
 
@@ -13211,7 +13229,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa259c8,
+	.pixel.data_bin		 = 0xb1b97d,
 	.pixel.size_bin		 = 0x79b,
 };
 
@@ -13220,7 +13238,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa26163,
+	.pixel.data_bin		 = 0xb1c118,
 	.pixel.size_bin		 = 0x85e,
 };
 
@@ -13229,7 +13247,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa269c1,
+	.pixel.data_bin		 = 0xb1c976,
 	.pixel.size_bin		 = 0x884,
 };
 
@@ -13238,7 +13256,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa27245,
+	.pixel.data_bin		 = 0xb1d1fa,
 	.pixel.size_bin		 = 0x903,
 };
 
@@ -13247,7 +13265,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa27b48,
+	.pixel.data_bin		 = 0xb1dafd,
 	.pixel.size_bin		 = 0x812,
 };
 
@@ -13256,7 +13274,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2835a,
+	.pixel.data_bin		 = 0xb1e30f,
 	.pixel.size_bin		 = 0x6d5,
 };
 
@@ -13265,7 +13283,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa28a2f,
+	.pixel.data_bin		 = 0xb1e9e4,
 	.pixel.size_bin		 = 0x7cf,
 };
 
@@ -13274,7 +13292,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa291fe,
+	.pixel.data_bin		 = 0xb1f1b3,
 	.pixel.size_bin		 = 0x81b,
 };
 
@@ -13283,7 +13301,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa29a19,
+	.pixel.data_bin		 = 0xb1f9ce,
 	.pixel.size_bin		 = 0x7de,
 };
 
@@ -13292,7 +13310,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2a1f7,
+	.pixel.data_bin		 = 0xb201ac,
 	.pixel.size_bin		 = 0x6f9,
 };
 
@@ -13301,7 +13319,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2a8f0,
+	.pixel.data_bin		 = 0xb208a5,
 	.pixel.size_bin		 = 0x817,
 };
 
@@ -13310,7 +13328,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2b107,
+	.pixel.data_bin		 = 0xb210bc,
 	.pixel.size_bin		 = 0xafd,
 };
 
@@ -13319,7 +13337,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2bc04,
+	.pixel.data_bin		 = 0xb21bb9,
 	.pixel.size_bin		 = 0x7b5,
 };
 
@@ -13328,7 +13346,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2c3b9,
+	.pixel.data_bin		 = 0xb2236e,
 	.pixel.size_bin		 = 0x928,
 };
 
@@ -13337,7 +13355,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2cce1,
+	.pixel.data_bin		 = 0xb22c96,
 	.pixel.size_bin		 = 0x82c,
 };
 
@@ -13346,7 +13364,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2d50d,
+	.pixel.data_bin		 = 0xb234c2,
 	.pixel.size_bin		 = 0x7ff,
 };
 
@@ -13355,7 +13373,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2dd0c,
+	.pixel.data_bin		 = 0xb23cc1,
 	.pixel.size_bin		 = 0x80d,
 };
 
@@ -13364,7 +13382,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2e519,
+	.pixel.data_bin		 = 0xb244ce,
 	.pixel.size_bin		 = 0x68f,
 };
 
@@ -13373,7 +13391,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2eba8,
+	.pixel.data_bin		 = 0xb24b5d,
 	.pixel.size_bin		 = 0x90a,
 };
 
@@ -13382,7 +13400,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2f4b2,
+	.pixel.data_bin		 = 0xb25467,
 	.pixel.size_bin		 = 0x8c4,
 };
 
@@ -13391,7 +13409,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa2fd76,
+	.pixel.data_bin		 = 0xb25d2b,
 	.pixel.size_bin		 = 0x821,
 };
 
@@ -13400,7 +13418,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa30597,
+	.pixel.data_bin		 = 0xb2654c,
 	.pixel.size_bin		 = 0x787,
 };
 
@@ -13409,7 +13427,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa30d1e,
+	.pixel.data_bin		 = 0xb26cd3,
 	.pixel.size_bin		 = 0x853,
 };
 
@@ -13418,7 +13436,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa31571,
+	.pixel.data_bin		 = 0xb27526,
 	.pixel.size_bin		 = 0x7e3,
 };
 
@@ -13427,7 +13445,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa31d54,
+	.pixel.data_bin		 = 0xb27d09,
 	.pixel.size_bin		 = 0x929,
 };
 
@@ -13436,7 +13454,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3267d,
+	.pixel.data_bin		 = 0xb28632,
 	.pixel.size_bin		 = 0xa23,
 };
 
@@ -13445,7 +13463,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa330a0,
+	.pixel.data_bin		 = 0xb29055,
 	.pixel.size_bin		 = 0x910,
 };
 
@@ -13454,7 +13472,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa339b0,
+	.pixel.data_bin		 = 0xb29965,
 	.pixel.size_bin		 = 0x97e,
 };
 
@@ -13463,7 +13481,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3432e,
+	.pixel.data_bin		 = 0xb2a2e3,
 	.pixel.size_bin		 = 0xad2,
 };
 
@@ -13472,7 +13490,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa34e00,
+	.pixel.data_bin		 = 0xb2adb5,
 	.pixel.size_bin		 = 0x9f9,
 };
 
@@ -13481,7 +13499,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa357f9,
+	.pixel.data_bin		 = 0xb2b7ae,
 	.pixel.size_bin		 = 0x9a1,
 };
 
@@ -13490,7 +13508,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3619a,
+	.pixel.data_bin		 = 0xb2c14f,
 	.pixel.size_bin		 = 0xb15,
 };
 
@@ -13499,7 +13517,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa36caf,
+	.pixel.data_bin		 = 0xb2cc64,
 	.pixel.size_bin		 = 0xadc,
 };
 
@@ -13508,7 +13526,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3778b,
+	.pixel.data_bin		 = 0xb2d740,
 	.pixel.size_bin		 = 0xa22,
 };
 
@@ -13517,7 +13535,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa381ad,
+	.pixel.data_bin		 = 0xb2e162,
 	.pixel.size_bin		 = 0x721,
 };
 
@@ -13526,7 +13544,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa388ce,
+	.pixel.data_bin		 = 0xb2e883,
 	.pixel.size_bin		 = 0x7c1,
 };
 
@@ -13535,7 +13553,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3908f,
+	.pixel.data_bin		 = 0xb2f044,
 	.pixel.size_bin		 = 0x8cf,
 };
 
@@ -13544,7 +13562,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3995e,
+	.pixel.data_bin		 = 0xb2f913,
 	.pixel.size_bin		 = 0x880,
 };
 
@@ -13553,7 +13571,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3a1de,
+	.pixel.data_bin		 = 0xb30193,
 	.pixel.size_bin		 = 0x87c,
 };
 
@@ -13562,7 +13580,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3aa5a,
+	.pixel.data_bin		 = 0xb30a0f,
 	.pixel.size_bin		 = 0xa74,
 };
 
@@ -13571,7 +13589,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3b4ce,
+	.pixel.data_bin		 = 0xb31483,
 	.pixel.size_bin		 = 0xb4f,
 };
 
@@ -13580,7 +13598,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3c01d,
+	.pixel.data_bin		 = 0xb31fd2,
 	.pixel.size_bin		 = 0x8da,
 };
 
@@ -13589,7 +13607,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3c8f7,
+	.pixel.data_bin		 = 0xb328ac,
 	.pixel.size_bin		 = 0x884,
 };
 
@@ -13598,7 +13616,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3d17b,
+	.pixel.data_bin		 = 0xb33130,
 	.pixel.size_bin		 = 0x805,
 };
 
@@ -13607,7 +13625,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3d980,
+	.pixel.data_bin		 = 0xb33935,
 	.pixel.size_bin		 = 0x762,
 };
 
@@ -13616,7 +13634,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3e0e2,
+	.pixel.data_bin		 = 0xb34097,
 	.pixel.size_bin		 = 0x786,
 };
 
@@ -13625,7 +13643,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3e868,
+	.pixel.data_bin		 = 0xb3481d,
 	.pixel.size_bin		 = 0x7e6,
 };
 
@@ -13634,7 +13652,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3f04e,
+	.pixel.data_bin		 = 0xb35003,
 	.pixel.size_bin		 = 0x84c,
 };
 
@@ -13643,7 +13661,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa3f89a,
+	.pixel.data_bin		 = 0xb3584f,
 	.pixel.size_bin		 = 0x7a3,
 };
 
@@ -13652,7 +13670,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4003d,
+	.pixel.data_bin		 = 0xb35ff2,
 	.pixel.size_bin		 = 0x82f,
 };
 
@@ -13661,7 +13679,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4086c,
+	.pixel.data_bin		 = 0xb36821,
 	.pixel.size_bin		 = 0x81f,
 };
 
@@ -13670,7 +13688,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4108b,
+	.pixel.data_bin		 = 0xb37040,
 	.pixel.size_bin		 = 0x86e,
 };
 
@@ -13679,7 +13697,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa418f9,
+	.pixel.data_bin		 = 0xb378ae,
 	.pixel.size_bin		 = 0x6ec,
 };
 
@@ -13688,7 +13706,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa41fe5,
+	.pixel.data_bin		 = 0xb37f9a,
 	.pixel.size_bin		 = 0x9ef,
 };
 
@@ -13697,7 +13715,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa429d4,
+	.pixel.data_bin		 = 0xb38989,
 	.pixel.size_bin		 = 0x7b1,
 };
 
@@ -13706,7 +13724,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa43185,
+	.pixel.data_bin		 = 0xb3913a,
 	.pixel.size_bin		 = 0x837,
 };
 
@@ -13715,7 +13733,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa439bc,
+	.pixel.data_bin		 = 0xb39971,
 	.pixel.size_bin		 = 0x811,
 };
 
@@ -13724,7 +13742,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa441cd,
+	.pixel.data_bin		 = 0xb3a182,
 	.pixel.size_bin		 = 0x781,
 };
 
@@ -13733,7 +13751,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4494e,
+	.pixel.data_bin		 = 0xb3a903,
 	.pixel.size_bin		 = 0xaf3,
 };
 
@@ -13742,7 +13760,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa45441,
+	.pixel.data_bin		 = 0xb3b3f6,
 	.pixel.size_bin		 = 0x834,
 };
 
@@ -13751,7 +13769,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa45c75,
+	.pixel.data_bin		 = 0xb3bc2a,
 	.pixel.size_bin		 = 0x777,
 };
 
@@ -13760,7 +13778,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa463ec,
+	.pixel.data_bin		 = 0xb3c3a1,
 	.pixel.size_bin		 = 0x8eb,
 };
 
@@ -13769,7 +13787,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa46cd7,
+	.pixel.data_bin		 = 0xb3cc8c,
 	.pixel.size_bin		 = 0x68b,
 };
 
@@ -13778,7 +13796,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa47362,
+	.pixel.data_bin		 = 0xb3d317,
 	.pixel.size_bin		 = 0x848,
 };
 
@@ -13787,7 +13805,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa47baa,
+	.pixel.data_bin		 = 0xb3db5f,
 	.pixel.size_bin		 = 0xaf7,
 };
 
@@ -13796,7 +13814,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa486a1,
+	.pixel.data_bin		 = 0xb3e656,
 	.pixel.size_bin		 = 0x834,
 };
 
@@ -13805,7 +13823,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa48ed5,
+	.pixel.data_bin		 = 0xb3ee8a,
 	.pixel.size_bin		 = 0x723,
 };
 
@@ -13814,7 +13832,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa495f8,
+	.pixel.data_bin		 = 0xb3f5ad,
 	.pixel.size_bin		 = 0xa98,
 };
 
@@ -13823,7 +13841,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4a090,
+	.pixel.data_bin		 = 0xb40045,
 	.pixel.size_bin		 = 0x695,
 };
 
@@ -13832,7 +13850,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4a725,
+	.pixel.data_bin		 = 0xb406da,
 	.pixel.size_bin		 = 0x91b,
 };
 
@@ -13841,7 +13859,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4b040,
+	.pixel.data_bin		 = 0xb40ff5,
 	.pixel.size_bin		 = 0x7bc,
 };
 
@@ -13850,7 +13868,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4b7fc,
+	.pixel.data_bin		 = 0xb417b1,
 	.pixel.size_bin		 = 0x395,
 };
 
@@ -13859,7 +13877,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4bb91,
+	.pixel.data_bin		 = 0xb41b46,
 	.pixel.size_bin		 = 0x772,
 };
 
@@ -13868,7 +13886,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4c303,
+	.pixel.data_bin		 = 0xb422b8,
 	.pixel.size_bin		 = 0x8ce,
 };
 
@@ -13877,7 +13895,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4cbd1,
+	.pixel.data_bin		 = 0xb42b86,
 	.pixel.size_bin		 = 0x541,
 };
 
@@ -13886,7 +13904,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4d112,
+	.pixel.data_bin		 = 0xb430c7,
 	.pixel.size_bin		 = 0x52c,
 };
 
@@ -13895,7 +13913,7 @@ static const scui_image_t prj_image_src_10_sport_01_list_icon_small_I308001_10_s
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa4d63e,
+	.pixel.data_bin		 = 0xb435f3,
 	.pixel.size_bin		 = 0x95d,
 };
 
@@ -13904,7 +13922,7 @@ static const scui_image_t prj_image_src_10_sport_02_icon_bj_xiaobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x118,
 	.pixel.height		 = 0x9c,
-	.pixel.data_bin		 = 0xa4df9b,
+	.pixel.data_bin		 = 0xb43f50,
 	.pixel.size_bin		 = 0x34d,
 };
 
@@ -13913,7 +13931,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_01_dis_00bmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0xa4e2e8,
+	.pixel.data_bin		 = 0xb4429d,
 	.pixel.size_bin		 = 0x3be,
 };
 
@@ -13922,7 +13940,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_01_dis_01bmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa4e6a6,
+	.pixel.data_bin		 = 0xb4465b,
 	.pixel.size_bin		 = 0x22f,
 };
 
@@ -13931,7 +13949,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_02_dis_01bmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa4e8d5,
+	.pixel.data_bin		 = 0xb4488a,
 	.pixel.size_bin		 = 0x1f3,
 };
 
@@ -13940,7 +13958,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_02_kcal_01bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa4eac8,
+	.pixel.data_bin		 = 0xb44a7d,
 	.pixel.size_bin		 = 0x22f,
 };
 
@@ -13949,7 +13967,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_03_goal_00bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0xa4ecf7,
+	.pixel.data_bin		 = 0xb44cac,
 	.pixel.size_bin		 = 0x558,
 };
 
@@ -13958,7 +13976,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_03_timebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa4f24f,
+	.pixel.data_bin		 = 0xb45204,
 	.pixel.size_bin		 = 0x22b,
 };
 
@@ -13967,7 +13985,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_04_goal_01bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa4f47a,
+	.pixel.data_bin		 = 0xb4542f,
 	.pixel.size_bin		 = 0x1f1,
 };
 
@@ -13976,7 +13994,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_04_trip_Number_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa4f66b,
+	.pixel.data_bin		 = 0xb45620,
 	.pixel.size_bin		 = 0x22f,
 };
 
@@ -13985,7 +14003,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_05_kcal_00bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0xa4f89a,
+	.pixel.data_bin		 = 0xb4584f,
 	.pixel.size_bin		 = 0x66e,
 };
 
@@ -13994,7 +14012,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_06_kcal_01bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa4ff08,
+	.pixel.data_bin		 = 0xb45ebd,
 	.pixel.size_bin		 = 0x1f7,
 };
 
@@ -14003,7 +14021,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_07_Number_02bmp
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0xa500ff,
+	.pixel.data_bin		 = 0xb460b4,
 	.pixel.size_bin		 = 0x51c,
 };
 
@@ -14012,7 +14030,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_08_trip_00bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0xa5061b,
+	.pixel.data_bin		 = 0xb465d0,
 	.pixel.size_bin		 = 0x29d,
 };
 
@@ -14021,7 +14039,7 @@ static const scui_image_t prj_image_src_10_sport_02_setting_goal_09_trip_Number_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa508b8,
+	.pixel.data_bin		 = 0xb4686d,
 	.pixel.size_bin		 = 0x1f3,
 };
 
@@ -14030,7 +14048,7 @@ static const scui_image_t prj_image_src_10_sport_03_countdown_01_1bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x7c,
-	.pixel.data_bin		 = 0xa50aab,
+	.pixel.data_bin		 = 0xb46a60,
 	.pixel.size_bin		 = 0x150,
 };
 
@@ -14039,7 +14057,7 @@ static const scui_image_t prj_image_src_10_sport_03_countdown_02_2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x7c,
-	.pixel.data_bin		 = 0xa50bfb,
+	.pixel.data_bin		 = 0xb46bb0,
 	.pixel.size_bin		 = 0x4c4,
 };
 
@@ -14048,7 +14066,7 @@ static const scui_image_t prj_image_src_10_sport_03_countdown_03_3bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x7c,
-	.pixel.data_bin		 = 0xa510bf,
+	.pixel.data_bin		 = 0xb47074,
 	.pixel.size_bin		 = 0x52a,
 };
 
@@ -14057,7 +14075,7 @@ static const scui_image_t prj_image_src_10_sport_03_editbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa515e9,
+	.pixel.data_bin		 = 0xb4759e,
 	.pixel.size_bin		 = 0x22e,
 };
 
@@ -14066,7 +14084,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_01_arrowpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa51817,
+	.pixel.data_bin		 = 0xb477cc,
 	.pixel.size_bin		 = 0x5b3,
 };
 
@@ -14075,7 +14093,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_02_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d0,
 	.pixel.height		 = 0x1d0,
-	.pixel.data_bin		 = 0xa51dca,
+	.pixel.data_bin		 = 0xb47d7f,
 	.pixel.size_bin		 = 0x1bcc,
 };
 
@@ -14084,7 +14102,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_03_btnpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x142,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa53996,
+	.pixel.data_bin		 = 0xb4994b,
 	.pixel.size_bin		 = 0x10ab,
 };
 
@@ -14093,7 +14111,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_cardbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0xa54a41,
+	.pixel.data_bin		 = 0xb4a9f6,
 	.pixel.size_bin		 = 0x2d3,
 };
 
@@ -14102,7 +14120,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_01_ca
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0xa54d14,
+	.pixel.data_bin		 = 0xb4acc9,
 	.pixel.size_bin		 = 0x2d3,
 };
 
@@ -14111,7 +14129,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_02_cl
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xa54fe7,
+	.pixel.data_bin		 = 0xb4af9c,
 	.pixel.size_bin		 = 0x16b,
 };
 
@@ -14120,7 +14138,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_03_li
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xa55152,
+	.pixel.data_bin		 = 0xb4b107,
 	.pixel.size_bin		 = 0x23,
 };
 
@@ -14129,7 +14147,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_dot_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0xa55175,
+	.pixel.data_bin		 = 0xb4b12a,
 	.pixel.size_bin		 = 0x13a,
 };
 
@@ -14138,7 +14156,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_dot_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0xa552af,
+	.pixel.data_bin		 = 0xb4b264,
 	.pixel.size_bin		 = 0x110,
 };
 
@@ -14147,7 +14165,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_gps_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xa553bf,
+	.pixel.data_bin		 = 0xb4b374,
 	.pixel.size_bin		 = 0x43e,
 };
 
@@ -14156,7 +14174,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_gps_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xa557fd,
+	.pixel.data_bin		 = 0xb4b7b2,
 	.pixel.size_bin		 = 0x325,
 };
 
@@ -14165,7 +14183,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_gps_0
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xa55b22,
+	.pixel.data_bin		 = 0xb4bad7,
 	.pixel.size_bin		 = 0x413,
 };
 
@@ -14174,7 +14192,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_hr_gi
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xa55f35,
+	.pixel.data_bin		 = 0xb4beea,
 	.pixel.size_bin		 = 0x27d,
 };
 
@@ -14183,7 +14201,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_hr_gi
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xa561b2,
+	.pixel.data_bin		 = 0xb4c167,
 	.pixel.size_bin		 = 0x28b,
 };
 
@@ -14192,7 +14210,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_hr_gi
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xa5643d,
+	.pixel.data_bin		 = 0xb4c3f2,
 	.pixel.size_bin		 = 0x294,
 };
 
@@ -14201,7 +14219,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_hr_gi
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xa566d1,
+	.pixel.data_bin		 = 0xb4c686,
 	.pixel.size_bin		 = 0x2b5,
 };
 
@@ -14210,7 +14228,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_hr_gi
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xa56986,
+	.pixel.data_bin		 = 0xb4c93b,
 	.pixel.size_bin		 = 0x2c4,
 };
 
@@ -14219,7 +14237,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_hr_gi
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xa56c4a,
+	.pixel.data_bin		 = 0xb4cbff,
 	.pixel.size_bin		 = 0x2e9,
 };
 
@@ -14228,7 +14246,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_hr_gi
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xa56f33,
+	.pixel.data_bin		 = 0xb4cee8,
 	.pixel.size_bin		 = 0x316,
 };
 
@@ -14237,7 +14255,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_hr_gi
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xa57249,
+	.pixel.data_bin		 = 0xb4d1fe,
 	.pixel.size_bin		 = 0x318,
 };
 
@@ -14246,7 +14264,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_hr_gi
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xa57561,
+	.pixel.data_bin		 = 0xb4d516,
 	.pixel.size_bin		 = 0x376,
 };
 
@@ -14255,7 +14273,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x35,
-	.pixel.data_bin		 = 0xa578d7,
+	.pixel.data_bin		 = 0xb4d88c,
 	.pixel.size_bin		 = 0x5f5,
 };
 
@@ -14264,7 +14282,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x14,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xa57ecc,
+	.pixel.data_bin		 = 0xb4de81,
 	.pixel.size_bin		 = 0x23f,
 };
 
@@ -14273,7 +14291,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xa5810b,
+	.pixel.data_bin		 = 0xb4e0c0,
 	.pixel.size_bin		 = 0x1c4e,
 };
 
@@ -14282,7 +14300,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x14e,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0xa59d59,
+	.pixel.data_bin		 = 0xb4fd0e,
 	.pixel.size_bin		 = 0x126d,
 };
 
@@ -14291,7 +14309,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x14e,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0xa5afc6,
+	.pixel.data_bin		 = 0xb50f7b,
 	.pixel.size_bin		 = 0x1086,
 };
 
@@ -14300,7 +14318,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x14e,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0xa5c04c,
+	.pixel.data_bin		 = 0xb52001,
 	.pixel.size_bin		 = 0x106e,
 };
 
@@ -14309,7 +14327,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x192,
 	.pixel.height		 = 0x70,
-	.pixel.data_bin		 = 0xa5d0ba,
+	.pixel.data_bin		 = 0xb5306f,
 	.pixel.size_bin		 = 0x1244,
 };
 
@@ -14318,7 +14336,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x14,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xa5e2fe,
+	.pixel.data_bin		 = 0xb542b3,
 	.pixel.size_bin		 = 0x21c,
 };
 
@@ -14327,7 +14345,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xa5e51a,
+	.pixel.data_bin		 = 0xb544cf,
 	.pixel.size_bin		 = 0x6d1,
 };
 
@@ -14336,7 +14354,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xa5ebeb,
+	.pixel.data_bin		 = 0xb54ba0,
 	.pixel.size_bin		 = 0x6b2,
 };
 
@@ -14345,7 +14363,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xa5f29d,
+	.pixel.data_bin		 = 0xb55252,
 	.pixel.size_bin		 = 0x732,
 };
 
@@ -14354,7 +14372,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x4d,
-	.pixel.data_bin		 = 0xa5f9cf,
+	.pixel.data_bin		 = 0xb55984,
 	.pixel.size_bin		 = 0x86f,
 };
 
@@ -14363,7 +14381,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_traje
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xa6023e,
+	.pixel.data_bin		 = 0xb561f3,
 	.pixel.size_bin		 = 0x64,
 };
 
@@ -14372,7 +14390,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_zone_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x94,
 	.pixel.height		 = 0x23,
-	.pixel.data_bin		 = 0xa602a2,
+	.pixel.data_bin		 = 0xb56257,
 	.pixel.size_bin		 = 0x1da,
 };
 
@@ -14381,7 +14399,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_zone_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x94,
 	.pixel.height		 = 0x23,
-	.pixel.data_bin		 = 0xa6047c,
+	.pixel.data_bin		 = 0xb56431,
 	.pixel.size_bin		 = 0x372,
 };
 
@@ -14390,7 +14408,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_zone_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x94,
 	.pixel.height		 = 0x23,
-	.pixel.data_bin		 = 0xa607ee,
+	.pixel.data_bin		 = 0xb567a3,
 	.pixel.size_bin		 = 0x39d,
 };
 
@@ -14399,7 +14417,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_zone_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x94,
 	.pixel.height		 = 0x23,
-	.pixel.data_bin		 = 0xa60b8b,
+	.pixel.data_bin		 = 0xb56b40,
 	.pixel.size_bin		 = 0x39b,
 };
 
@@ -14408,7 +14426,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_zone_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x94,
 	.pixel.height		 = 0x23,
-	.pixel.data_bin		 = 0xa60f26,
+	.pixel.data_bin		 = 0xb56edb,
 	.pixel.size_bin		 = 0x370,
 };
 
@@ -14417,7 +14435,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_04_in_motion_zone_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x94,
 	.pixel.height		 = 0x23,
-	.pixel.data_bin		 = 0xa61296,
+	.pixel.data_bin		 = 0xb5724b,
 	.pixel.size_bin		 = 0x35b,
 };
 
@@ -14426,7 +14444,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_05_clock_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xa615f1,
+	.pixel.data_bin		 = 0xb575a6,
 	.pixel.size_bin		 = 0x16b,
 };
 
@@ -14435,7 +14453,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_06_distancebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xa6175c,
+	.pixel.data_bin		 = 0xb57711,
 	.pixel.size_bin		 = 0x219,
 };
 
@@ -14444,7 +14462,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_07_lesspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xa61975,
+	.pixel.data_bin		 = 0xb5792a,
 	.pixel.size_bin		 = 0x6d1,
 };
 
@@ -14453,7 +14471,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_08_linebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xa62046,
+	.pixel.data_bin		 = 0xb57ffb,
 	.pixel.size_bin		 = 0x23,
 };
 
@@ -14462,7 +14480,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_09_pluspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xa62069,
+	.pixel.data_bin		 = 0xb5801e,
 	.pixel.size_bin		 = 0x732,
 };
 
@@ -14471,7 +14489,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_10_proportionbmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xa6279b,
+	.pixel.data_bin		 = 0xb58750,
 	.pixel.size_bin		 = 0x64,
 };
 
@@ -14480,7 +14498,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_unlock_01_bgbmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xc6,
-	.pixel.data_bin		 = 0xa627ff,
+	.pixel.data_bin		 = 0xb587b4,
 	.pixel.size_bin		 = 0xb87,
 };
 
@@ -14489,7 +14507,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_unlock_02_dotbmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0xa63386,
+	.pixel.data_bin		 = 0xb5933b,
 	.pixel.size_bin		 = 0x50,
 };
 
@@ -14498,7 +14516,7 @@ static const scui_image_t prj_image_src_10_sport_04_in_motion_unlock_03_ringbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xc6,
-	.pixel.data_bin		 = 0xa633d6,
+	.pixel.data_bin		 = 0xb5938b,
 	.pixel.size_bin		 = 0x706,
 };
 
@@ -14507,7 +14525,7 @@ static const scui_image_t prj_image_src_10_sport_05_paused_01_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x8,
-	.pixel.data_bin		 = 0xa63adc,
+	.pixel.data_bin		 = 0xb59a91,
 	.pixel.size_bin		 = 0x37,
 };
 
@@ -14516,7 +14534,7 @@ static const scui_image_t prj_image_src_10_sport_05_paused_02_endbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0xa63b13,
+	.pixel.data_bin		 = 0xb59ac8,
 	.pixel.size_bin		 = 0x3c6,
 };
 
@@ -14525,7 +14543,7 @@ static const scui_image_t prj_image_src_10_sport_05_paused_03_pausebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0xa63ed9,
+	.pixel.data_bin		 = 0xb59e8e,
 	.pixel.size_bin		 = 0x414,
 };
 
@@ -14534,7 +14552,7 @@ static const scui_image_t prj_image_src_10_sport_05_paused_04_playbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0xa642ed,
+	.pixel.data_bin		 = 0xb5a2a2,
 	.pixel.size_bin		 = 0x44c,
 };
 
@@ -14543,7 +14561,7 @@ static const scui_image_t prj_image_src_10_sport_05_paused_05_ringbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x7a,
 	.pixel.height		 = 0x7a,
-	.pixel.data_bin		 = 0xa64739,
+	.pixel.data_bin		 = 0xb5a6ee,
 	.pixel.size_bin		 = 0x49b,
 };
 
@@ -14552,7 +14570,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_01_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0xc7,
-	.pixel.data_bin		 = 0xa64bd4,
+	.pixel.data_bin		 = 0xb5ab89,
 	.pixel.size_bin		 = 0x7d5,
 };
 
@@ -14561,7 +14579,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_01_bg_2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xa653a9,
+	.pixel.data_bin		 = 0xb5b35e,
 	.pixel.size_bin		 = 0xe62,
 };
 
@@ -14570,7 +14588,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_01_bg_3bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xa6620b,
+	.pixel.data_bin		 = 0xb5c1c0,
 	.pixel.size_bin		 = 0x2fa5,
 };
 
@@ -14579,7 +14597,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_02_endpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa691b0,
+	.pixel.data_bin		 = 0xb5f165,
 	.pixel.size_bin		 = 0x877,
 };
 
@@ -14588,7 +14606,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_03_highbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x14,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xa69a27,
+	.pixel.data_bin		 = 0xb5f9dc,
 	.pixel.size_bin		 = 0xd8,
 };
 
@@ -14597,7 +14615,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_04_lowbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x14,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xa69aff,
+	.pixel.data_bin		 = 0xb5fab4,
 	.pixel.size_bin		 = 0xdc,
 };
 
@@ -14606,7 +14624,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_05_startpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa69bdb,
+	.pixel.data_bin		 = 0xb5fb90,
 	.pixel.size_bin		 = 0x927,
 };
 
@@ -14615,7 +14633,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_07_endpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3b,
-	.pixel.data_bin		 = 0xa6a502,
+	.pixel.data_bin		 = 0xb604b7,
 	.pixel.size_bin		 = 0x791,
 };
 
@@ -14624,7 +14642,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_bar_chang_01_barbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x16a,
 	.pixel.height		 = 0xa,
-	.pixel.data_bin		 = 0xa6ac93,
+	.pixel.data_bin		 = 0xb60c48,
 	.pixel.size_bin		 = 0x55,
 };
 
@@ -14633,7 +14651,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_bar_chang_02_bar_00bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x6,
 	.pixel.height		 = 0xa,
-	.pixel.data_bin		 = 0xa6ace8,
+	.pixel.data_bin		 = 0xb60c9d,
 	.pixel.size_bin		 = 0x34,
 };
 
@@ -14642,7 +14660,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_bar_chang_03_bar_01bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x6,
 	.pixel.height		 = 0xa,
-	.pixel.data_bin		 = 0xa6ad1c,
+	.pixel.data_bin		 = 0xb60cd1,
 	.pixel.size_bin		 = 0x35,
 };
 
@@ -14651,7 +14669,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_bar_chang_04_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x16a,
 	.pixel.height		 = 0xa,
-	.pixel.data_bin		 = 0xa6ad51,
+	.pixel.data_bin		 = 0xb60d06,
 	.pixel.size_bin		 = 0x80,
 };
 
@@ -14660,7 +14678,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_01_altitudebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6add1,
+	.pixel.data_bin		 = 0xb60d86,
 	.pixel.size_bin		 = 0x2ef,
 };
 
@@ -14669,7 +14687,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_02_altitude2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6b0c0,
+	.pixel.data_bin		 = 0xb61075,
 	.pixel.size_bin		 = 0x356,
 };
 
@@ -14678,7 +14696,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_03_altitude3bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6b416,
+	.pixel.data_bin		 = 0xb613cb,
 	.pixel.size_bin		 = 0x352,
 };
 
@@ -14687,7 +14705,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_04_caoriesbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6b768,
+	.pixel.data_bin		 = 0xb6171d,
 	.pixel.size_bin		 = 0x308,
 };
 
@@ -14696,7 +14714,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_05_distancebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6ba70,
+	.pixel.data_bin		 = 0xb61a25,
 	.pixel.size_bin		 = 0x31c,
 };
 
@@ -14705,7 +14723,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_06_floorbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6bd8c,
+	.pixel.data_bin		 = 0xb61d41,
 	.pixel.size_bin		 = 0x119,
 };
 
@@ -14714,7 +14732,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_07_floor2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6bea5,
+	.pixel.data_bin		 = 0xb61e5a,
 	.pixel.size_bin		 = 0x113,
 };
 
@@ -14723,7 +14741,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_08_heart_ratebmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6bfb8,
+	.pixel.data_bin		 = 0xb61f6d,
 	.pixel.size_bin		 = 0x282,
 };
 
@@ -14732,7 +14750,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_09_numbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6c23a,
+	.pixel.data_bin		 = 0xb621ef,
 	.pixel.size_bin		 = 0x2ff,
 };
 
@@ -14741,7 +14759,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_10_num2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6c539,
+	.pixel.data_bin		 = 0xb624ee,
 	.pixel.size_bin		 = 0x3a4,
 };
 
@@ -14750,7 +14768,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_11_pacebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6c8dd,
+	.pixel.data_bin		 = 0xb62892,
 	.pixel.size_bin		 = 0x44a,
 };
 
@@ -14759,7 +14777,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_12_paddlebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6cd27,
+	.pixel.data_bin		 = 0xb62cdc,
 	.pixel.size_bin		 = 0x404,
 };
 
@@ -14768,7 +14786,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_13_paddle2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6d12b,
+	.pixel.data_bin		 = 0xb630e0,
 	.pixel.size_bin		 = 0x433,
 };
 
@@ -14777,7 +14795,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_14_paddle3bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6d55e,
+	.pixel.data_bin		 = 0xb63513,
 	.pixel.size_bin		 = 0x40b,
 };
 
@@ -14786,7 +14804,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_15_stepsbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6d969,
+	.pixel.data_bin		 = 0xb6391e,
 	.pixel.size_bin		 = 0x3a6,
 };
 
@@ -14795,7 +14813,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_16_steps2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6dd0f,
+	.pixel.data_bin		 = 0xb63cc4,
 	.pixel.size_bin		 = 0x3b5,
 };
 
@@ -14804,7 +14822,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_17_steps3bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6e0c4,
+	.pixel.data_bin		 = 0xb64079,
 	.pixel.size_bin		 = 0x388,
 };
 
@@ -14813,7 +14831,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_18_swimbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6e44c,
+	.pixel.data_bin		 = 0xb64401,
 	.pixel.size_bin		 = 0x496,
 };
 
@@ -14822,7 +14840,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_19_swolfbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6e8e2,
+	.pixel.data_bin		 = 0xb64897,
 	.pixel.size_bin		 = 0x558,
 };
 
@@ -14831,7 +14849,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_20_timebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6ee3a,
+	.pixel.data_bin		 = 0xb64def,
 	.pixel.size_bin		 = 0x297,
 };
 
@@ -14840,7 +14858,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_21_timesbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6f0d1,
+	.pixel.data_bin		 = 0xb65086,
 	.pixel.size_bin		 = 0x42d,
 };
 
@@ -14849,7 +14867,7 @@ static const scui_image_t prj_image_src_10_sport_06_end_icon_22_tripbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x38,
-	.pixel.data_bin		 = 0xa6f4fe,
+	.pixel.data_bin		 = 0xb654b3,
 	.pixel.size_bin		 = 0x2ac,
 };
 
@@ -14858,7 +14876,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_01_icon_go_00bmp
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xcc,
 	.pixel.height		 = 0xcc,
-	.pixel.data_bin		 = 0xa6f7aa,
+	.pixel.data_bin		 = 0xb6575f,
 	.pixel.size_bin		 = 0xf1b,
 };
 
@@ -14867,7 +14885,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_02_icon_go_01bmp
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xcc,
 	.pixel.height		 = 0xcc,
-	.pixel.data_bin		 = 0xa706c5,
+	.pixel.data_bin		 = 0xb6667a,
 	.pixel.size_bin		 = 0xeae,
 };
 
@@ -14876,7 +14894,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_03_icon_swimbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xa71573,
+	.pixel.data_bin		 = 0xb67528,
 	.pixel.size_bin		 = 0x367,
 };
 
@@ -14885,7 +14903,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gif_hr_01_00bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0xa718da,
+	.pixel.data_bin		 = 0xb6788f,
 	.pixel.size_bin		 = 0x375,
 };
 
@@ -14894,7 +14912,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gif_hr_02_01bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0xa71c4f,
+	.pixel.data_bin		 = 0xb67c04,
 	.pixel.size_bin		 = 0x3a3,
 };
 
@@ -14903,7 +14921,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gif_hr_03_02bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0xa71ff2,
+	.pixel.data_bin		 = 0xb67fa7,
 	.pixel.size_bin		 = 0x3b2,
 };
 
@@ -14912,7 +14930,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gif_hr_04_03bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0xa723a4,
+	.pixel.data_bin		 = 0xb68359,
 	.pixel.size_bin		 = 0x35c,
 };
 
@@ -14921,7 +14939,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gif_hr_05_04bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0xa72700,
+	.pixel.data_bin		 = 0xb686b5,
 	.pixel.size_bin		 = 0x356,
 };
 
@@ -14930,7 +14948,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gif_hr_06_05bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0xa72a56,
+	.pixel.data_bin		 = 0xb68a0b,
 	.pixel.size_bin		 = 0x331,
 };
 
@@ -14939,7 +14957,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gif_hr_07_06bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0xa72d87,
+	.pixel.data_bin		 = 0xb68d3c,
 	.pixel.size_bin		 = 0x2e3,
 };
 
@@ -14948,7 +14966,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gif_hr_08_07bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0xa7306a,
+	.pixel.data_bin		 = 0xb6901f,
 	.pixel.size_bin		 = 0x2ff,
 };
 
@@ -14957,7 +14975,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gif_hr_09_08bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x26,
-	.pixel.data_bin		 = 0xa73369,
+	.pixel.data_bin		 = 0xb6931e,
 	.pixel.size_bin		 = 0x2fa,
 };
 
@@ -14966,7 +14984,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gps_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xa73663,
+	.pixel.data_bin		 = 0xb69618,
 	.pixel.size_bin		 = 0xd9,
 };
 
@@ -14975,7 +14993,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gps_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xa7373c,
+	.pixel.data_bin		 = 0xb696f1,
 	.pixel.size_bin		 = 0x108,
 };
 
@@ -14984,7 +15002,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gps_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xa73844,
+	.pixel.data_bin		 = 0xb697f9,
 	.pixel.size_bin		 = 0x108,
 };
 
@@ -14993,7 +15011,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gps_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xa7394c,
+	.pixel.data_bin		 = 0xb69901,
 	.pixel.size_bin		 = 0xda,
 };
 
@@ -15002,7 +15020,7 @@ static const scui_image_t prj_image_src_10_sport_07_positioning_gps_05_icon_gpsb
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x42,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xa73a26,
+	.pixel.data_bin		 = 0xb699db,
 	.pixel.size_bin		 = 0x40f,
 };
 
@@ -15011,7 +15029,7 @@ static const scui_image_t prj_image_src_11_fing_phone_01_juxing_find_phone_1bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x116,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0xa73e35,
+	.pixel.data_bin		 = 0xb69dea,
 	.pixel.size_bin		 = 0x35b,
 };
 
@@ -15020,7 +15038,7 @@ static const scui_image_t prj_image_src_11_fing_phone_02_juxing_find_phone_2bmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x116,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0xa74190,
+	.pixel.data_bin		 = 0xb6a145,
 	.pixel.size_bin		 = 0x481,
 };
 
@@ -15029,7 +15047,7 @@ static const scui_image_t prj_image_src_11_fing_phone_03_phonebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x60,
 	.pixel.height		 = 0x8e,
-	.pixel.data_bin		 = 0xa74611,
+	.pixel.data_bin		 = 0xb6a5c6,
 	.pixel.size_bin		 = 0x588,
 };
 
@@ -15038,7 +15056,7 @@ static const scui_image_t prj_image_src_11_fing_phone_gif_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa74b99,
+	.pixel.data_bin		 = 0xb6ab4e,
 	.pixel.size_bin		 = 0x8e6,
 };
 
@@ -15047,7 +15065,7 @@ static const scui_image_t prj_image_src_11_fing_phone_gif_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa7547f,
+	.pixel.data_bin		 = 0xb6b434,
 	.pixel.size_bin		 = 0x88a,
 };
 
@@ -15056,7 +15074,7 @@ static const scui_image_t prj_image_src_11_fing_phone_gif_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa75d09,
+	.pixel.data_bin		 = 0xb6bcbe,
 	.pixel.size_bin		 = 0x78a,
 };
 
@@ -15065,7 +15083,7 @@ static const scui_image_t prj_image_src_11_fing_phone_gif_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa76493,
+	.pixel.data_bin		 = 0xb6c448,
 	.pixel.size_bin		 = 0x148,
 };
 
@@ -15074,7 +15092,7 @@ static const scui_image_t prj_image_src_11_fing_phone_gif_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa765db,
+	.pixel.data_bin		 = 0xb6c590,
 	.pixel.size_bin		 = 0x148,
 };
 
@@ -15083,7 +15101,7 @@ static const scui_image_t prj_image_src_11_fing_phone_gif_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa76723,
+	.pixel.data_bin		 = 0xb6c6d8,
 	.pixel.size_bin		 = 0x3ea,
 };
 
@@ -15092,7 +15110,7 @@ static const scui_image_t prj_image_src_11_fing_phone_gif_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa76b0d,
+	.pixel.data_bin		 = 0xb6cac2,
 	.pixel.size_bin		 = 0x467,
 };
 
@@ -15101,7 +15119,7 @@ static const scui_image_t prj_image_src_11_fing_phone_gif_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa76f74,
+	.pixel.data_bin		 = 0xb6cf29,
 	.pixel.size_bin		 = 0x81e,
 };
 
@@ -15110,7 +15128,7 @@ static const scui_image_t prj_image_src_11_fing_phone_gif_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa77792,
+	.pixel.data_bin		 = 0xb6d747,
 	.pixel.size_bin		 = 0x8db,
 };
 
@@ -15119,7 +15137,7 @@ static const scui_image_t prj_image_src_11_fing_phone_gif_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe4,
 	.pixel.height		 = 0x56,
-	.pixel.data_bin		 = 0xa7806d,
+	.pixel.data_bin		 = 0xb6e022,
 	.pixel.size_bin		 = 0x95d,
 };
 
@@ -15128,7 +15146,7 @@ static const scui_image_t prj_image_src_12_take_photo_01_take_photobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xa789ca,
+	.pixel.data_bin		 = 0xb6e97f,
 	.pixel.size_bin		 = 0x1266,
 };
 
@@ -15137,7 +15155,7 @@ static const scui_image_t prj_image_src_12_take_photo_02_take_photobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xa79c30,
+	.pixel.data_bin		 = 0xb6fbe5,
 	.pixel.size_bin		 = 0x14a2,
 };
 
@@ -15146,7 +15164,7 @@ static const scui_image_t prj_image_src_12_take_photo_03_take_photobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xa7b0d2,
+	.pixel.data_bin		 = 0xb71087,
 	.pixel.size_bin		 = 0x13f8,
 };
 
@@ -15155,7 +15173,7 @@ static const scui_image_t prj_image_src_12_take_photo_04_take_photobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xa7c4ca,
+	.pixel.data_bin		 = 0xb7247f,
 	.pixel.size_bin		 = 0x14a2,
 };
 
@@ -15164,7 +15182,7 @@ static const scui_image_t prj_image_src_12_take_photo_05_take_photobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xa7d96c,
+	.pixel.data_bin		 = 0xb73921,
 	.pixel.size_bin		 = 0x1266,
 };
 
@@ -15173,7 +15191,7 @@ static const scui_image_t prj_image_src_12_take_photo_06_take_photobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xa7ebd2,
+	.pixel.data_bin		 = 0xb74b87,
 	.pixel.size_bin		 = 0xe91,
 };
 
@@ -15182,7 +15200,7 @@ static const scui_image_t prj_image_src_12_take_photo_07_take_photobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xa7fa63,
+	.pixel.data_bin		 = 0xb75a18,
 	.pixel.size_bin		 = 0xca0,
 };
 
@@ -15191,7 +15209,7 @@ static const scui_image_t prj_image_src_12_take_photo_08_take_photobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xa80703,
+	.pixel.data_bin		 = 0xb766b8,
 	.pixel.size_bin		 = 0xd90,
 };
 
@@ -15200,7 +15218,7 @@ static const scui_image_t prj_image_src_12_take_photo_09_take_photobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xa81493,
+	.pixel.data_bin		 = 0xb77448,
 	.pixel.size_bin		 = 0xe26,
 };
 
@@ -15209,7 +15227,7 @@ static const scui_image_t prj_image_src_12_take_photo_10_take_photobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xa822b9,
+	.pixel.data_bin		 = 0xb7826e,
 	.pixel.size_bin		 = 0xbc5,
 };
 
@@ -15218,7 +15236,7 @@ static const scui_image_t prj_image_src_13_breath_training_01_more_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa82e7e,
+	.pixel.data_bin		 = 0xb78e33,
 	.pixel.size_bin		 = 0x1f3,
 };
 
@@ -15227,7 +15245,7 @@ static const scui_image_t prj_image_src_13_breath_training_01_play_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xa83071,
+	.pixel.data_bin		 = 0xb79026,
 	.pixel.size_bin		 = 0x3d1,
 };
 
@@ -15236,7 +15254,7 @@ static const scui_image_t prj_image_src_13_breath_training_02_more_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xa83442,
+	.pixel.data_bin		 = 0xb793f7,
 	.pixel.size_bin		 = 0x1f2,
 };
 
@@ -15245,7 +15263,7 @@ static const scui_image_t prj_image_src_13_breath_training_03_pacebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0xa83634,
+	.pixel.data_bin		 = 0xb795e9,
 	.pixel.size_bin		 = 0x537,
 };
 
@@ -15254,7 +15272,7 @@ static const scui_image_t prj_image_src_13_breath_training_04_timebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x48,
 	.pixel.height		 = 0x48,
-	.pixel.data_bin		 = 0xa83b6b,
+	.pixel.data_bin		 = 0xb79b20,
 	.pixel.size_bin		 = 0x519,
 };
 
@@ -15263,7 +15281,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xa84084,
+	.pixel.data_bin		 = 0xb7a039,
 	.pixel.size_bin		 = 0x4657,
 };
 
@@ -15272,7 +15290,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xa886db,
+	.pixel.data_bin		 = 0xb7e690,
 	.pixel.size_bin		 = 0x366d,
 };
 
@@ -15281,7 +15299,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xa8bd48,
+	.pixel.data_bin		 = 0xb81cfd,
 	.pixel.size_bin		 = 0x3611,
 };
 
@@ -15290,7 +15308,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xa8f359,
+	.pixel.data_bin		 = 0xb8530e,
 	.pixel.size_bin		 = 0x36d0,
 };
 
@@ -15299,7 +15317,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xa92a29,
+	.pixel.data_bin		 = 0xb889de,
 	.pixel.size_bin		 = 0x3689,
 };
 
@@ -15308,7 +15326,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xa960b2,
+	.pixel.data_bin		 = 0xb8c067,
 	.pixel.size_bin		 = 0x35c7,
 };
 
@@ -15317,7 +15335,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xa99679,
+	.pixel.data_bin		 = 0xb8f62e,
 	.pixel.size_bin		 = 0x351f,
 };
 
@@ -15326,7 +15344,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xa9cb98,
+	.pixel.data_bin		 = 0xb92b4d,
 	.pixel.size_bin		 = 0x34b3,
 };
 
@@ -15335,7 +15353,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xaa004b,
+	.pixel.data_bin		 = 0xb96000,
 	.pixel.size_bin		 = 0x32ba,
 };
 
@@ -15344,7 +15362,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xaa3305,
+	.pixel.data_bin		 = 0xb992ba,
 	.pixel.size_bin		 = 0x3072,
 };
 
@@ -15353,7 +15371,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xaa6377,
+	.pixel.data_bin		 = 0xb9c32c,
 	.pixel.size_bin		 = 0x30d8,
 };
 
@@ -15362,7 +15380,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xaa944f,
+	.pixel.data_bin		 = 0xb9f404,
 	.pixel.size_bin		 = 0x306a,
 };
 
@@ -15371,7 +15389,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xaac4b9,
+	.pixel.data_bin		 = 0xba246e,
 	.pixel.size_bin		 = 0x2e8a,
 };
 
@@ -15380,7 +15398,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xaaf343,
+	.pixel.data_bin		 = 0xba52f8,
 	.pixel.size_bin		 = 0x2e8d,
 };
 
@@ -15389,7 +15407,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_15_14bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xab21d0,
+	.pixel.data_bin		 = 0xba8185,
 	.pixel.size_bin		 = 0x2d86,
 };
 
@@ -15398,7 +15416,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_16_15bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xab4f56,
+	.pixel.data_bin		 = 0xbaaf0b,
 	.pixel.size_bin		 = 0x2c76,
 };
 
@@ -15407,7 +15425,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_17_16bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xab7bcc,
+	.pixel.data_bin		 = 0xbadb81,
 	.pixel.size_bin		 = 0x2b0b,
 };
 
@@ -15416,7 +15434,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_18_17bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xaba6d7,
+	.pixel.data_bin		 = 0xbb068c,
 	.pixel.size_bin		 = 0x2863,
 };
 
@@ -15425,7 +15443,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_19_18bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xabcf3a,
+	.pixel.data_bin		 = 0xbb2eef,
 	.pixel.size_bin		 = 0x252b,
 };
 
@@ -15434,7 +15452,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_20_19bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xabf465,
+	.pixel.data_bin		 = 0xbb541a,
 	.pixel.size_bin		 = 0x24e6,
 };
 
@@ -15443,7 +15461,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_21_20bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xac194b,
+	.pixel.data_bin		 = 0xbb7900,
 	.pixel.size_bin		 = 0x25e5,
 };
 
@@ -15452,7 +15470,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_22_21bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xac3f30,
+	.pixel.data_bin		 = 0xbb9ee5,
 	.pixel.size_bin		 = 0x2636,
 };
 
@@ -15461,7 +15479,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_23_22bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xac6566,
+	.pixel.data_bin		 = 0xbbc51b,
 	.pixel.size_bin		 = 0x25df,
 };
 
@@ -15470,7 +15488,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_24_23bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xac8b45,
+	.pixel.data_bin		 = 0xbbeafa,
 	.pixel.size_bin		 = 0x255b,
 };
 
@@ -15479,7 +15497,7 @@ static const scui_image_t prj_image_src_13_breath_training_gif_25_24bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x122,
 	.pixel.height		 = 0x122,
-	.pixel.data_bin		 = 0xacb0a0,
+	.pixel.data_bin		 = 0xbc1055,
 	.pixel.size_bin		 = 0x24fd,
 };
 
@@ -15488,7 +15506,7 @@ static const scui_image_t prj_image_src_13_voice_gif_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xacd59d,
+	.pixel.data_bin		 = 0xbc3552,
 	.pixel.size_bin		 = 0x236a,
 };
 
@@ -15497,7 +15515,7 @@ static const scui_image_t prj_image_src_13_voice_gif_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xacf907,
+	.pixel.data_bin		 = 0xbc58bc,
 	.pixel.size_bin		 = 0x291f,
 };
 
@@ -15506,7 +15524,7 @@ static const scui_image_t prj_image_src_13_voice_gif_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xad2226,
+	.pixel.data_bin		 = 0xbc81db,
 	.pixel.size_bin		 = 0x2c06,
 };
 
@@ -15515,7 +15533,7 @@ static const scui_image_t prj_image_src_13_voice_gif_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xad4e2c,
+	.pixel.data_bin		 = 0xbcade1,
 	.pixel.size_bin		 = 0x2e11,
 };
 
@@ -15524,7 +15542,7 @@ static const scui_image_t prj_image_src_13_voice_gif_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xad7c3d,
+	.pixel.data_bin		 = 0xbcdbf2,
 	.pixel.size_bin		 = 0x2df9,
 };
 
@@ -15533,7 +15551,7 @@ static const scui_image_t prj_image_src_13_voice_gif_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xadaa36,
+	.pixel.data_bin		 = 0xbd09eb,
 	.pixel.size_bin		 = 0x2c5e,
 };
 
@@ -15542,7 +15560,7 @@ static const scui_image_t prj_image_src_13_voice_gif_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xadd694,
+	.pixel.data_bin		 = 0xbd3649,
 	.pixel.size_bin		 = 0x2cee,
 };
 
@@ -15551,7 +15569,7 @@ static const scui_image_t prj_image_src_13_voice_gif_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xae0382,
+	.pixel.data_bin		 = 0xbd6337,
 	.pixel.size_bin		 = 0x2fd1,
 };
 
@@ -15560,7 +15578,7 @@ static const scui_image_t prj_image_src_13_voice_gif_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xae3353,
+	.pixel.data_bin		 = 0xbd9308,
 	.pixel.size_bin		 = 0x2fc7,
 };
 
@@ -15569,7 +15587,7 @@ static const scui_image_t prj_image_src_13_voice_gif_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xae631a,
+	.pixel.data_bin		 = 0xbdc2cf,
 	.pixel.size_bin		 = 0x2c76,
 };
 
@@ -15578,7 +15596,7 @@ static const scui_image_t prj_image_src_13_voice_gif_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xae8f90,
+	.pixel.data_bin		 = 0xbdef45,
 	.pixel.size_bin		 = 0x2cf0,
 };
 
@@ -15587,7 +15605,7 @@ static const scui_image_t prj_image_src_13_voice_gif_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xaebc80,
+	.pixel.data_bin		 = 0xbe1c35,
 	.pixel.size_bin		 = 0x2b93,
 };
 
@@ -15596,7 +15614,7 @@ static const scui_image_t prj_image_src_14_calculator_01_errorbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaee813,
+	.pixel.data_bin		 = 0xbe47c8,
 	.pixel.size_bin		 = 0x317,
 };
 
@@ -15605,7 +15623,7 @@ static const scui_image_t prj_image_src_14_calculator_02_kuangbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x136,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xaeeb2a,
+	.pixel.data_bin		 = 0xbe4adf,
 	.pixel.size_bin		 = 0x2bc,
 };
 
@@ -15614,7 +15632,7 @@ static const scui_image_t prj_image_src_14_calculator_btn_01_ac_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x50,
 	.pixel.height		 = 0x44,
-	.pixel.data_bin		 = 0xaeede6,
+	.pixel.data_bin		 = 0xbe4d9b,
 	.pixel.size_bin		 = 0x1b0,
 };
 
@@ -15623,7 +15641,7 @@ static const scui_image_t prj_image_src_14_calculator_btn_02_ac_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x60,
-	.pixel.data_bin		 = 0xaeef96,
+	.pixel.data_bin		 = 0xbe4f4b,
 	.pixel.size_bin		 = 0x583,
 };
 
@@ -15632,7 +15650,7 @@ static const scui_image_t prj_image_src_14_calculator_btn_03_jiajian_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x50,
 	.pixel.height		 = 0x44,
-	.pixel.data_bin		 = 0xaef519,
+	.pixel.data_bin		 = 0xbe54ce,
 	.pixel.size_bin		 = 0x1cb,
 };
 
@@ -15641,7 +15659,7 @@ static const scui_image_t prj_image_src_14_calculator_btn_04_jiajian_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x60,
-	.pixel.data_bin		 = 0xaef6e4,
+	.pixel.data_bin		 = 0xbe5699,
 	.pixel.size_bin		 = 0x5bc,
 };
 
@@ -15650,7 +15668,7 @@ static const scui_image_t prj_image_src_14_calculator_btn_05_jiajian_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x50,
 	.pixel.height		 = 0x44,
-	.pixel.data_bin		 = 0xaefca0,
+	.pixel.data_bin		 = 0xbe5c55,
 	.pixel.size_bin		 = 0x1c8,
 };
 
@@ -15659,7 +15677,7 @@ static const scui_image_t prj_image_src_14_calculator_btn_06_num_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x50,
 	.pixel.height		 = 0x44,
-	.pixel.data_bin		 = 0xaefe68,
+	.pixel.data_bin		 = 0xbe5e1d,
 	.pixel.size_bin		 = 0x18c,
 };
 
@@ -15668,7 +15686,7 @@ static const scui_image_t prj_image_src_14_calculator_btn_07_num_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x60,
-	.pixel.data_bin		 = 0xaefff4,
+	.pixel.data_bin		 = 0xbe5fa9,
 	.pixel.size_bin		 = 0x59e,
 };
 
@@ -15677,7 +15695,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_01_acpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x1a,
-	.pixel.data_bin		 = 0xaf0592,
+	.pixel.data_bin		 = 0xbe6547,
 	.pixel.size_bin		 = 0x422,
 };
 
@@ -15686,7 +15704,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_02_cheng_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaf09b4,
+	.pixel.data_bin		 = 0xbe6969,
 	.pixel.size_bin		 = 0x1b5,
 };
 
@@ -15695,7 +15713,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_03_cheng_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaf0b69,
+	.pixel.data_bin		 = 0xbe6b1e,
 	.pixel.size_bin		 = 0x263,
 };
 
@@ -15704,7 +15722,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_04_chu_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaf0dcc,
+	.pixel.data_bin		 = 0xbe6d81,
 	.pixel.size_bin		 = 0x1a3,
 };
 
@@ -15713,7 +15731,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_05_chu_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaf0f6f,
+	.pixel.data_bin		 = 0xbe6f24,
 	.pixel.size_bin		 = 0x22d,
 };
 
@@ -15722,7 +15740,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_06_deletepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x1a,
-	.pixel.data_bin		 = 0xaf119c,
+	.pixel.data_bin		 = 0xbe7151,
 	.pixel.size_bin		 = 0x226,
 };
 
@@ -15731,7 +15749,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_07_dengyu_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaf13c2,
+	.pixel.data_bin		 = 0xbe7377,
 	.pixel.size_bin		 = 0x12a,
 };
 
@@ -15740,7 +15758,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_08_dengyu_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaf14ec,
+	.pixel.data_bin		 = 0xbe74a1,
 	.pixel.size_bin		 = 0x145,
 };
 
@@ -15749,7 +15767,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_09_jian_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaf1631,
+	.pixel.data_bin		 = 0xbe75e6,
 	.pixel.size_bin		 = 0x110,
 };
 
@@ -15758,7 +15776,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_10_jian_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaf1741,
+	.pixel.data_bin		 = 0xbe76f6,
 	.pixel.size_bin		 = 0x11f,
 };
 
@@ -15767,7 +15785,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_11_jia_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaf1860,
+	.pixel.data_bin		 = 0xbe7815,
 	.pixel.size_bin		 = 0x181,
 };
 
@@ -15776,7 +15794,7 @@ static const scui_image_t prj_image_src_14_calculator_symbol_12_jia_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xaf19e1,
+	.pixel.data_bin		 = 0xbe7996,
 	.pixel.size_bin		 = 0x1ad,
 };
 
@@ -15785,7 +15803,7 @@ static const scui_image_t prj_image_src_15_flashlight_01_flashlightbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x42,
 	.pixel.height		 = 0x64,
-	.pixel.data_bin		 = 0xaf1b8e,
+	.pixel.data_bin		 = 0xbe7b43,
 	.pixel.size_bin		 = 0x2dd,
 };
 
@@ -15794,7 +15812,7 @@ static const scui_image_t prj_image_src_17_period_01_arrowbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xaf1e6b,
+	.pixel.data_bin		 = 0xbe7e20,
 	.pixel.size_bin		 = 0xeb,
 };
 
@@ -15803,7 +15821,7 @@ static const scui_image_t prj_image_src_17_period_02_bar_bigbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x3e,
 	.pixel.height		 = 0x6a,
-	.pixel.data_bin		 = 0xaf1f56,
+	.pixel.data_bin		 = 0xbe7f0b,
 	.pixel.size_bin		 = 0x233,
 };
 
@@ -15812,7 +15830,7 @@ static const scui_image_t prj_image_src_17_period_03_bar_smallbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x58,
-	.pixel.data_bin		 = 0xaf2189,
+	.pixel.data_bin		 = 0xbe813e,
 	.pixel.size_bin		 = 0x1da,
 };
 
@@ -15821,7 +15839,7 @@ static const scui_image_t prj_image_src_17_period_04_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0xaf2363,
+	.pixel.data_bin		 = 0xbe8318,
 	.pixel.size_bin		 = 0x192,
 };
 
@@ -15830,7 +15848,7 @@ static const scui_image_t prj_image_src_17_period_period_01_menstruation_bigpng 
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x32,
 	.pixel.height		 = 0x32,
-	.pixel.data_bin		 = 0xaf24f5,
+	.pixel.data_bin		 = 0xbe84aa,
 	.pixel.size_bin		 = 0x41c,
 };
 
@@ -15839,7 +15857,7 @@ static const scui_image_t prj_image_src_17_period_period_02_menstruation_smallpn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xaf2911,
+	.pixel.data_bin		 = 0xbe88c6,
 	.pixel.size_bin		 = 0x341,
 };
 
@@ -15848,7 +15866,7 @@ static const scui_image_t prj_image_src_17_period_period_03_ovulation_bigpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x32,
 	.pixel.height		 = 0x32,
-	.pixel.data_bin		 = 0xaf2c52,
+	.pixel.data_bin		 = 0xbe8c07,
 	.pixel.size_bin		 = 0x8eb,
 };
 
@@ -15857,7 +15875,7 @@ static const scui_image_t prj_image_src_17_period_period_04_ovulation_smallpng =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xaf353d,
+	.pixel.data_bin		 = 0xbe94f2,
 	.pixel.size_bin		 = 0x53a,
 };
 
@@ -15866,7 +15884,7 @@ static const scui_image_t prj_image_src_18_message_01_barbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x162,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xaf3a77,
+	.pixel.data_bin		 = 0xbe9a2c,
 	.pixel.size_bin		 = 0x18b,
 };
 
@@ -15875,7 +15893,7 @@ static const scui_image_t prj_image_src_18_message_02_deletebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x74,
 	.pixel.height		 = 0x9c,
-	.pixel.data_bin		 = 0xaf3c02,
+	.pixel.data_bin		 = 0xbe9bb7,
 	.pixel.size_bin		 = 0x4cb,
 };
 
@@ -15884,7 +15902,7 @@ static const scui_image_t prj_image_src_18_message_03_dotpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x18,
-	.pixel.data_bin		 = 0xaf40cd,
+	.pixel.data_bin		 = 0xbea082,
 	.pixel.size_bin		 = 0x229,
 };
 
@@ -15893,7 +15911,7 @@ static const scui_image_t prj_image_src_18_message_04_no_messagebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x66,
 	.pixel.height		 = 0x66,
-	.pixel.data_bin		 = 0xaf42f6,
+	.pixel.data_bin		 = 0xbea2ab,
 	.pixel.size_bin		 = 0x4c0,
 };
 
@@ -15902,7 +15920,7 @@ static const scui_image_t prj_image_src_18_message_05_message_icon_suopng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xaf47b6,
+	.pixel.data_bin		 = 0xbea76b,
 	.pixel.size_bin		 = 0x469,
 };
 
@@ -15911,7 +15929,7 @@ static const scui_image_t prj_image_src_18_message_icon_01_callpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xaf4c1f,
+	.pixel.data_bin		 = 0xbeabd4,
 	.pixel.size_bin		 = 0x8a5,
 };
 
@@ -15920,7 +15938,7 @@ static const scui_image_t prj_image_src_18_message_icon_02_facebookpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xaf54c4,
+	.pixel.data_bin		 = 0xbeb479,
 	.pixel.size_bin		 = 0x1335,
 };
 
@@ -15929,7 +15947,7 @@ static const scui_image_t prj_image_src_18_message_icon_03_flickrpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xaf67f9,
+	.pixel.data_bin		 = 0xbec7ae,
 	.pixel.size_bin		 = 0x919,
 };
 
@@ -15938,7 +15956,7 @@ static const scui_image_t prj_image_src_18_message_icon_04_gmailpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xaf7112,
+	.pixel.data_bin		 = 0xbed0c7,
 	.pixel.size_bin		 = 0x847,
 };
 
@@ -15947,7 +15965,7 @@ static const scui_image_t prj_image_src_18_message_icon_05_googlepluspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xaf7959,
+	.pixel.data_bin		 = 0xbed90e,
 	.pixel.size_bin		 = 0xc66,
 };
 
@@ -15956,7 +15974,7 @@ static const scui_image_t prj_image_src_18_message_icon_06_hangoutspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xaf85bf,
+	.pixel.data_bin		 = 0xbee574,
 	.pixel.size_bin		 = 0x13b9,
 };
 
@@ -15965,7 +15983,7 @@ static const scui_image_t prj_image_src_18_message_icon_07_inspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xaf9978,
+	.pixel.data_bin		 = 0xbef92d,
 	.pixel.size_bin		 = 0x2081,
 };
 
@@ -15974,7 +15992,7 @@ static const scui_image_t prj_image_src_18_message_icon_08_kakaopng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xafb9f9,
+	.pixel.data_bin		 = 0xbf19ae,
 	.pixel.size_bin		 = 0xb14,
 };
 
@@ -15983,7 +16001,7 @@ static const scui_image_t prj_image_src_18_message_icon_09_linepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xafc50d,
+	.pixel.data_bin		 = 0xbf24c2,
 	.pixel.size_bin		 = 0xa76,
 };
 
@@ -15992,7 +16010,7 @@ static const scui_image_t prj_image_src_18_message_icon_10_linkpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xafcf83,
+	.pixel.data_bin		 = 0xbf2f38,
 	.pixel.size_bin		 = 0x778,
 };
 
@@ -16001,7 +16019,7 @@ static const scui_image_t prj_image_src_18_message_icon_11_messagepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xafd6fb,
+	.pixel.data_bin		 = 0xbf36b0,
 	.pixel.size_bin		 = 0x10b3,
 };
 
@@ -16010,7 +16028,7 @@ static const scui_image_t prj_image_src_18_message_icon_12_messengerpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xafe7ae,
+	.pixel.data_bin		 = 0xbf4763,
 	.pixel.size_bin		 = 0x1121,
 };
 
@@ -16019,7 +16037,7 @@ static const scui_image_t prj_image_src_18_message_icon_13_OKrupng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xaff8cf,
+	.pixel.data_bin		 = 0xbf5884,
 	.pixel.size_bin		 = 0x12c6,
 };
 
@@ -16028,7 +16046,7 @@ static const scui_image_t prj_image_src_18_message_icon_14_otherpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb00b95,
+	.pixel.data_bin		 = 0xbf6b4a,
 	.pixel.size_bin		 = 0x7e0,
 };
 
@@ -16037,7 +16055,7 @@ static const scui_image_t prj_image_src_18_message_icon_15_pinterestpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb01375,
+	.pixel.data_bin		 = 0xbf732a,
 	.pixel.size_bin		 = 0xb66,
 };
 
@@ -16046,7 +16064,7 @@ static const scui_image_t prj_image_src_18_message_icon_16_QQpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb01edb,
+	.pixel.data_bin		 = 0xbf7e90,
 	.pixel.size_bin		 = 0xb51,
 };
 
@@ -16055,7 +16073,7 @@ static const scui_image_t prj_image_src_18_message_icon_17_skypepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb02a2c,
+	.pixel.data_bin		 = 0xbf89e1,
 	.pixel.size_bin		 = 0xaf9,
 };
 
@@ -16064,7 +16082,7 @@ static const scui_image_t prj_image_src_18_message_icon_18_snapchatpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb03525,
+	.pixel.data_bin		 = 0xbf94da,
 	.pixel.size_bin		 = 0x9dc,
 };
 
@@ -16073,7 +16091,7 @@ static const scui_image_t prj_image_src_18_message_icon_19_tumblrpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb03f01,
+	.pixel.data_bin		 = 0xbf9eb6,
 	.pixel.size_bin		 = 0x709,
 };
 
@@ -16082,7 +16100,7 @@ static const scui_image_t prj_image_src_18_message_icon_20_twitterpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb0460a,
+	.pixel.data_bin		 = 0xbfa5bf,
 	.pixel.size_bin		 = 0x95e,
 };
 
@@ -16091,7 +16109,7 @@ static const scui_image_t prj_image_src_18_message_icon_21_viberpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb04f68,
+	.pixel.data_bin		 = 0xbfaf1d,
 	.pixel.size_bin		 = 0xeb3,
 };
 
@@ -16100,7 +16118,7 @@ static const scui_image_t prj_image_src_18_message_icon_22_vkontaktepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb05e1b,
+	.pixel.data_bin		 = 0xbfbdd0,
 	.pixel.size_bin		 = 0xcd5,
 };
 
@@ -16109,7 +16127,7 @@ static const scui_image_t prj_image_src_18_message_icon_23_wechatpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb06af0,
+	.pixel.data_bin		 = 0xbfcaa5,
 	.pixel.size_bin		 = 0x145c,
 };
 
@@ -16118,7 +16136,7 @@ static const scui_image_t prj_image_src_18_message_icon_24_whatsapppng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb07f4c,
+	.pixel.data_bin		 = 0xbfdf01,
 	.pixel.size_bin		 = 0x1884,
 };
 
@@ -16127,7 +16145,7 @@ static const scui_image_t prj_image_src_18_message_icon_25_Xpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb097d0,
+	.pixel.data_bin		 = 0xbff785,
 	.pixel.size_bin		 = 0xac4,
 };
 
@@ -16136,7 +16154,7 @@ static const scui_image_t prj_image_src_18_message_icon_26_yandexpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb0a294,
+	.pixel.data_bin		 = 0xc00249,
 	.pixel.size_bin		 = 0xa79,
 };
 
@@ -16145,7 +16163,7 @@ static const scui_image_t prj_image_src_18_message_icon_27_youtubepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x40,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb0ad0d,
+	.pixel.data_bin		 = 0xc00cc2,
 	.pixel.size_bin		 = 0x6a5,
 };
 
@@ -16154,7 +16172,7 @@ static const scui_image_t prj_image_src_19_widget_01_arrowbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xb0b3b2,
+	.pixel.data_bin		 = 0xc01367,
 	.pixel.size_bin		 = 0x9a,
 };
 
@@ -16163,7 +16181,7 @@ static const scui_image_t prj_image_src_19_widget_01_closebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x58,
 	.pixel.height		 = 0x58,
-	.pixel.data_bin		 = 0xb0b44c,
+	.pixel.data_bin		 = 0xc01401,
 	.pixel.size_bin		 = 0x2f2,
 };
 
@@ -16172,7 +16190,7 @@ static const scui_image_t prj_image_src_19_widget_02_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xda,
 	.pixel.height		 = 0x9a,
-	.pixel.data_bin		 = 0xb0b73e,
+	.pixel.data_bin		 = 0xc016f3,
 	.pixel.size_bin		 = 0xcfe,
 };
 
@@ -16181,7 +16199,7 @@ static const scui_image_t prj_image_src_19_widget_02_pausedbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x58,
 	.pixel.height		 = 0x58,
-	.pixel.data_bin		 = 0xb0c43c,
+	.pixel.data_bin		 = 0xc023f1,
 	.pixel.size_bin		 = 0x28c,
 };
 
@@ -16190,7 +16208,7 @@ static const scui_image_t prj_image_src_19_widget_03_editbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x58,
 	.pixel.height		 = 0x58,
-	.pixel.data_bin		 = 0xb0c6c8,
+	.pixel.data_bin		 = 0xc0267d,
 	.pixel.size_bin		 = 0x35f,
 };
 
@@ -16199,7 +16217,7 @@ static const scui_image_t prj_image_src_19_widget_04_linebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2,
 	.pixel.height		 = 0x44,
-	.pixel.data_bin		 = 0xb0ca27,
+	.pixel.data_bin		 = 0xc029dc,
 	.pixel.size_bin		 = 0x23,
 };
 
@@ -16208,7 +16226,7 @@ static const scui_image_t prj_image_src_19_widget_05_playbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x58,
 	.pixel.height		 = 0x58,
-	.pixel.data_bin		 = 0xb0ca4a,
+	.pixel.data_bin		 = 0xc029ff,
 	.pixel.size_bin		 = 0x31a,
 };
 
@@ -16217,7 +16235,7 @@ static const scui_image_t prj_image_src_19_widget_06_retrybmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x58,
 	.pixel.height		 = 0x58,
-	.pixel.data_bin		 = 0xb0cd64,
+	.pixel.data_bin		 = 0xc02d19,
 	.pixel.size_bin		 = 0x548,
 };
 
@@ -16226,7 +16244,7 @@ static const scui_image_t prj_image_src_19_widget_07_barbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x8,
-	.pixel.data_bin		 = 0xb0d2ac,
+	.pixel.data_bin		 = 0xc03261,
 	.pixel.size_bin		 = 0x5b,
 };
 
@@ -16235,7 +16253,7 @@ static const scui_image_t prj_image_src_19_widget_08_arrowpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xb0d307,
+	.pixel.data_bin		 = 0xc032bc,
 	.pixel.size_bin		 = 0x588,
 };
 
@@ -16244,7 +16262,7 @@ static const scui_image_t prj_image_src_19_widget_09_arrow2png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xb0d88f,
+	.pixel.data_bin		 = 0xc03844,
 	.pixel.size_bin		 = 0x56f,
 };
 
@@ -16253,7 +16271,7 @@ static const scui_image_t prj_image_src_19_widget_activity_01_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x84,
 	.pixel.height		 = 0x84,
-	.pixel.data_bin		 = 0xb0ddfe,
+	.pixel.data_bin		 = 0xc03db3,
 	.pixel.size_bin		 = 0x876,
 };
 
@@ -16262,7 +16280,7 @@ static const scui_image_t prj_image_src_19_widget_activity_02_caloriesbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xb0e674,
+	.pixel.data_bin		 = 0xc04629,
 	.pixel.size_bin		 = 0x1da,
 };
 
@@ -16271,7 +16289,7 @@ static const scui_image_t prj_image_src_19_widget_activity_03_distancebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xb0e84e,
+	.pixel.data_bin		 = 0xc04803,
 	.pixel.size_bin		 = 0x1cf,
 };
 
@@ -16280,7 +16298,7 @@ static const scui_image_t prj_image_src_19_widget_activity_04_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xb0ea1d,
+	.pixel.data_bin		 = 0xc049d2,
 	.pixel.size_bin		 = 0x91,
 };
 
@@ -16289,7 +16307,7 @@ static const scui_image_t prj_image_src_19_widget_activity_05_ringbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x86,
 	.pixel.height		 = 0x86,
-	.pixel.data_bin		 = 0xb0eaae,
+	.pixel.data_bin		 = 0xc04a63,
 	.pixel.size_bin		 = 0x593,
 };
 
@@ -16298,7 +16316,7 @@ static const scui_image_t prj_image_src_19_widget_activity_08_stepsbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xb0f041,
+	.pixel.data_bin		 = 0xc04ff6,
 	.pixel.size_bin		 = 0x245,
 };
 
@@ -16307,7 +16325,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0f286,
+	.pixel.data_bin		 = 0xc0523b,
 	.pixel.size_bin		 = 0x55,
 };
 
@@ -16316,7 +16334,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0f2db,
+	.pixel.data_bin		 = 0xc05290,
 	.pixel.size_bin		 = 0x73,
 };
 
@@ -16325,7 +16343,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0f34e,
+	.pixel.data_bin		 = 0xc05303,
 	.pixel.size_bin		 = 0x9b,
 };
 
@@ -16334,7 +16352,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0f3e9,
+	.pixel.data_bin		 = 0xc0539e,
 	.pixel.size_bin		 = 0x1d8,
 };
 
@@ -16343,7 +16361,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0f5c1,
+	.pixel.data_bin		 = 0xc05576,
 	.pixel.size_bin		 = 0x80,
 };
 
@@ -16352,7 +16370,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0f641,
+	.pixel.data_bin		 = 0xc055f6,
 	.pixel.size_bin		 = 0x18e,
 };
 
@@ -16361,7 +16379,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0f7cf,
+	.pixel.data_bin		 = 0xc05784,
 	.pixel.size_bin		 = 0x1a4,
 };
 
@@ -16370,7 +16388,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0f973,
+	.pixel.data_bin		 = 0xc05928,
 	.pixel.size_bin		 = 0x149,
 };
 
@@ -16379,7 +16397,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0fabc,
+	.pixel.data_bin		 = 0xc05a71,
 	.pixel.size_bin		 = 0x1b9,
 };
 
@@ -16388,7 +16406,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0fc75,
+	.pixel.data_bin		 = 0xc05c2a,
 	.pixel.size_bin		 = 0x1c7,
 };
 
@@ -16397,7 +16415,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0fe3c,
+	.pixel.data_bin		 = 0xc05df1,
 	.pixel.size_bin		 = 0x125,
 };
 
@@ -16406,7 +16424,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb0ff61,
+	.pixel.data_bin		 = 0xc05f16,
 	.pixel.size_bin		 = 0x214,
 };
 
@@ -16415,7 +16433,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb10175,
+	.pixel.data_bin		 = 0xc0612a,
 	.pixel.size_bin		 = 0x1bd,
 };
 
@@ -16424,7 +16442,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_blue_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb10332,
+	.pixel.data_bin		 = 0xc062e7,
 	.pixel.size_bin		 = 0x95,
 };
 
@@ -16433,7 +16451,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb103c7,
+	.pixel.data_bin		 = 0xc0637c,
 	.pixel.size_bin		 = 0x5c,
 };
 
@@ -16442,7 +16460,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb10423,
+	.pixel.data_bin		 = 0xc063d8,
 	.pixel.size_bin		 = 0x76,
 };
 
@@ -16451,7 +16469,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb10499,
+	.pixel.data_bin		 = 0xc0644e,
 	.pixel.size_bin		 = 0x94,
 };
 
@@ -16460,7 +16478,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb1052d,
+	.pixel.data_bin		 = 0xc064e2,
 	.pixel.size_bin		 = 0x1cd,
 };
 
@@ -16469,7 +16487,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb106fa,
+	.pixel.data_bin		 = 0xc066af,
 	.pixel.size_bin		 = 0x84,
 };
 
@@ -16478,7 +16496,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb1077e,
+	.pixel.data_bin		 = 0xc06733,
 	.pixel.size_bin		 = 0x185,
 };
 
@@ -16487,7 +16505,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb10903,
+	.pixel.data_bin		 = 0xc068b8,
 	.pixel.size_bin		 = 0x19b,
 };
 
@@ -16496,7 +16514,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb10a9e,
+	.pixel.data_bin		 = 0xc06a53,
 	.pixel.size_bin		 = 0x149,
 };
 
@@ -16505,7 +16523,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb10be7,
+	.pixel.data_bin		 = 0xc06b9c,
 	.pixel.size_bin		 = 0x1b4,
 };
 
@@ -16514,7 +16532,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb10d9b,
+	.pixel.data_bin		 = 0xc06d50,
 	.pixel.size_bin		 = 0x1c6,
 };
 
@@ -16523,7 +16541,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb10f61,
+	.pixel.data_bin		 = 0xc06f16,
 	.pixel.size_bin		 = 0x120,
 };
 
@@ -16532,7 +16550,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb11081,
+	.pixel.data_bin		 = 0xc07036,
 	.pixel.size_bin		 = 0x20c,
 };
 
@@ -16541,7 +16559,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb1128d,
+	.pixel.data_bin		 = 0xc07242,
 	.pixel.size_bin		 = 0x1ce,
 };
 
@@ -16550,7 +16568,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_pink_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb1145b,
+	.pixel.data_bin		 = 0xc07410,
 	.pixel.size_bin		 = 0x99,
 };
 
@@ -16559,7 +16577,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_01_00bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb114f4,
+	.pixel.data_bin		 = 0xc074a9,
 	.pixel.size_bin		 = 0x5c,
 };
 
@@ -16568,7 +16586,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_02_01bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb11550,
+	.pixel.data_bin		 = 0xc07505,
 	.pixel.size_bin		 = 0x78,
 };
 
@@ -16577,7 +16595,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_03_02bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb115c8,
+	.pixel.data_bin		 = 0xc0757d,
 	.pixel.size_bin		 = 0xac,
 };
 
@@ -16586,7 +16604,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_04_03bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb11674,
+	.pixel.data_bin		 = 0xc07629,
 	.pixel.size_bin		 = 0x1f7,
 };
 
@@ -16595,7 +16613,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_05_04bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb1186b,
+	.pixel.data_bin		 = 0xc07820,
 	.pixel.size_bin		 = 0x84,
 };
 
@@ -16604,7 +16622,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_06_05bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb118ef,
+	.pixel.data_bin		 = 0xc078a4,
 	.pixel.size_bin		 = 0x1a8,
 };
 
@@ -16613,7 +16631,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_07_06bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb11a97,
+	.pixel.data_bin		 = 0xc07a4c,
 	.pixel.size_bin		 = 0x1c3,
 };
 
@@ -16622,7 +16640,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_08_07bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb11c5a,
+	.pixel.data_bin		 = 0xc07c0f,
 	.pixel.size_bin		 = 0x15c,
 };
 
@@ -16631,7 +16649,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_09_08bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb11db6,
+	.pixel.data_bin		 = 0xc07d6b,
 	.pixel.size_bin		 = 0x1d0,
 };
 
@@ -16640,7 +16658,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_10_09bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb11f86,
+	.pixel.data_bin		 = 0xc07f3b,
 	.pixel.size_bin		 = 0x1f3,
 };
 
@@ -16649,7 +16667,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_11_10bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb12179,
+	.pixel.data_bin		 = 0xc0812e,
 	.pixel.size_bin		 = 0x155,
 };
 
@@ -16658,7 +16676,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_12_11bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb122ce,
+	.pixel.data_bin		 = 0xc08283,
 	.pixel.size_bin		 = 0x23c,
 };
 
@@ -16667,7 +16685,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_13_12bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb1250a,
+	.pixel.data_bin		 = 0xc084bf,
 	.pixel.size_bin		 = 0x1e6,
 };
 
@@ -16676,7 +16694,7 @@ static const scui_image_t prj_image_src_19_widget_activity_num_yellow_14_13bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb126f0,
+	.pixel.data_bin		 = 0xc086a5,
 	.pixel.size_bin		 = 0x9a,
 };
 
@@ -16685,7 +16703,7 @@ static const scui_image_t prj_image_src_19_widget_compass_01_arrowbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb1278a,
+	.pixel.data_bin		 = 0xc0873f,
 	.pixel.size_bin		 = 0x1d8,
 };
 
@@ -16694,7 +16712,7 @@ static const scui_image_t prj_image_src_19_widget_compass_02_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x58,
 	.pixel.height		 = 0x58,
-	.pixel.data_bin		 = 0xb12962,
+	.pixel.data_bin		 = 0xc08917,
 	.pixel.size_bin		 = 0x158,
 };
 
@@ -16703,7 +16721,7 @@ static const scui_image_t prj_image_src_19_widget_compass_03_arrowpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb12aba,
+	.pixel.data_bin		 = 0xc08a6f,
 	.pixel.size_bin		 = 0x41d,
 };
 
@@ -16712,7 +16730,7 @@ static const scui_image_t prj_image_src_19_widget_music_01_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xb4,
-	.pixel.data_bin		 = 0xb12ed7,
+	.pixel.data_bin		 = 0xc08e8c,
 	.pixel.size_bin		 = 0x5016,
 };
 
@@ -16721,7 +16739,7 @@ static const scui_image_t prj_image_src_19_widget_music_02_nextbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xb17eed,
+	.pixel.data_bin		 = 0xc0dea2,
 	.pixel.size_bin		 = 0x3c0,
 };
 
@@ -16730,7 +16748,7 @@ static const scui_image_t prj_image_src_19_widget_music_03_playbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5a,
 	.pixel.height		 = 0x5a,
-	.pixel.data_bin		 = 0xb182ad,
+	.pixel.data_bin		 = 0xc0e262,
 	.pixel.size_bin		 = 0x761,
 };
 
@@ -16739,7 +16757,7 @@ static const scui_image_t prj_image_src_19_widget_music_04_upbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xb18a0e,
+	.pixel.data_bin		 = 0xc0e9c3,
 	.pixel.size_bin		 = 0x1e1,
 };
 
@@ -16748,7 +16766,7 @@ static const scui_image_t prj_image_src_19_widget_music_05_pausedbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5a,
 	.pixel.height		 = 0x5a,
-	.pixel.data_bin		 = 0xb18bef,
+	.pixel.data_bin		 = 0xc0eba4,
 	.pixel.size_bin		 = 0x719,
 };
 
@@ -16757,7 +16775,7 @@ static const scui_image_t prj_image_src_19_widget_period_01_fertilebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x50,
 	.pixel.height		 = 0x58,
-	.pixel.data_bin		 = 0xb19308,
+	.pixel.data_bin		 = 0xc0f2bd,
 	.pixel.size_bin		 = 0x8c1,
 };
 
@@ -16766,7 +16784,7 @@ static const scui_image_t prj_image_src_19_widget_period_02_menstrualbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x50,
 	.pixel.height		 = 0x58,
-	.pixel.data_bin		 = 0xb19bc9,
+	.pixel.data_bin		 = 0xc0fb7e,
 	.pixel.size_bin		 = 0xae8,
 };
 
@@ -16775,7 +16793,7 @@ static const scui_image_t prj_image_src_19_widget_timer_01_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x52,
-	.pixel.data_bin		 = 0xb1a6b1,
+	.pixel.data_bin		 = 0xc10666,
 	.pixel.size_bin		 = 0x5a4,
 };
 
@@ -16784,7 +16802,7 @@ static const scui_image_t prj_image_src_19_widget_timer_char_min_01_enbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1a,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xb1ac55,
+	.pixel.data_bin		 = 0xc10c0a,
 	.pixel.size_bin		 = 0xfb,
 };
 
@@ -16793,7 +16811,7 @@ static const scui_image_t prj_image_src_19_widget_timer_char_min_02_zhbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1a,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xb1ad50,
+	.pixel.data_bin		 = 0xc10d05,
 	.pixel.size_bin		 = 0x14b,
 };
 
@@ -16802,7 +16820,7 @@ static const scui_image_t prj_image_src_20_control_center_01_addpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xb1ae9b,
+	.pixel.data_bin		 = 0xc10e50,
 	.pixel.size_bin		 = 0x447,
 };
 
@@ -16811,7 +16829,7 @@ static const scui_image_t prj_image_src_20_control_center_02_btnbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe8,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xb1b2e2,
+	.pixel.data_bin		 = 0xc11297,
 	.pixel.size_bin		 = 0x1f5,
 };
 
@@ -16820,7 +16838,7 @@ static const scui_image_t prj_image_src_20_control_center_03_deletepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xb1b4d7,
+	.pixel.data_bin		 = 0xc1148c,
 	.pixel.size_bin		 = 0x3ae,
 };
 
@@ -16829,7 +16847,7 @@ static const scui_image_t prj_image_src_20_control_center_04_icon_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0xa,
-	.pixel.data_bin		 = 0xb1b885,
+	.pixel.data_bin		 = 0xc1183a,
 	.pixel.size_bin		 = 0x9e,
 };
 
@@ -16838,7 +16856,7 @@ static const scui_image_t prj_image_src_20_control_center_05_icon_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0xa,
-	.pixel.data_bin		 = 0xb1b923,
+	.pixel.data_bin		 = 0xc118d8,
 	.pixel.size_bin		 = 0xa0,
 };
 
@@ -16847,7 +16865,7 @@ static const scui_image_t prj_image_src_20_control_center_battery_01_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x7e,
 	.pixel.height		 = 0x7e,
-	.pixel.data_bin		 = 0xb1b9c3,
+	.pixel.data_bin		 = 0xc11978,
 	.pixel.size_bin		 = 0x4c1,
 };
 
@@ -16856,7 +16874,7 @@ static const scui_image_t prj_image_src_20_control_center_battery_02_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xe,
 	.pixel.height		 = 0xe,
-	.pixel.data_bin		 = 0xb1be84,
+	.pixel.data_bin		 = 0xc11e39,
 	.pixel.size_bin		 = 0x62,
 };
 
@@ -16865,7 +16883,7 @@ static const scui_image_t prj_image_src_20_control_center_battery_03_ringbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x7e,
 	.pixel.height		 = 0x7e,
-	.pixel.data_bin		 = 0xb1bee6,
+	.pixel.data_bin		 = 0xc11e9b,
 	.pixel.size_bin		 = 0x4ab,
 };
 
@@ -16874,7 +16892,7 @@ static const scui_image_t prj_image_src_20_control_center_call_01_nobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb1c391,
+	.pixel.data_bin		 = 0xc12346,
 	.pixel.size_bin		 = 0x270,
 };
 
@@ -16883,7 +16901,7 @@ static const scui_image_t prj_image_src_20_control_center_call_02_yesbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb1c601,
+	.pixel.data_bin		 = 0xc125b6,
 	.pixel.size_bin		 = 0x286,
 };
 
@@ -16892,7 +16910,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_01_aboutbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb1c887,
+	.pixel.data_bin		 = 0xc1283c,
 	.pixel.size_bin		 = 0x65a,
 };
 
@@ -16901,7 +16919,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_02_alarmsbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb1cee1,
+	.pixel.data_bin		 = 0xc12e96,
 	.pixel.size_bin		 = 0x810,
 };
 
@@ -16910,7 +16928,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_03_aodbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb1d6f1,
+	.pixel.data_bin		 = 0xc136a6,
 	.pixel.size_bin		 = 0x682,
 };
 
@@ -16919,7 +16937,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_04_brightness_00b
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb1dd73,
+	.pixel.data_bin		 = 0xc13d28,
 	.pixel.size_bin		 = 0x53e,
 };
 
@@ -16928,7 +16946,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_05_brightness_01b
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb1e2b1,
+	.pixel.data_bin		 = 0xc14266,
 	.pixel.size_bin		 = 0x686,
 };
 
@@ -16937,7 +16955,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_06_brightness_02b
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb1e937,
+	.pixel.data_bin		 = 0xc148ec,
 	.pixel.size_bin		 = 0x8e3,
 };
 
@@ -16946,7 +16964,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_07_brightness_03b
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb1f21a,
+	.pixel.data_bin		 = 0xc151cf,
 	.pixel.size_bin		 = 0x6d7,
 };
 
@@ -16955,7 +16973,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_08_brightness_04b
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb1f8f1,
+	.pixel.data_bin		 = 0xc158a6,
 	.pixel.size_bin		 = 0x5a7,
 };
 
@@ -16964,7 +16982,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_09_call_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb1fe98,
+	.pixel.data_bin		 = 0xc15e4d,
 	.pixel.size_bin		 = 0x675,
 };
 
@@ -16973,7 +16991,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_10_call_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb2050d,
+	.pixel.data_bin		 = 0xc164c2,
 	.pixel.size_bin		 = 0x6d2,
 };
 
@@ -16982,7 +17000,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_11_dnd_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb20bdf,
+	.pixel.data_bin		 = 0xc16b94,
 	.pixel.size_bin		 = 0x651,
 };
 
@@ -16991,7 +17009,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_12_dnd_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb21230,
+	.pixel.data_bin		 = 0xc171e5,
 	.pixel.size_bin		 = 0x6a5,
 };
 
@@ -17000,7 +17018,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_13_dot_001bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb218d5,
+	.pixel.data_bin		 = 0xc1788a,
 	.pixel.size_bin		 = 0x3e2,
 };
 
@@ -17009,7 +17027,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_13_dot_002bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb21cb7,
+	.pixel.data_bin		 = 0xc17c6c,
 	.pixel.size_bin		 = 0x3e2,
 };
 
@@ -17018,7 +17036,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_14_dot_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb22099,
+	.pixel.data_bin		 = 0xc1804e,
 	.pixel.size_bin		 = 0x35a,
 };
 
@@ -17027,7 +17045,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_15_find_phonebmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb223f3,
+	.pixel.data_bin		 = 0xc183a8,
 	.pixel.size_bin		 = 0x5ef,
 };
 
@@ -17036,7 +17054,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_16_mate_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb229e2,
+	.pixel.data_bin		 = 0xc18997,
 	.pixel.size_bin		 = 0x743,
 };
 
@@ -17045,7 +17063,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_17_mate_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb23125,
+	.pixel.data_bin		 = 0xc190da,
 	.pixel.size_bin		 = 0x78a,
 };
 
@@ -17054,7 +17072,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_18_settingsbmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb238af,
+	.pixel.data_bin		 = 0xc19864,
 	.pixel.size_bin		 = 0x6f0,
 };
 
@@ -17063,7 +17081,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_19_shoudianbmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb23f9f,
+	.pixel.data_bin		 = 0xc19f54,
 	.pixel.size_bin		 = 0x556,
 };
 
@@ -17072,7 +17090,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_20_wrist_00bmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb244f5,
+	.pixel.data_bin		 = 0xc1a4aa,
 	.pixel.size_bin		 = 0x5ef,
 };
 
@@ -17081,7 +17099,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_21_wrist_01bmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb24ae4,
+	.pixel.data_bin		 = 0xc1aa99,
 	.pixel.size_bin		 = 0x679,
 };
 
@@ -17090,7 +17108,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_22_Cover_lockbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb2515d,
+	.pixel.data_bin		 = 0xc1b112,
 	.pixel.size_bin		 = 0x885,
 };
 
@@ -17099,7 +17117,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_23_Display_durati
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb259e2,
+	.pixel.data_bin		 = 0xc1b997,
 	.pixel.size_bin		 = 0x8b7,
 };
 
@@ -17108,7 +17126,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_24_menu_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb26299,
+	.pixel.data_bin		 = 0xc1c24e,
 	.pixel.size_bin		 = 0x5cc,
 };
 
@@ -17117,7 +17135,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_25_menu_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb26865,
+	.pixel.data_bin		 = 0xc1c81a,
 	.pixel.size_bin		 = 0x820,
 };
 
@@ -17126,7 +17144,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_26_menu_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb27085,
+	.pixel.data_bin		 = 0xc1d03a,
 	.pixel.size_bin		 = 0x638,
 };
 
@@ -17135,7 +17153,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_27_menu_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb276bd,
+	.pixel.data_bin		 = 0xc1d672,
 	.pixel.size_bin		 = 0x8ac,
 };
 
@@ -17144,7 +17162,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_28_menu_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb27f69,
+	.pixel.data_bin		 = 0xc1df1e,
 	.pixel.size_bin		 = 0x4d4,
 };
 
@@ -17153,7 +17171,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_29_menu_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb2843d,
+	.pixel.data_bin		 = 0xc1e3f2,
 	.pixel.size_bin		 = 0x531,
 };
 
@@ -17162,7 +17180,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_30_passwordbmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb2896e,
+	.pixel.data_bin		 = 0xc1e923,
 	.pixel.size_bin		 = 0x627,
 };
 
@@ -17171,7 +17189,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_31_QRbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb28f95,
+	.pixel.data_bin		 = 0xc1ef4a,
 	.pixel.size_bin		 = 0x6b8,
 };
 
@@ -17180,7 +17198,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_32_SOSbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb2964d,
+	.pixel.data_bin		 = 0xc1f602,
 	.pixel.size_bin		 = 0x84c,
 };
 
@@ -17189,7 +17207,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_33_Stopwatchbmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb29e99,
+	.pixel.data_bin		 = 0xc1fe4e,
 	.pixel.size_bin		 = 0xacb,
 };
 
@@ -17198,7 +17216,7 @@ static const scui_image_t prj_image_src_20_control_center_icon_34_Voice_Assistan
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x72,
 	.pixel.height		 = 0x72,
-	.pixel.data_bin		 = 0xb2a964,
+	.pixel.data_bin		 = 0xc20919,
 	.pixel.size_bin		 = 0x576,
 };
 
@@ -17207,7 +17225,7 @@ static const scui_image_t prj_image_src_20_control_center_phone_01_nobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb2aeda,
+	.pixel.data_bin		 = 0xc20e8f,
 	.pixel.size_bin		 = 0x1de,
 };
 
@@ -17216,7 +17234,7 @@ static const scui_image_t prj_image_src_20_control_center_phone_02_yesbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb2b0b8,
+	.pixel.data_bin		 = 0xc2106d,
 	.pixel.size_bin		 = 0x18c,
 };
 
@@ -17225,7 +17243,7 @@ static const scui_image_t prj_image_src_22_sleep_details_01_awakebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x18,
-	.pixel.data_bin		 = 0xb2b244,
+	.pixel.data_bin		 = 0xc211f9,
 	.pixel.size_bin		 = 0x58,
 };
 
@@ -17234,7 +17252,7 @@ static const scui_image_t prj_image_src_22_sleep_details_02_deepbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x18,
-	.pixel.data_bin		 = 0xb2b29c,
+	.pixel.data_bin		 = 0xc21251,
 	.pixel.size_bin		 = 0x58,
 };
 
@@ -17243,7 +17261,7 @@ static const scui_image_t prj_image_src_22_sleep_details_03_lightbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x18,
-	.pixel.data_bin		 = 0xb2b2f4,
+	.pixel.data_bin		 = 0xc212a9,
 	.pixel.size_bin		 = 0x57,
 };
 
@@ -17252,7 +17270,7 @@ static const scui_image_t prj_image_src_22_sleep_details_04_linebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18a,
 	.pixel.height		 = 0x2,
-	.pixel.data_bin		 = 0xb2b34b,
+	.pixel.data_bin		 = 0xc21300,
 	.pixel.size_bin		 = 0x29,
 };
 
@@ -17261,7 +17279,7 @@ static const scui_image_t prj_image_src_22_sleep_details_05_rembmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x18,
-	.pixel.data_bin		 = 0xb2b374,
+	.pixel.data_bin		 = 0xc21329,
 	.pixel.size_bin		 = 0x57,
 };
 
@@ -17270,7 +17288,7 @@ static const scui_image_t prj_image_src_22_sleep_details_06_no_databmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18a,
 	.pixel.height		 = 0xac,
-	.pixel.data_bin		 = 0xb2b3cb,
+	.pixel.data_bin		 = 0xc21380,
 	.pixel.size_bin		 = 0x1e32,
 };
 
@@ -17279,7 +17297,7 @@ static const scui_image_t prj_image_src_22_sleep_home_01_asleepbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1e,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xb2d1fd,
+	.pixel.data_bin		 = 0xc231b2,
 	.pixel.size_bin		 = 0x1c4,
 };
 
@@ -17288,7 +17306,7 @@ static const scui_image_t prj_image_src_22_sleep_home_02_wakebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1e,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xb2d3c1,
+	.pixel.data_bin		 = 0xc23376,
 	.pixel.size_bin		 = 0x132,
 };
 
@@ -17297,7 +17315,7 @@ static const scui_image_t prj_image_src_22_sleep_home_bar_01_blue_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xb2d4f3,
+	.pixel.data_bin		 = 0xc234a8,
 	.pixel.size_bin		 = 0x63,
 };
 
@@ -17306,7 +17324,7 @@ static const scui_image_t prj_image_src_22_sleep_home_bar_02_blue_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xb2d556,
+	.pixel.data_bin		 = 0xc2350b,
 	.pixel.size_bin		 = 0x61,
 };
 
@@ -17315,7 +17333,7 @@ static const scui_image_t prj_image_src_22_sleep_home_bar_03_grey_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xb2d5b7,
+	.pixel.data_bin		 = 0xc2356c,
 	.pixel.size_bin		 = 0x64,
 };
 
@@ -17324,7 +17342,7 @@ static const scui_image_t prj_image_src_22_sleep_home_bar_04_grey_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xb2d61b,
+	.pixel.data_bin		 = 0xc235d0,
 	.pixel.size_bin		 = 0x63,
 };
 
@@ -17333,7 +17351,7 @@ static const scui_image_t prj_image_src_22_sleep_home_bar_05_prange_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xb2d67e,
+	.pixel.data_bin		 = 0xc23633,
 	.pixel.size_bin		 = 0x64,
 };
 
@@ -17342,7 +17360,7 @@ static const scui_image_t prj_image_src_22_sleep_home_bar_06_prange_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xb2d6e2,
+	.pixel.data_bin		 = 0xc23697,
 	.pixel.size_bin		 = 0x63,
 };
 
@@ -17351,7 +17369,7 @@ static const scui_image_t prj_image_src_22_sleep_home_bar_07_qing_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xb2d745,
+	.pixel.data_bin		 = 0xc236fa,
 	.pixel.size_bin		 = 0x64,
 };
 
@@ -17360,7 +17378,7 @@ static const scui_image_t prj_image_src_22_sleep_home_bar_08_qing_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xb2d7a9,
+	.pixel.data_bin		 = 0xc2375e,
 	.pixel.size_bin		 = 0x62,
 };
 
@@ -17369,7 +17387,7 @@ static const scui_image_t prj_image_src_22_sleep_home_bar_09_zi_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xb2d80b,
+	.pixel.data_bin		 = 0xc237c0,
 	.pixel.size_bin		 = 0x63,
 };
 
@@ -17378,7 +17396,7 @@ static const scui_image_t prj_image_src_22_sleep_home_bar_10_zi_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xb2d86e,
+	.pixel.data_bin		 = 0xc23823,
 	.pixel.size_bin		 = 0x62,
 };
 
@@ -17387,7 +17405,7 @@ static const scui_image_t prj_image_src_22_sleep_I308001_22_sleep_NO_recordpng =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5c,
 	.pixel.height		 = 0x5c,
-	.pixel.data_bin		 = 0xb2d8d0,
+	.pixel.data_bin		 = 0xc23885,
 	.pixel.size_bin		 = 0x1084,
 };
 
@@ -17396,7 +17414,7 @@ static const scui_image_t prj_image_src_22_sleep_sleep_settings_01_addpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0xb2e954,
+	.pixel.data_bin		 = 0xc24909,
 	.pixel.size_bin		 = 0x1bb,
 };
 
@@ -17405,7 +17423,7 @@ static const scui_image_t prj_image_src_22_sleep_sleep_settings_02_nopng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xb2eb0f,
+	.pixel.data_bin		 = 0xc24ac4,
 	.pixel.size_bin		 = 0x44e,
 };
 
@@ -17414,7 +17432,7 @@ static const scui_image_t prj_image_src_22_sleep_sleep_settings_03_yespng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xb2ef5d,
+	.pixel.data_bin		 = 0xc24f12,
 	.pixel.size_bin		 = 0x4fc,
 };
 
@@ -17423,7 +17441,7 @@ static const scui_image_t prj_image_src_23_call_01_callbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xb2f459,
+	.pixel.data_bin		 = 0xc2540e,
 	.pixel.size_bin		 = 0x288,
 };
 
@@ -17432,7 +17450,7 @@ static const scui_image_t prj_image_src_23_call_01_closebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x70,
-	.pixel.data_bin		 = 0xb2f6e1,
+	.pixel.data_bin		 = 0xc25696,
 	.pixel.size_bin		 = 0x3f7,
 };
 
@@ -17441,7 +17459,7 @@ static const scui_image_t prj_image_src_23_call_02_callingpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x18,
-	.pixel.data_bin		 = 0xb2fad8,
+	.pixel.data_bin		 = 0xc25a8d,
 	.pixel.size_bin		 = 0x1f7,
 };
 
@@ -17450,7 +17468,7 @@ static const scui_image_t prj_image_src_23_call_02_missed_callbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x78,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0xb2fccf,
+	.pixel.data_bin		 = 0xc25c84,
 	.pixel.size_bin		 = 0x770,
 };
 
@@ -17459,7 +17477,7 @@ static const scui_image_t prj_image_src_23_call_03_call_inpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x18,
-	.pixel.data_bin		 = 0xb3043f,
+	.pixel.data_bin		 = 0xc263f4,
 	.pixel.size_bin		 = 0x1df,
 };
 
@@ -17468,7 +17486,7 @@ static const scui_image_t prj_image_src_23_call_04_contactpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xb3061e,
+	.pixel.data_bin		 = 0xc265d3,
 	.pixel.size_bin		 = 0x55a,
 };
 
@@ -17477,7 +17495,7 @@ static const scui_image_t prj_image_src_23_call_05_deletebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x36,
 	.pixel.height		 = 0x25,
-	.pixel.data_bin		 = 0xb30b78,
+	.pixel.data_bin		 = 0xc26b2d,
 	.pixel.size_bin		 = 0x1cc,
 };
 
@@ -17486,7 +17504,7 @@ static const scui_image_t prj_image_src_23_call_06_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x5e,
-	.pixel.data_bin		 = 0xb30d44,
+	.pixel.data_bin		 = 0xc26cf9,
 	.pixel.size_bin		 = 0x2a3,
 };
 
@@ -17495,7 +17513,7 @@ static const scui_image_t prj_image_src_23_call_07_zhuanfapng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xb30fe7,
+	.pixel.data_bin		 = 0xc26f9c,
 	.pixel.size_bin		 = 0x3a2,
 };
 
@@ -17504,7 +17522,7 @@ static const scui_image_t prj_image_src_23_call_08_no_contactbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x6a,
 	.pixel.height		 = 0x70,
-	.pixel.data_bin		 = 0xb31389,
+	.pixel.data_bin		 = 0xc2733e,
 	.pixel.size_bin		 = 0x570,
 };
 
@@ -17513,7 +17531,7 @@ static const scui_image_t prj_image_src_23_call_09_no_recondbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x6e,
 	.pixel.height		 = 0x6c,
-	.pixel.data_bin		 = 0xb318f9,
+	.pixel.data_bin		 = 0xc278ae,
 	.pixel.size_bin		 = 0x5b1,
 };
 
@@ -17522,7 +17540,7 @@ static const scui_image_t prj_image_src_23_call_btn_01_cacelbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x70,
-	.pixel.data_bin		 = 0xb31eaa,
+	.pixel.data_bin		 = 0xc27e5f,
 	.pixel.size_bin		 = 0x3f7,
 };
 
@@ -17531,7 +17549,7 @@ static const scui_image_t prj_image_src_23_call_btn_02_callbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x70,
-	.pixel.data_bin		 = 0xb322a1,
+	.pixel.data_bin		 = 0xc28256,
 	.pixel.size_bin		 = 0x6dc,
 };
 
@@ -17540,7 +17558,7 @@ static const scui_image_t prj_image_src_23_call_btn_03_hand_up_bigbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x7e,
 	.pixel.height		 = 0x7e,
-	.pixel.data_bin		 = 0xb3297d,
+	.pixel.data_bin		 = 0xc28932,
 	.pixel.size_bin		 = 0x6c0,
 };
 
@@ -17549,7 +17567,7 @@ static const scui_image_t prj_image_src_23_call_btn_04_hand_up_middlebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x70,
-	.pixel.data_bin		 = 0xb3303d,
+	.pixel.data_bin		 = 0xc28ff2,
 	.pixel.size_bin		 = 0x5e9,
 };
 
@@ -17558,7 +17576,7 @@ static const scui_image_t prj_image_src_23_call_btn_05_hand_up_smallpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x54,
 	.pixel.height		 = 0x54,
-	.pixel.data_bin		 = 0xb33626,
+	.pixel.data_bin		 = 0xc295db,
 	.pixel.size_bin		 = 0x9ae,
 };
 
@@ -17567,7 +17585,7 @@ static const scui_image_t prj_image_src_23_call_btn_06_messagebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x54,
 	.pixel.height		 = 0x54,
-	.pixel.data_bin		 = 0xb33fd4,
+	.pixel.data_bin		 = 0xc29f89,
 	.pixel.size_bin		 = 0x416,
 };
 
@@ -17576,7 +17594,7 @@ static const scui_image_t prj_image_src_23_call_btn_07_voice_turn_offbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x54,
 	.pixel.height		 = 0x54,
-	.pixel.data_bin		 = 0xb343ea,
+	.pixel.data_bin		 = 0xc2a39f,
 	.pixel.size_bin		 = 0x593,
 };
 
@@ -17585,7 +17603,7 @@ static const scui_image_t prj_image_src_23_call_btn_08_voice_turn_onbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x54,
 	.pixel.height		 = 0x54,
-	.pixel.data_bin		 = 0xb3497d,
+	.pixel.data_bin		 = 0xc2a932,
 	.pixel.size_bin		 = 0x4ea,
 };
 
@@ -17594,7 +17612,7 @@ static const scui_image_t prj_image_src_23_call_btn_09_volume_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x54,
 	.pixel.height		 = 0x54,
-	.pixel.data_bin		 = 0xb34e67,
+	.pixel.data_bin		 = 0xc2ae1c,
 	.pixel.size_bin		 = 0x43c,
 };
 
@@ -17603,7 +17621,7 @@ static const scui_image_t prj_image_src_23_call_btn_10_volume_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x54,
 	.pixel.height		 = 0x54,
-	.pixel.data_bin		 = 0xb352a3,
+	.pixel.data_bin		 = 0xc2b258,
 	.pixel.size_bin		 = 0x4a8,
 };
 
@@ -17612,7 +17630,7 @@ static const scui_image_t prj_image_src_23_call_btn_11_call_bigbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x7e,
 	.pixel.height		 = 0x7e,
-	.pixel.data_bin		 = 0xb3574b,
+	.pixel.data_bin		 = 0xc2b700,
 	.pixel.size_bin		 = 0x7a2,
 };
 
@@ -17621,7 +17639,7 @@ static const scui_image_t prj_image_src_23_call_btn_12_message_bigbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x70,
 	.pixel.height		 = 0x70,
-	.pixel.data_bin		 = 0xb35eed,
+	.pixel.data_bin		 = 0xc2bea2,
 	.pixel.size_bin		 = 0x53d,
 };
 
@@ -17630,7 +17648,7 @@ static const scui_image_t prj_image_src_23_call_btn_13_voice_turn_offbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x54,
 	.pixel.height		 = 0x54,
-	.pixel.data_bin		 = 0xb3642a,
+	.pixel.data_bin		 = 0xc2c3df,
 	.pixel.size_bin		 = 0x521,
 };
 
@@ -17639,7 +17657,7 @@ static const scui_image_t prj_image_src_23_call_icon_01_contactpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xb3694b,
+	.pixel.data_bin		 = 0xc2c900,
 	.pixel.size_bin		 = 0x81a,
 };
 
@@ -17648,7 +17666,7 @@ static const scui_image_t prj_image_src_23_call_icon_02_dialpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xb37165,
+	.pixel.data_bin		 = 0xc2d11a,
 	.pixel.size_bin		 = 0x28a,
 };
 
@@ -17657,7 +17675,7 @@ static const scui_image_t prj_image_src_23_call_icon_03_recordspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xb373ef,
+	.pixel.data_bin		 = 0xc2d3a4,
 	.pixel.size_bin		 = 0x560,
 };
 
@@ -17666,7 +17684,7 @@ static const scui_image_t prj_image_src_23_call_icon_04_sospng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xb3794f,
+	.pixel.data_bin		 = 0xc2d904,
 	.pixel.size_bin		 = 0x7e5,
 };
 
@@ -17675,7 +17693,7 @@ static const scui_image_t prj_image_src_23_call_sos_01_iconpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x4c,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xb38134,
+	.pixel.data_bin		 = 0xc2e0e9,
 	.pixel.size_bin		 = 0x960,
 };
 
@@ -17684,7 +17702,7 @@ static const scui_image_t prj_image_src_23_call_sos_02_phonebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x52,
 	.pixel.height		 = 0x78,
-	.pixel.data_bin		 = 0xb38a94,
+	.pixel.data_bin		 = 0xc2ea49,
 	.pixel.size_bin		 = 0x32d,
 };
 
@@ -17693,7 +17711,7 @@ static const scui_image_t prj_image_src_23_call_sos_03_sosbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x64,
 	.pixel.height		 = 0x2f,
-	.pixel.data_bin		 = 0xb38dc1,
+	.pixel.data_bin		 = 0xc2ed76,
 	.pixel.size_bin		 = 0x52d,
 };
 
@@ -17702,7 +17720,7 @@ static const scui_image_t prj_image_src_23_call_sos_ring_01_leftbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x58,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0xb392ee,
+	.pixel.data_bin		 = 0xc2f2a3,
 	.pixel.size_bin		 = 0x8f2,
 };
 
@@ -17711,7 +17729,7 @@ static const scui_image_t prj_image_src_23_call_sos_ring_02_rightbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x58,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0xb39be0,
+	.pixel.data_bin		 = 0xc2fb95,
 	.pixel.size_bin		 = 0x8b5,
 };
 
@@ -17720,7 +17738,7 @@ static const scui_image_t prj_image_src_23_call_sos_ring_03_upbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x11e,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb3a495,
+	.pixel.data_bin		 = 0xc3044a,
 	.pixel.size_bin		 = 0x6cd,
 };
 
@@ -17729,7 +17747,7 @@ static const scui_image_t prj_image_src_23_call_sos_ring_04_xiabmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x11e,
 	.pixel.height		 = 0x40,
-	.pixel.data_bin		 = 0xb3ab62,
+	.pixel.data_bin		 = 0xc30b17,
 	.pixel.size_bin		 = 0x705,
 };
 
@@ -17738,7 +17756,7 @@ static const scui_image_t prj_image_src_23_call_volume_01_barbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xac,
 	.pixel.height		 = 0x8,
-	.pixel.data_bin		 = 0xb3b267,
+	.pixel.data_bin		 = 0xc3121c,
 	.pixel.size_bin		 = 0x49,
 };
 
@@ -17747,7 +17765,7 @@ static const scui_image_t prj_image_src_23_call_volume_02_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xac,
 	.pixel.height		 = 0x8,
-	.pixel.data_bin		 = 0xb3b2b0,
+	.pixel.data_bin		 = 0xc31265,
 	.pixel.size_bin		 = 0x57,
 };
 
@@ -17756,7 +17774,7 @@ static const scui_image_t prj_image_src_23_call_volume_03_lessbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xb3b307,
+	.pixel.data_bin		 = 0xc312bc,
 	.pixel.size_bin		 = 0x15c,
 };
 
@@ -17765,7 +17783,7 @@ static const scui_image_t prj_image_src_23_call_volume_04_plusbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xb3b463,
+	.pixel.data_bin		 = 0xc31418,
 	.pixel.size_bin		 = 0x247,
 };
 
@@ -17774,7 +17792,7 @@ static const scui_image_t prj_image_src_24_Charge_01_charingbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1a,
 	.pixel.height		 = 0x21,
-	.pixel.data_bin		 = 0xb3b6aa,
+	.pixel.data_bin		 = 0xc3165f,
 	.pixel.size_bin		 = 0x19b,
 };
 
@@ -17783,7 +17801,7 @@ static const scui_image_t prj_image_src_24_Charge_02_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb3b845,
+	.pixel.data_bin		 = 0xc317fa,
 	.pixel.size_bin		 = 0xc9,
 };
 
@@ -17792,7 +17810,7 @@ static const scui_image_t prj_image_src_24_Charge_03_icon_didianliangbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xdc,
 	.pixel.height		 = 0xdc,
-	.pixel.data_bin		 = 0xb3b90e,
+	.pixel.data_bin		 = 0xc318c3,
 	.pixel.size_bin		 = 0xb5c,
 };
 
@@ -17801,7 +17819,7 @@ static const scui_image_t prj_image_src_24_Charge_04_ringbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ce,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0xb3c46a,
+	.pixel.data_bin		 = 0xc3241f,
 	.pixel.size_bin		 = 0x14f3,
 };
 
@@ -17810,7 +17828,7 @@ static const scui_image_t prj_image_src_24_Charge_05_xuanzhuanbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ce,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0xb3d95d,
+	.pixel.data_bin		 = 0xc33912,
 	.pixel.size_bin		 = 0x2ff4,
 };
 
@@ -17819,7 +17837,7 @@ static const scui_image_t prj_image_src_24_Charge_06_xuanzhuanbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ce,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0xb40951,
+	.pixel.data_bin		 = 0xc36906,
 	.pixel.size_bin		 = 0x31d0,
 };
 
@@ -17828,7 +17846,7 @@ static const scui_image_t prj_image_src_24_Charge_07_xuanzhuanbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ce,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0xb43b21,
+	.pixel.data_bin		 = 0xc39ad6,
 	.pixel.size_bin		 = 0x3181,
 };
 
@@ -17837,7 +17855,7 @@ static const scui_image_t prj_image_src_24_Charge_08_xuanzhuanbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ce,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0xb46ca2,
+	.pixel.data_bin		 = 0xc3cc57,
 	.pixel.size_bin		 = 0x3159,
 };
 
@@ -17846,7 +17864,7 @@ static const scui_image_t prj_image_src_24_Charge_09_xuanzhuanbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ce,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0xb49dfb,
+	.pixel.data_bin		 = 0xc3fdb0,
 	.pixel.size_bin		 = 0x317e,
 };
 
@@ -17855,7 +17873,7 @@ static const scui_image_t prj_image_src_24_Charge_bg_01_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ce,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0xb4cf79,
+	.pixel.data_bin		 = 0xc42f2e,
 	.pixel.size_bin		 = 0x1a9d,
 };
 
@@ -17864,7 +17882,7 @@ static const scui_image_t prj_image_src_25_music_01_bjbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xb4ea16,
+	.pixel.data_bin		 = 0xc449cb,
 	.pixel.size_bin		 = 0xadf5,
 };
 
@@ -17873,7 +17891,7 @@ static const scui_image_t prj_image_src_25_music_03_bofangtiao_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x7c,
 	.pixel.height		 = 0xb6,
-	.pixel.data_bin		 = 0xb5980b,
+	.pixel.data_bin		 = 0xc4f7c0,
 	.pixel.size_bin		 = 0xe33,
 };
 
@@ -17882,7 +17900,7 @@ static const scui_image_t prj_image_src_25_music_04_bofang_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x7c,
 	.pixel.height		 = 0x7c,
-	.pixel.data_bin		 = 0xb5a63e,
+	.pixel.data_bin		 = 0xc505f3,
 	.pixel.size_bin		 = 0x3462,
 };
 
@@ -17891,7 +17909,7 @@ static const scui_image_t prj_image_src_25_music_05_bofang_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x7c,
 	.pixel.height		 = 0x7c,
-	.pixel.data_bin		 = 0xb5daa0,
+	.pixel.data_bin		 = 0xc53a55,
 	.pixel.size_bin		 = 0x345f,
 };
 
@@ -17900,7 +17918,7 @@ static const scui_image_t prj_image_src_25_music_06_bofang_no_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x7c,
 	.pixel.height		 = 0x7c,
-	.pixel.data_bin		 = 0xb60eff,
+	.pixel.data_bin		 = 0xc56eb4,
 	.pixel.size_bin		 = 0x3418,
 };
 
@@ -17909,7 +17927,7 @@ static const scui_image_t prj_image_src_25_music_07_bofang_no_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x7c,
 	.pixel.height		 = 0x7c,
-	.pixel.data_bin		 = 0xb64317,
+	.pixel.data_bin		 = 0xc5a2cc,
 	.pixel.size_bin		 = 0x33fb,
 };
 
@@ -17918,7 +17936,7 @@ static const scui_image_t prj_image_src_25_music_08_music_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xb67712,
+	.pixel.data_bin		 = 0xc5d6c7,
 	.pixel.size_bin		 = 0x317,
 };
 
@@ -17927,7 +17945,7 @@ static const scui_image_t prj_image_src_25_music_09_music_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xb67a29,
+	.pixel.data_bin		 = 0xc5d9de,
 	.pixel.size_bin		 = 0x2f6,
 };
 
@@ -17936,7 +17954,7 @@ static const scui_image_t prj_image_src_25_music_10_music_no_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xb67d1f,
+	.pixel.data_bin		 = 0xc5dcd4,
 	.pixel.size_bin		 = 0x3e7,
 };
 
@@ -17945,7 +17963,7 @@ static const scui_image_t prj_image_src_25_music_11_music_no_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xb68106,
+	.pixel.data_bin		 = 0xc5e0bb,
 	.pixel.size_bin		 = 0x3d8,
 };
 
@@ -17954,7 +17972,7 @@ static const scui_image_t prj_image_src_25_music_sound_01_bar_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x9e,
 	.pixel.height		 = 0x8,
-	.pixel.data_bin		 = 0xb684de,
+	.pixel.data_bin		 = 0xc5e493,
 	.pixel.size_bin		 = 0x14a,
 };
 
@@ -17963,7 +17981,7 @@ static const scui_image_t prj_image_src_25_music_sound_02_bar_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x9e,
 	.pixel.height		 = 0x8,
-	.pixel.data_bin		 = 0xb68628,
+	.pixel.data_bin		 = 0xc5e5dd,
 	.pixel.size_bin		 = 0x49,
 };
 
@@ -17972,7 +17990,7 @@ static const scui_image_t prj_image_src_25_music_sound_03_dot_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x4,
 	.pixel.height		 = 0x8,
-	.pixel.data_bin		 = 0xb68671,
+	.pixel.data_bin		 = 0xc5e626,
 	.pixel.size_bin		 = 0x688,
 };
 
@@ -17981,7 +17999,7 @@ static const scui_image_t prj_image_src_25_music_sound_04_dot_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x4,
 	.pixel.height		 = 0x8,
-	.pixel.data_bin		 = 0xb68cf9,
+	.pixel.data_bin		 = 0xc5ecae,
 	.pixel.size_bin		 = 0x687,
 };
 
@@ -17990,7 +18008,7 @@ static const scui_image_t prj_image_src_25_music_sound_05_sound_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x1e,
-	.pixel.data_bin		 = 0xb69380,
+	.pixel.data_bin		 = 0xc5f335,
 	.pixel.size_bin		 = 0x21c,
 };
 
@@ -17999,7 +18017,7 @@ static const scui_image_t prj_image_src_25_music_sound_06_sound_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x1e,
-	.pixel.data_bin		 = 0xb6959c,
+	.pixel.data_bin		 = 0xc5f551,
 	.pixel.size_bin		 = 0x7ce,
 };
 
@@ -18008,7 +18026,7 @@ static const scui_image_t prj_image_src_25_music_sound_07_sound_no_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x1e,
-	.pixel.data_bin		 = 0xb69d6a,
+	.pixel.data_bin		 = 0xc5fd1f,
 	.pixel.size_bin		 = 0x2e7,
 };
 
@@ -18017,7 +18035,7 @@ static const scui_image_t prj_image_src_25_music_sound_08_sound_no_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x1e,
-	.pixel.data_bin		 = 0xb6a051,
+	.pixel.data_bin		 = 0xc60006,
 	.pixel.size_bin		 = 0x907,
 };
 
@@ -18026,7 +18044,7 @@ static const scui_image_t prj_image_src_26_sport_record_01_no_recordbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x76,
 	.pixel.height		 = 0x6a,
-	.pixel.data_bin		 = 0xb6a958,
+	.pixel.data_bin		 = 0xc6090d,
 	.pixel.size_bin		 = 0x355,
 };
 
@@ -18035,7 +18053,7 @@ static const scui_image_t prj_image_src_27_compass_01_barpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xa,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xb6acad,
+	.pixel.data_bin		 = 0xc60c62,
 	.pixel.size_bin		 = 0x110,
 };
 
@@ -18044,7 +18062,7 @@ static const scui_image_t prj_image_src_27_compass_02_bg_enbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xb6adbd,
+	.pixel.data_bin		 = 0xc60d72,
 	.pixel.size_bin		 = 0x4922,
 };
 
@@ -18053,7 +18071,7 @@ static const scui_image_t prj_image_src_27_compass_03_bg_zhbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xb6f6df,
+	.pixel.data_bin		 = 0xc65694,
 	.pixel.size_bin		 = 0x4ac9,
 };
 
@@ -18062,7 +18080,7 @@ static const scui_image_t prj_image_src_27_compass_04_dubmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xb741a8,
+	.pixel.data_bin		 = 0xc6a15d,
 	.pixel.size_bin		 = 0x126,
 };
 
@@ -18071,7 +18089,7 @@ static const scui_image_t prj_image_src_27_compass_05_gaodubmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb742ce,
+	.pixel.data_bin		 = 0xc6a283,
 	.pixel.size_bin		 = 0x209,
 };
 
@@ -18080,7 +18098,7 @@ static const scui_image_t prj_image_src_27_compass_06_iconbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10c,
 	.pixel.height		 = 0x88,
-	.pixel.data_bin		 = 0xb744d7,
+	.pixel.data_bin		 = 0xc6a48c,
 	.pixel.size_bin		 = 0x1c59,
 };
 
@@ -18089,7 +18107,7 @@ static const scui_image_t prj_image_src_27_compass_07_linebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2,
 	.pixel.height		 = 0x50,
-	.pixel.data_bin		 = 0xb76130,
+	.pixel.data_bin		 = 0xc6c0e5,
 	.pixel.size_bin		 = 0x24,
 };
 
@@ -18098,7 +18116,7 @@ static const scui_image_t prj_image_src_27_compass_08_qiyabmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x20,
-	.pixel.data_bin		 = 0xb76154,
+	.pixel.data_bin		 = 0xc6c109,
 	.pixel.size_bin		 = 0x17f,
 };
 
@@ -18107,7 +18125,7 @@ static const scui_image_t prj_image_src_27_compass_09_bg_90enbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xb762d3,
+	.pixel.data_bin		 = 0xc6c288,
 	.pixel.size_bin		 = 0x4937,
 };
 
@@ -18116,7 +18134,7 @@ static const scui_image_t prj_image_src_27_compass_10_bg_90zhbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xb7ac0a,
+	.pixel.data_bin		 = 0xc70bbf,
 	.pixel.size_bin		 = 0x4a8c,
 };
 
@@ -18125,7 +18143,7 @@ static const scui_image_t prj_image_src_28_altitude_01_dianpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0xb7f696,
+	.pixel.data_bin		 = 0xc7564b,
 	.pixel.size_bin		 = 0x128,
 };
 
@@ -18134,7 +18152,7 @@ static const scui_image_t prj_image_src_28_altitude_02_linebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2,
 	.pixel.height		 = 0x9c,
-	.pixel.data_bin		 = 0xb7f7be,
+	.pixel.data_bin		 = 0xc75773,
 	.pixel.size_bin		 = 0x25,
 };
 
@@ -18143,7 +18161,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_01_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb7f7e3,
+	.pixel.data_bin		 = 0xc75798,
 	.pixel.size_bin		 = 0x13c9,
 };
 
@@ -18152,7 +18170,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_02_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb80bac,
+	.pixel.data_bin		 = 0xc76b61,
 	.pixel.size_bin		 = 0x15f4,
 };
 
@@ -18161,7 +18179,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_03_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb821a0,
+	.pixel.data_bin		 = 0xc78155,
 	.pixel.size_bin		 = 0x1b3d,
 };
 
@@ -18170,7 +18188,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_04_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb83cdd,
+	.pixel.data_bin		 = 0xc79c92,
 	.pixel.size_bin		 = 0x278a,
 };
 
@@ -18179,7 +18197,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_05_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb86467,
+	.pixel.data_bin		 = 0xc7c41c,
 	.pixel.size_bin		 = 0x309d,
 };
 
@@ -18188,7 +18206,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_06_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb89504,
+	.pixel.data_bin		 = 0xc7f4b9,
 	.pixel.size_bin		 = 0x3370,
 };
 
@@ -18197,7 +18215,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_07_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb8c874,
+	.pixel.data_bin		 = 0xc82829,
 	.pixel.size_bin		 = 0x31fb,
 };
 
@@ -18206,7 +18224,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_08_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb8fa6f,
+	.pixel.data_bin		 = 0xc85a24,
 	.pixel.size_bin		 = 0x327d,
 };
 
@@ -18215,7 +18233,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_09_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb92cec,
+	.pixel.data_bin		 = 0xc88ca1,
 	.pixel.size_bin		 = 0x32b7,
 };
 
@@ -18224,7 +18242,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_10_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb95fa3,
+	.pixel.data_bin		 = 0xc8bf58,
 	.pixel.size_bin		 = 0x32ae,
 };
 
@@ -18233,7 +18251,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_11_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb99251,
+	.pixel.data_bin		 = 0xc8f206,
 	.pixel.size_bin		 = 0x32aa,
 };
 
@@ -18242,7 +18260,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_12_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb9c4fb,
+	.pixel.data_bin		 = 0xc924b0,
 	.pixel.size_bin		 = 0x328f,
 };
 
@@ -18251,7 +18269,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_13_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xb9f78a,
+	.pixel.data_bin		 = 0xc9573f,
 	.pixel.size_bin		 = 0x3289,
 };
 
@@ -18260,7 +18278,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_14_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xba2a13,
+	.pixel.data_bin		 = 0xc989c8,
 	.pixel.size_bin		 = 0x3289,
 };
 
@@ -18269,7 +18287,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_15_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xba5c9c,
+	.pixel.data_bin		 = 0xc9bc51,
 	.pixel.size_bin		 = 0x3236,
 };
 
@@ -18278,7 +18296,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_16_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xba8ed2,
+	.pixel.data_bin		 = 0xc9ee87,
 	.pixel.size_bin		 = 0x31f0,
 };
 
@@ -18287,7 +18305,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_17_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc6,
 	.pixel.height		 = 0xe0,
-	.pixel.data_bin		 = 0xbac0c2,
+	.pixel.data_bin		 = 0xca2077,
 	.pixel.size_bin		 = 0x31a6,
 };
 
@@ -18296,7 +18314,7 @@ static const scui_image_t prj_image_src_29_remind_goal_accomplished_gif_goal_18_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x74,
 	.pixel.height		 = 0xcc,
-	.pixel.data_bin		 = 0xbaf268,
+	.pixel.data_bin		 = 0xca521d,
 	.pixel.size_bin		 = 0xb63,
 };
 
@@ -18305,7 +18323,7 @@ static const scui_image_t prj_image_src_29_remind_period_01_fpbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xa2,
 	.pixel.height		 = 0xb3,
-	.pixel.data_bin		 = 0xbafdcb,
+	.pixel.data_bin		 = 0xca5d80,
 	.pixel.size_bin		 = 0x142e,
 };
 
@@ -18314,7 +18332,7 @@ static const scui_image_t prj_image_src_29_remind_period_02_mpbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xa2,
 	.pixel.height		 = 0xb3,
-	.pixel.data_bin		 = 0xbb11f9,
+	.pixel.data_bin		 = 0xca71ae,
 	.pixel.size_bin		 = 0x1838,
 };
 
@@ -18323,7 +18341,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_01_aboutpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb2a31,
+	.pixel.data_bin		 = 0xca89e6,
 	.pixel.size_bin		 = 0x5f3,
 };
 
@@ -18332,7 +18350,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_02_aodpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb3024,
+	.pixel.data_bin		 = 0xca8fd9,
 	.pixel.size_bin		 = 0x6a8,
 };
 
@@ -18341,7 +18359,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_03_brightnesspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb36cc,
+	.pixel.data_bin		 = 0xca9681,
 	.pixel.size_bin		 = 0x643,
 };
 
@@ -18350,7 +18368,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_04_coverpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb3d0f,
+	.pixel.data_bin		 = 0xca9cc4,
 	.pixel.size_bin		 = 0x834,
 };
 
@@ -18359,7 +18377,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_05_dndpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb4543,
+	.pixel.data_bin		 = 0xcaa4f8,
 	.pixel.size_bin		 = 0x597,
 };
 
@@ -18368,7 +18386,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_06_downpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb4ada,
+	.pixel.data_bin		 = 0xcaaa8f,
 	.pixel.size_bin		 = 0x5f5,
 };
 
@@ -18377,7 +18395,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_07_passwordpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb50cf,
+	.pixel.data_bin		 = 0xcab084,
 	.pixel.size_bin		 = 0x5be,
 };
 
@@ -18386,7 +18404,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_08_soundpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb568d,
+	.pixel.data_bin		 = 0xcab642,
 	.pixel.size_bin		 = 0x665,
 };
 
@@ -18395,7 +18413,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_09_sportpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb5cf2,
+	.pixel.data_bin		 = 0xcabca7,
 	.pixel.size_bin		 = 0x823,
 };
 
@@ -18404,7 +18422,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_10_systempng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb6515,
+	.pixel.data_bin		 = 0xcac4ca,
 	.pixel.size_bin		 = 0x6e8,
 };
 
@@ -18413,7 +18431,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_11_themepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb6bfd,
+	.pixel.data_bin		 = 0xcacbb2,
 	.pixel.size_bin		 = 0x8ed,
 };
 
@@ -18422,7 +18440,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_12_timepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb74ea,
+	.pixel.data_bin		 = 0xcad49f,
 	.pixel.size_bin		 = 0x532,
 };
 
@@ -18431,7 +18449,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_13_watchfacepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb7a1c,
+	.pixel.data_bin		 = 0xcad9d1,
 	.pixel.size_bin		 = 0x77d,
 };
 
@@ -18440,7 +18458,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_14_languagepng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb8199,
+	.pixel.data_bin		 = 0xcae14e,
 	.pixel.size_bin		 = 0x6a9,
 };
 
@@ -18449,7 +18467,7 @@ static const scui_image_t prj_image_src_30_settings_00_list_15_QRpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x30,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xbb8842,
+	.pixel.data_bin		 = 0xcae7f7,
 	.pixel.size_bin		 = 0x638,
 };
 
@@ -18458,7 +18476,7 @@ static const scui_image_t prj_image_src_30_settings_01_kuangpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x17e,
 	.pixel.height		 = 0x12a,
-	.pixel.data_bin		 = 0xbb8e7a,
+	.pixel.data_bin		 = 0xcaee2f,
 	.pixel.size_bin		 = 0x2ecb,
 };
 
@@ -18467,7 +18485,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_01_previewbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x17e,
 	.pixel.height		 = 0x12a,
-	.pixel.data_bin		 = 0xbbbd45,
+	.pixel.data_bin		 = 0xcb1cfa,
 	.pixel.size_bin		 = 0x165f,
 };
 
@@ -18476,7 +18494,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_02_坐标png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xbbd3a4,
+	.pixel.data_bin		 = 0xcb3359,
 	.pixel.size_bin		 = 0x6afd,
 };
 
@@ -18485,7 +18503,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_01_00bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc3ea1,
+	.pixel.data_bin		 = 0xcb9e56,
 	.pixel.size_bin		 = 0x1d5,
 };
 
@@ -18494,7 +18512,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_02_01bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc4076,
+	.pixel.data_bin		 = 0xcba02b,
 	.pixel.size_bin		 = 0x10d,
 };
 
@@ -18503,7 +18521,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_03_02bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc4183,
+	.pixel.data_bin		 = 0xcba138,
 	.pixel.size_bin		 = 0x19f,
 };
 
@@ -18512,7 +18530,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_04_03bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc4322,
+	.pixel.data_bin		 = 0xcba2d7,
 	.pixel.size_bin		 = 0x192,
 };
 
@@ -18521,7 +18539,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_05_04bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc44b4,
+	.pixel.data_bin		 = 0xcba469,
 	.pixel.size_bin		 = 0x19b,
 };
 
@@ -18530,7 +18548,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_06_05bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc464f,
+	.pixel.data_bin		 = 0xcba604,
 	.pixel.size_bin		 = 0x1a0,
 };
 
@@ -18539,7 +18557,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_07_06bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc47ef,
+	.pixel.data_bin		 = 0xcba7a4,
 	.pixel.size_bin		 = 0x1e6,
 };
 
@@ -18548,7 +18566,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_08_07bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc49d5,
+	.pixel.data_bin		 = 0xcba98a,
 	.pixel.size_bin		 = 0x140,
 };
 
@@ -18557,7 +18575,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_09_08bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc4b15,
+	.pixel.data_bin		 = 0xcbaaca,
 	.pixel.size_bin		 = 0x1ee,
 };
 
@@ -18566,7 +18584,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_10_09bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc4d03,
+	.pixel.data_bin		 = 0xcbacb8,
 	.pixel.size_bin		 = 0x1e1,
 };
 
@@ -18575,7 +18593,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_1_num_11_10bmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x44,
 	.pixel.height		 = 0x4e,
-	.pixel.data_bin		 = 0xbc4ee4,
+	.pixel.data_bin		 = 0xcbae99,
 	.pixel.size_bin		 = 0x5a,
 };
 
@@ -18584,7 +18602,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_2_01_previewbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x17e,
 	.pixel.height		 = 0x12a,
-	.pixel.data_bin		 = 0xbc4f3e,
+	.pixel.data_bin		 = 0xcbaef3,
 	.pixel.size_bin		 = 0x18ad,
 };
 
@@ -18593,7 +18611,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_2_02_坐标png =
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xbc67eb,
+	.pixel.data_bin		 = 0xcbc7a0,
 	.pixel.size_bin		 = 0x5fc7,
 };
 
@@ -18602,7 +18620,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_2_bg_01_bgbmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xbcc7b2,
+	.pixel.data_bin		 = 0xcc2767,
 	.pixel.size_bin		 = 0xb8b,
 };
 
@@ -18611,7 +18629,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_2_point_01_hourp
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xe,
 	.pixel.height		 = 0x79,
-	.pixel.data_bin		 = 0xbcd33d,
+	.pixel.data_bin		 = 0xcc32f2,
 	.pixel.size_bin		 = 0xcc6,
 };
 
@@ -18620,7 +18638,7 @@ static const scui_image_t prj_image_src_30_settings_02_aod_dial_2_point_02_minpn
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xe,
 	.pixel.height		 = 0xb3,
-	.pixel.data_bin		 = 0xbce003,
+	.pixel.data_bin		 = 0xcc3fb8,
 	.pixel.size_bin		 = 0xefc,
 };
 
@@ -18629,7 +18647,7 @@ static const scui_image_t prj_image_src_30_settings_03_bright_sound_theme_dnd_01
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xb8,
 	.pixel.height		 = 0xa,
-	.pixel.data_bin		 = 0xbceeff,
+	.pixel.data_bin		 = 0xcc4eb4,
 	.pixel.size_bin		 = 0x638,
 };
 
@@ -18638,7 +18656,7 @@ static const scui_image_t prj_image_src_30_settings_03_bright_sound_theme_dnd_02
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xba,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0xbcf537,
+	.pixel.data_bin		 = 0xcc54ec,
 	.pixel.size_bin		 = 0x67,
 };
 
@@ -18647,7 +18665,7 @@ static const scui_image_t prj_image_src_30_settings_03_bright_sound_theme_dnd_03
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0xbcf59e,
+	.pixel.data_bin		 = 0xcc5553,
 	.pixel.size_bin		 = 0x2a7,
 };
 
@@ -18656,7 +18674,7 @@ static const scui_image_t prj_image_src_30_settings_03_bright_sound_theme_dnd_04
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0xbcf845,
+	.pixel.data_bin		 = 0xcc57fa,
 	.pixel.size_bin		 = 0x2fe,
 };
 
@@ -18665,7 +18683,7 @@ static const scui_image_t prj_image_src_30_settings_03_bright_sound_theme_dnd_05
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2,
 	.pixel.height		 = 0x64,
-	.pixel.data_bin		 = 0xbcfb43,
+	.pixel.data_bin		 = 0xcc5af8,
 	.pixel.size_bin		 = 0x23,
 };
 
@@ -18674,7 +18692,7 @@ static const scui_image_t prj_image_src_30_settings_03_bright_sound_theme_dnd_06
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0xbcfb66,
+	.pixel.data_bin		 = 0xcc5b1b,
 	.pixel.size_bin		 = 0x2be,
 };
 
@@ -18683,7 +18701,7 @@ static const scui_image_t prj_image_src_30_settings_03_bright_sound_theme_dnd_07
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0xbcfe24,
+	.pixel.data_bin		 = 0xcc5dd9,
 	.pixel.size_bin		 = 0x3c2,
 };
 
@@ -18692,7 +18710,7 @@ static const scui_image_t prj_image_src_30_settings_05_password_01_dot1bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xbd01e6,
+	.pixel.data_bin		 = 0xcc619b,
 	.pixel.size_bin		 = 0xd4,
 };
 
@@ -18701,7 +18719,7 @@ static const scui_image_t prj_image_src_30_settings_05_password_02_dot2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xbd02ba,
+	.pixel.data_bin		 = 0xcc626f,
 	.pixel.size_bin		 = 0xb5,
 };
 
@@ -18710,7 +18728,7 @@ static const scui_image_t prj_image_src_30_settings_06_theme_01_fengwopng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xbd036f,
+	.pixel.data_bin		 = 0xcc6324,
 	.pixel.size_bin		 = 0x5ef,
 };
 
@@ -18719,7 +18737,7 @@ static const scui_image_t prj_image_src_30_settings_06_theme_02_xingmangpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xbd095e,
+	.pixel.data_bin		 = 0xcc6913,
 	.pixel.size_bin		 = 0x4af,
 };
 
@@ -18728,7 +18746,7 @@ static const scui_image_t prj_image_src_30_settings_06_theme_03_listpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xbd0e0d,
+	.pixel.data_bin		 = 0xcc6dc2,
 	.pixel.size_bin		 = 0x32c,
 };
 
@@ -18737,7 +18755,7 @@ static const scui_image_t prj_image_src_30_settings_06_theme_04_guanghuanpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xbd1139,
+	.pixel.data_bin		 = 0xcc70ee,
 	.pixel.size_bin		 = 0x4f2,
 };
 
@@ -18746,7 +18764,7 @@ static const scui_image_t prj_image_src_30_settings_06_theme_05_bolunpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xbd162b,
+	.pixel.data_bin		 = 0xcc75e0,
 	.pixel.size_bin		 = 0x4d3,
 };
 
@@ -18755,7 +18773,7 @@ static const scui_image_t prj_image_src_30_settings_06_theme_06_pubupng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xbd1afe,
+	.pixel.data_bin		 = 0xcc7ab3,
 	.pixel.size_bin		 = 0x620,
 };
 
@@ -18764,7 +18782,7 @@ static const scui_image_t prj_image_src_31_ota_01_remindbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xd2,
 	.pixel.height		 = 0xd2,
-	.pixel.data_bin		 = 0xbd211e,
+	.pixel.data_bin		 = 0xcc80d3,
 	.pixel.size_bin		 = 0x1eb6,
 };
 
@@ -18773,7 +18791,7 @@ static const scui_image_t prj_image_src_31_ota_gif_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbd3fd4,
+	.pixel.data_bin		 = 0xcc9f89,
 	.pixel.size_bin		 = 0x1357,
 };
 
@@ -18782,7 +18800,7 @@ static const scui_image_t prj_image_src_31_ota_gif_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbd532b,
+	.pixel.data_bin		 = 0xccb2e0,
 	.pixel.size_bin		 = 0x1536,
 };
 
@@ -18791,7 +18809,7 @@ static const scui_image_t prj_image_src_31_ota_gif_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbd6861,
+	.pixel.data_bin		 = 0xccc816,
 	.pixel.size_bin		 = 0x1540,
 };
 
@@ -18800,7 +18818,7 @@ static const scui_image_t prj_image_src_31_ota_gif_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbd7da1,
+	.pixel.data_bin		 = 0xccdd56,
 	.pixel.size_bin		 = 0x137c,
 };
 
@@ -18809,7 +18827,7 @@ static const scui_image_t prj_image_src_31_ota_gif_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbd911d,
+	.pixel.data_bin		 = 0xccf0d2,
 	.pixel.size_bin		 = 0x1427,
 };
 
@@ -18818,7 +18836,7 @@ static const scui_image_t prj_image_src_31_ota_gif_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbda544,
+	.pixel.data_bin		 = 0xcd04f9,
 	.pixel.size_bin		 = 0x1380,
 };
 
@@ -18827,7 +18845,7 @@ static const scui_image_t prj_image_src_31_ota_gif_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbdb8c4,
+	.pixel.data_bin		 = 0xcd1879,
 	.pixel.size_bin		 = 0x1177,
 };
 
@@ -18836,7 +18854,7 @@ static const scui_image_t prj_image_src_31_ota_gif_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbdca3b,
+	.pixel.data_bin		 = 0xcd29f0,
 	.pixel.size_bin		 = 0x131b,
 };
 
@@ -18845,7 +18863,7 @@ static const scui_image_t prj_image_src_31_ota_gif_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbddd56,
+	.pixel.data_bin		 = 0xcd3d0b,
 	.pixel.size_bin		 = 0x13e8,
 };
 
@@ -18854,7 +18872,7 @@ static const scui_image_t prj_image_src_31_ota_gif_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbdf13e,
+	.pixel.data_bin		 = 0xcd50f3,
 	.pixel.size_bin		 = 0x1315,
 };
 
@@ -18863,7 +18881,7 @@ static const scui_image_t prj_image_src_31_ota_gif_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbe0453,
+	.pixel.data_bin		 = 0xcd6408,
 	.pixel.size_bin		 = 0x14e6,
 };
 
@@ -18872,7 +18890,7 @@ static const scui_image_t prj_image_src_31_ota_gif_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x82,
 	.pixel.height		 = 0xc8,
-	.pixel.data_bin		 = 0xbe1939,
+	.pixel.data_bin		 = 0xcd78ee,
 	.pixel.size_bin		 = 0x1517,
 };
 
@@ -18881,7 +18899,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xbe2e50,
+	.pixel.data_bin		 = 0xcd8e05,
 	.pixel.size_bin		 = 0x4bcb,
 };
 
@@ -18890,7 +18908,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xbe7a1b,
+	.pixel.data_bin		 = 0xcdd9d0,
 	.pixel.size_bin		 = 0x4c9c,
 };
 
@@ -18899,7 +18917,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xbec6b7,
+	.pixel.data_bin		 = 0xce266c,
 	.pixel.size_bin		 = 0x5066,
 };
 
@@ -18908,7 +18926,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xbf171d,
+	.pixel.data_bin		 = 0xce76d2,
 	.pixel.size_bin		 = 0x55d3,
 };
 
@@ -18917,7 +18935,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xbf6cf0,
+	.pixel.data_bin		 = 0xcecca5,
 	.pixel.size_bin		 = 0x5c2d,
 };
 
@@ -18926,7 +18944,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xbfc91d,
+	.pixel.data_bin		 = 0xcf28d2,
 	.pixel.size_bin		 = 0x62af,
 };
 
@@ -18935,7 +18953,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc02bcc,
+	.pixel.data_bin		 = 0xcf8b81,
 	.pixel.size_bin		 = 0x6954,
 };
 
@@ -18944,7 +18962,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc09520,
+	.pixel.data_bin		 = 0xcff4d5,
 	.pixel.size_bin		 = 0x6f50,
 };
 
@@ -18953,7 +18971,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc10470,
+	.pixel.data_bin		 = 0xd06425,
 	.pixel.size_bin		 = 0x7428,
 };
 
@@ -18962,7 +18980,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc17898,
+	.pixel.data_bin		 = 0xd0d84d,
 	.pixel.size_bin		 = 0x773a,
 };
 
@@ -18971,7 +18989,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc1efd2,
+	.pixel.data_bin		 = 0xd14f87,
 	.pixel.size_bin		 = 0x78a4,
 };
 
@@ -18980,7 +18998,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc26876,
+	.pixel.data_bin		 = 0xd1c82b,
 	.pixel.size_bin		 = 0x7775,
 };
 
@@ -18989,7 +19007,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc2dfeb,
+	.pixel.data_bin		 = 0xd23fa0,
 	.pixel.size_bin		 = 0x739f,
 };
 
@@ -18998,7 +19016,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc3538a,
+	.pixel.data_bin		 = 0xd2b33f,
 	.pixel.size_bin		 = 0x6e82,
 };
 
@@ -19007,7 +19025,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_15_14bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc3c20c,
+	.pixel.data_bin		 = 0xd321c1,
 	.pixel.size_bin		 = 0x67ad,
 };
 
@@ -19016,7 +19034,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_16_15bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc429b9,
+	.pixel.data_bin		 = 0xd3896e,
 	.pixel.size_bin		 = 0x6084,
 };
 
@@ -19025,7 +19043,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_17_16bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc48a3d,
+	.pixel.data_bin		 = 0xd3e9f2,
 	.pixel.size_bin		 = 0x59a4,
 };
 
@@ -19034,7 +19052,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_18_17bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc4e3e1,
+	.pixel.data_bin		 = 0xd44396,
 	.pixel.size_bin		 = 0x5418,
 };
 
@@ -19043,7 +19061,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_19_18bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc537f9,
+	.pixel.data_bin		 = 0xd497ae,
 	.pixel.size_bin		 = 0x4fb6,
 };
 
@@ -19052,7 +19070,7 @@ static const scui_image_t prj_image_src_32_blood_pressure_gif_20_19bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xee,
 	.pixel.height		 = 0x13a,
-	.pixel.data_bin		 = 0xc587af,
+	.pixel.data_bin		 = 0xd4e764,
 	.pixel.size_bin		 = 0x4ca3,
 };
 
@@ -19061,7 +19079,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc5d452,
+	.pixel.data_bin		 = 0xd53407,
 	.pixel.size_bin		 = 0x93a,
 };
 
@@ -19070,7 +19088,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc5dd8c,
+	.pixel.data_bin		 = 0xd53d41,
 	.pixel.size_bin		 = 0xed7,
 };
 
@@ -19079,7 +19097,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc5ec63,
+	.pixel.data_bin		 = 0xd54c18,
 	.pixel.size_bin		 = 0x1095,
 };
 
@@ -19088,7 +19106,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc5fcf8,
+	.pixel.data_bin		 = 0xd55cad,
 	.pixel.size_bin		 = 0x11cc,
 };
 
@@ -19097,7 +19115,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc60ec4,
+	.pixel.data_bin		 = 0xd56e79,
 	.pixel.size_bin		 = 0x14f1,
 };
 
@@ -19106,7 +19124,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc623b5,
+	.pixel.data_bin		 = 0xd5836a,
 	.pixel.size_bin		 = 0x1acb,
 };
 
@@ -19115,7 +19133,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_06_smallbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0x64,
-	.pixel.data_bin		 = 0xc63e80,
+	.pixel.data_bin		 = 0xd59e35,
 	.pixel.size_bin		 = 0x396,
 };
 
@@ -19124,7 +19142,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc64216,
+	.pixel.data_bin		 = 0xd5a1cb,
 	.pixel.size_bin		 = 0x23a6,
 };
 
@@ -19133,7 +19151,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc665bc,
+	.pixel.data_bin		 = 0xd5c571,
 	.pixel.size_bin		 = 0x2fea,
 };
 
@@ -19142,7 +19160,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc695a6,
+	.pixel.data_bin		 = 0xd5f55b,
 	.pixel.size_bin		 = 0x3a2c,
 };
 
@@ -19151,7 +19169,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc6cfd2,
+	.pixel.data_bin		 = 0xd62f87,
 	.pixel.size_bin		 = 0x3de8,
 };
 
@@ -19160,7 +19178,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc70dba,
+	.pixel.data_bin		 = 0xd66d6f,
 	.pixel.size_bin		 = 0x3ccc,
 };
 
@@ -19169,7 +19187,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc74a86,
+	.pixel.data_bin		 = 0xd6aa3b,
 	.pixel.size_bin		 = 0x32b3,
 };
 
@@ -19178,7 +19196,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc77d39,
+	.pixel.data_bin		 = 0xd6dcee,
 	.pixel.size_bin		 = 0x236e,
 };
 
@@ -19187,7 +19205,7 @@ static const scui_image_t prj_image_src_32_fing_watch_gif_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x138,
 	.pixel.height		 = 0x138,
-	.pixel.data_bin		 = 0xc7a0a7,
+	.pixel.data_bin		 = 0xd7005c,
 	.pixel.size_bin		 = 0x11f2,
 };
 
@@ -19196,7 +19214,7 @@ static const scui_image_t prj_image_src_33_mood_01_retrybmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xc7b299,
+	.pixel.data_bin		 = 0xd7124e,
 	.pixel.size_bin		 = 0x691,
 };
 
@@ -19205,7 +19223,7 @@ static const scui_image_t prj_image_src_33_mood_bar_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x6,
 	.pixel.height		 = 0x31,
-	.pixel.data_bin		 = 0xc7b92a,
+	.pixel.data_bin		 = 0xd718df,
 	.pixel.size_bin		 = 0x66,
 };
 
@@ -19214,7 +19232,7 @@ static const scui_image_t prj_image_src_33_mood_bar_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x6,
 	.pixel.height		 = 0x31,
-	.pixel.data_bin		 = 0xc7b990,
+	.pixel.data_bin		 = 0xd71945,
 	.pixel.size_bin		 = 0x64,
 };
 
@@ -19223,7 +19241,7 @@ static const scui_image_t prj_image_src_33_mood_bar_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x6,
 	.pixel.height		 = 0x31,
-	.pixel.data_bin		 = 0xc7b9f4,
+	.pixel.data_bin		 = 0xd719a9,
 	.pixel.size_bin		 = 0x67,
 };
 
@@ -19232,7 +19250,7 @@ static const scui_image_t prj_image_src_33_mood_biaoqing_01_icon_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x126,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0xc7ba5b,
+	.pixel.data_bin		 = 0xd71a10,
 	.pixel.size_bin		 = 0x18e1,
 };
 
@@ -19241,7 +19259,7 @@ static const scui_image_t prj_image_src_33_mood_biaoqing_02_icon_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x126,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0xc7d33c,
+	.pixel.data_bin		 = 0xd732f1,
 	.pixel.size_bin		 = 0x1ae3,
 };
 
@@ -19250,7 +19268,7 @@ static const scui_image_t prj_image_src_33_mood_biaoqing_03_icon_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x126,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0xc7ee1f,
+	.pixel.data_bin		 = 0xd74dd4,
 	.pixel.size_bin		 = 0x1a33,
 };
 
@@ -19259,7 +19277,7 @@ static const scui_image_t prj_image_src_33_mood_biaoqing_04_icon_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x126,
 	.pixel.height		 = 0x3e,
-	.pixel.data_bin		 = 0xc80852,
+	.pixel.data_bin		 = 0xd76807,
 	.pixel.size_bin		 = 0x1a1b,
 };
 
@@ -19268,7 +19286,7 @@ static const scui_image_t prj_image_src_33_mood_gif_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc8226d,
+	.pixel.data_bin		 = 0xd78222,
 	.pixel.size_bin		 = 0x1272,
 };
 
@@ -19277,7 +19295,7 @@ static const scui_image_t prj_image_src_33_mood_gif_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc834df,
+	.pixel.data_bin		 = 0xd79494,
 	.pixel.size_bin		 = 0x19bc,
 };
 
@@ -19286,7 +19304,7 @@ static const scui_image_t prj_image_src_33_mood_gif_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc84e9b,
+	.pixel.data_bin		 = 0xd7ae50,
 	.pixel.size_bin		 = 0x2834,
 };
 
@@ -19295,7 +19313,7 @@ static const scui_image_t prj_image_src_33_mood_gif_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc876cf,
+	.pixel.data_bin		 = 0xd7d684,
 	.pixel.size_bin		 = 0x28d3,
 };
 
@@ -19304,7 +19322,7 @@ static const scui_image_t prj_image_src_33_mood_gif_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc89fa2,
+	.pixel.data_bin		 = 0xd7ff57,
 	.pixel.size_bin		 = 0x24b9,
 };
 
@@ -19313,7 +19331,7 @@ static const scui_image_t prj_image_src_33_mood_gif_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc8c45b,
+	.pixel.data_bin		 = 0xd82410,
 	.pixel.size_bin		 = 0x1b4b,
 };
 
@@ -19322,7 +19340,7 @@ static const scui_image_t prj_image_src_33_mood_gif_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc8dfa6,
+	.pixel.data_bin		 = 0xd83f5b,
 	.pixel.size_bin		 = 0xe9e,
 };
 
@@ -19331,7 +19349,7 @@ static const scui_image_t prj_image_src_33_mood_gif_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc8ee44,
+	.pixel.data_bin		 = 0xd84df9,
 	.pixel.size_bin		 = 0x14d1,
 };
 
@@ -19340,7 +19358,7 @@ static const scui_image_t prj_image_src_33_mood_gif_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc90315,
+	.pixel.data_bin		 = 0xd862ca,
 	.pixel.size_bin		 = 0x1b2c,
 };
 
@@ -19349,7 +19367,7 @@ static const scui_image_t prj_image_src_33_mood_gif_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc91e41,
+	.pixel.data_bin		 = 0xd87df6,
 	.pixel.size_bin		 = 0x2188,
 };
 
@@ -19358,7 +19376,7 @@ static const scui_image_t prj_image_src_33_mood_gif_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc93fc9,
+	.pixel.data_bin		 = 0xd89f7e,
 	.pixel.size_bin		 = 0x1f81,
 };
 
@@ -19367,7 +19385,7 @@ static const scui_image_t prj_image_src_33_mood_gif_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc95f4a,
+	.pixel.data_bin		 = 0xd8beff,
 	.pixel.size_bin		 = 0x20b0,
 };
 
@@ -19376,7 +19394,7 @@ static const scui_image_t prj_image_src_33_mood_gif_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc97ffa,
+	.pixel.data_bin		 = 0xd8dfaf,
 	.pixel.size_bin		 = 0x1878,
 };
 
@@ -19385,7 +19403,7 @@ static const scui_image_t prj_image_src_33_mood_gif_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc99872,
+	.pixel.data_bin		 = 0xd8f827,
 	.pixel.size_bin		 = 0x143d,
 };
 
@@ -19394,7 +19412,7 @@ static const scui_image_t prj_image_src_33_mood_gif_15_14bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc9acaf,
+	.pixel.data_bin		 = 0xd90c64,
 	.pixel.size_bin		 = 0x11c3,
 };
 
@@ -19403,7 +19421,7 @@ static const scui_image_t prj_image_src_33_mood_gif_16_15bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc9be72,
+	.pixel.data_bin		 = 0xd91e27,
 	.pixel.size_bin		 = 0x1028,
 };
 
@@ -19412,7 +19430,7 @@ static const scui_image_t prj_image_src_33_mood_gif_17_16bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc9ce9a,
+	.pixel.data_bin		 = 0xd92e4f,
 	.pixel.size_bin		 = 0x1034,
 };
 
@@ -19421,7 +19439,7 @@ static const scui_image_t prj_image_src_33_mood_gif_18_17bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc9dece,
+	.pixel.data_bin		 = 0xd93e83,
 	.pixel.size_bin		 = 0x13ba,
 };
 
@@ -19430,7 +19448,7 @@ static const scui_image_t prj_image_src_33_mood_gif_19_18bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xc9f288,
+	.pixel.data_bin		 = 0xd9523d,
 	.pixel.size_bin		 = 0x1541,
 };
 
@@ -19439,7 +19457,7 @@ static const scui_image_t prj_image_src_33_mood_gif_20_19bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xca07c9,
+	.pixel.data_bin		 = 0xd9677e,
 	.pixel.size_bin		 = 0x14e7,
 };
 
@@ -19448,7 +19466,7 @@ static const scui_image_t prj_image_src_33_mood_gif_21_20bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xca1cb0,
+	.pixel.data_bin		 = 0xd97c65,
 	.pixel.size_bin		 = 0x1f1a,
 };
 
@@ -19457,7 +19475,7 @@ static const scui_image_t prj_image_src_33_mood_gif_22_21bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xca3bca,
+	.pixel.data_bin		 = 0xd99b7f,
 	.pixel.size_bin		 = 0x2451,
 };
 
@@ -19466,7 +19484,7 @@ static const scui_image_t prj_image_src_33_mood_gif_23_22bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xca601b,
+	.pixel.data_bin		 = 0xd9bfd0,
 	.pixel.size_bin		 = 0x1bfb,
 };
 
@@ -19475,7 +19493,7 @@ static const scui_image_t prj_image_src_33_mood_gif_24_23bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xca7c16,
+	.pixel.data_bin		 = 0xd9dbcb,
 	.pixel.size_bin		 = 0x1b26,
 };
 
@@ -19484,7 +19502,7 @@ static const scui_image_t prj_image_src_33_mood_gif_25_24bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xca973c,
+	.pixel.data_bin		 = 0xd9f6f1,
 	.pixel.size_bin		 = 0x25cf,
 };
 
@@ -19493,7 +19511,7 @@ static const scui_image_t prj_image_src_33_mood_gif_26_25bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xcabd0b,
+	.pixel.data_bin		 = 0xda1cc0,
 	.pixel.size_bin		 = 0x1e48,
 };
 
@@ -19502,7 +19520,7 @@ static const scui_image_t prj_image_src_33_mood_gif_27_26bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xcadb53,
+	.pixel.data_bin		 = 0xda3b08,
 	.pixel.size_bin		 = 0x19af,
 };
 
@@ -19511,7 +19529,7 @@ static const scui_image_t prj_image_src_33_mood_gif_28_27bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x100,
 	.pixel.height		 = 0x106,
-	.pixel.data_bin		 = 0xcaf502,
+	.pixel.data_bin		 = 0xda54b7,
 	.pixel.size_bin		 = 0x194e,
 };
 
@@ -19520,7 +19538,7 @@ static const scui_image_t prj_image_src_34_measure_01_retrybmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcb0e50,
+	.pixel.data_bin		 = 0xda6e05,
 	.pixel.size_bin		 = 0x685,
 };
 
@@ -19529,7 +19547,7 @@ static const scui_image_t prj_image_src_34_measure_gif_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xea,
 	.pixel.height		 = 0xea,
-	.pixel.data_bin		 = 0xcb14d5,
+	.pixel.data_bin		 = 0xda748a,
 	.pixel.size_bin		 = 0x3a49,
 };
 
@@ -19538,7 +19556,7 @@ static const scui_image_t prj_image_src_34_measure_gif_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xea,
 	.pixel.height		 = 0xea,
-	.pixel.data_bin		 = 0xcb4f1e,
+	.pixel.data_bin		 = 0xdaaed3,
 	.pixel.size_bin		 = 0x3ce0,
 };
 
@@ -19547,7 +19565,7 @@ static const scui_image_t prj_image_src_34_measure_icon_01_heartbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xcb8bfe,
+	.pixel.data_bin		 = 0xdaebb3,
 	.pixel.size_bin		 = 0x3c1,
 };
 
@@ -19556,7 +19574,7 @@ static const scui_image_t prj_image_src_34_measure_icon_02_pressurebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xcb8fbf,
+	.pixel.data_bin		 = 0xdaef74,
 	.pixel.size_bin		 = 0x5b4,
 };
 
@@ -19565,7 +19583,7 @@ static const scui_image_t prj_image_src_34_measure_icon_03_spobmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x34,
-	.pixel.data_bin		 = 0xcb9573,
+	.pixel.data_bin		 = 0xdaf528,
 	.pixel.size_bin		 = 0x6b7,
 };
 
@@ -19574,7 +19592,7 @@ static const scui_image_t prj_image_src_400X400pxbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x190,
 	.pixel.height		 = 0x190,
-	.pixel.data_bin		 = 0xcb9c2a,
+	.pixel.data_bin		 = 0xdafbdf,
 	.pixel.size_bin		 = 0x249b,
 };
 
@@ -19583,7 +19601,7 @@ static const scui_image_t prj_image_src_400X400pxpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x190,
 	.pixel.height		 = 0x190,
-	.pixel.data_bin		 = 0xcbc0c5,
+	.pixel.data_bin		 = 0xdb207a,
 	.pixel.size_bin		 = 0x4a44,
 };
 
@@ -19592,7 +19610,7 @@ static const scui_image_t prj_image_src_400X400px_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x32,
 	.pixel.height		 = 0x32,
-	.pixel.data_bin		 = 0xcc0b09,
+	.pixel.data_bin		 = 0xdb6abe,
 	.pixel.size_bin		 = 0xe9,
 };
 
@@ -19601,7 +19619,7 @@ static const scui_image_t prj_image_src_num_01_102_du_32x76png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc0bf2,
+	.pixel.data_bin		 = 0xdb6ba7,
 	.pixel.size_bin		 = 0x20f,
 };
 
@@ -19610,7 +19628,7 @@ static const scui_image_t prj_image_src_num_02_22_percent_16x18bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc0e01,
+	.pixel.data_bin		 = 0xdb6db6,
 	.pixel.size_bin		 = 0x141,
 };
 
@@ -19619,7 +19637,7 @@ static const scui_image_t prj_image_src_num_03_28_c_24x22png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xcc0f42,
+	.pixel.data_bin		 = 0xdb6ef7,
 	.pixel.size_bin		 = 0x27c,
 };
 
@@ -19628,7 +19646,7 @@ static const scui_image_t prj_image_src_num_04_28_f_24x22png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xcc11be,
+	.pixel.data_bin		 = 0xdb7173,
 	.pixel.size_bin		 = 0x1d3,
 };
 
@@ -19637,7 +19655,7 @@ static const scui_image_t prj_image_src_num_05_34_c_30x28png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1e,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xcc1391,
+	.pixel.data_bin		 = 0xdb7346,
 	.pixel.size_bin		 = 0x309,
 };
 
@@ -19646,7 +19664,7 @@ static const scui_image_t prj_image_src_num_06_34_f_30x28png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1e,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xcc169a,
+	.pixel.data_bin		 = 0xdb764f,
 	.pixel.size_bin		 = 0x203,
 };
 
@@ -19655,7 +19673,7 @@ static const scui_image_t prj_image_src_num_07_34_percent_24x28png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xcc189d,
+	.pixel.data_bin		 = 0xdb7852,
 	.pixel.size_bin		 = 0x31f,
 };
 
@@ -19664,7 +19682,7 @@ static const scui_image_t prj_image_src_num_08_44_percent_red_32x34bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcc1bbc,
+	.pixel.data_bin		 = 0xdb7b71,
 	.pixel.size_bin		 = 0x24f,
 };
 
@@ -19673,7 +19691,7 @@ static const scui_image_t prj_image_src_num_09_44_percent_white_32x34png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x20,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcc1e0b,
+	.pixel.data_bin		 = 0xdb7dc0,
 	.pixel.size_bin		 = 0x3f0,
 };
 
@@ -19682,7 +19700,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc21fb,
+	.pixel.data_bin		 = 0xdb81b0,
 	.pixel.size_bin		 = 0x192,
 };
 
@@ -19691,7 +19709,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc238d,
+	.pixel.data_bin		 = 0xdb8342,
 	.pixel.size_bin		 = 0x208,
 };
 
@@ -19700,7 +19718,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc2595,
+	.pixel.data_bin		 = 0xdb854a,
 	.pixel.size_bin		 = 0x3df,
 };
 
@@ -19709,7 +19727,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc2974,
+	.pixel.data_bin		 = 0xdb8929,
 	.pixel.size_bin		 = 0x680,
 };
 
@@ -19718,7 +19736,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc2ff4,
+	.pixel.data_bin		 = 0xdb8fa9,
 	.pixel.size_bin		 = 0x249,
 };
 
@@ -19727,7 +19745,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc323d,
+	.pixel.data_bin		 = 0xdb91f2,
 	.pixel.size_bin		 = 0x532,
 };
 
@@ -19736,7 +19754,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc376f,
+	.pixel.data_bin		 = 0xdb9724,
 	.pixel.size_bin		 = 0x5bf,
 };
 
@@ -19745,7 +19763,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc3d2e,
+	.pixel.data_bin		 = 0xdb9ce3,
 	.pixel.size_bin		 = 0x49f,
 };
 
@@ -19754,7 +19772,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc41cd,
+	.pixel.data_bin		 = 0xdba182,
 	.pixel.size_bin		 = 0x5fa,
 };
 
@@ -19763,7 +19781,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc47c7,
+	.pixel.data_bin		 = 0xdba77c,
 	.pixel.size_bin		 = 0x662,
 };
 
@@ -19772,7 +19790,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc4e29,
+	.pixel.data_bin		 = 0xdbadde,
 	.pixel.size_bin		 = 0x457,
 };
 
@@ -19781,7 +19799,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc5280,
+	.pixel.data_bin		 = 0xdbb235,
 	.pixel.size_bin		 = 0x779,
 };
 
@@ -19790,7 +19808,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc59f9,
+	.pixel.data_bin		 = 0xdbb9ae,
 	.pixel.size_bin		 = 0x666,
 };
 
@@ -19799,7 +19817,7 @@ static const scui_image_t prj_image_src_num_102_white_56x76_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xcc605f,
+	.pixel.data_bin		 = 0xdbc014,
 	.pixel.size_bin		 = 0x747,
 };
 
@@ -19808,7 +19826,7 @@ static const scui_image_t prj_image_src_num_10_52_pace_12x40png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcc67a6,
+	.pixel.data_bin		 = 0xdbc75b,
 	.pixel.size_bin		 = 0xc6,
 };
 
@@ -19817,7 +19835,7 @@ static const scui_image_t prj_image_src_num_11_52_pace_16x40png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcc686c,
+	.pixel.data_bin		 = 0xdbc821,
 	.pixel.size_bin		 = 0xd1,
 };
 
@@ -19826,7 +19844,7 @@ static const scui_image_t prj_image_src_num_12_62_c_34x48png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcc693d,
+	.pixel.data_bin		 = 0xdbc8f2,
 	.pixel.size_bin		 = 0x34c,
 };
 
@@ -19835,7 +19853,7 @@ static const scui_image_t prj_image_src_num_13_62_dial1_24x48png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcc6c89,
+	.pixel.data_bin		 = 0xdbcc3e,
 	.pixel.size_bin		 = 0x155,
 };
 
@@ -19844,7 +19862,7 @@ static const scui_image_t prj_image_src_num_14_62_dial2_24x48png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcc6dde,
+	.pixel.data_bin		 = 0xdbcd93,
 	.pixel.size_bin		 = 0x202,
 };
 
@@ -19853,7 +19871,7 @@ static const scui_image_t prj_image_src_num_15_62_dial3_24x48png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcc6fe0,
+	.pixel.data_bin		 = 0xdbcf95,
 	.pixel.size_bin		 = 0x268,
 };
 
@@ -19862,7 +19880,7 @@ static const scui_image_t prj_image_src_num_16_62_du_24x48png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcc7248,
+	.pixel.data_bin		 = 0xdbd1fd,
 	.pixel.size_bin		 = 0x1a4,
 };
 
@@ -19871,7 +19889,7 @@ static const scui_image_t prj_image_src_num_17_62_f_34x48png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcc73ec,
+	.pixel.data_bin		 = 0xdbd3a1,
 	.pixel.size_bin		 = 0x22d,
 };
 
@@ -19880,7 +19898,7 @@ static const scui_image_t prj_image_src_num_18_62_pace_12x48png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcc7619,
+	.pixel.data_bin		 = 0xdbd5ce,
 	.pixel.size_bin		 = 0xcd,
 };
 
@@ -19889,7 +19907,7 @@ static const scui_image_t prj_image_src_num_19_62_pace_20x48png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x14,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcc76e6,
+	.pixel.data_bin		 = 0xdbd69b,
 	.pixel.size_bin		 = 0xdc,
 };
 
@@ -19898,7 +19916,7 @@ static const scui_image_t prj_image_src_num_20_62_percent_28x48png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcc77c2,
+	.pixel.data_bin		 = 0xdbd777,
 	.pixel.size_bin		 = 0x4d8,
 };
 
@@ -19907,7 +19925,7 @@ static const scui_image_t prj_image_src_num_21_62_percent_44x48png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcc7c9a,
+	.pixel.data_bin		 = 0xdbdc4f,
 	.pixel.size_bin		 = 0x59d,
 };
 
@@ -19916,7 +19934,7 @@ static const scui_image_t prj_image_src_num_22_80_percent_56x60png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x38,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xcc8237,
+	.pixel.data_bin		 = 0xdbe1ec,
 	.pixel.size_bin		 = 0x726,
 };
 
@@ -19925,7 +19943,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc895d,
+	.pixel.data_bin		 = 0xdbe912,
 	.pixel.size_bin		 = 0xc2,
 };
 
@@ -19934,7 +19952,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc8a1f,
+	.pixel.data_bin		 = 0xdbe9d4,
 	.pixel.size_bin		 = 0xe9,
 };
 
@@ -19943,7 +19961,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc8b08,
+	.pixel.data_bin		 = 0xdbeabd,
 	.pixel.size_bin		 = 0x188,
 };
 
@@ -19952,7 +19970,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc8c90,
+	.pixel.data_bin		 = 0xdbec45,
 	.pixel.size_bin		 = 0x21b,
 };
 
@@ -19961,7 +19979,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc8eab,
+	.pixel.data_bin		 = 0xdbee60,
 	.pixel.size_bin		 = 0x120,
 };
 
@@ -19970,7 +19988,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc8fcb,
+	.pixel.data_bin		 = 0xdbef80,
 	.pixel.size_bin		 = 0x203,
 };
 
@@ -19979,7 +19997,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc91ce,
+	.pixel.data_bin		 = 0xdbf183,
 	.pixel.size_bin		 = 0x229,
 };
 
@@ -19988,7 +20006,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc93f7,
+	.pixel.data_bin		 = 0xdbf3ac,
 	.pixel.size_bin		 = 0x1c5,
 };
 
@@ -19997,7 +20015,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc95bc,
+	.pixel.data_bin		 = 0xdbf571,
 	.pixel.size_bin		 = 0x21a,
 };
 
@@ -20006,7 +20024,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc97d6,
+	.pixel.data_bin		 = 0xdbf78b,
 	.pixel.size_bin		 = 0x224,
 };
 
@@ -20015,7 +20033,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc99fa,
+	.pixel.data_bin		 = 0xdbf9af,
 	.pixel.size_bin		 = 0x1ba,
 };
 
@@ -20024,7 +20042,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc9bb4,
+	.pixel.data_bin		 = 0xdbfb69,
 	.pixel.size_bin		 = 0x280,
 };
 
@@ -20033,7 +20051,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcc9e34,
+	.pixel.data_bin		 = 0xdbfde9,
 	.pixel.size_bin		 = 0x226,
 };
 
@@ -20042,7 +20060,7 @@ static const scui_image_t prj_image_src_num_22_grey_12x18_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca05a,
+	.pixel.data_bin		 = 0xdc000f,
 	.pixel.size_bin		 = 0x116,
 };
 
@@ -20051,7 +20069,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca170,
+	.pixel.data_bin		 = 0xdc0125,
 	.pixel.size_bin		 = 0x33,
 };
 
@@ -20060,7 +20078,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca1a3,
+	.pixel.data_bin		 = 0xdc0158,
 	.pixel.size_bin		 = 0x42,
 };
 
@@ -20069,7 +20087,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca1e5,
+	.pixel.data_bin		 = 0xdc019a,
 	.pixel.size_bin		 = 0x6d,
 };
 
@@ -20078,7 +20096,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca252,
+	.pixel.data_bin		 = 0xdc0207,
 	.pixel.size_bin		 = 0xfa,
 };
 
@@ -20087,7 +20105,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca34c,
+	.pixel.data_bin		 = 0xdc0301,
 	.pixel.size_bin		 = 0x58,
 };
 
@@ -20096,7 +20114,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca3a4,
+	.pixel.data_bin		 = 0xdc0359,
 	.pixel.size_bin		 = 0xe3,
 };
 
@@ -20105,7 +20123,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca487,
+	.pixel.data_bin		 = 0xdc043c,
 	.pixel.size_bin		 = 0xe6,
 };
 
@@ -20114,7 +20132,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca56d,
+	.pixel.data_bin		 = 0xdc0522,
 	.pixel.size_bin		 = 0xb8,
 };
 
@@ -20123,7 +20141,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca625,
+	.pixel.data_bin		 = 0xdc05da,
 	.pixel.size_bin		 = 0xfa,
 };
 
@@ -20132,7 +20150,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca71f,
+	.pixel.data_bin		 = 0xdc06d4,
 	.pixel.size_bin		 = 0xf8,
 };
 
@@ -20141,7 +20159,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca817,
+	.pixel.data_bin		 = 0xdc07cc,
 	.pixel.size_bin		 = 0xb2,
 };
 
@@ -20150,7 +20168,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca8c9,
+	.pixel.data_bin		 = 0xdc087e,
 	.pixel.size_bin		 = 0x11d,
 };
 
@@ -20159,7 +20177,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xcca9e6,
+	.pixel.data_bin		 = 0xdc099b,
 	.pixel.size_bin		 = 0xf9,
 };
 
@@ -20168,7 +20186,7 @@ static const scui_image_t prj_image_src_num_22_red_12x18_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccaadf,
+	.pixel.data_bin		 = 0xdc0a94,
 	.pixel.size_bin		 = 0x50,
 };
 
@@ -20177,7 +20195,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccab2f,
+	.pixel.data_bin		 = 0xdc0ae4,
 	.pixel.size_bin		 = 0xbc,
 };
 
@@ -20186,7 +20204,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccabeb,
+	.pixel.data_bin		 = 0xdc0ba0,
 	.pixel.size_bin		 = 0xd4,
 };
 
@@ -20195,7 +20213,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccacbf,
+	.pixel.data_bin		 = 0xdc0c74,
 	.pixel.size_bin		 = 0x16d,
 };
 
@@ -20204,7 +20222,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccae2c,
+	.pixel.data_bin		 = 0xdc0de1,
 	.pixel.size_bin		 = 0x1bb,
 };
 
@@ -20213,7 +20231,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccafe7,
+	.pixel.data_bin		 = 0xdc0f9c,
 	.pixel.size_bin		 = 0xfd,
 };
 
@@ -20222,7 +20240,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccb0e4,
+	.pixel.data_bin		 = 0xdc1099,
 	.pixel.size_bin		 = 0x1a7,
 };
 
@@ -20231,7 +20249,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccb28b,
+	.pixel.data_bin		 = 0xdc1240,
 	.pixel.size_bin		 = 0x1ae,
 };
 
@@ -20240,7 +20258,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccb439,
+	.pixel.data_bin		 = 0xdc13ee,
 	.pixel.size_bin		 = 0x196,
 };
 
@@ -20249,7 +20267,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccb5cf,
+	.pixel.data_bin		 = 0xdc1584,
 	.pixel.size_bin		 = 0x1c1,
 };
 
@@ -20258,7 +20276,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccb790,
+	.pixel.data_bin		 = 0xdc1745,
 	.pixel.size_bin		 = 0x1c0,
 };
 
@@ -20267,7 +20285,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccb950,
+	.pixel.data_bin		 = 0xdc1905,
 	.pixel.size_bin		 = 0x16b,
 };
 
@@ -20276,7 +20294,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccbabb,
+	.pixel.data_bin		 = 0xdc1a70,
 	.pixel.size_bin		 = 0x1df,
 };
 
@@ -20285,7 +20303,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccbc9a,
+	.pixel.data_bin		 = 0xdc1c4f,
 	.pixel.size_bin		 = 0x1ab,
 };
 
@@ -20294,7 +20312,7 @@ static const scui_image_t prj_image_src_num_22_white_12x18_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x12,
-	.pixel.data_bin		 = 0xccbe45,
+	.pixel.data_bin		 = 0xdc1dfa,
 	.pixel.size_bin		 = 0xfc,
 };
 
@@ -20303,7 +20321,7 @@ static const scui_image_t prj_image_src_num_23_92_c_44x76png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xccbf41,
+	.pixel.data_bin		 = 0xdc1ef6,
 	.pixel.size_bin		 = 0x3e9,
 };
 
@@ -20312,7 +20330,7 @@ static const scui_image_t prj_image_src_num_24_92_f_44x76png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xccc32a,
+	.pixel.data_bin		 = 0xdc22df,
 	.pixel.size_bin		 = 0x2a5,
 };
 
@@ -20321,7 +20339,7 @@ static const scui_image_t prj_image_src_num_25_102_percent_74x76png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x4a,
 	.pixel.height		 = 0x4c,
-	.pixel.data_bin		 = 0xccc5cf,
+	.pixel.data_bin		 = 0xdc2584,
 	.pixel.size_bin		 = 0x93f,
 };
 
@@ -20330,7 +20348,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xcccf0e,
+	.pixel.data_bin		 = 0xdc2ec3,
 	.pixel.size_bin		 = 0xe0,
 };
 
@@ -20339,7 +20357,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xcccfee,
+	.pixel.data_bin		 = 0xdc2fa3,
 	.pixel.size_bin		 = 0xe8,
 };
 
@@ -20348,7 +20366,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xccd0d6,
+	.pixel.data_bin		 = 0xdc308b,
 	.pixel.size_bin		 = 0x18f,
 };
 
@@ -20357,7 +20375,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xccd265,
+	.pixel.data_bin		 = 0xdc321a,
 	.pixel.size_bin		 = 0x227,
 };
 
@@ -20366,7 +20384,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xccd48c,
+	.pixel.data_bin		 = 0xdc3441,
 	.pixel.size_bin		 = 0x11d,
 };
 
@@ -20375,7 +20393,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xccd5a9,
+	.pixel.data_bin		 = 0xdc355e,
 	.pixel.size_bin		 = 0x1e1,
 };
 
@@ -20384,7 +20402,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xccd78a,
+	.pixel.data_bin		 = 0xdc373f,
 	.pixel.size_bin		 = 0x1f8,
 };
 
@@ -20393,7 +20411,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xccd982,
+	.pixel.data_bin		 = 0xdc3937,
 	.pixel.size_bin		 = 0x1d9,
 };
 
@@ -20402,7 +20420,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xccdb5b,
+	.pixel.data_bin		 = 0xdc3b10,
 	.pixel.size_bin		 = 0x1ff,
 };
 
@@ -20411,7 +20429,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xccdd5a,
+	.pixel.data_bin		 = 0xdc3d0f,
 	.pixel.size_bin		 = 0x215,
 };
 
@@ -20420,7 +20438,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xccdf6f,
+	.pixel.data_bin		 = 0xdc3f24,
 	.pixel.size_bin		 = 0x1bc,
 };
 
@@ -20429,7 +20447,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xcce12b,
+	.pixel.data_bin		 = 0xdc40e0,
 	.pixel.size_bin		 = 0x24c,
 };
 
@@ -20438,7 +20456,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xcce377,
+	.pixel.data_bin		 = 0xdc432c,
 	.pixel.size_bin		 = 0x20a,
 };
 
@@ -20447,7 +20465,7 @@ static const scui_image_t prj_image_src_num_28_white_16x22_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x16,
-	.pixel.data_bin		 = 0xcce581,
+	.pixel.data_bin		 = 0xdc4536,
 	.pixel.size_bin		 = 0x10f,
 };
 
@@ -20456,7 +20474,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xcce690,
+	.pixel.data_bin		 = 0xdc4645,
 	.pixel.size_bin		 = 0xda,
 };
 
@@ -20465,7 +20483,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xcce76a,
+	.pixel.data_bin		 = 0xdc471f,
 	.pixel.size_bin		 = 0x5d9,
 };
 
@@ -20474,7 +20492,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xe,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xcced43,
+	.pixel.data_bin		 = 0xdc4cf8,
 	.pixel.size_bin		 = 0x674,
 };
 
@@ -20483,7 +20501,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xccf3b7,
+	.pixel.data_bin		 = 0xdc536c,
 	.pixel.size_bin		 = 0x253,
 };
 
@@ -20492,7 +20510,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xccf60a,
+	.pixel.data_bin		 = 0xdc55bf,
 	.pixel.size_bin		 = 0x131,
 };
 
@@ -20501,7 +20519,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xccf73b,
+	.pixel.data_bin		 = 0xdc56f0,
 	.pixel.size_bin		 = 0x223,
 };
 
@@ -20510,7 +20528,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xccf95e,
+	.pixel.data_bin		 = 0xdc5913,
 	.pixel.size_bin		 = 0x240,
 };
 
@@ -20519,7 +20537,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xccfb9e,
+	.pixel.data_bin		 = 0xdc5b53,
 	.pixel.size_bin		 = 0x1ea,
 };
 
@@ -20528,7 +20546,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xccfd88,
+	.pixel.data_bin		 = 0xdc5d3d,
 	.pixel.size_bin		 = 0x24f,
 };
 
@@ -20537,7 +20555,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xccffd7,
+	.pixel.data_bin		 = 0xdc5f8c,
 	.pixel.size_bin		 = 0x25d,
 };
 
@@ -20546,7 +20564,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xcd0234,
+	.pixel.data_bin		 = 0xdc61e9,
 	.pixel.size_bin		 = 0x1c4,
 };
 
@@ -20555,7 +20573,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xcd03f8,
+	.pixel.data_bin		 = 0xdc63ad,
 	.pixel.size_bin		 = 0x2a2,
 };
 
@@ -20564,7 +20582,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xcd069a,
+	.pixel.data_bin		 = 0xdc664f,
 	.pixel.size_bin		 = 0x260,
 };
 
@@ -20573,7 +20591,7 @@ static const scui_image_t prj_image_src_num_34_white_18x28_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x8,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xcd08fa,
+	.pixel.data_bin		 = 0xdc68af,
 	.pixel.size_bin		 = 0x6e2,
 };
 
@@ -20582,7 +20600,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd0fdc,
+	.pixel.data_bin		 = 0xdc6f91,
 	.pixel.size_bin		 = 0x117,
 };
 
@@ -20591,7 +20609,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd10f3,
+	.pixel.data_bin		 = 0xdc70a8,
 	.pixel.size_bin		 = 0x136,
 };
 
@@ -20600,7 +20618,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd1229,
+	.pixel.data_bin		 = 0xdc71de,
 	.pixel.size_bin		 = 0x264,
 };
 
@@ -20609,7 +20627,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd148d,
+	.pixel.data_bin		 = 0xdc7442,
 	.pixel.size_bin		 = 0x3ed,
 };
 
@@ -20618,7 +20636,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd187a,
+	.pixel.data_bin		 = 0xdc782f,
 	.pixel.size_bin		 = 0x164,
 };
 
@@ -20627,7 +20645,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd19de,
+	.pixel.data_bin		 = 0xdc7993,
 	.pixel.size_bin		 = 0x382,
 };
 
@@ -20636,7 +20654,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd1d60,
+	.pixel.data_bin		 = 0xdc7d15,
 	.pixel.size_bin		 = 0x3d5,
 };
 
@@ -20645,7 +20663,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd2135,
+	.pixel.data_bin		 = 0xdc80ea,
 	.pixel.size_bin		 = 0x2b9,
 };
 
@@ -20654,7 +20672,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd23ee,
+	.pixel.data_bin		 = 0xdc83a3,
 	.pixel.size_bin		 = 0x3bc,
 };
 
@@ -20663,7 +20681,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd27aa,
+	.pixel.data_bin		 = 0xdc875f,
 	.pixel.size_bin		 = 0x418,
 };
 
@@ -20672,7 +20690,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd2bc2,
+	.pixel.data_bin		 = 0xdc8b77,
 	.pixel.size_bin		 = 0x2c5,
 };
 
@@ -20681,7 +20699,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd2e87,
+	.pixel.data_bin		 = 0xdc8e3c,
 	.pixel.size_bin		 = 0x49d,
 };
 
@@ -20690,7 +20708,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd3324,
+	.pixel.data_bin		 = 0xdc92d9,
 	.pixel.size_bin		 = 0x3fc,
 };
 
@@ -20699,7 +20717,7 @@ static const scui_image_t prj_image_src_num_44_grey_24x34_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd3720,
+	.pixel.data_bin		 = 0xdc96d5,
 	.pixel.size_bin		 = 0x1c1,
 };
 
@@ -20708,7 +20726,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd38e1,
+	.pixel.data_bin		 = 0xdc9896,
 	.pixel.size_bin		 = 0x54,
 };
 
@@ -20717,7 +20735,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd3935,
+	.pixel.data_bin		 = 0xdc98ea,
 	.pixel.size_bin		 = 0x77,
 };
 
@@ -20726,7 +20744,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd39ac,
+	.pixel.data_bin		 = 0xdc9961,
 	.pixel.size_bin		 = 0x98,
 };
 
@@ -20735,7 +20753,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd3a44,
+	.pixel.data_bin		 = 0xdc99f9,
 	.pixel.size_bin		 = 0x1ab,
 };
 
@@ -20744,7 +20762,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd3bef,
+	.pixel.data_bin		 = 0xdc9ba4,
 	.pixel.size_bin		 = 0x7c,
 };
 
@@ -20753,7 +20771,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd3c6b,
+	.pixel.data_bin		 = 0xdc9c20,
 	.pixel.size_bin		 = 0x17e,
 };
 
@@ -20762,7 +20780,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd3de9,
+	.pixel.data_bin		 = 0xdc9d9e,
 	.pixel.size_bin		 = 0x199,
 };
 
@@ -20771,7 +20789,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd3f82,
+	.pixel.data_bin		 = 0xdc9f37,
 	.pixel.size_bin		 = 0x151,
 };
 
@@ -20780,7 +20798,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd40d3,
+	.pixel.data_bin		 = 0xdca088,
 	.pixel.size_bin		 = 0x1bb,
 };
 
@@ -20789,7 +20807,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd428e,
+	.pixel.data_bin		 = 0xdca243,
 	.pixel.size_bin		 = 0x1bf,
 };
 
@@ -20798,7 +20816,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd444d,
+	.pixel.data_bin		 = 0xdca402,
 	.pixel.size_bin		 = 0x130,
 };
 
@@ -20807,7 +20825,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd457d,
+	.pixel.data_bin		 = 0xdca532,
 	.pixel.size_bin		 = 0x1f1,
 };
 
@@ -20816,7 +20834,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd476e,
+	.pixel.data_bin		 = 0xdca723,
 	.pixel.size_bin		 = 0x1cc,
 };
 
@@ -20825,7 +20843,7 @@ static const scui_image_t prj_image_src_num_44_red_24x34_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd493a,
+	.pixel.data_bin		 = 0xdca8ef,
 	.pixel.size_bin		 = 0xa2,
 };
 
@@ -20834,7 +20852,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd49dc,
+	.pixel.data_bin		 = 0xdca991,
 	.pixel.size_bin		 = 0x103,
 };
 
@@ -20843,7 +20861,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xa,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd4adf,
+	.pixel.data_bin		 = 0xdcaa94,
 	.pixel.size_bin		 = 0x5f2,
 };
 
@@ -20852,7 +20870,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd50d1,
+	.pixel.data_bin		 = 0xdcb086,
 	.pixel.size_bin		 = 0x695,
 };
 
@@ -20861,7 +20879,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd5766,
+	.pixel.data_bin		 = 0xdcb71b,
 	.pixel.size_bin		 = 0x301,
 };
 
@@ -20870,7 +20888,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd5a67,
+	.pixel.data_bin		 = 0xdcba1c,
 	.pixel.size_bin		 = 0x162,
 };
 
@@ -20879,7 +20897,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd5bc9,
+	.pixel.data_bin		 = 0xdcbb7e,
 	.pixel.size_bin		 = 0x286,
 };
 
@@ -20888,7 +20906,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd5e4f,
+	.pixel.data_bin		 = 0xdcbe04,
 	.pixel.size_bin		 = 0x2bc,
 };
 
@@ -20897,7 +20915,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd610b,
+	.pixel.data_bin		 = 0xdcc0c0,
 	.pixel.size_bin		 = 0x286,
 };
 
@@ -20906,7 +20924,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd6391,
+	.pixel.data_bin		 = 0xdcc346,
 	.pixel.size_bin		 = 0x2db,
 };
 
@@ -20915,7 +20933,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd666c,
+	.pixel.data_bin		 = 0xdcc621,
 	.pixel.size_bin		 = 0x2fe,
 };
 
@@ -20924,7 +20942,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd696a,
+	.pixel.data_bin		 = 0xdcc91f,
 	.pixel.size_bin		 = 0x23c,
 };
 
@@ -20933,7 +20951,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd6ba6,
+	.pixel.data_bin		 = 0xdccb5b,
 	.pixel.size_bin		 = 0x34b,
 };
 
@@ -20942,7 +20960,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd6ef1,
+	.pixel.data_bin		 = 0xdccea6,
 	.pixel.size_bin		 = 0x2ec,
 };
 
@@ -20951,7 +20969,7 @@ static const scui_image_t prj_image_src_num_44_white_24x34_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xa,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcd71dd,
+	.pixel.data_bin		 = 0xdcd192,
 	.pixel.size_bin		 = 0x713,
 };
 
@@ -20960,7 +20978,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd78f0,
+	.pixel.data_bin		 = 0xdcd8a5,
 	.pixel.size_bin		 = 0x5d,
 };
 
@@ -20969,7 +20987,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_02_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd794d,
+	.pixel.data_bin		 = 0xdcd902,
 	.pixel.size_bin		 = 0x84,
 };
 
@@ -20978,7 +20996,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_03_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd79d1,
+	.pixel.data_bin		 = 0xdcd986,
 	.pixel.size_bin		 = 0x95,
 };
 
@@ -20987,7 +21005,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_04_03bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd7a66,
+	.pixel.data_bin		 = 0xdcda1b,
 	.pixel.size_bin		 = 0x22c,
 };
 
@@ -20996,7 +21014,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_05_04bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd7c92,
+	.pixel.data_bin		 = 0xdcdc47,
 	.pixel.size_bin		 = 0x97,
 };
 
@@ -21005,7 +21023,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_06_05bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd7d29,
+	.pixel.data_bin		 = 0xdcdcde,
 	.pixel.size_bin		 = 0x1de,
 };
 
@@ -21014,7 +21032,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_07_06bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd7f07,
+	.pixel.data_bin		 = 0xdcdebc,
 	.pixel.size_bin		 = 0x1f0,
 };
 
@@ -21023,7 +21041,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_08_07bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd80f7,
+	.pixel.data_bin		 = 0xdce0ac,
 	.pixel.size_bin		 = 0x17e,
 };
 
@@ -21032,7 +21050,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_09_08bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd8275,
+	.pixel.data_bin		 = 0xdce22a,
 	.pixel.size_bin		 = 0x211,
 };
 
@@ -21041,7 +21059,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_10_09bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd8486,
+	.pixel.data_bin		 = 0xdce43b,
 	.pixel.size_bin		 = 0x21e,
 };
 
@@ -21050,7 +21068,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_11_10bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd86a4,
+	.pixel.data_bin		 = 0xdce659,
 	.pixel.size_bin		 = 0x15a,
 };
 
@@ -21059,7 +21077,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_12_11bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd87fe,
+	.pixel.data_bin		 = 0xdce7b3,
 	.pixel.size_bin		 = 0x27b,
 };
 
@@ -21068,7 +21086,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_13_12bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd8a79,
+	.pixel.data_bin		 = 0xdcea2e,
 	.pixel.size_bin		 = 0x20f,
 };
 
@@ -21077,7 +21095,7 @@ static const scui_image_t prj_image_src_num_52_red_28x40_14_13bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd8c88,
+	.pixel.data_bin		 = 0xdcec3d,
 	.pixel.size_bin		 = 0xd1,
 };
 
@@ -21086,7 +21104,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd8d59,
+	.pixel.data_bin		 = 0xdced0e,
 	.pixel.size_bin		 = 0x10e,
 };
 
@@ -21095,7 +21113,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xe,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd8e67,
+	.pixel.data_bin		 = 0xdcee1c,
 	.pixel.size_bin		 = 0x615,
 };
 
@@ -21104,7 +21122,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd947c,
+	.pixel.data_bin		 = 0xdcf431,
 	.pixel.size_bin		 = 0x20d,
 };
 
@@ -21113,7 +21131,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd9689,
+	.pixel.data_bin		 = 0xdcf63e,
 	.pixel.size_bin		 = 0x359,
 };
 
@@ -21122,7 +21140,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd99e2,
+	.pixel.data_bin		 = 0xdcf997,
 	.pixel.size_bin		 = 0x18c,
 };
 
@@ -21131,7 +21149,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd9b6e,
+	.pixel.data_bin		 = 0xdcfb23,
 	.pixel.size_bin		 = 0x2e5,
 };
 
@@ -21140,7 +21158,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcd9e53,
+	.pixel.data_bin		 = 0xdcfe08,
 	.pixel.size_bin		 = 0x320,
 };
 
@@ -21149,7 +21167,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcda173,
+	.pixel.data_bin		 = 0xdd0128,
 	.pixel.size_bin		 = 0x277,
 };
 
@@ -21158,7 +21176,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcda3ea,
+	.pixel.data_bin		 = 0xdd039f,
 	.pixel.size_bin		 = 0x348,
 };
 
@@ -21167,7 +21185,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcda732,
+	.pixel.data_bin		 = 0xdd06e7,
 	.pixel.size_bin		 = 0x378,
 };
 
@@ -21176,7 +21194,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcdaaaa,
+	.pixel.data_bin		 = 0xdd0a5f,
 	.pixel.size_bin		 = 0x27c,
 };
 
@@ -21185,7 +21203,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcdad26,
+	.pixel.data_bin		 = 0xdd0cdb,
 	.pixel.size_bin		 = 0x3e7,
 };
 
@@ -21194,7 +21212,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1c,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcdb10d,
+	.pixel.data_bin		 = 0xdd10c2,
 	.pixel.size_bin		 = 0x36f,
 };
 
@@ -21203,7 +21221,7 @@ static const scui_image_t prj_image_src_num_52_white_28x40_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xe,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcdb47c,
+	.pixel.data_bin		 = 0xdd1431,
 	.pixel.size_bin		 = 0x684,
 };
 
@@ -21212,7 +21230,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcdbb00,
+	.pixel.data_bin		 = 0xdd1ab5,
 	.pixel.size_bin		 = 0x119,
 };
 
@@ -21221,7 +21239,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcdbc19,
+	.pixel.data_bin		 = 0xdd1bce,
 	.pixel.size_bin		 = 0x614,
 };
 
@@ -21230,7 +21248,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcdc22d,
+	.pixel.data_bin		 = 0xdd21e2,
 	.pixel.size_bin		 = 0x2d1,
 };
 
@@ -21239,7 +21257,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcdc4fe,
+	.pixel.data_bin		 = 0xdd24b3,
 	.pixel.size_bin		 = 0x40e,
 };
 
@@ -21248,7 +21266,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcdc90c,
+	.pixel.data_bin		 = 0xdd28c1,
 	.pixel.size_bin		 = 0x1b5,
 };
 
@@ -21257,7 +21275,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcdcac1,
+	.pixel.data_bin		 = 0xdd2a76,
 	.pixel.size_bin		 = 0x367,
 };
 
@@ -21266,7 +21284,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcdce28,
+	.pixel.data_bin		 = 0xdd2ddd,
 	.pixel.size_bin		 = 0x3b6,
 };
 
@@ -21275,7 +21293,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcdd1de,
+	.pixel.data_bin		 = 0xdd3193,
 	.pixel.size_bin		 = 0x341,
 };
 
@@ -21284,7 +21302,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcdd51f,
+	.pixel.data_bin		 = 0xdd34d4,
 	.pixel.size_bin		 = 0x3c7,
 };
 
@@ -21293,7 +21311,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcdd8e6,
+	.pixel.data_bin		 = 0xdd389b,
 	.pixel.size_bin		 = 0x40e,
 };
 
@@ -21302,7 +21320,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcddcf4,
+	.pixel.data_bin		 = 0xdd3ca9,
 	.pixel.size_bin		 = 0x309,
 };
 
@@ -21311,7 +21329,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcddffd,
+	.pixel.data_bin		 = 0xdd3fb2,
 	.pixel.size_bin		 = 0x4a2,
 };
 
@@ -21320,7 +21338,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcde49f,
+	.pixel.data_bin		 = 0xdd4454,
 	.pixel.size_bin		 = 0x3fe,
 };
 
@@ -21329,7 +21347,7 @@ static const scui_image_t prj_image_src_num_62_white_36x46_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0x30,
-	.pixel.data_bin		 = 0xcde89d,
+	.pixel.data_bin		 = 0xdd4852,
 	.pixel.size_bin		 = 0x756,
 };
 
@@ -21338,7 +21356,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xcdeff3,
+	.pixel.data_bin		 = 0xdd4fa8,
 	.pixel.size_bin		 = 0x148,
 };
 
@@ -21347,7 +21365,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xcdf13b,
+	.pixel.data_bin		 = 0xdd50f0,
 	.pixel.size_bin		 = 0x63b,
 };
 
@@ -21356,7 +21374,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xcdf776,
+	.pixel.data_bin		 = 0xdd572b,
 	.pixel.size_bin		 = 0x35c,
 };
 
@@ -21365,7 +21383,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xcdfad2,
+	.pixel.data_bin		 = 0xdd5a87,
 	.pixel.size_bin		 = 0x524,
 };
 
@@ -21374,7 +21392,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xcdfff6,
+	.pixel.data_bin		 = 0xdd5fab,
 	.pixel.size_bin		 = 0x1f8,
 };
 
@@ -21383,7 +21401,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xce01ee,
+	.pixel.data_bin		 = 0xdd61a3,
 	.pixel.size_bin		 = 0x469,
 };
 
@@ -21392,7 +21410,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xce0657,
+	.pixel.data_bin		 = 0xdd660c,
 	.pixel.size_bin		 = 0x47a,
 };
 
@@ -21401,7 +21419,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xce0ad1,
+	.pixel.data_bin		 = 0xdd6a86,
 	.pixel.size_bin		 = 0x3bc,
 };
 
@@ -21410,7 +21428,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xce0e8d,
+	.pixel.data_bin		 = 0xdd6e42,
 	.pixel.size_bin		 = 0x4a9,
 };
 
@@ -21419,7 +21437,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xce1336,
+	.pixel.data_bin		 = 0xdd72eb,
 	.pixel.size_bin		 = 0x4df,
 };
 
@@ -21428,7 +21446,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xce1815,
+	.pixel.data_bin		 = 0xdd77ca,
 	.pixel.size_bin		 = 0x345,
 };
 
@@ -21437,7 +21455,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xce1b5a,
+	.pixel.data_bin		 = 0xdd7b0f,
 	.pixel.size_bin		 = 0x5e2,
 };
 
@@ -21446,7 +21464,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xce213c,
+	.pixel.data_bin		 = 0xdd80f1,
 	.pixel.size_bin		 = 0x543,
 };
 
@@ -21455,7 +21473,7 @@ static const scui_image_t prj_image_src_num_80_white_44x60_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x3c,
-	.pixel.data_bin		 = 0xce267f,
+	.pixel.data_bin		 = 0xdd8634,
 	.pixel.size_bin		 = 0x6e3,
 };
 
@@ -21464,7 +21482,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce2d62,
+	.pixel.data_bin		 = 0xdd8d17,
 	.pixel.size_bin		 = 0x170,
 };
 
@@ -21473,7 +21491,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce2ed2,
+	.pixel.data_bin		 = 0xdd8e87,
 	.pixel.size_bin		 = 0x1c2,
 };
 
@@ -21482,7 +21500,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce3094,
+	.pixel.data_bin		 = 0xdd9049,
 	.pixel.size_bin		 = 0x3b1,
 };
 
@@ -21491,7 +21509,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce3445,
+	.pixel.data_bin		 = 0xdd93fa,
 	.pixel.size_bin		 = 0x5ac,
 };
 
@@ -21500,7 +21518,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce39f1,
+	.pixel.data_bin		 = 0xdd99a6,
 	.pixel.size_bin		 = 0x243,
 };
 
@@ -21509,7 +21527,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce3c34,
+	.pixel.data_bin		 = 0xdd9be9,
 	.pixel.size_bin		 = 0x4ef,
 };
 
@@ -21518,7 +21536,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_07_06png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce4123,
+	.pixel.data_bin		 = 0xdda0d8,
 	.pixel.size_bin		 = 0x52c,
 };
 
@@ -21527,7 +21545,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_08_07png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce464f,
+	.pixel.data_bin		 = 0xdda604,
 	.pixel.size_bin		 = 0x476,
 };
 
@@ -21536,7 +21554,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_09_08png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce4ac5,
+	.pixel.data_bin		 = 0xddaa7a,
 	.pixel.size_bin		 = 0x55c,
 };
 
@@ -21545,7 +21563,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_10_09png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce5021,
+	.pixel.data_bin		 = 0xddafd6,
 	.pixel.size_bin		 = 0x5f4,
 };
 
@@ -21554,7 +21572,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_11_10png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce5615,
+	.pixel.data_bin		 = 0xddb5ca,
 	.pixel.size_bin		 = 0x40b,
 };
 
@@ -21563,7 +21581,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_12_11png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce5a20,
+	.pixel.data_bin		 = 0xddb9d5,
 	.pixel.size_bin		 = 0x6ba,
 };
 
@@ -21572,7 +21590,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_13_12png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x34,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce60da,
+	.pixel.data_bin		 = 0xddc08f,
 	.pixel.size_bin		 = 0x5b3,
 };
 
@@ -21581,7 +21599,7 @@ static const scui_image_t prj_image_src_num_92_white_52x70_14_13png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x46,
-	.pixel.data_bin		 = 0xce668d,
+	.pixel.data_bin		 = 0xddc642,
 	.pixel.size_bin		 = 0x7d0,
 };
 
@@ -21590,7 +21608,7 @@ static const scui_image_t prj_image_src_repeat_01_bluetoothbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xd2,
 	.pixel.height		 = 0xd2,
-	.pixel.data_bin		 = 0xce6e5d,
+	.pixel.data_bin		 = 0xddce12,
 	.pixel.size_bin		 = 0xefe,
 };
 
@@ -21599,7 +21617,7 @@ static const scui_image_t prj_image_src_repeat_02_windowpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x146,
 	.pixel.height		 = 0x7c,
-	.pixel.data_bin		 = 0xce7d5b,
+	.pixel.data_bin		 = 0xdddd10,
 	.pixel.size_bin		 = 0x1ae6,
 };
 
@@ -21608,7 +21626,7 @@ static const scui_image_t prj_image_src_repeat_03_barbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x6,
 	.pixel.height		 = 0x98,
-	.pixel.data_bin		 = 0xce9841,
+	.pixel.data_bin		 = 0xddf7f6,
 	.pixel.size_bin		 = 0x30,
 };
 
@@ -21617,7 +21635,7 @@ static const scui_image_t prj_image_src_repeat_04_barbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x90,
-	.pixel.data_bin		 = 0xce9871,
+	.pixel.data_bin		 = 0xddf826,
 	.pixel.size_bin		 = 0x4c,
 };
 
@@ -21626,7 +21644,7 @@ static const scui_image_t prj_image_src_repeat_05_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x6,
 	.pixel.height		 = 0x6,
-	.pixel.data_bin		 = 0xce98bd,
+	.pixel.data_bin		 = 0xddf872,
 	.pixel.size_bin		 = 0x29,
 };
 
@@ -21635,7 +21653,7 @@ static const scui_image_t prj_image_src_repeat_06_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0xce98e6,
+	.pixel.data_bin		 = 0xddf89b,
 	.pixel.size_bin		 = 0x50,
 };
 
@@ -21644,7 +21662,7 @@ static const scui_image_t prj_image_src_repeat_arrow_01_backbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xce9936,
+	.pixel.data_bin		 = 0xddf8eb,
 	.pixel.size_bin		 = 0x7e,
 };
 
@@ -21653,7 +21671,7 @@ static const scui_image_t prj_image_src_repeat_arrow_02_underbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xce99b4,
+	.pixel.data_bin		 = 0xddf969,
 	.pixel.size_bin		 = 0xfc,
 };
 
@@ -21662,7 +21680,7 @@ static const scui_image_t prj_image_src_repeat_arrow_03_upbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x14,
-	.pixel.data_bin		 = 0xce9ab0,
+	.pixel.data_bin		 = 0xddfa65,
 	.pixel.size_bin		 = 0xe9,
 };
 
@@ -21671,7 +21689,7 @@ static const scui_image_t prj_image_src_repeat_arrow_04_backbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xce9b99,
+	.pixel.data_bin		 = 0xddfb4e,
 	.pixel.size_bin		 = 0x77,
 };
 
@@ -21680,7 +21698,7 @@ static const scui_image_t prj_image_src_repeat_arrow_05_backbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x12,
 	.pixel.height		 = 0x17,
-	.pixel.data_bin		 = 0xce9c10,
+	.pixel.data_bin		 = 0xddfbc5,
 	.pixel.size_bin		 = 0xd6,
 };
 
@@ -21689,7 +21707,7 @@ static const scui_image_t prj_image_src_repeat_arrow_06_backbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x1b,
-	.pixel.data_bin		 = 0xce9ce6,
+	.pixel.data_bin		 = 0xddfc9b,
 	.pixel.size_bin		 = 0x62,
 };
 
@@ -21698,7 +21716,7 @@ static const scui_image_t prj_image_src_repeat_box_alarm_01_left_downbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xce9d48,
+	.pixel.data_bin		 = 0xddfcfd,
 	.pixel.size_bin		 = 0xc5,
 };
 
@@ -21707,7 +21725,7 @@ static const scui_image_t prj_image_src_repeat_box_alarm_02_left_upbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xce9e0d,
+	.pixel.data_bin		 = 0xddfdc2,
 	.pixel.size_bin		 = 0xcb,
 };
 
@@ -21716,7 +21734,7 @@ static const scui_image_t prj_image_src_repeat_box_alarm_03_right_downbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xce9ed8,
+	.pixel.data_bin		 = 0xddfe8d,
 	.pixel.size_bin		 = 0xcb,
 };
 
@@ -21725,7 +21743,7 @@ static const scui_image_t prj_image_src_repeat_box_alarm_04_right_upbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xce9fa3,
+	.pixel.data_bin		 = 0xddff58,
 	.pixel.size_bin		 = 0xca,
 };
 
@@ -21734,7 +21752,7 @@ static const scui_image_t prj_image_src_repeat_box_grey_01_left_downbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea06d,
+	.pixel.data_bin		 = 0xde0022,
 	.pixel.size_bin		 = 0xbb,
 };
 
@@ -21743,7 +21761,7 @@ static const scui_image_t prj_image_src_repeat_box_grey_02_left_upbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea128,
+	.pixel.data_bin		 = 0xde00dd,
 	.pixel.size_bin		 = 0xc3,
 };
 
@@ -21752,7 +21770,7 @@ static const scui_image_t prj_image_src_repeat_box_grey_03_right_downbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea1eb,
+	.pixel.data_bin		 = 0xde01a0,
 	.pixel.size_bin		 = 0xc4,
 };
 
@@ -21761,7 +21779,7 @@ static const scui_image_t prj_image_src_repeat_box_grey_04_right_upbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea2af,
+	.pixel.data_bin		 = 0xde0264,
 	.pixel.size_bin		 = 0xc3,
 };
 
@@ -21770,7 +21788,7 @@ static const scui_image_t prj_image_src_repeat_box_sleep_breathe_01_left_downbmp
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea372,
+	.pixel.data_bin		 = 0xde0327,
 	.pixel.size_bin		 = 0xca,
 };
 
@@ -21779,7 +21797,7 @@ static const scui_image_t prj_image_src_repeat_box_sleep_breathe_02_left_upbmp =
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea43c,
+	.pixel.data_bin		 = 0xde03f1,
 	.pixel.size_bin		 = 0xcd,
 };
 
@@ -21788,7 +21806,7 @@ static const scui_image_t prj_image_src_repeat_box_sleep_breathe_03_right_downbm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea509,
+	.pixel.data_bin		 = 0xde04be,
 	.pixel.size_bin		 = 0xd6,
 };
 
@@ -21797,7 +21815,7 @@ static const scui_image_t prj_image_src_repeat_box_sleep_breathe_04_right_upbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea5df,
+	.pixel.data_bin		 = 0xde0594,
 	.pixel.size_bin		 = 0xce,
 };
 
@@ -21806,7 +21824,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_01_left_downbm
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea6ad,
+	.pixel.data_bin		 = 0xde0662,
 	.pixel.size_bin		 = 0xbf,
 };
 
@@ -21815,7 +21833,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_02_left_upbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea76c,
+	.pixel.data_bin		 = 0xde0721,
 	.pixel.size_bin		 = 0xc6,
 };
 
@@ -21824,7 +21842,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_03_right_downb
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea832,
+	.pixel.data_bin		 = 0xde07e7,
 	.pixel.size_bin		 = 0xc9,
 };
 
@@ -21833,7 +21851,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_04_right_upbmp
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea8fb,
+	.pixel.data_bin		 = 0xde08b0,
 	.pixel.size_bin		 = 0xcb,
 };
 
@@ -21842,7 +21860,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_dis_01_left_do
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcea9c6,
+	.pixel.data_bin		 = 0xde097b,
 	.pixel.size_bin		 = 0xc5,
 };
 
@@ -21851,7 +21869,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_dis_02_left_up
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceaa8b,
+	.pixel.data_bin		 = 0xde0a40,
 	.pixel.size_bin		 = 0xc9,
 };
 
@@ -21860,7 +21878,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_dis_03_right_d
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceab54,
+	.pixel.data_bin		 = 0xde0b09,
 	.pixel.size_bin		 = 0xcf,
 };
 
@@ -21869,7 +21887,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_dis_04_right_u
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceac23,
+	.pixel.data_bin		 = 0xde0bd8,
 	.pixel.size_bin		 = 0xc9,
 };
 
@@ -21878,7 +21896,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_heart_01_left_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceacec,
+	.pixel.data_bin		 = 0xde0ca1,
 	.pixel.size_bin		 = 0xc4,
 };
 
@@ -21887,7 +21905,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_heart_02_left_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceadb0,
+	.pixel.data_bin		 = 0xde0d65,
 	.pixel.size_bin		 = 0xc9,
 };
 
@@ -21896,7 +21914,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_heart_03_right
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceae79,
+	.pixel.data_bin		 = 0xde0e2e,
 	.pixel.size_bin		 = 0xc4,
 };
 
@@ -21905,7 +21923,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_heart_04_right
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceaf3d,
+	.pixel.data_bin		 = 0xde0ef2,
 	.pixel.size_bin		 = 0xc1,
 };
 
@@ -21914,7 +21932,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_01_left_d
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceaffe,
+	.pixel.data_bin		 = 0xde0fb3,
 	.pixel.size_bin		 = 0xc5,
 };
 
@@ -21923,7 +21941,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_02_left_u
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb0c3,
+	.pixel.data_bin		 = 0xde1078,
 	.pixel.size_bin		 = 0xcb,
 };
 
@@ -21932,7 +21950,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_03_right_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb18e,
+	.pixel.data_bin		 = 0xde1143,
 	.pixel.size_bin		 = 0xc7,
 };
 
@@ -21941,7 +21959,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_04_right_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb255,
+	.pixel.data_bin		 = 0xde120a,
 	.pixel.size_bin		 = 0xc5,
 };
 
@@ -21950,7 +21968,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_time_01_left_d
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb31a,
+	.pixel.data_bin		 = 0xde12cf,
 	.pixel.size_bin		 = 0xc1,
 };
 
@@ -21959,7 +21977,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_time_02_left_u
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb3db,
+	.pixel.data_bin		 = 0xde1390,
 	.pixel.size_bin		 = 0xc8,
 };
 
@@ -21968,7 +21986,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_time_03_right_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb4a3,
+	.pixel.data_bin		 = 0xde1458,
 	.pixel.size_bin		 = 0xca,
 };
 
@@ -21977,7 +21995,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_time_04_right_
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb56d,
+	.pixel.data_bin		 = 0xde1522,
 	.pixel.size_bin		 = 0xc4,
 };
 
@@ -21986,7 +22004,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_01
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb631,
+	.pixel.data_bin		 = 0xde15e6,
 	.pixel.size_bin		 = 0xcd,
 };
 
@@ -21995,7 +22013,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_02
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb6fe,
+	.pixel.data_bin		 = 0xde16b3,
 	.pixel.size_bin		 = 0xd0,
 };
 
@@ -22004,7 +22022,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_03
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb7ce,
+	.pixel.data_bin		 = 0xde1783,
 	.pixel.size_bin		 = 0xd3,
 };
 
@@ -22013,7 +22031,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_04
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb8a1,
+	.pixel.data_bin		 = 0xde1856,
 	.pixel.size_bin		 = 0xcd,
 };
 
@@ -22022,7 +22040,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_01_left
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceb96e,
+	.pixel.data_bin		 = 0xde1923,
 	.pixel.size_bin		 = 0xcd,
 };
 
@@ -22031,7 +22049,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_02_left
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xceba3b,
+	.pixel.data_bin		 = 0xde19f0,
 	.pixel.size_bin		 = 0xcf,
 };
 
@@ -22040,7 +22058,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_03_righ
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcebb0a,
+	.pixel.data_bin		 = 0xde1abf,
 	.pixel.size_bin		 = 0xd3,
 };
 
@@ -22049,7 +22067,7 @@ static const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_04_righ
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcebbdd,
+	.pixel.data_bin		 = 0xde1b92,
 	.pixel.size_bin		 = 0xcb,
 };
 
@@ -22058,7 +22076,7 @@ static const scui_image_t prj_image_src_repeat_box_timer_01_left_downbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcebca8,
+	.pixel.data_bin		 = 0xde1c5d,
 	.pixel.size_bin		 = 0xc7,
 };
 
@@ -22067,7 +22085,7 @@ static const scui_image_t prj_image_src_repeat_box_timer_02_left_upbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcebd6f,
+	.pixel.data_bin		 = 0xde1d24,
 	.pixel.size_bin		 = 0xc6,
 };
 
@@ -22076,7 +22094,7 @@ static const scui_image_t prj_image_src_repeat_box_timer_03_right_downbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcebe35,
+	.pixel.data_bin		 = 0xde1dea,
 	.pixel.size_bin		 = 0xc9,
 };
 
@@ -22085,7 +22103,7 @@ static const scui_image_t prj_image_src_repeat_box_timer_04_right_upbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x10,
-	.pixel.data_bin		 = 0xcebefe,
+	.pixel.data_bin		 = 0xde1eb3,
 	.pixel.size_bin		 = 0xc5,
 };
 
@@ -22094,7 +22112,7 @@ static const scui_image_t prj_image_src_repeat_btn_01_card_mediunpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x15e,
 	.pixel.height		 = 0x64,
-	.pixel.data_bin		 = 0xcebfc3,
+	.pixel.data_bin		 = 0xde1f78,
 	.pixel.size_bin		 = 0xbe1,
 };
 
@@ -22103,7 +22121,7 @@ static const scui_image_t prj_image_src_repeat_btn_02_closebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcecba4,
+	.pixel.data_bin		 = 0xde2b59,
 	.pixel.size_bin		 = 0x386,
 };
 
@@ -22112,7 +22130,7 @@ static const scui_image_t prj_image_src_repeat_btn_04_delete_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xb0,
 	.pixel.height		 = 0x74,
-	.pixel.data_bin		 = 0xcecf2a,
+	.pixel.data_bin		 = 0xde2edf,
 	.pixel.size_bin		 = 0x4ef,
 };
 
@@ -22121,7 +22139,7 @@ static const scui_image_t prj_image_src_repeat_btn_05_delete_02bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xb0,
 	.pixel.height		 = 0x64,
-	.pixel.data_bin		 = 0xced419,
+	.pixel.data_bin		 = 0xde33ce,
 	.pixel.size_bin		 = 0x4d8,
 };
 
@@ -22130,7 +22148,7 @@ static const scui_image_t prj_image_src_repeat_btn_06_delete_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xced8f1,
+	.pixel.data_bin		 = 0xde38a6,
 	.pixel.size_bin		 = 0x555,
 };
 
@@ -22139,7 +22157,7 @@ static const scui_image_t prj_image_src_repeat_btn_11_ok_alarmbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcede46,
+	.pixel.data_bin		 = 0xde3dfb,
 	.pixel.size_bin		 = 0x571,
 };
 
@@ -22148,7 +22166,7 @@ static const scui_image_t prj_image_src_repeat_btn_12_ok_breathe_sleep_sportbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcee3b7,
+	.pixel.data_bin		 = 0xde436c,
 	.pixel.size_bin		 = 0x5ae,
 };
 
@@ -22157,7 +22175,7 @@ static const scui_image_t prj_image_src_repeat_btn_13_ok_callbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcee965,
+	.pixel.data_bin		 = 0xde491a,
 	.pixel.size_bin		 = 0x5b3,
 };
 
@@ -22166,7 +22184,7 @@ static const scui_image_t prj_image_src_repeat_btn_14_ok_heart_spo2_settingsbmp 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xceef18,
+	.pixel.data_bin		 = 0xde4ecd,
 	.pixel.size_bin		 = 0x574,
 };
 
@@ -22175,7 +22193,7 @@ static const scui_image_t prj_image_src_repeat_btn_15_ok_sport_disbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcef48c,
+	.pixel.data_bin		 = 0xde5441,
 	.pixel.size_bin		 = 0x582,
 };
 
@@ -22184,7 +22202,7 @@ static const scui_image_t prj_image_src_repeat_btn_16_ok_sport_dis_timebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcefa0e,
+	.pixel.data_bin		 = 0xde59c3,
 	.pixel.size_bin		 = 0x5bc,
 };
 
@@ -22193,7 +22211,7 @@ static const scui_image_t prj_image_src_repeat_btn_17_ok_sport_heartbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xceffca,
+	.pixel.data_bin		 = 0xde5f7f,
 	.pixel.size_bin		 = 0x531,
 };
 
@@ -22202,7 +22220,7 @@ static const scui_image_t prj_image_src_repeat_btn_18_ok_sport_kcalbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcf04fb,
+	.pixel.data_bin		 = 0xde64b0,
 	.pixel.size_bin		 = 0x58f,
 };
 
@@ -22211,7 +22229,7 @@ static const scui_image_t prj_image_src_repeat_btn_19_ok_sport_timebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcf0a8a,
+	.pixel.data_bin		 = 0xde6a3f,
 	.pixel.size_bin		 = 0x581,
 };
 
@@ -22220,7 +22238,7 @@ static const scui_image_t prj_image_src_repeat_btn_20_ok_sport_trip_numberbmp = 
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcf100b,
+	.pixel.data_bin		 = 0xde6fc0,
 	.pixel.size_bin		 = 0x5a0,
 };
 
@@ -22229,7 +22247,7 @@ static const scui_image_t prj_image_src_repeat_btn_21_retey_stressbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcf15ab,
+	.pixel.data_bin		 = 0xde7560,
 	.pixel.size_bin		 = 0x6c2,
 };
 
@@ -22238,7 +22256,7 @@ static const scui_image_t prj_image_src_repeat_btn_22_retry_heartbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x62,
 	.pixel.height		 = 0x62,
-	.pixel.data_bin		 = 0xcf1c6d,
+	.pixel.data_bin		 = 0xde7c22,
 	.pixel.size_bin		 = 0x67c,
 };
 
@@ -22247,7 +22265,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_01_d
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf22e9,
+	.pixel.data_bin		 = 0xde829e,
 	.pixel.size_bin		 = 0x167,
 };
 
@@ -22256,7 +22274,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_02_d
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf2450,
+	.pixel.data_bin		 = 0xde8405,
 	.pixel.size_bin		 = 0x16d,
 };
 
@@ -22265,7 +22283,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_03_d
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf25bd,
+	.pixel.data_bin		 = 0xde8572,
 	.pixel.size_bin		 = 0x157,
 };
 
@@ -22274,7 +22292,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_04_d
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf2714,
+	.pixel.data_bin		 = 0xde86c9,
 	.pixel.size_bin		 = 0x159,
 };
 
@@ -22283,7 +22301,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_05_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf286d,
+	.pixel.data_bin		 = 0xde8822,
 	.pixel.size_bin		 = 0x1a1,
 };
 
@@ -22292,7 +22310,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_06_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf2a0e,
+	.pixel.data_bin		 = 0xde89c3,
 	.pixel.size_bin		 = 0x196,
 };
 
@@ -22301,7 +22319,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_07_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf2ba4,
+	.pixel.data_bin		 = 0xde8b59,
 	.pixel.size_bin		 = 0x181,
 };
 
@@ -22310,7 +22328,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_08_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf2d25,
+	.pixel.data_bin		 = 0xde8cda,
 	.pixel.size_bin		 = 0x195,
 };
 
@@ -22319,7 +22337,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_09_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf2eba,
+	.pixel.data_bin		 = 0xde8e6f,
 	.pixel.size_bin		 = 0x1ab,
 };
 
@@ -22328,7 +22346,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_10_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf3065,
+	.pixel.data_bin		 = 0xde901a,
 	.pixel.size_bin		 = 0x1a5,
 };
 
@@ -22337,7 +22355,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_11_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf320a,
+	.pixel.data_bin		 = 0xde91bf,
 	.pixel.size_bin		 = 0x18b,
 };
 
@@ -22346,7 +22364,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_12_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf3395,
+	.pixel.data_bin		 = 0xde934a,
 	.pixel.size_bin		 = 0x199,
 };
 
@@ -22355,7 +22373,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_13_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf352e,
+	.pixel.data_bin		 = 0xde94e3,
 	.pixel.size_bin		 = 0x172,
 };
 
@@ -22364,7 +22382,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_14_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf36a0,
+	.pixel.data_bin		 = 0xde9655,
 	.pixel.size_bin		 = 0x166,
 };
 
@@ -22373,7 +22391,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_15_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf3806,
+	.pixel.data_bin		 = 0xde97bb,
 	.pixel.size_bin		 = 0x15c,
 };
 
@@ -22382,7 +22400,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_16_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf3962,
+	.pixel.data_bin		 = 0xde9917,
 	.pixel.size_bin		 = 0x161,
 };
 
@@ -22391,7 +22409,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_17_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf3ac3,
+	.pixel.data_bin		 = 0xde9a78,
 	.pixel.size_bin		 = 0x199,
 };
 
@@ -22400,7 +22418,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_18_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf3c5c,
+	.pixel.data_bin		 = 0xde9c11,
 	.pixel.size_bin		 = 0x192,
 };
 
@@ -22409,7 +22427,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_19_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf3dee,
+	.pixel.data_bin		 = 0xde9da3,
 	.pixel.size_bin		 = 0x17b,
 };
 
@@ -22418,7 +22436,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_20_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf3f69,
+	.pixel.data_bin		 = 0xde9f1e,
 	.pixel.size_bin		 = 0x188,
 };
 
@@ -22427,7 +22445,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_21_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf40f1,
+	.pixel.data_bin		 = 0xdea0a6,
 	.pixel.size_bin		 = 0x197,
 };
 
@@ -22436,7 +22454,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_22_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf4288,
+	.pixel.data_bin		 = 0xdea23d,
 	.pixel.size_bin		 = 0x191,
 };
 
@@ -22445,7 +22463,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_23_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf4419,
+	.pixel.data_bin		 = 0xdea3ce,
 	.pixel.size_bin		 = 0x179,
 };
 
@@ -22454,7 +22472,7 @@ static const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_24_j
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2e,
 	.pixel.height		 = 0x2e,
-	.pixel.data_bin		 = 0xcf4592,
+	.pixel.data_bin		 = 0xdea547,
 	.pixel.size_bin		 = 0x18a,
 };
 
@@ -22463,7 +22481,7 @@ static const scui_image_t prj_image_src_repeat_card_01_heartbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xe6,
-	.pixel.data_bin		 = 0xcf471c,
+	.pixel.data_bin		 = 0xdea6d1,
 	.pixel.size_bin		 = 0x3c68,
 };
 
@@ -22472,7 +22490,7 @@ static const scui_image_t prj_image_src_repeat_card_01_heart_01bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0xe6,
-	.pixel.data_bin		 = 0xcf8384,
+	.pixel.data_bin		 = 0xdee339,
 	.pixel.size_bin		 = 0x5c3,
 };
 
@@ -22481,7 +22499,7 @@ static const scui_image_t prj_image_src_repeat_card_02_small_downbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0x64,
-	.pixel.data_bin		 = 0xcf8947,
+	.pixel.data_bin		 = 0xdee8fc,
 	.pixel.size_bin		 = 0x313,
 };
 
@@ -22490,7 +22508,7 @@ static const scui_image_t prj_image_src_repeat_card_03_small_onbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x19a,
 	.pixel.height		 = 0x64,
-	.pixel.data_bin		 = 0xcf8c5a,
+	.pixel.data_bin		 = 0xdeec0f,
 	.pixel.size_bin		 = 0x315,
 };
 
@@ -22499,7 +22517,7 @@ static const scui_image_t prj_image_src_repeat_card_04_r36_1bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xcf8f6f,
+	.pixel.data_bin		 = 0xdeef24,
 	.pixel.size_bin		 = 0x131,
 };
 
@@ -22508,7 +22526,7 @@ static const scui_image_t prj_image_src_repeat_card_05_r36_2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xcf90a0,
+	.pixel.data_bin		 = 0xdef055,
 	.pixel.size_bin		 = 0x128,
 };
 
@@ -22517,7 +22535,7 @@ static const scui_image_t prj_image_src_repeat_card_06_r36_3bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xcf91c8,
+	.pixel.data_bin		 = 0xdef17d,
 	.pixel.size_bin		 = 0x11a,
 };
 
@@ -22526,7 +22544,7 @@ static const scui_image_t prj_image_src_repeat_card_07_r36_4bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xcf92e2,
+	.pixel.data_bin		 = 0xdef297,
 	.pixel.size_bin		 = 0x11a,
 };
 
@@ -22535,7 +22553,7 @@ static const scui_image_t prj_image_src_repeat_card_08_r36_5bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xcf93fc,
+	.pixel.data_bin		 = 0xdef3b1,
 	.pixel.size_bin		 = 0x13a,
 };
 
@@ -22544,7 +22562,7 @@ static const scui_image_t prj_image_src_repeat_card_09_r36_6bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xcf9536,
+	.pixel.data_bin		 = 0xdef4eb,
 	.pixel.size_bin		 = 0x136,
 };
 
@@ -22553,7 +22571,7 @@ static const scui_image_t prj_image_src_repeat_card_10_r36_7bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xcf966c,
+	.pixel.data_bin		 = 0xdef621,
 	.pixel.size_bin		 = 0x123,
 };
 
@@ -22562,7 +22580,7 @@ static const scui_image_t prj_image_src_repeat_card_11_r36_8bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xcf978f,
+	.pixel.data_bin		 = 0xdef744,
 	.pixel.size_bin		 = 0x124,
 };
 
@@ -22571,7 +22589,7 @@ static const scui_image_t prj_image_src_repeat_card_12_r40_1bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcf98b3,
+	.pixel.data_bin		 = 0xdef868,
 	.pixel.size_bin		 = 0x148,
 };
 
@@ -22580,7 +22598,7 @@ static const scui_image_t prj_image_src_repeat_card_13_r40_2bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcf99fb,
+	.pixel.data_bin		 = 0xdef9b0,
 	.pixel.size_bin		 = 0x141,
 };
 
@@ -22589,7 +22607,7 @@ static const scui_image_t prj_image_src_repeat_card_14_r40_3bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcf9b3c,
+	.pixel.data_bin		 = 0xdefaf1,
 	.pixel.size_bin		 = 0x131,
 };
 
@@ -22598,7 +22616,7 @@ static const scui_image_t prj_image_src_repeat_card_15_r40_4bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x28,
 	.pixel.height		 = 0x28,
-	.pixel.data_bin		 = 0xcf9c6d,
+	.pixel.data_bin		 = 0xdefc22,
 	.pixel.size_bin		 = 0x136,
 };
 
@@ -22607,7 +22625,7 @@ static const scui_image_t prj_image_src_repeat_control_01_goupng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0x2c,
-	.pixel.data_bin		 = 0xcf9da3,
+	.pixel.data_bin		 = 0xdefd58,
 	.pixel.size_bin		 = 0x507,
 };
 
@@ -22616,7 +22634,7 @@ static const scui_image_t prj_image_src_repeat_dot_01_greybmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0xcfa2aa,
+	.pixel.data_bin		 = 0xdf025f,
 	.pixel.size_bin		 = 0x6e,
 };
 
@@ -22625,7 +22643,7 @@ static const scui_image_t prj_image_src_repeat_dot_02_whitebmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0xcfa318,
+	.pixel.data_bin		 = 0xdf02cd,
 	.pixel.size_bin		 = 0x75,
 };
 
@@ -22634,7 +22652,7 @@ static const scui_image_t prj_image_src_repeat_map_01_max_heartbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1e,
 	.pixel.height		 = 0x1a,
-	.pixel.data_bin		 = 0xcfa38d,
+	.pixel.data_bin		 = 0xdf0342,
 	.pixel.size_bin		 = 0x11b,
 };
 
@@ -22643,7 +22661,7 @@ static const scui_image_t prj_image_src_repeat_map_02_max_stressbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1e,
 	.pixel.height		 = 0x1a,
-	.pixel.data_bin		 = 0xcfa4a8,
+	.pixel.data_bin		 = 0xdf045d,
 	.pixel.size_bin		 = 0x11b,
 };
 
@@ -22652,7 +22670,7 @@ static const scui_image_t prj_image_src_repeat_map_03_minbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1e,
 	.pixel.height		 = 0x1a,
-	.pixel.data_bin		 = 0xcfa5c3,
+	.pixel.data_bin		 = 0xdf0578,
 	.pixel.size_bin		 = 0x124,
 };
 
@@ -22661,7 +22679,7 @@ static const scui_image_t prj_image_src_repeat_mask_01_big_downpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcfa6e7,
+	.pixel.data_bin		 = 0xdf069c,
 	.pixel.size_bin		 = 0x58e,
 };
 
@@ -22670,7 +22688,7 @@ static const scui_image_t prj_image_src_repeat_mask_02_big_uppng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xc8,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcfac75,
+	.pixel.data_bin		 = 0xdf0c2a,
 	.pixel.size_bin		 = 0x644,
 };
 
@@ -22679,7 +22697,7 @@ static const scui_image_t prj_image_src_repeat_mask_03_small_downpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcfb2b9,
+	.pixel.data_bin		 = 0xdf126e,
 	.pixel.size_bin		 = 0x37a,
 };
 
@@ -22688,7 +22706,7 @@ static const scui_image_t prj_image_src_repeat_mask_04_small_uppng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0x22,
-	.pixel.data_bin		 = 0xcfb633,
+	.pixel.data_bin		 = 0xdf15e8,
 	.pixel.size_bin		 = 0x3f0,
 };
 
@@ -22697,7 +22715,7 @@ static const scui_image_t prj_image_src_repeat_mask_05_big_downpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1aa,
 	.pixel.height		 = 0x89,
-	.pixel.data_bin		 = 0xcfba23,
+	.pixel.data_bin		 = 0xdf19d8,
 	.pixel.size_bin		 = 0x1073,
 };
 
@@ -22706,7 +22724,7 @@ static const scui_image_t prj_image_src_repeat_mask_06_big_uppng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x1aa,
 	.pixel.height		 = 0x8b,
-	.pixel.data_bin		 = 0xcfca96,
+	.pixel.data_bin		 = 0xdf2a4b,
 	.pixel.size_bin		 = 0xfa9,
 };
 
@@ -22715,7 +22733,7 @@ static const scui_image_t prj_image_src_repeat_mask_07_small_downpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x192,
 	.pixel.height		 = 0x70,
-	.pixel.data_bin		 = 0xcfda3f,
+	.pixel.data_bin		 = 0xdf39f4,
 	.pixel.size_bin		 = 0xdd1,
 };
 
@@ -22724,7 +22742,7 @@ static const scui_image_t prj_image_src_repeat_mask_08_small_uppng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x192,
 	.pixel.height		 = 0x70,
-	.pixel.data_bin		 = 0xcfe810,
+	.pixel.data_bin		 = 0xdf47c5,
 	.pixel.size_bin		 = 0xd14,
 };
 
@@ -22733,7 +22751,7 @@ static const scui_image_t prj_image_src_repeat_mask_09_all_maskpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xf0,
 	.pixel.height		 = 0xc6,
-	.pixel.data_bin		 = 0xcff524,
+	.pixel.data_bin		 = 0xdf54d9,
 	.pixel.size_bin		 = 0x16e2,
 };
 
@@ -22742,7 +22760,7 @@ static const scui_image_t prj_image_src_repeat_mask_10_all_maskpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0xa6,
 	.pixel.height		 = 0xc6,
-	.pixel.data_bin		 = 0xd00c06,
+	.pixel.data_bin		 = 0xdf6bbb,
 	.pixel.size_bin		 = 0x11ea,
 };
 
@@ -22751,7 +22769,7 @@ static const scui_image_t prj_image_src_repeat_mask_11_all_maskpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x5e,
 	.pixel.height		 = 0xc6,
-	.pixel.data_bin		 = 0xd01df0,
+	.pixel.data_bin		 = 0xdf7da5,
 	.pixel.size_bin		 = 0xc8e,
 };
 
@@ -22760,7 +22778,7 @@ static const scui_image_t prj_image_src_repeat_mask_12_all_maskpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x18e,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xd02a7e,
+	.pixel.data_bin		 = 0xdf8a33,
 	.pixel.size_bin		 = 0x4ca9,
 };
 
@@ -22769,7 +22787,7 @@ static const scui_image_t prj_image_src_repeat_slider_01_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0xec,
-	.pixel.data_bin		 = 0xd07727,
+	.pixel.data_bin		 = 0xdfd6dc,
 	.pixel.size_bin		 = 0x3d1,
 };
 
@@ -22778,7 +22796,7 @@ static const scui_image_t prj_image_src_repeat_slider_02_dotbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0xc,
 	.pixel.height		 = 0xc,
-	.pixel.data_bin		 = 0xd07af8,
+	.pixel.data_bin		 = 0xdfdaad,
 	.pixel.size_bin		 = 0x50,
 };
 
@@ -22787,7 +22805,7 @@ static const scui_image_t prj_image_src_repeat_slider_03_ringbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1ce,
 	.pixel.height		 = 0x1ce,
-	.pixel.data_bin		 = 0xd07b48,
+	.pixel.data_bin		 = 0xdfdafd,
 	.pixel.size_bin		 = 0x1469,
 };
 
@@ -22796,7 +22814,7 @@ static const scui_image_t prj_image_src_repeat_slider_04_bgpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2c,
 	.pixel.height		 = 0xec,
-	.pixel.data_bin		 = 0xd08fb1,
+	.pixel.data_bin		 = 0xdfef66,
 	.pixel.size_bin		 = 0xa05,
 };
 
@@ -22805,7 +22823,7 @@ static const scui_image_t prj_image_src_repeat_slider_jindutiao_01_00png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0x7b,
-	.pixel.data_bin		 = 0xd099b6,
+	.pixel.data_bin		 = 0xdff96b,
 	.pixel.size_bin		 = 0xafd,
 };
 
@@ -22814,7 +22832,7 @@ static const scui_image_t prj_image_src_repeat_slider_jindutiao_02_01png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x26,
 	.pixel.height		 = 0x54,
-	.pixel.data_bin		 = 0xd0a4b3,
+	.pixel.data_bin		 = 0xe00468,
 	.pixel.size_bin		 = 0x932,
 };
 
@@ -22823,7 +22841,7 @@ static const scui_image_t prj_image_src_repeat_slider_jindutiao_03_02png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x22,
 	.pixel.height		 = 0x41,
-	.pixel.data_bin		 = 0xd0ade5,
+	.pixel.data_bin		 = 0xe00d9a,
 	.pixel.size_bin		 = 0x812,
 };
 
@@ -22832,7 +22850,7 @@ static const scui_image_t prj_image_src_repeat_slider_jindutiao_04_03png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x1f,
-	.pixel.data_bin		 = 0xd0b5f7,
+	.pixel.data_bin		 = 0xe015ac,
 	.pixel.size_bin		 = 0x6c3,
 };
 
@@ -22841,7 +22859,7 @@ static const scui_image_t prj_image_src_repeat_slider_jindutiao_05_04png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x16,
 	.pixel.height		 = 0x1c,
-	.pixel.data_bin		 = 0xd0bcba,
+	.pixel.data_bin		 = 0xe01c6f,
 	.pixel.size_bin		 = 0x6b3,
 };
 
@@ -22850,7 +22868,7 @@ static const scui_image_t prj_image_src_repeat_slider_jindutiao_06_05png = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x10,
 	.pixel.height		 = 0x11,
-	.pixel.data_bin		 = 0xd0c36d,
+	.pixel.data_bin		 = 0xe02322,
 	.pixel.size_bin		 = 0x64d,
 };
 
@@ -22859,7 +22877,7 @@ static const scui_image_t prj_image_src_repeat_slider_jindutiao_07_bgpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x2a,
 	.pixel.height		 = 0xeb,
-	.pixel.data_bin		 = 0xd0c9ba,
+	.pixel.data_bin		 = 0xe0296f,
 	.pixel.size_bin		 = 0xa1a,
 };
 
@@ -22868,7 +22886,7 @@ static const scui_image_t prj_image_src_repeat_switch_01_alarmspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x46,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xd0d3d4,
+	.pixel.data_bin		 = 0xe03389,
 	.pixel.size_bin		 = 0x398,
 };
 
@@ -22877,7 +22895,7 @@ static const scui_image_t prj_image_src_repeat_switch_02_batterypng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x46,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xd0d76c,
+	.pixel.data_bin		 = 0xe03721,
 	.pixel.size_bin		 = 0x3a0,
 };
 
@@ -22886,7 +22904,7 @@ static const scui_image_t prj_image_src_repeat_switch_03_dotpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x24,
 	.pixel.height		 = 0x24,
-	.pixel.data_bin		 = 0xd0db0c,
+	.pixel.data_bin		 = 0xe03ac1,
 	.pixel.size_bin		 = 0x247,
 };
 
@@ -22895,7 +22913,7 @@ static const scui_image_t prj_image_src_repeat_switch_04_heartpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x46,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xd0dd53,
+	.pixel.data_bin		 = 0xe03d08,
 	.pixel.size_bin		 = 0x3ad,
 };
 
@@ -22904,7 +22922,7 @@ static const scui_image_t prj_image_src_repeat_switch_05_offpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x46,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xd0e100,
+	.pixel.data_bin		 = 0xe040b5,
 	.pixel.size_bin		 = 0x3a3,
 };
 
@@ -22913,7 +22931,7 @@ static const scui_image_t prj_image_src_repeat_switch_06_sleeppng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x46,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xd0e4a3,
+	.pixel.data_bin		 = 0xe04458,
 	.pixel.size_bin		 = 0x3a2,
 };
 
@@ -22922,7 +22940,7 @@ static const scui_image_t prj_image_src_repeat_switch_07_sport_settingspng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x46,
 	.pixel.height		 = 0x2a,
-	.pixel.data_bin		 = 0xd0e845,
+	.pixel.data_bin		 = 0xe047fa,
 	.pixel.size_bin		 = 0x365,
 };
 
@@ -22931,7 +22949,7 @@ static const scui_image_t prj_image_src_system_01_sospng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x50,
 	.pixel.height		 = 0x50,
-	.pixel.data_bin		 = 0xd0ebaa,
+	.pixel.data_bin		 = 0xe04b5f,
 	.pixel.size_bin		 = 0xd84,
 };
 
@@ -22940,7 +22958,7 @@ static const scui_image_t prj_image_src_system_02_turn_offpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x50,
 	.pixel.height		 = 0x50,
-	.pixel.data_bin		 = 0xd0f92e,
+	.pixel.data_bin		 = 0xe058e3,
 	.pixel.size_bin		 = 0xa84,
 };
 
@@ -22949,7 +22967,7 @@ static const scui_image_t prj_image_src_system_03_restartpng = {
 	.type				 = scui_image_type_png,
 	.pixel.width		 = 0x50,
 	.pixel.height		 = 0x50,
-	.pixel.data_bin		 = 0xd103b2,
+	.pixel.data_bin		 = 0xe06367,
 	.pixel.size_bin		 = 0x86e,
 };
 
@@ -22958,7 +22976,7 @@ static const scui_image_t prj_image_src_vedio_approvelottiejson = {
 	.type				 = scui_image_type_lottie,
 	.pixel.width		 = 0x0,
 	.pixel.height		 = 0x0,
-	.pixel.data_bin		 = 0xd10c20,
+	.pixel.data_bin		 = 0xe06bd5,
 	.pixel.size_bin		 = 0x1412,
 };
 
@@ -22967,7 +22985,7 @@ static const scui_image_t prj_image_src_vedio_birdsmp4 = {
 	.type				 = scui_image_type_mp4,
 	.pixel.width		 = 0x0,
 	.pixel.height		 = 0x0,
-	.pixel.data_bin		 = 0xd12032,
+	.pixel.data_bin		 = 0xe07fe7,
 	.pixel.size_bin		 = 0x14bac9,
 };
 
@@ -22976,7 +22994,7 @@ static const scui_image_t prj_image_src_vedio_bulbgif = {
 	.type				 = scui_image_type_gif,
 	.pixel.width		 = 0x0,
 	.pixel.height		 = 0x0,
-	.pixel.data_bin		 = 0xe5dafb,
+	.pixel.data_bin		 = 0xf53ab0,
 	.pixel.size_bin		 = 0x451d,
 };
 
@@ -22985,7 +23003,7 @@ static const scui_image_t prj_image_src_vedio_comfirmlottiejson = {
 	.type				 = scui_image_type_lottie,
 	.pixel.width		 = 0x0,
 	.pixel.height		 = 0x0,
-	.pixel.data_bin		 = 0xe62018,
+	.pixel.data_bin		 = 0xf57fcd,
 	.pixel.size_bin		 = 0x130f,
 };
 
@@ -22994,7 +23012,7 @@ static const scui_image_t prj_image_src_vedio_musiclottiejson = {
 	.type				 = scui_image_type_lottie,
 	.pixel.width		 = 0x0,
 	.pixel.height		 = 0x0,
-	.pixel.data_bin		 = 0xe63327,
+	.pixel.data_bin		 = 0xf592dc,
 	.pixel.size_bin		 = 0x1e65,
 };
 
@@ -23003,7 +23021,7 @@ static const scui_image_t prj_image_src_watchface_bg_01_bgbmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xe6518c,
+	.pixel.data_bin		 = 0xf5b141,
 	.pixel.size_bin		 = 0x37f9,
 };
 
@@ -23012,7 +23030,7 @@ static const scui_image_t prj_image_src_watchface_bg_01_bgjpg = {
 	.type				 = scui_image_type_jpg,
 	.pixel.width		 = 0x1d2,
 	.pixel.height		 = 0x1d2,
-	.pixel.data_bin		 = 0xe68985,
+	.pixel.data_bin		 = 0xf5e93a,
 	.pixel.size_bin		 = 0x82bd,
 };
 
@@ -23021,7 +23039,7 @@ static const scui_image_t prj_image_src_watchface_preview_01_00bmp = {
 	.type				 = scui_image_type_lz4,
 	.pixel.width		 = 0x17e,
 	.pixel.height		 = 0x12a,
-	.pixel.data_bin		 = 0xe70c42,
+	.pixel.data_bin		 = 0xf66bf7,
 	.pixel.size_bin		 = 0x4742,
 };
 
@@ -23030,11 +23048,11 @@ static const scui_image_t prj_image_src_watchface_preview_01_00jpg = {
 	.type				 = scui_image_type_jpg,
 	.pixel.width		 = 0x17e,
 	.pixel.height		 = 0x12a,
-	.pixel.data_bin		 = 0xe75384,
+	.pixel.data_bin		 = 0xf6b339,
 	.pixel.size_bin		 = 0x66d0,
 };
 
-const void * const scui_image_parser_table[2559] = {
+const void * const scui_image_parser_table[2561] = {
 	(void *)&prj_image_src_00_3d_AnalogClock_0jpg,
 	(void *)&prj_image_src_00_3d_AnalogClock_00png,
 	(void *)&prj_image_src_00_3d_AnalogClock_01png,
@@ -23289,6 +23307,8 @@ const void * const scui_image_parser_table[2559] = {
 	(void *)&prj_image_src_00_3d_Soccer_weatherbmp,
 	(void *)&prj_image_src_00_3d_Trans_Lightpng,
 	(void *)&prj_image_src_00_3d_Trans_Light_rawpng,
+	(void *)&prj_image_src_00_3d_Trans_Light_raw_HPbmp,
+	(void *)&prj_image_src_00_3d_Trans_Light_raw_HPpng,
 	(void *)&prj_image_src_00_3d_Wave_Board00png,
 	(void *)&prj_image_src_00_3d_Wave_Board01png,
 	(void *)&prj_image_src_00_3d_Wave_Board02png,

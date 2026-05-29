@@ -115,6 +115,9 @@ static void scui_window_switch_ready(void)
         scui_widget_show(handle_c, false);
     if (handle_t != SCUI_HANDLE_INVALID && scui_handle_unmap(handle_t))
         scui_widget_show(handle_t, false);
+    
+    /* 失活当前界面 */
+    scui_window_active(SCUI_HANDLE_SYSTEM);
 }
 
 /*@brief 窗口切换完成
