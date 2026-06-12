@@ -143,6 +143,7 @@ void scui_xwatch_invoke(scui_event_t *event)
                     scui_coord_t image_w = scui_image_w(xwatch->image[idx_angle]);
                     scui_coord_t image_h = scui_image_h(xwatch->image[idx_angle]);
                     scui_area_t  image_clip = {.w = image_w, .h = image_h,};
+                    scui_area_t  image_clip_reb = image_clip;
                     
                     scui_face2_t image2_clip = {0};
                     scui_face3_t image3_clip = {0};
@@ -156,69 +157,55 @@ void scui_xwatch_invoke(scui_event_t *event)
                     if (!scui_area_inter2(&clip_widget, &image_clip))
                          break;
                     
-                    #if 0
-                    /* 是整体区域剪除 */
-                    /* 从控件区域缩小到图片完全绘制区域 */
-                    scui_widget_draw(event->object, &image_clip, false);
-                    #else
-                    /* 如果接近水平或者垂直, 此时无需分段 */
-                    scui_multi_t angle_near = angle[idx_angle];
-                    angle_near = scui_mabs(angle_near, 90);
-                    angle_near = scui_min(angle_near, 90 - angle_near);
-                    /* 计算与xy轴线最小夹角小于制定值即可(一个单元格6度,选定单元格) */
-                    if (angle_near < 6) {
-                        scui_widget_draw(event->object, &image_clip, false);
+                    /*FPB分段:比率超过阈值触发,沿Y轴切片
+                     *接近0/90度时比率≈1.0不触发,绕过
+                     *scui_widget_draw_frag水平不稳定
+                     */
+                    const scui_coord3_t fpb_limit_s = 2.0f;  /* 触发阈值 */
+                    const scui_coord3_t fpb_limit_m = 3.2f;  /* 45°最大比率 */
+                    const scui_coord_t  fpb_seg_min = 2;     /* 分段下限 */
+                    const scui_coord_t  fpb_seg_max = 13;    /* 分段上限 */
+                    
+                    /* 计算是否需要分段 */
+                    scui_coord3_t image_size  = scui_area_size(&image_clip_reb);
+                    scui_coord3_t widget_size = scui_area_size(&clip_widget);
+                    scui_coord3_t fpb_ratio_c = widget_size / image_size;
+                    if (widget_size <= image_size * fpb_limit_s) {
+                        scui_widget_draw(event->object, &clip_widget, false);
                         continue;
                     }
                     
-                    /* 进行最小分段扫描 */
-                    const scui_multi_t scan_seg = 10; // 分段限制
-                    scui_multi_t vmin  = scui_min(image_w, image_h); // 最小高度
-                    scui_multi_t vfrag = scui_max(vmin, clip_widget.h / scan_seg);
+                    /* 均匀线性映射 [limit_s, limit_m] → [seg_min, seg_max] */
+                    scui_coord_t num_seg = scui_map(fpb_ratio_c,
+                        fpb_limit_s, fpb_limit_m, fpb_seg_min, fpb_seg_max);
+                    
+                    /* 沿Y轴水平分段, 逐条带求交绘制 */
+                    scui_coord_t vfrag = clip_widget.h / num_seg;
+                    if (vfrag < 1) vfrag = 1;
+                    
                     scui_multi_t sumpox = 0;
                     scui_area_t  clip_frag = {
                         .x = clip_widget.x,
                         .w = clip_widget.w,
                     };
                     
-                    clip_frag.h = vfrag; /* 通过初始检测 */
-                    for (scui_multi_t vofs = 0; vofs < clip_widget.h; vofs += clip_frag.h) {
-                        /* 重定向扫描区域 */
-                        clip_frag.y = clip_widget.y + vofs;
-                        clip_frag.h = clip_widget.h - vofs < vfrag ? clip_widget.h - vofs : vfrag;
+                    for (scui_coord_t seg = 0; seg < num_seg; seg++) {
+                        clip_frag.y = clip_widget.y + (scui_coord_t)(seg * vfrag);
+                        clip_frag.h = (seg == num_seg - 1) ? (clip_widget.y + clip_widget.h - clip_frag.y) : vfrag;
                         
                         scui_area_t draw_clip = clip_frag;
-                        /* 这里脏矩阵计算重绘区域还有问题(?) */
                         if (scui_widget_draw_frag(&draw_clip, &clip_frag, &image2_clip)) {
-                            
-                            #if 0
-                            SCUI_LOG_INFO("draw_clip<%3d,%3d,%3d,%3d>",
-                                draw_clip.x, draw_clip.y,
-                                draw_clip.w, draw_clip.h);
-                            
-                            SCUI_LOG_INFO("draw_clip<%3d,%3d,%3d,%3d>"
-                                          "clip_frag<%3d,%3d,%3d,%3d>"
-                                          "image2_clip<%3.2f,%3.2f><%3.2f,%3.2f><%3.2f,%3.2f><%3.2f,%3.2f>",
-                                
-                                draw_clip.x, draw_clip.y,
-                                draw_clip.w, draw_clip.h,
-                                
-                                clip_frag.x, clip_frag.y,
-                                clip_frag.w, clip_frag.h,
-                                
-                                image2_clip.point2[0].x, image2_clip.point2[0].y,
-                                image2_clip.point2[1].x, image2_clip.point2[1].y,
-                                image2_clip.point2[2].x, image2_clip.point2[2].y,
-                                image2_clip.point2[3].x, image2_clip.point2[3].y);
-                            #endif
-                            
                             scui_widget_draw(event->object, &draw_clip, false);
                             sumpox += scui_area_size(&draw_clip);
                         }
                     }
-                    SCUI_LOG_INFO("draw idx:%d sumpox:%d, pct:%.1f%%", idx_angle, sumpox,
-                        (float)sumpox / (float)scui_area_size(&clip_widget));
                     
+                    SCUI_LOG_WARN("draw idx:%d ratio:%.1f seg:%d sumpox:%d pct:%.1f%%", idx_angle,
+                        fpb_ratio_c, num_seg, sumpox, sumpox / widget_size * 100.0);
+                    
+                    #if 0
+                    /* 对比: 不分段直接整体绘制 */
+                    scui_widget_draw(event->object, &image_clip, false);
                     #endif
                 }
             }

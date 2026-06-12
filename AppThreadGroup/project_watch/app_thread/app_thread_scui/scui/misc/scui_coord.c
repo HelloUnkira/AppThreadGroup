@@ -548,5 +548,5 @@ scui_point_t scui_area_center(scui_area_t *area)
 scui_multi_t scui_area_size(scui_area_t *area)
 {
     SCUI_ASSERT(area->w >= 0 && area->h >= 0);
-    return area->w * area->h;
+    return (scui_multi_t)area->w * (scui_multi_t)area->h;
 }
