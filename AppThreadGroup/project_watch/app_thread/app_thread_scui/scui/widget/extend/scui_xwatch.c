@@ -200,7 +200,7 @@ void scui_xwatch_invoke(scui_event_t *event)
                         }
                     }
                     
-                    SCUI_LOG_WARN("draw idx:%d ratio:%.1f seg:%d sumpox:%d pct:%.1f%%", idx_angle,
+                    SCUI_LOG_INFO("draw idx:%d ratio:%.1f seg:%d sumpox:%d pct:%.1f%%", idx_angle,
                         fpb_ratio_c, num_seg, sumpox, sumpox / widget_size * 100.0);
                     
                     #if 0

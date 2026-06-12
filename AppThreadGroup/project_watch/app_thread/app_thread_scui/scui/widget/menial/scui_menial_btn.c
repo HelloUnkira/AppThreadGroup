@@ -23,7 +23,6 @@ void scui_menial_btn_make(bool maker, void *inst)
     } else {
         
         /* 未配置使用默认值 */
-        if (menial->data.btn.time == 0) menial->data.btn.time = SCUI_WIDGET_MENIAL_BTN_TIME;
         if (menial->data.btn.lim  == 0) menial->data.btn.lim  = SCUI_WIDGET_MENIAL_BTN_PCT;
         if (menial->data.btn.fixed)     menial->data.btn.lim  = 100;
     }
@@ -125,6 +124,11 @@ void scui_menial_btn_invoke(scui_event_t *event)
         scui_multi_t default_w = widget_clip.w;
         scui_multi_t default_h = widget_clip.h;
         
+        /* 同步全局time属性(默认值/可覆盖) */
+        scui_coord_t main_time = menial->data.btn.time;
+        if (main_time == 0) main_time = SCUI_WIDGET_MENIAL_BTN_TIME;
+        scui_object_prop_new(event->object, main, main_time, def, scui_object_data_number(main_time));
+        
         /* def<->pre */
         if (true) {
             /* color bg prop */
@@ -135,7 +139,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
             scui_object_tran_new2(event->object, rect_bg, rect_color, def, pre,
                 scui_object_data_color32(menial->data.btn.color[0].color_l),
                 scui_object_data_color32(menial->data.btn.color[0].color_d),
-                NULL, menial->data.btn.time, 0);
+                NULL, main_time, 0);
             
             /* width && height prop */
             scui_object_prop_new(event->object, rect_bg, rect_width,  def, scui_object_data_number(scale_w));
@@ -146,9 +150,9 @@ void scui_menial_btn_invoke(scui_event_t *event)
             if (!menial->data.btn.fixed) {
                 /* width && height tran */
                 scui_object_tran_new2(event->object, rect_bg, rect_width,  def, pre, scui_object_data_number(scale_w),
-                    scui_object_data_number(default_w), NULL, menial->data.btn.time, 0);
+                    scui_object_data_number(default_w), NULL, main_time, 0);
                 scui_object_tran_new2(event->object, rect_bg, rect_height, def, pre, scui_object_data_number(scale_h),
-                    scui_object_data_number(default_h), NULL, menial->data.btn.time, 0);
+                    scui_object_data_number(default_h), NULL, main_time, 0);
             }
         }
         
@@ -162,7 +166,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
             scui_object_tran_new2(event->object, rect_bg, rect_color, chk, pre,
                 scui_object_data_color32(menial->data.btn.color[1].color_l),
                 scui_object_data_color32(menial->data.btn.color[1].color_d),
-                NULL, menial->data.btn.time, 0);
+                NULL, main_time, 0);
             
             /* width && height prop */
             scui_object_prop_new(event->object, rect_bg, rect_width,  chk, scui_object_data_number(scale_w));
@@ -173,9 +177,9 @@ void scui_menial_btn_invoke(scui_event_t *event)
             if (!menial->data.btn.fixed) {
                 /* width && height tran */
                 scui_object_tran_new2(event->object, rect_bg, rect_width,  chk, pre, scui_object_data_number(scale_w),
-                    scui_object_data_number(default_w), NULL, menial->data.btn.time, 0);
+                    scui_object_data_number(default_w), NULL, main_time, 0);
                 scui_object_tran_new2(event->object, rect_bg, rect_height, chk, pre, scui_object_data_number(scale_h),
-                    scui_object_data_number(default_h), NULL, menial->data.btn.time, 0);
+                    scui_object_data_number(default_h), NULL, main_time, 0);
             }
         }
         break;

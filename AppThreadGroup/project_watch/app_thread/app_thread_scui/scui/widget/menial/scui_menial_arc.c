@@ -36,18 +36,10 @@ void scui_menial_arc_make(bool maker, void *inst)
         }
         
         /* 未配置使用默认值 */
-        if (menial->data.arc.time == 0)
-            menial->data.arc.time  = SCUI_WIDGET_MENIAL_ARC_TIME;
-        
         scui_coord3_t angle_s = menial->data.arc.angle_s;
         scui_coord3_t angle_e = menial->data.arc.angle_e;
         scui_coord3_t angle_d = scui_dist(angle_s, angle_e);
         menial->data.arc.angle_d = angle_d;
-        
-        if (!menial->data.arc.spinner) {
-            /* spinner的time不做计算, 默认按360度给入 */
-            menial->data.arc.time = menial->data.arc.time * angle_d / 360.0f;
-        }
     }
 }
 
@@ -95,9 +87,18 @@ void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, boo
     SCUI_LOG_INFO("tran(%d->%d)", tran_def.data_p.number, tran_def.data_n.number);
     
     if (anim) {
+        /* 同步time属性 */
+        scui_object_prop_t prop_time = {
+            .part  = scui_object_part_main,
+            .state = scui_object_state_def,
+            .style = scui_object_style_main_time,
+        };
+        scui_object_prop_sync(handle, &prop_time);
+        
         scui_coord3_t angle_d = menial->data.arc.angle_d;
         scui_coord3_t val_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
-        tran_def.time = scui_map(val_dif, 0, angle_d, 0, menial->data.bar.time);
+        tran_def.time = scui_map(val_dif, 0, angle_d, 0,
+            prop_time.data.number * angle_d / 360.0f);
         
         /* 过渡动画更新 */
         scui_object_tran_add(handle, &tran_def);
@@ -165,8 +166,16 @@ void scui_menial_arc_invoke(scui_event_t *event)
     case scui_event_anima_elapse: {
         
         if (menial->data.arc.spinner) {
+            /* 同步time属性(旋转速度) */
+            scui_object_prop_t prop_time = {
+                .part  = scui_object_part_main,
+                .state = scui_object_state_def,
+                .style = scui_object_style_main_time,
+            };
+            scui_object_prop_sync(event->object, &prop_time);
+            
             scui_coord3_t angle_d = menial->data.arc.angle_d;
-            menial->data.arc.angle_c += scui_map(event->tick, 0, menial->data.arc.time, 0.0f, angle_d);
+            menial->data.arc.angle_c += scui_map(event->tick, 0, prop_time.data.number, 0.0f, angle_d);
             if (menial->data.arc.angle_c > 360) menial->data.arc.angle_c -= 360;
             
             /* 加载圆环前景(angle_s, angle_e) */
@@ -216,6 +225,14 @@ void scui_menial_arc_invoke(scui_event_t *event)
         scui_area_t widget_clip = scui_widget_clip(event->object);
         scui_object_sub_t sub = {0};
         
+        /* spinner的time不做计算, 默认按360度给入 */
+        if (!menial->data.arc.spinner) {
+            scui_coord3_t angle_s = menial->data.arc.angle_s;
+            scui_coord3_t angle_e = menial->data.arc.angle_e;
+            scui_coord3_t angle_d = scui_dist(angle_s, angle_e);
+            menial->data.arc.time = menial->data.arc.time * angle_d / 360.0f;
+        }
+        
         sub.arc.alpha.alpha        = scui_alpha_cover;
         sub.arc.angle_s.number     = 0;
         sub.arc.angle_e.number     = 360;
@@ -238,6 +255,11 @@ void scui_menial_arc_invoke(scui_event_t *event)
         sub.arc.color.color32 = menial->data.arc.color[1].color_s;
         sub.arc.color_grad.color32 = menial->data.arc.color[1].color_e;
         scui_object_prop_arc(event->object, &sub);
+        
+        /* 同步全局time属性(默认值/可覆盖) */
+        scui_coord_t main_time = menial->data.arc.time;
+        if (main_time == 0) main_time = SCUI_WIDGET_MENIAL_BTN_TIME;
+        scui_object_prop_new(event->object, main, main_time, def, scui_object_data_number(main_time));
         
         scui_menial_arc_update_value(event->object, 0.0f, false);
         break;

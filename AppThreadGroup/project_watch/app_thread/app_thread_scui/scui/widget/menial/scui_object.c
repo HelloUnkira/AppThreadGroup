@@ -242,6 +242,9 @@ void scui_object_tran_add(scui_handle_t handle, scui_object_tran_t *tran)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_object_t *object = (void *)widget;
     
+    /* 过渡属性需要提供time属性 */
+    SCUI_ASSERT(tran->time != 0);
+    
     #if 0
     /* 唯一实例:以旧换新: */
     SCUI_ASSERT(scui_object_tran_check(tran));

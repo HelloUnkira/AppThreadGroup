@@ -32,17 +32,6 @@ void scui_menial_bar_make(bool maker, void *inst)
         /* 未配置使用默认值 */
         if (SCUI_IS_ZERO_VAL_F(menial->data.bar.value_lim))
             menial->data.bar.value_lim = 100.0f;
-        
-        /* 未配置使用默认值 */
-        if (menial->data.bar.time == 0 && menial->data.bar.ext_slider)
-            menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_EXT_SLIDER_TIME;
-        if (menial->data.bar.time == 0 && menial->data.bar.ext_switch)
-            menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_EXT_SWITCH_TIME;
-        if (menial->data.bar.time == 0)
-            menial->data.bar.time  = SCUI_WIDGET_MENIAL_BAR_TIME;
-        
-        scui_coord3_t value_d = menial->data.bar.value_lim;
-        menial->data.bar.time = menial->data.bar.time * value_d / 100.0f;
     }
 }
 
@@ -114,8 +103,18 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
     SCUI_LOG_INFO("tran(%d->%d)", tran_def.data_p.number, tran_def.data_n.number);
     
     if (anim) {
-        scui_coord_t val_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
-        tran_def.time = scui_map(val_dif, 0, size_max, 0, menial->data.bar.time);
+        /* 同步time属性 */
+        scui_object_prop_t prop_time = {
+            .part  = scui_object_part_main,
+            .state = scui_object_state_def,
+            .style = scui_object_style_main_time,
+        };
+        scui_object_prop_sync(handle, &prop_time);
+        
+        scui_coord_t  val_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
+        scui_coord3_t value_d = menial->data.bar.value_lim;
+        tran_def.time = scui_map(val_dif, 0, size_max, 0,
+            prop_time.data.number * value_d / 100.0f);
         
         /* 过渡动画更新 */
         scui_object_tran_add(handle, &tran_def);
@@ -227,6 +226,11 @@ void scui_menial_bar_invoke(scui_event_t *event)
         
         /* 需要按下变色时考虑(需要过渡动画) */
         // sub.state = scui_object_state_pre;
+        
+        /* 同步全局time属性(默认值/可覆盖) */
+        scui_coord_t main_time = menial->data.bar.time;
+        if (main_time == 0) main_time = SCUI_WIDGET_MENIAL_BTN_TIME;
+        scui_object_prop_new(event->object, main, main_time, def, scui_object_data_number(main_time));
         
         scui_menial_bar_update_value(event->object, 0.0f, false);
         break;

@@ -18,6 +18,7 @@ typedef enum {
     scui_object_type_sub1  = 0x0100,
     scui_object_type_sub2  = 0x0200,
     scui_object_type_sub3  = 0x0300,
+    scui_object_type_sub4  = 0x0400,
     
     /*************************************************************************/
     scui_object_state_sub = scui_object_type_state + scui_object_type_sub,
@@ -29,7 +30,7 @@ typedef enum {
     /*************************************************************************/
     scui_object_part_sub = scui_object_type_part + scui_object_type_sub,
     
-    /* 背景/前景/边界/盒子/阴影 */
+    scui_object_part_main,      /* 全局 */
     scui_object_part_rect_bg,   /* 背景 */
     scui_object_part_rect_fg,   /* 前景 */
     scui_object_part_rect_edge, /* 边界(可选扩充) */
@@ -40,7 +41,14 @@ typedef enum {
     scui_object_part_line,      /*  */
     
     /*************************************************************************/
-    scui_object_style_rect_s = scui_object_type_style + scui_object_type_sub1,
+    scui_object_style_main_time_s = scui_object_type_style + scui_object_type_sub1,
+    
+    scui_object_style_main_time,
+    
+    scui_object_style_main_time_e,
+    /*************************************************************************/
+    /* 背景/前景/边界/盒子/阴影 */
+    scui_object_style_rect_s = scui_object_type_style + scui_object_type_sub2,
     
     scui_object_style_rect_alpha,
     scui_object_style_rect_color,
@@ -55,7 +63,8 @@ typedef enum {
     
     scui_object_style_rect_e,
     /*************************************************************************/
-    scui_object_style_arc_s = scui_object_type_style + scui_object_type_sub2,
+    /* 弧形 */
+    scui_object_style_arc_s = scui_object_type_style + scui_object_type_sub3,
     
     scui_object_style_arc_alpha,
     scui_object_style_arc_color,
@@ -69,7 +78,8 @@ typedef enum {
     
     scui_object_style_arc_e,
     /*************************************************************************/
-    scui_object_style_line_s = scui_object_type_style + scui_object_type_sub3,
+    /* 线 */
+    scui_object_style_line_s = scui_object_type_style + scui_object_type_sub4,
     
     scui_object_style_line_alpha,
     scui_object_style_line_color,
@@ -80,7 +90,6 @@ typedef enum {
     scui_object_style_line_multi,
     
     scui_object_style_line_e,
-    /*************************************************************************/
     
 } scui_object_type_t;
 
