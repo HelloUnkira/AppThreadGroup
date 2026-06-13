@@ -1,37 +1,31 @@
 {
-    "type": "scene",
+    "type":   "scene",
     "widget": [
         {
-            "widget.type":                  "scui_widget_type_window",
-            "widget.style.fully_bg":        "true",
-            "widget.style.sched_anima":     "true",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_key":       "true",
-            "widget.clip.w":                "SCUI_HOR_RES",
-            "widget.clip.h":                "SCUI_VER_RES",
-            "widget.myself":                "SCUI_UI_SCENE_MINI_CARD",
-            "widget.event_cb":              "scui_ui_scene_mini_card_event_proc",
-            "widget.child_num":             "10",
-            "preload":                      "1",
-            "level":                        "0",
-            "buffer":                       "true"
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.style.indev_key":   "true",
+            "widget.myself":            "SCUI_UI_SCENE_MINI_CARD",
+            "widget.event_cb":          "scui_ui_scene_mini_card_event_proc",
+            "widget.child_num":         "10",
+            "preload":                  "1"
         },
         {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.style.sched_anima":     "true",
-            "widget.clip.w":                "SCUI_HOR_RES",
-            "widget.clip.h":                "SCUI_VER_RES",
-            "widget.myself":                "SCUI_UI_SCENE_MINI_CARD_BAR_ARC",
-            "widget.parent":                "SCUI_UI_SCENE_MINI_CARD",
-            "widget.event_cb":              "scui_ui_scene_mini_card_bar_arc_event"
+            "widget.type":     "scui_widget_type_custom",
+            "widget.clip.w":   "SCUI_HOR_RES",
+            "widget.clip.h":   "SCUI_VER_RES",
+            "widget.myself":   "SCUI_UI_SCENE_MINI_CARD_BAR_ARC",
+            "widget.parent":   "SCUI_UI_SCENE_MINI_CARD",
+            "widget.event_cb": "scui_ui_scene_mini_card_bar_arc_event"
         },
         {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.w":                "SCUI_HOR_RES",
-            "widget.clip.h":                "SCUI_VER_RES",
-            "widget.myself":                "SCUI_UI_SCENE_MINI_CARD_MASK",
-            "widget.parent":                "SCUI_UI_SCENE_MINI_CARD",
-            "widget.event_cb":              "scui_ui_mask_all_event_proc"
+            "widget.type":     "scui_widget_type_custom",
+            "widget.clip.w":   "SCUI_HOR_RES",
+            "widget.clip.h":   "SCUI_VER_RES",
+            "widget.myself":   "SCUI_UI_SCENE_MINI_CARD_MASK",
+            "widget.parent":   "SCUI_UI_SCENE_MINI_CARD",
+            "widget.event_cb": "scui_ui_mask_all_event_proc"
         }
     ]
 }

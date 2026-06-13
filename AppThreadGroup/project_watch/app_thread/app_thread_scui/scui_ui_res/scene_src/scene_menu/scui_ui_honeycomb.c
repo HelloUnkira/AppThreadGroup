@@ -265,8 +265,9 @@ void scui_ui_scene_honeycomb_scroll_event_proc(scui_event_t *event)
         scui_ui_honeycomb_list_layout(list_layout, scui_ui_res_local->scale_ofs);
         
         scui_custom_maker_t custom_maker = {0};
-        scui_handle_t custom_handle         = SCUI_HANDLE_INVALID;
-        custom_maker.widget.type            = scui_widget_type_custom;
+        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
+        
+        scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
         custom_maker.widget.style.indev_ptr = true;
         custom_maker.widget.clip.w          = icon_w;
         custom_maker.widget.clip.h          = icon_h;

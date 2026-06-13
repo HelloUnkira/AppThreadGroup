@@ -116,12 +116,11 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         #define SCUI_SCROLL_LAYOUT_AUTO     1
         scui_scroll_maker_t scroll_maker = {0};
         scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
-        scroll_maker.widget.type = scui_widget_type_scroll;
+        
+        scui_widget_maker_def_cfg(&scroll_maker, scui_widget_type_scroll);
         scroll_maker.widget.style.fully_bg = true;
         scroll_maker.widget.style.sched_widget = true;
         scroll_maker.widget.style.indev_ptr = true;
-        scroll_maker.widget.style.indev_enc = true;
-        scroll_maker.widget.style.indev_key = true;
         scroll_maker.widget.clip.x = SCUI_HOR_RES / 6;
         scroll_maker.widget.clip.y = SCUI_VER_RES / 6;
         scroll_maker.widget.clip.w = SCUI_HOR_RES * 4 / 6;
@@ -136,17 +135,12 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         scroll_maker.fling_page = 5;
         scroll_maker.route_enc = 117;
         scroll_maker.route_key = 117;
-        scroll_maker.keyid_fdir = SCUI_WIDGET_SCROLL_KEY_FDIR;
-        scroll_maker.keyid_bdir = SCUI_WIDGET_SCROLL_KEY_BDIR;
         
         #if SCUI_SCROLL_LAYOUT_AUTO
-        scroll_maker.pos = scui_opt_pos_c;
         // scroll_maker.pos = scui_opt_dir_hor;
         // scroll_maker.pos = scui_opt_dir_ver;
         // scroll_maker.dir = scui_opt_dir_hor;
-        scroll_maker.dir = scui_opt_dir_ver;
         #else
-        scroll_maker.pos = scui_opt_pos_c;
         // scroll_maker.pos = scui_opt_pos_l;
         // scroll_maker.pos = scui_opt_pos_r;
         // scroll_maker.pos = scui_opt_pos_u;
@@ -161,7 +155,8 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
-        custom_maker.widget.type   = scui_widget_type_custom;
+        
+        scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
         custom_maker.widget.style.fully_bg  = true;
         custom_maker.widget.style.indev_ptr = true;
         custom_maker.widget.clip.w = SCUI_HOR_RES / 6;
@@ -202,9 +197,10 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         #if 1
         // spinner test
         scui_custom_maker_t custom_maker_zero = {0};
+        
+        scui_widget_maker_def_cfg(&custom_maker_zero, scui_widget_type_custom);
         custom_maker = custom_maker_zero;
         
-        custom_maker.widget.type = scui_widget_type_custom;
         custom_maker.widget.parent = event->object;
         custom_maker.type = scui_custom_type_spinner;
         custom_maker.data.spinner.spinner = scui_image_prj_image_src_400X400pxbmp;

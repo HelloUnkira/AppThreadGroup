@@ -44,7 +44,8 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
         
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
-        custom_maker.widget.type = scui_widget_type_custom;
+        
+        scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
         custom_maker.widget.parent = event->object;
         custom_maker.widget.clip.x = 10 * 2;
         custom_maker.widget.clip.y = 10 * 2;
@@ -100,7 +101,8 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
         
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
-        custom_maker.widget.type = scui_widget_type_custom;
+        
+        scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
         custom_maker.widget.parent = event->object;
         custom_maker.widget.clip.x = 15;
         custom_maker.widget.clip.y = 15;

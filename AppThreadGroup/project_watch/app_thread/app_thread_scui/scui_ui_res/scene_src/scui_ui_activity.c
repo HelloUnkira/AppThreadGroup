@@ -138,8 +138,9 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         
         // 清空图像资源缓存
         scui_canvas_maker_t canvas_maker = {0};
-        scui_handle_t canvas_handle  = SCUI_HANDLE_INVALID;
-        canvas_maker.widget.type     = scui_widget_type_canvas;
+        scui_handle_t canvas_handle = SCUI_HANDLE_INVALID;
+        
+        scui_widget_maker_def_cfg(&canvas_maker, scui_widget_type_canvas);
         canvas_maker.widget.clip.w   = SCUI_HOR_RES;
         canvas_maker.widget.clip.h   = SCUI_VER_RES;
         canvas_maker.widget.event_cb = scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc;
@@ -172,8 +173,9 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         scui_string_maker_t string_maker = {0};
-        scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
-        string_maker.widget.type                = scui_widget_type_string;
+        scui_handle_t string_handle = SCUI_HANDLE_INVALID;
+        
+        scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
         string_maker.widget.parent              = event->object;
         string_maker.widget.clip.w              = SCUI_HOR_RES;
         string_maker.widget.clip.h              = 40;
@@ -347,7 +349,8 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         // chart hist
         scui_xchart_maker_t xchart_maker = {0};
         scui_handle_t xchart_handle = SCUI_HANDLE_INVALID;
-        xchart_maker.widget.type = scui_widget_type_xchart;
+        
+        scui_widget_maker_def_cfg(&xchart_maker, scui_widget_type_xchart);
         xchart_maker.widget.clip.x = 0;
         xchart_maker.widget.clip.y = 100;
         xchart_maker.widget.clip.w = SCUI_HOR_RES;
@@ -510,7 +513,8 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         // chart hist
         scui_xchart_maker_t xchart_maker = {0};
         scui_handle_t xchart_handle = SCUI_HANDLE_INVALID;
-        xchart_maker.widget.type = scui_widget_type_xchart;
+        
+        scui_widget_maker_def_cfg(&xchart_maker, scui_widget_type_xchart);
         xchart_maker.widget.clip.x = 0;
         xchart_maker.widget.clip.y = 100;
         xchart_maker.widget.clip.w = SCUI_HOR_RES;
@@ -674,7 +678,8 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         // chart hist
         scui_xchart_maker_t xchart_maker = {0};
         scui_handle_t xchart_handle = SCUI_HANDLE_INVALID;
-        xchart_maker.widget.type = scui_widget_type_xchart;
+        
+        scui_widget_maker_def_cfg(&xchart_maker, scui_widget_type_xchart);
         xchart_maker.widget.clip.x = 0;
         xchart_maker.widget.clip.y = 100;
         xchart_maker.widget.clip.w = SCUI_HOR_RES;

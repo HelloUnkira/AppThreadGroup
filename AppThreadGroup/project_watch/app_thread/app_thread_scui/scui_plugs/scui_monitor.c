@@ -180,7 +180,8 @@ void scui_monitor_event_cb(scui_event_t *event)
         /* 创建显示信息文本,都是英文 */
         scui_string_maker_t string_maker = {0};
         scui_handle_t string_handle = SCUI_HANDLE_INVALID;
-        string_maker.widget.type                = scui_widget_type_string;
+        
+        scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
         string_maker.widget.parent              = event->object;
         string_maker.widget.clip.x              = 0;
         string_maker.widget.clip.y              = 0;
@@ -240,7 +241,8 @@ void scui_monitor_show(bool buffer)
         
         scui_window_maker_t window_maker = {0};
         scui_handle_t window_handle = SCUI_HANDLE_INVALID;
-        window_maker.widget.type = scui_widget_type_window;
+        
+        scui_widget_maker_def_cfg(&window_maker, scui_widget_type_window);
         window_maker.widget.style.sched_anima = true;
         window_maker.widget.style.fully_bg = buffer;
         window_maker.widget.clip.x = 10;

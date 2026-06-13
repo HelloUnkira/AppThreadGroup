@@ -65,7 +65,8 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         // chart hist
         scui_xchart_maker_t xchart1_maker = {0};
         scui_handle_t xchart1_handle = SCUI_HANDLE_INVALID;
-        xchart1_maker.widget.type = scui_widget_type_xchart;
+        
+        scui_widget_maker_def_cfg(&xchart1_maker, scui_widget_type_xchart);
         xchart1_maker.widget.style.indev_ptr = true;
         xchart1_maker.widget.style.indev_enc = true;
         xchart1_maker.widget.style.indev_key = true;
@@ -93,7 +94,8 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         // chart line
         scui_xchart_maker_t xchart2_maker = {0};
         scui_handle_t xchart2_handle = SCUI_HANDLE_INVALID;
-        xchart2_maker.widget.type = scui_widget_type_xchart;
+        
+        scui_widget_maker_def_cfg(&xchart2_maker, scui_widget_type_xchart);
         xchart2_maker.widget.style.indev_ptr = true;
         xchart2_maker.widget.style.indev_enc = true;
         xchart2_maker.widget.style.indev_key = true;
@@ -129,7 +131,8 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         #if SCUI_MEM_FEAT_MINI == 0
         // digit picker == scroll + string * num
         scui_roller_maker_t roller_maker = {0};
-        roller_maker.widget.type            = scui_widget_type_roller;
+        
+        scui_widget_maker_def_cfg(&roller_maker, scui_widget_type_roller);
         roller_maker.widget.clip.w          = SCUI_HOR_RES * 11 / 25;
         roller_maker.widget.clip.h          = SCUI_VER_RES * 11 / 25;
         roller_maker.widget.parent          = SCUI_UI_SCENE_FLOAT_4;
@@ -139,7 +142,8 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         roller_maker.scroll.loop = true;
         
         scui_string_maker_t string_maker = {0};
-        string_maker.widget.type                = scui_widget_type_string;
+        
+        scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
         string_maker.args.align_hor             = 2;
         string_maker.args.align_ver             = 2;
         string_maker.args.color.color_s.full    = 0xFF0000FF;

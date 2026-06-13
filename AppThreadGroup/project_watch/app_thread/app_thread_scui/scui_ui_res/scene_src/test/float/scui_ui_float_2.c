@@ -126,7 +126,8 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         scui_custom_data_t custom_data_zero = {0};
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
-        custom_maker.widget.type = scui_widget_type_custom;
+        
+        scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
         custom_maker.widget.parent = event->object;
         custom_maker.widget.style.fully_bg = true;
         
@@ -221,7 +222,8 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         #if 1
         scui_button_maker_t button_maker = {0};
         scui_handle_t button_handle = SCUI_HANDLE_INVALID;
-        button_maker.widget.type = scui_widget_type_button;
+        
+        scui_widget_maker_def_cfg(&button_maker, scui_widget_type_button);
         button_maker.widget.style.fully_bg = true;
         button_maker.widget.parent = event->object;
         button_maker.widget.event_cb = scui_ui_scene_float_2_button_event_proc;

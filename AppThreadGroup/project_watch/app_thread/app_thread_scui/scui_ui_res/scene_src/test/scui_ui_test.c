@@ -31,7 +31,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         
         #if 1 /* test string widget */
         scui_string_maker_t string_maker = {0};
-        string_maker.widget.type       = scui_widget_type_string;
+        
+        scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
         string_maker.widget.parent     = SCUI_UI_SCENE_TEST;
         string_maker.args.line_width   = 2;
         string_maker.args.mode_scroll  = 1;
@@ -113,7 +114,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         
         scui_xvedio_maker_t xvedio_maker = {0};
         scui_handle_t xvedio_handle = SCUI_HANDLE_INVALID;
-        xvedio_maker.widget.type    = scui_widget_type_xvedio;
+        
+        scui_widget_maker_def_cfg(&xvedio_maker, scui_widget_type_xvedio);
         xvedio_maker.widget.parent  = event->object;
         
         xvedio_maker.widget.clip.x   = SCUI_VER_RES * 7 / 8 - 40;

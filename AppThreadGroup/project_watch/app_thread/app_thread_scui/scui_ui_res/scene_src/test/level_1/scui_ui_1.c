@@ -114,7 +114,8 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         scui_menial_data_t menial_data_zero = {0};
         scui_menial_maker_t menial_maker = {0};
         scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
-        menial_maker.widget.type = scui_widget_type_menial;
+        
+        scui_widget_maker_def_cfg(&menial_maker, scui_widget_type_menial);
         menial_maker.widget.parent = event->object;
         
         #if 1
@@ -319,7 +320,8 @@ void scui_ui_scene_1_scroll_page_2_event_proc(scui_event_t *event)
         scui_menial_data_t menial_data_zero = {0};
         scui_menial_maker_t menial_maker = {0};
         scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
-        menial_maker.widget.type = scui_widget_type_menial;
+        
+        scui_widget_maker_def_cfg(&menial_maker, scui_widget_type_menial);
         menial_maker.widget.parent = event->object;
         
         #if 1
@@ -389,7 +391,8 @@ void scui_ui_scene_1_scroll_page_3_event_proc(scui_event_t *event)
         // test tvg cache block draw
         scui_menial_maker_t menial_maker = {0};
         scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
-        menial_maker.widget.type = scui_widget_type_menial;
+        
+        scui_widget_maker_def_cfg(&menial_maker, scui_widget_type_menial);
         menial_maker.widget.parent = event->object;
         
         menial_maker.type = scui_menial_type_bar;

@@ -218,13 +218,13 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     
     /* 构建一个父容器,用于承载cwf */
     scui_custom_maker_t custom_maker = {0};
-    custom_maker.widget.type      = scui_widget_type_custom;
+    
+    scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
     custom_maker.widget.clip      = scui_widget_clip(parent);
     custom_maker.widget.parent    = parent;
     custom_maker.widget.child_num = parser->list_num;
     
     /* 给这个父容器悬挂帧动画更新 */
-    custom_maker.widget.style.sched_anima = true;
     custom_maker.widget.event_cb = scui_cwf_json_custom_event;
     
     custom_maker.widget.style.fully_bg = true;

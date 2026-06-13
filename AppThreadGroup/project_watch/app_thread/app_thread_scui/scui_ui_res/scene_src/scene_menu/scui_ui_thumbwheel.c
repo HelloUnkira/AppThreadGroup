@@ -81,7 +81,8 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
         dst_clip.x = dst_clip.x + dst_clip.w * 3 / 2;
         
         scui_string_maker_t string_maker = {0};
-        string_maker.widget.type                = scui_widget_type_string;
+        
+        scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
         string_maker.widget.parent              = event->object;
         string_maker.widget.clip.x              = dst_clip.x;
         string_maker.widget.clip.w              = img_dist * 2 - img_dia * 2 - dst_clip.w * 2;

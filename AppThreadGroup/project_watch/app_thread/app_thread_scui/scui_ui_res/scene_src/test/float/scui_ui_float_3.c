@@ -134,8 +134,9 @@ void scui_ui_scene_float_3_btn_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         scui_button_maker_t button_maker = {0};
-        scui_handle_t button_bandle     = SCUI_HANDLE_INVALID;
-        button_maker.widget.type        = scui_widget_type_button;
+        scui_handle_t button_bandle = SCUI_HANDLE_INVALID;
+        
+        scui_widget_maker_def_cfg(&button_maker, scui_widget_type_button);
         button_maker.widget.parent      = event->object;
         button_maker.widget.event_cb    = scui_ui_scene_float_3_button_event;
         button_maker.type               = scui_button_type_image;

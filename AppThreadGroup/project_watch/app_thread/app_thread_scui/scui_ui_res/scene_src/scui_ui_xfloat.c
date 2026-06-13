@@ -117,7 +117,8 @@ void scui_ui_scene_xfloat_create(scui_event_t *event, scui_opt_pos_t pos, scui_e
     
     scui_linear_maker_t linear_maker = {0};
     scui_handle_t linear_handle = SCUI_HANDLE_INVALID;
-    linear_maker.widget.type            = scui_widget_type_linear;
+    
+    scui_widget_maker_def_cfg(&linear_maker, scui_widget_type_linear);
     linear_maker.widget.style.indev_key = true;
     linear_maker.widget.clip            = clip_z;
     linear_maker.widget.parent          = event->object;
@@ -143,13 +144,14 @@ void scui_ui_scene_xfloat_create(scui_event_t *event, scui_opt_pos_t pos, scui_e
     scui_linear_s_maker_t linear_s_maker = {0};
     scui_handle_t linear_m_handle = SCUI_HANDLE_INVALID;
     scui_handle_t linear_s_handle = SCUI_HANDLE_INVALID;
-    linear_m_maker.widget.type            = scui_widget_type_linear_m;
+    
+    scui_widget_maker_def_cfg(&linear_m_maker, scui_widget_type_linear_m);
+    scui_widget_maker_def_cfg(&linear_s_maker, scui_widget_type_linear_s);
     linear_m_maker.widget.style.indev_ptr = true;
     linear_m_maker.widget.style.indev_enc = true;
     linear_m_maker.widget.style.indev_key = true;
     linear_m_maker.widget.parent          = linear_handle;
     linear_m_maker.widget.event_cb        = scui_ui_scene_xfloat_m_event_proc;
-    linear_s_maker.widget.type            = scui_widget_type_linear_s;
     linear_s_maker.widget.child_num       = 10;
     linear_s_maker.widget.event_cb        = event_cb_s;
     

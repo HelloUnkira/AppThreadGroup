@@ -55,8 +55,9 @@ void scui_ui_scene_notify_event_proc(scui_event_t *event)
         scui_window_local_res_get(event->object, &scui_ui_res_local);
         
         scui_custom_maker_t custom_maker = {0};
-        scui_handle_t custom_handle             = SCUI_HANDLE_INVALID;
-        custom_maker.widget.type                = scui_widget_type_custom;
+        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
+        
+        scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
         custom_maker.widget.clip.w              = SCUI_HOR_RES;
         custom_maker.widget.parent              = event->object;
         custom_maker.widget.clip.h              = 80;

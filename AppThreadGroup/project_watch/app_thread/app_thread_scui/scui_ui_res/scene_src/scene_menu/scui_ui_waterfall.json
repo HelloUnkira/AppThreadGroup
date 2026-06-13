@@ -1,46 +1,33 @@
 {
-    "type": "scene",
+    "type":   "scene",
     "widget": [
         {
-            "widget.type":                  "scui_widget_type_window",
-            "widget.style.fully_bg":        "true",
-            "widget.style.sched_anima":     "true",
-            "widget.style.indev_key":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.clip.w":                "SCUI_HOR_RES",
-            "widget.clip.h":                "SCUI_VER_RES",
-            "widget.myself":                "SCUI_UI_SCENE_WATERFALL",
-            "widget.event_cb":              "scui_ui_scene_waterfall_event_proc",
-            "level":                        "0",
-            "buffer":                       "true"
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_key":   "true",
+            "widget.style.indev_enc":   "true",
+            "widget.myself":            "SCUI_UI_SCENE_WATERFALL",
+            "widget.event_cb":          "scui_ui_scene_waterfall_event_proc"
         },
         {
-            "widget.type":                  "scui_widget_type_scroll",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
-            "widget.clip.w":                "SCUI_HOR_RES",
-            "widget.clip.h":                "SCUI_VER_RES",
-            "widget.myself":                "SCUI_UI_SCENE_WATERFALL_SCROLL",
-            "widget.parent":                "SCUI_UI_SCENE_WATERFALL",
-            "widget.event_cb":              "scui_ui_scene_waterfall_scroll_event",
-            "widget.child_num":             "50",
-            "pos":                          "scui_opt_pos_all",
-            "dir":                          "scui_opt_dir_ver",
-            "route_enc":                    "117",
-            "route_key":                    "117",
-            "keyid_fdir":                   "SCUI_WIDGET_SCROLL_KEY_FDIR",
-            "keyid_bdir":                   "SCUI_WIDGET_SCROLL_KEY_BDIR",
-            "springback":                   "35",
-            "freedom":                      "true"
+            "widget.type":      "scui_widget_type_scroll",
+            "widget.myself":    "SCUI_UI_SCENE_WATERFALL_SCROLL",
+            "widget.parent":    "SCUI_UI_SCENE_WATERFALL",
+            "widget.event_cb":  "scui_ui_scene_waterfall_scroll_event",
+            "widget.child_num": "50",
+            "pos":              "scui_opt_pos_all",
+            "route_enc":        "117",
+            "route_key":        "117",
+            "springback":       "35",
+            "freedom":          "true"
         },
         {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.style.sched_anima":     "true",
-            "widget.clip.w":                "SCUI_HOR_RES",
-            "widget.clip.h":                "SCUI_VER_RES",
-            "widget.myself":                "SCUI_UI_SCENE_WATERFALL_BAR_ARC",
-            "widget.parent":                "SCUI_UI_SCENE_WATERFALL",
-            "widget.event_cb":              "scui_ui_scene_waterfall_bar_arc_event"
+            "widget.type":     "scui_widget_type_custom",
+            "widget.clip.w":   "SCUI_HOR_RES",
+            "widget.clip.h":   "SCUI_VER_RES",
+            "widget.myself":   "SCUI_UI_SCENE_WATERFALL_BAR_ARC",
+            "widget.parent":   "SCUI_UI_SCENE_WATERFALL",
+            "widget.event_cb": "scui_ui_scene_waterfall_bar_arc_event"
         }
     ]
 }

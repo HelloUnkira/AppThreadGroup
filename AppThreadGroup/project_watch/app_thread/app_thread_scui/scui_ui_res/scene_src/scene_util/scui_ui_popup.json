@@ -1,40 +1,38 @@
 {
-    "type": "scene",
+    "type":   "scene",
     "widget": [
         {
-            "widget.type":                  "scui_widget_type_window",
-            "widget.style.fully_bg":        "true",
-            "widget.style.sched_anima":     "true",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_key":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.clip.x":                "58",
-            "widget.clip.y":                "60",
-            "widget.clip.w":                "350",
-            "widget.clip.h":                "100",
-            "widget.myself":                "SCUI_UI_SCENE_POPUP",
-            "widget.event_cb":              "scui_ui_scene_popup_event_proc",
-            "widget.child_num":             "5",
-            "level":                        "10",
-            "buffer":                       "true",
-            "resident":                     "true",
-            "format":                       "SCUI_PIXEL_CF_DEF_A"
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.style.indev_key":   "true",
+            "widget.style.indev_enc":   "true",
+            "widget.clip.x":            "58",
+            "widget.clip.y":            "60",
+            "widget.clip.w":            "350",
+            "widget.clip.h":            "100",
+            "widget.myself":            "SCUI_UI_SCENE_POPUP",
+            "widget.event_cb":          "scui_ui_scene_popup_event_proc",
+            "widget.child_num":         "5",
+            "level":                    "10",
+            "resident":                 "true",
+            "format":                   "SCUI_PIXEL_CF_DEF_A"
         },
         {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.w":                "350",
-            "widget.clip.h":                "100",
-            "widget.myself":                "SCUI_UI_SCENE_POPUP_SCALE",
-            "widget.parent":                "SCUI_UI_SCENE_POPUP"
+            "widget.type":   "scui_widget_type_custom",
+            "widget.clip.w": "350",
+            "widget.clip.h": "100",
+            "widget.myself": "SCUI_UI_SCENE_POPUP_SCALE",
+            "widget.parent": "SCUI_UI_SCENE_POPUP"
         },
         {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.w":                "350",
-            "widget.clip.h":                "100",
-            "widget.myself":                "SCUI_UI_SCENE_POPUP_BG",
-            "widget.parent":                "SCUI_UI_SCENE_POPUP_SCALE",
-            "widget.event_cb":              "scui_ui_scene_popup_bg_event_proc",
-            "widget.child_num":             "5"
+            "widget.type":      "scui_widget_type_custom",
+            "widget.clip.w":    "350",
+            "widget.clip.h":    "100",
+            "widget.myself":    "SCUI_UI_SCENE_POPUP_BG",
+            "widget.parent":    "SCUI_UI_SCENE_POPUP_SCALE",
+            "widget.event_cb":  "scui_ui_scene_popup_bg_event_proc",
+            "widget.child_num": "5"
         }
     ]
 }

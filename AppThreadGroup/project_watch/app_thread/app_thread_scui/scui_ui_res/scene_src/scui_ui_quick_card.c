@@ -163,12 +163,13 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
         scui_handle_t linear_m_handle = SCUI_HANDLE_INVALID;
         scui_handle_t linear_s_handle = SCUI_HANDLE_INVALID;
         
+        scui_widget_maker_def_cfg(&linear_m_maker, scui_widget_type_linear_m);
+        scui_widget_maker_def_cfg(&linear_s_maker, scui_widget_type_linear_s);
+        
         // 通用属性配置
-        linear_m_maker.widget.type              = scui_widget_type_linear_m;
         linear_m_maker.widget.style.sched_anima = true;
         linear_m_maker.widget.clip.w            = SCUI_HOR_RES;
         linear_m_maker.widget.parent            = event->object;
-        linear_s_maker.widget.type              = scui_widget_type_linear_s;
         linear_s_maker.widget.clip.w            = 410;
         linear_s_maker.widget.clip.h            = 180;
         linear_s_maker.widget.child_num         = 5;
@@ -283,7 +284,8 @@ void scui_ui_scene_quick_card_event_proc(scui_event_t *event)
         
         scui_linear_maker_t linear_maker = {0};
         scui_handle_t linear_handle = SCUI_HANDLE_INVALID;
-        linear_maker.widget.type = scui_widget_type_linear;
+        
+        scui_widget_maker_def_cfg(&linear_maker, scui_widget_type_linear);
         linear_maker.widget.style.order_draw   = true;
         linear_maker.widget.style.sched_widget = true;
         linear_maker.widget.style.indev_ptr    = true;
