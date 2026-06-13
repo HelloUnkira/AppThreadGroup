@@ -19,6 +19,13 @@ void scui_widget_maker_def_cfg(void *maker, scui_widget_type_t type)
 		window_maker->widget.clip.w                  = SCUI_HOR_RES;
 		window_maker->widget.clip.h                  = SCUI_VER_RES;
 		window_maker->level                          = 0;
+		window_maker->switch_enc                     = scui_opt_pos_all;
+		window_maker->switch_key                     = scui_opt_pos_all;
+		window_maker->switch_enc_way                 = scui_opt_dir_ver;
+		window_maker->switch_key_id[0]               = scui_event_key_val_down;
+		window_maker->switch_key_id[1]               = scui_event_key_val_up;
+		window_maker->switch_key_id[2]               = scui_event_key_val_right;
+		window_maker->switch_key_id[3]               = scui_event_key_val_left;
 		break;
 	}
 	case scui_widget_type_custom: {

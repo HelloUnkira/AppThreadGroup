@@ -9,7 +9,14 @@
             "widget.myself":          "SCUI_UI_SCENE_HOME",
             "widget.event_cb":        "scui_ui_scene_home_event_proc",
             "widget.child_num":       "5",
-            "preload":                "1"
+            "preload":                "1",
+            "sibling[0]":             "SCUI_UI_SCENE_NOTIFY",
+            "sibling[1]":             "SCUI_UI_SCENE_QUICK_CARD",
+            "sibling[2]":             "SCUI_UI_SCENE_MINI_CARD",
+            "sibling[3]":             "SCUI_UI_SCENE_ACTIVITY",
+            "switch_type[0]":         "scui_window_switch_cover_in",
+            "switch_type[1]":         "scui_window_switch_cover_in",
+            "switch_type[2]":         "scui_window_switch_cover_in"
         }
     ]
 }

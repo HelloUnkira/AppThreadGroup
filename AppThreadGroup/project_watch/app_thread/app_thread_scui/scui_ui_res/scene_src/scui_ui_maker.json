@@ -9,7 +9,14 @@
                 "buffer":                   "true",
                 "widget.clip.w":            "SCUI_HOR_RES",
                 "widget.clip.h":            "SCUI_VER_RES",
-                "level":                    "0"
+                "level":                    "0",
+                "switch_enc":               "scui_opt_pos_all",
+                "switch_key":               "scui_opt_pos_all",
+                "switch_enc_way":           "scui_opt_dir_ver",
+                "switch_key_id[0]":         "scui_event_key_val_down",
+                "switch_key_id[1]":         "scui_event_key_val_up",
+                "switch_key_id[2]":         "scui_event_key_val_right",
+                "switch_key_id[3]":         "scui_event_key_val_left"
             }
         },
         {

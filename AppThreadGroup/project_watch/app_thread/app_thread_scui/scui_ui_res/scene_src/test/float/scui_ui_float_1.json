@@ -9,7 +9,9 @@
             "widget.style.indev_key":   "true",
             "widget.myself":            "SCUI_UI_SCENE_FLOAT_1",
             "widget.event_cb":          "scui_ui_scene_float_1_event_proc",
-            "level":                    "1"
+            "level":                    "1",
+            "sibling[1]":               "SCUI_UI_SCENE_TEST",
+            "switch_type[1]":           "scui_window_switch_cover_out"
         },
         {
             "widget.type":             "scui_widget_type_custom",

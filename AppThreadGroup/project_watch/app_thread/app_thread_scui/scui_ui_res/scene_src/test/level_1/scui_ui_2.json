@@ -9,7 +9,11 @@
             "widget.event_cb":          "scui_ui_scene_2_event_proc",
             "widget.image":             "scui_image_prj_image_src_watchface_bg_01_bgjpg",
             "widget.child_num":         "5",
-            "preload":                  "1"
+            "preload":                  "1",
+            "sibling[0]":               "SCUI_UI_SCENE_BUTTERFLY",
+            "sibling[1]":               "SCUI_UI_SCENE_SOCCER",
+            "sibling[2]":               "SCUI_UI_SCENE_1",
+            "sibling[3]":               "SCUI_UI_SCENE_6"
         },
         {
             "widget.type":     "scui_widget_type_custom",

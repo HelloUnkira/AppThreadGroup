@@ -5,7 +5,8 @@
             "widget.type":      "scui_widget_type_window",
             "widget.myself":    "SCUI_UI_SCENE_CUBE",
             "widget.event_cb":  "scui_ui_scene_cube_event_proc",
-            "widget.child_num": "10"
+            "widget.child_num": "10",
+            "sibling[0]":       "SCUI_UI_SCENE_1"
         },
         {
             "widget.type":            "scui_widget_type_custom",

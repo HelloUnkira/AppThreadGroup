@@ -291,10 +291,18 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_BUTTERFLY,
 	.widget.event_cb                = scui_ui_scene_butterfly_event_proc,
+	.sibling[1]                     = SCUI_UI_SCENE_2,
 	.widget.child_num               = 11,
 };
 
@@ -322,10 +330,18 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_CUBE = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_CUBE,
 	.widget.event_cb                = scui_ui_scene_cube_event_proc,
+	.sibling[0]                     = SCUI_UI_SCENE_1,
 	.widget.child_num               = 11,
 };
 
@@ -353,6 +369,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LANTERN = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_LANTERN,
@@ -384,10 +407,18 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SOCCER = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_SOCCER,
 	.widget.event_cb                = scui_ui_scene_soccer_event_proc,
+	.sibling[0]                     = SCUI_UI_SCENE_2,
 	.widget.child_num               = 11,
 };
 
@@ -415,6 +446,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HONEYCOMB = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -457,6 +495,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -523,6 +568,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -566,6 +618,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SPREAD = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_SPREAD,
@@ -600,6 +659,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_THUMBWHEEL = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_THUMBWHEEL,
@@ -634,6 +700,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -689,6 +762,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -742,6 +822,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -749,6 +836,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY = {
 	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY,
 	.widget.event_cb                = scui_ui_scene_activity_event_proc,
 	.preload                        = 1,
+	.sibling[2]                     = SCUI_UI_SCENE_HOME,
+	.sibling[3]                     = SCUI_UI_SCENE_1,
 	.widget.child_num               = 2,
 };
 
@@ -891,6 +980,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.indev_ptr         = true,
@@ -899,6 +995,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.myself                  = SCUI_UI_SCENE_HOME,
 	.widget.event_cb                = scui_ui_scene_home_event_proc,
 	.preload                        = 1,
+	.sibling[0]                     = SCUI_UI_SCENE_NOTIFY,
+	.sibling[1]                     = SCUI_UI_SCENE_QUICK_CARD,
+	.sibling[2]                     = SCUI_UI_SCENE_MINI_CARD,
+	.sibling[3]                     = SCUI_UI_SCENE_ACTIVITY,
+	.switch_type[0]                 = scui_window_switch_cover_in,
+	.switch_type[1]                 = scui_window_switch_cover_in,
+	.switch_type[2]                 = scui_window_switch_cover_in,
 	.widget.child_num               = 5,
 };
 
@@ -910,6 +1013,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MINI_CARD = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -918,6 +1028,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MINI_CARD = {
 	.widget.myself                  = SCUI_UI_SCENE_MINI_CARD,
 	.widget.event_cb                = scui_ui_scene_mini_card_event_proc,
 	.preload                        = 1,
+	.sibling[3]                     = SCUI_UI_SCENE_HOME,
+	.switch_type[3]                 = scui_window_switch_cover_out,
 	.widget.child_num               = 12,
 };
 
@@ -955,6 +1067,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NONE = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_NONE,
@@ -968,10 +1087,19 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NOTIFY = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_NOTIFY,
 	.widget.event_cb                = scui_ui_scene_notify_event_proc,
+	.sibling[1]                     = SCUI_UI_SCENE_HOME,
+	.switch_type[1]                 = scui_window_switch_cover_out,
 	.widget.child_num               = 5,
 };
 
@@ -983,10 +1111,21 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_QUICK_CARD = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_QUICK_CARD,
 	.widget.event_cb                = scui_ui_scene_quick_card_event_proc,
+	.sibling[0]                     = SCUI_UI_SCENE_HOME,
+	.sibling[1]                     = SCUI_UI_SCENE_LIST_SCALE,
+	.switch_type[0]                 = scui_window_switch_cover_out,
+	.switch_type[1]                 = scui_window_switch_move,
 	.widget.child_num               = 5,
 };
 
@@ -998,6 +1137,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_STANDBY = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.indev_ptr         = true,
@@ -1016,6 +1162,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -1025,6 +1178,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_1,
 	.widget.event_cb                = scui_ui_scene_float_1_event_proc,
 	.level                          = 1,
+	.sibling[1]                     = SCUI_UI_SCENE_TEST,
+	.switch_type[1]                 = scui_window_switch_cover_out,
 	.widget.child_num               = 2,
 };
 
@@ -1072,6 +1227,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -1081,6 +1243,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_2,
 	.widget.event_cb                = scui_ui_scene_float_2_event_proc,
 	.level                          = 1,
+	.sibling[0]                     = SCUI_UI_SCENE_TEST,
+	.switch_type[0]                 = scui_window_switch_cover_out,
 	.widget.child_num               = 20,
 };
 
@@ -1092,6 +1256,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.indev_ptr         = true,
@@ -1100,6 +1271,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_3,
 	.widget.event_cb                = scui_ui_scene_float_3_event_proc,
 	.level                          = 1,
+	.sibling[3]                     = SCUI_UI_SCENE_TEST,
+	.switch_type[3]                 = scui_window_switch_cover_out,
 	.widget.child_num               = 12,
 };
 
@@ -1139,6 +1312,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -1148,6 +1328,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_4,
 	.widget.event_cb                = scui_ui_scene_float_4_event_proc,
 	.level                          = 1,
+	.sibling[2]                     = SCUI_UI_SCENE_TEST,
+	.switch_type[2]                 = scui_window_switch_cover_out,
 	.widget.child_num               = 5,
 };
 
@@ -1159,11 +1341,22 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_1 = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_1,
 	.widget.event_cb                = scui_ui_scene_1_event_proc,
 	.preload                        = 1,
+	.sibling[0]                     = SCUI_UI_SCENE_TEST,
+	.sibling[1]                     = SCUI_UI_SCENE_CUBE,
+	.sibling[2]                     = SCUI_UI_SCENE_ACTIVITY,
+	.sibling[3]                     = SCUI_UI_SCENE_2,
 	.widget.child_num               = 1,
 };
 
@@ -1240,6 +1433,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_2 = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -1248,6 +1448,10 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_2 = {
 	.widget.event_cb                = scui_ui_scene_2_event_proc,
 	.widget.image                   = scui_image_prj_image_src_watchface_bg_01_bgjpg,
 	.preload                        = 1,
+	.sibling[0]                     = SCUI_UI_SCENE_BUTTERFLY,
+	.sibling[1]                     = SCUI_UI_SCENE_SOCCER,
+	.sibling[2]                     = SCUI_UI_SCENE_1,
+	.sibling[3]                     = SCUI_UI_SCENE_6,
 	.widget.child_num               = 6,
 };
 
@@ -1272,6 +1476,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_3 = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.indev_key         = true,
@@ -1289,12 +1500,21 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.myself                  = SCUI_UI_SCENE_6,
 	.widget.event_cb                = scui_ui_scene_6_event_proc,
 	.widget.image                   = scui_image_prj_image_src_watchface_bg_01_bgjpg,
 	.preload                        = 1,
+	.sibling[2]                     = SCUI_UI_SCENE_2,
+	.sibling[3]                     = SCUI_UI_SCENE_HOME,
 	.widget.child_num               = 9,
 };
 
@@ -1460,6 +1680,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
 	.widget.style.sched_anima       = true,
@@ -1468,6 +1695,14 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.widget.style.indev_key         = true,
 	.widget.myself                  = SCUI_UI_SCENE_TEST,
 	.widget.event_cb                = scui_ui_scene_test_event_proc,
+	.sibling[0]                     = SCUI_UI_SCENE_FLOAT_1,
+	.sibling[1]                     = SCUI_UI_SCENE_FLOAT_2,
+	.sibling[2]                     = SCUI_UI_SCENE_FLOAT_3,
+	.sibling[3]                     = SCUI_UI_SCENE_FLOAT_4,
+	.switch_type[0]                 = scui_window_switch_cover_in,
+	.switch_type[1]                 = scui_window_switch_cover_in,
+	.switch_type[2]                 = scui_window_switch_cover_in,
+	.switch_type[3]                 = scui_window_switch_cover_in,
 	.widget.child_num               = 10,
 };
 
