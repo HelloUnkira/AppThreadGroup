@@ -7,11 +7,17 @@
  */
 scui_widget_type_t scui_widget_type(scui_handle_t handle);
 
-/*@brief 控件树的根控件
+/*@brief 控件的根控件
  *@param handle 控件句柄
  *@retval 根控件句柄
  */
 scui_handle_t scui_widget_root(scui_handle_t handle);
+
+/*@brief 控件树的根控件
+ *@param handle 控件句柄
+ *@retval 根控件句柄
+ */
+scui_handle_t scui_widget_tree(scui_handle_t handle);
 
 /*@brief 控件的父控件
  *@param handle 控件句柄
@@ -66,22 +72,23 @@ void scui_widget_child_move_background(scui_handle_t handle);
  */
 scui_area_t scui_widget_clip(scui_handle_t handle);
 
-/*@brief 控件画布
+/*@brief 控件剪切域
  *@param handle 控件句柄
- *@retval 控件画布
+ *@retval 控件剪切域
  */
-scui_surface_t * scui_widget_surface(scui_handle_t handle);
+scui_area_t scui_widget_clip_self(scui_handle_t handle);
 
-/*@brief 控件画布创建
- *@param handle  控件句柄
- *@param surface 画布参数(.format;.hor_res;.ver_res;)
- */
-void scui_widget_surface_create(scui_handle_t handle, scui_surface_t *surface);
-
-/*@brief 控件画布销毁
+/*@brief 控件剪切域
  *@param handle 控件句柄
+ *@retval 控件剪切域
  */
-void scui_widget_surface_destroy(scui_handle_t handle);
+scui_area_t scui_widget_clip_root(scui_handle_t handle);
+
+/*@brief 控件剪切域
+ *@param handle 控件句柄
+ *@retval 控件剪切域
+ */
+scui_area_t scui_widget_clip_tree(scui_handle_t handle);
 
 /*@brief 控件显示状态获取
  *@param handle 控件句柄
@@ -255,16 +262,16 @@ void scui_widget_event_add(scui_handle_t handle, scui_event_cb_node_t *node);
  */
 void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node);
 
+/*@brief 控件事件响应转移
+ *@param event 事件
+ */
+void scui_widget_event_shift(scui_event_t *event);
+
 /*@brief 控件事件包含检查
  *@param event 事件
  *@retval 包含不包含
  */
 bool scui_widget_event_inside(scui_event_t *event);
-
-/*@brief 控件事件响应转移
- *@param event 事件
- */
-void scui_widget_event_shift(scui_event_t *event);
 
 /*************************************************************************************************/
 /*************************************************************************************************/

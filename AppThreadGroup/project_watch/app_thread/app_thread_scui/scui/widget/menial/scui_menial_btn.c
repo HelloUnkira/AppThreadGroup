@@ -185,9 +185,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
         break;
     }
     
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             return;
+    case scui_event_draw_graph: {
         
         scui_object_prop_t prop = {0};
         prop.part = scui_object_part_rect_bg;

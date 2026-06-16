@@ -5,8 +5,8 @@
             "class": "scui_widget_type_window",
             "default": {
                 "widget.type":              "scui_widget_type_window",
+                "widget.style.buffer": 	    "true",
                 "widget.style.fully_bg":    "true",
-                "buffer":                   "true",
                 "widget.clip.w":            "SCUI_HOR_RES",
                 "widget.clip.h":            "SCUI_VER_RES",
                 "level":                    "0",
@@ -38,12 +38,6 @@
                 "keyid_bdir":               "SCUI_WIDGET_SCROLL_KEY_BDIR",
                 "pos":                      "scui_opt_pos_c",
                 "dir":                      "scui_opt_dir_ver"
-            }
-        },
-        {
-            "class": "scui_widget_type_canvas",
-            "default": {
-                "widget.type": "scui_widget_type_canvas"
             }
         },
         {

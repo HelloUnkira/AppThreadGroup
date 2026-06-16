@@ -17,15 +17,27 @@ scui_widget_type_t scui_widget_type(scui_handle_t handle)
     return widget->type;
 }
 
-/*@brief 控件树的根控件
+/*@brief 控件的根控件
  *@param handle 控件句柄
  *@retval 根控件句柄
  */
 scui_handle_t scui_widget_root(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    return widget->parent == SCUI_HANDLE_INVALID ? handle :
-        scui_widget_root(widget->parent);
+    if (widget->parent  == SCUI_HANDLE_INVALID) return handle;
+    if (widget->surface != SCUI_HANDLE_INVALID) return handle;
+    return scui_widget_root(widget->parent);
+}
+
+/*@brief 控件树的根控件
+ *@param handle 控件句柄
+ *@retval 根控件句柄
+ */
+scui_handle_t scui_widget_tree(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    if (widget->parent == SCUI_HANDLE_INVALID) return handle;
+    return scui_widget_tree(widget->parent);
 }
 
 /*@brief 控件的父控件

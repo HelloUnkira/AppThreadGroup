@@ -6,7 +6,6 @@
 typedef enum {
     scui_widget_type_unknown,   /* 未知控件 */
     scui_widget_type_window,    /* 窗口控件(根控件) */
-    scui_widget_type_canvas,    /* 画布控件(根控件) */
     scui_widget_type_custom,    /* 自定义控件 */
     scui_widget_type_scroll,    /* 滚动控件 */
     scui_widget_type_string,    /* 字符串控件 */
@@ -34,17 +33,19 @@ typedef enum {
 /*@brief 控件状态风格
  */
 typedef struct {
-    scui_sbitfd_t fixed:1;              /* 控件移动禁止(悬浮) */
+    scui_sbitfd_t buffer:1;             /* 控件独立画布标记 */
+    scui_sbitfd_t buffer_d:1;           /* 控件独立画布标记(动态构建) */
     scui_sbitfd_t fully_bg:1;           /* 背景覆盖:1;背景透明:0; */
     scui_sbitfd_t cover_fg:1;           /* 前景覆盖:1;前景透明:0; */
     scui_sbitfd_t indev_ptr:1;          /* 输入事件响应标记:ptr */
     scui_sbitfd_t indev_enc:1;          /* 输入事件响应标记:enc */
     scui_sbitfd_t indev_key:1;          /* 输入事件响应标记:key */
-    scui_sbitfd_t sched_anima:1;        /* 控件调度帧动画标记 */
-    scui_sbitfd_t sched_widget:1;       /* 控件专属事件响应标记 */
+    scui_sbitfd_t sched_anima:1;        /* 控件帧动画标记 */
+    scui_sbitfd_t sched_widget:1;       /* 控件专属事件标记 */
     scui_sbitfd_t event_override:1;     /* 事件响应重载(0:默认;1:自定义;) */
     scui_sbitfd_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
     scui_sbitfd_t fully_clip:1;         /* 控件绘制区域(0:局部;1:完整;) */
+    scui_sbitfd_t fixed:1;              /* 控件移动禁止(悬浮) */
 } scui_widget_style_t;
 
 /*@brief 控件状态
@@ -56,16 +57,24 @@ typedef struct {
     scui_sbitfd_t indev_key_hold:1;     /* 输入事件响应维持:key */
 } scui_widget_state_t;
 
+/*@brief 控件画布
+ */
+typedef struct {
+    scui_surface_t surface;             /* 画布资源 */
+    scui_handle_t  image;               /* 画布图句柄 */
+    scui_image_t   image_src;           /* 画布图资源 */
+} scui_widget_surface_t;
+
 /*@brief 控件动画
  */
 typedef struct {
-    scui_handle_t  handle;          /* 监听动画 */
-    scui_handle_t  object;          /* 动画对象 */
-    scui_handle_t  number;          /* 动画数量 */
-    scui_handle_t *list;            /* 动画列表 */
-    scui_handle_t *step;            /* 工步序列 */
-    scui_handle_t  step_lim;        /* 工步极限 */
-    scui_handle_t  iter;            /* 当前工步 */
+    scui_handle_t  handle;              /* 监听动画 */
+    scui_handle_t  object;              /* 动画对象 */
+    scui_handle_t  number;              /* 动画数量 */
+    scui_handle_t *list;                /* 动画列表 */
+    scui_handle_t *step;                /* 工步序列 */
+    scui_handle_t  step_lim;            /* 工步极限 */
+    scui_handle_t  iter;                /* 当前工步 */
 } scui_widget_anima_t;
 
 /*@brief 控件构造回调
@@ -104,7 +113,8 @@ typedef struct {
     scui_handle_t          *child_list;     /* 控件关联属性:子控件列表 */
     scui_handle_t           child_num;      /* 控件关联属性:子控件最大数量 */
     scui_handle_t           child_now;      /* 控件关联属性:子控件当前数量 */
-    scui_surface_t         *surface;        /* 控件画布(图形上下文):画布实例 */
+    scui_handle_t           surface;        /* 控件画布(图形上下文):画布资源 */
+    scui_surface_t         *surface_c;      /* 控件画布(图形上下文):画布实例 */
     scui_clip_set_t         clip_set;       /* 控件画布(图形上下文):画布剪切域集合 */
     scui_handle_t           user_data;      /* 扩展字段:用户资源句柄 */
     scui_alpha_t            alpha;          /* 控件透明度 */
@@ -124,6 +134,7 @@ typedef struct {
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t           child_num;      /* 控件关联属性:子控件最大数量 */
     scui_handle_t           anima_num;      /* 控件动画数量:最大限制 */
+    scui_pixel_cf_t         format;         /* 控件画布类型 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
     scui_color_t            color;          /* 纯色背景(如果没背景图片,颜色绘制) */
 } scui_widget_maker_t;
@@ -202,6 +213,39 @@ bool scui_widget_clip_cover(scui_widget_t *widget);
  */
 void scui_widget_clip_update(scui_widget_t *widget);
 
+/*@brief 控件独立画布创建
+ *@param handle  控件句柄
+ *@param surface 画布参数(.format;.hor_res;.ver_res;)
+ */
+void scui_widget_surface_create(scui_handle_t handle, scui_surface_t *surface);
+
+/*@brief 控件独立画布销毁
+ *@param handle 控件句柄
+ */
+void scui_widget_surface_destroy(scui_handle_t handle);
+
+/*@brief 控件画布资源就绪
+ *@param handle 控件句柄
+ */
+void scui_widget_surface_ready(scui_handle_t handle);
+
+/*@brief 控件画布资源回收
+ *@param handle 控件句柄
+ */
+void scui_widget_surface_recycle(scui_handle_t handle);
+
+/*@brief 控件画布
+ *@param handle 控件句柄
+ *@retval 控件画布
+ */
+scui_surface_t * scui_widget_surface(scui_handle_t handle);
+
+/*@brief 控件画布图
+ *@param handle 控件句柄
+ *@retval 画布图句柄
+ */
+scui_handle_t scui_widget_surface_image(scui_handle_t handle);
+
 /*@brief 控件画布重映射
  *@param handle  控件句柄
  *@param surface 画布实例
@@ -218,18 +262,6 @@ void scui_widget_surface_refr(scui_handle_t handle, bool recurse);
  *@param widget 控件实例
  */
 bool scui_widget_surface_only(scui_widget_t *widget);
-
-/*@brief 控件画布更新
- *@param widget  控件实例
- *@param surface 画布实例
- */
-void scui_widget_surface_swap(scui_widget_t *widget, scui_surface_t *surface);
-
-/*@brief 控件画布同步
- *@param widget  控件实例
- *@param surface 画布实例
- */
-void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface);
 
 /*@brief 控件显示状态更新
  *@param handle  控件句柄

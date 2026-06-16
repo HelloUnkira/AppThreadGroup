@@ -475,12 +475,14 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     draw_dsc.graph.src_tvg_cb = scui_object_tvg_rect_cb;
     #endif
     
-    scui_widget_draw_graph(widget->myself, NULL,
-        alpha, color, &draw_dsc);
+    scui_widget_draw_graph(widget->myself, NULL, false,
+    alpha,
+    color,
+    &draw_dsc);
     
     /* 添加抖动模糊效果 */
     if (draw_dsc.graph.src_grad)
-        scui_widget_draw_dither(widget->myself, NULL);
+        scui_widget_draw_dither(widget->myself, NULL, false);
     
     return true;
 }
@@ -549,12 +551,14 @@ bool scui_object_draw_arc(scui_handle_t handle, scui_object_prop_t *prop)
     draw_dsc.graph.src_center.y += widget->clip.y;
     draw_dsc.graph.src_radius   -= draw_dsc.graph.src_width / 2  + 1;
     
-    scui_widget_draw_graph(widget->myself, NULL,
-        alpha, color, &draw_dsc);
+    scui_widget_draw_graph(widget->myself, NULL, false,
+    alpha,
+    color,
+    &draw_dsc);
     
     /* 添加抖动模糊效果 */
     if (draw_dsc.graph.src_grad)
-        scui_widget_draw_dither(widget->myself, NULL);
+        scui_widget_draw_dither(widget->myself, NULL, false);
     
     return true;
 }
@@ -622,8 +626,10 @@ bool scui_object_draw_line(scui_handle_t handle, scui_object_prop_t *prop)
         draw_dsc.graph.src_vpos[idx].y += area.y;
     }
     
-    scui_widget_draw_graph(widget->myself, &area,
-        alpha, color, &draw_dsc);
+    scui_widget_draw_graph(widget->myself, &area, false,
+    alpha,
+    color,
+    &draw_dsc);
     
     return true;
 }

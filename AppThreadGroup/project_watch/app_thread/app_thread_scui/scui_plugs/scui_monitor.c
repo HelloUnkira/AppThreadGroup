@@ -221,7 +221,7 @@ void scui_monitor_event_cb(scui_event_t *event)
     case scui_event_destroy: {
         break;
     }
-    case scui_event_draw:
+    case scui_event_draw_graph:
         break;
     case scui_event_focus_get:
         break;
@@ -243,8 +243,9 @@ void scui_monitor_show(bool buffer)
         scui_handle_t window_handle = SCUI_HANDLE_INVALID;
         
         scui_widget_maker_def_cfg(&window_maker, scui_widget_type_window);
-        window_maker.widget.style.sched_anima = true;
+        window_maker.widget.style.buffer = buffer;
         window_maker.widget.style.fully_bg = buffer;
+        window_maker.widget.style.sched_anima = true;
         window_maker.widget.clip.x = 10;
         window_maker.widget.clip.y = SCUI_VER_RES - 70;
         window_maker.widget.clip.w = SCUI_HOR_RES - 10 * 2;
@@ -252,9 +253,7 @@ void scui_monitor_show(bool buffer)
         window_maker.widget.event_cb  = scui_monitor_event_cb;
         window_maker.widget.child_num = 5;
         window_maker.level    = 10;
-        window_maker.buffer   = buffer;
         window_maker.resident = true;
-        window_maker.format   = SCUI_PIXEL_CF_DEF_A;
         scui_widget_create(&window_maker, &window_handle);
         scui_widget_show(window_handle, true);
         scui_monitor.window = window_handle;

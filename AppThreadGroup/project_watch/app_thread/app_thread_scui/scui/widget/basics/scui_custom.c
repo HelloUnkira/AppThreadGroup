@@ -103,48 +103,43 @@ void scui_custom_invoke(scui_event_t *event)
     
     /* 其他事件重载实现 */
     switch (event->type) {
-    case scui_event_draw: {
-        if (scui_event_check_execute(event)) {
-            switch (custom->type) {
-            case scui_custom_type_barcode: {
-                scui_handle_t image = custom->data->barcode.image;
-                scui_color_t  color = custom->data->barcode.color;
-                scui_widget_draw_image(widget->myself, &widget->clip,
-                    image, NULL, color);
-                break;
-            }
-            case scui_custom_type_qrcode: {
-                scui_handle_t image = custom->data->qrcode.image;
-                scui_color_t  color = custom->data->qrcode.color;
-                scui_widget_draw_image(widget->myself, &widget->clip,
-                    image, NULL, color);
-                break;
-            }
-            default: {
-                /* 简单打个表整理一下:不是ctx */
-                static const void (*scui_custom_draw_cb[scui_custom_type_num])
-                (scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data) = {
-                    [scui_custom_type_slider]       = scui_custom_draw_slider,
-                    [scui_custom_type_spinner]      = scui_custom_draw_spinner,
-                    [scui_custom_type_indicator]    = scui_custom_draw_indicator,
-                    [scui_custom_type_ring_edge]    = scui_custom_draw_ring_edge,
-                    [scui_custom_type_image_text]   = scui_custom_draw_image_text,
-                    [scui_custom_type_image_crect4] = scui_custom_draw_image_crect4,
-                };
-                
-                if (scui_custom_draw_cb[custom->type] != NULL)
-                    scui_custom_draw_cb[custom->type](widget->myself, &widget->clip, custom->data);
-            }
-            }
+    case scui_event_draw_ready: {
+        /* 回收可能因为文本绘制而存留在控件内的资源 */
+        scui_custom_text_recycle(widget->myself);
+        break;
+    }
+    case scui_event_draw_graph: {
+        switch (custom->type) {
+        case scui_custom_type_barcode: {
+            scui_handle_t image = custom->data->barcode.image;
+            scui_color_t  color = custom->data->barcode.color;
+            scui_widget_draw_image(widget->myself, NULL, false, image, NULL, color);
+            break;
         }
-        
-        if (scui_event_check_prepare(event)) {
-            /* 回收可能因为文本绘制而存留在控件内的资源 */
-            scui_custom_text_recycle(widget->myself);
+        case scui_custom_type_qrcode: {
+            scui_handle_t image = custom->data->qrcode.image;
+            scui_color_t  color = custom->data->qrcode.color;
+            scui_widget_draw_image(widget->myself, NULL, false, image, NULL, color);
+            break;
         }
-        if (scui_event_check_finish(event)) {
-            /* 回收可能因为文本绘制而存留在控件内的资源 */
-            scui_custom_text_recycle(widget->myself);
+        default: {
+            /* 简单打个表整理一下:不是ctx */
+            static const void (*scui_custom_draw_cb[scui_custom_type_num])
+            (scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data) = {
+                [scui_custom_type_slider]       = scui_custom_draw_slider,
+                [scui_custom_type_spinner]      = scui_custom_draw_spinner,
+                [scui_custom_type_indicator]    = scui_custom_draw_indicator,
+                [scui_custom_type_ring_edge]    = scui_custom_draw_ring_edge,
+                [scui_custom_type_image_text]   = scui_custom_draw_image_text,
+                [scui_custom_type_image_crect4] = scui_custom_draw_image_crect4,
+            };
+            
+            scui_area_t widget_clip = widget->clip;
+            widget_clip.x = widget_clip.y = 0;
+            
+            if (scui_custom_draw_cb[custom->type] != NULL)
+                scui_custom_draw_cb[custom->type](widget->myself, &widget_clip, custom->data);
+        }
         }
         break;
     }
@@ -239,13 +234,16 @@ void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text)
         str_args->utf8 = str_utf8;
         
         /* 绘制剪切域同步 */
-        if (scui_area_empty(&str_args->clip))
+        if (scui_area_empty(&str_args->clip)) {
             str_args->clip = widget->clip;
+            str_args->clip.x = 0;
+            str_args->clip.y = 0;
+        }
         
         /* 绘制时本地布局 */
         str_args->update = true;
         scui_string_args_proc(str_args);
-        scui_widget_draw_string(handle, &str_args->clip, str_args);
+        scui_widget_draw_string(handle, &str_args->clip, false, str_args);
         return;
     }
     
@@ -322,7 +320,7 @@ void scui_custom_draw_slider(scui_handle_t handle, scui_area_t *clip, scui_custo
     SCUI_ASSERT(clip != NULL);
     
     /* 绘制背景进度条 */
-    scui_widget_draw_image(handle, clip, bar, NULL, color_bar);
+    scui_widget_draw_image(handle, clip, false, bar, NULL, color_bar);
     
     cmin = scui_min(vmax, scui_max(vmin, cmin));
     cmax = scui_max(vmin, scui_min(vmax, cmax));
@@ -353,14 +351,14 @@ void scui_custom_draw_slider(scui_handle_t handle, scui_area_t *clip, scui_custo
         dst_area = scui_widget_clip(handle);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_2))
-            scui_widget_draw_image(handle, &dst_clip, edge, &src_clip, color_edge);
+            scui_widget_draw_image(handle, &dst_clip, false, edge, &src_clip, color_edge);
         
         src_clip.x = src_clip.w;
         src_clip.y = 0;
         dst_area = scui_widget_clip(handle);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_1))
-            scui_widget_draw_image(handle, &dst_clip, edge, &src_clip, color_edge);
+            scui_widget_draw_image(handle, &dst_clip, false, edge, &src_clip, color_edge);
         
         /* 填充这块区域 */
         scui_area_t area = {
@@ -372,7 +370,7 @@ void scui_custom_draw_slider(scui_handle_t handle, scui_area_t *clip, scui_custo
         dst_clip = scui_widget_clip(handle);
         if (scui_area_inter(&dst_area, &dst_clip, clip))
         if (scui_area_inter(&dst_clip, &dst_area, &area))
-            scui_widget_draw_color(handle, &dst_clip, color_edge);
+            scui_widget_draw_color(handle, &dst_clip, false, color_edge);
         
     } else {
         scui_coord_t offset_d1 = scui_map(cmin, vmin, vmax, dist - src_clip.h, 0);
@@ -387,14 +385,14 @@ void scui_custom_draw_slider(scui_handle_t handle, scui_area_t *clip, scui_custo
         dst_area = scui_widget_clip(handle);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_2))
-            scui_widget_draw_image(handle, &dst_clip, edge, &src_clip, color_edge);
+            scui_widget_draw_image(handle, &dst_clip, false, edge, &src_clip, color_edge);
         
         src_clip.x = 0;
         src_clip.y = src_clip.h / 2;
         dst_area = scui_widget_clip(handle);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_1))
-            scui_widget_draw_image(handle, &dst_clip, edge, &src_clip, color_edge);
+            scui_widget_draw_image(handle, &dst_clip, false, edge, &src_clip, color_edge);
         
         /* 填充这块区域 */
         scui_area_t area = {
@@ -406,7 +404,7 @@ void scui_custom_draw_slider(scui_handle_t handle, scui_area_t *clip, scui_custo
         dst_clip = scui_widget_clip(handle);
         if (scui_area_inter(&dst_area, &dst_clip, clip))
         if (scui_area_inter(&dst_clip, &dst_area, &area))
-            scui_widget_draw_color(handle, &dst_clip, color_edge);
+            scui_widget_draw_color(handle, &dst_clip, false, color_edge);
         
     }
 }
@@ -433,7 +431,7 @@ void scui_custom_draw_spinner(scui_handle_t handle, scui_area_t *clip, scui_cust
     /* 绘制背景 */
     if (color.color_d.full != 0x0) {
         scui_color_t color_bg = SCUI_COLOR_MAKE(color.filter, color.color_f, color.color_d);
-        scui_widget_draw_image(handle, clip, spinner, NULL, color_bg);
+        scui_widget_draw_image(handle, clip, false, spinner, NULL, color_bg);
     }
     
     scui_coord_t  angle_c = scui_map(percent % 100, 0, 100, 0, 360);
@@ -447,7 +445,7 @@ void scui_custom_draw_spinner(scui_handle_t handle, scui_area_t *clip, scui_cust
     
     /* 绘制圆环 */
     scui_color_t color_fg = SCUI_COLOR_MAKE_SE(color.filter, color.color_f, color.color_l, color.color_l);
-    scui_widget_draw_ring(handle, clip, spinner, NULL, adj_s, color_fg, adj_e, 100, edge);
+    scui_widget_draw_ring(handle, clip, false, spinner, NULL, adj_s, color_fg, adj_e, 100, edge);
 }
 
 /*@brief 自定义控件:插件:导航点
@@ -475,14 +473,14 @@ void scui_custom_draw_indicator(scui_handle_t handle, scui_area_t *clip, scui_cu
         if (idx == index) {
             scui_area_t dst_clip = *clip;
             if (scui_area_limit_offset(&dst_clip, &offset))
-                scui_widget_draw_image(handle, &dst_clip, focus, NULL, color_focus);
+                scui_widget_draw_image(handle, &dst_clip, false, focus, NULL, color_focus);
             
             if (way) offset.y += scui_image_h(focus) + span;
             else offset.x += scui_image_w(focus) + span;
         } else {
             scui_area_t dst_clip = *clip;
             if (scui_area_limit_offset(&dst_clip, &offset))
-                scui_widget_draw_image(handle, &dst_clip, wait, NULL, color_wait);
+                scui_widget_draw_image(handle, &dst_clip, false, wait, NULL, color_wait);
             
             if (way) offset.y += scui_image_h(wait) + span;
             else offset.x += scui_image_w(wait) + span;
@@ -516,7 +514,7 @@ void scui_custom_draw_ring_edge(scui_handle_t handle, scui_area_t *clip, scui_cu
         .w = scui_image_w(image),
         .h = scui_image_h(image),
     };
-    scui_widget_draw_image(handle, &clip_edge, image, NULL, color);
+    scui_widget_draw_image(handle, &clip_edge, false, image, NULL, color);
 }
 
 /*@brief 自定义控件:插件:图像连续绘制
@@ -545,7 +543,7 @@ void scui_custom_draw_image_text(scui_handle_t handle, scui_area_t *clip, scui_c
         
         scui_area_t dst_clip = *clip;
         if (scui_area_limit_offset(&dst_clip, &offset))
-            scui_widget_draw_image(handle, &dst_clip, image[idx], NULL, color);
+            scui_widget_draw_image(handle, &dst_clip, false, image[idx], NULL, color);
         
         if (way) offset.y += span + scui_image_h(image[idx]);
         else offset.x += span + scui_image_w(image[idx]);
@@ -585,7 +583,7 @@ void scui_custom_draw_image_crect4(scui_handle_t handle, scui_area_t *clip, scui
     /* 无图片,全填充或者不填充 */
     if (image_clip.w == -1 || image_clip.h == -1) {
         if (delta == -1) {
-            scui_widget_draw_color(handle, clip, color);
+            scui_widget_draw_color(handle, clip, false, color);
             return;
         }
         clip_a.w = delta;
@@ -607,14 +605,14 @@ void scui_custom_draw_image_crect4(scui_handle_t handle, scui_area_t *clip, scui
             clip_f.y = clip->y;
             scui_area_t dst_clip = {0};
             if (scui_area_inter(&dst_clip, clip, &clip_f))
-                scui_widget_draw_color(handle, &dst_clip, color);
+                scui_widget_draw_color(handle, &dst_clip, false, color);
             /* 画第二个矩形 */
             if (delta != -1) {
                 clip_f.x = clip->x + clip_a.w;
                 clip_f.y = clip->y + clip->h - delta;
                 scui_area_t dst_clip = {0};
                 if (scui_area_inter(&dst_clip, clip, &clip_f))
-                    scui_widget_draw_color(handle, &dst_clip, color);
+                    scui_widget_draw_color(handle, &dst_clip, false, color);
             }
         }
         if (delta_h > 0) {
@@ -625,14 +623,14 @@ void scui_custom_draw_image_crect4(scui_handle_t handle, scui_area_t *clip, scui
             clip_f.y = clip->y + clip_a.h;
             scui_area_t dst_clip = {0};
             if (scui_area_inter(&dst_clip, clip, &clip_f))
-                scui_widget_draw_color(handle, &dst_clip, color);
+                scui_widget_draw_color(handle, &dst_clip, false, color);
             /* 画第二个矩形 */
             if (delta != -1) {
                 clip_f.x = clip->x + clip->w - delta;
                 clip_f.y = clip->y + clip_a.h;
                 scui_area_t dst_clip = {0};
                 if (scui_area_inter(&dst_clip, clip, &clip_f))
-                    scui_widget_draw_color(handle, &dst_clip, color);
+                    scui_widget_draw_color(handle, &dst_clip, false, color);
             }
         }
     }
@@ -658,10 +656,10 @@ void scui_custom_draw_image_crect4(scui_handle_t handle, scui_area_t *clip, scui
         
         if (image[idx] == SCUI_HANDLE_INVALID) {
             if (scui_area_inter(&dst_clip, clip, &clip_a))
-                scui_widget_draw_color(handle, &dst_clip, color);
+                scui_widget_draw_color(handle, &dst_clip, false, color);
         } else {
             if (scui_area_inter(&dst_clip, clip, &clip_a))
-                scui_widget_draw_image(handle, &dst_clip, image[idx], NULL, color);
+                scui_widget_draw_image(handle, &dst_clip, false, image[idx], NULL, color);
         }
     }
     /* ... */

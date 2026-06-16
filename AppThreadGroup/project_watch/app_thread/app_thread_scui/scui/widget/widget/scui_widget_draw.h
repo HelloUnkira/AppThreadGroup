@@ -2,6 +2,7 @@
 #define SCUI_WIDGET_DRAW_H
 
 typedef struct {
+    scui_sbitfd_t   redirect:1;     /* 画布重定向(父控件画布绘制) */
     
     void           *str_args;       /* 类型:(scui_string_args_t) */
     
@@ -63,106 +64,202 @@ SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_2d);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_3d);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_ring);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_graph);
+SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_buffer);
+SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_buffer_2d);
+SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_buffer_3d);
 /*****************************************************************************/
 /*@brief 简化转义的宏api
  */
 
-#define scui_widget_draw_string(handle_v, target_v, str_args_v)                 \
+#define scui_widget_draw_string(handle_v, target_v, redirect_v, str_args_v)     \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {.str_args = str_args_v,};              \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect = redirect_v,                                                 \
+        .str_args = str_args_v,                                                 \
+    };                                                                          \
     scui_widget_draw_ctx_string(handle_v, target_v, &scui_wdc_i);               \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_symbol(handle_v, target_v,                             \
+#define scui_widget_draw_symbol(handle_v, target_v, redirect_v,                 \
     clip_v, color_v, font_name_v, symbol_v)                                     \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {.clip = clip_v,.color = color_v,       \
-        .font_name = font_name_v,.symbol = symbol_v,};                          \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect  = redirect_v,                                                \
+        .clip      = clip_v,                                                    \
+        .color     = color_v,                                                   \
+        .font_name = font_name_v,                                               \
+        .symbol    = symbol_v,                                                  \
+    };                                                                          \
     scui_widget_draw_ctx_symbol(handle_v, target_v, &scui_wdc_i);               \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_color(handle_v, target_v, color_v)                     \
+#define scui_widget_draw_color(handle_v, target_v, redirect_v, color_v)         \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {.color = color_v,};                    \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect = redirect_v,                                                 \
+        .color    = color_v,                                                    \
+    };                                                                          \
     scui_widget_draw_ctx_color(handle_v, target_v, &scui_wdc_i);                \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_color_grad(handle_v, target_v, color_v, way_v)         \
+#define scui_widget_draw_color_grad(handle_v, target_v, redirect_v,             \
+    color_v, way_v)                                                             \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {.color = color_v,.way = way_v,};       \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect = redirect_v,                                                 \
+        .color    = color_v,                                                    \
+        .way      = way_v,                                                      \
+    };                                                                          \
     scui_widget_draw_ctx_color_grad(handle_v, target_v, &scui_wdc_i);           \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_dither(handle_v, target_v)                             \
+#define scui_widget_draw_dither(handle_v, target_v, redirect_v)                 \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {0};                                    \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect = redirect_v,                                                 \
+    };                                                                          \
     scui_widget_draw_ctx_dither(handle_v, target_v, &scui_wdc_i);               \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_blur(handle_v, target_v)                               \
+#define scui_widget_draw_blur(handle_v, target_v, redirect_v)                   \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {0};                                    \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect = redirect_v,                                                 \
+    };                                                                          \
     scui_widget_draw_ctx_blur(handle_v, target_v, &scui_wdc_i);                 \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_image(handle_v, target_v,                              \
+#define scui_widget_draw_image(handle_v, target_v, redirect_v,                  \
     image_v, clip_v, color_v)                                                   \
 do {                                                                            \
     scui_widget_draw_dsc_t scui_wdc_i = {                                       \
-        .image = image_v,.clip = clip_v,.color = color_v,};                     \
+        .redirect = redirect_v,                                                 \
+        .image    = image_v,                                                    \
+        .clip     = clip_v,                                                     \
+        .color    = color_v,                                                    \
+    };                                                                          \
     scui_widget_draw_ctx_image(handle_v, target_v, &scui_wdc_i);                \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_image_scale(handle_v, target_v,                        \
+#define scui_widget_draw_image_scale(handle_v, target_v, redirect_v,            \
     image_v, clip_v, scale_v, pos_v)                                            \
 do {                                                                            \
     scui_widget_draw_dsc_t scui_wdc_i = {                                       \
-       .image = image_v,.clip = clip_v,.scale = scale_v,.pos = pos_v,};         \
+        .redirect = redirect_v,                                                 \
+        .image    = image_v,                                                    \
+        .clip     = clip_v,                                                     \
+        .scale    = scale_v,                                                    \
+        .pos      = pos_v,                                                      \
+    };                                                                          \
     scui_widget_draw_ctx_image_scale(handle_v, target_v, &scui_wdc_i);          \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_image_rotate(handle_v, target_v,                       \
+#define scui_widget_draw_image_rotate(handle_v, target_v, redirect_v,           \
     image_v, clip_v, anchor_v, center_v, angle_v)                               \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {.image = image_v,.clip = clip_v,       \
-        .anchor = anchor_v,.center = center_v,.angle = angle_v,};               \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect = redirect_v,                                                 \
+        .image    = image_v,                                                    \
+        .clip     = clip_v,                                                     \
+        .anchor   = anchor_v,                                                   \
+        .center   = center_v,                                                   \
+        .angle    = angle_v,                                                    \
+    };                                                                          \
     scui_widget_draw_ctx_image_rotate(handle_v, target_v, &scui_wdc_i);         \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_image_2d(handle_v, target_v,                           \
+#define scui_widget_draw_image_2d(handle_v, target_v, redirect_v,               \
     image_v, clip_v, anchor_v, center_v, scale_v, angle_v)                      \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {.image = image_v,.clip = clip_v,       \
-        .anchor = anchor_v,.center = center_v,                                  \
-        .scale = scale_v,.angle = angle_v,};                                    \
-    scui_widget_draw_ctx_image_rotate(handle_v, target_v, &scui_wdc_i);         \
-} while (0)                                                                     \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect = redirect_v,                                                 \
+        .image    = image_v,                                                    \
+        .clip     = clip_v,                                                     \
+        .anchor   = anchor_v,                                                   \
+        .center   = center_v,                                                   \
+        .scale    = scale_v,                                                    \
+        .angle    = angle_v,                                                    \
+    };                                                                          \
+    scui_widget_draw_ctx_image_2d(handle_v, target_v, &scui_wdc_i);             \
+} while (0)
 
-#define scui_widget_draw_image_3d(handle_v, target_v,                           \
+#define scui_widget_draw_image_3d(handle_v, target_v, redirect_v,               \
     image_v, clip_v, matrix_v, inv_matrix_v)                                    \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {.image = image_v,.clip = clip_v,       \
-        .matrix = matrix_v,.inv_matrix = inv_matrix_v,};                        \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect    = redirect_v,                                              \
+        .image       = image_v,                                                 \
+        .clip        = clip_v,                                                  \
+        .matrix      = matrix_v,                                                \
+        .inv_matrix  = inv_matrix_v,                                            \
+    };                                                                          \
     scui_widget_draw_ctx_image_3d(handle_v, target_v, &scui_wdc_i);             \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_ring(handle_v, target_v,                               \
+#define scui_widget_draw_ring(handle_v, target_v, redirect_v,                   \
     image_v, clip_v, angle_s_v, color_v, angle_e_v, percent_v, image_e_v)       \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {.image = image_v,.clip = clip_v,       \
-        .color = color_v,.angle_s = angle_s_v,.angle_e = angle_e_v,             \
-        .percent = percent_v,.image_e = image_e_v,};                            \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect = redirect_v,                                                 \
+        .image    = image_v,                                                    \
+        .clip     = clip_v,                                                     \
+        .angle_s  = angle_s_v,                                                  \
+        .color    = color_v,                                                    \
+        .angle_e  = angle_e_v,                                                  \
+        .percent  = percent_v,                                                  \
+        .image_e  = image_e_v,                                                  \
+    };                                                                          \
     scui_widget_draw_ctx_ring(handle_v, target_v, &scui_wdc_i);                 \
-} while (0)                                                                     \
+} while (0)
 
-#define scui_widget_draw_graph(handle_v, target_v,                              \
+#define scui_widget_draw_graph(handle_v, target_v, redirect_v,                  \
     alpha_v, color_v, graph_v)                                                  \
 do {                                                                            \
     scui_widget_draw_dsc_t scui_wdc_i = {                                       \
-        .alpha = alpha_v,.color = color_v,.graph = graph_v,};                   \
+        .redirect = redirect_v,                                                 \
+        .alpha    = alpha_v,                                                    \
+        .color    = color_v,                                                    \
+        .graph    = graph_v,                                                    \
+    };                                                                          \
     scui_widget_draw_ctx_graph(handle_v, target_v, &scui_wdc_i);                \
-} while (0)                                                                     \
+} while (0)
 
+#define scui_widget_draw_buffer(handle_v, target_v, redirect_v,                 \
+    clip_v, color_v)                                                            \
+do {                                                                            \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect = redirect_v,                                                 \
+        .clip     = clip_v,                                                     \
+        .color    = color_v,                                                    \
+    };                                                                          \
+    scui_widget_draw_ctx_buffer(handle_v, target_v, &scui_wdc_i);               \
+} while (0)
 
+#define scui_widget_draw_buffer_2d(handle_v, target_v, redirect_v,              \
+    clip_v, anchor_v, center_v, scale_v, angle_v, color_v)                      \
+do {                                                                            \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect = redirect_v,                                                 \
+        .clip     = clip_v,                                                     \
+        .anchor   = anchor_v,                                                   \
+        .center   = center_v,                                                   \
+        .scale    = scale_v,                                                    \
+        .angle    = angle_v,                                                    \
+        .color    = color_v,                                                    \
+    };                                                                          \
+    scui_widget_draw_ctx_buffer_2d(handle_v, target_v, &scui_wdc_i);            \
+} while (0)
+
+#define scui_widget_draw_buffer_3d(handle_v, target_v, redirect_v,              \
+    clip_v, matrix_v, inv_matrix_v)                                             \
+do {                                                                            \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .redirect    = redirect_v,                                              \
+        .clip        = clip_v,                                                  \
+        .matrix      = matrix_v,                                                \
+        .inv_matrix  = inv_matrix_v,                                            \
+    };                                                                          \
+    scui_widget_draw_ctx_buffer_3d(handle_v, target_v, &scui_wdc_i);            \
+} while (0)
 
 #endif

@@ -22,7 +22,6 @@ typedef enum {
 typedef struct {
     uintptr_t sync:1;           /* 事件响应调度: 同步调度,异步调度 */
     uintptr_t prior:8;          /* 事件优先级别: 数字越大优先级越高 */
-    uintptr_t order:2;          /* 事件响应顺序: 0x00:准备步; 0x01:处理步; 0x02:完成步; */
     uintptr_t result:2;         /* 事件响应结果: 0x00:未处理; 0x01:已问询; 0x02:已吸收; */
     uintptr_t bubble:1;         /* 事件响应冒泡: 备注:!!特殊事件使用; false:不冒泡; true:冒泡; */
 } scui_event_style_t;
@@ -119,19 +118,11 @@ typedef struct {
 static inline void scui_event_mask_quit(scui_event_t *event)        {(event->style.result  = 0x00);}
 static inline void scui_event_mask_keep(scui_event_t *event)        {(event->style.result |= 0x01);}
 static inline void scui_event_mask_over(scui_event_t *event)        {(event->style.result |= 0x02);}
-/* 标记事件访问流程 */
-static inline void scui_event_mask_prepare(scui_event_t *event)     {event->style.order = 0x00;}
-static inline void scui_event_mask_execute(scui_event_t *event)     {event->style.order = 0x01;}
-static inline void scui_event_mask_finish(scui_event_t *event)      {event->style.order = 0x02;}
 
 /* 检查事件访问状态 */
 static inline bool scui_event_check_quit(scui_event_t *event)       {return (event->style.result) == 0x00;}
 static inline bool scui_event_check_keep(scui_event_t *event)       {return (event->style.result & 0x01) != 0;}
 static inline bool scui_event_check_over(scui_event_t *event)       {return (event->style.result & 0x02) != 0;}
-/* 检查事件访问流程 */
-static inline bool scui_event_check_prepare(scui_event_t *event)    {return event->style.order == 0x00;}
-static inline bool scui_event_check_execute(scui_event_t *event)    {return event->style.order == 0x01;}
-static inline bool scui_event_check_finish(scui_event_t *event)     {return event->style.order == 0x02;}
 
 /*@brief 事件吸收回调(空吸收)
  *@param evt_old 旧事件

@@ -20,9 +20,7 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
     case scui_event_anima_elapse:
         break;
     case scui_event_ptr_click:
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
+    case scui_event_draw_graph: {
         
         scui_handle_t  parent = scui_widget_parent(event->object);
         scui_handle_t  index  = scui_widget_child_to_index(event->object) - 1;
@@ -49,7 +47,8 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         scui_coord_t scroll_cx = scroll_c.x + scroll_c.w / 2;
         scui_coord_t scroll_cy = scroll_c.y + scroll_c.h / 2;
         
-        scui_area_t  icon_c  = scui_widget_clip(event->object);
+        scui_area_t  icon_c        = scui_widget_clip(event->object);
+        scui_area_t  icon_c_origin = icon_c;
         scui_coord_t icon_cx = icon_c.x + icon_c.w / 2;
         scui_coord_t icon_cy = icon_c.y + icon_c.h / 2;
         scui_coord_t dist_cx = scui_dist(scroll_cx, icon_cx);
@@ -113,8 +112,16 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         icon_c.h  = scui_image_h(image);
         icon_c.w  = scui_image_w(image);
         
-        if (event->type == scui_event_draw)
-            scui_widget_draw_image(event->object, &icon_c, image, NULL, SCUI_COLOR_UNUSED);
+        if (event->type == scui_event_draw) {
+            /* 绘制目标:从滚动空间坐标转换为控件局部坐标 */
+            scui_area_t draw_clip = {
+                .x = icon_c.x - icon_c_origin.x,
+                .y = icon_c.y - icon_c_origin.y,
+                .w = icon_c.w,
+                .h = icon_c.h,
+            };
+            scui_widget_draw_image(event->object, &draw_clip, false, image, NULL, SCUI_COLOR_UNUSED);
+        }
         
         if (event->type == scui_event_ptr_click) {
             

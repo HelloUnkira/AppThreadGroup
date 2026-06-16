@@ -83,95 +83,98 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         scui_ui_res_local->size += 1 * resize_way;
         scui_widget_draw(event->object, NULL, false);
         break;
-    case scui_event_draw:
+    case scui_event_draw_ready: {
         
-        /* 绘制流程准备 */
-        if (scui_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
-            
-            /* 8个顶点 */
-            scui_coord3_t size = scui_ui_res_local->size / 2;
-            scui_vertex3_t vertex3_0 = {-1.0f * size, -1.0f * size, -1.0f * size,};
-            scui_vertex3_t vertex3_1 = {+1.0f * size, -1.0f * size, -1.0f * size,};
-            scui_vertex3_t vertex3_2 = {+1.0f * size, +1.0f * size, -1.0f * size,};
-            scui_vertex3_t vertex3_3 = {-1.0f * size, +1.0f * size, -1.0f * size,};
-            scui_vertex3_t vertex3_4 = {-1.0f * size, -1.0f * size, +1.0f * size,};
-            scui_vertex3_t vertex3_5 = {+1.0f * size, -1.0f * size, +1.0f * size,};
-            scui_vertex3_t vertex3_6 = {+1.0f * size, +1.0f * size, +1.0f * size,};
-            scui_vertex3_t vertex3_7 = {-1.0f * size, +1.0f * size, +1.0f * size,};
-            
-            scui_face3_t face3[6] = {
-                {.point3 = {vertex3_0, vertex3_3, vertex3_2, vertex3_1,},},
-                {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},},
-                {.point3 = {vertex3_1, vertex3_2, vertex3_6, vertex3_5,},},
-                {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},},
-                {.point3 = {vertex3_2, vertex3_3, vertex3_7, vertex3_6,},},
-                {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},},
-            };
-            
-            scui_normal3_t normal3[6] = {
-                {+0.0f, +0.0f, -1.0f},  // 0321
-                {+0.0f, +0.0f, +1.0f},  // 4567
-                {+1.0f, +0.0f, +0.0f},  // 1265
-                {-1.0f, +0.0f, +0.0f},  // 0473
-                {+0.0f, +1.0f, +0.0f},  // 2376
-                {+0.0f, -1.0f, +0.0f},  // 0154
-            };
-            
-            scui_area_t clip = scui_widget_clip(event->object);
-            /* 居中偏移 */
-            scui_point3_t offset = {
-                .x = clip.x + clip.w / 2,
-                .y = clip.y + clip.h / 2,
-            };
-            
-            /* 三轴旋转矩阵 */
-            scui_matrix_t r_matrix = {0};
-            scui_point3_t angle = scui_ui_res_local->rotate;
-            scui_matrix_rotate_a3(&r_matrix, &angle, 0x00);
-            
-            for (uint8_t idx = 0; idx < 6; idx++) {
-                /* 旋转面,移动面 */
-                scui_area3_transform_by_matrix(&face3[idx], &r_matrix);
-                scui_area3_offset_xy(&face3[idx], &offset);
-                /* 计算法线z轴 */
-                scui_coord3_t *normal_z = scui_ui_res_local->normal_z;
-                scui_mormal3_z_by_matrix(&normal3[idx], &normal_z[idx], &r_matrix);
-                if (normal_z[idx] <= 0.0f)
-                    continue;
-                /* 仿射变换矩阵 */
-                scui_matrix_t *matrix = scui_ui_res_local->matrix;
-                scui_matrix_t *inv_matrix = scui_ui_res_local->inv_matrix;
-                
-                scui_size2_t size2 = {
-                    .w = scui_image_w(scui_ui_res_local->image[idx]),
-                    .h = scui_image_h(scui_ui_res_local->image[idx]),
-                };
-                scui_matrix_affine_blit(&matrix[idx], &size2, &face3[idx]);
-                
-                inv_matrix[idx] = matrix[idx];
-                scui_matrix_inverse(&inv_matrix[idx]);
-            }
-        }
+        /* 绘制就绪: 顶点/矩阵预计算 */
+        SCUI_ASSERT(scui_ui_res_local != NULL);
         
-        /* 绘制流程进行 */
-        if (scui_event_check_execute(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
+        /* 8个顶点 */
+        scui_coord3_t size = scui_ui_res_local->size / 2;
+        scui_vertex3_t vertex3_0 = {-1.0f * size, -1.0f * size, -1.0f * size,};
+        scui_vertex3_t vertex3_1 = {+1.0f * size, -1.0f * size, -1.0f * size,};
+        scui_vertex3_t vertex3_2 = {+1.0f * size, +1.0f * size, -1.0f * size,};
+        scui_vertex3_t vertex3_3 = {-1.0f * size, +1.0f * size, -1.0f * size,};
+        scui_vertex3_t vertex3_4 = {-1.0f * size, -1.0f * size, +1.0f * size,};
+        scui_vertex3_t vertex3_5 = {+1.0f * size, -1.0f * size, +1.0f * size,};
+        scui_vertex3_t vertex3_6 = {+1.0f * size, +1.0f * size, +1.0f * size,};
+        scui_vertex3_t vertex3_7 = {-1.0f * size, +1.0f * size, +1.0f * size,};
+        
+        scui_face3_t face3[6] = {
+            {.point3 = {vertex3_0, vertex3_3, vertex3_2, vertex3_1,},},
+            {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},},
+            {.point3 = {vertex3_1, vertex3_2, vertex3_6, vertex3_5,},},
+            {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},},
+            {.point3 = {vertex3_2, vertex3_3, vertex3_7, vertex3_6,},},
+            {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},},
+        };
+        
+        scui_normal3_t normal3[6] = {
+            {+0.0f, +0.0f, -1.0f},  // 0321
+            {+0.0f, +0.0f, +1.0f},  // 4567
+            {+1.0f, +0.0f, +0.0f},  // 1265
+            {-1.0f, +0.0f, +0.0f},  // 0473
+            {+0.0f, +1.0f, +0.0f},  // 2376
+            {+0.0f, -1.0f, +0.0f},  // 0154
+        };
+        
+        scui_area_t clip = scui_widget_clip(event->object);
+        /* 居中偏移 */
+        scui_point3_t offset = {
+            .x = clip.x + clip.w / 2,
+            .y = clip.y + clip.h / 2,
+        };
+        
+        /* 三轴旋转矩阵 */
+        scui_matrix_t r_matrix = {0};
+        scui_point3_t angle = scui_ui_res_local->rotate;
+        scui_matrix_rotate_a3(&r_matrix, &angle, 0x00);
+        
+        for (uint8_t idx = 0; idx < 6; idx++) {
+            /* 旋转面,移动面 */
+            scui_area3_transform_by_matrix(&face3[idx], &r_matrix);
+            scui_area3_offset_xy(&face3[idx], &offset);
+            /* 计算法线z轴 */
+            scui_coord3_t *normal_z = scui_ui_res_local->normal_z;
+            scui_mormal3_z_by_matrix(&normal3[idx], &normal_z[idx], &r_matrix);
+            if (normal_z[idx] <= 0.0f)
+                continue;
+            /* 仿射变换矩阵 */
+            scui_matrix_t *matrix = scui_ui_res_local->matrix;
+            scui_matrix_t *inv_matrix = scui_ui_res_local->inv_matrix;
             
-            for (uint8_t idx = 0; idx < 6; idx++) {
-                
-                scui_coord3_t *normal_z = scui_ui_res_local->normal_z;
-                if (normal_z[idx] <= 0.0f)
-                    continue;
-                
-                scui_handle_t *image  = scui_ui_res_local->image;
-                scui_matrix_t *matrix = scui_ui_res_local->matrix;
-                scui_matrix_t *inv_matrix = scui_ui_res_local->inv_matrix;
-                scui_widget_draw_image_3d(event->object, NULL, image[idx], NULL,
-                    &matrix[idx], &inv_matrix[idx]);
-            }
+            scui_size2_t size2 = {
+                .w = scui_image_w(scui_ui_res_local->image[idx]),
+                .h = scui_image_h(scui_ui_res_local->image[idx]),
+            };
+            scui_matrix_affine_blit(&matrix[idx], &size2, &face3[idx]);
+            
+            inv_matrix[idx] = matrix[idx];
+            scui_matrix_inverse(&inv_matrix[idx]);
         }
         break;
+    }
+    case scui_event_draw_graph: {
+        
+        /* 绘制图形: 执行3D渲染 */
+        SCUI_ASSERT(scui_ui_res_local != NULL);
+        
+        for (uint8_t idx = 0; idx < 6; idx++) {
+            
+            scui_coord3_t *normal_z = scui_ui_res_local->normal_z;
+            if (normal_z[idx] <= 0.0f)
+                continue;
+            
+            scui_handle_t *image  = scui_ui_res_local->image;
+            scui_matrix_t *matrix = scui_ui_res_local->matrix;
+            scui_matrix_t *inv_matrix = scui_ui_res_local->inv_matrix;
+            scui_widget_draw_image_3d(event->object, NULL, false,
+    image[idx],
+    NULL,
+    &matrix[idx],
+    &inv_matrix[idx]);
+        }
+        break;
+    }
     case scui_event_ptr_move:
         scui_event_mask_over(event);
         /* y轴旋转是x的移动偏移量 */
@@ -185,7 +188,6 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
     case scui_event_ptr_up:
         scui_ui_res_local->move_lock = false;
         break;
-    break;
     default:
         break;
     }

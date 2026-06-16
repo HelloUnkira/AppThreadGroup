@@ -73,9 +73,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
+    case scui_event_draw_graph: {
         
         scui_handle_t  parent = scui_widget_parent(event->object);
         scui_handle_t  index  = scui_widget_child_to_index(event->object);
@@ -172,6 +170,14 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
             
             
             
+            /* 绘制目标:从滚动空间坐标转换为控件局部坐标 */
+            scui_area_t draw_clip = {
+                .x = scale_clip.x - icon_clip.x,
+                .y = scale_clip.y - icon_clip.y,
+                .w = scale_clip.w,
+                .h = scale_clip.h,
+            };
+
             #if 0
             #elif SCUI_UI_HONEYCOMB_EDGE_MODE == 0  // 圆屏
             scui_area_t scale_center = {
@@ -190,9 +196,9 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
                     .x = scale_clip.w * SCUI_SCALE_COF / scui_image_w(image),
                     .y = scale_clip.h * SCUI_SCALE_COF / scui_image_h(image),
                 };
-                scui_widget_draw_image_scale(event->object, &scale_clip, image, NULL, scale, scui_opt_pos_c);
+                scui_widget_draw_image_scale(event->object, &draw_clip, false, image, NULL, scale, scui_opt_pos_c);
                 #else
-                scui_widget_draw_image(event->object, &scale_clip, image + idx, NULL, SCUI_COLOR_UNUSED);
+                scui_widget_draw_image(event->object, &draw_clip, false, image + idx, NULL, SCUI_COLOR_UNUSED);
                 #endif
                 break;
             }
@@ -203,9 +209,9 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
                     .x = scale_clip.w * SCUI_SCALE_COF / scui_image_w(image),
                     .y = scale_clip.h * SCUI_SCALE_COF / scui_image_h(image),
                 };
-                scui_widget_draw_image_scale(event->object, &scale_clip, image, NULL, scale, scui_opt_pos_c);
+                scui_widget_draw_image_scale(event->object, &draw_clip, false, image, NULL, scale, scui_opt_pos_c);
                 #else
-                scui_widget_draw_image(event->object, &scale_clip, image + idx, NULL, SCUI_COLOR_UNUSED);
+                scui_widget_draw_image(event->object, &draw_clip, false, image + idx, NULL, SCUI_COLOR_UNUSED);
                 #endif
                 break;
             }

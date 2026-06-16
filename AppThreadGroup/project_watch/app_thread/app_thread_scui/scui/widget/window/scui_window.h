@@ -15,9 +15,7 @@ typedef struct {
     scui_coord_t        switch_key_id[4];   /* 临近界面按键交互id */
     scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
     scui_sbitfd_t       preload:1;          /* 窗口预加载时(许可预加载) */
-    scui_sbitfd_t       buffer:1;           /* 窗口独立画布(是否使用) */
     scui_sbitfd_t       level:6;            /* 窗口所在层级(越大越高) */
-    scui_pixel_cf_t     format;             /* 窗口像素格式(独立画布) */
     /* 内部域: */
     scui_sbitfd_t       draw_lock:1;        /* 窗口绘制锁 */
     void               *local_res;          /* 窗口资源实例 */
@@ -38,9 +36,7 @@ typedef struct {
     scui_coord_t        switch_key_id[4];   /* 临近界面按键交互id */
     scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
     scui_sbitfd_t       preload:1;          /* 窗口预加载时(许可预加载) */
-    scui_sbitfd_t       buffer:1;           /* 窗口独立画布(是否使用) */
     scui_sbitfd_t       level:6;            /* 窗口所在层级(越大越高) */
-    scui_pixel_cf_t     format;             /* 窗口像素格式(独立画布) */
 } scui_window_maker_t;
 #pragma pack(pop)
 

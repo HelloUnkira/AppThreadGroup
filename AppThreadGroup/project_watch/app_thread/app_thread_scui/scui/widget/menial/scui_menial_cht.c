@@ -166,9 +166,7 @@ void scui_menial_cht_invoke(scui_event_t *event)
         }
         break;
     }
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             return;
+    case scui_event_draw_graph: {
         
         switch (menial->data.cht.type) {
         default:SCUI_ASSERT(false);break;

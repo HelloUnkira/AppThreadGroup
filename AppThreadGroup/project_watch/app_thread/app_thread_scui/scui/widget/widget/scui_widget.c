@@ -44,6 +44,22 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     /* 控件初始默认为隐藏 */
     widget->state.view = false;
     
+    /* 构建孩子列表 */
+    widget->child_now  = 0;
+    widget->child_num  = widget_maker->child_num;
+    widget->child_list = NULL;
+    if (widget->child_num != 0) {
+        scui_handle_t child_size = widget->child_num * sizeof(scui_handle_t);
+        widget->child_list = SCUI_MEM_ZALLOC(scui_mem_type_mix, child_size);
+    }
+    
+    /* 构建父子关联 */
+    /* 向父控件的孩子列表添加自己 */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
+        scui_widget_child_add(widget_p, widget->myself);
+    }
+    
     /* 配置控件事件响应 */
     scui_event_cb_ready(&widget->list);
     scui_event_cb_node_t cb_node = {0};
@@ -54,6 +70,7 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
         cb_node.event_cb = widget_map->invoke;
     }
     
+    /* 配置控件事件响应 */
     if (cb_node.event_cb != NULL) {
         
         cb_node.event = scui_event_sched_all;
@@ -77,34 +94,45 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
         }
     }
     
-    /* 构建孩子列表 */
-    widget->child_now  = 0;
-    widget->child_num  = widget_maker->child_num;
-    widget->child_list = NULL;
-    if (widget->child_num != 0) {
-        scui_handle_t child_size = widget->child_num * sizeof(scui_handle_t);
-        widget->child_list = SCUI_MEM_ZALLOC(scui_mem_type_mix, child_size);
+    #if SCUI_MEM_FEAT_MINI
+    /* 小内存禁用自有独立画布 */
+    widget->style.buffer = false;
+    #endif
+    
+    /* 控件画布句柄初始无效 */
+    widget->surface = SCUI_HANDLE_INVALID;
+    widget->surface_c = NULL;
+    
+    /* 控件独立画布构建 */
+    if (widget->style.buffer) {
+        
+        scui_surface_t surface = {
+            .format  = widget_maker->format,
+            .hor_res = widget->clip.w,
+            .ver_res = widget->clip.h,
+        };
+        scui_widget_surface_create(widget->myself, &surface);
     }
     
-    /* 构建父子关联 */
+    /* 独立画布及其子控件都映射到它自己 */
+    if (widget->surface  != SCUI_HANDLE_INVALID)
+        widget->surface_c = scui_widget_surface(widget->myself);
+    
+    /* 更新与父控件的坐标关联 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_handle_t  handle_r = scui_widget_root(widget->myself);
-        scui_widget_t *widget_r = scui_handle_source_check(handle_r);
         scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
         
-        /* 画布的映射是根控件 */
-        widget->surface = widget_r->surface;
+        /* 画布继承父控件(定位到最近独立画布) */
+        /* 仅当自己没有独立画布时继承, 否则保持自己的 surface_c */
+        if (widget->surface  == SCUI_HANDLE_INVALID)
+            widget->surface_c = widget_p->surface_c;
         
-        /* 子控件的坐标区域是相对根控件(递归语义) */
-        if (widget_p->parent == SCUI_HANDLE_INVALID &&
-            scui_widget_surface_only(widget));
-        else {
+        /* 子控件的坐标区域是相对最近的独立画布 */
+        /* 拥有独立画布的父控件不传递坐标偏移(子控件相对独立画布原点) */
+        if (widget_p->surface == SCUI_HANDLE_INVALID) {
             widget->clip.x += widget_p->clip.x;
             widget->clip.y += widget_p->clip.y;
         }
-        
-        /* 向父控件的孩子列表添加自己 */
-        scui_widget_child_add(widget_p, widget->myself);
     }
     
     /* 画布剪切域重置更新 */
@@ -130,8 +158,6 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     SCUI_LOG_INFO("widget myself %u",       widget->myself);
     SCUI_LOG_INFO("widget parent %u",       widget->parent);
     SCUI_LOG_INFO("widget child_num %u",    widget->child_num);
-    SCUI_LOG_INFO("widget image %u",        widget->image);
-    SCUI_LOG_INFO("widget color %08x",      widget->color.color.full);
 }
 
 /*@brief 控件析构器
@@ -147,11 +173,14 @@ void scui_widget_burn(scui_widget_t *widget)
     /* 回收用户资源句柄 */
     scui_handle_clear(widget->user_data);
     
+    /* 回收对象动画 */
+    scui_anima_object_recycle(widget->myself);
+    
     /* 回收控件动画 */
     scui_widget_anima_destroy(widget->myself);
     
-    /* 回收对象动画 */
-    scui_anima_object_recycle(widget->myself);
+    /* 回收独立子画布 */
+    scui_widget_surface_destroy(widget->myself);
     
     /* 画布剪切域清除 */
     scui_clip_clear(&widget->clip_set);

@@ -38,7 +38,6 @@ void scui_event_register_finish(scui_event_cb_t event_cb)
 }
 
 /*@brief 事件回调全局响应权限检查
- *       before和after的响应权限检查
  *@param event 事件包
  *@retval 允许该事件
  */
@@ -75,30 +74,6 @@ static bool scui_event_cb_check(scui_event_t *event)
     return false;
 }
 
-/*@brief 事件回调全局响应权限检查
- *       prepare和finish的响应权限检查
- *@param event 事件包
- *@retval 允许该事件
- */
-static bool scui_event_order_check(scui_event_t *event)
-{
-    /* 自定义事件一律允许响应prepare和finish */
-    if (scui_event_type_custom(event->type))
-        return true;
-    
-    /* 绝大部分系统事件不需要响应prepare和finish */
-    /* 系统事件中必须该表中事件才响应prepare和finish */
-    static const uint32_t event_table[] = {
-        scui_event_draw,
-    };
-    
-    for (scui_multi_t idx = 0; idx < scui_arr_len(event_table); idx++)
-        if (event->type == event_table[idx])
-            return true;
-    
-    return false;
-}
-
 /*@brief 事件优先级更新
  *@param event 事件包
  */
@@ -112,6 +87,10 @@ static void scui_event_adjust_prior(scui_event_t *event)
         [scui_event_show]           = scui_event_prior_high,
         [scui_event_hide]           = scui_event_prior_high,
         [scui_event_draw]           = scui_event_prior_low,
+        [scui_event_draw_ready]     = scui_event_prior_low,
+        [scui_event_draw_graph]     = scui_event_prior_low,
+        [scui_event_draw_buffer]    = scui_event_prior_low,
+        [scui_event_draw_finish]    = scui_event_prior_low,
         [scui_event_draw_empty]     = scui_event_prior_above,
         [scui_event_refr]           = scui_event_prior_low,
         
@@ -294,21 +273,8 @@ static void scui_event_respond(scui_event_t *event)
     /* 系统事件响应<sys> */
     if (scui_event_type_sys(event->type)) {
         
-        /* 系统事件调度工步:prepare */
-        if (scui_event_order_check(event)) {
-            scui_event_mask_prepare(event);
-            scui_widget_event_dispatch(event);
-        }
-        /* 系统事件调度工步:execute */
-        if (true/* must execute */) {
-            scui_event_mask_execute(event);
-            scui_widget_event_dispatch(event);
-        }
-        /* 系统事件调度工步:finish */
-        if (scui_event_order_check(event)) {
-            scui_event_mask_finish(event);
-            scui_widget_event_dispatch(event);
-        }
+        /* 系统事件单次派发 */
+        scui_widget_event_dispatch(event);
         
         /* 控件树调度结束, 检查事件是否处理完毕 */
         if (scui_event_check_over(event) &&
@@ -317,21 +283,8 @@ static void scui_event_respond(scui_event_t *event)
         
         if (scui_event_bubble_over(event)) {
             
-            /* 系统事件调度工步:prepare */
-            if (scui_event_order_check(event)) {
-                scui_event_mask_prepare(event);
-                scui_window_event_dispatch(event);
-            }
-            /* 系统事件调度工步:execute */
-            if (true/* must execute */) {
-                scui_event_mask_execute(event);
-                scui_window_event_dispatch(event);
-            }
-            /* 系统事件调度工步:finish */
-            if (scui_event_order_check(event)) {
-                scui_event_mask_finish(event);
-                scui_window_event_dispatch(event);
-            }
+            /* 系统事件窗口级单次派发 */
+            scui_window_event_dispatch(event);
         }
         
         if (scui_event_check_over(event))
@@ -341,21 +294,8 @@ static void scui_event_respond(scui_event_t *event)
     /* 自定义事件响应<custom> */
     if (scui_event_type_custom(event->type)) {
         
-        /* 系统事件调度工步:prepare */
-        if (scui_event_order_check(event)) {
-            scui_event_mask_prepare(event);
-            scui_event_cb_custom(event);
-        }
-        /* 系统事件调度工步:execute */
-        if (scui_event_order_check(event)) {
-            scui_event_mask_execute(event);
-            scui_event_cb_custom(event);
-        }
-        /* 系统事件调度工步:finish */
-        if (scui_event_order_check(event)) {
-            scui_event_mask_finish(event);
-            scui_event_cb_custom(event);
-        }
+        /* 自定义事件单次派发 */
+        scui_event_cb_custom(event);
         
         if (scui_event_check_over(event))
             return;

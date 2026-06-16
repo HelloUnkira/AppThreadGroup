@@ -19,48 +19,50 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
         widget->clip.y == point->y)
         return;
     
-    /* 存在独立画布下,如果移动的是窗口,只需要改变窗口位置 */
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        scui_widget_surface_only(widget)) {
-        widget->clip.x = point->x;
-        widget->clip.y = point->y;
-        scui_widget_refr(widget->myself, false);
-        SCUI_LOG_DEBUG("<x:%d, y:%d>", point->x, point->y);
-        return;
-    }
-    
     /* 控件悬浮, 不响应移动 */
     if (widget->style.fixed)
         return;
     
-    /* 计算移动偏移量 */
-    scui_point_t offset = {
-        .x = point->x - widget->clip.x,
-        .y = point->y - widget->clip.y,
-    };
-    
-    /* 移动自己 */
-    widget->clip.x = point->x;
-    widget->clip.y = point->y;
-    
-    /* 移动孩子,迭代它的孩子列表 */
-    scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t  handle_c = widget->child_list[idx];
-        scui_widget_t *widget_c = scui_handle_source_check(handle_c);
-        scui_point_t    point_c = {0};
-        point_c.x = offset.x + widget_c->clip.x;
-        point_c.y = offset.y + widget_c->clip.y;
-        scui_widget_move_pos(handle_c, &point_c);
+    /* 如果移动的是独立画布 */
+    /* 只需要改变独立画布位置 */
+    if (widget->style.buffer) {
+        widget->clip.x = point->x;
+        widget->clip.y = point->y;
+        
+        if (widget->parent == SCUI_HANDLE_INVALID)
+            scui_widget_refr(widget->myself, false);
+        if (widget->parent != SCUI_HANDLE_INVALID)
+            scui_widget_draw(widget->parent, NULL, false);
+        
+        SCUI_LOG_INFO("<x:%d, y:%d>", point->x, point->y);
+    } else {
+        /* 计算移动偏移量 */
+        scui_point_t offset = {
+            .x = point->x - widget->clip.x,
+            .y = point->y - widget->clip.y,
+        };
+        
+        /* 移动自己 */
+        widget->clip.x = point->x;
+        widget->clip.y = point->y;
+        
+        /* 移动孩子,迭代它的孩子列表 */
+        scui_widget_child_list_btra(widget, idx) {
+            scui_handle_t  handle_c = widget->child_list[idx];
+            scui_widget_t *widget_c = scui_handle_source_check(handle_c);
+            scui_point_t    point_c = {0};
+            point_c.x = offset.x + widget_c->clip.x;
+            point_c.y = offset.y + widget_c->clip.y;
+            scui_widget_move_pos(handle_c, &point_c);
+        }
+        
+        scui_widget_draw(widget->myself, NULL, false);
     }
     
-    scui_widget_draw(widget->myself, NULL, false);
     if (widget->parent != SCUI_HANDLE_INVALID) {
         /* 父控件信息更新 */
         scui_event_define(event, widget->parent, false, scui_event_child_pos, scui_event_absorb_none);
         scui_event_notify(&event);
-        
-        /* 重绘父控件 */
-        scui_widget_draw(widget->parent, NULL, false);
     }
 }
 
@@ -174,16 +176,16 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    /* 禁止根控件修改自己尺寸 */
-    /* 因为这会影响到画布资源 */
-    if (widget->parent == SCUI_HANDLE_INVALID) {
-        SCUI_LOG_ERROR("unsupport");
-        return;
-    }
-    
     if (widget->clip.w == width &&
         widget->clip.h == height)
         return;
+    
+    /* 因为会影响到画布资源 */
+    /* 禁止独立画布控件修改自己尺寸 */
+    if (widget->surface != SCUI_HANDLE_INVALID) {
+        SCUI_LOG_ERROR("unsupport");
+        return;
+    }
     
     if (width <= 0 || height <= 0) {
         scui_event_define(event, handle, true, scui_event_size_auto, NULL);

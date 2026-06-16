@@ -136,7 +136,7 @@
 /* 帧缓冲异步(同步:1块;异步:2块;) */
 #define SCUI_FRAME_BUFFER_ASYNC                     (2)
 
-/* 帧缓冲分段(未完成,开发中......) */
+/* 帧缓冲分段(分段混合) */
 #define SCUI_FRAME_BUFFER_SEG                       (0 && !SCUI_MEM_FEAT_MINI)
 #define SCUI_FRAME_BUFFER_SEG_LINE                  (SCUI_VER_RES / 3)
 
@@ -174,8 +174,8 @@
 #define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1 && !SCUI_MEM_FEAT_MINI)
 
 /* 以最小脉冲全局刷新窗口 */
-#define SCUI_WIDGET_ANIMA_DRAW_AUTO                 (1)
-#define SCUI_WIDGET_ANIMA_DRAW_TIME                 (251)
+#define SCUI_WIDGET_ANIMA_DRAW_AUTO                 (0)
+#define SCUI_WIDGET_ANIMA_DRAW_TIME                 (137)
 
 /* 图片外存直达画布(节约峰值内存, 但会加重绘制时间) */
 #define SCUI_WIDGET_IMAGE_DIRECT                    (0 && !SCUI_MEM_FEAT_MINI)

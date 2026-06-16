@@ -310,118 +310,121 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
         
         scui_widget_draw(event->object, NULL, false);
         break;
-    case scui_event_draw:
+    case scui_event_draw_ready: {
         
-        /* 绘制流程准备 */
-        if (scui_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
-            
-            scui_handle_t *image_list       = scui_ui_res_local->image_list;
-            scui_matrix_t *matrix_list      = scui_ui_res_local->matrix_list;
-            scui_matrix_t *inv_matrix_list  = scui_ui_res_local->inv_matrix_list;
-            scui_handle_t  matrix_num       = SCUI_UI_RES_LOCAL_NUM_ELEMENT;
-            scui_coord3_t *center_z_list    = scui_ui_res_local->center_z_list;
-            
-            // 测试时，背景填白
-            // scui_widget_color_set(event->object, SCUI_COLOR_MAKE32(false, 0x0, 0xFFFFFFFF));
-            
-            /* 居中偏移 */
-            scui_area_t clip = scui_widget_clip(event->object);
-            scui_point3_t offset = {
-                .x = clip.x + clip.w / 2,
-                .y = clip.y + clip.h / 2,
-            };
-            
-            /* 视点在屏幕中间 */
-            scui_view3_t view = {
-                .x = +offset.x,
-                .y = +offset.y,
-                .z = -offset.x,
-            };
-            
-            /* 面初始化 */
-            scui_face3_t face3_list4[4] = {0};
-            scui_ui_scene_butterfly_face_ready(face3_list4);
-            
-            /* 面列表 */
-            scui_face3_t list_face3[] = {
-                face3_list4[0], face3_list4[0],
-                face3_list4[1], face3_list4[1], face3_list4[1], face3_list4[1],
-                face3_list4[2], face3_list4[2], face3_list4[3], face3_list4[3],
-            };
-            /* 图列表 */
-            scui_handle_t list_image[] = {
-                image_list[0], image_list[0],
-                image_list[1], image_list[1], image_list[1], image_list[1],
-                image_list[2], image_list[2], image_list[3], image_list[3],
-            };
-            
-            // 矩阵重置
-            for (uint8_t idx = 0; idx < matrix_num; idx++)
-                scui_matrix_identity(&matrix_list[idx]);
-            
-            // 矩阵变换元素
-            scui_ui_scene_butterfly_face_matrix_update();
-            
-            // 矩阵变换流程
-            for (uint8_t idx = 0; idx < matrix_num; idx++) {
-                
-                scui_face3_t face3 = list_face3[idx];
-                scui_size2_t size2 = scui_image_size2(list_image[idx]);
-                scui_area3_transform_by_matrix(&face3, &matrix_list[idx]);
-                scui_area3_offset(&face3, &offset);
-                // 面处理最后: 对面进行最后一次更新
-                scui_ui_scene_butterfly_face_update(&face3, idx);
-                
-                scui_area3_center_z(&face3, &center_z_list[idx]);
-                scui_matrix_perspective_view_blit(&matrix_list[idx], &size2, &face3, &view);
-                
-                inv_matrix_list[idx] = matrix_list[idx];
-                scui_matrix_inverse(&inv_matrix_list[idx]);
-            }
-        }
+        /* 绘制就绪: 面/矩阵预计算 */
+        SCUI_ASSERT(scui_ui_res_local != NULL);
         
-        /* 绘制流程进行 */
-        if (scui_event_check_execute(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
+        scui_handle_t *image_list       = scui_ui_res_local->image_list;
+        scui_matrix_t *matrix_list      = scui_ui_res_local->matrix_list;
+        scui_matrix_t *inv_matrix_list  = scui_ui_res_local->inv_matrix_list;
+        scui_handle_t  matrix_num       = SCUI_UI_RES_LOCAL_NUM_ELEMENT;
+        scui_coord3_t *center_z_list    = scui_ui_res_local->center_z_list;
+        
+        // 测试时，背景填白
+        // scui_widget_color_set(event->object, SCUI_COLOR_MAKE32(false, 0x0, 0xFFFFFFFF));
+        
+        /* 居中偏移 */
+        scui_area_t clip = scui_widget_clip(event->object);
+        scui_point3_t offset = {
+            .x = clip.x + clip.w / 2,
+            .y = clip.y + clip.h / 2,
+        };
+        
+        /* 视点在屏幕中间 */
+        scui_view3_t view = {
+            .x = +offset.x,
+            .y = +offset.y,
+            .z = -offset.x,
+        };
+        
+        /* 面初始化 */
+        scui_face3_t face3_list4[4] = {0};
+        scui_ui_scene_butterfly_face_ready(face3_list4);
+        
+        /* 面列表 */
+        scui_face3_t list_face3[] = {
+            face3_list4[0], face3_list4[0],
+            face3_list4[1], face3_list4[1], face3_list4[1], face3_list4[1],
+            face3_list4[2], face3_list4[2], face3_list4[3], face3_list4[3],
+        };
+        /* 图列表 */
+        scui_handle_t list_image[] = {
+            image_list[0], image_list[0],
+            image_list[1], image_list[1], image_list[1], image_list[1],
+            image_list[2], image_list[2], image_list[3], image_list[3],
+        };
+        
+        // 矩阵重置
+        for (uint8_t idx = 0; idx < matrix_num; idx++)
+            scui_matrix_identity(&matrix_list[idx]);
+        
+        // 矩阵变换元素
+        scui_ui_scene_butterfly_face_matrix_update();
+        
+        // 矩阵变换流程
+        for (uint8_t idx = 0; idx < matrix_num; idx++) {
             
-            scui_handle_t *image_list       = scui_ui_res_local->image_list;
-            scui_matrix_t *matrix_list      = scui_ui_res_local->matrix_list;
-            scui_matrix_t *inv_matrix_list  = scui_ui_res_local->inv_matrix_list;
-            scui_handle_t  matrix_num       = SCUI_UI_RES_LOCAL_NUM_ELEMENT;
-            scui_coord3_t *center_z_list    = scui_ui_res_local->center_z_list;
+            scui_face3_t face3 = list_face3[idx];
+            scui_size2_t size2 = scui_image_size2(list_image[idx]);
+            scui_area3_transform_by_matrix(&face3, &matrix_list[idx]);
+            scui_area3_offset(&face3, &offset);
+            // 面处理最后: 对面进行最后一次更新
+            scui_ui_scene_butterfly_face_update(&face3, idx);
             
-            /* 图列表 */
-            scui_handle_t list_image[] = {
-                image_list[0], image_list[0],
-                image_list[1], image_list[1], image_list[1], image_list[1],
-                image_list[2], image_list[2], image_list[3], image_list[3],
-            };
+            scui_area3_center_z(&face3, &center_z_list[idx]);
+            scui_matrix_perspective_view_blit(&matrix_list[idx], &size2, &face3, &view);
             
-            /* 根据center_z的深度信息进行排序决定绘制顺序 */
-            scui_coord3_t draw_z[SCUI_UI_RES_LOCAL_NUM_ELEMENT] = {0};
-            scui_coord_t  draw_i[SCUI_UI_RES_LOCAL_NUM_ELEMENT] = {0};
-            
-            for (uint8_t idx = 0; idx < matrix_num; idx++) {
-                draw_i[idx] = idx; draw_z[idx] = center_z_list[idx];
-            }
-            
-            for (uint8_t idx_i = 0; idx_i < matrix_num; idx_i++)
-            for (uint8_t idx_j = 0; idx_j < matrix_num; idx_j++)
-                if (draw_z[idx_i] > draw_z[idx_j] && idx_i != idx_j) {
-                    
-                    scui_coord_t draw_i_t = draw_i[idx_i];
-                    draw_i[idx_i] = draw_i[idx_j]; draw_i[idx_j] = draw_i_t;
-                    scui_coord3_t draw_z_t = draw_z[idx_i];
-                    draw_z[idx_i] = draw_z[idx_j]; draw_z[idx_j] = draw_z_t;
-                }
-            
-            for (uint8_t idx = 0; idx < matrix_num; idx++)
-                scui_widget_draw_image_3d(event->object, NULL, list_image[draw_i[idx]],
-                    NULL, &matrix_list[draw_i[idx]], &inv_matrix_list[draw_i[idx]]);
-            
+            inv_matrix_list[idx] = matrix_list[idx];
+            scui_matrix_inverse(&inv_matrix_list[idx]);
         }
         break;
+    }
+    case scui_event_draw_graph: {
+        
+        /* 绘制图形: 深度排序渲染 */
+        SCUI_ASSERT(scui_ui_res_local != NULL);
+        
+        scui_handle_t *image_list       = scui_ui_res_local->image_list;
+        scui_matrix_t *matrix_list      = scui_ui_res_local->matrix_list;
+        scui_matrix_t *inv_matrix_list  = scui_ui_res_local->inv_matrix_list;
+        scui_handle_t  matrix_num       = SCUI_UI_RES_LOCAL_NUM_ELEMENT;
+        scui_coord3_t *center_z_list    = scui_ui_res_local->center_z_list;
+        
+        /* 图列表 */
+        scui_handle_t list_image[] = {
+            image_list[0], image_list[0],
+            image_list[1], image_list[1], image_list[1], image_list[1],
+            image_list[2], image_list[2], image_list[3], image_list[3],
+        };
+        
+        /* 根据center_z的深度信息进行排序决定绘制顺序 */
+        scui_coord3_t draw_z[SCUI_UI_RES_LOCAL_NUM_ELEMENT] = {0};
+        scui_coord_t  draw_i[SCUI_UI_RES_LOCAL_NUM_ELEMENT] = {0};
+        
+        for (uint8_t idx = 0; idx < matrix_num; idx++) {
+            draw_i[idx] = idx; draw_z[idx] = center_z_list[idx];
+        }
+        
+        for (uint8_t idx_i = 0; idx_i < matrix_num; idx_i++)
+        for (uint8_t idx_j = 0; idx_j < matrix_num; idx_j++)
+            if (draw_z[idx_i] > draw_z[idx_j] && idx_i != idx_j) {
+                
+                scui_coord_t draw_i_t = draw_i[idx_i];
+                draw_i[idx_i] = draw_i[idx_j]; draw_i[idx_j] = draw_i_t;
+                scui_coord3_t draw_z_t = draw_z[idx_i];
+                draw_z[idx_i] = draw_z[idx_j]; draw_z[idx_j] = draw_z_t;
+            }
+        
+        for (uint8_t idx = 0; idx < matrix_num; idx++)
+            scui_widget_draw_image_3d(event->object, NULL, false,
+    list_image[draw_i[idx]],
+    NULL,
+    &matrix_list[draw_i[idx]],
+    &inv_matrix_list[draw_i[idx]]);
+        
+        break;
+    }
     case scui_event_ptr_move:
         scui_event_mask_over(event);
         
@@ -440,7 +443,6 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
     case scui_event_ptr_down:
     case scui_event_ptr_up:
         break;
-    break;
     default:
         break;
     }

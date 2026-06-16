@@ -54,8 +54,6 @@
 #include "scui_window.h"            /* 控件(窗口) */
 #include "scui_window_inf.h"        /* 控件(窗口)API */
 /* widget(base): */
-#include "scui_canvas.h"            /* 控件(画布) */
-#include "scui_canvas_inf.h"        /* 控件(画布)API */
 #include "scui_custom.h"            /* 控件(自定义) */
 #include "scui_custom_inf.h"        /* 控件(自定义)API */
 #include "scui_string.h"            /* 控件(字符串) */

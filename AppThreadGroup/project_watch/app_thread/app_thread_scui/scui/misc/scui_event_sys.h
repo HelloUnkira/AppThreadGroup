@@ -11,36 +11,40 @@ typedef enum {
     /* 调度事件<s> */
     scui_event_sched_s,
     scui_event_sched_all,
-    scui_event_sched_none,      /* 空调度(调度激活) */
-    scui_event_sched_async,     /* 异步调度 */
-    scui_event_anima_elapse,    /* 动画轮转调度 */
-    scui_event_focus_lost,      /* 窗口焦点失去事件 */
-    scui_event_focus_get,       /* 窗口焦点获取事件 */
-    scui_event_refr,            /* 窗口刷新事件 */
-    scui_event_draw,            /* 控件绘制事件 */
-    scui_event_draw_empty,      /* 控件绘制事件(绘制转义) */
-    scui_event_show,            /* 控件隐藏事件 */
-    scui_event_hide,            /* 控件显示事件 */
-    scui_event_create,          /* 控件创建事件 */
-    scui_event_layout,          /* 控件布局更新 */
-    scui_event_destroy,         /* 控件销毁事件 */
-    scui_event_child_nums,      /* 控件添加移除子控件 */
-    scui_event_child_size,      /* 控件的子控件坐标改变 */
-    scui_event_child_pos,       /* 控件的子控件坐标改变 */
-    scui_event_size_auto,       /* 控件尺寸调整 */
-    scui_event_size_adjust,     /* 控件尺寸调整 */
-    scui_event_lang_change,     /* 全局更新语言 */
+    scui_event_sched_none,          /* 空调度(调度激活) */
+    scui_event_sched_async,         /* 异步调度 */
+    scui_event_anima_elapse,        /* 动画轮转调度 */
+    scui_event_focus_lost,          /* 窗口焦点失去事件 */
+    scui_event_focus_get,           /* 窗口焦点获取事件 */
+    scui_event_refr,                /* 窗口刷新事件 */
+    scui_event_draw,                /* 控件绘制事件(主体) */
+    scui_event_draw_ready,          /* 控件绘制事件(步调1:就绪) */
+    scui_event_draw_graph,          /* 控件绘制事件(步调2:图形) */
+    scui_event_draw_buffer,         /* 控件绘制事件(步调3:画布) */
+    scui_event_draw_finish,         /* 控件绘制事件(步调4:完成) */
+    scui_event_draw_empty,          /* 控件绘制事件(绘制转义) */
+    scui_event_show,                /* 控件隐藏事件 */
+    scui_event_hide,                /* 控件显示事件 */
+    scui_event_create,              /* 控件创建事件 */
+    scui_event_layout,              /* 控件布局更新 */
+    scui_event_destroy,             /* 控件销毁事件 */
+    scui_event_child_nums,          /* 控件添加移除子控件 */
+    scui_event_child_size,          /* 控件的子控件坐标改变 */
+    scui_event_child_pos,           /* 控件的子控件坐标改变 */
+    scui_event_size_auto,           /* 控件尺寸调整 */
+    scui_event_size_adjust,         /* 控件尺寸调整 */
+    scui_event_lang_change,         /* 全局更新语言 */
     scui_event_sched_e,
     /* 特殊控件生成事件: */
     scui_event_widget_s,
     scui_event_widget_all,
-    scui_event_window_preload,  /* 窗口控件:预加载 */
-    scui_event_scroll_layout,   /* 滚动控件:布局更新 */
-    scui_event_scroll_start,    /* 滚动控件:滚动开始 */
-    scui_event_scroll_keep,     /* 滚动控件:滚动进行 */
-    scui_event_scroll_over,     /* 滚动控件:滚动结束 */
-    scui_event_button_click,    /* 按钮控件:指针点击 */
-    scui_event_update_value,    /* 其余控件:数据更新 */
+    scui_event_window_preload,      /* 窗口控件:预加载 */
+    scui_event_scroll_layout,       /* 滚动控件:布局更新 */
+    scui_event_scroll_start,        /* 滚动控件:滚动开始 */
+    scui_event_scroll_keep,         /* 滚动控件:滚动进行 */
+    scui_event_scroll_over,         /* 滚动控件:滚动结束 */
+    scui_event_button_click,        /* 按钮控件:指针点击 */
+    scui_event_update_value,        /* 其余控件:数据更新 */
     scui_event_widget_e,
     /* 调度事件<e> */
     

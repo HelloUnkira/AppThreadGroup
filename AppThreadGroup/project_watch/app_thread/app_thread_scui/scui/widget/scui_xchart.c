@@ -40,7 +40,7 @@ void scui_xchart_make(void *inst, void *inst_maker, scui_handle_t *handle)
         if (xchart->hist.space <= 0)
             xchart->hist.space  = 1;
         /* 限制 */
-        scui_coord_t height = xchart->widget.clip.h;
+        scui_coord_t height = widget->clip.h;
         if (xchart->hist.height > height + xchart->hist.offset.y)
             xchart->hist.height = height - xchart->hist.offset.y;
         /* 创建数据存储空间 */
@@ -66,7 +66,7 @@ void scui_xchart_make(void *inst, void *inst_maker, scui_handle_t *handle)
         if (xchart->line.space <= 0)
             xchart->line.space  = 1;
         /* 限制 */
-        scui_coord_t height = xchart->widget.clip.h;
+        scui_coord_t height = widget->clip.h;
         if (xchart->line.height > height + xchart->line.offset.y)
             xchart->line.height = height - xchart->line.offset.y;
         /* 创建数据存储空间 */
@@ -175,9 +175,7 @@ void scui_xchart_invoke(scui_event_t *event)
     scui_xchart_t *xchart = (void *)widget;
     
     switch (event->type) {
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
+    case scui_event_draw_graph: {
         
         switch (xchart->type) {
         case scui_xchart_type_hist: {
@@ -214,27 +212,27 @@ void scui_xchart_invoke(scui_event_t *event)
                 
                 /* 绘制edge */
                 src_clip.y = 0;
-                dst_clip = xchart->widget.clip;
-                dst_clip.x += offset.x;
-                dst_clip.y += offset.y + offset_2y;
-                scui_widget_draw_image(widget->myself, &dst_clip, image, &src_clip, color_edge);
+                dst_clip = widget->clip;
+                dst_clip.x = offset.x;
+                dst_clip.y = offset.y + offset_2y;
+                scui_widget_draw_image(widget->myself, &dst_clip, false, image, &src_clip, color_edge);
                 
                 /* 绘制edge */
                 src_clip.y = src_clip.h;
-                dst_clip = xchart->widget.clip;
-                dst_clip.x += offset.x;
-                dst_clip.y += offset.y + offset_1y - src_clip.h;
-                scui_widget_draw_image(widget->myself, &dst_clip, image, &src_clip, color_edge);
+                dst_clip = widget->clip;
+                dst_clip.x = offset.x;
+                dst_clip.y = offset.y + offset_1y - src_clip.h;
+                scui_widget_draw_image(widget->myself, &dst_clip, false, image, &src_clip, color_edge);
                 
                 /* 填充这块区域 */
-                dst_clip = xchart->widget.clip;
+                dst_clip = widget->clip;
                 scui_area_t area = {
-                    .x = dst_clip.x + offset.x,
+                    .x = offset.x,
                     .w = src_clip.w,
-                    .y = dst_clip.y + offset.y + offset_2y + src_clip.h,
+                    .y = offset.y  + offset_2y + src_clip.h,
                     .h = offset_1y - offset_2y - src_clip.h * 2,
                 };
-                scui_widget_draw_color(widget->myself, &area, color);
+                scui_widget_draw_color(widget->myself, &area, false, color);
                 
                 offset.x += scui_image_w(image) + space;
             }
@@ -261,7 +259,7 @@ void scui_xchart_invoke(scui_event_t *event)
             color_edge.filter        = true;
             
             for (scui_coord_t idx = 0; idx + 1 < xchart->line.number; idx++) {
-                scui_area_t  dst_clip  = xchart->widget.clip;
+                scui_area_t  dst_clip  = widget->clip;
                 scui_coord_t offset_1y = scui_map(vlist[idx + 0], value_min, value_max, height, 0);
                 scui_coord_t offset_2y = scui_map(vlist[idx + 1], value_min, value_max, height, 0);
                 scui_point_t offset_1 = {.x = dst_clip.x + offset.x, .y = dst_clip.y + offset.y + offset_1y};
@@ -270,18 +268,18 @@ void scui_xchart_invoke(scui_event_t *event)
                 
                 /* 绘制edge */
                 if (idx == 0) {
-                    dst_clip = xchart->widget.clip;
-                    dst_clip.x += offset_1.x - src_clip.w;
-                    dst_clip.y += offset_1.y - src_clip.h;
-                    scui_widget_draw_image(widget->myself, &dst_clip, image, NULL, color_edge);
+                    dst_clip = widget->clip;
+                    dst_clip.x = offset_1.x - src_clip.w;
+                    dst_clip.y = offset_1.y - src_clip.h;
+                    scui_widget_draw_image(widget->myself, &dst_clip, false, image, NULL, color_edge);
                 }
                 
                 /* 绘制edge */
                 if (1) {
-                    dst_clip = xchart->widget.clip;
-                    dst_clip.x += offset_2.x - src_clip.w;
-                    dst_clip.y += offset_2.y - src_clip.h;
-                    scui_widget_draw_image(widget->myself, &dst_clip, image, NULL, color_edge);
+                    dst_clip = widget->clip;
+                    dst_clip.x = offset_2.x - src_clip.w;
+                    dst_clip.y = offset_2.y - src_clip.h;
+                    scui_widget_draw_image(widget->myself, &dst_clip, false, image, NULL, color_edge);
                 }
                 
                 scui_draw_dsc_t draw_dsc = {
@@ -290,7 +288,7 @@ void scui_xchart_invoke(scui_event_t *event)
                     .graph.src_pos_1 = offset_1,
                     .graph.src_pos_2 = offset_2,
                 };
-                scui_widget_draw_graph(widget->myself, NULL, widget->alpha, color, &draw_dsc);
+                scui_widget_draw_graph(widget->myself, NULL, false, widget->alpha, color, &draw_dsc);
                 offset.x += space;
             }
             

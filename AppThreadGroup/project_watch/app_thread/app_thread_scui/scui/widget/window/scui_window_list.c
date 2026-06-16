@@ -147,8 +147,8 @@ static void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scu
         
         /* 完全覆盖,此时跳过 */
         if (widget->clip.x == 0 && widget->clip.y == 0 &&
-            widget->surface->alpha  == scui_alpha_cover &&
-            widget->surface->format == surface_fb->format)
+            widget->surface_c->alpha  == scui_alpha_cover &&
+            widget->surface_c->format == surface_fb->format)
             break;
     }
     
@@ -296,7 +296,7 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         /* 当前窗口独立于管理之外时, 直接渲染 */
         if (scui_widget_surface_only(widget) && window->resident) {
             scui_surface_t *dst_surface = scui_frame_buffer_draw();
-            scui_surface_t *src_surface = widget->surface;
+            scui_surface_t *src_surface = widget->surface_c;
             scui_area_t dst_clip = scui_surface_area(dst_surface);
             scui_area_t src_clip = scui_surface_area(src_surface);
             /* 独立画布将窗口偏移补充到画布上 */
@@ -346,6 +346,50 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     }
     }
     #endif
+}
+
+/*@brief 窗口画布更新(swap模式)
+ *       交换窗口独立画布与目标画布的pixel指针
+ *       同时同步更新独立画布句柄内的surface.pixel字段
+ *       调用前提:窗口必须拥有独立画布(surface句柄有效)
+ *@param widget  窗口控件实例
+ *@param surface 目标画布(通常为framebuffer)
+ */
+static void scui_window_surface_swap(scui_widget_t *widget, scui_surface_t *surface)
+{
+    SCUI_ASSERT(widget->surface_c->pixel   != surface->pixel);
+    SCUI_ASSERT(widget->surface_c->format  == surface->format);
+    SCUI_ASSERT(widget->surface_c->hor_res == surface->hor_res);
+    SCUI_ASSERT(widget->surface_c->ver_res == surface->ver_res);
+    
+    /* 窗口必须有独立画布 */
+    SCUI_ASSERT(widget->surface != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(widget->surface_c == scui_widget_surface(widget->myself));
+    
+    /* 交换 surface_c 与目标画布的 pixel */
+    uint8_t *pixel = widget->surface_c->pixel;
+    widget->surface_c->pixel = surface->pixel;
+    surface->pixel = pixel;
+}
+
+/*@brief 窗口画布同步(sync模式)
+ *       将目标画布内容拷贝到窗口独立画布
+ *       调用前提: 窗口必须拥有独立画布(surface句柄有效)
+ *@param widget  窗口控件实例
+ *@param surface 源画布(通常为refr framebuffer)
+ */
+static void scui_window_surface_sync(scui_widget_t *widget, scui_surface_t *surface)
+{
+    SCUI_ASSERT(widget->surface_c->pixel   != surface->pixel);
+    SCUI_ASSERT(widget->surface_c->format  == surface->format);
+    SCUI_ASSERT(widget->surface_c->hor_res == surface->hor_res);
+    SCUI_ASSERT(widget->surface_c->ver_res == surface->ver_res);
+    
+    scui_surface_t *dst_surface = widget->surface_c;
+    scui_surface_t *src_surface = surface;
+    scui_area_t dst_clip = scui_surface_area(dst_surface);
+    scui_area_t src_clip = scui_surface_area(src_surface);
+    scui_draw_area_copy(true, dst_surface, dst_clip, src_surface, src_clip);
 }
 
 /*@brief 窗口管理器画布就绪
@@ -429,21 +473,21 @@ static void scui_window_surface_blend(void)
     /* 此时则使用switch模式直接交换surface快速进入refr异步 */
     /* 在refr异步的开始则异步进行数据同步,还原本地的surface */
     #if SCUI_WINDOW_SWITCH_MODE
-    scui_widget_t *widget_only = NULL;
-    scui_window_surface_switch(0x01, &widget_only);
+    scui_widget_t *widget_o = NULL;
+    scui_window_surface_switch(0x01, &widget_o);
     if (scui_window_list.widget_0_num == 1 && scui_window_list.widget_1_num == 0) {
-        widget_only = scui_window_list.widget_0[0];
+        widget_o = scui_window_list.widget_0[0];
         
         scui_surface_t *surface_fb = scui_frame_buffer_draw();
         SCUI_ASSERT(surface_fb->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(surface_fb->hor_res == SCUI_VER_RES);
-        /* 类型必须匹配才可交换 */
-        if (widget_only->surface->format  == surface_fb->format  &&
-            widget_only->surface->hor_res == surface_fb->hor_res &&
-            widget_only->surface->ver_res == surface_fb->ver_res) {
+        /* 类型必须匹配才可交换(通过独立画布句柄获取surface实例) */
+        if (widget_o->surface_c->format  == surface_fb->format  &&
+            widget_o->surface_c->hor_res == surface_fb->hor_res &&
+            widget_o->surface_c->ver_res == surface_fb->ver_res) {
             
-            scui_window_surface_switch(0x00, &widget_only);
-            scui_widget_surface_swap(scui_window_list.widget_0[0], surface_fb);
+            scui_window_surface_switch(0x00, &widget_o);
+            scui_window_surface_swap(scui_window_list.widget_0[0], surface_fb);
             SCUI_LOG_INFO("blend to switch mode");
             return;
         }
@@ -490,7 +534,7 @@ static void scui_window_surface_refresh(void)
         SCUI_ASSERT(widget != NULL);
         SCUI_LOG_INFO("switch mode sync");
         scui_surface_t *surface_fb = scui_frame_buffer_refr();
-        scui_widget_surface_sync(widget, surface_fb);
+        scui_window_surface_sync(widget, surface_fb);
     }
     /* 等待绘制目标刷新 */
     scui_frame_buffer_draw_wait();

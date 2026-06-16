@@ -17,9 +17,7 @@ static struct {
 void scui_ui_scene_notify_none_event(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
+    case scui_event_draw_graph: {
         
         /* 单字符文本 */
         scui_string_args_t args = {0};
@@ -32,7 +30,6 @@ void scui_ui_scene_notify_none_event(scui_event_t *event)
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, scui_lang_type_en);
         args.utf8 = "Wait-Adaptor";
         
-        args.clip = scui_widget_clip(event->object);
         scui_custom_draw_text(event->object, &args, SCUI_HANDLE_INVALID);
         
         break;
@@ -74,16 +71,15 @@ void scui_ui_scene_notify_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_lost:
         break;
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
+    case scui_event_draw_graph: {
         
         // 这里画个圈,校验测试使用
         scui_area_t clip = scui_widget_clip(event->object);
-        clip.x += 4; clip.y += 4;
-        scui_widget_draw_image(event->object, &clip,
-        scui_image_prj_image_src_03_activity_ring_big_max_03_bj_01bmp,
-        NULL, SCUI_COLOR_MAKE32(true, 0xFF000000, 0xFF404040));
+        scui_area_t draw = {.x = 4, .y = 4, .w = clip.w, .h = clip.h};
+        scui_widget_draw_image(event->object, &draw, false,
+    scui_image_prj_image_src_03_activity_ring_big_max_03_bj_01bmp,
+    NULL,
+    SCUI_COLOR_MAKE32(true, 0xFF000000, 0xFF404040));
         
         break;
     }

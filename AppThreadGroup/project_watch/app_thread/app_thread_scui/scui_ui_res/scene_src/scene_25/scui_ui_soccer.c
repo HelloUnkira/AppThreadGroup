@@ -100,169 +100,175 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
         scui_ui_res_local->rotate.y += 1.5f;
         scui_widget_draw(event->object, NULL, false);
         break;
-    case scui_event_draw:
+    case scui_event_draw_ready: {
         
-        /* 绘制流程准备 */
-        if (scui_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
-            
-            scui_coord3_t angle_56 = scui_ui_res_local->angle_56;
-            scui_coord3_t angle_66 = scui_ui_res_local->angle_66;
-            
-            scui_coord3_t sub_size = scui_ui_res_local->sub_size;
-            scui_coord3_t sub_hor_res = scui_ui_res_local->sub_hor_res;
-            scui_coord3_t sub_ver_res = scui_ui_res_local->sub_ver_res;
-            
-            scui_handle_t image_bg = scui_ui_res_local->image_bg;
-            scui_handle_t image_fg = scui_ui_res_local->image_fg[0][0];
-            scui_coord3_t image_bg_w = scui_image_w(image_bg);
-            scui_coord3_t image_bg_h = scui_image_h(image_bg);
-            scui_coord3_t image_fg_w = scui_image_w(image_fg);
-            scui_coord3_t image_fg_h = scui_image_h(image_fg);
-            scui_point2_t offset_bg  = scui_ui_res_local->offset_bg;
-            scui_point2_t offset_fg  = scui_ui_res_local->offset_fg;
-            
-            scui_coord3_t dist_5 = scui_tan(SCUI_RAD_BY_A(36.0f)) * sub_size;
-            scui_coord3_t sin_56 = scui_sin(SCUI_RAD_BY_A(angle_56));
-            scui_coord3_t cos_56 = scui_cos(SCUI_RAD_BY_A(angle_56));
-            scui_coord3_t sin_66 = scui_sin(SCUI_RAD_BY_A(angle_66));
-            scui_coord3_t cos_66 = scui_cos(SCUI_RAD_BY_A(angle_66));
-            
-            scui_area_t clip = scui_widget_clip(event->object);
-            /* 居中偏移 */
-            scui_point3_t offset = {
-                .x = clip.x + clip.w / 2,
-                .y = clip.y + clip.h / 2,
-            };
-            
-            scui_coord3_t angle_x[4] = {angle_56, angle_66, - angle_66, - angle_56,};
-            scui_point3_t face3_bg_ofs[4] = {
-                {.y = -cos_66 * sub_ver_res * 3 / 4 - cos_56 * sub_ver_res, .z = -dist_5},
-                {.y = -cos_66 * sub_ver_res * 3 / 4,                        .z = -dist_5 - sin_56 * sub_ver_res,},
-                {.y = -cos_66 * sub_ver_res * 1 / 4,                        .z = -dist_5 - sin_56 * sub_ver_res - sin_66 * sub_ver_res,},
-                {.y = +cos_66 * sub_ver_res * 3 / 4,                        .z = -dist_5 - sin_56 * sub_ver_res,},
-            };
-            scui_point3_t face3_fg_ofs[4] = {0};
-            for (uint8_t idx_k = 0; idx_k < 4; idx_k++) {
-                face3_fg_ofs[idx_k] = face3_bg_ofs[idx_k];
-                #if 0
-                if (idx_k == 0 || idx_k == 3) {
-                    face3_fg_ofs[idx_k].y += cos_56 * offset_fg.y;
-                    face3_fg_ofs[idx_k].z += sin_56 * offset_fg.y;
-                }
-                if (idx_k == 1 || idx_k == 2) {
-                    face3_fg_ofs[idx_k].y += cos_66 * offset_fg.y;
-                    face3_fg_ofs[idx_k].z += sin_66 * offset_fg.y;
-                }
-                #endif
+        /* 绘制就绪: 几何/矩阵预计算 */
+        SCUI_ASSERT(scui_ui_res_local != NULL);
+        
+        scui_coord3_t angle_56 = scui_ui_res_local->angle_56;
+        scui_coord3_t angle_66 = scui_ui_res_local->angle_66;
+        
+        scui_coord3_t sub_size = scui_ui_res_local->sub_size;
+        scui_coord3_t sub_hor_res = scui_ui_res_local->sub_hor_res;
+        scui_coord3_t sub_ver_res = scui_ui_res_local->sub_ver_res;
+        
+        scui_handle_t image_bg = scui_ui_res_local->image_bg;
+        scui_handle_t image_fg = scui_ui_res_local->image_fg[0][0];
+        scui_coord3_t image_bg_w = scui_image_w(image_bg);
+        scui_coord3_t image_bg_h = scui_image_h(image_bg);
+        scui_coord3_t image_fg_w = scui_image_w(image_fg);
+        scui_coord3_t image_fg_h = scui_image_h(image_fg);
+        scui_point2_t offset_bg  = scui_ui_res_local->offset_bg;
+        scui_point2_t offset_fg  = scui_ui_res_local->offset_fg;
+        
+        scui_coord3_t dist_5 = scui_tan(SCUI_RAD_BY_A(36.0f)) * sub_size;
+        scui_coord3_t sin_56 = scui_sin(SCUI_RAD_BY_A(angle_56));
+        scui_coord3_t cos_56 = scui_cos(SCUI_RAD_BY_A(angle_56));
+        scui_coord3_t sin_66 = scui_sin(SCUI_RAD_BY_A(angle_66));
+        scui_coord3_t cos_66 = scui_cos(SCUI_RAD_BY_A(angle_66));
+        
+        scui_area_t clip = scui_widget_clip(event->object);
+        /* 居中偏移 */
+        scui_point3_t offset = {
+            .x = clip.x + clip.w / 2,
+            .y = clip.y + clip.h / 2,
+        };
+        
+        scui_coord3_t angle_x[4] = {angle_56, angle_66, - angle_66, - angle_56,};
+        scui_point3_t face3_bg_ofs[4] = {
+            {.y = -cos_66 * sub_ver_res * 3 / 4 - cos_56 * sub_ver_res, .z = -dist_5},
+            {.y = -cos_66 * sub_ver_res * 3 / 4,                        .z = -dist_5 - sin_56 * sub_ver_res,},
+            {.y = -cos_66 * sub_ver_res * 1 / 4,                        .z = -dist_5 - sin_56 * sub_ver_res - sin_66 * sub_ver_res,},
+            {.y = +cos_66 * sub_ver_res * 3 / 4,                        .z = -dist_5 - sin_56 * sub_ver_res,},
+        };
+        scui_point3_t face3_fg_ofs[4] = {0};
+        for (uint8_t idx_k = 0; idx_k < 4; idx_k++) {
+            face3_fg_ofs[idx_k] = face3_bg_ofs[idx_k];
+            #if 0
+            if (idx_k == 0 || idx_k == 3) {
+                face3_fg_ofs[idx_k].y += cos_56 * offset_fg.y;
+                face3_fg_ofs[idx_k].z += sin_56 * offset_fg.y;
             }
-            
-            
-            for (uint8_t idx_j = 0; idx_j < 4; idx_j++)
-            for (uint8_t idx_i = 0; idx_i < 5; idx_i++) {
-                
-                /* 1.移动x轴向 */
-                scui_face3_t face3_bg = {
-                    .point3[0] = {.x = -image_bg_w / 2 - offset_bg.x, .y = -offset_bg.y,},
-                    .point3[1] = {.x = +image_bg_w / 2 - offset_bg.x, .y = -offset_bg.y,},
-                    .point3[2] = {.x = +image_bg_w / 2 - offset_bg.x, .y = -offset_bg.y + image_bg_h,},
-                    .point3[3] = {.x = -image_bg_w / 2 - offset_bg.x, .y = -offset_bg.y + image_bg_h,},
-                };
-                scui_face3_t face3_fg = {
-                    .point3[0] = {.x = -image_fg_w / 2, .y = -offset_bg.y + offset_fg.y,},
-                    .point3[1] = {.x = +image_fg_w / 2, .y = -offset_bg.y + offset_fg.y,},
-                    .point3[2] = {.x = +image_fg_w / 2, .y = -offset_bg.y + offset_fg.y + image_fg_h,},
-                    .point3[3] = {.x = -image_fg_w / 2, .y = -offset_bg.y + offset_fg.y + image_fg_h,},
-                };
-                
-                /* 2.进行x轴向旋转 */
-                scui_matrix_t x_matrix = {0};
-                scui_matrix_identity(&x_matrix);
-                scui_matrix_rotate_a(&x_matrix, -(angle_x[idx_j]), 0x01);
-                scui_area3_transform_by_matrix(&face3_bg, &x_matrix);
-                scui_area3_transform_by_matrix(&face3_fg, &x_matrix);
-                /* 3.移动y轴向和z轴向 */
-                for (uint8_t idx_k = 0; idx_k < 4; idx_k++) {
-                    face3_bg.point3[idx_k].y += face3_bg_ofs[idx_j].y;
-                    face3_bg.point3[idx_k].z += face3_bg_ofs[idx_j].z;
-                    face3_fg.point3[idx_k].y += face3_fg_ofs[idx_j].y;
-                    face3_fg.point3[idx_k].z += face3_fg_ofs[idx_j].z;
-                }
-                /* 3.进行y轴向旋转 */
-                scui_matrix_t y_matrix = {0};
-                scui_matrix_identity(&y_matrix);
-                scui_coord3_t rotate_y = scui_ui_res_local->rotate.y;
-                scui_matrix_rotate_a(&y_matrix, +(idx_i * 72.0f + (idx_j < 2 ? 0.0f : 36.0f) + rotate_y), 0x02);
-                scui_area3_transform_by_matrix(&face3_bg, &y_matrix);
-                scui_area3_transform_by_matrix(&face3_fg, &y_matrix);
-                /* 4.进行x轴向旋转 */
-                scui_matrix_t rx_matrix = {0};
-                scui_matrix_identity(&rx_matrix);
-                scui_coord3_t rotate_x = scui_ui_res_local->rotate.x;
-                scui_matrix_rotate_a(&rx_matrix, +(rotate_x), 0x01);
-                scui_area3_transform_by_matrix(&face3_bg, &rx_matrix);
-                scui_area3_transform_by_matrix(&face3_fg, &rx_matrix);
-                /* 5.移动到中心点 */
-                scui_area3_offset_xy(&face3_bg, &offset);
-                scui_area3_offset_xy(&face3_fg, &offset);
-                
-                /* 计算法线z轴 */
-                scui_matrix_t t_matrix = {0};
-                scui_matrix_identity(&t_matrix);
-                scui_matrix_multiply(&t_matrix, &x_matrix);
-                scui_matrix_multiply(&t_matrix, &y_matrix);
-                scui_matrix_multiply(&t_matrix, &rx_matrix);
-                scui_normal3_t  normal3 = {0.0f, 0.0f, -1.0f};
-                scui_coord3_t (*normal_z_bg)[5] = scui_ui_res_local->normal_z_bg;
-                scui_coord3_t (*normal_z_fg)[5] = scui_ui_res_local->normal_z_fg;
-                scui_mormal3_z_by_matrix(&normal3, &normal_z_bg[idx_j][idx_i], &t_matrix);
-                scui_mormal3_z_by_matrix(&normal3, &normal_z_fg[idx_j][idx_i], &t_matrix);
-                if (normal_z_bg[idx_j][idx_i] < -0.0f) {
-                    /* 仿射变换矩阵 */
-                    scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
-                    scui_matrix_t (*inv_matrix_bg)[5] = scui_ui_res_local->inv_matrix_bg;
-                    scui_size2_t size2_bg = {.w = image_bg_w,.h = image_bg_h,};
-                    scui_matrix_affine_blit(&matrix_bg[idx_j][idx_i], &size2_bg, &face3_bg);
-                    inv_matrix_bg[idx_j][idx_i] = matrix_bg[idx_j][idx_i];
-                    scui_matrix_inverse(&inv_matrix_bg[idx_j][idx_i]);
-                }
-                if (normal_z_fg[idx_j][idx_i] < -0.0f) {
-                    scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
-                    scui_matrix_t (*inv_matrix_fg)[5] = scui_ui_res_local->inv_matrix_fg;
-                    scui_size2_t size2_fg = {.w = image_fg_w,.h = image_fg_h,};
-                    scui_matrix_affine_blit(&matrix_fg[idx_j][idx_i], &size2_fg, &face3_fg);
-                    inv_matrix_fg[idx_j][idx_i] = matrix_fg[idx_j][idx_i];
-                    scui_matrix_inverse(&inv_matrix_fg[idx_j][idx_i]);
-                }
+            if (idx_k == 1 || idx_k == 2) {
+                face3_fg_ofs[idx_k].y += cos_66 * offset_fg.y;
+                face3_fg_ofs[idx_k].z += sin_66 * offset_fg.y;
             }
+            #endif
         }
         
-        /* 绘制流程进行 */
-        if (scui_event_check_execute(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
+        
+        for (uint8_t idx_j = 0; idx_j < 4; idx_j++)
+        for (uint8_t idx_i = 0; idx_i < 5; idx_i++) {
             
-            for (uint8_t idx_j = 0; idx_j < 4; idx_j++)
-            for (uint8_t idx_i = 0; idx_i < 5; idx_i++) {
-                
-                scui_coord3_t (*normal_z_bg)[5] = scui_ui_res_local->normal_z_bg;
-                scui_coord3_t (*normal_z_fg)[5] = scui_ui_res_local->normal_z_fg;
-                if (normal_z_bg[idx_j][idx_i] < -0.0f) {
-                    scui_handle_t   image_bg = scui_ui_res_local->image_bg;
-                    scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
-                    scui_matrix_t (*inv_matrix_bg)[5] = scui_ui_res_local->inv_matrix_bg;
-                    scui_widget_draw_image_3d(event->object, NULL, image_bg, NULL,
-                        &matrix_bg[idx_j][idx_i], &inv_matrix_bg[idx_j][idx_i]);
-                }
-                if (normal_z_fg[idx_j][idx_i] < -0.0f) {
-                    scui_handle_t (*image_fg)[5] = scui_ui_res_local->image_fg;
-                    scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
-                    scui_matrix_t (*inv_matrix_fg)[5] = scui_ui_res_local->inv_matrix_fg;
-                    scui_widget_draw_image_3d(event->object, NULL, image_fg[idx_j][idx_i], NULL,
-                        &matrix_fg[idx_j][idx_i], &inv_matrix_fg[idx_j][idx_i]);
-                }
+            /* 1.移动x轴向 */
+            scui_face3_t face3_bg = {
+                .point3[0] = {.x = -image_bg_w / 2 - offset_bg.x, .y = -offset_bg.y,},
+                .point3[1] = {.x = +image_bg_w / 2 - offset_bg.x, .y = -offset_bg.y,},
+                .point3[2] = {.x = +image_bg_w / 2 - offset_bg.x, .y = -offset_bg.y + image_bg_h,},
+                .point3[3] = {.x = -image_bg_w / 2 - offset_bg.x, .y = -offset_bg.y + image_bg_h,},
+            };
+            scui_face3_t face3_fg = {
+                .point3[0] = {.x = -image_fg_w / 2, .y = -offset_bg.y + offset_fg.y,},
+                .point3[1] = {.x = +image_fg_w / 2, .y = -offset_bg.y + offset_fg.y,},
+                .point3[2] = {.x = +image_fg_w / 2, .y = -offset_bg.y + offset_fg.y + image_fg_h,},
+                .point3[3] = {.x = -image_fg_w / 2, .y = -offset_bg.y + offset_fg.y + image_fg_h,},
+            };
+            
+            /* 2.进行x轴向旋转 */
+            scui_matrix_t x_matrix = {0};
+            scui_matrix_identity(&x_matrix);
+            scui_matrix_rotate_a(&x_matrix, -(angle_x[idx_j]), 0x01);
+            scui_area3_transform_by_matrix(&face3_bg, &x_matrix);
+            scui_area3_transform_by_matrix(&face3_fg, &x_matrix);
+            /* 3.移动y轴向和z轴向 */
+            for (uint8_t idx_k = 0; idx_k < 4; idx_k++) {
+                face3_bg.point3[idx_k].y += face3_bg_ofs[idx_j].y;
+                face3_bg.point3[idx_k].z += face3_bg_ofs[idx_j].z;
+                face3_fg.point3[idx_k].y += face3_fg_ofs[idx_j].y;
+                face3_fg.point3[idx_k].z += face3_fg_ofs[idx_j].z;
+            }
+            /* 3.进行y轴向旋转 */
+            scui_matrix_t y_matrix = {0};
+            scui_matrix_identity(&y_matrix);
+            scui_coord3_t rotate_y = scui_ui_res_local->rotate.y;
+            scui_matrix_rotate_a(&y_matrix, +(idx_i * 72.0f + (idx_j < 2 ? 0.0f : 36.0f) + rotate_y), 0x02);
+            scui_area3_transform_by_matrix(&face3_bg, &y_matrix);
+            scui_area3_transform_by_matrix(&face3_fg, &y_matrix);
+            /* 4.进行x轴向旋转 */
+            scui_matrix_t rx_matrix = {0};
+            scui_matrix_identity(&rx_matrix);
+            scui_coord3_t rotate_x = scui_ui_res_local->rotate.x;
+            scui_matrix_rotate_a(&rx_matrix, +(rotate_x), 0x01);
+            scui_area3_transform_by_matrix(&face3_bg, &rx_matrix);
+            scui_area3_transform_by_matrix(&face3_fg, &rx_matrix);
+            /* 5.移动到中心点 */
+            scui_area3_offset_xy(&face3_bg, &offset);
+            scui_area3_offset_xy(&face3_fg, &offset);
+            
+            /* 计算法线z轴 */
+            scui_matrix_t t_matrix = {0};
+            scui_matrix_identity(&t_matrix);
+            scui_matrix_multiply(&t_matrix, &x_matrix);
+            scui_matrix_multiply(&t_matrix, &y_matrix);
+            scui_matrix_multiply(&t_matrix, &rx_matrix);
+            scui_normal3_t  normal3 = {0.0f, 0.0f, -1.0f};
+            scui_coord3_t (*normal_z_bg)[5] = scui_ui_res_local->normal_z_bg;
+            scui_coord3_t (*normal_z_fg)[5] = scui_ui_res_local->normal_z_fg;
+            scui_mormal3_z_by_matrix(&normal3, &normal_z_bg[idx_j][idx_i], &t_matrix);
+            scui_mormal3_z_by_matrix(&normal3, &normal_z_fg[idx_j][idx_i], &t_matrix);
+            if (normal_z_bg[idx_j][idx_i] < -0.0f) {
+                /* 仿射变换矩阵 */
+                scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
+                scui_matrix_t (*inv_matrix_bg)[5] = scui_ui_res_local->inv_matrix_bg;
+                scui_size2_t size2_bg = {.w = image_bg_w,.h = image_bg_h,};
+                scui_matrix_affine_blit(&matrix_bg[idx_j][idx_i], &size2_bg, &face3_bg);
+                inv_matrix_bg[idx_j][idx_i] = matrix_bg[idx_j][idx_i];
+                scui_matrix_inverse(&inv_matrix_bg[idx_j][idx_i]);
+            }
+            if (normal_z_fg[idx_j][idx_i] < -0.0f) {
+                scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
+                scui_matrix_t (*inv_matrix_fg)[5] = scui_ui_res_local->inv_matrix_fg;
+                scui_size2_t size2_fg = {.w = image_fg_w,.h = image_fg_h,};
+                scui_matrix_affine_blit(&matrix_fg[idx_j][idx_i], &size2_fg, &face3_fg);
+                inv_matrix_fg[idx_j][idx_i] = matrix_fg[idx_j][idx_i];
+                scui_matrix_inverse(&inv_matrix_fg[idx_j][idx_i]);
             }
         }
         break;
+    }
+    case scui_event_draw_graph: {
+        
+        /* 绘制图形: 执行3D渲染 */
+        SCUI_ASSERT(scui_ui_res_local != NULL);
+        
+        for (uint8_t idx_j = 0; idx_j < 4; idx_j++)
+        for (uint8_t idx_i = 0; idx_i < 5; idx_i++) {
+            
+            scui_coord3_t (*normal_z_bg)[5] = scui_ui_res_local->normal_z_bg;
+            scui_coord3_t (*normal_z_fg)[5] = scui_ui_res_local->normal_z_fg;
+            if (normal_z_bg[idx_j][idx_i] < -0.0f) {
+                scui_handle_t   image_bg = scui_ui_res_local->image_bg;
+                scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
+                scui_matrix_t (*inv_matrix_bg)[5] = scui_ui_res_local->inv_matrix_bg;
+                scui_widget_draw_image_3d(event->object, NULL, false,
+    image_bg,
+    NULL,
+    &matrix_bg[idx_j][idx_i],
+    &inv_matrix_bg[idx_j][idx_i]);
+            }
+            if (normal_z_fg[idx_j][idx_i] < -0.0f) {
+                scui_handle_t (*image_fg)[5] = scui_ui_res_local->image_fg;
+                scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
+                scui_matrix_t (*inv_matrix_fg)[5] = scui_ui_res_local->inv_matrix_fg;
+                scui_widget_draw_image_3d(event->object, NULL, false,
+    image_fg[idx_j][idx_i],
+    NULL,
+    &matrix_fg[idx_j][idx_i],
+    &inv_matrix_fg[idx_j][idx_i]);
+            }
+        }
+        break;
+    }
     case scui_event_ptr_move:
         scui_event_mask_over(event);
         
@@ -278,7 +284,6 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
         scui_ui_res_local->move_lock = false;
         
         break;
-    break;
     default:
         break;
     }

@@ -14,8 +14,8 @@ void scui_widget_maker_def_cfg(void *maker, scui_widget_type_t type)
 		scui_window_maker_t *window_maker = (scui_window_maker_t *)maker;
 		
 		window_maker->widget.type                    = scui_widget_type_window;
+		window_maker->widget.style.buffer            = true;
 		window_maker->widget.style.fully_bg          = true;
-		window_maker->buffer                         = true;
 		window_maker->widget.clip.w                  = SCUI_HOR_RES;
 		window_maker->widget.clip.h                  = SCUI_VER_RES;
 		window_maker->level                          = 0;
@@ -47,12 +47,6 @@ void scui_widget_maker_def_cfg(void *maker, scui_widget_type_t type)
 		scroll_maker->keyid_bdir                     = SCUI_WIDGET_SCROLL_KEY_BDIR;
 		scroll_maker->pos                            = scui_opt_pos_c;
 		scroll_maker->dir                            = scui_opt_dir_ver;
-		break;
-	}
-	case scui_widget_type_canvas: {
-		scui_canvas_maker_t *canvas_maker = (scui_canvas_maker_t *)maker;
-		
-		canvas_maker->widget.type                    = scui_widget_type_canvas;
 		break;
 	}
 	case scui_widget_type_string: {

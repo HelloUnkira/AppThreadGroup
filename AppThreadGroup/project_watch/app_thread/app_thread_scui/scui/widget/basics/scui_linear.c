@@ -228,66 +228,64 @@ void scui_linear_invoke(scui_event_t *event)
     scui_scroll_invoke(event);
     
     switch (event->type) {
-    case scui_event_draw: {
+    case scui_event_draw_graph: {
         
         /* 从控件树绘制结束,回收部分不使用的画布 */
-        if (scui_event_check_finish(event)) {
+        
+        /* 更新回收记录 */
+        linear->clear_num   = 0;
+        linear->clear_byte  = 0;
+        linear->remain_num  = 0;
+        linear->remain_byte = 0;
+        
+        /* 遍历子控件列表 */
+        scui_widget_child_list_btra(widget, idx) {
+            /* 取出子控件(主)的相关信息 */
+            scui_handle_t    handle_m = widget->child_list[idx];
+            scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
+            scui_linear_m_t *linear_m = (void *)widget_m;
             
-            /* 更新回收记录 */
-            linear->clear_num   = 0;
-            linear->clear_byte  = 0;
-            linear->remain_num  = 0;
-            linear->remain_byte = 0;
+            /* 不是所有子控件(主)都有子控件树(从) */
+            if (linear_m->handle_s == SCUI_HANDLE_INVALID)
+                continue;
             
-            /* 遍历子控件列表 */
-            scui_widget_child_list_btra(widget, idx) {
-                /* 取出子控件(主)的相关信息 */
-                scui_handle_t    handle_m = widget->child_list[idx];
-                scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
-                scui_linear_m_t *linear_m = (void *)widget_m;
-                
-                /* 不是所有子控件(主)都有子控件树(从) */
-                if (linear_m->handle_s == SCUI_HANDLE_INVALID)
-                    continue;
-                
-                /* 取出子控件树(从)的相关信息 */
-                scui_handle_t    handle_s = linear_m->handle_s;
-                scui_widget_t   *widget_s = scui_handle_source_check(handle_s);
-                scui_linear_s_t *linear_s = (void *)widget_s;
-                
-                SCUI_LOG_DEBUG("surface index:%x", idx);
-                scui_multi_t surface_size = 0;
-                
-                /* 从子控件树无需清理 */
-                if (linear_s->surface_s == NULL)
-                    continue;
-                if (linear_s->surface_s != NULL) {
-                    scui_coord_t hor_res   = linear_s->surface_s->hor_res;
-                    scui_coord_t ver_res   = linear_s->surface_s->ver_res;
-                    scui_coord_t cf_byte   = scui_pixel_byte(linear_s->surface_s->format);
-                    scui_coord_t cf_remain = sizeof(scui_color_wt_t) - cf_byte;
-                    surface_size = hor_res * ver_res * cf_byte + cf_remain;
-                }
-                
-                if (linear_m->draw) {
-                    linear_m->draw = false;
-                    
-                    linear->remain_byte += surface_size;
-                    linear->remain_num  += surface_size == 0 ? 0 : 1;
-                    continue;
-                }
-                linear->clear_byte += surface_size;
-                linear->clear_num  += surface_size == 0 ? 0 : 1;
-                
-                scui_widget_surface_remap(handle_s, linear_s->surface_s);
-                scui_widget_surface_destroy(handle_s);
-                scui_widget_surface_remap(handle_s, NULL);
-                linear_s->surface_s = NULL;
+            /* 取出子控件树(从)的相关信息 */
+            scui_handle_t    handle_s = linear_m->handle_s;
+            scui_widget_t   *widget_s = scui_handle_source_check(handle_s);
+            scui_linear_s_t *linear_s = (void *)widget_s;
+            
+            SCUI_LOG_DEBUG("surface index:%x", idx);
+            scui_multi_t surface_size = 0;
+            
+            /* 从子控件树无需清理 */
+            if (linear_s->surface_s == NULL)
+                continue;
+            if (linear_s->surface_s != NULL) {
+                scui_coord_t hor_res   = linear_s->surface_s->hor_res;
+                scui_coord_t ver_res   = linear_s->surface_s->ver_res;
+                scui_coord_t cf_byte   = scui_pixel_byte(linear_s->surface_s->format);
+                scui_coord_t cf_remain = sizeof(scui_color_wt_t) - cf_byte;
+                surface_size = hor_res * ver_res * cf_byte + cf_remain;
             }
             
-            SCUI_LOG_INFO("surface clear  num:%u, bytes:%x", linear->clear_num,  linear->clear_byte);
-            SCUI_LOG_INFO("surface remain num:%u, bytes:%x", linear->remain_num, linear->remain_byte);
+            if (linear_m->draw) {
+                linear_m->draw = false;
+                
+                linear->remain_byte += surface_size;
+                linear->remain_num  += surface_size == 0 ? 0 : 1;
+                continue;
+            }
+            linear->clear_byte += surface_size;
+            linear->clear_num  += surface_size == 0 ? 0 : 1;
+            
+            scui_widget_surface_remap(handle_s, linear_s->surface_s);
+            scui_widget_surface_destroy(handle_s);
+            scui_widget_surface_remap(handle_s, NULL);
+            linear_s->surface_s = NULL;
         }
+        
+        SCUI_LOG_INFO("surface clear  num:%u, bytes:%x", linear->clear_num,  linear->clear_byte);
+        SCUI_LOG_INFO("surface remain num:%u, bytes:%x", linear->remain_num, linear->remain_byte);
         break;
     }
     default:
@@ -304,7 +302,7 @@ void scui_linear_m_invoke(scui_event_t *event)
     /* 列表控件是当前控件的父控件 */
     
     switch (event->type) {
-    case scui_event_draw: {
+    case scui_event_draw_graph: {
         scui_handle_t    handle_m = event->object;
         scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
         scui_linear_m_t *linear_m = (void *)widget_m;
@@ -318,62 +316,58 @@ void scui_linear_m_invoke(scui_event_t *event)
         scui_linear_s_t *linear_s = (void *)widget_s;
         
         /* 步调:prepare */
-        if (scui_event_check_prepare(event)) {
-            /* 处理子控件树画布,重绘子控件树 */
+        /* 处理子控件树画布,重绘子控件树 */
+        
+        /* 没有剪切域,忽略该绘制,避免假绘制爆内存 */
+        if (scui_widget_draw_empty(handle_m)) {
+            linear_m->draw = false;
             
-            /* 没有剪切域,忽略该绘制,避免假绘制爆内存 */
-            if (scui_widget_draw_empty(handle_m)) {
-                linear_m->draw = false;
-                
-                /* 主目标不能绘制,清空从目标画布 */
-                if (linear_s->surface_s != NULL) {
-                    scui_widget_surface_remap(handle_s, linear_s->surface_s);
-                    scui_widget_surface_destroy(handle_s);
-                    scui_widget_surface_remap(handle_s, NULL);
-                    linear_s->surface_s = NULL;
-                }
-                return;
+            /* 主目标不能绘制,清空从目标画布 */
+            if (linear_s->surface_s != NULL) {
+                scui_widget_surface_remap(handle_s, linear_s->surface_s);
+                scui_widget_surface_destroy(handle_s);
+                scui_widget_surface_remap(handle_s, NULL);
+                linear_s->surface_s = NULL;
             }
-            
-            /* 创建一个独立的子画布,将目标绘制到一个独立子画布中 */
-            if (linear_s->surface_s == NULL) {
-                scui_surface_t surface = {
-                    .format  = linear_s->format,
-                    .hor_res = widget_s->clip.w,
-                    .ver_res = widget_s->clip.h,
-                };
-                scui_widget_surface_create(handle_s, &surface);
-                linear_s->surface_s = scui_widget_surface(handle_s);
-                linear_m->refr = true;
-                /* 更新此画布目标,重配画布图资源 */
-                linear_s->image_src.type           = scui_image_type_mem;
-                linear_s->image_src.format         = linear_s->surface_s->format;
-                linear_s->image_src.pixel.width    = linear_s->surface_s->hor_res;
-                linear_s->image_src.pixel.height   = linear_s->surface_s->ver_res;
-                linear_s->image_src.pixel.data_bin = linear_s->surface_s->pixel;
-            }
-            scui_widget_surface_remap(handle_s, linear_s->surface_s);
-            
-            /* 刷新该画布 */
-            if (linear_m->refr) {
-                linear_m->refr = false;
-                
-                /* 移除跟子控件树相关所有绘制事件 */
-                scui_event_define(event, handle_s, false, scui_event_draw, NULL);
-                while (scui_event_dequeue(&event, true, false));
-                
-                scui_widget_show(handle_s, false);
-            }
-            
-            /* 流程到此,画布已经是新的了,标记进行绘制 */
-            linear_m->draw = true;
+            return;
         }
         
-        /* 步调finish: */
-        if (scui_event_check_finish(event)) {
-            /* 去除画布绑定 */
-            scui_widget_surface_remap(handle_s, NULL);
+        /* 创建一个独立的子画布,将目标绘制到一个独立子画布中 */
+        if (linear_s->surface_s == NULL) {
+            scui_surface_t surface = {
+                .format  = linear_s->format,
+                .hor_res = widget_s->clip.w,
+                .ver_res = widget_s->clip.h,
+            };
+            scui_widget_surface_create(handle_s, &surface);
+            linear_s->surface_s = scui_widget_surface(handle_s);
+            linear_m->refr = true;
+            /* 更新此画布目标,重配画布图资源 */
+            linear_s->image_src.type           = scui_image_type_mem;
+            linear_s->image_src.format         = linear_s->surface_s->format;
+            linear_s->image_src.pixel.width    = linear_s->surface_s->hor_res;
+            linear_s->image_src.pixel.height   = linear_s->surface_s->ver_res;
+            linear_s->image_src.pixel.data_bin = linear_s->surface_s->pixel;
         }
+        scui_widget_surface_remap(handle_s, linear_s->surface_s);
+        
+        /* 刷新该画布 */
+        if (linear_m->refr) {
+            linear_m->refr = false;
+            
+            /* 移除跟子控件树相关所有绘制事件 */
+            scui_event_define(event, handle_s, false, scui_event_draw, NULL);
+            while (scui_event_dequeue(&event, true, false));
+            
+            scui_widget_show(handle_s, false);
+        }
+        
+        /* 流程到此,画布已经是新的了,标记进行绘制 */
+        linear_m->draw = true;
+        
+        /* 步调finish: */
+        /* 去除画布绑定 */
+        scui_widget_surface_remap(handle_s, NULL);
         break;
     }
     default: {
@@ -406,7 +400,7 @@ void scui_linear_s_invoke(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
     switch (event->type) {
-        case scui_event_draw: {
+        case scui_event_draw_graph: {
             scui_handle_t    handle_s = event->object;
             scui_widget_t   *widget_s = scui_handle_source_check(handle_s);
             scui_linear_s_t *linear_s = (void *)widget_s;

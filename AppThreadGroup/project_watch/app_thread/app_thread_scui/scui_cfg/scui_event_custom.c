@@ -184,8 +184,6 @@ void scui_event_custom_myself(scui_event_t *event)
     }
     case scui_event_ui_home_goto: {
         scui_event_mask_over(event);
-        if (!scui_event_check_execute(event))
-             break;
         
         /* 如果本来是在待机界面时 */
         if (handle_top == SCUI_UI_SCENE_STANDBY) {
@@ -200,8 +198,6 @@ void scui_event_custom_myself(scui_event_t *event)
     }
     case scui_event_ui_standy_enter: {
         scui_event_mask_over(event);
-        if (!scui_event_check_execute(event))
-             break;
         
         /* 如果本来是在待机界面时 */
         if (handle_top != SCUI_UI_SCENE_STANDBY) {
@@ -217,8 +213,6 @@ void scui_event_custom_myself(scui_event_t *event)
     }
     case scui_event_ui_standy_exit: {
         scui_event_mask_over(event);
-        if (!scui_event_check_execute(event))
-             break;
         
         if (handle_top == SCUI_UI_SCENE_STANDBY) {
             scui_window_stack_del_by(SCUI_UI_SCENE_STANDBY,

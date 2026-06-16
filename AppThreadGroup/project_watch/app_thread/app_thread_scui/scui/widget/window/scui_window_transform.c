@@ -18,7 +18,7 @@ static scui_window_transform_t scui_window_transform = {0};
 static bool scui_window_transform_clip(scui_widget_t *widget, scui_area_t *dst_clip, scui_area_t *src_clip)
 {
     scui_surface_t *dst_surface = scui_frame_buffer_draw();
-    scui_surface_t *src_surface = widget->surface;
+    scui_surface_t *src_surface = widget->surface_c;
     
     SCUI_ASSERT(scui_widget_surface_only(widget));
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
@@ -64,7 +64,7 @@ void scui_window_transform_move(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -90,7 +90,7 @@ void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -169,7 +169,7 @@ void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -251,7 +251,7 @@ void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -358,7 +358,7 @@ void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -423,7 +423,7 @@ void scui_window_transform_rotate_1(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -473,7 +473,7 @@ void scui_window_transform_circle(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -571,7 +571,7 @@ void scui_window_transform_grid(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -657,7 +657,7 @@ void scui_window_transform_flip1(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -734,7 +734,7 @@ void scui_window_transform_flip2(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -769,7 +769,7 @@ void scui_window_transform_flip2(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 窗口切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_surface_t *src_surface = list[idx]->surface;
+        scui_surface_t *src_surface = list[idx]->surface_c;
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         scui_area_t dst_clip = scui_frame_buffer_area();
@@ -818,8 +818,8 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
     scui_handle_t  window_a = scui_window_active_curr();
     scui_widget_t *widget_a = list[0]->myself == window_a ? list[0] : list[1];
     scui_widget_t *widget_i = list[0]->myself != window_a ? list[0] : list[1];
-    scui_surface_t *src_surface_a = widget_a->surface;
-    scui_surface_t *src_surface_i = widget_i->surface;
+    scui_surface_t *src_surface_a = widget_a->surface_c;
+    scui_surface_t *src_surface_i = widget_i->surface_c;
     
     /* 空间建模参数 */
     scui_coord3_t angle = scui_map(scui_window_switch_pct(), 0, 100, 0, 180);
@@ -1030,8 +1030,8 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
     scui_handle_t  window_a = scui_window_active_curr();
     scui_widget_t *widget_a = list[0]->myself == window_a ? list[0] : list[1];
     scui_widget_t *widget_i = list[0]->myself != window_a ? list[0] : list[1];
-    scui_surface_t *src_surface_a = widget_a->surface;
-    scui_surface_t *src_surface_i = widget_i->surface;
+    scui_surface_t *src_surface_a = widget_a->surface_c;
+    scui_surface_t *src_surface_i = widget_i->surface_c;
     
     const scui_coord3_t flap_scale_w = 0.173;
     const scui_coord_t  flap_seg = 6;
@@ -1232,8 +1232,8 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
     scui_handle_t  window_a = scui_window_active_curr();
     scui_widget_t *widget_a = list[0]->myself == window_a ? list[0] : list[1];
     scui_widget_t *widget_i = list[0]->myself != window_a ? list[0] : list[1];
-    scui_surface_t *src_surface_a = widget_a->surface;
-    scui_surface_t *src_surface_i = widget_i->surface;
+    scui_surface_t *src_surface_a = widget_a->surface_c;
+    scui_surface_t *src_surface_i = widget_i->surface_c;
     
     /* 空间建模参数 */
     scui_coord3_t angle = scui_map(scui_window_switch_pct(), 0, 100, 0, 90);

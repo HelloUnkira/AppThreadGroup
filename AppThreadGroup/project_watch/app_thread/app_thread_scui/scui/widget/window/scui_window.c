@@ -27,35 +27,10 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(widget_maker->parent == SCUI_HANDLE_INVALID);
     /* 注意:要求只能是根控件才可以创建窗口 */
     
-    #if SCUI_MEM_FEAT_MINI
-    /* 小内存方案禁用窗口独立画布 */
-    window_maker->buffer = false;
-    #endif
-    
     /* 常配置信息 */
     window->resident = window_maker->resident;
     window->preload  = window_maker->preload;
-    window->buffer   = window_maker->buffer;
     window->level    = window_maker->level;
-    window->format   = window_maker->format;
-    if (window->format == scui_pixel_cf_def)
-        window->format  = SCUI_PIXEL_CF_DEF;
-    
-    /* 创建surface */
-    if (window->buffer) {
-        scui_surface_t surface = {
-            .format  = window->format,
-            .hor_res = widget->clip.w,
-            .ver_res = widget->clip.h,
-        };
-        
-        scui_widget_clip_clear(widget, true);
-        scui_widget_surface_create(widget->myself, &surface);
-        scui_widget_surface_refr(widget->myself, true);
-    }
-    
-    /* sibling, switch_type, switch_enc, switch_key */
-    /* 既要满足静态配置的同时也应允许过程中动态更变 */
     
     /* 配置邻近窗口: */
     for (scui_coord_t idx = 0; idx < 4; idx++)
@@ -96,10 +71,6 @@ void scui_window_burn(scui_handle_t handle)
     
     /* 回收本地资源 */
     SCUI_MEM_FREE(window->local_res);
-    
-    /* 回收surface */
-    if (scui_widget_surface_only(widget))
-        scui_widget_surface_destroy(widget->myself);
     
     /* 析构基础控件实例 */
     scui_widget_burn(widget);

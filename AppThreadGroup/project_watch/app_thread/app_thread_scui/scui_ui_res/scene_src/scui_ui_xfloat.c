@@ -17,9 +17,7 @@ void scui_ui_scene_xfloat_m_event_proc(scui_event_t * event)
         break;
     case scui_event_destroy:
         break;
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
+    case scui_event_draw_graph: {
         
         scui_handle_t handle_s = SCUI_HANDLE_INVALID;
         scui_linear_m_get(event->object, &handle_s);
@@ -38,7 +36,7 @@ void scui_ui_scene_xfloat_m_event_proc(scui_event_t * event)
         scui_handle_t image = scui_handle_find();
         scui_handle_linker(image, &img_inst);
         
-        scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_UNUSED);
+        scui_widget_draw_image(event->object, NULL, false, image, NULL, SCUI_COLOR_UNUSED);
         
         scui_handle_clear(image);
         break;

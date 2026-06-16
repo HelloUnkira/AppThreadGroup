@@ -56,9 +56,7 @@ static void scui_cwf_json_val_to_idx_ofs(scui_cwf_json_parser_t *parser, uint32_
 static void scui_cwf_json_custom_event(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             return;
+    case scui_event_draw_graph: {
         
         /* 固定资源绑定到res, 构建时将widget与固定的res绑定 */
         scui_csf_json_item__res_t *res = NULL;
@@ -73,7 +71,7 @@ static void scui_cwf_json_custom_event(scui_event_t *event)
         if (res->idx_ofs == NULL)
             break;
         
-        scui_area_t clip = scui_widget_clip(event->object);
+        scui_multi_t cur_x = 0;
         for (int32_t idx = 0; idx < res->idx_num; idx++) {
             uint16_t img_ofs = res->img_ofs[res->idx_ofs[idx]];
             scui_handle_t image = parser->image_hit[img_ofs];
@@ -82,12 +80,16 @@ static void scui_cwf_json_custom_event(scui_event_t *event)
             
             /* 要么全部绘制图片, 要么只绘制指定位置的图片 */
             if (res->img_bits == 0 || res->img_bits - 1 == idx) {
-                clip.w = scui_image_w(image);
-                clip.h = scui_image_h(image);
-                scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
+                scui_area_t clip = {
+                    .x = cur_x,
+                    .y = 0,
+                    .w = scui_image_w(image),
+                    .h = scui_image_h(image),
+                };
+                scui_widget_draw_image(event->object, &clip, false, image, NULL, SCUI_COLOR_UNUSED);
             }
             /* 迭代到下一个绘制目标 */
-            clip.x += clip.w + res->img_span;
+            cur_x += scui_image_w(image) + res->img_span;
         }
         break;
     }

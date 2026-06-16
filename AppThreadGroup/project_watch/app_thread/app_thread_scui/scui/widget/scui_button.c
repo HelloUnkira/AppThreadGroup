@@ -121,9 +121,7 @@ void scui_button_invoke(scui_event_t *event)
         
         break;
     }
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             return;
+    case scui_event_draw_graph: {
         
         if (button->type == scui_button_type_image) {
             switch (button->mode) {
@@ -203,8 +201,10 @@ void scui_button_invoke(scui_event_t *event)
                     draw_dsc.graph.src_radius = src_radius[idx];
                     draw_dsc.graph.src_shadow = (idx == 3);
                     
-                    scui_widget_draw_graph(widget->myself, NULL,
-                        button->pixel.alpha[idx], src_color, &draw_dsc);
+                    scui_widget_draw_graph(widget->myself, NULL, false,
+    button->pixel.alpha[idx],
+    src_color,
+    &draw_dsc);
                 }
                 
                 break;
@@ -218,15 +218,7 @@ void scui_button_invoke(scui_event_t *event)
     }
     case scui_event_ptr_down: {
         
-        scui_handle_t handle = scui_widget_root(widget->myself);
-        scui_widget_t  *root = scui_handle_source_check(handle);
-        
-        scui_area_t clip = widget->clip;
-        if (widget != root) {
-            clip.x += root->clip.x;
-            clip.y += root->clip.y;
-        }
-        if (!scui_area_point(&clip, &event->ptr_c))
+        if (!scui_widget_event_inside(event))
              break;
         
         switch (button->mode) {
