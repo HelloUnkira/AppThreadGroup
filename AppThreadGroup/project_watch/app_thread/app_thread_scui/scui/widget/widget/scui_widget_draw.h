@@ -44,6 +44,13 @@ bool scui_widget_draw_empty(scui_handle_t handle);
  */
 bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *face);
 
+/*@brief 重定向画布及其剪切域
+ *@param handle 控件句柄
+ *@param redirect 重定向
+ *@retval 成功失败
+ */
+bool scui_widget_draw_buffer(scui_handle_t handle, bool redirect);
+
 /* widget draw ctx: */
 /*****************************************************************************/
 #define SCUI_WIDGET_DRAW_CTX_DECLARE(name) void name(scui_handle_t handle, \
@@ -62,9 +69,6 @@ SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_2d);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_image_3d);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_ring);
 SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_graph);
-SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_buffer);
-SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_buffer_2d);
-SCUI_WIDGET_DRAW_CTX_DECLARE(scui_widget_draw_ctx_buffer_3d);
 /*****************************************************************************/
 /*@brief 简化转义的宏api
  */
@@ -188,36 +192,6 @@ do {                                                                            
         .graph    = graph_v,                                                    \
     };                                                                          \
     scui_widget_draw_ctx_graph(handle_v, target_v, &scui_wdc_i);                \
-} while (0)
-
-#define scui_widget_draw_buffer(handle_v, target_v,                             \
-    clip_v, color_v)                                                            \
-do { scui_widget_draw_dsc_t scui_wdc_i = { .clip = clip_v, .color = color_v }; \
-    scui_widget_draw_ctx_buffer(handle_v, target_v, &scui_wdc_i); } while (0)
-
-#define scui_widget_draw_buffer_2d(handle_v, target_v,                          \
-    clip_v, anchor_v, center_v, scale_v, angle_v, color_v)                      \
-do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
-        .clip     = clip_v,                                                     \
-        .anchor   = anchor_v,                                                   \
-        .center   = center_v,                                                   \
-        .scale    = scale_v,                                                    \
-        .angle    = angle_v,                                                    \
-        .color    = color_v,                                                    \
-    };                                                                          \
-    scui_widget_draw_ctx_buffer_2d(handle_v, target_v, &scui_wdc_i);            \
-} while (0)
-
-#define scui_widget_draw_buffer_3d(handle_v, target_v,                          \
-    clip_v, matrix_v, inv_matrix_v)                                             \
-do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
-        .clip        = clip_v,                                                  \
-        .matrix      = matrix_v,                                                \
-        .inv_matrix  = inv_matrix_v,                                            \
-    };                                                                          \
-    scui_widget_draw_ctx_buffer_3d(handle_v, target_v, &scui_wdc_i);            \
 } while (0)
 
 #endif

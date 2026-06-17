@@ -556,9 +556,15 @@ static void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_
     /* 子任务层级派发 */
     switch (event->type) {
     case scui_event_draw_graph:
-        if (widget->style.buffer) {
+        if (!widget->style.buffer)
+             break;
+        
+        if (scui_widget_draw_buffer(widget->myself, true)) {
+            
             scui_event_define(event_draw_buffer, widget->myself, true, scui_event_draw_buffer, scui_event_absorb_none);
             scui_event_notify(&event_draw_buffer);
+            
+            scui_widget_draw_buffer(widget->myself, false);
         }
         break;
     default:

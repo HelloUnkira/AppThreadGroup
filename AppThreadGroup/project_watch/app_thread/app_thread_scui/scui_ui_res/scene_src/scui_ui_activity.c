@@ -144,7 +144,8 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
     case scui_event_draw_buffer: {
         
         /* 将独立画布内容(大三环绘制结果)合成到父控件画布 */
-        scui_widget_draw_buffer(event->object, NULL, NULL, SCUI_COLOR_UNUSED);
+        scui_handle_t surface_image = scui_widget_surface_image(event->object);
+        scui_widget_draw_image(event->object, NULL, surface_image, NULL, SCUI_COLOR_UNUSED);
         break;
     }
     default:

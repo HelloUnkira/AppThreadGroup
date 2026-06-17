@@ -215,7 +215,7 @@ void scui_widget_clip_update(scui_widget_t *widget);
 
 /*@brief 控件画布
  *@param handle 控件句柄
- *@retval 控件画布
+ *@retval 控件画布实例
  */
 scui_surface_t * scui_widget_surface(scui_handle_t handle);
 
