@@ -113,7 +113,6 @@ bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *f
 /*@brief 绘制目标重定向(相对布局)
  *@param widget   控件实例
  *@param target   控件剪切域(输入:widget-local坐标; 输出:与clip_set同坐标系)
- *@param draw_dsc 绘制参数实例(用于redirect判断)
  *@retval 绘制目标有效
  */
 static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
@@ -146,31 +145,6 @@ static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
     return true;
 }
 
-/*@brief 画布重定向(图形上下文画布)
- *@param widget   控件实例
- *@param draw_dsc 绘制参数实例
- *@retval 实际绘制画布
- */
-static scui_surface_t * scui_widget_draw_redirect(scui_widget_t *widget, scui_widget_draw_dsc_t *draw_dsc)
-{
-    if (draw_dsc->redirect) {
-        /* 如果激活redirect,尝试切换到父控件画布 */
-        if (widget->parent != SCUI_HANDLE_INVALID) {
-            scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
-            if (widget_p->surface_c != NULL) return widget_p->surface_c;
-        }
-    }
-    
-    if (widget->surface_c != NULL)
-        return widget->surface_c;
-    
-    if (widget->surface != SCUI_HANDLE_INVALID)
-        return scui_widget_surface(widget->myself);
-    
-    /* 默认使用自身画布: */
-    return NULL;
-}
-
 /*@brief 控件在画布绘制字符串
  *@param handle   控件句柄
  *@param target   控件剪切域
@@ -180,7 +154,7 @@ void scui_widget_draw_ctx_string(scui_handle_t handle, scui_area_t *target, scui
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     /* 当前本接口作为控件专用绘制接口: */
@@ -231,7 +205,7 @@ void scui_widget_draw_ctx_symbol(scui_handle_t handle, scui_area_t *target, scui
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_area_t  *clip = draw_dsc->clip;
@@ -281,7 +255,7 @@ void scui_widget_draw_ctx_color(scui_handle_t handle, scui_area_t *target, scui_
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_clip_btra(widget->clip_set, node) {
@@ -309,7 +283,7 @@ void scui_widget_draw_ctx_color_grad(scui_handle_t handle, scui_area_t *target, 
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_clip_btra(widget->clip_set, node) {
@@ -338,7 +312,7 @@ void scui_widget_draw_ctx_dither(scui_handle_t handle, scui_area_t *target, scui
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_clip_btra(widget->clip_set, node) {
@@ -366,7 +340,7 @@ void scui_widget_draw_ctx_blur(scui_handle_t handle, scui_area_t *target, scui_w
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_clip_btra(widget->clip_set, node) {
@@ -394,7 +368,7 @@ void scui_widget_draw_ctx_image(scui_handle_t handle, scui_area_t *target, scui_
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_handle_t image = draw_dsc->image;
@@ -484,7 +458,7 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_handle_t image = draw_dsc->image;
@@ -555,7 +529,7 @@ void scui_widget_draw_ctx_image_rotate(scui_handle_t handle, scui_area_t *target
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_handle_t image  = draw_dsc->image;
@@ -611,7 +585,7 @@ void scui_widget_draw_ctx_image_2d(scui_handle_t handle, scui_area_t *target, sc
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_handle_t image  = draw_dsc->image;
@@ -663,7 +637,7 @@ void scui_widget_draw_ctx_image_3d(scui_handle_t handle, scui_area_t *target, sc
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_handle_t image = draw_dsc->image;
@@ -721,7 +695,7 @@ void scui_widget_draw_ctx_ring(scui_handle_t handle, scui_area_t *target, scui_w
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     scui_handle_t image   = draw_dsc->image;
@@ -799,7 +773,7 @@ void scui_widget_draw_ctx_graph(scui_handle_t handle, scui_area_t *target, scui_
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t  *widget  = scui_handle_source_check(handle);
-    scui_surface_t *surface = scui_widget_draw_redirect(widget, draw_dsc);
+    scui_surface_t *surface = widget->surface_c;
     if (!scui_widget_draw_target(widget, &target)) return;
     
     #if SCUI_FRAME_BUFFER_SEG
@@ -851,9 +825,17 @@ void scui_widget_draw_ctx_buffer(scui_handle_t handle, scui_area_t *target, scui
     
     scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
     widget->surface_c = widget_p->surface_c;
+    scui_clip_set_t clip_set_bak = widget->clip_set;
+    
+    scui_clip_ready(&widget->clip_set);
+    scui_widget_surface_refr(widget->myself, false);
+    scui_widget_clip_reset(widget->myself, &widget->clip, false);
     
     scui_widget_draw_ctx_image(widget->myself, target, &buf_dsc);
+    
     widget->surface_c = scui_widget_surface(widget->myself);
+    scui_clip_clear(&widget->clip_set);
+    widget->clip_set = clip_set_bak;
 }
 
 /*@brief 控件绘制画布

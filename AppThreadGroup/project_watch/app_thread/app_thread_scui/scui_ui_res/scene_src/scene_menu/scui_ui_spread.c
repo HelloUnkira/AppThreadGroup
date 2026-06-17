@@ -174,7 +174,7 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
                     draw_clip.x -= widget_clip.x;
                     draw_clip.y -= widget_clip.y;
                     scui_handle_t image = scui_ui_scene_list_image[lst_ofs] + img_map;
-                    scui_widget_draw_image(event->object, &draw_clip, false, image, NULL, SCUI_COLOR_UNUSED);
+                    scui_widget_draw_image(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED);
                 }
                 if (event->type == scui_event_ptr_click) {
                     if (scui_area_point(&dst_clip, &event->ptr_c)) {

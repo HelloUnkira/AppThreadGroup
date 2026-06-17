@@ -332,9 +332,9 @@ static void scui_widget_event_process(scui_event_t *event)
             /* 绘制图片背景(有背景图片) */
             /* 绘制纯色背景(没有背景图片) */
             if (widget->image != SCUI_HANDLE_INVALID)
-                scui_widget_draw_image(event->object, NULL, false, widget->image, NULL, widget->color);
+                scui_widget_draw_image(event->object, NULL, widget->image, NULL, widget->color);
             else
-                scui_widget_draw_color(event->object, NULL, false, widget->color);
+                scui_widget_draw_color(event->object, NULL, widget->color);
         }
         
         break;
@@ -448,20 +448,20 @@ static void scui_widget_event_process(scui_event_t *event)
             
             draw_dsc.graph.src_pos_1.y = clip.y1;
             draw_dsc.graph.src_pos_2.y = clip.y1;
-            scui_widget_draw_graph(event->object, NULL, false, alpha, color, &draw_dsc);
+            scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
             draw_dsc.graph.src_pos_1.y = clip.y2;
             draw_dsc.graph.src_pos_2.y = clip.y2;
-            scui_widget_draw_graph(event->object, NULL, false, alpha, color, &draw_dsc);
+            scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
             
             draw_dsc.graph.src_pos_1.y = clip.y1;
             draw_dsc.graph.src_pos_2.y = clip.y2;
             
             draw_dsc.graph.src_pos_1.x = clip.x1;
             draw_dsc.graph.src_pos_2.x = clip.x1;
-            scui_widget_draw_graph(event->object, NULL, false, alpha, color, &draw_dsc);
+            scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
             draw_dsc.graph.src_pos_1.x = clip.x2;
             draw_dsc.graph.src_pos_2.x = clip.x2;
-            scui_widget_draw_graph(event->object, NULL, false, alpha, color, &draw_dsc);
+            scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
         }
         #endif
     }

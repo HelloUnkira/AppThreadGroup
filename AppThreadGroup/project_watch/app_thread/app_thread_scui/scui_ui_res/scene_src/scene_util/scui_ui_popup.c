@@ -133,7 +133,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         
         #if SCUI_MEM_FEAT_MINI == 0
         scui_widget_alpha_set(event->object, scui_alpha_cover, false);
-        scui_widget_draw_color(event->object, NULL, false, SCUI_COLOR_ZEROED);
+        scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
         #endif
         break;
     }
@@ -190,12 +190,12 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
         scui_alpha_t alpha = scui_alpha_trans;
         scui_widget_alpha_get(event->object, &alpha);
         scui_widget_alpha_set(event->object, scui_alpha_cover, false);
-        scui_widget_draw_color(event->object, NULL, false, SCUI_COLOR_ZEROED);
+        scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
         scui_widget_alpha_set(event->object, alpha, false);
         #endif
         
         scui_handle_t image = scui_image_prj_image_src_repeat_btn_01_card_mediunpng;
-        scui_widget_draw_image(event->object, NULL, false, image, NULL, SCUI_COLOR_ZEROED);
+        scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_ZEROED);
         
         break;
     }

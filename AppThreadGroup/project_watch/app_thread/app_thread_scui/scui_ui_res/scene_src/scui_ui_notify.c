@@ -76,10 +76,9 @@ void scui_ui_scene_notify_event_proc(scui_event_t *event)
         // 这里画个圈,校验测试使用
         scui_area_t clip = scui_widget_clip(event->object);
         scui_area_t draw = {.x = 4, .y = 4, .w = clip.w, .h = clip.h};
-        scui_widget_draw_image(event->object, &draw, false,
-    scui_image_prj_image_src_03_activity_ring_big_max_03_bj_01bmp,
-    NULL,
-    SCUI_COLOR_MAKE32(true, 0xFF000000, 0xFF404040));
+        scui_widget_draw_image(event->object, &draw,
+            scui_image_prj_image_src_03_activity_ring_big_max_03_bj_01bmp,
+            NULL, SCUI_COLOR_MAKE32(true, 0xFF000000, 0xFF404040));
         
         break;
     }

@@ -299,12 +299,7 @@ void scui_ui_scene_1_scroll_page_1_event_proc(scui_event_t *event)
         scui_area_t symbol_area = scui_symbol_area(font, symbol);
         widget_clip.x += (widget_clip.w - symbol_area.h) / 2;
         
-        scui_widget_draw_symbol(event->object, &widget_clip, false,
-    NULL,
-    SCUI_COLOR_WHITE,
-    font,
-    symbol);
-        
+        scui_widget_draw_symbol(event->object, &widget_clip, NULL, SCUI_COLOR_WHITE, font, symbol);
         break;
     }
     default:

@@ -413,7 +413,10 @@ void scui_widget_surface_refr(scui_handle_t handle, bool recurse)
     
     /* 控件永远相对画布运动 */
     widget->clip_set.clip = widget->clip;
-    if (widget->surface != SCUI_HANDLE_INVALID) {
+    
+    /* 坐标区域是相对独立画布运动 */
+    if (widget->surface   != SCUI_HANDLE_INVALID &&
+        widget->surface_c == scui_widget_surface(widget->myself)) {
         widget->clip_set.clip.x = 0;
         widget->clip_set.clip.y = 0;
     }

@@ -120,7 +120,7 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
                 .w = icon_c.w,
                 .h = icon_c.h,
             };
-            scui_widget_draw_image(event->object, &draw_clip, false, image, NULL, SCUI_COLOR_UNUSED);
+            scui_widget_draw_image(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED);
         }
         
         if (event->type == scui_event_ptr_click) {

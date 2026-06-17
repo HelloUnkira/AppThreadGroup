@@ -256,32 +256,20 @@ void scui_xwatch_invoke(scui_event_t *event)
         if (xwatch->image[0] != SCUI_HANDLE_INVALID) {  /* hour */
             anchor_c.x = widget_clip.x + xwatch->anchor[0].x;
             anchor_c.y = widget_clip.y + xwatch->anchor[0].y;
-            scui_widget_draw_image_rotate(event->object, NULL, false,
-    xwatch->image[0],
-    NULL,
-    anchor_c,
-    xwatch->center[0],
-    angle_h * SCUI_SCALE_COF);
+            scui_widget_draw_image_rotate(event->object, NULL, xwatch->image[0], NULL,
+                anchor_c, xwatch->center[0], angle_h * SCUI_SCALE_COF);
         }
         if (xwatch->image[1] != SCUI_HANDLE_INVALID) {  /* minute */
             anchor_c.x = widget_clip.x + xwatch->anchor[1].x;
             anchor_c.y = widget_clip.y + xwatch->anchor[1].y;
-            scui_widget_draw_image_rotate(event->object, NULL, false,
-    xwatch->image[1],
-    NULL,
-    anchor_c,
-    xwatch->center[1],
-    angle_m * SCUI_SCALE_COF);
+            scui_widget_draw_image_rotate(event->object, NULL, xwatch->image[1], NULL,
+                anchor_c, xwatch->center[1], angle_m * SCUI_SCALE_COF);
         }
         if (xwatch->image[2] != SCUI_HANDLE_INVALID) {  /* second */
             anchor_c.x = widget_clip.x + xwatch->anchor[2].x;
             anchor_c.y = widget_clip.y + xwatch->anchor[2].y;
-            scui_widget_draw_image_rotate(event->object, NULL, false,
-    xwatch->image[2],
-    NULL,
-    anchor_c,
-    xwatch->center[2],
-    angle_s * SCUI_SCALE_COF);
+            scui_widget_draw_image_rotate(event->object, NULL, xwatch->image[2], NULL,
+                anchor_c, xwatch->center[2], angle_s * SCUI_SCALE_COF);
         }
         
         break;

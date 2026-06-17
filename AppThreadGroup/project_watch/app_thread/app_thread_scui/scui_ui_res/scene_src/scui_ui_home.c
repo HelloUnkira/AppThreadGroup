@@ -42,7 +42,7 @@ void scui_ui_scene_float_s_event_proc(scui_event_t * event)
         scui_handle_t handle_m  = SCUI_HANDLE_INVALID;
         scui_linear_s_get(event->object, &handle_m);
         
-        scui_widget_draw_color(event->object, NULL, false, SCUI_COLOR32_WHITE);
+        scui_widget_draw_color(event->object, NULL, SCUI_COLOR32_WHITE);
         break;
     }
     default:
@@ -98,7 +98,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
             /* 背景窗口虚化 */
             scui_widget_draw(event->object, NULL, false);
             // scui_widget_draw_dither(event->object, NULL);
-            scui_widget_draw_blur(event->object, NULL, false);
+            scui_widget_draw_blur(event->object, NULL);
             scui_widget_refr(event->object, false);
         }
         #endif

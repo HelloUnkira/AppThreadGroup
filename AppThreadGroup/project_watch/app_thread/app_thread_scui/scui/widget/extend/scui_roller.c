@@ -150,7 +150,7 @@ static void scui_roller_m_event(scui_event_t *event)
         
         switch (roller->type) {
         case scui_roller_type_simple: {
-            scui_widget_draw_image(event->object, NULL, false, image_s, NULL, SCUI_COLOR_UNUSED);
+            scui_widget_draw_image(event->object, NULL, image_s, NULL, SCUI_COLOR_UNUSED);
             break;
         }
         case scui_roller_type_scale: {
@@ -158,7 +158,7 @@ static void scui_roller_m_event(scui_event_t *event)
             scui_opt_pos_t img_pos = scui_opt_pos_c;
             img_scale.x = 1024 * (scui_multi_t)percent / 100;
             img_scale.y = 1024 * (scui_multi_t)percent / 100;
-            scui_widget_draw_image_scale(event->object, NULL, false, image_s, NULL, img_scale, img_pos);
+            scui_widget_draw_image_scale(event->object, NULL, image_s, NULL, img_scale, img_pos);
             break;
         }
         case scui_roller_type_spin: {
@@ -199,7 +199,7 @@ static void scui_roller_m_event(scui_event_t *event)
             
             /* 这里暂时不分为三个步调, 都在execute执行完毕 */
             /* 此外, 这里仅仅替父控件计算绘制的实际内容, 子控件本身不做额外绘制 */
-            scui_widget_draw_image_3d(widget->myself, NULL, false, image_s, NULL, &matrix, &inv_matrix);
+            scui_widget_draw_image_3d(widget->myself, NULL, image_s, NULL, &matrix, &inv_matrix);
             break;
         }
         default:

@@ -40,7 +40,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         /* 绘制背景 */
         scui_area_t clip = scui_widget_clip(event->object);
         scui_area_t draw_target = {.x = 0, .y = 0, .w = clip.w, .h = clip.h};
-        scui_widget_draw_color(event->object, &draw_target, false, SCUI_COLOR_MAKE32(false, 0x0, 0xFF404040));
+        scui_widget_draw_color(event->object, &draw_target, SCUI_COLOR_MAKE32(false, 0x0, 0xFF404040));
         
         
         
@@ -97,7 +97,7 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         #if 0   // 更新alpha通道
         scui_alpha_t alpha = scui_alpha_pct(percent);
         scui_widget_alpha_set(event->object, scui_alpha_cover, true);
-        scui_widget_draw_color(event->object, NULL, false, SCUI_COLOR_UNUSED);
+        scui_widget_draw_color(event->object, NULL, SCUI_COLOR_UNUSED);
         scui_widget_alpha_set(event->object, alpha, true);
         #endif
         
@@ -119,8 +119,10 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_coord_t  btn_scale_x = (scui_multi_t)btn_clip.w * (1024 - img_scale.x) / 1024;
         btn_clip.x += btn_scale_x / 2;
         btn_clip.w -= btn_scale_x;
-        scui_custom_draw_image_crect4_OLD(event, &btn_clip, btn_image_full, btn_color_full, -1);
-        scui_widget_draw_image_scale(event->object, NULL, false, image_s, NULL, img_scale, img_pos);
+        scui_custom_data_t custom_data;
+        scui_custom_data_config_image_crect4(&custom_data, btn_image_full, btn_color_full, -1);
+        scui_custom_draw_image_crect4(event->object, &btn_clip, &custom_data);
+        scui_widget_draw_image_scale(event->object, NULL, image_s, NULL, img_scale, img_pos);
         
         
         
@@ -318,7 +320,7 @@ void scui_ui_scene_quick_card_event_proc(scui_event_t *event)
         #if 0
         scui_area_t clip = scui_widget_clip(event->object);
         clip.x += 4; clip.y += 4;
-        scui_widget_draw_image(event->object, &clip, false,
+        scui_widget_draw_image(event->object, &clip,
     scui_image_prj_image_src_03_activity_ring_big_max_03_bj_01bmp,
     NULL,
     SCUI_COLOR_MAKE32(true, 0xFF000000, 0xFF404040));

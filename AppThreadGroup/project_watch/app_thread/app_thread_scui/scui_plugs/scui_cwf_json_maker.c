@@ -86,7 +86,7 @@ static void scui_cwf_json_custom_event(scui_event_t *event)
                     .w = scui_image_w(image),
                     .h = scui_image_h(image),
                 };
-                scui_widget_draw_image(event->object, &clip, false, image, NULL, SCUI_COLOR_UNUSED);
+                scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
             }
             /* 迭代到下一个绘制目标 */
             cur_x += scui_image_w(image) + res->img_span;

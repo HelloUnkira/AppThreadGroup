@@ -127,8 +127,10 @@ void scui_button_invoke(scui_event_t *event)
             switch (button->mode) {
             case scui_button_mode_static: {
                 
-                scui_custom_draw_image_crect4_OLD(event, &widget->clip,
+                scui_custom_data_t custom_data;
+                scui_custom_data_config_image_crect4(&custom_data,
                     button->image.image, button->image.color, button->image.delta);
+                scui_custom_draw_image_crect4(widget->myself, &widget->clip, &custom_data);
                 break;
             }
             case scui_button_mode_scale: {
@@ -141,8 +143,10 @@ void scui_button_invoke(scui_event_t *event)
                 scale_clip.w -= scale_x * 2;
                 scale_clip.h -= scale_y * 2;
                 
-                scui_custom_draw_image_crect4_OLD(event, &scale_clip,
+                scui_custom_data_t custom_data;
+                scui_custom_data_config_image_crect4(&custom_data,
                     button->image.image, button->image.color, button->image.delta);
+                scui_custom_draw_image_crect4(widget->myself, &scale_clip, &custom_data);
                 break;
             }
             default:
@@ -201,10 +205,7 @@ void scui_button_invoke(scui_event_t *event)
                     draw_dsc.graph.src_radius = src_radius[idx];
                     draw_dsc.graph.src_shadow = (idx == 3);
                     
-                    scui_widget_draw_graph(widget->myself, NULL, false,
-    button->pixel.alpha[idx],
-    src_color,
-    &draw_dsc);
+                    scui_widget_draw_graph(widget->myself, NULL, button->pixel.alpha[idx], src_color, &draw_dsc);
                 }
                 
                 break;

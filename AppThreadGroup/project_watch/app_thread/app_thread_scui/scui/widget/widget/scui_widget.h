@@ -213,6 +213,12 @@ bool scui_widget_clip_cover(scui_widget_t *widget);
  */
 void scui_widget_clip_update(scui_widget_t *widget);
 
+/*@brief 控件画布
+ *@param handle 控件句柄
+ *@retval 控件画布
+ */
+scui_surface_t * scui_widget_surface(scui_handle_t handle);
+
 /*@brief 控件独立画布创建
  *@param handle  控件句柄
  *@param surface 画布参数(.format;.hor_res;.ver_res;)
@@ -233,18 +239,6 @@ void scui_widget_surface_ready(scui_handle_t handle);
  *@param handle 控件句柄
  */
 void scui_widget_surface_recycle(scui_handle_t handle);
-
-/*@brief 控件画布
- *@param handle 控件句柄
- *@retval 控件画布
- */
-scui_surface_t * scui_widget_surface(scui_handle_t handle);
-
-/*@brief 控件画布图
- *@param handle 控件句柄
- *@retval 画布图句柄
- */
-scui_handle_t scui_widget_surface_image(scui_handle_t handle);
 
 /*@brief 控件画布重映射
  *@param handle  控件句柄

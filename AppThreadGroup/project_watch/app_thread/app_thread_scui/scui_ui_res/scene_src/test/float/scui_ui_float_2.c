@@ -276,27 +276,27 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         clip.y = SCUI_VER_RES * 1 / 13;
         clip.w = SCUI_HOR_RES * 3 / 13;
         clip.h = SCUI_VER_RES * 3 / 13;
-        scui_widget_draw_color(event->object, &clip, false, SCUI_COLOR_WHITE);
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
         clip.x = SCUI_HOR_RES * 5 / 13;
         clip.y = SCUI_VER_RES * 1 / 13;
         clip.w = SCUI_HOR_RES * 3 / 13;
         clip.h = SCUI_VER_RES * 3 / 13;
-        scui_widget_draw_color(event->object, &clip, false, SCUI_COLOR_WHITE);
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
         clip.x = SCUI_HOR_RES * 9 / 13;
         clip.y = SCUI_VER_RES * 1 / 13;
         clip.w = SCUI_HOR_RES * 3 / 13;
         clip.h = SCUI_VER_RES * 3 / 13;
-        scui_widget_draw_color(event->object, &clip, false, SCUI_COLOR_WHITE);
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
         clip.x = SCUI_HOR_RES * 1 / 13;
         clip.y = SCUI_VER_RES * 5 / 13;
         clip.w = SCUI_HOR_RES * 5 / 13;
         clip.h = SCUI_VER_RES * 5 / 13;
-        scui_widget_draw_color(event->object, &clip, false, SCUI_COLOR_WHITE);
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
         clip.x = SCUI_HOR_RES * 7 / 13;
         clip.y = SCUI_VER_RES * 5 / 13;
         clip.w = SCUI_HOR_RES * 5 / 13;
         clip.h = SCUI_VER_RES * 7 / 13;
-        scui_widget_draw_color(event->object, &clip, false, SCUI_COLOR_WHITE);
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
         #endif
         
         #if 1
@@ -309,7 +309,7 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         clip.y = SCUI_VER_RES * 1 / 13 + 10;
         clip.w = SCUI_HOR_RES * 3 / 13 - 10 * 2;
         clip.h = SCUI_VER_RES * 3 / 13 - 10 * 2;
-        scui_widget_draw_color(event->object, &clip, false, SCUI_COLOR_BLACK);
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
         
         clip.x = SCUI_HOR_RES * 1 / 13 + 15;
         clip.y = SCUI_HOR_RES * 1 / 13 + 15;
@@ -317,8 +317,8 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         clip.h = SCUI_HOR_RES * 3 / 13 - 15 * 2;
         clip.h /= 2;
         clip.h -= 5;
-        scui_widget_draw_color_grad(event->object, &clip, false, color_mix, false);
-        scui_widget_draw_dither(event->object, &clip, false);
+        scui_widget_draw_color_grad(event->object, &clip, color_mix, false);
+        scui_widget_draw_dither(event->object, &clip);
         
         clip.x = SCUI_HOR_RES * 1 / 13 + 15;
         clip.y = SCUI_VER_RES * 1 / 13 + 15;
@@ -327,8 +327,8 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         clip.h /= 2;
         clip.y += clip.h + 5;
         clip.h -= 5;
-        scui_widget_draw_color_grad(event->object, &clip, false, color_mix, true);
-        scui_widget_draw_dither(event->object, &clip, false);
+        scui_widget_draw_color_grad(event->object, &clip, color_mix, true);
+        scui_widget_draw_dither(event->object, &clip);
         #endif
         
         #if 1
@@ -336,10 +336,10 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         clip.y = SCUI_VER_RES * 1 / 13 + 10;
         clip.w = SCUI_HOR_RES * 3 / 13 - 10 * 2;
         clip.h = SCUI_VER_RES * 3 / 13 - 10 * 2;
-        scui_widget_draw_color(event->object, &clip, false, SCUI_COLOR_BLACK);
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
         
         scui_handle_t image_handle = scui_image_prj_image_src_repeat_btn_22_retry_heartbmp;
-        scui_widget_draw_image_scale(event->object, &clip, false, image_handle, NULL, image_scale, scui_opt_pos_c);
+        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, image_scale, scui_opt_pos_c);
         #endif
         
         

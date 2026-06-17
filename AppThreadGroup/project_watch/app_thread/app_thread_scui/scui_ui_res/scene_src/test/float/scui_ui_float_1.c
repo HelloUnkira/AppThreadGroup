@@ -79,7 +79,7 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
             .w = scui_widget_clip(event->object).w - 10 * 2,
             .h = scui_widget_clip(event->object).h - 10 * 2,
         };
-        scui_widget_draw_color(event->object, &clip, false, SCUI_COLOR_BLACK);
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
         break;
     }
     default:
@@ -137,7 +137,7 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
             .w = scui_widget_clip(event->object).w - 10 * 2,
             .h = scui_widget_clip(event->object).h - 10 * 2,
         };
-        scui_widget_draw_color(event->object, &clip, false, SCUI_COLOR_BLACK);
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
         break;
     }
     default:

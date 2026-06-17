@@ -36,7 +36,7 @@ void scui_ui_scene_xfloat_m_event_proc(scui_event_t * event)
         scui_handle_t image = scui_handle_find();
         scui_handle_linker(image, &img_inst);
         
-        scui_widget_draw_image(event->object, NULL, false, image, NULL, SCUI_COLOR_UNUSED);
+        scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_UNUSED);
         
         scui_handle_clear(image);
         break;

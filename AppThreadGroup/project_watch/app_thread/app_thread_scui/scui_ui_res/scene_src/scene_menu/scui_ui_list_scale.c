@@ -50,7 +50,7 @@ static void scui_ui_scene_scale_item_event_proc(scui_event_t *event)
         
         /* 缩放背景(100%, 实际缩放在blit时由buffer_2d完成) */
         scui_color_t bg_color = {.color.full = 0xFF282828,};
-        scui_widget_draw_color(event->object, NULL, false, bg_color);
+        scui_widget_draw_color(event->object, NULL, bg_color);
         
         /* 9-patch卡片背景(100%,全填充, 会在blit时统一缩放) */
         scui_area_t  btn_clip = clip_w;
@@ -61,14 +61,16 @@ static void scui_ui_scene_scale_item_event_proc(scui_event_t *event)
             scui_image_prj_image_src_repeat_card_06_r36_3bmp,
             scui_image_prj_image_src_repeat_card_07_r36_4bmp,
         };
-        scui_custom_draw_image_crect4_OLD(event, &btn_clip,
+        scui_custom_data_t data = {0};
+        scui_custom_data_config_image_crect4(&data,
             btn_image_full, btn_color_full, -1);
+        scui_custom_draw_image_crect4(event->object, &btn_clip, &data);
         
         /* 绘制图标(100%, 居中) */
         scui_opt_pos_t img_pos  = scui_opt_pos_c;
         scui_handle_t  image_icon = scui_ui_scene_list_image[match_idx] + 3;
         scui_point_t   img_scale = {.x = SCUI_SCALE_COF, .y = SCUI_SCALE_COF,};
-        scui_widget_draw_image_scale(event->object, NULL, false,
+        scui_widget_draw_image_scale(event->object, NULL,
             image_icon,
             NULL,
             img_scale,
@@ -83,7 +85,7 @@ static void scui_ui_scene_scale_item_event_proc(scui_event_t *event)
             arrow_clip.y += (arrow_clip.h - scui_image_h(image_arrow)) / 2;
             arrow_clip.h -= (arrow_clip.h - scui_image_h(image_arrow));
             scui_color_t color_white = {.filter = true,.color.full = 0xFFFFFFFF,};
-            scui_widget_draw_image(event->object, &arrow_clip, false,
+            scui_widget_draw_image(event->object, &arrow_clip,
                 image_arrow,
                 NULL,
                 color_white);
@@ -147,7 +149,7 @@ static void scui_ui_scene_scale_item_event_proc(scui_event_t *event)
             .x = SCUI_SCALE_COF * (scui_multi_t)percent / 100,
             .y = SCUI_SCALE_COF * (scui_multi_t)percent / 100,
         };
-        scui_widget_draw_buffer_2d(event->object, NULL, false,
+        scui_widget_draw_buffer_2d(event->object, NULL,
             NULL, anchor, center, scale, 0, SCUI_COLOR_UNUSED);
         
         /* 恢复原始alpha */
