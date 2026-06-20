@@ -57,14 +57,6 @@ typedef struct {
     scui_sbitfd_t indev_key_hold:1;     /* 输入事件响应维持:key */
 } scui_widget_state_t;
 
-/*@brief 控件画布
- */
-typedef struct {
-    scui_surface_t surface;             /* 画布资源 */
-    scui_handle_t  image;               /* 画布图句柄 */
-    scui_image_t   image_src;           /* 画布图资源 */
-} scui_widget_surface_t;
-
 /*@brief 控件动画
  */
 typedef struct {
@@ -113,9 +105,14 @@ typedef struct {
     scui_handle_t          *child_list;     /* 控件关联属性:子控件列表 */
     scui_handle_t           child_num;      /* 控件关联属性:子控件最大数量 */
     scui_handle_t           child_now;      /* 控件关联属性:子控件当前数量 */
-    scui_handle_t           surface;        /* 控件画布(图形上下文):画布资源 */
-    scui_surface_t         *surface_c;      /* 控件画布(图形上下文):画布实例 */
+    /* 图形上下文: */
+    scui_surface_t         *surface;        /* 控件画布(图形上下文):画布实例 */
+    scui_surface_t         *surface_s;      /* 控件画布(图形上下文):画布资源 */
     scui_clip_set_t         clip_set;       /* 控件画布(图形上下文):画布剪切域集合 */
+    scui_clip_set_t        *clip_set_p;     /* 控件画布(图形上下文):画布剪切域集合 */
+    scui_handle_t           image_s;        /* 控件画布(图形上下文):画布图句柄 */
+    scui_image_t           *image_s_src;    /* 控件画布(图形上下文):画布图资源 */
+    /* 基础样式: */
     scui_handle_t           user_data;      /* 扩展字段:用户资源句柄 */
     scui_alpha_t            alpha;          /* 控件透明度 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
@@ -213,6 +210,12 @@ bool scui_widget_clip_cover(scui_widget_t *widget);
  */
 void scui_widget_clip_update(scui_widget_t *widget);
 
+/*@brief 控件绘制剪切域
+ *@param widget  控件实例
+ *@param clip    剪切域
+ */
+void scui_widget_clip_draw(scui_widget_t *widget, scui_area_t *clip);
+
 /*@brief 控件画布
  *@param handle 控件句柄
  *@retval 控件画布实例
@@ -220,37 +223,37 @@ void scui_widget_clip_update(scui_widget_t *widget);
 scui_surface_t * scui_widget_surface(scui_handle_t handle);
 
 /*@brief 控件独立画布创建
- *@param handle  控件句柄
+ *@param widget  控件实例
  *@param surface 画布参数(.format;.hor_res;.ver_res;)
  */
-void scui_widget_surface_create(scui_handle_t handle, scui_surface_t *surface);
+void scui_widget_surface_create(scui_widget_t *widget, scui_surface_t *surface);
 
 /*@brief 控件独立画布销毁
- *@param handle 控件句柄
+ *@param widget 控件实例
  */
-void scui_widget_surface_destroy(scui_handle_t handle);
+void scui_widget_surface_destroy(scui_widget_t *widget);
 
 /*@brief 控件画布资源就绪
- *@param handle 控件句柄
+ *@param widget 控件实例
  */
-void scui_widget_surface_ready(scui_handle_t handle);
+void scui_widget_surface_ready(scui_widget_t *widget);
 
 /*@brief 控件画布资源回收
- *@param handle 控件句柄
+ *@param widget 控件实例
  */
-void scui_widget_surface_recycle(scui_handle_t handle);
+void scui_widget_surface_recycle(scui_widget_t *widget);
 
 /*@brief 控件画布重映射
- *@param handle  控件句柄
+ *@param widget  控件实例
  *@param surface 画布实例
  */
-void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface);
+void scui_widget_surface_remap(scui_widget_t *widget, scui_surface_t *surface);
 
 /*@brief 控件画布剪切域刷新
- *@param handle  控件句柄
+ *@param widget  控件实例
  *@param recurse 递归处理
  */
-void scui_widget_surface_refr(scui_handle_t handle, bool recurse);
+void scui_widget_surface_refr(scui_widget_t *widget, bool recurse);
 
 /*@brief 控件画布为独立画布
  *@param widget 控件实例

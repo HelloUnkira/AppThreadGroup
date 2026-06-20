@@ -99,9 +99,13 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     widget->style.buffer = false;
     #endif
     
-    /* 控件画布句柄初始无效 */
-    widget->surface = SCUI_HANDLE_INVALID;
-    widget->surface_c = NULL;
+    /* 控件画布实例初始无效 */
+    widget->surface_s = NULL;
+    widget->image_s = SCUI_HANDLE_INVALID;
+    widget->image_s_src = NULL;
+    widget->surface = NULL;
+    scui_clip_ready(&widget->clip_set);
+    widget->clip_set_p = NULL;
     
     /* 控件独立画布构建 */
     if (widget->style.buffer) {
@@ -111,12 +115,12 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
             .hor_res = widget->clip.w,
             .ver_res = widget->clip.h,
         };
-        scui_widget_surface_create(widget->myself, &surface);
+        scui_widget_surface_create(widget, &surface);
     }
     
     /* 独立画布及其子控件都映射到它自己 */
-    if (widget->surface  != SCUI_HANDLE_INVALID)
-        widget->surface_c = scui_widget_surface(widget->myself);
+    if (widget->surface_s != NULL)
+        widget->surface = widget->surface_s;
     
     /* 更新与父控件的坐标关联 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
@@ -124,12 +128,12 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
         
         /* 画布继承父控件(定位到最近独立画布) */
         /* 仅当自己没有独立画布时继承, 否则保持自己的 surface_c */
-        if (widget->surface  == SCUI_HANDLE_INVALID)
-            widget->surface_c = widget_p->surface_c;
+        if (widget->surface_s == NULL)
+            widget->surface = widget_p->surface;
         
         /* 子控件的坐标区域是相对最近的独立画布 */
         /* 拥有独立画布的父控件不传递坐标偏移(子控件相对独立画布原点) */
-        if (widget_p->surface == SCUI_HANDLE_INVALID) {
+        if (widget_p->surface_s == NULL) {
             widget->clip.x += widget_p->clip.x;
             widget->clip.y += widget_p->clip.y;
         }
@@ -137,7 +141,8 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     
     /* 画布剪切域重置更新 */
     scui_clip_ready(&widget->clip_set);
-    scui_widget_surface_refr(widget->myself, false);
+    scui_widget_surface_refr(widget, false);
+    scui_widget_clip_reset(widget, &widget->clip_set.clip, true);
     
     /* 构建控件动画 */
     if (widget_maker->anima_num != 0)
@@ -180,7 +185,7 @@ void scui_widget_burn(scui_widget_t *widget)
     scui_widget_anima_destroy(widget->myself);
     
     /* 回收独立子画布 */
-    scui_widget_surface_destroy(widget->myself);
+    scui_widget_surface_destroy(widget);
     
     /* 画布剪切域清除 */
     scui_clip_clear(&widget->clip_set);

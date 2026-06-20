@@ -120,32 +120,28 @@ bool scui_widget_draw_buffer(scui_handle_t handle, bool redirect)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     if (widget->parent == SCUI_HANDLE_INVALID) return false;
-    SCUI_ASSERT(widget->surface != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(widget->surface_s != NULL);
     
-    static scui_surface_t *surface_c = NULL;
-    static scui_clip_set_t clip_set  = {0};
+    static scui_surface_t *surface = NULL;
+    static scui_clip_set_t  clip_set  = {0};
     
     if (redirect) {
-        SCUI_ASSERT(surface_c == NULL);
-        surface_c = widget->surface_c;
+        SCUI_ASSERT(surface == NULL);
+        surface = widget->surface;
         clip_set  = widget->clip_set;
         
         /* 映射到父控件画布 */
         scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
-        widget->surface_c = widget_p->surface_c;
-        
-        scui_clip_ready(&widget->clip_set);
-        scui_widget_surface_refr(widget->myself, false);
-        scui_widget_clip_reset(widget, &widget->clip, false);
-        /* 暂时默认使用全局剪切域 */
+        widget->surface  =  widget_p->surface;
+        widget->clip_set = *widget->clip_set_p;
         return true;
     } else {
-        scui_clip_clear(&widget->clip_set);
-        SCUI_ASSERT(surface_c == scui_widget_surface(widget->myself));
+        SCUI_ASSERT(surface == widget->surface_s);
+        scui_clip_clear(widget->clip_set_p);
         
-        widget->surface_c = surface_c;
-        widget->clip_set  = clip_set;
-        surface_c = NULL;
+        widget->surface  = surface;
+        widget->clip_set = clip_set;
+        surface = NULL;
         return true;
     }
     
@@ -177,8 +173,8 @@ static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
     }
     
     /* 画布的坐标区域是相对独立画布控件 */
-    if (widget->surface   != SCUI_HANDLE_INVALID &&
-        widget->surface_c == scui_widget_surface(widget->myself)) {
+    if (widget->surface_s != NULL &&
+        widget->surface == widget->surface_s) {
         widget_clip.x -= widget->clip.x;
         widget_clip.y -= widget->clip.y;
     }
@@ -225,14 +221,14 @@ void scui_widget_draw_ctx_string(scui_handle_t handle, scui_area_t *target, scui
         
         #if SCUI_FRAME_BUFFER_SEG
         scui_point_t dst_offset = {0};
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, &dst_offset, NULL, NULL)) continue;
         
         src_clip.x -= dst_offset.x;
         src_clip.y -= dst_offset.y;
         #endif
         
-        scui_draw_string(false, widget->surface_c, dst_clip,
+        scui_draw_string(false, widget->surface, dst_clip,
             src_clip, widget->alpha, str_args);
     }
 }
@@ -277,11 +273,11 @@ void scui_widget_draw_ctx_symbol(scui_handle_t handle, scui_area_t *target, scui
         
         #if SCUI_FRAME_BUFFER_SEG
         scui_point_t dst_offset = {0};
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, &dst_offset, &src_clip, NULL)) continue;
         #endif
         
-        scui_draw_symbol(false, widget->surface_c, dst_clip,
+        scui_draw_symbol(false, widget->surface, dst_clip,
             name, symbol, src_clip, widget->alpha, draw_dsc->color);
     }
 }
@@ -305,11 +301,11 @@ void scui_widget_draw_ctx_color(scui_handle_t handle, scui_area_t *target, scui_
              continue;
         
         #if SCUI_FRAME_BUFFER_SEG
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
         
-        scui_draw_area_fill(false, widget->surface_c, dst_clip, widget->alpha, draw_dsc->color);
+        scui_draw_area_fill(false, widget->surface, dst_clip, widget->alpha, draw_dsc->color);
     }
 }
 
@@ -332,11 +328,11 @@ void scui_widget_draw_ctx_color_grad(scui_handle_t handle, scui_area_t *target, 
              continue;
         
         #if SCUI_FRAME_BUFFER_SEG
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
         
-        scui_draw_area_grad(false, widget->surface_c, dst_clip,
+        scui_draw_area_grad(false, widget->surface, dst_clip,
             *target, draw_dsc->color, widget->alpha, draw_dsc->way);
     }
 }
@@ -360,11 +356,11 @@ void scui_widget_draw_ctx_dither(scui_handle_t handle, scui_area_t *target, scui
              continue;
         
         #if SCUI_FRAME_BUFFER_SEG
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
         
-        scui_draw_area_dither(false, widget->surface_c, dst_clip);
+        scui_draw_area_dither(false, widget->surface, dst_clip);
     }
 }
 
@@ -387,11 +383,11 @@ void scui_widget_draw_ctx_blur(scui_handle_t handle, scui_area_t *target, scui_w
              continue;
         
         #if SCUI_FRAME_BUFFER_SEG
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
         
-        scui_draw_area_blur(false, widget->surface_c, dst_clip);
+        scui_draw_area_blur(false, widget->surface, dst_clip);
     }
 }
 
@@ -422,17 +418,17 @@ void scui_widget_draw_ctx_image(scui_handle_t handle, scui_area_t *target, scui_
     /* 图片的大小有个阈值,且类型要匹配 */
     if (image_inst->type != scui_image_type_mem &&
        !scui_pixel_alpha_in(image_inst->format) &&
-        image_inst->format == widget->surface_c->format)
+        image_inst->format == widget->surface->format)
     if (SCUI_WIDGET_IMAGE_DIRECT_LIMIT <= scui_image_size(image_inst)) {
-        scui_area_t clip_surface = scui_surface_area(widget->surface_c);
+        scui_area_t clip_surface = scui_surface_area(widget->surface);
         scui_area_t clip_image   = scui_image_area(image);
         /* 宽度要保持一致,因为需要连续的线性内存空间 */
         if (target->w == clip_surface.w && scui_area_equal(&clip_image, clip) &&
             target->w == clip_image.w && scui_area_inside(target, &clip_image)) {
             /* 折算y偏移量, 到达图片的对齐点 */
-            uint32_t byte = scui_pixel_byte(widget->surface_c->format);
+            uint32_t byte = scui_pixel_byte(widget->surface->format);
             uint32_t line = target->y * target->w * byte;
-            uint8_t *data = widget->surface_c->pixel + line;
+            uint8_t *data = widget->surface->pixel + line;
             #if 1
             SCUI_LOG_INFO("image direct");
             scui_image_src_read(image_inst, data);
@@ -475,11 +471,11 @@ void scui_widget_draw_ctx_image(scui_handle_t handle, scui_area_t *target, scui_
         
         #if SCUI_FRAME_BUFFER_SEG
         scui_point_t dst_offset = {0};
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, &src_clip, &dst_offset, NULL)) continue;
         #endif
         
-        scui_draw_image(false, widget->surface_c, dst_clip,
+        scui_draw_image(false, widget->surface, dst_clip,
             image_inst, src_clip, widget->alpha, draw_dsc->color);
     }
 }
@@ -539,7 +535,7 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
         
         #if SCUI_FRAME_BUFFER_SEG
         scui_point_t seg_offset = {0};
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
         
         dst_anchor.x -= seg_offset.x;
@@ -547,7 +543,7 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
         #endif
         
         scui_multi_t angle = 0;
-        scui_draw_image_2d(false, widget->surface_c, dst_clip,
+        scui_draw_image_2d(false, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha,
             draw_dsc->scale, angle,
             dst_anchor, src_center);
@@ -591,7 +587,7 @@ void scui_widget_draw_ctx_image_rotate(scui_handle_t handle, scui_area_t *target
         
         #if SCUI_FRAME_BUFFER_SEG
         scui_point_t seg_offset = {0};
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
         
         anchor.x -= seg_offset.x;
@@ -602,7 +598,7 @@ void scui_widget_draw_ctx_image_rotate(scui_handle_t handle, scui_area_t *target
             .x = SCUI_SCALE_COF,
             .y = SCUI_SCALE_COF,
         };
-        scui_draw_image_2d(false, widget->surface_c, dst_clip,
+        scui_draw_image_2d(false, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha,
             scale, draw_dsc->angle,
             anchor, center);
@@ -646,14 +642,14 @@ void scui_widget_draw_ctx_image_2d(scui_handle_t handle, scui_area_t *target, sc
         
         #if SCUI_FRAME_BUFFER_SEG
         scui_point_t seg_offset = {0};
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
         
         anchor.x -= seg_offset.x;
         anchor.y -= seg_offset.y;
         #endif
         
-        scui_draw_image_2d(false, widget->surface_c, dst_clip,
+        scui_draw_image_2d(false, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha,
             draw_dsc->scale, draw_dsc->angle,
             anchor, center);
@@ -699,7 +695,7 @@ void scui_widget_draw_ctx_image_3d(scui_handle_t handle, scui_area_t *target, sc
         
         #if SCUI_FRAME_BUFFER_SEG
         scui_point_t seg_offset = {0};
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
         
         scui_point2_t matrix_ofs_i = {0};
@@ -711,7 +707,7 @@ void scui_widget_draw_ctx_image_3d(scui_handle_t handle, scui_area_t *target, sc
         scui_matrix_inverse(&src_matrix);
         #endif
         
-        scui_draw_image_3d(false, widget->surface_c, dst_clip,
+        scui_draw_image_3d(false, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha, SCUI_COLOR_UNUSED,
             inv_matrix, src_matrix);
     }
@@ -781,14 +777,14 @@ void scui_widget_draw_ctx_ring(scui_handle_t handle, scui_area_t *target, scui_w
         
         #if SCUI_FRAME_BUFFER_SEG
         scui_point_t seg_offset = {0};
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
         
         dst_center.x -= seg_offset.x;
         dst_center.y -= seg_offset.y;
         #endif
         
-        scui_draw_ring(false, widget->surface_c, dst_clip,
+        scui_draw_ring(false, widget->surface, dst_clip,
             dst_center, image_e_inst, image_inst, src_clip,
             angle_as, widget->alpha, angle_ae, draw_dsc->color);
     }
@@ -819,12 +815,12 @@ void scui_widget_draw_ctx_graph(scui_handle_t handle, scui_area_t *target, scui_
              continue;
         
         #if SCUI_FRAME_BUFFER_SEG
-        if (!scui_frame_buffer_clip_seg(widget->surface_c,
+        if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
         
         scui_draw_dsc_t *draw_dsc_graph = draw_dsc->graph;
-        scui_draw_graph(false, widget->surface_c, dst_clip,
+        scui_draw_graph(false, widget->surface, dst_clip,
             draw_dsc->alpha, draw_dsc->color, draw_dsc_graph);
     }
 }

@@ -182,7 +182,7 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     
     /* 因为会影响到画布资源 */
     /* 禁止独立画布控件修改自己尺寸 */
-    if (widget->surface != SCUI_HANDLE_INVALID) {
+    if (widget->surface_s != NULL) {
         SCUI_LOG_ERROR("unsupport");
         return;
     }

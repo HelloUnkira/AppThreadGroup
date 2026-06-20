@@ -147,8 +147,8 @@ static void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scu
         
         /* 完全覆盖,此时跳过 */
         if (widget->clip.x == 0 && widget->clip.y == 0 &&
-            widget->surface_c->alpha  == scui_alpha_cover &&
-            widget->surface_c->format == surface_fb->format)
+            widget->surface->alpha  == scui_alpha_cover &&
+            widget->surface->format == surface_fb->format)
             break;
     }
     
@@ -296,7 +296,7 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         /* 当前窗口独立于管理之外时, 直接渲染 */
         if (scui_widget_surface_only(widget) && window->resident) {
             scui_surface_t *dst_surface = scui_frame_buffer_draw();
-            scui_surface_t *src_surface = widget->surface_c;
+            scui_surface_t *src_surface = widget->surface;
             scui_area_t dst_clip = scui_surface_area(dst_surface);
             scui_area_t src_clip = scui_surface_area(src_surface);
             /* 独立画布将窗口偏移补充到画布上 */
@@ -357,18 +357,18 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
  */
 static void scui_window_surface_swap(scui_widget_t *widget, scui_surface_t *surface)
 {
-    SCUI_ASSERT(widget->surface_c->pixel   != surface->pixel);
-    SCUI_ASSERT(widget->surface_c->format  == surface->format);
-    SCUI_ASSERT(widget->surface_c->hor_res == surface->hor_res);
-    SCUI_ASSERT(widget->surface_c->ver_res == surface->ver_res);
+    SCUI_ASSERT(widget->surface->pixel   != surface->pixel);
+    SCUI_ASSERT(widget->surface->format  == surface->format);
+    SCUI_ASSERT(widget->surface->hor_res == surface->hor_res);
+    SCUI_ASSERT(widget->surface->ver_res == surface->ver_res);
     
     /* 窗口必须有独立画布 */
-    SCUI_ASSERT(widget->surface != SCUI_HANDLE_INVALID);
-    SCUI_ASSERT(widget->surface_c == scui_widget_surface(widget->myself));
+    SCUI_ASSERT(widget->surface_s != NULL);
+    SCUI_ASSERT(widget->surface == widget->surface_s);
     
     /* 交换 surface_c 与目标画布的 pixel */
-    uint8_t *pixel = widget->surface_c->pixel;
-    widget->surface_c->pixel = surface->pixel;
+    uint8_t *pixel = widget->surface->pixel;
+    widget->surface->pixel = surface->pixel;
     surface->pixel = pixel;
 }
 
@@ -380,12 +380,12 @@ static void scui_window_surface_swap(scui_widget_t *widget, scui_surface_t *surf
  */
 static void scui_window_surface_sync(scui_widget_t *widget, scui_surface_t *surface)
 {
-    SCUI_ASSERT(widget->surface_c->pixel   != surface->pixel);
-    SCUI_ASSERT(widget->surface_c->format  == surface->format);
-    SCUI_ASSERT(widget->surface_c->hor_res == surface->hor_res);
-    SCUI_ASSERT(widget->surface_c->ver_res == surface->ver_res);
+    SCUI_ASSERT(widget->surface->pixel   != surface->pixel);
+    SCUI_ASSERT(widget->surface->format  == surface->format);
+    SCUI_ASSERT(widget->surface->hor_res == surface->hor_res);
+    SCUI_ASSERT(widget->surface->ver_res == surface->ver_res);
     
-    scui_surface_t *dst_surface = widget->surface_c;
+    scui_surface_t *dst_surface = widget->surface;
     scui_surface_t *src_surface = surface;
     scui_area_t dst_clip = scui_surface_area(dst_surface);
     scui_area_t src_clip = scui_surface_area(src_surface);
@@ -482,9 +482,9 @@ static void scui_window_surface_blend(void)
         SCUI_ASSERT(surface_fb->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(surface_fb->hor_res == SCUI_VER_RES);
         /* 类型必须匹配才可交换(通过独立画布句柄获取surface实例) */
-        if (widget_o->surface_c->format  == surface_fb->format  &&
-            widget_o->surface_c->hor_res == surface_fb->hor_res &&
-            widget_o->surface_c->ver_res == surface_fb->ver_res) {
+        if (widget_o->surface->format  == surface_fb->format  &&
+            widget_o->surface->hor_res == surface_fb->hor_res &&
+            widget_o->surface->ver_res == surface_fb->ver_res) {
             
             scui_window_surface_switch(0x00, &widget_o);
             scui_window_surface_swap(scui_window_list.widget_0[0], surface_fb);

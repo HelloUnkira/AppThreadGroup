@@ -138,9 +138,9 @@ void scui_linear_s_burn(scui_handle_t handle)
     
     /* 子控件树回收画布 */
     if (linear_s->surface_s != NULL) {
-        scui_widget_surface_remap(handle, linear_s->surface_s);
-        scui_widget_surface_destroy(handle);
-        scui_widget_surface_remap(handle, NULL);
+        scui_widget_surface_remap(widget, linear_s->surface_s);
+        scui_widget_surface_destroy(widget);
+        scui_widget_surface_remap(widget, NULL);
     }
     
     /* 句柄回收 */
@@ -278,9 +278,9 @@ void scui_linear_invoke(scui_event_t *event)
             linear->clear_byte += surface_size;
             linear->clear_num  += surface_size == 0 ? 0 : 1;
             
-            scui_widget_surface_remap(handle_s, linear_s->surface_s);
-            scui_widget_surface_destroy(handle_s);
-            scui_widget_surface_remap(handle_s, NULL);
+            scui_widget_surface_remap(widget_s, linear_s->surface_s);
+            scui_widget_surface_destroy(widget_s);
+            scui_widget_surface_remap(widget_s, NULL);
             linear_s->surface_s = NULL;
         }
         
@@ -324,9 +324,9 @@ void scui_linear_m_invoke(scui_event_t *event)
             
             /* 主目标不能绘制,清空从目标画布 */
             if (linear_s->surface_s != NULL) {
-                scui_widget_surface_remap(handle_s, linear_s->surface_s);
-                scui_widget_surface_destroy(handle_s);
-                scui_widget_surface_remap(handle_s, NULL);
+                scui_widget_surface_remap(widget_s, linear_s->surface_s);
+                scui_widget_surface_destroy(widget_s);
+                scui_widget_surface_remap(widget_s, NULL);
                 linear_s->surface_s = NULL;
             }
             return;
@@ -339,7 +339,7 @@ void scui_linear_m_invoke(scui_event_t *event)
                 .hor_res = widget_s->clip.w,
                 .ver_res = widget_s->clip.h,
             };
-            scui_widget_surface_create(handle_s, &surface);
+            scui_widget_surface_create(widget_s, &surface);
             linear_s->surface_s = scui_widget_surface(handle_s);
             linear_m->refr = true;
             /* 更新此画布目标,重配画布图资源 */
@@ -349,7 +349,7 @@ void scui_linear_m_invoke(scui_event_t *event)
             linear_s->image_src.pixel.height   = linear_s->surface_s->ver_res;
             linear_s->image_src.pixel.data_bin = linear_s->surface_s->pixel;
         }
-        scui_widget_surface_remap(handle_s, linear_s->surface_s);
+        scui_widget_surface_remap(widget_s, linear_s->surface_s);
         
         /* 刷新该画布 */
         if (linear_m->refr) {
@@ -367,7 +367,7 @@ void scui_linear_m_invoke(scui_event_t *event)
         
         /* 步调finish: */
         /* 去除画布绑定 */
-        scui_widget_surface_remap(handle_s, NULL);
+        scui_widget_surface_remap(widget_s, NULL);
         break;
     }
     default: {
