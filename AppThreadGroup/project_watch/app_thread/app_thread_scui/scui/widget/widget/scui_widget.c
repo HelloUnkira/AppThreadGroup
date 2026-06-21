@@ -99,13 +99,8 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     widget->style.buffer = false;
     #endif
     
-    /* 控件画布实例初始无效 */
-    widget->surface_s = NULL;
-    widget->image_s = SCUI_HANDLE_INVALID;
-    widget->image_s_src = NULL;
-    widget->surface = NULL;
+    /* 控件画布剪切域 */
     scui_clip_ready(&widget->clip_set);
-    widget->clip_set_p = NULL;
     
     /* 控件独立画布构建 */
     if (widget->style.buffer) {
