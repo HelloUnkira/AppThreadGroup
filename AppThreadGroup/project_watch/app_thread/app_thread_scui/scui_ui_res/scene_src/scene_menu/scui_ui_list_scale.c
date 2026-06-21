@@ -8,8 +8,7 @@
 #include "scui.h"
 
 static struct {
-    scui_handle_t     item_m[50];
-    scui_coord_t      scroll_pct;
+    scui_handle_t     item_list[50];
     scui_ui_bar_arc_t bar_arc;
 } * scui_ui_res_local = NULL;
 
@@ -26,16 +25,26 @@ void scui_ui_scene_list_scale_bar_arc_event(scui_event_t *event)
  */
 static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
 {
-    scui_widget_t *widget = scui_handle_source_check(event->object);
-
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
+    case scui_event_draw_ready: {
+        /* 为独立画布准备画布资源 */
+        if (!scui_widget_draw_empty(event->object))
+             scui_widget_surface_ready(event->object);
+        break;
+    }
+    case scui_event_draw_finish: {
+        /* 为独立画布回收画布资源 */
+        if (scui_widget_draw_empty(event->object))
+            scui_widget_surface_recycle(event->object);
+        break;
+    }
     case scui_event_draw_graph: {
         
         scui_handle_t match_idx = -1;
         for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++)
-            if (scui_ui_res_local->item_m[idx] == event->object) {
+            if (scui_ui_res_local->item_list[idx] == event->object) {
                 match_idx = idx;
                 continue;
             }
@@ -129,13 +138,6 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
         SCUI_LOG_WARN("click idx:%d", index);
         break;
     }
-    case scui_event_draw_finish: {
-        /* 回收离屏列表项的画布内存(buffer_d 延迟分配, draw_ready 再分配) */
-        // if (scui_widget_draw_empty(event->object))
-        //     scui_widget_surface_recycle(event->object);
-        
-        break;
-    }
     default:
         break;
     }
@@ -167,7 +169,7 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
             scui_widget_maker_def_cfg(&item_maker, scui_widget_type_custom);
             
             item_maker.widget.style.buffer    = true;
-            // item_maker.widget.style.buffer_d  = true;
+            item_maker.widget.style.buffer_d  = true;
             item_maker.widget.style.fully_bg  = true;
             item_maker.widget.style.indev_ptr = true;
             item_maker.widget.format          = SCUI_PIXEL_CF_DEF_A;
@@ -180,7 +182,7 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 scui_handle_t item_handle = SCUI_HANDLE_INVALID;
                 scui_widget_create(&item_maker, &item_handle);
-                scui_ui_res_local->item_m[idx] = item_handle;
+                scui_ui_res_local->item_list[idx] = item_handle;
                 
                 scui_string_maker_t string_maker = {0};
                 scui_handle_t string_handle = SCUI_HANDLE_INVALID;
@@ -224,7 +226,6 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
 
         scui_coord_t scroll_pct = 0;
         scui_scroll_percent_get(event->object, &scroll_pct);
-        scui_ui_res_local->scroll_pct = scroll_pct;
         scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
         scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
         break;

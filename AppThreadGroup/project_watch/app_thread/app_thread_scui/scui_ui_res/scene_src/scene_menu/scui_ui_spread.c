@@ -70,7 +70,7 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
     case scui_event_ptr_click:
     case scui_event_draw_graph: {
         
-        scui_area_t  widget_clip = scui_widget_clip(event->object);
+        scui_area_t  widget_clip = scui_widget_clip_self(event->object);
         scui_coord_t widget_cx   = widget_clip.x + widget_clip.w / 2;
         scui_coord_t widget_cy   = widget_clip.y + widget_clip.h / 2;
         
@@ -168,7 +168,7 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
                 dst_clip.w = image_w;
                 dst_clip.h = image_h;
                 
-                if (event->type == scui_event_draw) {
+                if (event->type == scui_event_draw_graph) {
                     /* 绘制目标:从滚动空间坐标转换为控件局部坐标 */
                     scui_area_t draw_clip = dst_clip;
                     draw_clip.x -= widget_clip.x;

@@ -286,8 +286,8 @@ extern void scui_ui_scene_test_event_proc(scui_event_t *event);
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -325,8 +325,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_CUBE = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -364,8 +364,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LANTERN = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -402,8 +402,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LANTERN_CUSTOM = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SOCCER = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -441,8 +441,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HONEYCOMB = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -490,8 +490,8 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_HONEYCOMB_SCROLL = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -563,8 +563,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC_MASK = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -613,8 +613,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE_MASK = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SPREAD = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -654,8 +654,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_SPREAD_CUSTOM = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_THUMBWHEEL = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -695,8 +695,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_THUMBWHEEL_CUSTOM = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -757,8 +757,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_BAR_ARC = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -817,8 +817,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_BG = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -976,8 +976,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_BLANK
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1009,8 +1009,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MINI_CARD = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1063,8 +1063,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_MINI_CARD_MASK = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NONE = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1083,8 +1083,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NONE = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NOTIFY = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1107,8 +1107,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NOTIFY = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_QUICK_CARD = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1133,8 +1133,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_QUICK_CARD = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_STANDBY = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1158,8 +1158,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_STANDBY = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1223,8 +1223,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_2 = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1252,8 +1252,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1308,8 +1308,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_BTN = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1337,8 +1337,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_1 = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1429,8 +1429,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_3 = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_2 = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1472,8 +1472,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_2_BAR_ARC = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_3 = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1496,8 +1496,8 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_3 = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,
@@ -1676,8 +1676,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_9 = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	/* 默认配置 */
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.fully_bg          = true,
 	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.level                          = 0,

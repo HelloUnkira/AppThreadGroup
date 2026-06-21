@@ -8,31 +8,35 @@
 #include "scui.h"
 
 static struct {
-    scui_handle_t linear;
-    scui_handle_t linear_m[50];
-    scui_handle_t linear_s[50];
-    scui_handle_t list_num;
+    scui_handle_t item_list[50];
+    scui_coord_t  list_num;
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
+static void scui_ui_scene_quick_card_item_event(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_create:
+    case scui_event_draw_ready: {
+        /* 为独立画布准备画布资源 */
+        if (!scui_widget_draw_empty(event->object))
+             scui_widget_surface_ready(event->object);
         break;
-    case scui_event_destroy:
+    }
+    case scui_event_draw_finish: {
+        /* 为独立画布回收画布资源 */
+        if (scui_widget_draw_empty(event->object))
+            scui_widget_surface_recycle(event->object);
         break;
+    }
     case scui_event_draw_graph: {
         
         scui_handle_t match_idx = -1;
-        scui_handle_t handle_m  = SCUI_HANDLE_INVALID;
-        scui_linear_s_get(event->object, &handle_m);
-        for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++)
-            if (scui_ui_res_local->linear_m[idx] == handle_m) {
+        for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++)
+            if (scui_ui_res_local->item_list[idx] == event->object) {
                 match_idx = idx;
                 continue;
             }
@@ -46,51 +50,30 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         
         break;
     }
-    default:
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        break;
-    case scui_event_draw_graph: {
+    case scui_event_draw_buffer: {
         
-        scui_handle_t handle_s = SCUI_HANDLE_INVALID;
-        scui_handle_t  image_s = SCUI_HANDLE_INVALID;
-        scui_linear_m_get(event->object, &handle_s);
-        scui_linear_s_image(handle_s, &image_s);
-        scui_handle_t custom = handle_s;
+        // 计算当前控件中心到父控件中心距离
+        scui_area_t clip_p = scui_widget_clip(scui_widget_parent(event->object));
+        scui_area_t clip_w = scui_widget_clip(event->object);
         
-        
-        
+        #if 1
+        scui_point_t offset  = {0};
         scui_multi_t percent = 100;
-        scui_area_t  clip_p  = scui_widget_clip(scui_widget_parent(event->object));
-        scui_area_t  clip_w  = scui_widget_clip(event->object);
-        if ((clip_p.y + clip_p.h / 2 < clip_w.y + clip_w.h / 2)) {
-            // 计算当前控件中心到父控件中心距离
-            scui_point_t offset = {0};
-            offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2);
-            offset.y = scui_dist(clip_p.y + clip_p.h / 2, clip_w.y + clip_w.h / 2);
-            
-            scui_multi_t rad_rr = clip_p.h / 2 - clip_w.h / 2;
-            scui_multi_t dist_y = (1024 * scui_min(rad_rr, offset.y) / rad_rr);
-            scui_multi_t cos_a2 = (1024 * 1024) - dist_y * dist_y;
-            scui_multi_t cos_ia = 0, cos_fa = 0;
-            scui_sqrt(cos_a2, &cos_ia, &cos_fa, 0x8000);
-            scui_multi_t dist_x = (1024 - cos_ia) * (rad_rr) / 1024;
-            SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
-            
-            dist_x  = scui_min(dist_x, clip_p.w / 2);
-            percent = (clip_p.w / 2 - dist_x) * 100 / (clip_p.w / 2);
-            percent = scui_min(scui_max(percent, 30), 100);
-            SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
-        }
+        offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2);
+        offset.y = scui_dist(clip_p.y + clip_p.h / 2, clip_w.y + clip_w.h / 2);
+        
+        scui_multi_t rad_rr = clip_p.h / 2 - clip_w.h / 2;
+        scui_multi_t dist_y = (1024 * scui_min(rad_rr, offset.y) / rad_rr);
+        scui_multi_t cos_a2 = (1024 * 1024) - dist_y * dist_y;
+        scui_multi_t cos_ia = 0, cos_fa = 0;
+        scui_sqrt(cos_a2, &cos_ia, &cos_fa, 0x8000);
+        scui_multi_t dist_x = (1024 - cos_ia) * (rad_rr) / 1024;
+        SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
+        
+        dist_x  = scui_min(dist_x, clip_p.w / 2);
+        percent = (clip_p.w / 2 - dist_x) * 100 / (clip_p.w / 2);
+        percent = scui_min(scui_max(percent, 30), 100);
+        SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
         
         scui_alpha_t alpha_raw = scui_alpha_cover;
         scui_widget_alpha_get(event->object, &alpha_raw);
@@ -101,32 +84,24 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_widget_alpha_set(event->object, alpha, true);
         #endif
         
-        
-        
-        scui_area_t   btn_clip = clip_w;
-        scui_color_t  btn_color_full = {.color.full = 0xFF282828,};
-        scui_handle_t btn_image_full[4] = {
-            scui_image_prj_image_src_repeat_card_04_r36_1bmp,
-            scui_image_prj_image_src_repeat_card_05_r36_2bmp,
-            scui_image_prj_image_src_repeat_card_06_r36_3bmp,
-            scui_image_prj_image_src_repeat_card_07_r36_4bmp,
-        };
-        
         scui_point_t img_scale = {0};
         scui_opt_pos_t img_pos = scui_opt_pos_c;
         img_scale.x = 1024 * (scui_multi_t)percent / 100;
         img_scale.y = 1024 * (scui_multi_t)percent / 100;
-        scui_coord_t  btn_scale_x = (scui_multi_t)btn_clip.w * (1024 - img_scale.x) / 1024;
-        btn_clip.x += btn_scale_x / 2;
-        btn_clip.w -= btn_scale_x;
-        scui_custom_data_t custom_data;
-        scui_custom_data_config_image_crect4(&custom_data, btn_image_full, btn_color_full, -1);
-        scui_custom_draw_image_crect4(event->object, &btn_clip, &custom_data);
-        scui_widget_draw_image_scale(event->object, NULL, image_s, NULL, img_scale, img_pos);
         
-        
-        
+        scui_handle_t surface_image = scui_widget_surface_image(event->object);
+        scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL, img_scale, img_pos);
         scui_widget_alpha_set(event->object, alpha_raw, true);
+        #else
+        scui_area_t target = {
+            .x = (clip_p.w - src_clip.w) / 2,
+            .y = 0,
+            .w = clip_w.w,
+            .h = clip_w.h,
+        };
+        scui_widget_draw_image(event->object, &target, surface_image, NULL, SCUI_COLOR_UNUSED);
+        #endif
+        
         break;
     }
     case scui_event_ptr_click: {
@@ -134,12 +109,6 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_event_mask_over(event);
         scui_handle_t parent = scui_widget_parent(event->object);
         scui_handle_t index  = scui_widget_child_to_index(event->object) - 1;
-        
-        scui_handle_t handle_m = event->object;
-        scui_handle_t handle_s = SCUI_HANDLE_INVALID;
-        scui_linear_m_get(handle_m, &handle_s);
-        
-        scui_handle_t  custom = handle_m;
         SCUI_LOG_WARN("click idx:%d", index);
         
         break;
@@ -157,57 +126,50 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_linear_m_maker_t linear_m_maker = {0};
-        scui_linear_s_maker_t linear_s_maker = {0};
-        scui_handle_t linear_m_handle = SCUI_HANDLE_INVALID;
-        scui_handle_t linear_s_handle = SCUI_HANDLE_INVALID;
-        
-        scui_widget_maker_def_cfg(&linear_m_maker, scui_widget_type_linear_m);
-        scui_widget_maker_def_cfg(&linear_s_maker, scui_widget_type_linear_s);
-        
-        // 通用属性配置
-        linear_m_maker.widget.style.sched_anima = true;
-        linear_m_maker.widget.clip.w            = SCUI_HOR_RES;
-        linear_m_maker.widget.parent            = event->object;
-        linear_s_maker.widget.clip.w            = 410;
-        linear_s_maker.widget.clip.h            = 180;
-        linear_s_maker.widget.child_num         = 5;
-        linear_s_maker.widget.event_cb          = scui_ui_scene_item_s_event_proc;
-        
-        // 上半部分留白占用
-        linear_m_maker.widget.style.indev_ptr = false;
-        linear_m_maker.widget.clip.h          = SCUI_VER_RES / 2 - 10 - 180 / 2;
-        linear_m_maker.widget.event_cb        = NULL;
-        scui_widget_create(&linear_m_maker, &linear_m_handle);
-        
-        // list的各个子控件
-        linear_m_maker.widget.style.indev_ptr = true;
-        linear_m_maker.widget.clip.h          = 180;
-        linear_m_maker.widget.event_cb        = scui_ui_scene_item_m_event_proc;
-        
-        for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
-            // 创建并绑定子控件(主)(从)
-            scui_widget_create(&linear_m_maker, &linear_m_handle);
-            scui_widget_create(&linear_s_maker, &linear_s_handle);
-            scui_linear_m_set(linear_m_handle, &linear_s_handle);
-            scui_linear_s_set(linear_s_handle, &linear_m_handle);
-            
-            scui_ui_res_local->linear_m[idx] = linear_m_handle;
-            scui_ui_res_local->linear_s[idx] = linear_s_handle;
+        {
+            /* 上半部分留白 */
+            scui_custom_maker_t spacer_maker = {0};
+            scui_handle_t spacer_handle = SCUI_HANDLE_INVALID;
+            scui_widget_maker_def_cfg(&spacer_maker, scui_widget_type_custom);
+            spacer_maker.widget.style.indev_ptr = false;
+            spacer_maker.widget.parent          = event->object;
+            spacer_maker.widget.clip.w          = SCUI_HOR_RES;
+            spacer_maker.widget.clip.h          = SCUI_VER_RES / 2 - 10 - 180 / 2;
+            scui_widget_create(&spacer_maker, &spacer_handle);
         }
         
-        // 下半部分留白占用
-        linear_m_maker.widget.style.indev_ptr = false;
-        linear_m_maker.widget.clip.h          = SCUI_VER_RES / 2 - 10 - 180 / 2;
-        linear_m_maker.widget.event_cb        = NULL;
-        scui_widget_create(&linear_m_maker, &linear_m_handle);
+        scui_custom_maker_t item_maker = {0};
+        scui_widget_maker_def_cfg(&item_maker, scui_widget_type_custom);
+        
+        item_maker.widget.style.buffer    = true;
+        item_maker.widget.style.buffer_d  = true;
+        item_maker.widget.style.fully_bg  = true;
+        item_maker.widget.style.indev_ptr = true;
+        item_maker.widget.format          = SCUI_PIXEL_CF_DEF_A;
+        item_maker.widget.parent          = event->object;
+        item_maker.widget.clip.w          = SCUI_HOR_RES;
+        item_maker.widget.clip.h          = 410;
+        item_maker.widget.event_cb        = scui_ui_scene_quick_card_item_event;
+        item_maker.widget.child_num       = 50;
         
         // list的各个子控件树
-        for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
-            linear_s_handle = scui_ui_res_local->linear_s[idx];
+        for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
+            scui_handle_t item_handle = SCUI_HANDLE_INVALID;
+            scui_widget_create(&item_maker, &item_handle);
         }
         
-        scui_ui_res_local->linear = event->object;
+        /* 下半部分留白 */
+        {
+            scui_custom_maker_t spacer_maker = {0};
+            scui_handle_t spacer_handle = SCUI_HANDLE_INVALID;
+            scui_widget_maker_def_cfg(&spacer_maker, scui_widget_type_custom);
+            spacer_maker.widget.style.indev_ptr = false;
+            spacer_maker.widget.parent          = event->object;
+            spacer_maker.widget.clip.w          = SCUI_HOR_RES;
+            spacer_maker.widget.clip.h          = SCUI_VER_RES / 2 - 10 - 180 / 2;
+            scui_widget_create(&spacer_maker, &spacer_handle);
+        }
+        
         break;
     }
     case scui_event_scroll_layout:
@@ -281,31 +243,27 @@ void scui_ui_scene_quick_card_event_proc(scui_event_t *event)
         
         scui_ui_res_local->list_num = 10;
         
-        scui_linear_maker_t linear_maker = {0};
-        scui_handle_t linear_handle = SCUI_HANDLE_INVALID;
+        scui_scroll_maker_t scroll_maker = {0};
+        scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&linear_maker, scui_widget_type_linear);
-        linear_maker.widget.style.order_draw   = true;
-        linear_maker.widget.style.sched_widget = true;
-        linear_maker.widget.style.indev_ptr    = true;
-        linear_maker.widget.style.indev_enc    = true;
-        linear_maker.widget.style.indev_key    = true;
-        linear_maker.widget.clip.w = SCUI_HOR_RES;
-        linear_maker.widget.clip.h = SCUI_VER_RES;
-        linear_maker.widget.parent = event->object;
-        linear_maker.widget.child_num  = 50;
-        linear_maker.widget.event_cb   = scui_ui_scene_quick_card_scroll_event;
-        linear_maker.scroll.pos        = scui_opt_pos_c;
-        linear_maker.scroll.dir        = scui_opt_dir_ver;
-        linear_maker.scroll.skip       = scui_opt_pos_all;
-        linear_maker.scroll.space      = 3;
-        linear_maker.scroll.route_enc  = 117;
-        linear_maker.scroll.route_key  = 117;
-        linear_maker.scroll.keyid_fdir = SCUI_WIDGET_SCROLL_KEY_FDIR;
-        linear_maker.scroll.keyid_bdir = SCUI_WIDGET_SCROLL_KEY_BDIR;
-        linear_maker.scroll.springback = 70;
-        scui_widget_create(&linear_maker, &linear_handle);
-        
+        scui_widget_maker_def_cfg(&scroll_maker, scui_widget_type_scroll);
+        scroll_maker.widget.style.fully_bg  = true;
+        scroll_maker.widget.style.indev_enc = true;
+        scroll_maker.widget.style.indev_key = true;
+        scroll_maker.widget.clip.w = SCUI_HOR_RES;
+        scroll_maker.widget.clip.h = SCUI_VER_RES;
+        scroll_maker.widget.parent = event->object;
+        scroll_maker.widget.event_cb   = scui_ui_scene_quick_card_scroll_event;
+        scroll_maker.widget.child_num  = scui_ui_res_local->list_num;
+        scroll_maker.pos        = scui_opt_pos_c;
+        scroll_maker.dir        = scui_opt_dir_ver;
+        scroll_maker.space      = 3;
+        scroll_maker.route_enc  = 117;
+        scroll_maker.route_key  = 117;
+        scroll_maker.keyid_fdir = SCUI_WIDGET_SCROLL_KEY_FDIR;
+        scroll_maker.keyid_bdir = SCUI_WIDGET_SCROLL_KEY_BDIR;
+        scroll_maker.springback = 70;
+        scui_widget_create(&scroll_maker, &scroll_handle);
         break;
     }
     case scui_event_destroy:

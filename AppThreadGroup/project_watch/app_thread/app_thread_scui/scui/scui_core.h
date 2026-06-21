@@ -61,8 +61,6 @@
 #include "scui_symbol_inf.h"        /* 控件(字符串)API */
 #include "scui_scroll.h"            /* 控件(滚动) */
 #include "scui_scroll_inf.h"        /* 控件(滚动)API */
-#include "scui_linear.h"            /* 控件(列表) */
-#include "scui_linear_inf.h"        /* 控件(列表)API */
 /* widget(extend): */
 #include "scui_roller.h"            /* 控件(滚轮) */
 #include "scui_roller_inf.h"        /* 控件(滚轮)API */

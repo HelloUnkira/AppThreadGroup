@@ -1373,8 +1373,6 @@ void scui_scroll_invoke(scui_event_t *event)
         scui_scroll_event_layout(event);
         if (layout) scui_scroll_notify_alone(event->object, 0xAA);
         
-        if (offset_t != 0) {volatile int breakpoint = 0;
-            breakpoint++;};
         if (scroll->dir == scui_opt_dir_hor) offset.x = -offset_t;
         if (scroll->dir == scui_opt_dir_ver) offset.y = -offset_t;
         if (layout) scui_scroll_offset(event->object, &offset, false);
@@ -1467,7 +1465,7 @@ void scui_scroll_invoke(scui_event_t *event)
         
         if (scroll->dir != scui_opt_dir_hor &&
             scroll->dir != scui_opt_dir_ver) {
-            SCUI_LOG_ERROR("scroll way is unsupport");
+            // SCUI_LOG_ERROR("scroll way is unsupport");
             break;
         }
         if (scroll->route_enc == 0) {

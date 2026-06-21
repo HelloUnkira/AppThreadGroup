@@ -62,6 +62,8 @@ scui_area_t scui_widget_clip_tree(scui_handle_t handle)
     while (handle != SCUI_HANDLE_INVALID) {
         scui_handle_t  handle_r = scui_widget_root(handle);
         scui_widget_t *widget_r = scui_handle_source_check(handle_r);
+        
+        if (handle_r == handle) break;
         if (widget_r->parent == SCUI_HANDLE_INVALID) break;
         if (widget_r->parent != SCUI_HANDLE_INVALID) {
             widget_clip.x += widget_r->clip.x;
@@ -166,6 +168,7 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip)
     
     if (widget->style.buffer) {
         
+        SCUI_ASSERT(clip != NULL);
         scui_area_t clip_inter = {0};
         if (scui_area_inter(&clip_inter, &widget->clip_set_p->clip, clip))
             scui_clip_add(widget->clip_set_p, &clip_inter);
@@ -408,7 +411,7 @@ void scui_widget_surface_create(scui_widget_t *widget, scui_surface_t *surface)
     if (widget->style.buffer_d) return;
     
     /* 更新画布实例 */
-    scui_widget_surface_ready(widget);
+    scui_widget_surface_ready(widget->myself);
 }
 
 /*@brief 控件画布销毁
@@ -419,7 +422,7 @@ void scui_widget_surface_destroy(scui_widget_t *widget)
     if (widget->surface_s == NULL) return;
     
     /* 回收画布资源 */
-    scui_widget_surface_recycle(widget);
+    scui_widget_surface_recycle(widget->myself);
     
     /* 回收画布图句柄 */
     scui_handle_clear(widget->image_s);
@@ -440,10 +443,11 @@ void scui_widget_surface_destroy(scui_widget_t *widget)
 }
 
 /*@brief 控件画布资源就绪
- *@param widget 控件实例
+ *@param handle 控件句柄
  */
-void scui_widget_surface_ready(scui_widget_t *widget)
+void scui_widget_surface_ready(scui_handle_t handle)
 {
+    scui_widget_t *widget = scui_handle_source_check(handle);
     if (widget->surface_s == NULL) return;
     if (widget->surface_s->pixel != NULL) return;
     
@@ -454,13 +458,20 @@ void scui_widget_surface_ready(scui_widget_t *widget)
     
     /* 同步更新画布图实例 */
     scui_image_by_surface(widget->image_s_src, widget->surface_s);
+    
+    /* 调度后迟延补充剪切域 */
+    if (widget->style.buffer_d) {
+        scui_widget_clip_draw_tree(widget);
+        scui_widget_clip_reset(widget, &widget->clip);
+    }
 }
 
 /*@brief 控件画布资源回收
- *@param widget 控件实例
+ *@param handle 控件句柄
  */
-void scui_widget_surface_recycle(scui_widget_t *widget)
+void scui_widget_surface_recycle(scui_handle_t handle)
 {
+    scui_widget_t *widget = scui_handle_source_check(handle);
     if (widget->surface_s == NULL) return;
     if (widget->surface_s->pixel == NULL) return;
     

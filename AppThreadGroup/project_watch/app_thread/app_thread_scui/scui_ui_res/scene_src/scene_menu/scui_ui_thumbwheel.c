@@ -109,9 +109,9 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
             scui_widget_draw(SCUI_UI_SCENE_THUMBWHEEL, NULL, false, 0);
         }
         
-        scui_area_t  clip_w = scui_widget_clip(event->object);
-        scui_coord_t widget_cx   = clip_w.x + clip_w.w / 2;
-        scui_coord_t widget_cy   = clip_w.y + clip_w.h / 2;
+        scui_area_t  clip_w = scui_widget_clip_self(event->object);
+        scui_coord_t widget_cx = clip_w.x + clip_w.w / 2;
+        scui_coord_t widget_cy = clip_w.y + clip_w.h / 2;
         
         scui_coord_t image_w  = scui_image_w(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS_MAX);
         scui_coord_t image_h  = scui_image_h(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS_MAX);
@@ -147,7 +147,7 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
             dst_clip.w = scui_image_w(image);
             dst_clip.h = scui_image_h(image);
             
-            if (event->type == scui_event_draw) {
+            if (event->type == scui_event_draw_graph) {
                 /* 绘制目标:从滚动空间坐标转换为控件局部坐标 */
                 scui_area_t draw_clip = dst_clip;
                 draw_clip.x -= clip_w.x;

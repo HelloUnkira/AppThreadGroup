@@ -12,6 +12,7 @@
  */
 void scui_ui_scene_xfloat_m_event_proc(scui_event_t * event)
 {
+    #if 0
     switch (event->type) {
     case scui_event_create:
         break;
@@ -55,6 +56,7 @@ void scui_ui_scene_xfloat_m_event_proc(scui_event_t * event)
     default:
         break;
     }
+    #endif
 }
 
 /*@brief 控件事件响应回调
@@ -62,6 +64,7 @@ void scui_ui_scene_xfloat_m_event_proc(scui_event_t * event)
  */
 void scui_ui_scene_xfloat_event_proc(scui_event_t * event)
 {
+    #if 0
     switch (event->type) {
     case scui_event_create:
         break;
@@ -101,6 +104,7 @@ void scui_ui_scene_xfloat_event_proc(scui_event_t * event)
     default:
         break;
     }
+    #endif
 }
 
 /*@brief 控件事件响应构建
@@ -110,6 +114,7 @@ void scui_ui_scene_xfloat_event_proc(scui_event_t * event)
  */
 void scui_ui_scene_xfloat_create(scui_event_t *event, scui_opt_pos_t pos, scui_event_cb_t event_cb_s)
 {
+    #if 0
     scui_area_t clip_p = scui_widget_clip(event->object);
     scui_area_t clip_z = clip_p; clip_z.x = clip_z.y = 0;
     
@@ -176,4 +181,5 @@ void scui_ui_scene_xfloat_create(scui_event_t *event, scui_opt_pos_t pos, scui_e
             scui_linear_s_set(linear_s_handle, &linear_m_handle);
         }
     }
+    #endif
 }

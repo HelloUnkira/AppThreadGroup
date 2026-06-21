@@ -43,7 +43,7 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         scui_coord_t  ofs_max = SCUI_UI_WATERFALL_OFS_MAX;
         scui_coord_t  ofs_cur = ofs_min;
         
-        scui_area_t  scroll_c  = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL);
+        scui_area_t  scroll_c  = scui_widget_clip_self(SCUI_UI_SCENE_WATERFALL_SCROLL);
         scui_coord_t scroll_cx = scroll_c.x + scroll_c.w / 2;
         scui_coord_t scroll_cy = scroll_c.y + scroll_c.h / 2;
         
@@ -112,7 +112,7 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         icon_c.h  = scui_image_h(image);
         icon_c.w  = scui_image_w(image);
         
-        if (event->type == scui_event_draw) {
+        if (event->type == scui_event_draw_graph) {
             /* 绘制目标:从滚动空间坐标转换为控件局部坐标 */
             scui_area_t draw_clip = {
                 .x = icon_c.x - icon_c_origin.x,

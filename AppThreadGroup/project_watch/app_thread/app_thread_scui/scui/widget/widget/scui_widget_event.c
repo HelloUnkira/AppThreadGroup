@@ -337,11 +337,6 @@ static void scui_widget_event_process(scui_event_t *event)
         
         break;
     }
-    case scui_event_draw_ready: {
-        /* 为独立画布准备画布资源(冒泡路径) */
-        scui_widget_surface_ready(widget);
-        break;
-    }
     case scui_event_draw_graph: {
         
         /* 绘制事件不能被控件响应 */
@@ -350,7 +345,12 @@ static void scui_widget_event_process(scui_event_t *event)
             return;
         }
         /* 绘制事件没有剪切域,忽略 */
-        if (scui_widget_draw_empty(event->object)) {
+        if (scui_area_empty(&widget->clip_set.clip)) {
+            SCUI_LOG_INFO("widget clip is empty");
+            return;
+        }
+        /* 绘制事件没有剪切域,忽略 */
+        if (scui_clip_empty(&widget->clip_set)) {
             SCUI_LOG_INFO("widget clip is empty");
             return;
         }
@@ -679,8 +679,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
             SCUI_LOG_INFO("size_old:%d, size_new:%d", size_old, size_new);
         }
         
-        /* 为独立画布准备画布资源 */
-        scui_widget_surface_ready(widget);
         scui_widget_event_bubble(event, NULL, false, true);
         return;
     }

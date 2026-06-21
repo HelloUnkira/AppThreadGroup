@@ -55,24 +55,6 @@ void scui_widget_maker_def_cfg(void *maker, scui_widget_type_t type)
 		string_maker->widget.type                    = scui_widget_type_string;
 		break;
 	}
-	case scui_widget_type_linear: {
-		scui_linear_maker_t *linear_maker = (scui_linear_maker_t *)maker;
-		
-		linear_maker->widget.type                    = scui_widget_type_linear;
-		break;
-	}
-	case scui_widget_type_linear_m: {
-		scui_linear_m_maker_t *linear_m_maker = (scui_linear_m_maker_t *)maker;
-		
-		linear_m_maker->widget.type                    = scui_widget_type_linear_m;
-		break;
-	}
-	case scui_widget_type_linear_s: {
-		scui_linear_s_maker_t *linear_s_maker = (scui_linear_s_maker_t *)maker;
-		
-		linear_s_maker->widget.type                    = scui_widget_type_linear_s;
-		break;
-	}
 	case scui_widget_type_roller: {
 		scui_roller_maker_t *roller_maker = (scui_roller_maker_t *)maker;
 		

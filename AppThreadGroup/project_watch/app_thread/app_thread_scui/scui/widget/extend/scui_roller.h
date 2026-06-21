@@ -12,7 +12,6 @@ typedef struct {
     SCUI_EXTEND_FIELD_S
     scui_widget_t widget;
     scui_scroll_t scroll;
-    scui_linear_t linear;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_roller_type_t  type;
@@ -27,7 +26,6 @@ typedef struct {
     SCUI_EXTEND_FIELD_S
     scui_widget_maker_t widget;
     scui_scroll_maker_t scroll;
-    scui_linear_maker_t linear;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_roller_type_t  type;

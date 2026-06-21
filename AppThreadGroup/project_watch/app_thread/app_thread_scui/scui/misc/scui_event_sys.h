@@ -22,7 +22,6 @@ typedef enum {
     scui_event_draw_graph,          /* 控件绘制事件(步调2:图形) */
     scui_event_draw_buffer,         /* 控件绘制事件(步调3:画布) */
     scui_event_draw_finish,         /* 控件绘制事件(步调4:完成) */
-    scui_event_draw_empty,          /* 控件绘制事件(绘制转义) */
     scui_event_create,              /* 控件创建事件 */
     scui_event_destroy,             /* 控件销毁事件 */
     scui_event_show,                /* 控件隐藏事件 */

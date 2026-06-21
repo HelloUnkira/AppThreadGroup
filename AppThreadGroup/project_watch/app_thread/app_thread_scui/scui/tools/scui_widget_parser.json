@@ -28,10 +28,6 @@
             "maker": "scui_string_maker_t"
         },
         {
-            "class": "scui_widget_type_linear",
-            "maker": "scui_linear_maker_t"
-        },
-        {
             "class": "scui_widget_type_roller",
             "maker": "scui_roller_maker_t"
         },

@@ -91,7 +91,6 @@ static void scui_event_adjust_prior(scui_event_t *event)
         [scui_event_draw_graph]     = scui_event_prior_low,
         [scui_event_draw_buffer]    = scui_event_prior_low,
         [scui_event_draw_finish]    = scui_event_prior_low,
-        [scui_event_draw_empty]     = scui_event_prior_above,
         [scui_event_refr]           = scui_event_prior_low,
         
         [scui_event_create]         = scui_event_prior_high,

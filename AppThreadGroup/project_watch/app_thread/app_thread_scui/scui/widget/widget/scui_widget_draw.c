@@ -17,8 +17,6 @@ bool scui_widget_draw_empty(scui_handle_t handle)
     
     if (scui_area_empty(&widget->clip_set.clip))
         return true;
-    if (scui_clip_empty(&widget->clip_set))
-        return true;
     
     return false;
 }

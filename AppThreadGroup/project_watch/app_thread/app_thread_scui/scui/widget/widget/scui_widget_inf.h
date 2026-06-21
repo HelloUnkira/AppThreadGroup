@@ -280,6 +280,16 @@ bool scui_widget_event_inside(scui_event_t *event);
  */
 scui_handle_t scui_widget_surface_image(scui_handle_t handle);
 
+/*@brief 控件画布资源就绪
+ *@param handle 控件句柄
+ */
+void scui_widget_surface_ready(scui_handle_t handle);
+
+/*@brief 控件画布资源回收
+ *@param handle 控件句柄
+ */
+void scui_widget_surface_recycle(scui_handle_t handle);
+
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/

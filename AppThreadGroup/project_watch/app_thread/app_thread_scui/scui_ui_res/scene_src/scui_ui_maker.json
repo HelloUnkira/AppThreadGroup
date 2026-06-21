@@ -47,24 +47,6 @@
             }
         },
         {
-            "class": "scui_widget_type_linear",
-            "default": {
-                "widget.type": "scui_widget_type_linear"
-            }
-        },
-        {
-            "class": "scui_widget_type_linear_m",
-            "default": {
-                "widget.type": "scui_widget_type_linear_m"
-            }
-        },
-        {
-            "class": "scui_widget_type_linear_s",
-            "default": {
-                "widget.type": "scui_widget_type_linear_s"
-            }
-        },
-        {
             "class": "scui_widget_type_roller",
             "default": {
                 "widget.type": "scui_widget_type_roller"

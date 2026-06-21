@@ -234,7 +234,7 @@ void scui_xwatch_invoke(scui_event_t *event)
             event->tick = 0;
             event->type = scui_event_anima_elapse;
             scui_xwatch_invoke(event);
-            event->type = scui_event_draw;
+            event->type = scui_event_draw_graph;
         }
         
         float tick_ms = xwatch->tick_curr;

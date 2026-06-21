@@ -31,6 +31,7 @@ static struct {
  */
 void scui_ui_scene_float_s_event_proc(scui_event_t * event)
 {
+    #if 0
     switch (event->type) {
     case scui_event_create:
         break;
@@ -48,6 +49,7 @@ void scui_ui_scene_float_s_event_proc(scui_event_t * event)
     default:
         break;
     }
+    #endif
 }
 
 
