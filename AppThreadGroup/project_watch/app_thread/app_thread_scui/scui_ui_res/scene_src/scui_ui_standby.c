@@ -46,7 +46,7 @@ void scui_ui_scene_standby_event_proc(scui_event_t *event)
         
         scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
         scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     case scui_event_enc_bdir: {
@@ -57,7 +57,7 @@ void scui_ui_scene_standby_event_proc(scui_event_t *event)
         
         scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
         scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     case scui_event_ptr_click:

@@ -148,7 +148,7 @@ void scui_custom_invoke(scui_event_t *event)
     case scui_event_lang_change:
         /* 回收可能因为文本绘制而存留在控件内的资源 */
         scui_custom_text_recycle(widget->myself);
-        scui_widget_draw(widget->myself, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false, 0);
         break;
     default:
         break;

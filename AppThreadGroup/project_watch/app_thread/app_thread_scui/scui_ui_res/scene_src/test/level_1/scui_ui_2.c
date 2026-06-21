@@ -81,7 +81,7 @@ void scui_ui_scene_2_spinner_event_proc(scui_event_t *event)
             spinner_cnt -= spinner_tick;
         
         data->spinner.percent = scui_map(spinner_cnt, 0, spinner_tick, 0, 100);
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     }

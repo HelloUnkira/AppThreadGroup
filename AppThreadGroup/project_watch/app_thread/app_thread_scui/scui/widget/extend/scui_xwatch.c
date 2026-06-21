@@ -171,7 +171,7 @@ void scui_xwatch_invoke(scui_event_t *event)
                     scui_coord3_t widget_size = scui_area_size(&clip_widget);
                     scui_coord3_t fpb_ratio_c = widget_size / image_size;
                     if (widget_size <= image_size * fpb_limit_s) {
-                        scui_widget_draw(event->object, &clip_widget, false);
+                        scui_widget_draw(event->object, &clip_widget, false, 0);
                         continue;
                     }
                     
@@ -195,7 +195,7 @@ void scui_xwatch_invoke(scui_event_t *event)
                         
                         scui_area_t draw_clip = clip_frag;
                         if (scui_widget_draw_frag(&draw_clip, &clip_frag, &image2_clip)) {
-                            scui_widget_draw(event->object, &draw_clip, false);
+                            scui_widget_draw(event->object, &draw_clip, false, 0);
                             sumpox += scui_area_size(&draw_clip);
                         }
                     }
@@ -211,7 +211,7 @@ void scui_xwatch_invoke(scui_event_t *event)
             }
             SCUI_LOG_INFO("draw over");
             #else
-            scui_widget_draw(event->object, NULL, false);
+            scui_widget_draw(event->object, NULL, false, 0);
             #endif
         }
         

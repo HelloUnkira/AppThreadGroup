@@ -35,7 +35,7 @@ void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string)
     
     // 显示界面,重绘它
     scui_widget_show(SCUI_UI_SCENE_POPUP, false);
-    scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
+    scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false, 0);
     scui_window_active(SCUI_UI_SCENE_POPUP);
     
     if (text != SCUI_HANDLE_INVALID)
@@ -84,7 +84,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
                 scui_widget_move_pos(SCUI_UI_SCENE_POPUP_SCALE, &(scui_point_t){.x = scale_cur_x, .y = scale_cur_y});
                 scui_widget_move_pos(SCUI_UI_SCENE_POPUP_BG, &(scui_point_t){.x = clip.x, .y = clip.y});
                 
-                scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
+                scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false, 0);
                 
                 popup_anima += event->tick;
             }
@@ -116,7 +116,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
             } else {
                 SCUI_LOG_INFO("popup wait");
                 scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_cover, true);
-                scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
+                scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false, 0);
             }
         }
         break;

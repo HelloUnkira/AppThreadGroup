@@ -141,47 +141,58 @@ void scui_widget_clip_clear(scui_widget_t *widget, bool recurse)
 /*@brief 控件还原剪切域
  *@param widget  控件实例
  *@param clip    剪切域
- *@param recurse 递归处理
  */
-void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recurse)
+void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip)
 {
     SCUI_LOG_DEBUG("widget: %u", widget->myself);
-    SCUI_ASSERT(clip != NULL);
     
-    if (widget->style.buffer && widget->parent != SCUI_HANDLE_INVALID) {
+    /* 从根控件开始更新(它会保存最终剪切域) */
+    /* 如果其他子控件都不存在独立画布的话 */
+    if (widget->parent == SCUI_HANDLE_INVALID) {
+        SCUI_ASSERT(clip == NULL);
+        
+        /* 为所有控件及其子控件添加画布控件剪切域 */
+        scui_clip_btra(widget->clip_set, node) {
+            scui_clip_unit_t *unit = scui_clip_unit(node);
+            
+            scui_widget_child_list_btra(widget, idx) {
+                scui_handle_t  handle_c = widget->child_list[idx];
+                scui_widget_t *widget_c = scui_handle_source_check(handle_c);
+                scui_widget_clip_reset(widget_c, &unit->clip);
+            }
+        }
+        return;
+    }
+    
+    if (widget->style.buffer) {
         
         scui_area_t clip_inter = {0};
         if (scui_area_inter(&clip_inter, &widget->clip_set_p->clip, clip))
             scui_clip_add(widget->clip_set_p, &clip_inter);
         
-        if (!recurse)
-             return;
-        
         /* 为所有控件及其子控件添加画布控件剪切域 */
-        scui_clip_btra((*widget->clip_set_p), node) {
+        scui_clip_btra(widget->clip_set, node) {
             scui_clip_unit_t *unit = scui_clip_unit(node);
             scui_widget_child_list_btra(widget, idx) {
                 scui_handle_t  handle_c = widget->child_list[idx];
                 scui_widget_t *widget_c = scui_handle_source_check(handle_c);
-                scui_widget_clip_reset(widget_c, &unit->clip, true);
+                scui_widget_clip_reset(widget_c, &unit->clip);
             }
         }
-    } else {
         
-        scui_area_t clip_inter = {0};
-        if (scui_area_inter(&clip_inter, &widget->clip_set.clip, clip))
-            scui_clip_add(&widget->clip_set, &clip_inter);
-        
-        if (!recurse)
-             return;
-        
-        scui_widget_child_list_btra(widget, idx) {
-            scui_handle_t  handle_c = widget->child_list[idx];
-            scui_widget_t *widget_c = scui_handle_source(handle_c);
-            scui_widget_clip_reset(widget_c, clip, recurse);
-        }
+        return;
     }
     
+    SCUI_ASSERT(clip != NULL);
+    scui_area_t clip_inter = {0};
+    if (scui_area_inter(&clip_inter, &widget->clip_set.clip, clip))
+        scui_clip_add(&widget->clip_set, &clip_inter);
+    
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t  handle_c = widget->child_list[idx];
+        scui_widget_t *widget_c = scui_handle_source(handle_c);
+        scui_widget_clip_reset(widget_c, clip);
+    }
 }
 
 /*@brief 控件全覆盖剪切域检查
@@ -283,24 +294,61 @@ void scui_widget_clip_update(scui_widget_t *widget)
 /*@brief 控件绘制剪切域
  *@param widget  控件实例
  *@param clip    剪切域
+ *@param type    添加目标(0:自己;1:父源;2:两者)
  */
-void scui_widget_clip_draw(scui_widget_t *widget, scui_area_t *clip)
+void scui_widget_clip_draw(scui_widget_t *widget, scui_area_t *clip, scui_handle_t type)
 {
     SCUI_LOG_DEBUG("widget: %u", widget->myself);
     SCUI_ASSERT(clip != NULL);
     
-    /* 再往画布控件或者根控件加一次剪切域 */
-    if (widget->style.buffer || widget->parent == SCUI_HANDLE_INVALID) {
+    /* 自身剪切域 */
+    if (type == 0 || type == 2) {
         
         scui_area_t clip_inter = {0};
         if (scui_area_inter(&clip_inter, &widget->clip_set.clip, clip))
             scui_clip_add(&widget->clip_set, &clip_inter);
-        
-        return;
     }
     
-    /* 未知情况 */
-    SCUI_ASSERT(false);
+    /* 父源剪切域 */
+    if (type == 1 || type == 2) {
+        
+        /* 必须要有父控件存在 */
+        /* 否则没有补充父源剪切域的必要性 */
+        if (widget->style.buffer && widget->parent != SCUI_HANDLE_INVALID) {
+            
+            scui_area_t clip_p = *clip;
+            clip_p.x += widget->clip.x;
+            clip_p.y += widget->clip.y;
+            
+            scui_area_t clip_inter = {0};
+            if (scui_area_inter(&clip_inter, &widget->clip_set_p->clip, &clip_p))
+                scui_clip_add(widget->clip_set_p, &clip_inter);
+        }
+    }
+}
+
+/*@brief 控件绘制剪切域(树)
+ *@param widget 控件实例
+ */
+void scui_widget_clip_draw_tree(scui_widget_t *widget)
+{
+    SCUI_LOG_DEBUG("widget: %u", widget->myself);
+    
+    if (widget->style.buffer || widget->parent == SCUI_HANDLE_INVALID) {
+        
+        scui_widget_clip_draw(widget, &widget->clip_set.clip, 0);
+        
+        if (widget->parent != SCUI_HANDLE_INVALID) {
+            
+            scui_widget_clip_draw(widget, &widget->clip, 1);
+        }
+    }
+    
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t  handle_c = widget->child_list[idx];
+        scui_widget_t *widget_c = scui_handle_source(handle_c);
+        scui_widget_clip_draw_tree(widget_c);
+    }
 }
 
 /*@brief 控件画布

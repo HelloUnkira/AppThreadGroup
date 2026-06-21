@@ -107,7 +107,7 @@ void scui_xvedio_invoke(scui_event_t *event)
         }
         }
         
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     default:

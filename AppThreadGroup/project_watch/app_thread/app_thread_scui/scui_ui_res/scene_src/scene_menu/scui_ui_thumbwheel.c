@@ -60,7 +60,7 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
             if (scui_ui_res_local->angle %  SCUI_UI_THEMEWHEEL_ANGLE_UNIT != 0)
                 scui_ui_res_local->angle += scui_ui_res_local->way * angle_ofs;
             
-            scui_widget_draw(event->object, NULL, false);
+            scui_widget_draw(event->object, NULL, false, 0);
         }
         break;
     case scui_event_create: {
@@ -106,7 +106,7 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
         if (scui_ui_res_local->anima)
         if (scui_ui_res_local->angle % SCUI_UI_THEMEWHEEL_ANGLE_UNIT == 0) {
             scui_ui_res_local->anima = false;
-            scui_widget_draw(SCUI_UI_SCENE_THUMBWHEEL, NULL, false);
+            scui_widget_draw(SCUI_UI_SCENE_THUMBWHEEL, NULL, false, 0);
         }
         
         scui_area_t  clip_w = scui_widget_clip(event->object);
@@ -218,7 +218,7 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
         /* 位移向量映射到直径上,直径是180度,做出比值成偏转角 */
         scui_ui_res_local->angle += flag * del_p * 180 / widget_dist;
         
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     case scui_event_ptr_down:

@@ -231,7 +231,7 @@ static void scui_widget_anima_expire_fade(void *instance)
     scui_anima_t *anima = instance;
     
     scui_widget_alpha_set(anima->object, anima->value_c, true);
-    scui_widget_draw(anima->object, NULL, false);
+    scui_widget_draw(anima->object, NULL, false, 0);
 }
 
 /*@brief 控件动画回调(透明渐入)
@@ -281,7 +281,7 @@ static void scui_widget_anima_expire_zoom_out_w(void *instance)
     
     scui_area_t clip = scui_widget_clip(anima->object);
     scui_widget_adjust_size(anima->object, anima->value_c, clip.h);
-    scui_widget_draw(anima->object, NULL, false);
+    scui_widget_draw(anima->object, NULL, false, 0);
 }
 
 /*@brief 控件动画回调(缩小高度)
@@ -293,7 +293,7 @@ static void scui_widget_anima_expire_zoom_out_h(void *instance)
     
     scui_area_t clip = scui_widget_clip(anima->object);
     scui_widget_adjust_size(anima->object, clip.w, anima->value_c);
-    scui_widget_draw(anima->object, NULL, false);
+    scui_widget_draw(anima->object, NULL, false, 0);
 }
 
 /*@brief 控件动画回调

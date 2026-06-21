@@ -30,7 +30,6 @@ typedef struct {
     
 } scui_widget_draw_dsc_t;
 
-
 /*@brief 控件剪切域为空(绘制)
  *@param handle 控件句柄
  *@retval 控件剪切域为空

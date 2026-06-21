@@ -246,6 +246,7 @@ void scui_monitor_show(bool buffer)
         window_maker.widget.style.buffer = buffer;
         window_maker.widget.style.fully_bg = buffer;
         window_maker.widget.style.sched_anima = true;
+        window_maker.widget.format = SCUI_PIXEL_CF_DEF_A;
         window_maker.widget.clip.x = 10;
         window_maker.widget.clip.y = SCUI_VER_RES - 70;
         window_maker.widget.clip.w = SCUI_HOR_RES - 10 * 2;

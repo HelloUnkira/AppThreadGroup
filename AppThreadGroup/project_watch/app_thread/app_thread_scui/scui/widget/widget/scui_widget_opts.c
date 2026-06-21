@@ -32,7 +32,7 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
         if (widget->parent == SCUI_HANDLE_INVALID)
             scui_widget_refr(widget->myself, false);
         if (widget->parent != SCUI_HANDLE_INVALID)
-            scui_widget_draw(widget->parent, NULL, false);
+            scui_widget_draw(widget->parent, NULL, false, 1);
         
         SCUI_LOG_INFO("<x:%d, y:%d>", point->x, point->y);
     } else {
@@ -56,7 +56,7 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
             scui_widget_move_pos(handle_c, &point_c);
         }
         
-        scui_widget_draw(widget->myself, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false, 0);
     }
     
     if (widget->parent != SCUI_HANDLE_INVALID) {
@@ -196,7 +196,7 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     widget->clip.w = width;
     widget->clip.h = height;
     
-    scui_widget_draw(widget->myself, NULL, false);
+    scui_widget_draw(widget->myself, NULL, false, 0);
     if (widget->parent != SCUI_HANDLE_INVALID) {
         /* 子控件更新 */
         scui_event_define(event_c, widget->myself, false, scui_event_size_adjust, scui_event_absorb_none);
@@ -207,7 +207,7 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
         scui_event_notify(&event_p);
         
         /* 重绘父控件 */
-        scui_widget_draw(widget->parent, NULL, false);
+        scui_widget_draw(widget->parent, NULL, false, 0);
     }
 }
 

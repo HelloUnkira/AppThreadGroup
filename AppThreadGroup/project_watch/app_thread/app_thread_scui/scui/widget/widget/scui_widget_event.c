@@ -7,49 +7,100 @@
 
 #include "scui.h"
 
+/*@brief 绘制控件追加绘制剪切域
+ *@param handle 控件句柄
+ *@param clip   剪切域
+ *@param type   绘制类型
+ *@retval 成功失败
+ */
+static bool scui_widget_draw_clip(scui_handle_t handle, scui_area_t *clip, scui_handle_t type)
+{
+    /* 不给无效目标添加剪切域 */
+    if (scui_handle_unmap(handle))
+        return false;
+    if (scui_widget_is_hide(handle))
+        return false;
+    
+    #if SCUI_MEM_FEAT_MINI == 1
+    /* 分段绘制直接全局添加即可 */
+    /* 所以迟延到最终绘制前进行 */
+    return true;
+    #endif
+    
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    switch (type) {
+    default:SCUI_ASSERT(false);
+    case 0: {
+        scui_handle_t  handle_r = scui_widget_root(widget->myself);
+        scui_widget_t *widget_r = scui_handle_source_check(handle_r);
+        scui_area_t clip_w = scui_widget_clip_self(widget->myself);
+        
+        if (clip  !=  NULL) {
+            clip_w = *clip;
+            scui_area_t clip_s = scui_widget_clip_self(widget->myself);
+            if (!scui_area_inter2(&clip_w, &clip_s))
+                 return false;
+            
+            scui_area_t clip_r = widget->clip;
+            clip_w.x += clip_r.x;
+            clip_w.y += clip_r.y;
+            if (!scui_area_inter2(&clip_w, &clip_r))
+                 return false;
+        }
+        
+        /* 两者皆加 */
+        scui_widget_clip_draw(widget_r, &clip_w, 2);
+        return true;
+    }
+    case 1: {
+        scui_handle_t  handle_r = scui_widget_root(widget->myself);
+        scui_widget_t *widget_r = scui_handle_source_check(handle_r);
+        scui_area_t clip_w = scui_widget_clip_self(widget->myself);
+        
+        if (clip  !=  NULL) {
+            clip_w = *clip;
+            scui_area_t clip_s = scui_widget_clip_self(widget->myself);
+            if (!scui_area_inter2(&clip_w, &clip_s))
+                 return false;
+            
+            scui_area_t clip_r = widget->clip;
+            clip_w.x += clip_r.x;
+            clip_w.y += clip_r.y;
+            if (!scui_area_inter2(&clip_w, &clip_r))
+                 return false;
+        }
+        
+        scui_widget_clip_draw(widget_r, &clip_w, 1);
+        return true;
+    }
+    case 2: {
+        SCUI_ASSERT(clip == NULL);
+        
+        scui_widget_clip_draw_tree(widget);
+        return true;
+    }
+    }
+    
+    return false;
+}
+
 /*@brief 绘制控件
  *@param handle 控件句柄
  *@param clip   剪切域
  *@param sync   同步绘制
+ *@param type   剪切域类型
  */
-void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
+void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync, scui_handle_t type)
 {
     SCUI_LOG_INFO("%u", handle);
     
-    /* 不给无效目标添加剪切域 */
-    if (scui_handle_unmap(handle))
-        return;
-    if (scui_widget_is_hide(handle))
-        return;
-    
-    scui_handle_t  handle_r = scui_widget_root(handle);
-    scui_widget_t *widget_r = scui_handle_source_check(handle_r);
-    scui_widget_t *widget   = scui_handle_source_check(handle);
-    
-    /* 分段绘制直接全局添加即可 */
-    /* 所以迟延到最终绘制前进行 */
-    #if SCUI_MEM_FEAT_MINI == 0
-    scui_area_t clip_w = scui_widget_clip_self(widget->myself);
-    clip_w = clip != NULL ? *clip : clip_w;
-    
-    /* 相对剪切域先要检查, 再进行转换剪切域 */
-    scui_area_t clip_s = scui_widget_clip_self(widget->myself);
-    if (!scui_area_inter2(&clip_w, &clip_s))
+    /* 尝试为其添加剪切域 */
+    if (!scui_widget_draw_clip(handle, clip, type))
          return;
-    
-    scui_area_t clip_r = widget->clip;
-    clip_w.x += clip_r.x;
-    clip_w.y += clip_r.y;
-    if (!scui_area_inter2(&clip_w, &clip_r))
-         return;
-    
-    /* 为根画布控件补充剪切域 */
-    /* scui_widget_clip_check(handle_r, true); */
-    scui_widget_clip_draw(widget_r, &clip_w);
-    #endif
     
     /* 为根控件添加绘制事件 */
-    scui_handle_t handle_t = scui_widget_tree(widget->myself);
+    scui_handle_t handle_t = scui_widget_tree(handle);
     scui_event_define(event, handle_t, sync, scui_event_draw, scui_event_absorb_none);
     scui_event_notify(&event);
     
@@ -100,7 +151,7 @@ static void scui_widget_show_async(scui_handle_t handle)
     
     /* 控件布局更新, 重绘自己 */
     bool only = scui_widget_surface_only(widget);
-    scui_widget_draw(widget->myself, NULL, only);
+    scui_widget_draw(widget->myself, NULL, only, 2);
 }
 
 /*@brief 控件隐藏
@@ -119,7 +170,7 @@ static void scui_widget_hide_async(scui_handle_t handle)
     /* 父控件布局更新, 重绘父窗口 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
         bool only = scui_widget_surface_only(widget);
-        scui_widget_draw(widget->parent, NULL, only);
+        scui_widget_draw(widget->parent, NULL, only, 2);
     }
     
     /* 窗口移除出窗口管理器中 */
@@ -618,7 +669,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             /* 绘制起始, 更新surface剪切域 */
             /* 为所有控件及其子控件添加全局剪切域 */
             /* scui_widget_clip_check(widget->myself, true); */
-            scui_widget_clip_reset(widget, &widget->clip_set.clip, true);
+            scui_widget_clip_reset(widget, NULL);
             
             scui_multi_t size_old = 0, size_new = 0;
             scui_widget_clip_sizes(widget->myself, &size_old);

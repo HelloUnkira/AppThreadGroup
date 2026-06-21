@@ -102,7 +102,7 @@ void scui_button_invoke(scui_event_t *event)
                     (button->btn1_pct == 100 && button->btn1_way == -1) ||
                     (button->btn1_pct == button->btn1_lim && button->btn1_way == +1)) {
                      button->btn1_pct += button->btn1_way;
-                     scui_widget_draw(widget->myself, NULL, false);
+                     scui_widget_draw(widget->myself, NULL, false, 0);
                 }
                 SCUI_LOG_INFO("<%d, %d>", button->btn1_pct, button->btn1_way);
             } else {

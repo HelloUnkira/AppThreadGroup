@@ -218,8 +218,9 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
  *@param handle 控件句柄
  *@param clip   剪切域
  *@param sync   同步绘制
+ *@param type   剪切域类型
  */
-void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync);
+void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync, scui_handle_t type);
 
 /*@brief 刷新控件
  *@param handle 控件句柄

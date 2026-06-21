@@ -378,7 +378,7 @@ void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge)
         scroll->edge = *edge;
     
     scroll->layout = true;
-    scui_widget_draw(handle, NULL, false);
+    scui_widget_draw(handle, NULL, false, 0);
 }
 
 /*@brief 滚动控件边界忽略检查
@@ -614,7 +614,7 @@ static void scui_scroll_anima_expire(void *instance)
         scui_scroll_point_record(widget->myself, true);
         scui_scroll_notify_alone(widget->myself, 0x02);
         
-        scui_widget_draw(widget->myself, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false, 0);
     } else {
         /* 自动布局,非循环,循环 */
         scui_coord_t delta = 0;
@@ -688,7 +688,7 @@ static void scui_scroll_anima_expire(void *instance)
             scui_scroll_notify_alone(widget->myself, 0x02);
         }
         
-        scui_widget_draw(widget->myself, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false, 0);
     }
 }
 
@@ -1260,7 +1260,7 @@ static void scui_scroll_event_layout(scui_event_t *event)
         /* 状态量还原 */
         scroll->ofs_cur = (scui_point_t){0};
         scroll->ofs_sum = (scui_point_t){0};
-        scui_widget_draw(widget->myself, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false, 0);
         return;
     }
     
@@ -1334,7 +1334,7 @@ static void scui_scroll_event_layout(scui_event_t *event)
     }
     SCUI_LOG_DEBUG("range:[0, %d]", scroll->dis_lim);
     
-    scui_widget_draw(widget->myself, NULL, false);
+    scui_widget_draw(widget->myself, NULL, false, 0);
 }
 
 /*@brief 事件处理回调

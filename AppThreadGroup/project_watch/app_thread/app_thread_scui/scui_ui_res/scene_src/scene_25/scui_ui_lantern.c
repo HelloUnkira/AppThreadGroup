@@ -105,7 +105,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         
         scui_ui_res_local->scale_c  += resize_way;
         scui_ui_res_local->rotate_x += 1.0f;
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_draw_ready: {
         
@@ -245,7 +245,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         if (scui_betw_lr(scui_ui_res_local->rotate_y + ptr_dy, -15, 15))
             scui_ui_res_local->rotate_y += ptr_dy;
         
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_ptr_down:
     case scui_event_ptr_up:

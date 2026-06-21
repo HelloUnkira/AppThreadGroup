@@ -55,7 +55,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         if (pct == 100 || pct == 0)
             way = -way;
         
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_draw_graph: {
         

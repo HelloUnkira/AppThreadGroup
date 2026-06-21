@@ -24,7 +24,7 @@ scui_widget_type_t scui_widget_type(scui_handle_t handle)
 scui_handle_t scui_widget_root(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    if (widget->parent  == SCUI_HANDLE_INVALID) return handle;
+    if (widget->parent == SCUI_HANDLE_INVALID) return handle;
     if (widget->surface_s != NULL) return handle;
     return scui_widget_root(widget->parent);
 }

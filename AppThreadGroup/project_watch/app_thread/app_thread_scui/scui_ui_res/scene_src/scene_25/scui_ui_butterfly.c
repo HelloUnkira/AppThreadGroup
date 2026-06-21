@@ -308,7 +308,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
         /* 蝴蝶整体旋转 */
         scui_ui_res_local->rotate_angle++;
         
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_draw_ready: {
         
@@ -435,7 +435,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
         
         scui_ui_scene_butterfly_image_update();
         
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_ptr_down:
     case scui_event_ptr_up:

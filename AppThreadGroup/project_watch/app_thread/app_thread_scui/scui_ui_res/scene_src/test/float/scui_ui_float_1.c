@@ -14,7 +14,7 @@ void scui_ui_scene_float_1_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_create:
         break;
@@ -37,7 +37,7 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_create: {
         scui_area_t widget_clip = scui_widget_clip(event->object);
@@ -95,7 +95,7 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_create: {
         scui_area_t widget_clip = scui_widget_clip(event->object);

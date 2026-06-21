@@ -177,7 +177,7 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             scui_widget_move_pos(group, &point);
             scui_widget_alpha_set(group, alpha, true);
         }
-        scui_widget_draw(scroll, NULL, false);
+        scui_widget_draw(scroll, NULL, false, 0);
         
         scui_coord_t scroll_pct = 0;
         scui_scroll_percent_get(scroll, &scroll_pct);

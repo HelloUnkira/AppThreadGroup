@@ -440,7 +440,7 @@ void scui_widget_draw_ctx_image(scui_handle_t handle, scui_area_t *target, scui_
             /* scui_widget_clip_sizes(widget_t->myself, &size_old); */
             /* 上面默认使用的全局剪切域 */
             /* 所以可能存在覆盖,为所有控件补充剪切域 */
-            scui_widget_clip_reset(widget_t, target, true);
+            scui_widget_clip_reset(widget_t, NULL, true);
             
             /* scui_widget_clip_check(widget_r->myself, true); */
             scui_widget_clip_update(widget_t);

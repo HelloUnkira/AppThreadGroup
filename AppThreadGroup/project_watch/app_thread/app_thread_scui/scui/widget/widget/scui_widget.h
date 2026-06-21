@@ -196,9 +196,8 @@ void scui_widget_clip_clear(scui_widget_t *widget, bool recurse);
 /*@brief 控件还原剪切域
  *@param widget  控件实例
  *@param clip    剪切域
- *@param recurse 递归处理
  */
-void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recurse);
+void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip);
 
 /*@brief 控件全覆盖剪切域检查
  *@param widget 控件实例
@@ -213,8 +212,14 @@ void scui_widget_clip_update(scui_widget_t *widget);
 /*@brief 控件绘制剪切域
  *@param widget  控件实例
  *@param clip    剪切域
+ *@param type    添加目标(0:自己;1:父源;2:两者)
  */
-void scui_widget_clip_draw(scui_widget_t *widget, scui_area_t *clip);
+void scui_widget_clip_draw(scui_widget_t *widget, scui_area_t *clip, scui_handle_t type);
+
+/*@brief 控件绘制剪切域(树)
+ *@param widget 控件实例
+ */
+void scui_widget_clip_draw_tree(scui_widget_t *widget);
 
 /*@brief 控件画布
  *@param handle 控件句柄

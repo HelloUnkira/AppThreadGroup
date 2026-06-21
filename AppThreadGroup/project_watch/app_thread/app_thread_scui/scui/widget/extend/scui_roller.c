@@ -277,7 +277,7 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     scui_string_update_str(string_handle, str_utf8);
     
     /* 添加控件重绘 */
-    scui_widget_draw(handle, NULL, false);
+    scui_widget_draw(handle, NULL, false, 0);
 }
 
 /*@brief 滚轮控件中心对齐子控件

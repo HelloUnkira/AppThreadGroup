@@ -1553,7 +1553,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         if (tick_cnt < 1000 / span_fps) return;
         else tick_cnt -= 1000 / span_fps;
         
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     case scui_event_create: {

@@ -142,7 +142,6 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     /* 画布剪切域重置更新 */
     scui_clip_ready(&widget->clip_set);
     scui_widget_surface_refr(widget, false);
-    scui_widget_clip_reset(widget, &widget->clip_set.clip, true);
     
     /* 构建控件动画 */
     if (widget_maker->anima_num != 0)

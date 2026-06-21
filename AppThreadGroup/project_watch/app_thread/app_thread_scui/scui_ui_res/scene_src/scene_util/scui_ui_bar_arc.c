@@ -22,7 +22,7 @@ void scui_ui_bar_arc_reset(scui_ui_bar_arc_t *bar_arc)
     };
     scui_widget_draw(bar_arc->bar_handle, &draw_clip, false);
     #else
-    scui_widget_draw(bar_arc->bar_handle, NULL, false);
+    scui_widget_draw(bar_arc->bar_handle, NULL, false, 0);
     #endif
     
     scui_widget_alpha_set(bar_arc->bar_handle, bar_arc->bar_alpha, false);
@@ -44,7 +44,7 @@ void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event)
                 bar_arc->bar_alpha  = 0;
             
             scui_widget_alpha_set(event->object, bar_arc->bar_alpha, false);
-            scui_widget_draw(event->object, NULL, false);
+            scui_widget_draw(event->object, NULL, false, 0);
         }
         break;
     }

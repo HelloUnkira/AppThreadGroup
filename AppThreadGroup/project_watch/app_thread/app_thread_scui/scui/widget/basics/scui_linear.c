@@ -410,7 +410,7 @@ void scui_linear_s_invoke(scui_event_t *event)
             scui_linear_m_t *linear_m = (void *)widget_m;
             
             /* 子控件树重绘时, 通知主控件 */
-            scui_widget_draw(handle_m, NULL, false);
+            scui_widget_draw(handle_m, NULL, false, 0);
             break;
         }
         case scui_event_draw_empty: {
@@ -430,7 +430,7 @@ void scui_linear_s_invoke(scui_event_t *event)
             SCUI_ASSERT(handle_m != SCUI_HANDLE_INVALID);
             
             /* scui_widget_clip_check(scui_widget_root(handle_m), true); */
-            scui_widget_draw(handle_m, NULL, false);
+            scui_widget_draw(handle_m, NULL, false, 0);
             /* scui_widget_clip_check(scui_widget_root(handle_m), true); */
             linear_m->refr = true;
             break;

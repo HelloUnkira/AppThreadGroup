@@ -318,7 +318,7 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
             continue;
         }
         
-        scui_widget_draw(handle, NULL, true);
+        scui_widget_draw(handle, NULL, true, 0);
     }
     
     
@@ -599,7 +599,7 @@ void scui_window_event_dispatch(scui_event_t *event)
                 
                 if (anima_draw >= SCUI_WIDGET_ANIMA_DRAW_TIME) {
                     anima_draw -= SCUI_WIDGET_ANIMA_DRAW_TIME;
-                    scui_widget_draw(handle, NULL, false);
+                    scui_widget_draw(handle, NULL, false, 0);
                 }
                 scui_window_list.anima_draw = anima_draw;
             }
@@ -635,7 +635,7 @@ void scui_window_active(scui_handle_t handle)
     }
     
     if (scui_window_list.acts_rcd[0] == handle) {
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(handle, NULL, false, 0);
         SCUI_LOG_INFO("redundant operation");
         return;
     }

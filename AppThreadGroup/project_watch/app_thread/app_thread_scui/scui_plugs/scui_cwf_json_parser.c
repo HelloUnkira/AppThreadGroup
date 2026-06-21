@@ -245,6 +245,8 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     /* 在结束的时候,进行一次anim更新 */
     for (uint32_t idx = 0; idx < parser->list_num; idx++)
         scui_cwf_json_anim_item(parser, idx);
+    
+    scui_widget_draw(parent, NULL, false, 2);
 }
 
 /*@brief 销毁cwf preview

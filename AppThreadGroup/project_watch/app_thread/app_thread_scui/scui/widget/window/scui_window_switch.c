@@ -260,7 +260,7 @@ static void scui_window_move_anima_state(uint8_t type)
             scui_window_draw_lock_set(handle_t, true);
             
             /* 背景窗口虚化 */
-            scui_widget_draw(handle_t, NULL, false);
+            scui_widget_draw(handle_t, NULL, false, 0);
             scui_widget_draw_blur(handle_t, NULL);
             // scui_widget_draw_blur(handle_t, NULL);
             SCUI_LOG_INFO("");
@@ -282,7 +282,7 @@ static void scui_window_move_anima_state(uint8_t type)
             
             /* 窗口绘制解锁(解锁所有窗口即可) */
             scui_window_draw_lock_set(handle_t, false);
-            scui_widget_draw(handle_t, NULL, false);
+            scui_widget_draw(handle_t, NULL, false, 0);
         }
         break;
     }
@@ -388,7 +388,7 @@ static void scui_window_move_anima_expire(void *instance)
     if (scui_widget_surface_only(widget))
         scui_widget_refr(widget->myself, false);
     else
-        scui_widget_draw(widget->myself, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false, 0);
 }
 
 /*@brief 窗口移动动画回调

@@ -64,7 +64,7 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
             if (scui_ui_res_local->skew %  scui_ui_res_local->route != 0)
                 scui_ui_res_local->skew += scui_ui_res_local->way * angle_ofs;
             
-            scui_widget_draw(event->object, NULL, false);
+            scui_widget_draw(event->object, NULL, false, 0);
         }
         break;
     case scui_event_ptr_click:

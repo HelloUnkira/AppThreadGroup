@@ -24,7 +24,7 @@ void scui_ui_scene_6_event_proc(scui_event_t *event)
     case scui_event_focus_lost:
         break;
     case scui_event_key_click:
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     default:
         break;
@@ -272,7 +272,7 @@ void scui_ui_scene_6_4_event_proc(scui_event_t *event)
         
         src_angle_s = scui_map(cnt, 0, tick, 0, 360);
         src_angle_e = src_angle_s + rnd * 30;
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         
         break;
     case scui_event_draw_graph: {
@@ -338,7 +338,7 @@ void scui_ui_scene_6_5_event_proc(scui_event_t *event)
         
         src_angle_s = scui_map(cnt, 0, tick, 0, 360);
         src_angle_e = src_angle_s + rnd * 30;
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         
         break;
     case scui_event_draw_graph: {

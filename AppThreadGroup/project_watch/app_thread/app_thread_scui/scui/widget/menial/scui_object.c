@@ -92,7 +92,7 @@ void scui_object_prop_del(scui_handle_t handle, scui_object_prop_t *prop)
         
         local_prop->use = false;
         object->prop_cur--;
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(handle, NULL, false, 0);
         return;
     }
 }
@@ -124,7 +124,7 @@ void scui_object_prop_add(scui_handle_t handle, scui_object_prop_t *prop)
         
        *local_prop = *prop;
         local_prop->use = true;
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(handle, NULL, false, 0);
         return;
     }
     #endif
@@ -149,7 +149,7 @@ void scui_object_prop_add(scui_handle_t handle, scui_object_prop_t *prop)
        *local_prop = *prop;
         local_prop->use = true;
         object->prop_cur++;
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(handle, NULL, false, 0);
         return;
     }
     

@@ -81,7 +81,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         scui_ui_res_local->rotate.y += 1.0f * rotate_way;
         scui_ui_res_local->rotate.x -= 1.0f * rotate_way;
         scui_ui_res_local->size += 1 * resize_way;
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_draw_ready: {
         
@@ -179,7 +179,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         scui_ui_res_local->move_lock = true;
         scui_ui_res_local->rotate.y += event->ptr_e.x - event->ptr_s.x;
         scui_ui_res_local->rotate.x += event->ptr_s.y - event->ptr_e.y;     // y轴方向是反的
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_ptr_down:
     case scui_event_ptr_up:

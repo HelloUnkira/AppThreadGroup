@@ -19,7 +19,7 @@ void scui_ui_scene_float_2_slider_event_proc(scui_event_t *event)
         
         data->slider.cmin = (uint32_t)scui_rand(100) % 45;
         data->slider.cmax = 100 - (uint32_t)scui_rand(100) % 45;
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     }
@@ -42,7 +42,7 @@ void scui_ui_scene_float_2_spinner_event_proc(scui_event_t *event)
             spinner_cnt -= spinner_tick;
         
         data->spinner.percent = scui_map(spinner_cnt, 0, spinner_tick, 0, 100);
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     }
@@ -64,7 +64,7 @@ void scui_ui_scene_float_2_indicator_event_proc(scui_event_t *event)
             data->indicator.index++;
             if (data->indicator.index >= 5)
                 data->indicator.index  = 0;
-            scui_widget_draw(event->object, NULL, false);
+            scui_widget_draw(event->object, NULL, false, 0);
         }
         break;
     }
@@ -82,7 +82,7 @@ void scui_ui_scene_float_2_ring_edge_event_proc(scui_event_t *event)
         scui_custom_data_inst(event->object, &data);
         
         data->ring_edge.angle += SCUI_SCALE_COF * 1 / 6 / 3;
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     }
@@ -117,7 +117,7 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         
         image_scale.x = scui_map(image_pct, 0, 100, 512, 1536);
         image_scale.y = scui_map(image_pct, 0, 100, 512, 1536);
-        scui_widget_draw(event->object, NULL, false);
+        scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     case scui_event_create: {

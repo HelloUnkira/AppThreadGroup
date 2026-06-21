@@ -184,7 +184,7 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     }
     
     string->args.update = true;
-    scui_widget_draw(handle, NULL, false);
+    scui_widget_draw(handle, NULL, false, 0);
 }
 
 /*@brief 字符串控件更新字符串
@@ -220,7 +220,7 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
     }
     
     string->args.update = true;
-    scui_widget_draw(handle, NULL, false);
+    scui_widget_draw(handle, NULL, false, 0);
 }
 
 /*@brief 字符串控件更新字符串(重上色)
@@ -310,7 +310,7 @@ void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, scui_
         string->args.grads->grad_s[idx] = grad_s[idx];
     
     string->args.update = true;
-    scui_widget_draw(handle, NULL, false);
+    scui_widget_draw(handle, NULL, false, 0);
 }
 
 /*@brief 字符串控件滚动中止
@@ -364,7 +364,7 @@ void scui_string_adjust_size(scui_handle_t handle, scui_coord_t size)
     
     /* 这里是需要重刷新 */
     string->args.update = true;
-    scui_widget_draw(widget->myself, NULL, false);
+    scui_widget_draw(widget->myself, NULL, false, 0);
 }
 
 /*@brief 事件处理回调
@@ -433,7 +433,7 @@ void scui_string_invoke(scui_event_t *event)
         }
         
         string->unit_anima = true;
-        scui_widget_draw(widget->myself, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false, 0);
         break;
     }
     case scui_event_draw_graph: {
@@ -578,7 +578,7 @@ void scui_string_invoke(scui_event_t *event)
     }
     case scui_event_size_adjust: {
         string->args.update = true;
-        scui_widget_draw(widget->myself, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false, 0);
         
         /* 回收绘制缓存块 */
         scui_image_burn(string->draw_image_src);
@@ -595,7 +595,7 @@ void scui_string_invoke(scui_event_t *event)
             string->args.size = scui_font_size_match(string->font_idx, string->args.size);
             string->args.name = scui_font_name_match(string->font_idx, string->args.lang);
             scui_string_update_text(widget->myself, text);
-            scui_widget_draw(widget->myself, NULL, true);
+            scui_widget_draw(widget->myself, NULL, true, 0);
         }
         break;
     }
