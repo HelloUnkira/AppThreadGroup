@@ -337,6 +337,36 @@ static void scui_widget_event_process(scui_event_t *event)
         
         break;
     }
+    case scui_event_draw_ready: {
+        /* 绘制事件不能被控件响应 */
+        if (scui_widget_is_hide(widget->myself)) {
+            SCUI_LOG_INFO("widget is hide");
+            return;
+        }
+        if (widget->style.buffer && widget->style.buffer_d) {
+            /* 绘制事件没有剪切域(无需创建) */
+            if (scui_area_empty(&widget->clip_set_p->clip))
+                break;
+            
+            scui_widget_surface_ready(widget->myself);
+        }
+        break;
+    }
+    case scui_event_draw_finish: {
+        /* 绘制事件不能被控件响应 */
+        if (scui_widget_is_hide(widget->myself)) {
+            SCUI_LOG_INFO("widget is hide");
+            return;
+        }
+        if (widget->style.buffer && widget->style.buffer_d) {
+            /* 绘制事件有剪切域(无需回收) */
+            if (!scui_area_empty(&widget->clip_set_p->clip))
+                 break;
+            
+            scui_widget_surface_recycle(widget->myself);
+        }
+        break;
+    }
     case scui_event_draw_graph: {
         
         /* 绘制事件不能被控件响应 */
@@ -756,9 +786,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
     case scui_event_destroy:
     case scui_event_show:
     case scui_event_hide:
-        scui_widget_event_process(event);
-        scui_event_mask_over(event);
-        return;
     case scui_event_layout:
     case scui_event_child_nums:
     case scui_event_child_size:

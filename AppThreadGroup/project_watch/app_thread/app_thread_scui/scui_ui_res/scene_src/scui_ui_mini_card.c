@@ -77,18 +77,6 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_draw_ready: {
-        /* 为独立画布准备画布资源 */
-        if (!scui_widget_draw_empty(event->object))
-             scui_widget_surface_ready(event->object);
-        break;
-    }
-    case scui_event_draw_finish: {
-        /* 为独立画布回收画布资源 */
-        if (scui_widget_draw_empty(event->object))
-            scui_widget_surface_recycle(event->object);
-        break;
-    }
     case scui_event_draw_graph: {
         
         scui_handle_t match_idx = -1;
@@ -99,7 +87,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             }
         
         scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[match_idx];
-        scui_area_t clip = scui_widget_clip(event->object);
+        scui_area_t clip = scui_widget_clip_self(event->object);
         scui_widget_t *widget = scui_handle_source_check(event->object);
         scui_multi_t clip_w = widget->clip.w;  // for dimension queries
         scui_multi_t clip_h = widget->clip.h;
@@ -113,7 +101,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             break;
         }
         default: {
-            scui_area_t   clip = scui_widget_clip(event->object);
+            scui_area_t   clip = scui_widget_clip_self(event->object);
             scui_color_t  color = {.color.full = 0xFF282828,};
             scui_handle_t image[4] = {
                 scui_image_prj_image_src_repeat_card_04_r36_1bmp,
@@ -181,6 +169,9 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             scui_area_t clip_digit_kcal = clip_icon_kcal; clip_digit_kcal.x += scui_image_w(image_icon_kcal) + 10;
             scui_area_t clip_digit_step = clip_icon_step; clip_digit_step.x += scui_image_w(image_icon_step) + 10;
             scui_area_t clip_digit_dist = clip_icon_dist; clip_digit_dist.x += scui_image_w(image_icon_dist) + 10;
+            clip_digit_kcal.w = (scui_image_w(image_icon_kcal) + 10) * 5;
+            clip_digit_step.w = (scui_image_w(image_icon_step) + 10) * 5;
+            clip_digit_dist.w = (scui_image_w(image_icon_dist) + 10) * 5;
             scui_handle_t image_digit_kcal_list[10] = {0};
             scui_handle_t image_digit_step_list[10] = {0};
             scui_handle_t image_digit_dist_list[10] = {0};
@@ -743,7 +734,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
     case scui_event_draw_buffer: {
         
         // 计算当前控件中心到父控件中心距离
-        scui_area_t clip_p = scui_widget_clip(scui_widget_parent(event->object));
+        scui_area_t clip_p = scui_widget_clip(scui_widget_tree(event->object));
         scui_area_t clip_w = scui_widget_clip(event->object);
         
         #if 1
@@ -803,14 +794,15 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
         
         scui_event_mask_over(event);
         scui_handle_t parent = scui_widget_parent(event->object);
-        scui_handle_t index  = scui_widget_child_to_index(event->object) - 1;
+        scui_handle_t scroll = scui_widget_parent(parent);
+        scui_handle_t index  = scui_widget_child_to_index(parent) - 1;
         SCUI_LOG_WARN("click idx:%d", index);
         
         // 不是点击到中心子控件, 聚焦它
         scui_handle_t target = SCUI_HANDLE_INVALID;
-        scui_scroll_center_get(parent, &target);
-        if (target != event->object) {
-            scui_scroll_center(parent, event->object, true);
+        scui_scroll_center_get(scroll, &target);
+        if (target != parent) {
+            scui_scroll_center(scroll, parent, true);
             return;
         }
         
@@ -939,23 +931,35 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
             scui_widget_create(&spacer_maker, &spacer_handle);
         }
         
-        scui_custom_maker_t item_maker = {0};
-        scui_widget_maker_def_cfg(&item_maker, scui_widget_type_custom);
-        
-        item_maker.widget.style.buffer    = true;
-        item_maker.widget.style.buffer_d  = true;
-        item_maker.widget.style.fully_bg  = true;
-        item_maker.widget.style.indev_ptr = true;
-        item_maker.widget.format          = SCUI_PIXEL_CF_DEF_A;
-        item_maker.widget.parent          = event->object;
-        item_maker.widget.clip.w          = SCUI_HOR_RES;
-        item_maker.widget.clip.h          = 410;
-        item_maker.widget.event_cb        = scui_ui_scene_mini_card_item_event;
-        item_maker.widget.child_num       = 50;
-        
         // list的各个子控件树
         for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
+            
+            scui_custom_maker_t cont_maker = {0};
+            scui_custom_maker_t item_maker = {0};
+            scui_handle_t cont_handle = SCUI_HANDLE_INVALID;
             scui_handle_t item_handle = SCUI_HANDLE_INVALID;
+            scui_widget_maker_def_cfg(&cont_maker, scui_widget_type_custom);
+            scui_widget_maker_def_cfg(&item_maker, scui_widget_type_custom);
+            
+            cont_maker.widget.style.fully_bg  = true;
+            cont_maker.widget.parent          = event->object;
+            cont_maker.widget.clip.w          = SCUI_HOR_RES;
+            cont_maker.widget.clip.h          = 180;
+            cont_maker.widget.child_num       = 1;
+            scui_widget_create(&cont_maker, &cont_handle);
+            
+            item_maker.widget.style.buffer    = true;
+            item_maker.widget.style.buffer_d  = true;
+            item_maker.widget.style.fully_bg  = true;
+            item_maker.widget.style.indev_ptr = true;
+            item_maker.widget.format          = SCUI_PIXEL_CF_DEF_A;
+            item_maker.widget.parent          = cont_handle;
+            item_maker.widget.clip.w          = 410;
+            item_maker.widget.clip.h          = 180;
+            item_maker.widget.clip.x          = (SCUI_HOR_RES - item_maker.widget.clip.w) / 2;
+            item_maker.widget.event_cb        = scui_ui_scene_mini_card_item_event;
+            item_maker.widget.child_num       = 50;
+            
             scui_widget_create(&item_maker, &item_handle);
             scui_ui_res_local->item_list[idx] = item_handle;
             

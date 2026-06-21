@@ -28,18 +28,6 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_draw_ready: {
-        /* 为独立画布准备画布资源 */
-        if (!scui_widget_draw_empty(event->object))
-             scui_widget_surface_ready(event->object);
-        break;
-    }
-    case scui_event_draw_finish: {
-        /* 为独立画布回收画布资源 */
-        if (scui_widget_draw_empty(event->object))
-            scui_widget_surface_recycle(event->object);
-        break;
-    }
     case scui_event_draw_graph: {
         
         scui_handle_t match_idx = -1;

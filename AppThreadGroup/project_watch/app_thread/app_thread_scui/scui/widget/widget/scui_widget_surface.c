@@ -307,17 +307,18 @@ void scui_widget_clip_draw(scui_widget_t *widget, scui_area_t *clip, scui_handle
     /* 自身剪切域 */
     if (type == 0 || type == 2) {
         
-        scui_area_t clip_inter = {0};
-        if (scui_area_inter(&clip_inter, &widget->clip_set.clip, clip))
-            scui_clip_add(&widget->clip_set, &clip_inter);
+        if (widget->style.buffer || widget->parent == SCUI_HANDLE_INVALID) {
+            
+            scui_area_t clip_inter = {0};
+            if (scui_area_inter(&clip_inter, &widget->clip_set.clip, clip))
+                scui_clip_add(&widget->clip_set, &clip_inter);
+        }
     }
     
     /* 父源剪切域 */
     if (type == 1 || type == 2) {
         
-        /* 必须要有父控件存在 */
-        /* 否则没有补充父源剪切域的必要性 */
-        if (widget->style.buffer && widget->parent != SCUI_HANDLE_INVALID) {
+        if (widget->style.buffer || widget->parent != SCUI_HANDLE_INVALID) {
             
             scui_area_t clip_p = *clip;
             clip_p.x += widget->clip.x;
@@ -339,11 +340,13 @@ void scui_widget_clip_draw_tree(scui_widget_t *widget)
     
     if (widget->style.buffer || widget->parent == SCUI_HANDLE_INVALID) {
         
-        scui_widget_clip_draw(widget, &widget->clip_set.clip, 0);
+        scui_area_t clip_s = scui_widget_clip_self(widget->myself);
+        scui_widget_clip_draw(widget, &clip_s, 0);
         
         if (widget->parent != SCUI_HANDLE_INVALID) {
             
-            scui_widget_clip_draw(widget, &widget->clip, 1);
+            scui_area_t clip_s = scui_widget_clip_self(widget->myself);
+            scui_widget_clip_draw(widget, &clip_s, 1);
         }
     }
     
@@ -461,6 +464,17 @@ void scui_widget_surface_ready(scui_handle_t handle)
     
     /* 调度后迟延补充剪切域 */
     if (widget->style.buffer_d) {
+        /* 这里手动做一次对齐还原(不被父控件约束) */
+        widget->clip_set.clip = widget->clip;
+        widget->clip_set.clip.x = 0;
+        widget->clip_set.clip.y = 0;
+        scui_widget_child_list_btra(widget, idx) {
+            scui_handle_t  handle_c = widget->child_list[idx];
+            scui_widget_t *widget_c = scui_handle_source(handle_c);
+            scui_widget_surface_refr(widget_c, true);
+        }
+        /* 这样子写怪怪的,暂定如此 */
+        
         scui_widget_clip_draw_tree(widget);
         scui_widget_clip_reset(widget, &widget->clip);
     }

@@ -15,8 +15,17 @@ bool scui_widget_draw_empty(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    if (scui_area_empty(&widget->clip_set.clip))
-        return true;
+    if (widget->style.buffer) {
+        
+        if (scui_area_empty(&widget->clip_set_p->clip))
+            return true;
+        
+    } else {
+        
+        if (scui_area_empty(&widget->clip_set.clip))
+            return true;
+        
+    }
     
     return false;
 }
