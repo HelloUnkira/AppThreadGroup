@@ -67,7 +67,7 @@ static void scui_roller_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_draw_graph: {
+    case scui_event_draw_buffer: {
         
         /* 列表控件是当前控件的父控件 */
         SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
@@ -211,16 +211,18 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     scui_roller_t *roller = (void *)widget;
     
     /* 基类对象同步(同步外界给的部分状态) */
-    scui_custom_maker_t custom_maker = {.widget = maker->widget,};
+    scui_custom_maker_t custom_maker = {0};
     scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
     
-    scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_scroll);
+    scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
     
-    /* 子控件(主)子控件树(从)创建 */
+    /* 子控件创建 */
+    custom_maker.widget.clip = maker->widget.clip;
     custom_maker.widget.style.buffer    = true;
-    custom_maker.widget.style.buffer_d  = true;
+    // custom_maker.widget.style.buffer_d  = true;
     custom_maker.widget.style.fully_bg  = true;
     custom_maker.widget.style.indev_ptr = true;
+    custom_maker.widget.format          = SCUI_PIXEL_CF_DEF_A;
     custom_maker.widget.parent          = widget->myself;
     custom_maker.widget.event_cb        = scui_roller_event;
     custom_maker.widget.child_num       = 1;

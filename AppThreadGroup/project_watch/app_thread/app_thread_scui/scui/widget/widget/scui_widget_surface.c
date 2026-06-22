@@ -461,23 +461,6 @@ void scui_widget_surface_ready(scui_handle_t handle)
     
     /* 同步更新画布图实例 */
     scui_image_by_surface(widget->image_s_src, widget->surface_s);
-    
-    /* 调度后迟延补充剪切域 */
-    if (widget->style.buffer_d) {
-        /* 这里手动做一次对齐还原(不被父控件约束) */
-        widget->clip_set.clip = widget->clip;
-        widget->clip_set.clip.x = 0;
-        widget->clip_set.clip.y = 0;
-        scui_widget_child_list_btra(widget, idx) {
-            scui_handle_t  handle_c = widget->child_list[idx];
-            scui_widget_t *widget_c = scui_handle_source(handle_c);
-            scui_widget_surface_refr(widget_c, true);
-        }
-        /* 这样子写怪怪的,暂定如此 */
-        
-        scui_widget_clip_draw_tree(widget);
-        scui_widget_clip_reset(widget, &widget->clip);
-    }
 }
 
 /*@brief 控件画布资源回收
@@ -529,7 +512,7 @@ void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
     widget->clip_set.clip = widget->clip;
     
     /* 子控件的坐标区域是父控件坐标区域的子集(递归语义) */
-    if (widget->parent != SCUI_HANDLE_INVALID) {
+    if (!widget->style.buffer && widget->parent != SCUI_HANDLE_INVALID) {
         scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
         scui_area_t clip_w = widget->clip_set.clip;
         scui_area_t clip_p = widget_p->clip_set.clip;
@@ -540,8 +523,7 @@ void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
     }
     
     /* 坐标区域是相对独立画布运动 */
-    if (widget->surface_s != NULL &&
-        widget->surface == widget->surface_s) {
+    if (widget->style.buffer && widget->surface == widget->surface_s) {
         
         widget->clip_set_p->clip = widget->clip_set.clip;
         widget->clip_set.clip.x = 0;
