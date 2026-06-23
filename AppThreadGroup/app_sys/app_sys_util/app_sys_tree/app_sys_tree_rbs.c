@@ -470,7 +470,7 @@ static void app_sys_tree_rbst_get_stack_prepare(app_sys_tree_rbst_t *tree, app_s
     do {
         /* 删除动作时额外需要去停留在此处,插入动作时无需 */
         /* 因为我们关心的是按顺序排序而不是冲突修改 */
-        if (remove && app_sys_tree_rbst_get_confirm(tree)(node, stack[*size - 1]) == 0)
+        if (remove && stack[*size - 1] == node)
             return;
         /* 红黑树具有二叉查找树的性质,可以以此规则获得迭代记录 */
         uint32_t side = app_sys_tree_rbsn_error;
@@ -539,7 +539,7 @@ static void app_sys_tree_rbst_insert_adjust(app_sys_tree_rbsn_t **stack, uint32_
             app_sys_tree_rbsn_set_color(uncle, app_sys_tree_rbsn_color_b);
             /* 3.红色节点冲突回退到祖父节点 */
             size -= 2;
-            continue; 
+            continue;
         }
         /* 情况2:叔叔节点不存在或为黑色(本地旋转修正该树) */
         app_sys_tree_rbsn_status_t side_parent = app_sys_tree_rbsn_get_side(node, parent);
@@ -742,7 +742,7 @@ static void app_sys_tree_rbst_remove_node(app_sys_tree_rbst_t *tree, app_sys_tre
     uint32_t size = -1;
     app_sys_tree_rbst_get_stack_prepare(tree, node, stack, &size, 1);
     /* 3.没找到要删除节点 */
-    if (app_sys_tree_rbst_get_confirm(tree)(node, stack[size - 1]) != 0)
+    if (node != stack[size - 1])
         return;
     /* 侵入式数据结构需要额外更新节点栈 */
     /* 我们只能删除一个有0或1个子节点的节点 */

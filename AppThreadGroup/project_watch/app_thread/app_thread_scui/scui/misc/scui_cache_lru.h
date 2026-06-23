@@ -5,7 +5,7 @@
  */
 typedef struct {
     scui_list_dln_t  dl_node;
-    scui_table_dln_t ht_node;
+    scui_table_rbsn_t ht_node;
     scui_sbitfd_t count:16; /* 衰减计数器 */
     scui_sbitfd_t lock:16;  /* 嵌套锁计数器 */
 } scui_cache_lru_unit_t;
@@ -15,17 +15,23 @@ typedef struct {
 typedef struct {
     scui_mutex_t     mutex;
     scui_list_dll_t  dl_list;
-    scui_table_dll_t ht_list[SCUI_CACHE_LRU_HASH_LIMIT];
-    scui_table_dlt_t ht_table;
+    scui_table_rbsl_t ht_list[SCUI_CACHE_LRU_HASH_LIMIT];
+    scui_table_rbst_t ht_table;
     scui_multi_t nodes;     /* 缓存单位数量 */
     scui_multi_t usage;     /* 缓存对内存资源占用情况 */
     scui_multi_t total;     /* 缓存对内存资源占用总门限 */
     scui_multi_t cnt_hit;   /* 命中次数 */
     scui_multi_t cnt_unhit; /* 非命中次数 */
-    /* 表资源回调: */
-    scui_table_dlt_fd_t dlt_fd;
-    scui_table_dlt_fc_t dlt_fc;
-    scui_table_dlt_fv_t dlt_fv;
+    /* 表资源回调:
+     * rbst_fd:  hash digest 函数
+     * rbst_fcm: rbst compare 函数 (返回!=0表示<, ==0表示>=, 用于红黑树排序)
+     * rbst_fc:  rbst confirm 函数 (返回==0表示匹配, 用于红黑树查找)
+     * rbst_fv:  visit 访问函数
+     */
+    scui_table_rbst_fd_t rbst_fd;
+    scui_table_rbst_fc_t rbst_fm;   // confirm: match
+    scui_table_rbst_fc_t rbst_fc;   // compare
+    scui_table_rbst_fv_t rbst_fv;
     uint32_t ht_list_num;
     /* 节点资源回调 */
     scui_multi_t (*get_size)(scui_cache_lru_unit_t *lru_unit);

@@ -13,8 +13,8 @@
  */
 static bool scui_cache_lru_sort(scui_list_dln_t *node1, scui_list_dln_t *node2)
 {
-    scui_cache_lru_unit_t *lru_unit1 = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node1);
-    scui_cache_lru_unit_t *lru_unit2 = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node2);
+    scui_cache_lru_unit_t *lru_unit1 = scui_own_ofs(scui_cache_lru_unit_t, dl_node, node1);
+    scui_cache_lru_unit_t *lru_unit2 = scui_own_ofs(scui_cache_lru_unit_t, dl_node, node2);
     return lru_unit1->count >= lru_unit2->count;
 }
 
@@ -46,17 +46,18 @@ void scui_cache_lru_ready(scui_cache_lru_table_t *lru_table)
 {
     SCUI_ASSERT(lru_table != NULL);
     SCUI_ASSERT(lru_table->total != 0);
-    SCUI_ASSERT(lru_table->dlt_fd != NULL);
-    SCUI_ASSERT(lru_table->dlt_fc != NULL);
-    SCUI_ASSERT(lru_table->dlt_fv != NULL);
+    SCUI_ASSERT(lru_table->rbst_fd != NULL);
+    SCUI_ASSERT(lru_table->rbst_fm != NULL);
+    SCUI_ASSERT(lru_table->rbst_fc != NULL);
+    SCUI_ASSERT(lru_table->rbst_fv != NULL);
     SCUI_ASSERT(lru_table->ht_list_num != 0);
     SCUI_ASSERT(lru_table->ht_list_num <= SCUI_CACHE_LRU_HASH_LIMIT);
     
     scui_mutex_process(&lru_table->mutex, scui_mutex_static);
     scui_list_dll_reset(&lru_table->dl_list);
-    scui_table_dll_reset(lru_table->ht_list, lru_table->ht_list_num);
-    scui_table_dlt_reset(&lru_table->ht_table, lru_table->dlt_fd, lru_table->dlt_fc,
-        lru_table->dlt_fv, lru_table->ht_list, lru_table->ht_list_num);
+    scui_table_rbsl_reset(lru_table->ht_list, lru_table->ht_list_num);
+    scui_table_rbst_reset(&lru_table->ht_table, lru_table->rbst_fd, lru_table->rbst_fc,
+        lru_table->rbst_fm, lru_table->rbst_fv, lru_table->ht_list, lru_table->ht_list_num);
     
     lru_table->nodes = 0;
     lru_table->usage = 0;
@@ -90,7 +91,7 @@ void scui_cache_lru_visit(scui_cache_lru_table_t *lru_table)
     SCUI_ASSERT(lru_table != NULL);
     
     SCUI_LOG_WARN("nodes:%u, usage:%u", lru_table->nodes, lru_table->usage);
-    scui_table_dlt_visit(&lru_table->ht_table);
+    scui_table_rbst_visit(&lru_table->ht_table);
     scui_mutex_process(&lru_table->mutex, scui_mutex_give);
 }
 
@@ -148,7 +149,7 @@ void scui_cache_lru_clear(scui_cache_lru_table_t *lru_table, bool force)
         if (lru_unit_t == NULL)
             break;
         scui_list_dll_remove(&lru_table->dl_list, &lru_unit_t->dl_node);
-        scui_table_dlt_remove(&lru_table->ht_table, &lru_unit_t->ht_node);
+        scui_table_rbst_remove(&lru_table->ht_table, &lru_unit_t->ht_node);
         
         /* 约减使用率 */
         lru_table->usage -= lru_table->get_size(lru_unit_t);
@@ -174,15 +175,15 @@ void scui_cache_lru_invalidate(scui_cache_lru_table_t *lru_table, scui_cache_lru
     SCUI_ASSERT(lru_table != NULL);
     SCUI_ASSERT(lru_unit != NULL);
     
-    scui_table_dln_t *unit_node = NULL;
+    scui_table_rbsn_t *unit_node = NULL;
     scui_cache_lru_unit_t *lru_unit_t = NULL;
-    if ((unit_node = scui_table_dlt_search(&lru_table->ht_table, &lru_unit->ht_node)) != NULL)
+    if ((unit_node = scui_table_rbst_search(&lru_table->ht_table, &lru_unit->ht_node)) != NULL)
         lru_unit_t = scui_own_ofs(scui_cache_lru_unit_t, ht_node, unit_node);
     
     /* 如果缓存命中时 */
     if (lru_unit_t != NULL) {
         scui_list_dll_remove(&lru_table->dl_list, &lru_unit_t->dl_node);
-        scui_table_dlt_remove(&lru_table->ht_table, &lru_unit_t->ht_node);
+        scui_table_rbst_remove(&lru_table->ht_table, &lru_unit_t->ht_node);
         SCUI_ASSERT(lru_unit_t->lock == 0);
         
         /* 约减使用率 */
@@ -205,15 +206,16 @@ void scui_cache_lru_unload(scui_cache_lru_table_t *lru_table, scui_cache_lru_uni
     SCUI_ASSERT(lru_table != NULL);
     SCUI_ASSERT(lru_unit != NULL);
     
-    scui_table_dln_t *unit_node = NULL;
+    scui_table_rbsn_t *unit_node = NULL;
     scui_cache_lru_unit_t *lru_unit_t = NULL;
-    if ((unit_node = scui_table_dlt_search(&lru_table->ht_table, &lru_unit->ht_node)) != NULL)
+    if ((unit_node = scui_table_rbst_search(&lru_table->ht_table, &lru_unit->ht_node)) != NULL)
         lru_unit_t = scui_own_ofs(scui_cache_lru_unit_t, ht_node, unit_node);
     
     /* 如果缓存命中时 */
     if (lru_unit_t != NULL)
-    if (lru_unit_t->lock != 0)
+    if (lru_unit_t->lock != 0) {
         lru_unit_t->lock--;
+    }
     scui_mutex_process(&lru_table->mutex, scui_mutex_give);
 }
 
@@ -227,9 +229,9 @@ void scui_cache_lru_load(scui_cache_lru_table_t *lru_table, scui_cache_lru_unit_
     SCUI_ASSERT(lru_table != NULL);
     SCUI_ASSERT(lru_unit != NULL);
     
-    scui_table_dln_t *unit_node = NULL;
+    scui_table_rbsn_t *unit_node = NULL;
     scui_cache_lru_unit_t *lru_unit_t = NULL;
-    if ((unit_node = scui_table_dlt_search(&lru_table->ht_table, &lru_unit->ht_node)) != NULL)
+    if ((unit_node = scui_table_rbst_search(&lru_table->ht_table, &lru_unit->ht_node)) != NULL)
         lru_unit_t = scui_own_ofs(scui_cache_lru_unit_t, ht_node, unit_node);
     
     /* 如果缓存命中时 */
@@ -253,7 +255,7 @@ void scui_cache_lru_load(scui_cache_lru_table_t *lru_table, scui_cache_lru_unit_
     }
     
     /* 对缓存计数器进行一次重衰减(rewind),老化它 */
-    if ((unit_node = scui_list_dll_tail(&lru_table->dl_list)) != NULL) {
+    if ((unit_node = (scui_table_rbsn_t *)scui_list_dll_tail(&lru_table->dl_list)) != NULL) {
          lru_unit_t = scui_own_ofs(scui_cache_lru_unit_t, dl_node, unit_node);
          scui_multi_t count = lru_unit_t->count;
          if (count > 0x07) {
@@ -298,7 +300,7 @@ void scui_cache_lru_load(scui_cache_lru_table_t *lru_table, scui_cache_lru_unit_
                 break;
             }
             scui_list_dll_remove(&lru_table->dl_list, &lru_unit_t->dl_node);
-            scui_table_dlt_remove(&lru_table->ht_table, &lru_unit_t->ht_node);
+            scui_table_rbst_remove(&lru_table->ht_table, &lru_unit_t->ht_node);
             
             /* 约减使用率 */
             lru_table->usage -= lru_table->get_size(lru_unit_t);
@@ -312,8 +314,8 @@ void scui_cache_lru_load(scui_cache_lru_table_t *lru_table, scui_cache_lru_unit_
         scui_list_dln_reset(&lru_unit_t->dl_node);
         scui_queue_dlpq_enqueue(&lru_table->dl_list, &lru_unit_t->dl_node, scui_cache_lru_sort);
         /* 哈希表保存查询记录 */
-        scui_table_dln_reset(&lru_unit_t->ht_node);
-        scui_table_dlt_insert(&lru_table->ht_table, &lru_unit_t->ht_node);
+        scui_table_rbsn_reset(&lru_unit_t->ht_node);
+        scui_table_rbst_insert(&lru_table->ht_table, &lru_unit_t->ht_node);
     }
     over:
     scui_mutex_process(&lru_table->mutex, scui_mutex_give);

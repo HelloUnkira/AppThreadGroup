@@ -11,7 +11,7 @@ static scui_cache_image_t scui_cache_image = {0};
 
 /*@brief 哈希散列函数,哈希摘要函数
  */
-static uint32_t scui_cache_image_fd_t(scui_table_dln_t *node)
+static uint32_t scui_cache_image_fd_t(scui_table_rbsn_t *node)
 {
     scui_cache_lru_unit_t *unit = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node);
     scui_cache_image_unit_t *image_unit = scui_own_ofs(scui_cache_image_unit_t, lru_unit, unit);
@@ -19,9 +19,9 @@ static uint32_t scui_cache_image_fd_t(scui_table_dln_t *node)
     return scui_cache_lru_hash((void *)&image_unit->image->pixel.data_bin, sizeof(uintptr_t));
 }
 
-/*@brief 哈希比较函数
+/*@brief 哈希比较函数(confirm:匹配语义,返回0表示相等)
  */
-static bool scui_cache_image_fc_t(scui_table_dln_t *node1, scui_table_dln_t *node2)
+static uint8_t scui_cache_image_fm_t(scui_table_rbsn_t *node1, scui_table_rbsn_t *node2)
 {
     scui_cache_lru_unit_t *unit1 = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node1);
     scui_cache_lru_unit_t *unit2 = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node2);
@@ -47,12 +47,27 @@ static bool scui_cache_image_fc_t(scui_table_dln_t *node1, scui_table_dln_t *nod
             cond_tar = true;
     }
     
-    return cond_bin && cond_tar ? true : false;
+    return cond_bin && cond_tar ? 0 : 1;
+}
+
+/*@brief 哈希比较函数(compare:排序语义)
+ */
+static uint8_t scui_cache_image_fc_t(scui_table_rbsn_t *node1, scui_table_rbsn_t *node2)
+{
+    scui_cache_lru_unit_t *unit1 = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node1);
+    scui_cache_lru_unit_t *unit2 = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node2);
+    scui_cache_image_unit_t *image_unit1 = scui_own_ofs(scui_cache_image_unit_t, lru_unit, unit1);
+    scui_cache_image_unit_t *image_unit2 = scui_own_ofs(scui_cache_image_unit_t, lru_unit, unit2);
+    
+    if (image_unit1->image->pixel.data_bin < image_unit2->image->pixel.data_bin) return 1;
+    if (image_unit1->image->pixel.data_bin > image_unit2->image->pixel.data_bin) return 0;
+    if (image_unit1->image->from < image_unit2->image->from) return 1;
+    return 0;
 }
 
 /*@brief 哈希访问函数
  */
-static void scui_cache_image_fv_t(scui_table_dln_t *node, uint32_t idx)
+static void scui_cache_image_fv_t(scui_table_rbsn_t *node, uint32_t idx)
 {
     scui_cache_lru_unit_t *unit = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node);
     scui_cache_image_unit_t *image_unit = scui_own_ofs(scui_cache_image_unit_t, lru_unit, unit);
@@ -121,9 +136,10 @@ void scui_cache_image_ready(void)
     #if SCUI_CACHE_HASH_IMAGE != 0
     scui_cache_image_t *cache = &scui_cache_image;
     
-    cache->lru_table.dlt_fd = scui_cache_image_fd_t;
-    cache->lru_table.dlt_fc = scui_cache_image_fc_t;
-    cache->lru_table.dlt_fv = scui_cache_image_fv_t;
+    cache->lru_table.rbst_fd = scui_cache_image_fd_t;
+    cache->lru_table.rbst_fm = scui_cache_image_fm_t;
+    cache->lru_table.rbst_fc = scui_cache_image_fc_t;
+    cache->lru_table.rbst_fv = scui_cache_image_fv_t;
     cache->lru_table.ht_list_num = SCUI_CACHE_HASH_IMAGE;
     cache->lru_table.total = SCUI_CACHE_TOTAL_IMAGE;
     cache->lru_table.get_size = scui_cache_image_unit_get_size;

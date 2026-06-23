@@ -130,12 +130,14 @@ void scui_button_invoke(scui_event_t *event)
                 scui_custom_data_t custom_data;
                 scui_custom_data_config_image_crect4(&custom_data,
                     button->image.image, button->image.color, button->image.delta);
-                scui_custom_draw_image_crect4(widget->myself, &widget->clip, &custom_data);
+                scui_area_t widget_clip = scui_widget_clip_self(widget->myself);
+                scui_custom_draw_image_crect4(widget->myself, &widget_clip, &custom_data);
                 break;
             }
             case scui_button_mode_scale: {
                 SCUI_ASSERT(button->btn1_pct >= button->btn1_lim && button->btn1_pct <= 100);
-                scui_area_t  scale_clip = widget->clip;
+                scui_area_t widget_clip = scui_widget_clip_self(widget->myself);
+                scui_area_t  scale_clip = widget_clip;
                 scui_multi_t scale_x = scale_clip.w * (100 - button->btn1_pct) / 100 / 2;
                 scui_multi_t scale_y = scale_clip.h * (100 - button->btn1_pct) / 100 / 2;
                 scale_clip.x += scale_x;
@@ -162,6 +164,7 @@ void scui_button_invoke(scui_event_t *event)
             }
             case scui_button_mode_scale: {
                 SCUI_ASSERT(button->btn1_pct >= button->btn1_lim && button->btn1_pct <= 100);
+                scui_area_t widget_clip = scui_widget_clip_self(widget->myself);
                 scui_area_t  scale_clip = widget->clip;
                 scui_multi_t scale_x = scale_clip.w * (100 - button->btn1_pct) / 100 / 2;
                 scui_multi_t scale_y = scale_clip.h * (100 - button->btn1_pct) / 100 / 2;

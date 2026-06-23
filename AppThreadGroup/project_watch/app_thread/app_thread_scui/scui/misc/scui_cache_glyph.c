@@ -11,7 +11,7 @@ static scui_cache_glyph_t scui_cache_glyph = {0};
 
 /*@brief 哈希散列函数,哈希摘要函数
  */
-static uint32_t scui_cache_glyph_fd_t(scui_table_dln_t *node)
+static uint32_t scui_cache_glyph_fd_t(scui_table_rbsn_t *node)
 {
     scui_cache_lru_unit_t *unit = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node);
     scui_cache_glyph_unit_t *glyph_unit = scui_own_ofs(scui_cache_glyph_unit_t, lru_unit, unit);
@@ -20,9 +20,9 @@ static uint32_t scui_cache_glyph_fd_t(scui_table_dln_t *node)
     return scui_cache_lru_hash((void *)&letter, sizeof(uint32_t));
 }
 
-/*@brief 哈希比较函数
+/*@brief 哈希比较函数(confirm:匹配语义,返回0表示相等)
  */
-static uint8_t scui_cache_glyph_fc_t(scui_table_dln_t *node1, scui_table_dln_t *node2)
+static uint8_t scui_cache_glyph_fm_t(scui_table_rbsn_t *node1, scui_table_rbsn_t *node2)
 {
     scui_cache_lru_unit_t *unit1 = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node1);
     scui_cache_lru_unit_t *unit2 = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node2);
@@ -31,29 +31,46 @@ static uint8_t scui_cache_glyph_fc_t(scui_table_dln_t *node1, scui_table_dln_t *
     
     scui_handle_t name1 = glyph_unit1->name;
     scui_handle_t name2 = glyph_unit2->name;
-    if (name1 != name2) return false;
+    if (name1 != name2) return 1;
     
     uint16_t size1 = glyph_unit1->size;
     uint16_t size2 = glyph_unit2->size;
-    if (size1 != size2) return false;
+    if (size1 != size2) return 1;
     
     uint32_t letter1 = glyph_unit1->glyph.unicode_letter;
     uint32_t letter2 = glyph_unit2->glyph.unicode_letter;
-    if (letter1 != letter2) return false;
+    if (letter1 != letter2) return 1;
     
     /* 只有使用kern的字这个字段才会特殊化 */
     uint32_t letter1_next = glyph_unit1->glyph.unicode_letter_next;
     uint32_t letter2_next = glyph_unit2->glyph.unicode_letter_next;
-    if (letter1_next != letter2_next) return false;
+    if (letter1_next != letter2_next) return 1;
     
+    return 0;
+}
+
+/*@brief 哈希比较函数(compare:排序语义)
+ */
+static uint8_t scui_cache_glyph_fc_t(scui_table_rbsn_t *node1, scui_table_rbsn_t *node2)
+{
+    scui_cache_lru_unit_t *unit1 = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node1);
+    scui_cache_lru_unit_t *unit2 = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node2);
+    scui_cache_glyph_unit_t *glyph_unit1 = scui_own_ofs(scui_cache_glyph_unit_t, lru_unit, unit1);
+    scui_cache_glyph_unit_t *glyph_unit2 = scui_own_ofs(scui_cache_glyph_unit_t, lru_unit, unit2);
     
-    
-    return true;
+    if (glyph_unit1->name < glyph_unit2->name) return 1;
+    if (glyph_unit1->name > glyph_unit2->name) return 0;
+    if (glyph_unit1->size < glyph_unit2->size) return 1;
+    if (glyph_unit1->size > glyph_unit2->size) return 0;
+    if (glyph_unit1->glyph.unicode_letter < glyph_unit2->glyph.unicode_letter) return 1;
+    if (glyph_unit1->glyph.unicode_letter > glyph_unit2->glyph.unicode_letter) return 0;
+    if (glyph_unit1->glyph.unicode_letter_next < glyph_unit2->glyph.unicode_letter_next) return 1;
+    return 0;
 }
 
 /*@brief 哈希访问函数
  */
-static void scui_cache_glyph_fv_t(scui_table_dln_t *node, uint32_t idx)
+static void scui_cache_glyph_fv_t(scui_table_rbsn_t *node, uint32_t idx)
 {
     scui_cache_lru_unit_t *unit = scui_own_ofs(scui_cache_lru_unit_t, ht_node, node);
     scui_cache_glyph_unit_t *glyph_unit = scui_own_ofs(scui_cache_glyph_unit_t, lru_unit, unit);
@@ -124,9 +141,10 @@ void scui_cache_glyph_ready(void)
     #if SCUI_CACHE_HASH_GLYPH != 0
     scui_cache_glyph_t *cache = &scui_cache_glyph;
     
-    cache->lru_table.dlt_fd = scui_cache_glyph_fd_t;
-    cache->lru_table.dlt_fc = scui_cache_glyph_fc_t;
-    cache->lru_table.dlt_fv = scui_cache_glyph_fv_t;
+    cache->lru_table.rbst_fd = scui_cache_glyph_fd_t;
+    cache->lru_table.rbst_fm = scui_cache_glyph_fm_t;
+    cache->lru_table.rbst_fc = scui_cache_glyph_fc_t;
+    cache->lru_table.rbst_fv = scui_cache_glyph_fv_t;
     cache->lru_table.ht_list_num = SCUI_CACHE_HASH_GLYPH;
     cache->lru_table.total = SCUI_CACHE_TOTAL_GLYPH;
     cache->lru_table.get_size = scui_cache_glyph_unit_get_size;
