@@ -34,11 +34,11 @@ static bool scui_widget_draw_clip(scui_handle_t handle, scui_area_t *clip, scui_
     case 0: {
         scui_handle_t  handle_r = scui_widget_root(widget->myself);
         scui_widget_t *widget_r = scui_handle_source_check(handle_r);
-        scui_area_t clip_w = scui_widget_clip_self(widget->myself);
+        scui_area_t clip_w = scui_widget_area(widget->myself);
         
         if (clip  !=  NULL) {
             clip_w = *clip;
-            scui_area_t clip_s = scui_widget_clip_self(widget->myself);
+            scui_area_t clip_s = scui_widget_area(widget->myself);
             if (!scui_area_inter2(&clip_w, &clip_s))
                  return false;
         }
@@ -55,11 +55,11 @@ static bool scui_widget_draw_clip(scui_handle_t handle, scui_area_t *clip, scui_
     case 1: {
         scui_handle_t  handle_r = scui_widget_root(widget->myself);
         scui_widget_t *widget_r = scui_handle_source_check(handle_r);
-        scui_area_t clip_w = scui_widget_clip_self(widget->myself);
+        scui_area_t clip_w = scui_widget_area(widget->myself);
         
         if (clip  !=  NULL) {
             clip_w = *clip;
-            scui_area_t clip_s = scui_widget_clip_self(widget->myself);
+            scui_area_t clip_s = scui_widget_area(widget->myself);
             if (!scui_area_inter2(&clip_w, &clip_s))
                  return false;
         }

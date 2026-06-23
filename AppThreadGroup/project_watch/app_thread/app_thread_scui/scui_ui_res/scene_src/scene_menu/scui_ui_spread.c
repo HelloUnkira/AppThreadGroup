@@ -70,7 +70,7 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
     case scui_event_ptr_click:
     case scui_event_draw_graph: {
         
-        scui_area_t  widget_clip = scui_widget_clip_self(event->object);
+        scui_area_t  widget_clip = scui_widget_area(event->object);
         scui_coord_t widget_cx   = widget_clip.x + widget_clip.w / 2;
         scui_coord_t widget_cy   = widget_clip.y + widget_clip.h / 2;
         

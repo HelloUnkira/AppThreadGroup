@@ -70,13 +70,13 @@ void scui_widget_child_move_background(scui_handle_t handle);
  *@param handle 控件句柄
  *@retval 控件剪切域
  */
-scui_area_t scui_widget_clip(scui_handle_t handle);
+scui_area_t scui_widget_area(scui_handle_t handle);
 
 /*@brief 控件剪切域
  *@param handle 控件句柄
  *@retval 控件剪切域
  */
-scui_area_t scui_widget_clip_self(scui_handle_t handle);
+scui_area_t scui_widget_clip(scui_handle_t handle);
 
 /*@brief 控件剪切域
  *@param handle 控件句柄

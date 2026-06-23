@@ -37,14 +37,14 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
                 continue;
             }
         
-        scui_area_t image_clip = scui_widget_clip_self(event->object);
+        scui_area_t image_clip = scui_widget_area(event->object);
         scui_handle_t image_icon = scui_ui_scene_list_image[match_idx] + 3;
         image_clip.x += (20);
         image_clip.y += (image_clip.h - scui_image_h(image_icon)) / 2;
         image_clip.h -= (image_clip.h - scui_image_h(image_icon));
         scui_widget_draw_image(event->object, &image_clip, image_icon, NULL, SCUI_COLOR_UNUSED);
         
-        image_clip = scui_widget_clip_self(event->object);
+        image_clip = scui_widget_area(event->object);
         image_icon = scui_image_prj_image_src_repeat_arrow_06_backbmp;
         image_clip.x = image_clip.w - scui_image_w(image_icon) - 10;
         image_clip.w = scui_image_w(image_icon);
@@ -86,7 +86,7 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
         scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
         scui_widget_alpha_set(event->object, alpha, true);
         
-        scui_area_t   btn_clip = scui_widget_clip_self(event->object);
+        scui_area_t   btn_clip = scui_widget_area(event->object);
         scui_color_t  btn_color = {.color.full = 0xFF282828,};
         scui_handle_t btn_image[4] = {
             scui_image_prj_image_src_repeat_card_04_r36_1bmp,

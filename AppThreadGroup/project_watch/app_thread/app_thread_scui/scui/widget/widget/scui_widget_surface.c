@@ -11,22 +11,22 @@
  *@param handle 控件句柄
  *@retval 控件剪切域
  */
-scui_area_t scui_widget_clip(scui_handle_t handle)
+scui_area_t scui_widget_area(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    return widget->clip;
+    scui_area_t widget_clip = widget->clip;
+    widget_clip.x = widget_clip.y = 0;
+    return widget_clip;
 }
 
 /*@brief 控件剪切域
  *@param handle 控件句柄
  *@retval 控件剪切域
  */
-scui_area_t scui_widget_clip_self(scui_handle_t handle)
+scui_area_t scui_widget_clip(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_area_t widget_clip = widget->clip;
-    widget_clip.x = widget_clip.y = 0;
-    return widget_clip;
+    return widget->clip;
 }
 
 /*@brief 控件剪切域
@@ -340,12 +340,12 @@ void scui_widget_clip_draw_tree(scui_widget_t *widget)
     
     if (widget->style.buffer || widget->parent == SCUI_HANDLE_INVALID) {
         
-        scui_area_t clip_s = scui_widget_clip_self(widget->myself);
+        scui_area_t clip_s = scui_widget_area(widget->myself);
         scui_widget_clip_draw(widget, &clip_s, 0);
         
         if (widget->parent != SCUI_HANDLE_INVALID) {
             
-            scui_area_t clip_s = scui_widget_clip_self(widget->myself);
+            scui_area_t clip_s = scui_widget_area(widget->myself);
             scui_widget_clip_draw(widget, &clip_s, 1);
         }
     }

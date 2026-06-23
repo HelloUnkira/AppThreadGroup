@@ -87,7 +87,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             }
         
         scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[match_idx];
-        scui_area_t clip = scui_widget_clip_self(event->object);
+        scui_area_t clip = scui_widget_area(event->object);
         scui_widget_t *widget = scui_handle_source_check(event->object);
         scui_multi_t clip_w = widget->clip.w;  // for dimension queries
         scui_multi_t clip_h = widget->clip.h;
@@ -101,7 +101,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             break;
         }
         default: {
-            scui_area_t   clip = scui_widget_clip_self(event->object);
+            scui_area_t   clip = scui_widget_area(event->object);
             scui_color_t  color = {.color.full = 0xFF282828,};
             scui_handle_t image[4] = {
                 scui_image_prj_image_src_repeat_card_04_r36_1bmp,

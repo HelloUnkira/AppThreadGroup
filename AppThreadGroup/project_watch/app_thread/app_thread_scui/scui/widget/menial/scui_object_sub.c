@@ -433,9 +433,11 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
         .color_e = src_data[scui_object_style_idx(rect_color_grad)].color32,
     };
     
-    scui_area_t dst_area = widget->clip;
-    dst_area.x += src_data[scui_object_style_idx(rect_point)].point.x;
-    dst_area.y += src_data[scui_object_style_idx(rect_point)].point.y;
+    scui_area_t dst_area = {0};
+    dst_area.w = widget->clip.w;
+    dst_area.h = widget->clip.h;
+    dst_area.x = src_data[scui_object_style_idx(rect_point)].point.x;
+    dst_area.y = src_data[scui_object_style_idx(rect_point)].point.y;
     
     scui_opt_pos_t align = src_data[scui_object_style_idx(rect_align)].align;
     scui_coord_t   width = src_data[scui_object_style_idx(rect_width)].number;
@@ -544,8 +546,6 @@ bool scui_object_draw_arc(scui_handle_t handle, scui_object_prop_t *prop)
     draw_dsc.graph.src_tvg_cb  = scui_object_tvg_arc_cb;
     #endif
     
-    draw_dsc.graph.src_center.x += widget->clip.x;
-    draw_dsc.graph.src_center.y += widget->clip.y;
     draw_dsc.graph.src_radius   -= draw_dsc.graph.src_width / 2  + 1;
     
     scui_widget_draw_graph(widget->myself, NULL, alpha, color, &draw_dsc);
@@ -603,7 +603,6 @@ bool scui_object_draw_line(scui_handle_t handle, scui_object_prop_t *prop)
     };
     
     scui_area_t area = src_data[scui_object_style_idx(line_area)].area;
-    area.x += widget->clip.x; area.y += widget->clip.y;
     
     scui_draw_dsc_t draw_dsc = {0};
     draw_dsc.type = scui_draw_type_pixel_tvg;

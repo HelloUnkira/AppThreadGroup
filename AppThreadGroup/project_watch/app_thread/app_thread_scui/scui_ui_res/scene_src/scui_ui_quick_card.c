@@ -30,7 +30,7 @@ static void scui_ui_scene_quick_card_item_event(scui_event_t *event)
             }
         
         /* 绘制背景 */
-        scui_area_t   clip = scui_widget_clip_self(event->object);
+        scui_area_t   clip = scui_widget_area(event->object);
         scui_color_t  color = {.color.full = 0xFF282828,};
         scui_handle_t image[4] = {
             scui_image_prj_image_src_repeat_card_04_r36_1bmp,

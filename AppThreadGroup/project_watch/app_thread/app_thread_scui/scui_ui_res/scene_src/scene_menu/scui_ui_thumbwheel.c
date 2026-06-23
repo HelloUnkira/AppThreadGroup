@@ -109,7 +109,7 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
             scui_widget_draw(SCUI_UI_SCENE_THUMBWHEEL, NULL, false, 0);
         }
         
-        scui_area_t  clip_w = scui_widget_clip_self(event->object);
+        scui_area_t  clip_w = scui_widget_area(event->object);
         scui_coord_t widget_cx = clip_w.x + clip_w.w / 2;
         scui_coord_t widget_cy = clip_w.y + clip_w.h / 2;
         

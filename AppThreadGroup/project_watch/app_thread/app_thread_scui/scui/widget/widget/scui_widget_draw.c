@@ -169,7 +169,7 @@ static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
     if (*target != NULL) {
         widget_clip = **target;
         /* 相对剪切域先要检查, 再进行转换剪切域 */
-        scui_area_t clip_s = scui_widget_clip_self(widget->myself);
+        scui_area_t clip_s = scui_widget_area(widget->myself);
         if (!scui_area_inter2(&widget_clip, &clip_s))
              return false;
         
@@ -814,6 +814,26 @@ void scui_widget_draw_ctx_graph(scui_handle_t handle, scui_area_t *target, scui_
          return;
     #endif
     
+    scui_draw_dsc_t *draw_dsc_i = draw_dsc->graph;
+    
+    /* 偏移坐标转换 */
+    if (!widget->style.buffer) {
+        draw_dsc_i->graph.dst_part.x    += widget->clip.x;
+        draw_dsc_i->graph.dst_part.y    += widget->clip.y;
+        draw_dsc_i->graph.src_center.x  += widget->clip.x;
+        draw_dsc_i->graph.src_center.y  += widget->clip.y;
+        draw_dsc_i->graph.src_pos_1.x   += widget->clip.x;
+        draw_dsc_i->graph.src_pos_1.y   += widget->clip.y;
+        draw_dsc_i->graph.src_pos_2.x   += widget->clip.x;
+        draw_dsc_i->graph.src_pos_2.y   += widget->clip.y;
+        if (draw_dsc_i->graph.src_vpos  != NULL) {
+        for (scui_coord_t idx = 0; idx < draw_dsc_i->graph.src_vpos_c; idx++) {
+            draw_dsc_i->graph.src_vpos[idx].x += widget->clip.x;
+            draw_dsc_i->graph.src_vpos[idx].y += widget->clip.y;
+        }
+        }
+    }
+    
     scui_clip_btra(widget->clip_set, node) {
         scui_clip_unit_t *unit = scui_clip_unit(node);
         
@@ -826,8 +846,7 @@ void scui_widget_draw_ctx_graph(scui_handle_t handle, scui_area_t *target, scui_
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
         
-        scui_draw_dsc_t *draw_dsc_graph = draw_dsc->graph;
         scui_draw_graph(false, widget->surface, dst_clip,
-            draw_dsc->alpha, draw_dsc->color, draw_dsc_graph);
+            draw_dsc->alpha, draw_dsc->color, draw_dsc_i);
     }
 }
