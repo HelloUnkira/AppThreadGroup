@@ -161,7 +161,6 @@
 #define SCUI_DRAW_CACHE_THORVG                      (SCUI_HOR_RES * SCUI_VER_RES / 8)
 
 /* 第三方图元库 */
-#define SCUI_DRAW_GRAPH_USE_TVG                     (0) /* extend */
 #define SCUI_DRAW_GRAPH_USE_EGUI                    (1)
 #define SCUI_DRAW_GRAPH_USE_LVGL                    (0) /* unsupport yet */
 #define SCUI_DRAW_GRAPH_USE_XXXX                    (0) /* unsupport yet */

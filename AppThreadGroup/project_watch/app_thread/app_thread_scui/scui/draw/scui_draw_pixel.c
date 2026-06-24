@@ -281,8 +281,7 @@ void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, 
 void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
 {
     /* 基础填色 */
-    switch (draw_dsc->type) {
-    case scui_draw_type_pixel_line: {
+    if (draw_dsc->type == scui_draw_type_pixel_line) {
         scui_point_t src_pos_1 = draw_dsc->graph.src_pos_1;
         scui_point_t src_pos_2 = draw_dsc->graph.src_pos_2;
         /* 变成了一个点, 变成了一个区域, 直接填色 */
@@ -300,17 +299,23 @@ void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
             scui_draw_sline(draw_dsc);
             return;
         }
-        break;
-    }
-    default:
-        break;
     }
     
     
     
     /* 矢量绘图引擎 */
     #if SCUI_DRAW_USE_THORVG
-    if (scui_draw_ctx_graph_TVG(draw_dsc))
+    if (draw_dsc->type == scui_draw_type_pixel_tvg) {
+        if (scui_draw_ctx_graph_TVG(draw_dsc))
+            return;
+    }
+    #endif
+    
+    
+    
+    /* 外源图形组件 */
+    #if SCUI_DRAW_GRAPH_USE_LVGL
+    if (scui_draw_ctx_graph_LVGL(draw_dsc))
         return;
     #endif
     

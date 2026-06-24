@@ -54,7 +54,6 @@ static void scui_draw_tvg_canvas_sched(Tvg_Canvas *canvas)
     /* 固定:关闭画布 */
     tvg_canvas_destroy(canvas);
 }
-#endif
 
 /*@brief 弧绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例
@@ -549,6 +548,8 @@ static bool scui_draw_ctx_graph_part_TVG(scui_draw_dsc_t *draw_dsc)
     
     return false;
 }
+
+#endif
 
 /*@brief 基础图元绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例

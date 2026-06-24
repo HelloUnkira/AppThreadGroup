@@ -13,7 +13,6 @@ void scui_draw_graph_ready(void)
 {
     /* 矢量绘图引擎资源 */
     #if SCUI_DRAW_USE_THORVG
-    void scui_draw_thorvg_ready(void);
     scui_draw_thorvg_ready();
     #endif
 }

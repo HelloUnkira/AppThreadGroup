@@ -1,0 +1,2 @@
+scui_draw_EGUI_circle2c.py生成scui_draw_EGUI_circle2c.c后
+将内容全文拷贝到scui_draw_EGUI.c里面并且删掉这个.c即可
