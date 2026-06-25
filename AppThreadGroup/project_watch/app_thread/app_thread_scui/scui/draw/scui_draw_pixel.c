@@ -275,6 +275,16 @@ void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, 
     scui_draw_sline(draw_dsc);
 }
 
+/*@brief 就绪绘图资源
+ */
+void scui_draw_graph_ready(void)
+{
+    /* 矢量绘图引擎资源 */
+    #if SCUI_DRAW_USE_THORVG
+    scui_draw_tvg_ready();
+    #endif
+}
+
 /*@brief 基础图元绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例
  */

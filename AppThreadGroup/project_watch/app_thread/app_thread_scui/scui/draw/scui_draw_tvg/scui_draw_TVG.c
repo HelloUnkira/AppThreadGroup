@@ -616,7 +616,7 @@ bool scui_draw_ctx_graph_TVG(scui_draw_dsc_t *draw_dsc)
 
 /*@brief 就绪绘图引擎
  */
-void scui_draw_thorvg_ready(void)
+void scui_draw_tvg_ready(void)
 {
     #if SCUI_DRAW_USE_THORVG
     tvg_engine_init(TVG_ENGINE_SW, 0);

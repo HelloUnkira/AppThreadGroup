@@ -367,8 +367,9 @@ bool app_sys_mem_dir_walk(app_sys_mem_dir_t *mem_dir, void (*invoke)(void *point
     /* 分配堆 */
     app_sys_list_dll_btra(&mem_dir->dl_list_alloc, item) {
         app_sys_mem_dir_item_t *mem_dir_item = app_sys_own_ofs(app_sys_mem_dir_item_t, dl_node, item);
-        void *pointer = (uint8_t *)mem_dir_item + sizeof(app_sys_mem_dir_item_t);
-        invoke(pointer, true);
+        void *pointer_raw = mem_dir_item->offset;
+        void *pointer_ofs = (void *)((uintptr_t)app_sys_align_high(pointer_raw, sizeof(uintptr_t)) + sizeof(uintptr_t));
+        invoke(pointer_ofs, true);
         if (mem_dir_item->canary != APP_SYS_MEM_DIR_CANARY) {
             APP_SYS_LOG_ERROR("block %p canary check fail, heap is broken", mem_dir_item->offset);
             mem_dir_is_valid = false;
@@ -378,8 +379,9 @@ bool app_sys_mem_dir_walk(app_sys_mem_dir_t *mem_dir, void (*invoke)(void *point
     /* 空闲堆 */
     app_sys_list_dll_btra(&mem_dir->dl_list_free, item) {
         app_sys_mem_dir_item_t *mem_dir_item = app_sys_own_ofs(app_sys_mem_dir_item_t, dl_node, item);
-        void *pointer = (uint8_t *)mem_dir_item + sizeof(app_sys_mem_dir_item_t);
-        invoke(pointer, false);
+        void *pointer_raw = mem_dir_item->offset;
+        void *pointer_ofs = (void *)((uintptr_t)app_sys_align_high(pointer_raw, sizeof(uintptr_t)) + sizeof(uintptr_t));
+        invoke(pointer_ofs, false);
         if (mem_dir_item->canary != APP_SYS_MEM_DIR_CANARY) {
             APP_SYS_LOG_ERROR("block %p canary check fail, heap is broken", mem_dir_item->offset);
             mem_dir_is_valid = false;
