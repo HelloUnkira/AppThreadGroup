@@ -162,7 +162,7 @@
 
 /* 第三方图元库 */
 #define SCUI_DRAW_GRAPH_USE_EGUI                    (1)
-#define SCUI_DRAW_GRAPH_USE_LVGL                    (0) /* unsupport yet */
+#define SCUI_DRAW_GRAPH_USE_LVGL                    (1) /* unsupport yet */
 #define SCUI_DRAW_GRAPH_USE_XXXX                    (0) /* unsupport yet */
 /*************************************************************************************************/
 /*************************************************************************************************/
