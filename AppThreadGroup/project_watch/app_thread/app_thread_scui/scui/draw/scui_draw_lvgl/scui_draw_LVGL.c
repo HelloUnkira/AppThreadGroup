@@ -14,11 +14,10 @@
  *    - Main entry (scui_draw_ctx_graph_LVGL)
  */
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        3   /* 3:ERROR */
-#define SCUI_LOG_LIMIT_RECORD       1
-#include <stdint.h>
-#include <string.h>
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 2:WARN */
+
 #include "scui.h"
+
 /*
  * ===== 内存越界调试配置 =====
  * SCUI_DRAW_CANARY_CHECK:  启用 mask_buf 释放前的 canary 校验 (默认 ON)
@@ -27,16 +26,16 @@
  * SCUI_DRAW_BOUNDS_LOG:    启用边界/参数调试日志 (仅在 DEBUG 级别生效)
  */
 #ifndef SCUI_DRAW_CANARY_CHECK
-#define SCUI_DRAW_CANARY_CHECK      1
+#define SCUI_DRAW_CANARY_CHECK      1   /* 保留 canary 安全检查 */
 #endif
 #ifndef SCUI_DRAW_OVERFLOW_CHECK
-#define SCUI_DRAW_OVERFLOW_CHECK    1
+#define SCUI_DRAW_OVERFLOW_CHECK    0   /* 稳定后关闭详细日志 */
 #endif
 #ifndef SCUI_DRAW_MASK_ARRAY_BOUND
-#define SCUI_DRAW_MASK_ARRAY_BOUND  1
+#define SCUI_DRAW_MASK_ARRAY_BOUND  1   /* 保留越界检查 */
 #endif
 #ifndef SCUI_DRAW_BOUNDS_LOG
-#define SCUI_DRAW_BOUNDS_LOG        1
+#define SCUI_DRAW_BOUNDS_LOG        0   /* 稳定后关闭边界调试 */
 #endif
 #if defined(LVGL_VERSION_MAJOR) || defined(LVGL_VERSION_MINOR) || defined(LVGL_VERSION_PATCH)
 #error "do not import any lvgl header files"
@@ -418,8 +417,10 @@ static lv_draw_mask_res_t lv_draw_mask_line_region(
     for (y = area->y; y < area->y + area->h; y++) {
         lv_mask_alpha_t *line = mask_buf + (y - area->y) * stride;
         lv_draw_mask_res_t res = lv_draw_mask_line_row(p, line, area->x, y, area->w);
-        if (res == LV_DRAW_MASK_RES_TRANSP) return LV_DRAW_MASK_RES_TRANSP;
-        else if (res == LV_DRAW_MASK_RES_CHANGED) changed = true;
+        if (res == LV_DRAW_MASK_RES_TRANSP) {
+            mask_buf_set_zero(line, 0, area->w);
+            changed = true;
+        } else if (res == LV_DRAW_MASK_RES_CHANGED) changed = true;
     }
     /* mask_buf 现在是 uint8_t 类型，值自然在 0-255 范围内 */
     return changed ? LV_DRAW_MASK_RES_CHANGED : LV_DRAW_MASK_RES_FULL_COVER;
@@ -769,8 +770,10 @@ static lv_draw_mask_res_t lv_draw_mask_angle_region(
     for (y = area->y; y < area->y + area->h; y++) {
         lv_mask_alpha_t *line = mask_buf + (y - area->y) * stride;
         lv_draw_mask_res_t res = lv_draw_mask_angle_row(p, line, area->x, y, area->w);
-        if (res == LV_DRAW_MASK_RES_TRANSP) return LV_DRAW_MASK_RES_TRANSP;
-        else if (res == LV_DRAW_MASK_RES_CHANGED) changed = true;
+        if (res == LV_DRAW_MASK_RES_TRANSP) {
+            mask_buf_set_zero(line, 0, area->w);
+            changed = true;
+        } else if (res == LV_DRAW_MASK_RES_CHANGED) changed = true;
     }
     return changed ? LV_DRAW_MASK_RES_CHANGED : LV_DRAW_MASK_RES_FULL_COVER;
 }
@@ -917,7 +920,10 @@ static lv_draw_mask_res_t lv_draw_mask_radius_region(
     for (y = area->y; y < area->y + area->h; y++) {
         lv_mask_alpha_t *line = mask_buf + (y - area->y) * stride;
         lv_draw_mask_res_t res = lv_draw_mask_radius_row(p, line, area->x, y, area->w);
-        if (res == LV_DRAW_MASK_RES_TRANSP) return LV_DRAW_MASK_RES_TRANSP;
+        if (res == LV_DRAW_MASK_RES_TRANSP) {
+            mask_buf_set_zero(line, 0, area->w);  /* zero 该行，继续处理其他行 */
+            changed = true;
+        }
         else if (res == LV_DRAW_MASK_RES_CHANGED) changed = true;
     }
     return changed ? LV_DRAW_MASK_RES_CHANGED : LV_DRAW_MASK_RES_FULL_COVER;
@@ -1090,11 +1096,7 @@ static lv_mask_alpha_t *draw_mask_alloc(scui_coord_t w, scui_coord_t h, const ch
     SCUI_LOG_DEBUG("%s: alloc %d x %d = %u bytes at %p",
         caller, (int)w, (int)h, (unsigned)nbytes, (void*)buf);
 #endif
-#if SCUI_MEM_SENTRY_CHECK
-    SCUI_LOG_DEBUG("%s: sentry after alloc %p", caller, (void*)buf);
-    scui_mem_sentry_check();
-    SCUI_LOG_DEBUG("%s: sentry after alloc %p OK", caller, (void*)buf);
-#endif
+
     return buf;
 }
 /* 释放 mask_buf */
@@ -1114,7 +1116,7 @@ static void lv_draw_sw_blend(lv_draw_sw_ctx_t *ctx,
 {
     scui_coord_t w = mask_area->w, h = mask_area->h;
     if (w <= 0 || h <= 0) return;
-    (void)opa; (void)is_additive;
+    (void)is_additive;
 
     /* 取交集 */
     scui_area_t blend_clip;
@@ -1122,31 +1124,36 @@ static void lv_draw_sw_blend(lv_draw_sw_ctx_t *ctx,
         return;
 
     if (mask_buf == NULL) {
-        /* 无 mask: 纯色填充 */
-        scui_color_t fill_color;
-        fill_color.color = color;
-        fill_color.color_e = color;
-        memset(&fill_color.color_f, 0, sizeof(fill_color.color_f));
-        fill_color.filter = false;
-        scui_draw_area_fill(true, ctx->dst_surface, blend_clip, opa, fill_color);
-    } else {
-        /* 有 mask: 逐像素 scui_pixel_mix_with — mask[x] 作为 src_a */
+        /* 无 mask: 直接逐行填充（避免 SCUI 任务系统重入） */
         scui_surface_t *dst_surf = ctx->dst_surface;
-        /* 将颜色转为目标表面格式，保证同格式混合 */
-        scui_color_wt_t dst_color;
-        scui_pixel_by_color(dst_surf->format, &dst_color, color);
+        scui_coord_t y;
+        for (y = 0; y < blend_clip.h; y++) {
+            uint8_t *dst_ofs = scui_surface_pixel_ofs(dst_surf, blend_clip.y + y, blend_clip.x);
+            scui_coord_t x;
+            for (x = 0; x < blend_clip.w; x++) {
+                scui_pixel_mix_with(dst_surf->format, dst_ofs,
+                    scui_pixel_cf_bmp8888, &color, opa);
+                dst_ofs += dst_surf->pbyte;
+            }
+        }
+    } else {
+        /* 有 mask: 逐行 blend — 每行只算一次 surface_pixel_ofs */
+        scui_surface_t *dst_surf = ctx->dst_surface;
         scui_coord_t off_x = blend_clip.x - mask_area->x;
         scui_coord_t off_y = blend_clip.y - mask_area->y;
         scui_coord_t y;
         for (y = 0; y < blend_clip.h; y++) {
-            scui_coord_t x;
             const lv_mask_alpha_t *mask_row = mask_buf + (off_y + y) * mask_w + off_x;
+            uint8_t *dst_ofs = scui_surface_pixel_ofs(dst_surf, blend_clip.y + y, blend_clip.x);
+            scui_coord_t x;
             for (x = 0; x < blend_clip.w; x++) {
-                if (mask_row[x] == 0) continue;
-                uint8_t *dst_ofs = scui_surface_pixel_ofs(dst_surf,
-                    blend_clip.y + y, blend_clip.x + x);
+                lv_mask_alpha_t m = mask_row[x];
+                if (m == 0) { dst_ofs += dst_surf->pbyte; continue; }
+                scui_alpha_t mix_a = (m >= LV_OPA_MAX) ? opa
+                    : (scui_alpha_t)(((uint16_t)m * (uint16_t)opa) >> 8);
                 scui_pixel_mix_with(dst_surf->format, dst_ofs,
-                    dst_surf->format, &dst_color, (scui_alpha_t)mask_row[x]);
+                    scui_pixel_cf_bmp8888, &color, mix_a);
+                dst_ofs += dst_surf->pbyte;
             }
         }
     }
@@ -1264,11 +1271,6 @@ static void draw_scan_and_blend(
             SCUI_LOG_WARN("scan_blend: mask_result=TRANSP, skipping blend");
     }
 #endif
-#if SCUI_MEM_SENTRY_CHECK
-    SCUI_LOG_DEBUG("scan_blend: sentry after mask_apply");
-    scui_mem_sentry_check();
-    SCUI_LOG_DEBUG("scan_blend: sentry after mask_apply OK");
-#endif
     if (mask_result == LV_DRAW_MASK_RES_TRANSP) {
         draw_mask_free(mask_buf, draw_w, draw_h, "draw_scan_and_blend");
         return;
@@ -1330,6 +1332,26 @@ static void lv_draw_sw_line(lv_draw_sw_ctx_t *ctx,
     w = (w * lv_draw_line_wcorr[wcorr_i] + 63) >> 7;
     int32_t w_half0 = w >> 1;
     int32_t w_half1 = w_half0 + (w & 0x1);
+    /* 上行 flat 线：直接逐行渲染（mask 精度不足导致锯齿） */
+    if (flat && xdiff < 0) {
+        int32_t step = scui_abs(xdiff) / ydiff;  /* 像素/行 中心位移 */
+        int32_t rw = scui_max(w, step + 2);      /* +2确保step=3时仍有重叠 */
+        scui_coord_t y;
+        for (y = pt1.y; y <= pt2.y; y++) {
+            if (y < ctx->clip_area->y || y > ctx->clip_area->y + ctx->clip_area->h) continue;
+            int32_t cx = pt1.x + (xdiff * (y - pt1.y)) / ydiff;
+            int32_t x0 = cx - (rw >> 1);
+            int32_t x1 = x0 + rw - 1;
+            /* 端点裁剪（不超过 pt1.x / pt2.x） */
+            if (y == pt1.y) x0 = scui_max(x0, pt1.x);
+            if (y == pt2.y) x1 = scui_min(x1, pt2.x);
+            scui_area_t seg = {.x = x0, .y = y, .w = x1 - x0 + 1, .h = 1};
+            scui_area_t clip_seg;
+            if (seg.w > 0 && scui_area_inter(&clip_seg, &seg, ctx->clip_area))
+                lv_draw_sw_blend(ctx, NULL, 0, 0, &clip_seg, ctx->clip_area, color, opa, false);
+        }
+        return;
+    }
     /* Calculate blend area */
     scui_area_t blend_area;
     blend_area.x = scui_min(pt1.x, pt2.x) - w;
@@ -1539,22 +1561,22 @@ static void lv_draw_sw_arc(lv_draw_sw_ctx_t *ctx,
         }
         return;
     }
-    /* Construct outer circle area */
+    /* Construct outer circle area (odd size for center pixel) */
     scui_area_t area_out;
     area_out.x = center->x - radius;
     area_out.y = center->y - radius;
-    area_out.w = (radius << 1);
-    area_out.h = (radius << 1);
-    /* Inner circle area */
+    area_out.w = (radius << 1) + 1;
+    area_out.h = (radius << 1) + 1;
+    /* Inner circle area (shrunk by width on all sides) */
     scui_area_t area_in = area_out;
     area_in.x += width;
     area_in.y += width;
     area_in.w -= (width << 1);
     area_in.h -= (width << 1);
-    /* Inner circle mask (punch out interior) */
+    /* Inner circle mask (punch out interior) — 仅 ring/outline */
     int16_t mask_in_id = LV_MASK_ID_INV;
     lv_draw_mask_radius_param_t mask_in_param;
-    if (area_in.w > 0 && area_in.h > 0) {
+    if ((width > 0) && (width < radius) && area_in.w > 0 && area_in.h > 0) {
         lv_draw_mask_radius_init(&mask_in_param, &area_in, area_in.w >> 1, true);
         mask_in_id = lv_draw_mask_add(&mask_in_param, NULL);
     }
@@ -1577,7 +1599,7 @@ static void lv_draw_sw_arc(lv_draw_sw_ctx_t *ctx,
         if (mask_in_id != LV_MASK_ID_INV) lv_draw_mask_free_param(&mask_in_param);
         return;
     }
-    /* One-shot region draw */
+    /* One-shot region draw with all masks applied */
     draw_scan_and_blend(ctx, color, opa, &clip_area);
     /* Rounded cap handling */
     if (rounded) {
@@ -1611,36 +1633,6 @@ static void ctx_from_dsc(lv_draw_sw_ctx_t *ctx, scui_draw_dsc_t *draw_dsc)
 }
 bool scui_draw_ctx_graph_LVGL(scui_draw_dsc_t *draw_dsc)
 {
-    /* 单元测试：验证 mask_buf_set_zero 宏 */
-    static int _mask_zero_tested = 0;
-    if (!_mask_zero_tested) {
-        _mask_zero_tested = 1;
-        lv_mask_alpha_t test_buf[16];
-        /* 填充非零值 */
-        int i; for (i = 0; i < 16; i++) test_buf[i] = 0xFF;
-        /* 使用宏清零前8个元素 */
-        mask_buf_set_zero(test_buf, 0, 8);
-        /* 验证 */
-        int err = 0;
-        for (i = 0; i < 8; i++) if (test_buf[i] != 0) { err = 1; break; }
-        for (i = 8; i < 16; i++) if (test_buf[i] != 0xFF) { err = 2; break; }
-        SCUI_LOG_DEBUG("mask_buf_set_zero test: %s (err=%d)", err ? "FAIL" : "PASS", err);
-        /* 测试偏移量 */
-        for (i = 0; i < 16; i++) test_buf[i] = 0xFF;
-        mask_buf_set_zero(test_buf, 4, 8);
-        err = 0;
-        for (i = 0; i < 4; i++) if (test_buf[i] != 0xFF) { err = 3; break; }
-        for (i = 4; i < 12; i++) if (test_buf[i] != 0) { err = 4; break; }
-        for (i = 12; i < 16; i++) if (test_buf[i] != 0xFF) { err = 5; break; }
-        SCUI_LOG_DEBUG("mask_buf_set_zero offset test: %s (err=%d)", err ? "FAIL" : "PASS", err);
-    }
-    /* 入口立即检查哨兵（在任何局部变量/逻辑之前） */
-#if SCUI_MEM_SENTRY_CHECK
-    SCUI_LOG_DEBUG("draw entry IMMEDIATE: sentry check type=%d", (int)draw_dsc->type);
-    scui_mem_sentry_check();
-    SCUI_LOG_DEBUG("draw entry IMMEDIATE: sentry check type=%d OK", (int)draw_dsc->type);
-#endif
-
     scui_surface_t *dst_surface = draw_dsc->graph.dst_surface;
     scui_color32_t  src_color   = draw_dsc->graph.src_color.color;
     scui_alpha_t    src_alpha   = draw_dsc->graph.src_alpha;
@@ -1648,33 +1640,6 @@ bool scui_draw_ctx_graph_LVGL(scui_draw_dsc_t *draw_dsc)
     if (dst_surface == NULL || dst_surface->pixel == NULL) return false;
     lv_draw_sw_ctx_t ctx;
     ctx_from_dsc(&ctx, draw_dsc);
-#if SCUI_DRAW_BOUNDS_LOG
-    /* 打印活跃 mask 状态 */
-    {
-        int mask_cnt = 0;
-        for (int mi = 0; mi < LV_MASK_MAX_ID; mi++) {
-            if (lv_draw_mask_list[mi].param) {
-                mask_cnt++;
-                SCUI_LOG_DEBUG("draw entry: active_mask[%d] type=%d param=%p",
-                    mi, (int)((lv_draw_mask_common_dsc_t*)lv_draw_mask_list[mi].param)->type,
-                    (void*)lv_draw_mask_list[mi].param);
-            }
-        }
-        SCUI_LOG_DEBUG("draw entry: type=%d clip=(%d,%d,%d,%d) surface=(%d,%d,%d,%d) active_masks=%d dst_surf=%p pixel=%p",
-            (int)draw_dsc->type,
-            (int)draw_dsc->graph.dst_clip.x, (int)draw_dsc->graph.dst_clip.y,
-            (int)draw_dsc->graph.dst_clip.w, (int)draw_dsc->graph.dst_clip.h,
-            (int)ctx.buf_area.x, (int)ctx.buf_area.y,
-            (int)ctx.buf_area.w, (int)ctx.buf_area.h,
-            mask_cnt,
-            (void*)dst_surface, (void*)dst_surface->pixel);
-    }
-#endif
-#if SCUI_MEM_SENTRY_CHECK
-    SCUI_LOG_DEBUG("draw entry: sentry check after ctx_from_dsc type=%d", (int)draw_dsc->type);
-    scui_mem_sentry_check();
-    SCUI_LOG_DEBUG("draw entry: sentry check after ctx_from_dsc type=%d OK", (int)draw_dsc->type);
-#endif
     switch (draw_dsc->type) {
     case scui_draw_type_pixel_line: {
         scui_coord_t width = draw_dsc->graph.src_width;

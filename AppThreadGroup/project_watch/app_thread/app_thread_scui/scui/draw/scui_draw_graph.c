@@ -39,6 +39,7 @@ bool scui_draw_ctx_acc_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_string] =                   scui_draw_ctx_acc_string,
         [scui_draw_type_symbol] =                   scui_draw_ctx_acc_symbol,
         
+        [scui_draw_type_mask] =                     scui_draw_ctx_acc_mask,
         [scui_draw_type_ring] =                     scui_draw_ctx_acc_ring,
         
         [scui_draw_type_pixel_arc] =                scui_draw_ctx_acc_graph,
@@ -84,6 +85,7 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_string] =                   scui_draw_ctx_string,
         [scui_draw_type_symbol] =                   scui_draw_ctx_symbol,
         
+        [scui_draw_type_mask] =                     scui_draw_ctx_mask,
         [scui_draw_type_ring] =                     scui_draw_ctx_ring,
         
         [scui_draw_type_pixel_arc] =                scui_draw_ctx_graph,

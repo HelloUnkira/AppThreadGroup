@@ -34,6 +34,7 @@ typedef enum {
     scui_draw_type_string,
     scui_draw_type_symbol,
     
+    scui_draw_type_mask,
     scui_draw_type_ring,
     
     /* 基础图元放到最后 */
@@ -223,6 +224,13 @@ typedef struct {
         uint32_t            src_code;       /* 符号字符编码Unicode */
     } symbol;
     /**************************************************************************
+     * draw mask:
+     */
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+    } mask;
+    /**************************************************************************
      * draw ring:
      */
     struct {
@@ -380,6 +388,7 @@ SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_3d);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_letter);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_string);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_symbol);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_mask);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_ring);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_graph);
 /*****************************************************************************/
@@ -402,6 +411,7 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_3d);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_letter);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_string);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_symbol);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_mask);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_ring);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_graph);
 /*****************************************************************************/
