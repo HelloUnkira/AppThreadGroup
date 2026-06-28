@@ -326,6 +326,19 @@ do {                                                                            
 
 
 
+/* scui_draw_type_mask */
+#define scui_draw_mask(sync_v, dst_surface_v, dst_clip_v, mask_dsc_v)               \
+do {                                                                                \
+    scui_draw_dsc_t *scui_dd_i = NULL;                                              \
+    scui_draw_dsc_ready(&scui_dd_i);                                                \
+    scui_dd_i->type = scui_draw_type_mask;                                          \
+    scui_dd_i->sync = sync_v;                                                       \
+    scui_dd_i->mask.dst_surface    = dst_surface_v;                                 \
+    scui_dd_i->mask.dst_clip       = dst_clip_v;                                    \
+    scui_dd_i->mask.src_alpha      = (mask_dsc_v)->mask.src_alpha;                  \
+    scui_draw_dsc_task(scui_dd_i);                                                  \
+} while (0)                                                                         \
+
 /* scui_draw_type_ring */
 #define scui_draw_ring(sync_v, dst_surface_v, dst_clip_v,                           \
     dst_center_v, src_image_e_v, src_image_v, src_clip_v,                           \

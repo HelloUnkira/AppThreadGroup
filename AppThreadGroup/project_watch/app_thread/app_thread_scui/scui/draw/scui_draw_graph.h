@@ -229,6 +229,9 @@ typedef struct {
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_alpha_t        src_alpha;      /* 全局透明度 */
+        
+        scui_coord_t        src_type;       /* 类型: */
     } mask;
     /**************************************************************************
      * draw ring:

@@ -324,14 +324,14 @@ void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
     
     
     /* 外源图形组件 */
-    #if SCUI_DRAW_GRAPH_USE_LVGL
-    if (scui_draw_ctx_graph_LVGL(draw_dsc))
+    #if SCUI_DRAW_GRAPH_USE_EGUI
+    if (scui_draw_ctx_graph_EGUI(draw_dsc))
         return;
     #endif
     
     /* 外源图形组件 */
-    #if SCUI_DRAW_GRAPH_USE_EGUI
-    if (scui_draw_ctx_graph_EGUI(draw_dsc))
+    #if SCUI_DRAW_GRAPH_USE_LVGL
+    if (scui_draw_ctx_graph_LVGL(draw_dsc))
         return;
     #endif
     

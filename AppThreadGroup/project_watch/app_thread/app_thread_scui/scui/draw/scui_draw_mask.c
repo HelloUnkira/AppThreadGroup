@@ -7,19 +7,18 @@
 
 #include "scui.h"
 
-/*@brief 区域图像绘制
+/*@brief 蒙版绘制
  *@param draw_dsc 绘制描述符实例
  */
 void scui_draw_ctx_mask(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface =  draw_dsc->image.dst_surface;
-    scui_area_t    *dst_clip    = &draw_dsc->image.dst_clip;
+    scui_surface_t *dst_surface =  draw_dsc->mask.dst_surface;
+    scui_area_t    *dst_clip    = &draw_dsc->mask.dst_clip;
+    scui_alpha_t    src_alpha   =  draw_dsc->mask.src_alpha;
     /* draw dsc args<e> */
     /* */
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(dst_surface->format == scui_pixel_cf_alpha8);
     
-    
-    
-    // 留空, 待实现
 }
