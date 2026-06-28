@@ -66,7 +66,7 @@ void scui_widget_child_add(scui_widget_t *widget, scui_handle_t handle_c)
         widget->child_now++;
         
         /* 子控件列表更新通知 */
-        scui_event_define(event, widget->myself, false, scui_event_child_nums, scui_event_absorb_none);
+        scui_event_define(event, widget->myself, false, scui_event_child_num, scui_event_absorb_none);
         scui_event_notify(&event);
         return;
     }
@@ -92,7 +92,7 @@ void scui_widget_child_del(scui_widget_t *widget, scui_handle_t handle_c)
             widget->child_list[idx] = SCUI_HANDLE_INVALID;
         
         /* 子控件列表更新通知 */
-        scui_event_define(event, widget->myself, false, scui_event_child_nums, scui_event_absorb_none);
+        scui_event_define(event, widget->myself, false, scui_event_child_num, scui_event_absorb_none);
         scui_event_notify(&event);
         return;
     }
@@ -219,12 +219,6 @@ void scui_widget_state_view(scui_handle_t handle, bool view, bool recurse)
     /* 同步生成控件显示隐藏事件 */
     scui_event_define(event, handle, true, view ? scui_event_show : scui_event_hide, NULL);
     scui_event_notify(&event);
-    
-    /* 更新父控件布局 */
-    if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_event_define(event, widget->parent, false, scui_event_layout, scui_event_absorb_none);
-        scui_event_notify(&event);
-    }
     
     if (!recurse)
          return;

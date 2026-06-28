@@ -126,7 +126,7 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
 /*@brief 控件显示
  *@param handle 控件句柄
  */
-static void scui_widget_show_async(scui_handle_t handle)
+static void scui_widget_show_sched(scui_handle_t handle)
 {
     /* 尝试构建控件布局树 */
     scui_widget_layout_tree(handle);
@@ -155,7 +155,7 @@ static void scui_widget_show_async(scui_handle_t handle)
 /*@brief 控件隐藏
  *@param handle 控件句柄
  */
-static void scui_widget_hide_async(scui_handle_t handle)
+static void scui_widget_hide_sched(scui_handle_t handle)
 {
     if (scui_handle_unmap(handle))
         return;
@@ -191,12 +191,12 @@ void scui_widget_show(scui_handle_t handle, bool async)
     if (async) {
         scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_async, NULL);
         event.style.prior = scui_event_prior_real;
-        event.sched       = scui_widget_show_async;
+        event.sched       = scui_widget_show_sched;
         event.handle      = handle;
         scui_event_notify(&event);
         return;
     }
-    scui_widget_show_async(handle);
+    scui_widget_show_sched(handle);
 }
 
 /*@brief 控件隐藏
@@ -208,12 +208,12 @@ void scui_widget_hide(scui_handle_t handle, bool async)
     if (async) {
         scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_async, NULL);
         event.style.prior = scui_event_prior_real;
-        event.sched       = scui_widget_hide_async;
+        event.sched       = scui_widget_hide_sched;
         event.handle      = handle;
         scui_event_notify(&event);
         return;
     }
-    scui_widget_hide_async(handle);
+    scui_widget_hide_sched(handle);
 }
 
 /*@brief 清除事件的所有自定义回调
@@ -338,11 +338,6 @@ static void scui_widget_event_process(scui_event_t *event)
         break;
     }
     case scui_event_draw_ready: {
-        /* 绘制事件不能被控件响应 */
-        if (scui_widget_is_hide(widget->myself)) {
-            SCUI_LOG_INFO("widget is hide");
-            return;
-        }
         if (widget->style.buffer && widget->style.buffer_d) {
             /* 绘制事件没有剪切域(无需创建) */
             if (scui_area_empty(&widget->clip_set_p->clip))
@@ -353,11 +348,6 @@ static void scui_widget_event_process(scui_event_t *event)
         break;
     }
     case scui_event_draw_finish: {
-        /* 绘制事件不能被控件响应 */
-        if (scui_widget_is_hide(widget->myself)) {
-            SCUI_LOG_INFO("widget is hide");
-            return;
-        }
         if (widget->style.buffer && widget->style.buffer_d) {
             /* 绘制事件有剪切域(无需回收) */
             if (!scui_area_empty(&widget->clip_set_p->clip))
@@ -443,12 +433,18 @@ static void scui_widget_event_process(scui_event_t *event)
         break;
     }
     
+    /* 控件布局更新 */
+    case scui_event_create:
+    case scui_event_destroy:
+    case scui_event_show:
+    case scui_event_hide:
+    case scui_event_child_num:
+    case scui_event_child_pos:
+    case scui_event_child_size:
+    case scui_event_size_auto:
     case scui_event_size_adjust: {
-        if (widget->parent != SCUI_HANDLE_INVALID) {
-            /* 子控件更新,父控件布局更新 */
-            scui_event_define(event, widget->parent, false, scui_event_layout, scui_event_absorb_none);
-            scui_event_notify(&event);
-        }
+        scui_event_define(event, widget->myself, false, scui_event_layout, scui_event_absorb_none);
+        scui_event_notify(&event);
     }
     default:
         break;
@@ -534,16 +530,6 @@ static void scui_widget_event_process(scui_event_t *event)
     /* 它涉及到系统状态维护 */
     switch (event->type) {
     case scui_event_anima_elapse:
-    case scui_event_show:
-    case scui_event_hide:
-    case scui_event_draw:
-    case scui_event_draw_ready:
-    case scui_event_draw_graph:
-    case scui_event_draw_buffer:
-    case scui_event_draw_finish:
-    case scui_event_create:
-    case scui_event_layout:
-    case scui_event_destroy:
     case scui_event_ptr_down:
     case scui_event_ptr_up:
     case scui_event_key_down:
@@ -618,9 +604,8 @@ static void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_
              break;
         
         if (scui_widget_draw_buffer(widget->myself, true)) {
-            
-            scui_event_define(event_draw_buffer, widget->myself, true, scui_event_draw_buffer, scui_event_absorb_none);
-            scui_event_notify(&event_draw_buffer);
+            scui_event_define(event, widget->myself, true, scui_event_draw_buffer, NULL);
+            scui_event_notify(&event);
             
             scui_widget_draw_buffer(widget->myself, false);
         }
@@ -669,14 +654,16 @@ void scui_widget_event_dispatch(scui_event_t *event)
             }
             
             /* 启用集成事件冒泡流程 */
-            scui_event_define(event_draw_ready,  widget->myself, true, scui_event_draw_ready,  scui_event_absorb_none);
-            scui_event_define(event_draw_graph,  widget->myself, true, scui_event_draw_graph,  scui_event_absorb_none);
-            scui_event_define(event_draw_finish, widget->myself, true, scui_event_draw_finish, scui_event_absorb_none);
-            
+            scui_event_type_t event_list[] = {
+                scui_event_draw_ready,
+                scui_event_draw_graph,
+                scui_event_draw_finish,
+            };
             scui_tick_stat(scui_tick_stat_draw_rcd);
-            scui_event_notify(&event_draw_ready);
-            scui_event_notify(&event_draw_graph);
-            scui_event_notify(&event_draw_finish);
+            for (scui_handle_t idx = 0; idx < scui_arr_len(event_list); idx++) {
+                scui_event_define(event, widget->myself, true, event_list[idx], NULL);
+                scui_event_notify(&event);
+            }
             scui_tick_stat(scui_tick_stat_draw_sum);
         }
         return;
@@ -775,9 +762,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
     case scui_event_anima_elapse:
         scui_widget_event_bubble(event, NULL, false, false);
         return;
-    case scui_event_lang_change:
-        scui_widget_event_bubble(event, NULL, false, false);
-        return;
     case scui_event_focus_lost:
     case scui_event_focus_get:
         scui_widget_event_bubble(event, NULL, false, true);
@@ -786,27 +770,22 @@ void scui_widget_event_dispatch(scui_event_t *event)
     case scui_event_destroy:
     case scui_event_show:
     case scui_event_hide:
-    case scui_event_layout:
-    case scui_event_child_nums:
+    case scui_event_child_pos:
+    case scui_event_child_num:
     case scui_event_child_size:
-    case scui_event_child_pos: {
-        if (event->style.bubble) {
-            scui_widget_event_bubble(event, NULL, false, true);
-            scui_event_mask_over(event);
-        } else {
-            scui_widget_event_process(event);
-            scui_event_mask_over(event);
-        }
-        
-        /* 孩子信息更变, 更新画布剪切域 */
-        scui_widget_t *widget = scui_handle_source_check(event->object);
-        scui_widget_surface_refr(widget, true);
-        return;
-    }
     case scui_event_size_auto:
-    case scui_event_size_adjust:
+    case scui_event_size_adjust: {
         scui_widget_event_process(event);
         scui_event_mask_over(event);
+        return;
+    }
+    case scui_event_layout:
+        if (!event->style.bubble) scui_widget_event_process(event);
+        else scui_widget_event_bubble(event, NULL, false, false);
+        scui_event_mask_over(event);
+        return;
+    case scui_event_lang_change:
+        scui_widget_event_bubble(event, NULL, false, false);
         return;
     default: {
         SCUI_LOG_INFO("unknown dispatch");

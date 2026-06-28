@@ -97,9 +97,9 @@ static void scui_event_adjust_prior(scui_event_t *event)
         [scui_event_layout]         = scui_event_prior_above,
         [scui_event_destroy]        = scui_event_prior_high,
         
-        [scui_event_child_nums]     = scui_event_prior_above,
-        [scui_event_child_size]     = scui_event_prior_above,
+        [scui_event_child_num]      = scui_event_prior_above,
         [scui_event_child_pos]      = scui_event_prior_above,
+        [scui_event_child_size]     = scui_event_prior_above,
         
         [scui_event_size_auto]      = scui_event_prior_above,
         [scui_event_size_adjust]    = scui_event_prior_above,

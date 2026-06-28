@@ -99,9 +99,6 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     widget->style.buffer = false;
     #endif
     
-    /* 控件画布剪切域 */
-    scui_clip_ready(&widget->clip_set);
-    
     /* 控件独立画布构建 */
     if (widget->style.buffer) {
         

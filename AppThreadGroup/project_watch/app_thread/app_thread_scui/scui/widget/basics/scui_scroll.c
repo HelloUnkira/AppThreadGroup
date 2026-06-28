@@ -1351,20 +1351,10 @@ void scui_scroll_invoke(scui_event_t *event)
         return;
     
     switch (event->type) {
-    case scui_event_show:
-    case scui_event_hide:
-    case scui_event_create:
-    case scui_event_destroy:
-    case scui_event_focus_get:
-    case scui_event_focus_lost:
-    case scui_event_child_nums:
-    case scui_event_child_size: {
+    case scui_event_child_num:
+    case scui_event_child_size:
         scroll->layout = true;
-        /* 额外补充一个布局事件 */
-        scui_event_define(event, widget->myself, false, scui_event_layout, scui_event_absorb_none);
-        scui_event_notify(&event);
         break;
-    }
     case scui_event_layout: {
         bool layout = scroll->layout;
         scui_coord_t offset_t = 0; scui_point_t offset = {0};
