@@ -34,6 +34,7 @@ typedef struct {
     scui_sbitfd_t buffer_d:1;           /* 控件独立画布标记(动态构建) */
     scui_sbitfd_t fully_bg:1;           /* 背景覆盖:1;背景透明:0; */
     scui_sbitfd_t cover_fg:1;           /* 前景覆盖:1;前景透明:0; */
+    scui_sbitfd_t cover_buf:1;          /* 画布覆盖:1;画布透明:0; */
     scui_sbitfd_t indev_ptr:1;          /* 输入事件响应标记:ptr */
     scui_sbitfd_t indev_enc:1;          /* 输入事件响应标记:enc */
     scui_sbitfd_t indev_key:1;          /* 输入事件响应标记:key */

@@ -130,7 +130,7 @@ bool scui_widget_draw_buffer(scui_handle_t handle, bool redirect)
     SCUI_ASSERT(widget->surface_s != NULL);
     
     static scui_surface_t *surface = NULL;
-    static scui_clip_set_t  clip_set  = {0};
+    static scui_clip_set_t clip_set = {0};
     
     if (redirect) {
         SCUI_ASSERT(surface == NULL);

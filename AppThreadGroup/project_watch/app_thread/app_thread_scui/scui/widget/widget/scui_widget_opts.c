@@ -59,7 +59,7 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
             scui_widget_move_pos(handle_c, &point_c);
         }
         
-        scui_widget_draw(widget->myself, NULL, false, 0);
+        scui_widget_draw(widget->parent, NULL, false, 0);
     }
     
     if (widget->parent != SCUI_HANDLE_INVALID) {
@@ -96,10 +96,9 @@ void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset)
 void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_align_t align, scui_point_t *offset)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    /* 需要找到有效的对齐目标 */
-    if (target == SCUI_HANDLE_INVALID && widget->parent == SCUI_HANDLE_INVALID)
-        return;
     
+    /* 需要找到有效的对齐目标 */
+    if (target == SCUI_HANDLE_INVALID && widget->parent == SCUI_HANDLE_INVALID) return;
     scui_handle_t  handle_t = target != SCUI_HANDLE_INVALID ? target : widget->parent;
     scui_widget_t *widget_t = scui_handle_source_check(handle_t);
     

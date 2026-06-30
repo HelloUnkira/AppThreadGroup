@@ -365,14 +365,16 @@ static void scui_widget_event_process(scui_event_t *event)
             return;
         }
         /* 绘制事件没有剪切域,忽略 */
-        if (scui_area_empty(&widget->clip_set.clip)) {
+        if (scui_area_empty(&widget->clip_set.clip) &&
+            scui_clip_empty(&widget->clip_set)) {
             SCUI_LOG_INFO("widget clip is empty");
             return;
         }
-        /* 绘制事件没有剪切域,忽略 */
-        if (scui_clip_empty(&widget->clip_set)) {
-            SCUI_LOG_INFO("widget clip is empty");
-            return;
+        
+        /* 绘制一个背景覆盖 */
+        if (widget->style.buffer) {
+            /* 独立画布重绘前先清空画布 */
+            scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
         }
         
         /* 控件背景透明则不绘制 */
@@ -391,6 +393,18 @@ static void scui_widget_event_process(scui_event_t *event)
         /* 没有独立画布, 无此调度序列 */
         if (widget->surface_s == NULL)
             return;
+        
+        /* 绘制事件不能被控件响应 */
+        if (scui_widget_is_hide(widget->myself)) {
+            SCUI_LOG_INFO("widget is hide");
+            return;
+        }
+        /* 绘制事件没有剪切域,忽略 */
+        if (scui_area_empty(&widget->clip_set_p->clip) &&
+            scui_clip_empty(widget->clip_set_p)) {
+            SCUI_LOG_INFO("widget clip is empty");
+            return;
+        }
         
         break;
     }

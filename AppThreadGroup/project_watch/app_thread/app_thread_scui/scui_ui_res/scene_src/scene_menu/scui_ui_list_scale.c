@@ -56,6 +56,7 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
         break;
     }
     case scui_event_draw_buffer: {
+        scui_widget_draw_color(event->object, NULL, SCUI_COLOR_BLACK);
         
         scui_point_t offset  = {0};
         scui_multi_t percent = 100;
@@ -144,6 +145,8 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
             scui_custom_maker_t spacer_maker = {0};
             scui_handle_t spacer_handle = SCUI_HANDLE_INVALID;
             scui_widget_maker_def_cfg(&spacer_maker, scui_widget_type_custom);
+            spacer_maker.widget.style.fully_bg  = true;
+            spacer_maker.widget.style.cover_fg  = true;
             spacer_maker.widget.style.indev_ptr = false;
             spacer_maker.widget.parent          = event->object;
             spacer_maker.widget.clip.w          = SCUI_HOR_RES;
@@ -154,11 +157,13 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
         /* 列表项(核心区域) */
         {
             scui_custom_maker_t item_maker = {0};
+            scui_handle_t item_handle = SCUI_HANDLE_INVALID;
             scui_widget_maker_def_cfg(&item_maker, scui_widget_type_custom);
             
             item_maker.widget.style.buffer    = true;
             item_maker.widget.style.buffer_d  = true;
             item_maker.widget.style.fully_bg  = true;
+            item_maker.widget.style.cover_buf = true;
             item_maker.widget.style.indev_ptr = true;
             item_maker.widget.format          = SCUI_PIXEL_CF_DEF_A;
             item_maker.widget.parent          = event->object;
@@ -168,7 +173,6 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
             item_maker.widget.child_num       = 5;
             
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
-                scui_handle_t item_handle = SCUI_HANDLE_INVALID;
                 scui_widget_create(&item_maker, &item_handle);
                 scui_ui_res_local->item_list[idx] = item_handle;
                 
@@ -197,6 +201,8 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
             scui_custom_maker_t spacer_maker = {0};
             scui_handle_t spacer_handle = SCUI_HANDLE_INVALID;
             scui_widget_maker_def_cfg(&spacer_maker, scui_widget_type_custom);
+            spacer_maker.widget.style.fully_bg  = true;
+            spacer_maker.widget.style.cover_fg  = true;
             spacer_maker.widget.style.indev_ptr = false;
             spacer_maker.widget.parent          = event->object;
             spacer_maker.widget.clip.w          = SCUI_HOR_RES;
