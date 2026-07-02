@@ -686,12 +686,10 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_event_draw_graph,
                 scui_event_draw_finish,
             };
-            scui_tick_stat(scui_tick_stat_draw_rcd);
             for (scui_handle_t idx = 0; idx < scui_arr_len(event_list); idx++) {
                 scui_event_define(event, widget->myself, true, event_list[idx], NULL);
                 scui_event_notify(&event);
             }
-            scui_tick_stat(scui_tick_stat_draw_sum);
         }
         return;
     }
@@ -740,7 +738,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
         
         event->style.suborder = false;
         event->style.preorder = true;
+        scui_tick_stat(scui_tick_stat_draw_rcd);
         scui_widget_event_bubble(event);
+        scui_tick_stat(scui_tick_stat_draw_sum);
         return;
     }
     case scui_event_draw_buffer: {
@@ -756,10 +756,14 @@ void scui_widget_event_dispatch(scui_event_t *event)
         
         event->style.suborder = false;
         event->style.preorder = true;
+        scui_tick_stat(scui_tick_stat_draw_rcd);
         scui_widget_event_bubble(event);
+        scui_tick_stat(scui_tick_stat_draw_sum);
         #else
         /* 将其迁移到上一事件产生的子事件 */
+        scui_tick_stat(scui_tick_stat_draw_rcd);
         scui_widget_event_process(event);
+        scui_tick_stat(scui_tick_stat_draw_sum);
         #endif
         return;
     }
