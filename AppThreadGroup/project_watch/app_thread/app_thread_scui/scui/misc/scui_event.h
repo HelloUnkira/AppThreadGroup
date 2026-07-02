@@ -20,10 +20,13 @@ typedef enum {
 /*@brief 事件状态风格
  */
 typedef struct {
-    uintptr_t sync:1;           /* 事件响应调度: 同步调度,异步调度 */
-    uintptr_t prior:8;          /* 事件优先级别: 数字越大优先级越高 */
-    uintptr_t result:2;         /* 事件响应结果: 0x00:未处理; 0x01:已问询; 0x02:已吸收; */
-    uintptr_t bubble:1;         /* 事件响应冒泡: 备注:!!特殊事件使用; false:不冒泡; true:冒泡; */
+    scui_sbitfd_t sync:1;       /* 事件响应调度: 同步调度,异步调度 */
+    scui_sbitfd_t prior:8;      /* 事件优先级别: 数字越大优先级越高 */
+    scui_sbitfd_t result:2;     /* 事件响应结果: 0x00:未知; 0x01:问询; 0x02:吸收; */
+    /* 控件树调度(内部事件): */
+    scui_sbitfd_t suborder:1;   /* 事件响应冒泡: 0:顺序冒泡;1:逆序冒泡; */
+    scui_sbitfd_t preorder:1;   /* 事件响应冒泡: 0:后序冒泡;1:先序冒泡; */
+    scui_sbitfd_t bubble:1;     /* 事件响应冒泡: 0:单次调度;1:默认冒泡;(特殊!) */
 } scui_event_style_t;
 
 /*@brief 事件

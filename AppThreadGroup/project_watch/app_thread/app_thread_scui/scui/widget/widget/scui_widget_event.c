@@ -365,11 +365,19 @@ static void scui_widget_event_process(scui_event_t *event)
             return;
         }
         /* 绘制事件没有剪切域,忽略 */
-        if (scui_area_empty(&widget->clip_set.clip) &&
+        if (scui_area_empty(&widget->clip_set.clip) ||
             scui_clip_empty(&widget->clip_set)) {
             SCUI_LOG_INFO("widget clip is empty");
             return;
         }
+        /* 绘制事件没有剪切域,忽略 */
+        if (widget->style.buffer && widget->style.buffer_d)
+        if (scui_area_empty(&widget->clip_set_p->clip)) {
+            return;
+        }
+        /* 根控件画布为空,忽略 */
+        if (widget->surface->pixel == NULL)
+            return;
         
         /* 绘制一个背景覆盖 */
         if (widget->style.buffer) {
@@ -405,6 +413,10 @@ static void scui_widget_event_process(scui_event_t *event)
             SCUI_LOG_INFO("widget clip is empty");
             return;
         }
+        /* 绘制事件没有剪切域,忽略 */
+        if (widget->style.buffer && widget->style.buffer_d)
+            if (scui_area_empty(&widget->clip_set_p->clip))
+                return;
         
         break;
     }
@@ -559,29 +571,29 @@ static void scui_widget_event_process(scui_event_t *event)
 }
 
 /*@brief 控件事件冒泡
- *       亦可用于控件迭代等其他动作
- *@param event    事件(可以是假事件)
- *@param event_cb 事件回调(可以是假事件回调)
- *@param suborder 子控件冒泡顺序(0:顺序冒泡;1:逆序冒泡)
- *@param preorder 本控件冒泡顺序(0:后序冒泡;1:先序冒泡)
+ *@param event 事件
  */
-static void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool suborder, bool preorder)
+static void scui_widget_event_bubble(scui_event_t *event)
 {
     scui_widget_t *widget = scui_handle_source_check(event->object);
+    /* 这个函数不是很逻辑自洽 */
+    /* 暂时还没有更好的思路 */
     
     /* 进行一次冒泡重定向 */
-    bool suborder_w = suborder;
+    bool suborder_w = event->style.suborder;
+    
     switch (event->type) {
+    case scui_event_draw_ready:
     case scui_event_draw_graph:
+    case scui_event_draw_finish:
         suborder_w = widget->style.order_draw;
         break;
     default:
         break;
     }
     
-    if (preorder) {
-        if (event_cb != NULL) event_cb(event);
-        else scui_widget_event_process(event);
+    if (event->style.preorder) {
+        scui_widget_event_process(event);
         if (scui_event_check_over(event))
             return;
     }
@@ -589,7 +601,7 @@ static void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_
     if (suborder_w) {
         scui_widget_child_list_ftra(widget, idx) {
             event->object = widget->child_list[idx];
-            scui_widget_event_bubble(event, event_cb, suborder, preorder);
+            scui_widget_event_bubble(event);
             event->object = widget->myself;
             if (scui_event_check_over(event))
                 return;
@@ -597,16 +609,15 @@ static void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_
     } else {
         scui_widget_child_list_btra(widget, idx) {
             event->object = widget->child_list[idx];
-            scui_widget_event_bubble(event, event_cb, suborder, preorder);
+            scui_widget_event_bubble(event);
             event->object = widget->myself;
             if (scui_event_check_over(event))
                 return;
         }
     }
     
-    if (!preorder) {
-        if (event_cb != NULL) event_cb(event);
-        else scui_widget_event_process(event);
+    if (!event->style.preorder) {
+        scui_widget_event_process(event);
         if (scui_event_check_over(event))
             return;
     }
@@ -641,7 +652,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
     if (scui_event_type_ptr(event->type) ||
         scui_event_type_enc(event->type) ||
         scui_event_type_key(event->type)) {
-        scui_widget_event_bubble(event, NULL, true, false);
+        event->style.suborder = true;
+        event->style.preorder = false;
+        scui_widget_event_bubble(event);
         return;
     }
     
@@ -710,7 +723,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
             SCUI_LOG_INFO("size_old:%d, size_new:%d", size_old, size_new);
         }
         
-        scui_widget_event_bubble(event, NULL, false, true);
+        event->style.suborder = false;
+        event->style.preorder = true;
+        scui_widget_event_bubble(event);
         return;
     }
     case scui_event_draw_graph: {
@@ -723,7 +738,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_refr(widget->myself, true);
         }
         
-        scui_widget_event_bubble(event, NULL, false, true);
+        event->style.suborder = false;
+        event->style.preorder = true;
+        scui_widget_event_bubble(event);
         return;
     }
     case scui_event_draw_buffer: {
@@ -737,7 +754,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_refr(widget->myself, true);
         }
         
-        scui_widget_event_bubble(event, NULL, false, true);
+        event->style.suborder = false;
+        event->style.preorder = true;
+        scui_widget_event_bubble(event);
         #else
         /* 将其迁移到上一事件产生的子事件 */
         scui_widget_event_process(event);
@@ -770,15 +789,21 @@ void scui_widget_event_dispatch(scui_event_t *event)
             if (refr) scui_widget_refr(widget->myself, false);
         }
         
-        scui_widget_event_bubble(event, NULL, false, true);
+        event->style.suborder = false;
+        event->style.preorder = true;
+        scui_widget_event_bubble(event);
         return;
     }
     case scui_event_anima_elapse:
-        scui_widget_event_bubble(event, NULL, false, false);
+        event->style.suborder = false;
+        event->style.preorder = false;
+        scui_widget_event_bubble(event);
         return;
     case scui_event_focus_lost:
     case scui_event_focus_get:
-        scui_widget_event_bubble(event, NULL, false, true);
+        event->style.suborder = false;
+        event->style.preorder = true;
+        scui_widget_event_bubble(event);
         return;
     case scui_event_create:
     case scui_event_destroy:
@@ -794,12 +819,21 @@ void scui_widget_event_dispatch(scui_event_t *event)
         return;
     }
     case scui_event_layout:
-        if (!event->style.bubble) scui_widget_event_process(event);
-        else scui_widget_event_bubble(event, NULL, false, false);
+        if (event->style.bubble) {
+            event->style.suborder = false;
+            event->style.preorder = false;
+            scui_widget_event_bubble(event);
+            scui_event_mask_over(event);
+            return;
+        }
+        
+        scui_widget_event_process(event);
         scui_event_mask_over(event);
         return;
     case scui_event_lang_change:
-        scui_widget_event_bubble(event, NULL, false, false);
+        event->style.suborder = false;
+        event->style.preorder = false;
+        scui_widget_event_bubble(event);
         return;
     default: {
         SCUI_LOG_INFO("unknown dispatch");

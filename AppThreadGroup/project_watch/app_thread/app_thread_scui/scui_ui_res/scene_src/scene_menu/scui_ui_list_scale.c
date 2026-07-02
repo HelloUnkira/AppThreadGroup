@@ -29,6 +29,7 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
     case scui_event_anima_elapse:
         break;
     case scui_event_draw_graph: {
+        SCUI_LOG_INFO("draw widget:%u", event->object);
         
         scui_handle_t match_idx = -1;
         for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++)
@@ -56,7 +57,7 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
         break;
     }
     case scui_event_draw_buffer: {
-        scui_widget_draw_color(event->object, NULL, SCUI_COLOR_BLACK);
+        SCUI_LOG_INFO("draw buffer widget:%u", event->object);
         
         scui_point_t offset  = {0};
         scui_multi_t percent = 100;
