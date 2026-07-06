@@ -379,12 +379,6 @@ static void scui_widget_event_process(scui_event_t *event)
         if (widget->surface->pixel == NULL)
             return;
         
-        /* 绘制一个背景覆盖 */
-        if (widget->style.buffer) {
-            /* 独立画布重绘前先清空画布 */
-            scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
-        }
-        
         /* 控件背景透明则不绘制 */
         if (widget->style.fully_bg) {
             /* 绘制图片背景(有背景图片) */
@@ -393,6 +387,13 @@ static void scui_widget_event_process(scui_event_t *event)
                 scui_widget_draw_image(event->object, NULL, widget->image, NULL, widget->color);
             else
                 scui_widget_draw_color(event->object, NULL, widget->color);
+        } else {
+            
+            /* 控件背景透明独立画布 */
+            if (widget->style.buffer) {
+                /* 独立画布重绘前先清空画布 */
+                scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
+            }
         }
         
         break;
@@ -415,8 +416,8 @@ static void scui_widget_event_process(scui_event_t *event)
         }
         /* 绘制事件没有剪切域,忽略 */
         if (widget->style.buffer && widget->style.buffer_d)
-            if (scui_area_empty(&widget->clip_set_p->clip))
-                return;
+        if (scui_area_empty(&widget->clip_set_p->clip))
+            return;
         
         break;
     }
