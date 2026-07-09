@@ -6,6 +6,7 @@ typedef enum {
     app_thread_mix_irq_none = 0,        /* 系统模组,占位符(线程组公共事件) */
     app_thread_mix_irq_timer,           /* 定时器模组 */
     app_thread_mix_irq_clock,           /* 时钟模组 */
+    app_thread_mix_irq_shell,           /* shell模组 */
 } app_thread_mix_irq_module_t;
 
 /* 线程模组事件 */
@@ -19,6 +20,10 @@ typedef enum {
     app_thread_mix_irq_clock_local_update,
     app_thread_mix_irq_clock_timestamp_update,
     app_thread_mix_irq_clock_e,
+    /* shell 模组事件 */
+    app_thread_mix_irq_shell_s = 0,
+    app_thread_mix_irq_shell_poll,
+    app_thread_mix_irq_shell_e,
     /*  */
 } app_thread_mix_irq_module_event_t;
 
@@ -28,5 +33,7 @@ typedef enum {
 #include "app_module_clock.h"
 #include "app_module_rtc.h"
 #include "app_module_watchdog.h"
+/* 子线程模组 */
+#include "app_module_shell.h"
 
 #endif

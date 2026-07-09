@@ -10,12 +10,14 @@ extern const app_dev_t app_dev_ext_mem;
 extern const app_dev_t app_dev_log;
 extern const app_dev_t app_dev_rtc;
 extern const app_dev_t app_dev_wdt;
+extern const app_dev_t app_dev_shell;
 
 /* 设备抽象动作接口(peripheral) */
 #include "app_dev_ext_mem.h"        /* ext_mem */
 #include "app_dev_log.h"            /* log */
 #include "app_dev_rtc.h"            /* rtc */
 #include "app_dev_wdt.h"            /* watchdog */
+#include "app_dev_shell.h"          /* shell */
 
 /*@brief 初始化设备
  */

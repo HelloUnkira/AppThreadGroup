@@ -23,6 +23,16 @@ static void app_dev_log_hal_ready(app_dev_t *driver)
     /* 填充目标平台下的动作 */
 }
 
+/*@brief log设备开关
+ *@param driver 设备实例
+ *@param work   开关
+ */
+static void app_dev_log_hal_work(app_dev_t *driver, bool work)
+{
+    app_dev_log_data_t *data = driver->data;
+    data->work = work;
+}
+
 /*@brief log设备输出
  *@param driver 设备实例
  *@param format 输出变参格式化字符串
@@ -32,8 +42,8 @@ static void app_dev_log_hal_msg(app_dev_t *driver, const char *format, va_list l
 {
     app_dev_log_cfg_t *cfg = driver->cfg;
     app_dev_log_data_t *data = driver->data;
-    /* 填充目标平台下的动作 */
-    vprintf(format, list);
+    /* 填充目标平台下的动作(如果有效) */
+    if (data->work) vprintf(format, list);
     
     static bool not_ready = true;
     /* 将日志转存到文件中,方便回溯 */
@@ -55,13 +65,15 @@ static app_dev_log_cfg_t app_dev_log_cfg = {
 
 /* 静态配置的设备操作集合 */
 static const app_dev_log_api_t app_dev_log_api = {
-    .ready  = app_dev_log_hal_ready,
-    .msg    = app_dev_log_hal_msg,
+    .ready = app_dev_log_hal_ready,
+    .work  = app_dev_log_hal_work,
+    .msg   = app_dev_log_hal_msg,
 };
 
 /* 动态的设备操作数据 */
 static app_dev_log_data_t app_dev_log_data = {
     .data = NULL,
+    .work = true,
 };
 
 /* 静态配置的设备实例 */

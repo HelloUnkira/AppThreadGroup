@@ -29,6 +29,7 @@ static void app_thread_mix_irq_routine_ready_cb(void)
     app_module_clock_ready();
     app_module_rtc_ready();
     app_module_watchdog_ready();
+    app_module_shell_ready();
 }
 
 /*@brief 子线程服务例程处理部
@@ -47,6 +48,12 @@ static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package,
             app_module_clock_local_update();
         if (package->event == app_thread_mix_irq_clock_timestamp_update)
             app_module_clock_timestamp_update(package->byte_fixed);
+        return true;
+    }
+    case app_thread_mix_irq_shell: {
+        if (package->event == app_thread_mix_irq_shell_poll)
+            app_module_shell_poll();
+       *record = false;
         return true;
     }
     default:

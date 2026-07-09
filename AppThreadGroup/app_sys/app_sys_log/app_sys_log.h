@@ -106,10 +106,11 @@ const char * app_sys_log_line(void);
 /* ----------下面是未使用宏包装的函数,不建议直接使用,不利于项目代码裁剪---------- */
 
 typedef struct {
-    void (*message1)(const char *format, ...);
-    void (*message2)(const char *format, va_list list);
-    void (*persistent)(const char *text);
-    void (*notify_assert)(void);
+    void (*work)(bool work);
+    void (*msg1)(const char *format, ...);
+    void (*msg2)(const char *format, va_list list);
+    void (*text)(const char *text);
+    void (*asrt)(void);
 } app_sys_log_t;
 
 /*@brief 日志模组初始化
@@ -117,6 +118,11 @@ typedef struct {
  *@param log 配置实例
  */
 void app_sys_log_ready(app_sys_log_t *log);
+
+/*@brief 日志模组工作开关
+ *@param work 1:允许输出,0:禁止输出
+ */
+void app_sys_log_work(bool work);
 
 /*@brief 格式日志输出接口
  *       内部使用: 被宏函数使用

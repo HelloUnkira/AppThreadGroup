@@ -4,12 +4,14 @@
 /* 设备log抽象操作接口 */
 typedef struct {
     void (*ready)(app_dev_t *driver);
+    void (*work)(app_dev_t *driver, bool work);
     void (*msg)(app_dev_t *driver, const char *format, va_list list);
 } app_dev_log_api_t;
 
 /* 设备log抽象操作数据 */
 typedef struct {
     void *data;
+    bool  work;
 } app_dev_log_data_t;
 
 /*@brief log设备就绪
@@ -20,6 +22,18 @@ static inline void app_dev_log_ready(app_dev_t *driver)
     if (driver != NULL && driver->api != NULL) {
         const app_dev_log_api_t *api = driver->api;
         api->ready(driver);
+    }
+}
+
+/*@brief log设备开关
+ *@param driver 设备实例
+ *@param work   开关
+ */
+static inline void app_dev_log_work(app_dev_t *driver, bool work)
+{
+    if (driver != NULL && driver->api != NULL) {
+        const app_dev_log_api_t *api = driver->api;
+        api->work(driver, work);
     }
 }
 
@@ -34,6 +48,14 @@ static inline void app_dev_log_msg(app_dev_t *driver, const char *format, va_lis
         const app_dev_log_api_t *api = driver->api;
         api->msg(driver, format, list);
     }
+}
+
+/*@brief LOG工作开关(扩展封装)
+ *@param work 开关
+ */
+static inline void app_dev_log_work_e(bool work)
+{
+    app_dev_log_work(&app_dev_log, work);
 }
 
 /*@brief 变参函数式LOG输出接口(扩展封装)

@@ -45,6 +45,16 @@ void app_sys_log_ready(app_sys_log_t *log)
     app_sys_log = *log;
 }
 
+/*@brief 日志模组工作开关
+ *@param work 1:允许输出,0:禁止输出
+ */
+void app_sys_log_work(bool work)
+{
+    app_mutex_process(&app_sys_log_mutex, app_mutex_take);
+    if (app_sys_log.work != NULL) app_sys_log.work(work);
+    app_mutex_process(&app_sys_log_mutex, app_mutex_give);
+}
+
 /*@brief 格式日志输出接口
  *       无格式打印:{内容}
  *       带格式打印:[文件名][行数][级别]{内容}[换行]
@@ -66,11 +76,11 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
     if (status) {
         file = app_sys_log_file(file);
         /* 格式化选择,按需求选取即可 */
-           app_sys_log.message1("[%s][%u][%c]", func, line, flag);
-        // app_sys_log.message1("[%s][%u][%c]", file, line, flag);
-        // app_sys_log.message1("[%s][%s][%u][%c]", file, func, line, flag);
-           app_sys_log.message2(format, list);
-           app_sys_log.message1(app_sys_log_line());
+           app_sys_log.msg1("[%s][%u][%c]", func, line, flag);
+        // app_sys_log.msg1("[%s][%u][%c]", file, line, flag);
+        // app_sys_log.msg1("[%s][%s][%u][%c]", file, func, line, flag);
+           app_sys_log.msg2(format, list);
+           app_sys_log.msg1(app_sys_log_line());
         /* 格式化信息持久化 */
         if (record) {
             char text[APP_SYS_LOG_TEXT_LIMIT] = {0};
@@ -79,31 +89,31 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
             // snprintf(text, APP_SYS_LOG_TEXT_LIMIT - 1, "[%s][%u][%c]", file, line, flag);
             // snprintf(text, APP_SYS_LOG_TEXT_LIMIT - 1, "[%s][%s][%u][%c]", file, func, line, flag);
             text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
-            app_sys_log.persistent(text);
+            app_sys_log.text(text);
             vsnprintf(text, APP_SYS_LOG_TEXT_LIMIT, format, list);
             text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
-            app_sys_log.persistent(text);
+            app_sys_log.text(text);
             snprintf(text, APP_SYS_LOG_TEXT_LIMIT, app_sys_log_line());
             text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
-            app_sys_log.persistent(text);
+            app_sys_log.text(text);
         }
     } else {
-        // app_sys_log.message1("");
-           app_sys_log.message2(format, list);
-        // app_sys_log.message1(app_sys_log_line());
+        // app_sys_log.msg1("");
+           app_sys_log.msg2(format, list);
+        // app_sys_log.msg1(app_sys_log_line());
         /* 格式化信息持久化 */
         if (record) {
             char text[APP_SYS_LOG_TEXT_LIMIT] = {0};
             /* 格式化选择,按需求选取即可 */
             // snprintf(text, APP_SYS_LOG_TEXT_LIMIT, "");
             // text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
-            // app_sys_log.persistent(text);
+            // app_sys_log.text(text);
             vsnprintf(text, APP_SYS_LOG_TEXT_LIMIT, format, list);
             text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
-            app_sys_log.persistent(text);
+            app_sys_log.text(text);
             // snprintf(text, APP_SYS_LOG_TEXT_LIMIT, app_sys_log_line());
             // text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
-            // app_sys_log.persistent(text);
+            // app_sys_log.text(text);
         }
     }
     app_mutex_process(&app_sys_log_mutex, app_mutex_give);
@@ -122,8 +132,8 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
     if (cond)
         return;
     
-    if (app_sys_log.notify_assert != NULL)
-        app_sys_log.notify_assert();
+    if (app_sys_log.asrt != NULL)
+        app_sys_log.asrt();
     
     file = app_sys_log_file(file);
     /* 输出错误信息 */

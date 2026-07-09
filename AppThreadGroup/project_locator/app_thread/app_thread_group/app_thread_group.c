@@ -51,17 +51,19 @@ void app_thread_group_schedule(void)
     /*
      *!!!就绪app sys层
      */
-    typedef void (*message1)(const char *format, ...);
-    typedef void (*message2)(const char *format, va_list list);
-    typedef void (*persistent)(const char *text);
-    typedef void (*notify_assert)(void);
+    typedef void (*work)(bool work);
+    typedef void (*msg1)(const char *format, ...);
+    typedef void (*msg2)(const char *format, va_list list);
+    typedef void (*text)(const char *text);
+    typedef void (*asrt)(void);
     
     app_sys_cfg_t sys_cfg = {
         .log = {
-            .message1       = (message1)        app_dev_log_msg1,
-            .message2       = (message2)        app_dev_log_msg2,
-            .persistent     = (persistent)      app_sys_log_text_persistent,
-            .notify_assert  = (notify_assert)   app_thread_assert_notify,
+            .work  = (work)   app_dev_log_work_e,
+            .msg1  = (msg1)   app_dev_log_msg1,
+            .msg2  = (msg2)   app_dev_log_msg2,
+            .text  = (text)   app_sys_log_text_persistent,
+            .asrt  = (asrt)   app_thread_assert_notify,
         },
     };
     app_sys_ready(&sys_cfg);
