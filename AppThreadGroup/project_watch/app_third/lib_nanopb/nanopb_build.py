@@ -20,7 +20,7 @@ def nanopb_recuse_build(path) -> None:
            #if item.split('.')[-1] == 'proto' and item.split('.')[0] != 'descriptor' and item.split('.')[0] != 'nanopb':
                 # print(compile + execute + path + '\\' + item)
                 print(item)
-                os.system(compile + execute + path + '\\' + item)
+                __import__('subprocess').run([compile.strip()] + execute.split() + [os.path.join(path, item)], shell=False)
         if os.path.isdir(path + '\\' + item):
             nanopb_recuse_build(path + '\\' + item)
 
