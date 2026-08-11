@@ -110,9 +110,10 @@ static void scui_event_adjust_prior(scui_event_t *event)
     if (event->style.prior != scui_event_prior_none)
         return;
     
-    /* indev: ptr,enc,key */
+    /* indev: ptr,enc,bar,key */
     if (scui_event_type_ptr(event->type) ||
         scui_event_type_enc(event->type) ||
+        scui_event_type_bar(event->type) ||
         scui_event_type_key(event->type)) {
         event->style.prior = scui_event_prior_normal;
         return;
@@ -150,6 +151,9 @@ static bool scui_event_bubble_filter(scui_event_t *event)
         return true;
     case scui_event_enc_fdir:
     case scui_event_enc_bdir:
+        return true;
+    case scui_event_bar_move:
+    case scui_event_bar_fling:
         return true;
     case scui_event_key_hold:
     case scui_event_key_click:

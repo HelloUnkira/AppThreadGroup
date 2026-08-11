@@ -698,6 +698,44 @@ void scui_window_switch_event(scui_event_t *event)
         }
         break;
     }
+    case scui_event_bar_move:
+    case scui_event_bar_fling: {
+        
+        scui_opt_dir_t event_dir = scui_opt_dir_none;
+        SCUI_LOG_INFO("bar_way:%u", event->bar_way);
+        /* 方向检测与条件加载 */
+        if (event->bar_way == 0) {
+            
+            if (window->switch_enc_way == scui_opt_dir_hor) {
+                if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
+                if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_ltr;
+            }
+            if (window->switch_enc_way == scui_opt_dir_ver) {
+                if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_ltr;
+                if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
+            }
+        }
+        if (event->bar_way == 1) {
+            
+            if (window->switch_enc_way == scui_opt_dir_hor) {
+                if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;
+                if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_rtl;
+            }
+            if (window->switch_enc_way == scui_opt_dir_ver) {
+                if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_rtl;
+                if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;
+            }
+        }
+        
+        /* 给定方向进行窗口切换 */
+        scui_window_switch.pos = scui_opt_pos_all;
+        if (scui_window_switch_event_catch(event, event_dir, 1)) {
+            scui_window_move_anima_inout(scui_window_switch.list[0], false);
+            scui_event_mask_over(event);
+        }
+        
+        break;
+    }
     case scui_event_enc_fdir:
     case scui_event_enc_bdir: {
         

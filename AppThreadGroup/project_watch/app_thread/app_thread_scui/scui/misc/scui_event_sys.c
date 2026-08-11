@@ -55,6 +55,15 @@ bool scui_event_type_enc(scui_event_type_t event_type)
  *@param event_type 事件类型
  *@retval 类型匹配
  */
+bool scui_event_type_bar(scui_event_type_t event_type)
+{
+    return event_type > scui_event_bar_s && event_type < scui_event_bar_e;
+}
+
+/*@brief 事件类型检查
+ *@param event_type 事件类型
+ *@retval 类型匹配
+ */
 bool scui_event_type_key(scui_event_type_t event_type)
 {
     return event_type > scui_event_key_s && event_type < scui_event_key_e;

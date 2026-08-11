@@ -43,6 +43,7 @@
 #include "scui_indev.h"             /* 输入设备 */
 #include "scui_indev_ptr.h"         /* 输入设备:ptr */
 #include "scui_indev_enc.h"         /* 输入设备:enc */
+#include "scui_indev_bar.h"         /* 输入设备:bar */
 #include "scui_indev_key.h"         /* 输入设备:key */
 #include "scui_tick.h"              /* 滴答器 */
 #include "scui_disp.h"              /* 显示器 */

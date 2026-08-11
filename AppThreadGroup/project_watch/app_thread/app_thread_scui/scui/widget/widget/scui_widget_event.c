@@ -324,6 +324,9 @@ static void scui_widget_event_process(scui_event_t *event)
     /* 默认控件事件处理(enc) */
     if (scui_event_type_enc(event->type) && !widget->style.indev_enc)
         return;
+    /* 默认控件事件处理(bar) */
+    if (scui_event_type_bar(event->type) && !widget->style.indev_bar)
+        return;
     /* 默认控件事件处理(key) */
     if (scui_event_type_key(event->type) && !widget->style.indev_key)
         return;
@@ -449,6 +452,13 @@ static void scui_widget_event_process(scui_event_t *event)
     case scui_event_enc_bdir: {
         /* 存在该控件持有当前敏感事件 */
         if (widget->state.indev_enc_hold)
+            break;
+        break;
+    }
+    case scui_event_bar_move:
+    case scui_event_bar_fling: {
+        /* 存在该控件持有当前敏感事件 */
+        if (widget->state.indev_bar_hold)
             break;
         break;
     }

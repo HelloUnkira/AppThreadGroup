@@ -47,6 +47,7 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scroll->springback  = scroll_maker->springback;
     scroll->fling_page  = scroll_maker->fling_page;
     scroll->route_enc   = scroll_maker->route_enc;
+    scroll->route_bar   = scroll_maker->route_bar;
     scroll->route_key   = scroll_maker->route_key;
     scroll->keyid_fdir  = scroll_maker->keyid_fdir;
     scroll->keyid_bdir  = scroll_maker->keyid_bdir;
@@ -86,6 +87,14 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle)
             scroll->route_enc = widget->clip.w;
         if (scroll->dir == scui_opt_dir_ver)
             scroll->route_enc = widget->clip.h;
+    }
+    
+    /* 默认保持一个翻页 */
+    if (scroll->route_bar == 0) {
+        if (scroll->dir == scui_opt_dir_hor)
+            scroll->route_bar = widget->clip.w;
+        if (scroll->dir == scui_opt_dir_ver)
+            scroll->route_bar = widget->clip.h;
     }
     
     /* 默认保持一个翻页 */
@@ -1443,6 +1452,64 @@ void scui_scroll_invoke(scui_event_t *event)
             widget->state.indev_key_hold = false;
         }
         break;
+    case scui_event_bar_move:
+    case scui_event_bar_fling: {
+        if (widget->state.indev_bar_hold)
+            scui_event_mask_over(event);
+        if (widget->state.indev_ptr_hold ||
+            widget->state.indev_enc_hold ||
+            widget->state.indev_key_hold)
+            break;
+        
+        scui_coord_t way = 0;
+        scui_opt_dir_t dir = scui_opt_dir_none;
+        if (event->bar_way == 0) {
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_ltr;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_utd;
+            way = +1;
+        }
+        if (event->bar_way == 1) {
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_rtl;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_dtu;
+            way = -1;
+        }
+        
+        /* 忽略的方向不支持 */
+        if (scui_scroll_edge_skip(event->object, dir))
+            break;
+        
+        if (scroll->dir != scui_opt_dir_hor &&
+            scroll->dir != scui_opt_dir_ver) {
+            break;
+        }
+        if (scroll->route_bar == 0) {
+            SCUI_LOG_ERROR("route bar is zero");
+            break;
+        }
+        
+        scui_coord_t diff = event->bar_diff;
+        /* fling是带倍率的move */
+        if (event->type == scui_event_bar_fling)
+            diff *= scroll->fling_page;
+        
+        scui_point_t offset = {0};
+        if (scroll->dir == scui_opt_dir_hor)
+            offset.x = way * scroll->route_bar * diff;
+        if (scroll->dir == scui_opt_dir_ver)
+            offset.y = way * scroll->route_bar * diff;
+        
+        if (scroll->anima != SCUI_HANDLE_INVALID) {
+            scui_anima_stop(scroll->anima);
+            scui_anima_destroy(scroll->anima);
+            scroll->anima = SCUI_HANDLE_INVALID;
+            
+            scui_widget_scroll_state(0x01);
+        }
+        scui_scroll_anima_tag(event->object, 1);
+        scui_scroll_offset(event->object, &offset, true);
+        scui_event_mask_over(event);
+        break;
+    }
     case scui_event_enc_fdir:
     case scui_event_enc_bdir: {
         if (widget->state.indev_enc_hold)

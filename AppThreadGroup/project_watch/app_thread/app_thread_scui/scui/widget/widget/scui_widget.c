@@ -88,6 +88,10 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
             cb_node.event = scui_event_enc_all;
             scui_widget_event_add(*handle, &cb_node);
         }
+        if (widget->style.indev_bar) {
+            cb_node.event = scui_event_bar_all;
+            scui_widget_event_add(*handle, &cb_node);
+        }
         if (widget->style.indev_key) {
             cb_node.event = scui_event_key_all;
             scui_widget_event_add(*handle, &cb_node);

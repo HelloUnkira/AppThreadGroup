@@ -7,6 +7,7 @@ typedef enum {
     scui_indev_type_none,
     scui_indev_type_ptr,
     scui_indev_type_enc,
+    scui_indev_type_bar,
     scui_indev_type_key,
 } scui_indev_type_t;
 
@@ -31,6 +32,10 @@ typedef struct {
         struct {
             scui_coord_t enc_diff;
         } enc;
+        /* 输入设备bar */
+        struct {
+            scui_coord_t bar_pos;
+        } bar;
         /* 输入设备key */
         struct {
             scui_coord_t key_id;

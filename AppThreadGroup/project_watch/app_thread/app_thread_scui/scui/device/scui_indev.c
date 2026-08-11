@@ -20,6 +20,8 @@ void scui_indev_notify(scui_indev_data_t *data)
         scui_indev_ptr_notify(data);
     if (data->type == scui_indev_type_enc)
         scui_indev_enc_notify(data);
+    if (data->type == scui_indev_type_bar)
+        scui_indev_bar_notify(data);
     if (data->type == scui_indev_type_key)
         scui_indev_key_notify(data);
     scui_mutex_process(&scui_indev_mutex, scui_mutex_give);
@@ -34,6 +36,7 @@ static void scui_indev_anima_expire(void *instance)
     scui_mutex_process(&scui_indev_mutex, scui_mutex_take);
     scui_indev_ptr_event_merge();
     scui_indev_enc_event_merge();
+    scui_indev_bar_event_merge();
     scui_indev_key_event_merge();
     scui_mutex_process(&scui_indev_mutex, scui_mutex_give);
 }
@@ -46,6 +49,7 @@ void scui_indev_ready(void)
     
     scui_indev_ptr_ready();
     scui_indev_enc_ready();
+    scui_indev_bar_ready();
     scui_indev_key_ready();
     
     scui_anima_t anima = {0};

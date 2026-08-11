@@ -63,10 +63,18 @@ typedef enum {
     /* 输入设备事件<enc,s> */
     scui_event_enc_s,
     scui_event_enc_all,
-    scui_event_enc_fdir,    /* 正转<coord> */
-    scui_event_enc_bdir,    /* 反转<coord> */
+    scui_event_enc_fdir,    /* 正转事件<coord> */
+    scui_event_enc_bdir,    /* 反转事件<coord> */
     scui_event_enc_e,
     /* 输入设备事件<enc,e> */
+    
+    /* 输入设备事件<bar,s> */
+    scui_event_bar_s,
+    scui_event_bar_all,
+    scui_event_bar_move,    /* 移动事件<方向,单位> */
+    scui_event_bar_fling,   /* 轻扫事件<方向,单位> */
+    scui_event_bar_e,
+    /* 输入设备事件<bar,e> */
     
     /* 输入设备事件<key,s> */
     scui_event_key_s,
@@ -111,6 +119,12 @@ bool scui_event_type_ptr(scui_event_type_t event_type);
  *@retval 类型匹配
  */
 bool scui_event_type_enc(scui_event_type_t event_type);
+
+/*@brief 事件类型检查
+ *@param event_type 事件类型
+ *@retval 类型匹配
+ */
+bool scui_event_type_bar(scui_event_type_t event_type);
 
 /*@brief 事件类型检查
  *@param event_type 事件类型

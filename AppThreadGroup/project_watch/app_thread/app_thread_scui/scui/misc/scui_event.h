@@ -61,6 +61,12 @@ typedef struct {
             scui_sbitfd_t   enc_way:1;
             scui_coord_t    enc_diff;
         };
+        /* 输入事件数据<bar> */
+        struct {
+            /* 0:正向;1:反向; */
+            scui_sbitfd_t   bar_way:1;
+            scui_coord_t    bar_diff;
+        };
         /* 输入事件数据<key> */
         struct {
             scui_coord_t    key_id;

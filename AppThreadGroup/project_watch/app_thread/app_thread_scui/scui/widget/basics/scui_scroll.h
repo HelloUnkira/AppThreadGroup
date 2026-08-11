@@ -21,6 +21,7 @@ typedef struct {
     scui_map_cb_t   anima_path[4];      /* 动画轨迹[ptr,enc,key,auto] */
     scui_coord_t    anima_speed[4];     /* 动画速度[ptr,enc,key,auto](像素点/1s) */
     scui_coord_t    route_enc;          /* 旋钮行程 */
+    scui_coord_t    route_bar;          /* 滑条行程 */
     scui_coord_t    route_key;          /* 按键行程 */
     scui_coord_t    keyid_fdir;         /* 按键id,对应旋钮事件(clockwise) */
     scui_coord_t    keyid_bdir;         /* 按键id,对应旋钮事件(clockwise_anti) */
@@ -72,6 +73,7 @@ typedef struct {
     scui_map_cb_t   anima_path[4];      /* 动画轨迹[ptr,enc,key,auto] */
     scui_coord_t    anima_speed[4];     /* 动画速度[ptr,enc,key,auto](像素点/1s) */
     scui_coord_t    route_enc;          /* 旋钮行程 */
+    scui_coord_t    route_bar;          /* 滑条行程 */
     scui_coord_t    route_key;          /* 按键行程 */
     scui_coord_t    keyid_fdir;         /* 按键id,对应旋钮事件(clockwise) */
     scui_coord_t    keyid_bdir;         /* 按键id,对应旋钮事件(clockwise_anti) */

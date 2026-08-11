@@ -37,6 +37,7 @@ typedef struct {
     scui_sbitfd_t cover_buf:1;          /* 画布覆盖:1;画布透明:0; */
     scui_sbitfd_t indev_ptr:1;          /* 输入事件响应标记:ptr */
     scui_sbitfd_t indev_enc:1;          /* 输入事件响应标记:enc */
+    scui_sbitfd_t indev_bar:1;          /* 输入事件响应标记:bar */
     scui_sbitfd_t indev_key:1;          /* 输入事件响应标记:key */
     scui_sbitfd_t sched_anima:1;        /* 控件帧动画标记 */
     scui_sbitfd_t sched_widget:1;       /* 控件专属事件标记 */
@@ -52,6 +53,7 @@ typedef struct {
     scui_sbitfd_t view:1;               /* 控件隐藏:0;控件显示:1; */
     scui_sbitfd_t indev_ptr_hold:1;     /* 输入事件响应维持:ptr */
     scui_sbitfd_t indev_enc_hold:1;     /* 输入事件响应维持:enc */
+    scui_sbitfd_t indev_bar_hold:1;     /* 输入事件响应维持:bar */
     scui_sbitfd_t indev_key_hold:1;     /* 输入事件响应维持:key */
 } scui_widget_state_t;
 
