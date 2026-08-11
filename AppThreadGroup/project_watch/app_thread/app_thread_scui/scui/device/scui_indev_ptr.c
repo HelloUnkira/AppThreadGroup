@@ -21,15 +21,16 @@ static bool scui_event_ptr_hold_absorb(void *evt_old, void *evt_new)
     return true;
 }
 
-/*@brief 旋钮事件吸收回调
+/*@brief 移动事件吸收回调
  */
 static bool scui_event_ptr_move_absorb(void *evt_old, void *evt_new)
 {
     scui_event_t *event_old = evt_old;
     scui_event_t *event_new = evt_new;
     
-    /* 将key值转移到它上面: */
+    /* 将ptr值转移到它上面: */
     event_old->ptr_e = event_new->ptr_e;
+    event_old->ptr_v = event_new->ptr_v;
     return true;
 }
 
@@ -164,6 +165,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 event.ptr_s  = scui_indev_ptr.ptr_last;
                 event.ptr_e  = point;
                 event.ptr_dir = scui_indev_ptr_event_dir(&event);
+                event.ptr_v  = last_v;
                 SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                 scui_indev_ptr_event_check(&event);
             }
@@ -226,6 +228,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                     event.ptr_s  = scui_indev_ptr.ptr_last;
                     event.ptr_e  = point;
                     event.ptr_dir = scui_indev_ptr_event_dir(&event);
+                    event.ptr_v  = last_v;
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", near_v, near_v);
                     scui_indev_ptr_event_check(&event);

@@ -53,6 +53,7 @@ typedef struct {
             scui_point_t    ptr_s;
             scui_point_t    ptr_e;
             scui_opt_dir_t  ptr_dir;
+            scui_multi_t    ptr_v;
         };
         /* 输入事件数据<enc> */
         struct {

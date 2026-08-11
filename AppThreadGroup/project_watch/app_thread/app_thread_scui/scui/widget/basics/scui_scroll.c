@@ -70,8 +70,8 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle)
     anima_path[3] = scui_map_ease_in_out;
     
     /* 动画轨迹, 动画速度 */
+    scroll->anima_tag = 0;
     for (scui_multi_t idx = 0; idx < 4; idx++) {
-        scroll->anima_tag[idx]   = false;
         scroll->anima_path[idx]  = scroll_maker->anima_path[idx];
         scroll->anima_speed[idx] = scroll_maker->anima_speed[idx];
         if (scroll->anima_path[idx]  == NULL)
@@ -144,12 +144,11 @@ static void scui_scroll_anima_tag(scui_handle_t handle, uint8_t tag)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
     
-    for (scui_multi_t idx = 0; idx < 4; idx++)
-        scroll->anima_tag[idx] = false;
+    scroll->anima_tag = 0;
     
     if (tag < 4)
-        scroll->anima_tag[tag] = true;
-        scroll->anima_tag[3] = true;
+        scroll->anima_tag |= 1 << tag;
+        scroll->anima_tag |= 1 << 3;
 }
 
 /*@brief 滚动控件获取偏移量百分比(自动布局)
@@ -827,7 +826,7 @@ static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_
     /* 确定当前动画的路径 */
     /* 计算当前动画的周期 */
     for (scui_multi_t idx = 0; idx < 4; idx++)
-        if (scroll->anima_tag[idx]) {
+        if (scroll->anima_tag & (1 << idx)) {
             anima.path = scroll->anima_path[idx];
             anima.period = anima.period * 1000 / scroll->anima_speed[idx];
             break;
@@ -1409,6 +1408,13 @@ void scui_scroll_invoke(scui_event_t *event)
         }
         
         uint8_t type = scroll->freedom ? 0x10 : 0x00;
+        
+        scroll->speed_move = 0;
+        if (event->type == scui_event_ptr_move) {
+            if (scroll->dir == scui_opt_dir_hor) scroll->speed_move = scui_abs(event->ptr_v);
+            if (scroll->dir == scui_opt_dir_ver) scroll->speed_move = scui_abs(event->ptr_v);
+        }
+        
         scui_scroll_event_auto(event, type);
         scui_event_mask_over(event);
         break;
@@ -1420,8 +1426,17 @@ void scui_scroll_invoke(scui_event_t *event)
             scroll->mask_springback = false;
             
             uint8_t type = scroll->freedom ? 0x12 : 0x02;
+            
+            /* 惯性滑行: 速度×惯性系数/SCALE_COF=惯性距离 */
+            if (SCUI_INDEV_PTR_INERTIA != 0 && scroll->speed_move != 0) {
+                scui_multi_t dist = scroll->speed_move * SCUI_INDEV_PTR_INERTIA / SCUI_SCALE_COF;
+                if (scroll->dir == scui_opt_dir_hor) scroll->point_ofs.x += dist;
+                if (scroll->dir == scui_opt_dir_ver) scroll->point_ofs.y += dist;
+            }
+            
             scui_scroll_event_auto(event, type);
             
+            scroll->speed_move = 0;
             scui_scroll_anima_tag(event->object, -1);
             widget->state.indev_ptr_hold = false;
             widget->state.indev_enc_hold = false;
