@@ -1452,7 +1452,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_2 = {
 	.sibling[0]                     = SCUI_UI_SCENE_BUTTERFLY,
 	.sibling[1]                     = SCUI_UI_SCENE_SOCCER,
 	.sibling[2]                     = SCUI_UI_SCENE_1,
-	.sibling[3]                     = SCUI_UI_SCENE_6,
+	.sibling[3]                     = SCUI_UI_SCENE_3,
 	.widget.child_num               = 6,
 };
 
@@ -1486,11 +1486,16 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_3 = {
 	.switch_key_id[3]               = scui_event_key_val_left,
 
 	/* 自定义配置 */
+	.widget.style.sched_anima       = true,
+	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
 	.widget.style.indev_key         = true,
 	.widget.myself                  = SCUI_UI_SCENE_3,
 	.widget.event_cb                = scui_ui_scene_3_event_proc,
 	.widget.image                   = scui_image_prj_image_src_watchface_bg_01_bgjpg,
 	.preload                        = 1,
+	.sibling[2]                     = SCUI_UI_SCENE_2,
+	.sibling[3]                     = SCUI_UI_SCENE_6,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
@@ -1514,7 +1519,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
 	.widget.event_cb                = scui_ui_scene_6_event_proc,
 	.widget.image                   = scui_image_prj_image_src_watchface_bg_01_bgjpg,
 	.preload                        = 1,
-	.sibling[2]                     = SCUI_UI_SCENE_2,
+	.sibling[2]                     = SCUI_UI_SCENE_3,
 	.sibling[3]                     = SCUI_UI_SCENE_HOME,
 	.widget.child_num               = 9,
 };

@@ -11,9 +11,24 @@ import numpy
 scui_image_pkg_use_lz4 = True
 scui_image_pkg_use_jpg = True
 scui_image_pkg_use_png = True
+# 像素位宽配置(全局统一,不混用)
+scui_image_alpha_bits = 4       # alpha位宽(1/2/4/8)
+scui_image_index_bits = 8       # index位宽(1/2/4/8)
+scui_image_index_endian = False # index调色板字节序(True=大端, False=小端)
 # 句柄表偏移:图片描述
 scui_image_offset_name = 'SCUI_HANDLE_OFFSET_IMAGE'
 scui_image_offset_value = '0x2000 - 1'
+
+
+# 生成pixel px(grey,按位宽合并)
+def scui_image_pixel_px(grey_list, bits) -> int:
+    pixel_per_byte = 8 // bits
+    mask = (1 << bits) - 1
+    byte = 0
+    for idx in range(pixel_per_byte):
+        if idx < len(grey_list):
+            byte |= (grey_list[idx] & mask) << (8 - bits - idx * bits)
+    return byte
 
 
 # 生成pixel p4(grey)
@@ -21,6 +36,72 @@ def scui_image_pixel_p4(r8_0, g8_0, b8_0, r8_1, g8_1, b8_1) -> int:
     rgb_0 = (r8_0 + g8_0 + b8_0) / 3
     rgb_1 = (r8_1 + g8_1 + b8_1) / 3
     return (int(rgb_0 / 16) << 4) + int(rgb_1 / 16)
+
+
+# 索引图量化:统计rgba出现次数,取前color_num色为调色板
+def scui_image_pixel_index_palette(image, color_num) -> list:
+    pixel_matrix = image.load()
+    width, height = image.size
+    color_count = {}
+    for y in range(height):
+        for x in range(width):
+            r8, g8, b8, a8 = pixel_matrix[x, y]
+            key = (r8, g8, b8, a8)
+            color_count[key] = color_count.get(key, 0) + 1
+    # 按出现次数从高到低排序,取前color_num色,不足用黑色不透明补齐
+    color_sorted = sorted(color_count.items(), key=lambda item: item[1], reverse=True)
+    palette = [key for key, cnt in color_sorted[:color_num]]
+    while len(palette) < color_num:
+        palette.append((0, 0, 0, 0xFF))
+    return palette
+
+
+# 索引图量化:像素取最近色索引,按位宽合并为像素流
+def scui_image_pixel_index(image, palette, bits, endian) -> int:
+    pixel_matrix = image.load()
+    width, height = image.size
+    pixel_stream = []
+    # 调色板表(8565,每项3字节:A+R5G6B5,字节序由endian控制)
+    for pr, pg, pb, pa in palette:
+        r5 = (pr >> 3) & 0x1F
+        g6 = (pg >> 2) & 0x3F
+        b5 = (pb >> 3) & 0x1F
+        rgb8565 = (pa << 16) | (r5 << 11) | (g6 << 5) | (b5 << 0)
+        if endian:
+            pixel_stream.append((rgb8565 >> 16) & 0xFF)
+            pixel_stream.append((rgb8565 >> 8) & 0xFF)
+            pixel_stream.append(rgb8565 & 0xFF)
+        else:
+            pixel_stream.append(rgb8565 & 0xFF)
+            pixel_stream.append((rgb8565 >> 8) & 0xFF)
+            pixel_stream.append((rgb8565 >> 16) & 0xFF)
+    # 最近色索引
+    index_stream = []
+    for y in range(height):
+        for x in range(width):
+            r8, g8, b8, a8 = pixel_matrix[x, y]
+            best_idx = 0
+            best_dist = 0x7FFFFFFF
+            for idx, (pr, pg, pb, pa) in enumerate(palette):
+                dr, dg, db, da = r8 - pr, g8 - pg, b8 - pb, a8 - pa
+                dist = dr * dr + dg * dg + db * db + da * da
+                if dist < best_dist:
+                    best_dist = dist
+                    best_idx = idx
+            index_stream.append(best_idx)
+    # 索引像素流(1/2/4/8 bpp,高位在前)
+    mask = (1 << bits) - 1
+    if bits == 8:
+        pixel_stream.extend(index_stream)
+    else:
+        pixel_per_byte = 8 // bits
+        for idx in range(0, len(index_stream), pixel_per_byte):
+            byte = 0
+            for bit in range(pixel_per_byte):
+                if idx + bit < len(index_stream):
+                    byte |= (index_stream[idx + bit] & mask) << (8 - bits - bit * bits)
+            pixel_stream.append(byte)
+    return pixel_stream
 
 
 # 生成pixel bmp565
@@ -95,7 +176,7 @@ def scui_image_pixel_dither(image, dither):
 
 
 # 生成常规数据流
-def scui_image_pixel_stream(image_raw, image_std, dither) -> ():
+def scui_image_pixel_stream(image_raw, image_std, dither, tag_index=False) -> ():
     # ...
     # 现在我们将剩下的图片都转为RGBA格式的了:image_std
     # 我们需要根据原格式提取目标数据存储到缓存中
@@ -103,16 +184,31 @@ def scui_image_pixel_stream(image_raw, image_std, dither) -> ():
     # 针对被标记为dither的image进行处理
     pixel_matrix = scui_image_pixel_dither(image_std, dither)
     pixel_stream = []
+    # 索引量化:[[颜色表][索引图]]
+    if tag_index:
+        image_std = image_std.convert('RGBA')
+        index_bits = scui_image_index_bits
+        color_num = 1 << index_bits
+        palette = scui_image_pixel_index_palette(image_std, color_num)
+        pixel_stream = scui_image_pixel_index(image_std, palette, index_bits, scui_image_index_endian)
+        scui_pixel_cf = 'scui_pixel_cf_index%d' % index_bits
+        return pixel_stream, scui_pixel_cf
     # 迭代每一个像素点
     if image_raw.mode == 'P':
-        scui_pixel_cf = 'scui_pixel_cf_alpha4'
+        alpha_bits = scui_image_alpha_bits
+        pixel_per_byte = 8 // alpha_bits
+        grey_max = (1 << alpha_bits) - 1
+        scui_pixel_cf = 'scui_pixel_cf_alpha%d' % alpha_bits
         for j in range(image_std.size[1]):
-            for i in range(0, image_std.size[0], 2):
-                r8_0, r8_1 = pixel_matrix[i + 0, j][0], pixel_matrix[i + 1, j][0]
-                g8_0, g8_1 = pixel_matrix[i + 0, j][1], pixel_matrix[i + 1, j][1]
-                b8_0, b8_1 = pixel_matrix[i + 0, j][2], pixel_matrix[i + 1, j][2]
-                rgb8 = scui_image_pixel_p4(r8_0, g8_0, b8_0, r8_1, g8_1, b8_1)
-                pixel_stream.append(rgb8)
+            for i in range(0, image_std.size[0], pixel_per_byte):
+                grey_list = []
+                for k in range(pixel_per_byte):
+                    if i + k < image_std.size[0]:
+                        r8 = pixel_matrix[i + k, j][0]
+                        g8 = pixel_matrix[i + k, j][1]
+                        b8 = pixel_matrix[i + k, j][2]
+                        grey_list.append(int((r8 + g8 + b8) / 3) * grey_max // 255)
+                pixel_stream.append(scui_image_pixel_px(grey_list, alpha_bits))
         # for line in pixel_stream:
         #     print(line)
     if image_raw.mode == 'RGB':
@@ -180,13 +276,15 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
     # 对目标图片集合进行流式处理,提取数据内容
     for file in file_path_list:
         # 每一个迭代都有一个默认的起始状态
-        scui_image_tag_dither = str(file).find(".dither") != -1
+        scui_image_tag_dither = str(file).find('\\dither\\') != -1
+        scui_image_tag_index  = str(file).find('\\index\\') != -1
         scui_image_tag_frame = False
         scui_image_pkg_over = False
         scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
         scui_image_byte = 0
         scui_image_type = 'scui_image_type_bmp'
         scui_pixel_cf = 'scui_pixel_cf_bmp565'
+        pixel_raw_len = 0
         # 通用压缩协议(vedio, gif)
         if file.endswith('.gif'):
             scui_pixel_cf = 'scui_pixel_cf_none'
@@ -245,37 +343,70 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
             if (image_raw.size[0] % 2) != 0:
                 print('image %s width is odd:' % file)
                 return
+        # 自定义打包格式(索引量化优先)
+        if scui_image_tag_index:
+            pixel_stream, scui_pixel_cf = scui_image_pixel_stream(
+                image_raw, image_std, scui_image_tag_dither, scui_image_tag_index)
+            if not pixel_stream:
+                print('can\'t parse data stream')
+                continue
+            scui_image_pkg_over = True
+            # 计算本帧数据长度
+            pixel_bytes = bytearray(pixel_stream)
+            # lz4压缩
+            if scui_image_pkg_use_lz4:
+                scui_image_type = 'scui_image_type_lz4'
+                print('lz4:' + scui_image_tag)
+                pixel_bytes_lz4_com = scui_image_lz4_compress(pixel_bytes)
+                pixel_bytes_lz4_decom = scui_image_lz4_decompress(pixel_bytes_lz4_com)
+                if pixel_bytes != pixel_bytes_lz4_decom or len(pixel_bytes) != len(pixel_bytes_lz4_decom):
+                    print('lz4 compress decompress fail')
+                    continue
+                pixel_bin_len = len(pixel_bytes_lz4_com)
+                pixel_raw_len = len(pixel_bytes)
+                scui_image_parser_bin.write(pixel_bytes_lz4_com)
+                scui_image_byte = pixel_bytes_lz4_com
+            else:
+                scui_image_type = 'scui_image_type_idx'
+                print('raw:' + scui_image_tag)
+                pixel_bin_len = len(pixel_bytes)
+                pixel_raw_len = len(pixel_bytes)
+                scui_image_parser_bin.write(pixel_bytes)
+                scui_image_byte = pixel_bytes
         # 通用压缩协议
-        if scui_image_pkg_use_jpg:
-            if file.endswith('.jpg') or file.endswith('.jpeg'):
-                scui_pixel_cf = 'scui_pixel_cf_bmp565'
-                scui_image_type = 'scui_image_type_jpg'
-                scui_image_pkg_over = True
-                # 直接原模原样的copy即可
-                with open(file, mode='rb') as file_raw:
-                    pixel_stream = file_raw.read()
-                    pixel_bin_len = len(pixel_stream)
-                    pixel_raw_len = image_std.size[0] * image_std.size[1] * 2
-                    scui_image_parser_bin.write(pixel_stream)
-                    scui_image_byte = pixel_stream
-                    print('jpg:' + scui_image_tag)
-        # 通用压缩协议
-        if scui_image_pkg_use_png:
-            if file.endswith('.png'):
-                scui_pixel_cf = 'scui_pixel_cf_bmp8565'
-                scui_image_type = 'scui_image_type_png'
-                scui_image_pkg_over = True
-                # 直接原模原样的copy即可
-                with open(file, mode='rb') as file_raw:
-                    pixel_stream = file_raw.read()
-                    pixel_bin_len = len(pixel_stream)
-                    pixel_raw_len = image_std.size[0] * image_std.size[1] * 3
-                    scui_image_parser_bin.write(pixel_stream)
-                    scui_image_byte = pixel_stream
-                    print('png:' + scui_image_tag)
-        # 自定义打包格式
         if not scui_image_pkg_over:
-            pixel_stream, scui_pixel_cf = scui_image_pixel_stream(image_raw, image_std, scui_image_tag_dither)
+            if scui_image_pkg_use_jpg:
+                if file.endswith('.jpg') or file.endswith('.jpeg'):
+                    scui_pixel_cf = 'scui_pixel_cf_bmp565'
+                    scui_image_type = 'scui_image_type_jpg'
+                    scui_image_pkg_over = True
+                    # 直接原模原样的copy即可
+                    with open(file, mode='rb') as file_raw:
+                        pixel_stream = file_raw.read()
+                        pixel_bin_len = len(pixel_stream)
+                        pixel_raw_len = image_std.size[0] * image_std.size[1] * 2
+                        scui_image_parser_bin.write(pixel_stream)
+                        scui_image_byte = pixel_stream
+                        print('jpg:' + scui_image_tag)
+        # 通用压缩协议
+        if not scui_image_pkg_over:
+            if scui_image_pkg_use_png:
+                if file.endswith('.png'):
+                    scui_pixel_cf = 'scui_pixel_cf_bmp8565'
+                    scui_image_type = 'scui_image_type_png'
+                    scui_image_pkg_over = True
+                    # 直接原模原样的copy即可
+                    with open(file, mode='rb') as file_raw:
+                        pixel_stream = file_raw.read()
+                        pixel_bin_len = len(pixel_stream)
+                        pixel_raw_len = image_std.size[0] * image_std.size[1] * 3
+                        scui_image_parser_bin.write(pixel_stream)
+                        scui_image_byte = pixel_stream
+                        print('png:' + scui_image_tag)
+        # 自定义打包格式(dither等)
+        if not scui_image_pkg_over:
+            pixel_stream, scui_pixel_cf = scui_image_pixel_stream(
+                image_raw, image_std, scui_image_tag_dither, scui_image_tag_index)
             # 不可解析的数据流
             if not pixel_stream:
                 print('can\'t parse data stream')
@@ -307,6 +438,8 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
         if not scui_image_tag_frame:
             scui_image_pixel_width = image_std.size[0]
             scui_image_pixel_height = image_std.size[1]
+        # 内存大小(解压后/原始数据),各分支自行设置pixel_raw_len
+        scui_image_pixel_size_mem = pixel_raw_len
         # 写入结构, 更新pixel_offset
         scui_image_struct = ''
         scui_image_struct += 'static const scui_image_t %s = {\n' % scui_image_tag
@@ -316,6 +449,7 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
         scui_image_struct += '\t.pixel.height\t\t = %s,\n' % hex(scui_image_pixel_height)
         scui_image_struct += '\t.pixel.data_bin\t\t = %s,\n' % hex(pixel_bin_ofs)
         scui_image_struct += '\t.pixel.size_bin\t\t = %s,\n' % hex(pixel_bin_len)
+        scui_image_struct += '\t.pixel.size_mem\t\t = %s,\n' % hex(scui_image_pixel_size_mem)
         scui_image_struct += '};\n\n'
         scui_image_parser_c.write(scui_image_struct)
         # 我们生成一个子记录,用于外界解析时使用(内部只使用全部bin)

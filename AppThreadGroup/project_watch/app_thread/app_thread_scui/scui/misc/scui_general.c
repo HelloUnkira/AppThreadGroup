@@ -740,6 +740,42 @@ uint8_t scui_pixel_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
     }
 }
 
+/*@brief 位流取原始索引值(索引图使用)
+ *@param bitmap 位流字节
+ *@param bpp    位宽
+ *@param bpp_x  位序号(0开始,高位在前)
+ *@retval 原始索引值
+ */
+uint8_t scui_pixel_index_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
+{
+    SCUI_ASSERT(bpp * bpp_x < 8);
+    
+    /* 高位在前,低位在后 */
+    const uint16_t mask_1 = 0x0001;
+    const uint16_t mask_2 = 0x0003;
+    const uint16_t mask_4 = 0x000F;
+    const uint16_t mask_8 = 0x00FF;
+    uint8_t ofs = 0, bpp_idx = 0;
+    
+    switch (bpp) {
+    /* 高位在前,低位在后 */
+    case 1: ofs = 7 - bpp_x * 1;
+        bpp_idx = (bitmap & (mask_1 << ofs)) >> ofs;
+        return bpp_idx;
+    case 2: ofs = 6 - bpp_x * 2;
+        bpp_idx = (bitmap & (mask_2 << ofs)) >> ofs;
+        return bpp_idx;
+    case 4: ofs = 4 - bpp_x * 4;
+        bpp_idx = (bitmap & (mask_4 << ofs)) >> ofs;
+        return bpp_idx;
+    case 8: ofs = 0 - bpp_x * 0;
+        bpp_idx = (bitmap & (mask_8 << ofs)) >> ofs;
+        return bpp_idx;
+    default: SCUI_ASSERT(false);
+        return 0;
+    }
+}
+
 /*@brief 透明度混合撤销
  *@param alpha1 透明度1
  *@param alpha2 透明度2

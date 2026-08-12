@@ -167,6 +167,7 @@ void scui_image_src_read(scui_image_t *image, void *data)
     
     bool image_type_raw = false;
     image_type_raw = image_type_raw || image->type == scui_image_type_bmp;
+    image_type_raw = image_type_raw || image->type == scui_image_type_idx;
     image_type_raw = image_type_raw || image->type == scui_image_type_gif;
     image_type_raw = image_type_raw || image->type == scui_image_type_lottie;
     

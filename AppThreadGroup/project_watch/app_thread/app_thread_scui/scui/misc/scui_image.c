@@ -25,6 +25,7 @@ void scui_image_make(scui_image_t *image, scui_area_t *area)
     scui_multi_t image_size = image->pixel.width * image->pixel.height * image_bits / 8 + image_rem;
     image->pixel.data_bin   = (uintptr_t)SCUI_MEM_ALLOC(scui_mem_type_graph, image_size);
     image->pixel.size_bin   = image_size;
+    image->pixel.size_mem   = image_size;
     
     /* 初始构造时,清空资源信息 */
     scui_draw_byte_new(true, image->pixel.data_bin, 0x00, image->pixel.size_bin);
@@ -41,6 +42,7 @@ void scui_image_burn(scui_image_t *image)
         
         image->pixel.data_bin = 0;
         image->pixel.size_bin = 0;
+        image->pixel.size_mem = 0;
     }
 }
 
@@ -57,6 +59,7 @@ void scui_image_by_surface(scui_image_t *image, scui_surface_t *surface)
     image->pixel.height = surface->ver_res;
     image->pixel.data_bin = surface->pixel;
     image->pixel.size_bin = surface->stride * surface->ver_res;
+    image->pixel.size_mem = surface->stride * surface->ver_res;
 }
 
 /*@brief 图像转为画布
@@ -224,7 +227,7 @@ scui_area_t scui_image_area(scui_handle_t handle)
  */
 uintptr_t scui_image_size(scui_image_t *image)
 {
-    return image->pixel.width * image->pixel.height * scui_pixel_bits(image->format) / 8;
+    return image->pixel.size_mem;
 }
 
 /*@brief 统计图像列表排列尺寸

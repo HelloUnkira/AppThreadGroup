@@ -368,6 +368,55 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
         return;
     }
     
+    /* pixel cover:(索引图取色) */
+    if (src_surface->format == scui_pixel_cf_index1 ||
+        src_surface->format == scui_pixel_cf_index2 ||
+        src_surface->format == scui_pixel_cf_index4 ||
+        src_surface->format == scui_pixel_cf_index8) {
+        scui_multi_t src_bits  = scui_pixel_bits(src_surface->format);
+        scui_multi_t dst_ofs_p = scui_surface_point_ofs(dst_surface, dst_clip_v.y, dst_clip_v.x);
+        scui_multi_t src_ofs_p = scui_surface_point_ofs(src_surface, src_clip_v.y, src_clip_v.x);
+        dst_addr = dst_surface->pixel + dst_ofs_p * dst_surface->pbyte;
+        src_addr = src_surface->pixel;
+        
+        /* 颜色表在索引图前面 */
+        scui_multi_t bits_num   = 8 / src_bits;
+        scui_multi_t index_len  = scui_max(1 << src_bits, 2);
+        scui_multi_t index_byte = scui_pixel_byte(scui_pixel_cf_bmp8565);
+        
+        /* 调色板表+索引图 */
+        uint8_t *index_table = src_addr;
+        src_addr += index_len * index_byte;
+        
+        /* 图像颜色过滤 */
+        scui_color_wt_t filter = 0;
+        scui_pixel_by_color(dst_surface->format, &filter, src_color.color_f);
+        
+        for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
+        for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
+            uint8_t *dst_ofs = dst_addr  + scui_surface_pbyte_ofs(dst_surface, idx_line, idx_item);
+            uint32_t idx_ofs = src_ofs_p + scui_surface_point_ofs(src_surface, idx_line, idx_item);
+            uint8_t *src_ofs = src_addr  + idx_ofs / bits_num;
+            
+            /* 取出索引值(高位在前,低位在后) */
+            scui_color8565_t index_c = {0};
+            uint8_t index = scui_pixel_index_bpp_x(*src_ofs, src_bits, idx_ofs % bits_num);
+            index_c.byte[0] = index_table[index * index_byte + 0];
+            index_c.byte[1] = index_table[index * index_byte + 1];
+            index_c.byte[2] = index_table[index * index_byte + 2];
+            
+            /* 过滤色调 */
+            scui_color_wt_t color = 0;
+            scui_pixel_by_cf(dst_surface->format, &color, &index_c);
+            if (src_color.filter && color == filter)
+                continue;
+            
+            scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                scui_pixel_cf_bmp8565, &index_c, src_surface->alpha);
+        }
+        return;
+    }
+    
     SCUI_LOG_ERROR("unsupported blend:");
     SCUI_LOG_ERROR("dst_surface format:%x", dst_surface->format);
     SCUI_LOG_ERROR("src_surface format:%x", src_surface->format);

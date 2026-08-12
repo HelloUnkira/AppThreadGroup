@@ -5,6 +5,7 @@
  */
 typedef enum {
     scui_image_type_bmp = 0,    /* 默认图片(无压缩) */
+    scui_image_type_idx,        /* 索引图片(无压缩) */
     scui_image_type_lz4,        /* 压缩图片(lz4,只压缩bitmap) */
     scui_image_type_jpg,        /* JPG压缩图片(原图) */
     scui_image_type_png,        /* PNG压缩图片(原图) */
@@ -22,6 +23,7 @@ typedef struct {
     uintptr_t height;       /* 图片高 */
     uintptr_t data_bin;     /* 图片数据源(外存源数据流偏移) */
     uintptr_t size_bin;     /* 图片数据源(外存源大小) */
+    uintptr_t size_mem;     /* 图片数据(内存解压后大小) */
 } scui_image_pixel_t;
 
 /*@brief 图片数据

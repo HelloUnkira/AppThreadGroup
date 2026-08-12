@@ -138,6 +138,7 @@ def scui_cwf_json_parser_image_info(image_path, c_file_list, c_data_offset):
         scui_image_height = 0
         scui_image_width = 0
         scui_image_size = 0
+        scui_image_size_mem = 0
         scui_image_data = 0
         # 对所有的image info统计
         with open(os.path.join(image_path, file_name), mode='r', encoding='utf-8') as file:
@@ -169,17 +170,21 @@ def scui_cwf_json_parser_image_info(image_path, c_file_list, c_data_offset):
                 if re.search(r'\.pixel\.size_bin', line):
                     payload = line.split('=')[1].split(',')[0].strip()
                     scui_image_size = int(payload[2:], 16)
+                if re.search(r'\.pixel\.size_mem', line):
+                    payload = line.split('=')[1].split(',')[0].strip()
+                    scui_image_size_mem = int(payload[2:], 16)
         scui_image_data = c_data_offset
         c_data_offset += scui_image_size
         # 简单过滤一下
         if scui_image_format == 0 or scui_image_height == 0 or scui_image_width == 0 or scui_image_size == 0:
             raise ValueError('incomplete image info %s' % file_name)
-        # 打包成cwf约定结构 'u8u8u32u32u32u32'
+        # 打包成cwf约定结构 'u8u8u32u32u32u32u32'
         image_info_bytes.extend(scui_image_format.to_bytes(byteorder='little', length=1))
         image_info_bytes.extend(scui_image_type.to_bytes(byteorder='little', length=1))
         image_info_bytes.extend(scui_image_height.to_bytes(byteorder='little', length=4))
         image_info_bytes.extend(scui_image_width.to_bytes(byteorder='little', length=4))
         image_info_bytes.extend(scui_image_size.to_bytes(byteorder='little', length=4))
+        image_info_bytes.extend(scui_image_size_mem.to_bytes(byteorder='little', length=4))
         image_info_bytes.extend(scui_image_data.to_bytes(byteorder='little', length=4))
     # 写入json文件到达缓存目标文件
     with open(scui_cwf_json_parser_tmp_bin[1], mode='wb') as file:
@@ -258,7 +263,7 @@ def scui_cwf_json_parser():
     c_file_list = scui_cwf_json_parser_image_collect(img_path)
     json_bytes = scui_cwf_json_parser_json(src_path, dst_path, c_file_list, json_name)
     # image info 和 image data整理后转入临时文件
-    c_data_offset = 28 + json_bytes + len(c_file_list) * 18
+    c_data_offset = 28 + json_bytes + len(c_file_list) * 22
     scui_cwf_json_parser_image_info(img_path, c_file_list, c_data_offset)
     scui_cwf_json_parser_image_data(img_path, c_file_list)
     # 打包三个文件变成一个

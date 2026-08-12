@@ -186,10 +186,14 @@ typedef enum {
     scui_pixel_cf_alpha2    = 0x0100 + 1 * 8 / 4,   /* alpha */
     scui_pixel_cf_alpha4    = 0x0100 + 1 * 8 / 2,   /* alpha */
     scui_pixel_cf_alpha8    = 0x0100 + 1 * 8,       /* alpha */
-    scui_pixel_cf_bmp565    = 0x0200 + 2 * 8,       /* bitmap */
-    scui_pixel_cf_bmp888    = 0x0200 + 3 * 8,       /* bitmap */
-    scui_pixel_cf_bmp8565   = 0x0300 + 3 * 8,       /* bitmap */
-    scui_pixel_cf_bmp8888   = 0x0300 + 4 * 8,       /* bitmap */
+    scui_pixel_cf_index1    = 0x0200 + 1 * 8 / 8,   /* index */
+    scui_pixel_cf_index2    = 0x0200 + 1 * 8 / 4,   /* index */
+    scui_pixel_cf_index4    = 0x0200 + 1 * 8 / 2,   /* index */
+    scui_pixel_cf_index8    = 0x0200 + 1 * 8,       /* index */
+    scui_pixel_cf_bmp565    = 0x0300 + 2 * 8,       /* bitmap */
+    scui_pixel_cf_bmp888    = 0x0300 + 3 * 8,       /* bitmap */
+    scui_pixel_cf_bmp8565   = 0x0400 + 3 * 8,       /* bitmap */
+    scui_pixel_cf_bmp8888   = 0x0400 + 4 * 8,       /* bitmap */
     scui_pixel_cf_all,
 } scui_pixel_cf_t;
 
@@ -199,9 +203,15 @@ static inline scui_coord_t scui_pixel_bits(scui_pixel_cf_t cf)
 static inline scui_coord_t scui_pixel_byte(scui_pixel_cf_t cf)
 {return (cf & scui_pixel_cf_bits_mask) >> 3;}
 static inline bool scui_pixel_type_bmp(scui_pixel_cf_t cf)
-{return (cf & scui_pixel_cf_type_mask) != 0x0100;}
+{return (cf & scui_pixel_cf_type_mask) == 0x0300 ||
+        (cf & scui_pixel_cf_type_mask) == 0x0400;}
+static inline bool scui_pixel_type_alpha(scui_pixel_cf_t cf)
+{return (cf & scui_pixel_cf_type_mask) == 0x0100;}
+static inline bool scui_pixel_type_index(scui_pixel_cf_t cf)
+{return (cf & scui_pixel_cf_type_mask) == 0x0200;}
 static inline bool scui_pixel_alpha_in(scui_pixel_cf_t cf)
-{return (cf & scui_pixel_cf_type_mask) != 0x0200;}
+{return (cf & scui_pixel_cf_type_mask) == 0x0100 ||
+        (cf & scui_pixel_cf_type_mask) == 0x0400;}
 
 /*@brief 实体抽象:画布
  *       画布是块独立缓冲区或共享绘制画布的缓冲区
@@ -368,6 +378,14 @@ uint8_t scui_pixel_grey_by(scui_pixel_cf_t cf, void *pixel);
  *@retval 灰度值
  */
 uint8_t scui_pixel_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x);
+
+/*@brief 位流取原始索引值(索引图使用)
+ *@param bitmap 位图
+ *@param bpp    位宽
+ *@param bpp_x  偏移值
+ *@retval 原始索引值
+ */
+uint8_t scui_pixel_index_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x);
 
 /*@brief 透明度混合撤销
  *@param alpha1 透明度1
