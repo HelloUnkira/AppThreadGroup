@@ -6,7 +6,7 @@
  */
 
 typedef enum {
-	SCUI_HANDLE_OFFSET_LANG = 0x4000 - 1,
+	SCUI_HANDLE_OFFSET_LANG = 0x5000 - 1,
 	SCUI_LANG_0X0000,	/* 扫码下载APP或扫码配对 */
 	SCUI_LANG_0X0001,	/* 是否绑定？ */
 	SCUI_LANG_0X0002,	/* 绑定成功 */

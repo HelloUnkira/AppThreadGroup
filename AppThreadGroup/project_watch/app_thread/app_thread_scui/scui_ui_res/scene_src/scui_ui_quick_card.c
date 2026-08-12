@@ -33,10 +33,10 @@ static void scui_ui_scene_quick_card_item_event(scui_event_t *event)
         scui_area_t   clip = scui_widget_area(event->object);
         scui_color_t  color = {.color.full = 0xFF282828,};
         scui_handle_t image[4] = {
-            scui_image_prj_image_src_repeat_card_04_r36_1bmp,
-            scui_image_prj_image_src_repeat_card_05_r36_2bmp,
-            scui_image_prj_image_src_repeat_card_06_r36_3bmp,
-            scui_image_prj_image_src_repeat_card_07_r36_4bmp,
+            scui_image_prj_repeat_card_04_r36_1jpg,
+            scui_image_prj_repeat_card_05_r36_2jpg,
+            scui_image_prj_repeat_card_06_r36_3jpg,
+            scui_image_prj_repeat_card_07_r36_4jpg,
         };
         scui_custom_data_t custom_data;
         scui_custom_data_config_image_crect4(&custom_data, image, color, -1);
@@ -292,7 +292,7 @@ void scui_ui_scene_quick_card_event_proc(scui_event_t *event)
         scui_area_t clip = scui_widget_clip(event->object);
         clip.x += 4; clip.y += 4;
         scui_widget_draw_image(event->object, &clip,
-    scui_image_prj_image_src_03_activity_ring_big_max_03_bj_01bmp,
+    scui_image_prj_03_activity_ring_big_max_03_bj_01bmp,
     NULL,
     SCUI_COLOR_MAKE32(true, 0xFF000000, 0xFF404040));
         #endif

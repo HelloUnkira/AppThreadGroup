@@ -14,7 +14,7 @@ typedef enum {
 } scui_font_lang_t;
 
 typedef enum {
-	SCUI_HANDLE_OFFSET_FONT = 0x3000 - 1,
+	SCUI_HANDLE_OFFSET_FONT = 0x4000 - 1,
 	scui_font_ascii_8bin, // 0x3000
 	scui_font_ascii_12bin, // 0x3001
 	scui_font_ascii_16bin, // 0x3002

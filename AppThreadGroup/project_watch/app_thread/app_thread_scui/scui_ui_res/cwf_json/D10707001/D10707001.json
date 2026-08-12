@@ -3,13 +3,13 @@
     "layout": [
         {
             "type":     "scui_cwf_json_type_img_preview",
-            "image_src": ["cwf_image_perview_01_00bmp"]
+            "image_src": ["cwf_perview_01_00jpg"]
         },
         {
             "type":     "scui_cwf_json_type_img_simple",
             "x":        0,
             "y":        0,
-            "image_src": ["cwf_image_bg_01_3bmp"]
+            "image_src": ["cwf_bg_01_3jpg"]
         },
         
         {
@@ -24,9 +24,9 @@
             "sy":        233,
             "s_cy":      200,
             "image_src": [
-                "cwf_image_hour_01_00png",
-                "cwf_image_min_01_00png",
-                "cwf_image_sec_01_00png"
+                "cwf_hour_01_00png",
+                "cwf_min_01_00png",
+                "cwf_sec_01_00png"
             ]
         }
     ]

@@ -3,7 +3,7 @@
     "layout": [
         {
             "type":     "scui_cwf_json_type_img_preview",
-            "image_src": ["cwf_image_preview_01_1bmp"]
+            "image_src": ["cwf_preview_01_1jpg"]
         },
         
         {
@@ -13,16 +13,16 @@
             "bits":     0,
             "span":     0,
             "image_src": [
-                "cwf_image_num_hour_min_04_03bmp",
-                "cwf_image_num_hour_min_05_04bmp",
-                "cwf_image_num_hour_min_06_05bmp",
-                "cwf_image_num_hour_min_07_06bmp",
-                "cwf_image_num_hour_min_08_07bmp",
-                "cwf_image_num_hour_min_09_08bmp",
-                "cwf_image_num_hour_min_10_09bmp",
-                "cwf_image_num_hour_min_11_10bmp",
-                "cwf_image_num_hour_min_12_11bmp",
-                "cwf_image_num_hour_min_13_12bmp"
+                "cwf_num_hour_min_04_03jpg",
+                "cwf_num_hour_min_05_04jpg",
+                "cwf_num_hour_min_06_05jpg",
+                "cwf_num_hour_min_07_06jpg",
+                "cwf_num_hour_min_08_07jpg",
+                "cwf_num_hour_min_09_08jpg",
+                "cwf_num_hour_min_10_09jpg",
+                "cwf_num_hour_min_11_10jpg",
+                "cwf_num_hour_min_12_11jpg",
+                "cwf_num_hour_min_13_12jpg"
             ]
         },
         {
@@ -32,16 +32,16 @@
             "bits":     0,
             "span":     0,
             "image_src": [
-                "cwf_image_num_hour_min_04_03bmp",
-                "cwf_image_num_hour_min_05_04bmp",
-                "cwf_image_num_hour_min_06_05bmp",
-                "cwf_image_num_hour_min_07_06bmp",
-                "cwf_image_num_hour_min_08_07bmp",
-                "cwf_image_num_hour_min_09_08bmp",
-                "cwf_image_num_hour_min_10_09bmp",
-                "cwf_image_num_hour_min_11_10bmp",
-                "cwf_image_num_hour_min_12_11bmp",
-                "cwf_image_num_hour_min_13_12bmp"
+                "cwf_num_hour_min_04_03jpg",
+                "cwf_num_hour_min_05_04jpg",
+                "cwf_num_hour_min_06_05jpg",
+                "cwf_num_hour_min_07_06jpg",
+                "cwf_num_hour_min_08_07jpg",
+                "cwf_num_hour_min_09_08jpg",
+                "cwf_num_hour_min_10_09jpg",
+                "cwf_num_hour_min_11_10jpg",
+                "cwf_num_hour_min_12_11jpg",
+                "cwf_num_hour_min_13_12jpg"
             ]
         }
     ]

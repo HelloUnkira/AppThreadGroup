@@ -63,24 +63,24 @@ static struct {
  */
 static void scui_ui_scene_butterfly_image_update(void)
 {
-    scui_ui_res_local->image_antenna = scui_image_prj_image_src_00_3d_Butterfly_Antennapng;
-    scui_ui_res_local->image_trunk   = scui_image_prj_image_src_00_3d_Butterfly_BodyHalfpng;
+    scui_ui_res_local->image_antenna = scui_image_prj_00_3d_Butterfly_Antennapng;
+    scui_ui_res_local->image_trunk   = scui_image_prj_00_3d_Butterfly_BodyHalfpng;
 
     if (scui_ui_res_local->image_wing_type == 0) {
-        scui_ui_res_local->image_wing[0] = scui_image_prj_image_src_00_3d_Butterfly_SwingUp0png;
-        scui_ui_res_local->image_wing[1] = scui_image_prj_image_src_00_3d_Butterfly_SwingDown0png;
+        scui_ui_res_local->image_wing[0] = scui_image_prj_00_3d_Butterfly_SwingUp0png;
+        scui_ui_res_local->image_wing[1] = scui_image_prj_00_3d_Butterfly_SwingDown0png;
     }
     if (scui_ui_res_local->image_wing_type == 1) {
-        scui_ui_res_local->image_wing[0] = scui_image_prj_image_src_00_3d_Butterfly_SwingUp1png;
-        scui_ui_res_local->image_wing[1] = scui_image_prj_image_src_00_3d_Butterfly_SwingDown1png;
+        scui_ui_res_local->image_wing[0] = scui_image_prj_00_3d_Butterfly_SwingUp1png;
+        scui_ui_res_local->image_wing[1] = scui_image_prj_00_3d_Butterfly_SwingDown1png;
     }
     if (scui_ui_res_local->image_wing_type == 2) {
-        scui_ui_res_local->image_wing[0] = scui_image_prj_image_src_00_3d_Butterfly_SwingUp2png;
-        scui_ui_res_local->image_wing[1] = scui_image_prj_image_src_00_3d_Butterfly_SwingDown2png;
+        scui_ui_res_local->image_wing[0] = scui_image_prj_00_3d_Butterfly_SwingUp2png;
+        scui_ui_res_local->image_wing[1] = scui_image_prj_00_3d_Butterfly_SwingDown2png;
     }
     if (scui_ui_res_local->image_wing_type == 3) {
-        scui_ui_res_local->image_wing[0] = scui_image_prj_image_src_00_3d_Butterfly_SwingUp3png;
-        scui_ui_res_local->image_wing[1] = scui_image_prj_image_src_00_3d_Butterfly_SwingDown3png;
+        scui_ui_res_local->image_wing[0] = scui_image_prj_00_3d_Butterfly_SwingUp3png;
+        scui_ui_res_local->image_wing[1] = scui_image_prj_00_3d_Butterfly_SwingDown3png;
     }
 }
 

@@ -86,6 +86,11 @@ def scui_cwf_json_parser_proto():
              json_parser['version'][1], json_parser['version'][0]))
         
         file.write('typedef enum {\n')
+        for idx, item in enumerate(json_parser['scui_cwf_json_pixel_cf']):
+            file.write('\t%s%s,\n' % (item, ' = 0' if idx == 0 else ''))
+        file.write('} scui_cwf_json_pixel_cf_t;\n\n')
+        
+        file.write('typedef enum {\n')
         for idx, item in enumerate(json_parser['scui_cwf_json_image_cf']):
             file.write('\t%s%s,\n' % (item, ' = 0' if idx == 0 else ''))
         file.write('} scui_cwf_json_image_cf_t;\n\n')
@@ -130,8 +135,24 @@ def scui_cwf_json_parser_json(src_path, dst_path, c_file_list, json_name):
 
 # 子流程:image info处理
 def scui_cwf_json_parser_image_info(image_path, c_file_list, c_data_offset):
-    image_info_bytes = bytearray()
+    # 打开协议json, 获取像素格式/图片类型枚举映射
+    parser_path = os.path.join(os.path.dirname(__file__), 'scui_cwf_json_parser.json')
+    with open(parser_path, mode='r', encoding='utf-8') as file:
+        json_parser = json.load(file)
+    pixel_cf_list = json_parser['scui_cwf_json_pixel_cf']
+    image_cf_list = json_parser['scui_cwf_json_image_cf']
+    # 构建 scui_pixel_cf_xxx -> scui_cwf_json_pixel_cf_xxx 索引映射
+    pixel_cf_map = {}
+    for idx, item in enumerate(pixel_cf_list):
+        tag = 'scui_pixel_cf_' + item[len('scui_cwf_json_pixel_cf_'):]
+        pixel_cf_map[tag] = idx
+    # 构建 scui_image_type_xxx -> scui_cwf_json_image_cf_xxx 索引映射
+    image_cf_map = {}
+    for idx, item in enumerate(image_cf_list):
+        tag = 'scui_image_type_' + item[len('scui_cwf_json_image_cf_'):]
+        image_cf_map[tag] = idx
     # 对所有的image info统计
+    image_info_bytes = bytearray()
     for file_name in c_file_list:
         scui_image_format = 0
         scui_image_type = 0
@@ -144,23 +165,13 @@ def scui_cwf_json_parser_image_info(image_path, c_file_list, c_data_offset):
         with open(os.path.join(image_path, file_name), mode='r', encoding='utf-8') as file:
             for line in file.readlines():
                 if re.search(r'\.format', line):
-                    payload = line.split('=')[1].split(',')[0]
-                    if re.search('scui_pixel_cf_alpha4', payload):
-                        scui_image_format = 1
-                    if re.search('scui_pixel_cf_bmp565', payload):
-                        scui_image_format = 3
-                    if re.search('scui_pixel_cf_bmp8565', payload):
-                        scui_image_format = 5
+                    payload = line.split('=')[1].split(',')[0].strip()
+                    if payload in pixel_cf_map:
+                        scui_image_format = pixel_cf_map[payload]
                 if re.search(r'\.type', line):
-                    payload = line.split('=')[1].split(',')[0]
-                    if re.search('scui_image_type_bmp', payload):
-                        scui_image_type = 0
-                    if re.search('scui_image_type_lz4', payload):
-                        scui_image_type = 1
-                    if re.search('scui_image_type_jpg', payload):
-                        scui_image_type = 2
-                    if re.search('scui_image_type_png', payload):
-                        scui_image_type = 3
+                    payload = line.split('=')[1].split(',')[0].strip()
+                    if payload in image_cf_map:
+                        scui_image_type = image_cf_map[payload]
                 if re.search(r'\.pixel\.height', line):
                     payload = line.split('=')[1].split(',')[0].strip()
                     scui_image_height = int(payload[2:], 16)

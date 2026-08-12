@@ -26,14 +26,14 @@ void scui_ui_scene_3_event_proc(scui_event_t *event)
     #if 1 /* test:index image */
     case scui_event_draw_graph: {
         
-        scui_handle_t heart_src = scui_image_prj_image_src_00_theme_icon_00_heart_06_05png;
-        scui_handle_t heart_idx = scui_image_prj_image_src_00_theme_icon_00_heart_index_06_05png;
-        scui_handle_t spo2_src  = scui_image_prj_image_src_00_theme_icon_01_spo2_06_05png;
-        scui_handle_t spo2_idx  = scui_image_prj_image_src_00_theme_icon_01_spo2_index_06_05png;
-        scui_handle_t sun_src   = scui_image_prj_image_src_02_weather_icon_weather_big_00_sun_01_00bmp;
-        scui_handle_t sun_idx   = scui_image_prj_image_src_02_weather_icon_weather_big_00_sun_index_01_00bmp;
-        scui_handle_t bfly_src  = scui_image_prj_image_src_00_3d_Butterfly_SwingDown0png;
-        scui_handle_t bfly_idx  = scui_image_prj_image_src_00_3d_Butterfly_index_SwingDown0png;
+        scui_handle_t heart_src = scui_image_prj_00_theme_icon_00_heart_06_05png;
+        scui_handle_t heart_idx = scui_image_prj_00_theme_icon_00_heart_index_06_05png;
+        scui_handle_t spo2_src  = scui_image_prj_00_theme_icon_01_spo2_06_05png;
+        scui_handle_t spo2_idx  = scui_image_prj_00_theme_icon_01_spo2_index_06_05png;
+        scui_handle_t sun_src   = scui_image_prj_02_weather_icon_weather_big_00_sun_01_00jpg;
+        scui_handle_t sun_idx   = scui_image_prj_02_weather_icon_weather_big_00_sun_index_01_00jpg;
+        scui_handle_t bfly_src  = scui_image_prj_00_3d_Butterfly_SwingDown0png;
+        scui_handle_t bfly_idx  = scui_image_prj_00_3d_Butterfly_index_SwingDown0png;
         
         scui_coord_t x0 = SCUI_HOR_RES * 1 / 8;     /* 原图列 */
         scui_coord_t x1 = SCUI_HOR_RES * 5 / 8;     /* index列 */

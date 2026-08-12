@@ -437,7 +437,7 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
         scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
         scui_window_local_res_get(event->object, &scui_ui_res_local);
         
-        scui_widget_image_set(event->object, scui_image_prj_image_src_08_stopwatch_01_bgbmp);
+        scui_widget_image_set(event->object, scui_image_prj_08_stopwatch_01_bgjpg);
         break;
     case scui_event_destroy:
         break;

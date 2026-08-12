@@ -19,21 +19,21 @@ void scui_ui_mask_all_event_proc(scui_event_t *event)
         
         // 内存真的不够绘制遮罩
         
-        scui_handle_t image_mask_u = scui_image_prj_image_src_repeat_mask_06_big_uppng;
+        scui_handle_t image_mask_u = scui_image_prj_repeat_mask_06_big_uppng;
         clip.w = scui_image_w(image_mask_u);
         clip.h = scui_image_h(image_mask_u);
         clip.x = (SCUI_HOR_RES - clip.w) / 2;
         clip.y = 0;
         // scui_widget_draw_image(event->object, &clip, SCUI_COLOR_UNUSED, image_mask_u, NULL);
         
-        scui_handle_t image_mask_d = scui_image_prj_image_src_repeat_mask_05_big_downpng;
+        scui_handle_t image_mask_d = scui_image_prj_repeat_mask_05_big_downpng;
         clip.w = scui_image_w(image_mask_d);
         clip.h = scui_image_h(image_mask_d);
         clip.x = (SCUI_HOR_RES - clip.w) / 2;
         clip.y = (SCUI_VER_RES - clip.h);
         // scui_widget_draw_image(event->object, &clip, SCUI_COLOR_UNUSED, image_mask_d, NULL);
         
-        scui_handle_t image_mask_a = scui_image_prj_image_src_repeat_mask_12_all_maskpng;
+        scui_handle_t image_mask_a = scui_image_prj_repeat_mask_12_all_maskpng;
         clip.w = scui_image_w(image_mask_a);
         clip.h = scui_image_h(image_mask_a);
         clip.x = (SCUI_HOR_RES - clip.w) / 2;

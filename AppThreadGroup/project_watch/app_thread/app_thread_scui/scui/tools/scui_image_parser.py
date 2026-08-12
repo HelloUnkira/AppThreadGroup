@@ -240,15 +240,32 @@ def scui_image_pixel_stream(image_raw, image_std, dither, tag_index=False) -> ()
     return pixel_stream, scui_pixel_cf
 
 
+# 图片宽度应为偶数, 奇数宽度跳过(索引/位操作需要偶数宽度)
+def scui_image_width_even(file):
+    # 非图片格式(lottie.json/mp4等)无宽度概念, 直接放行
+    if not file.lower().endswith(('.bmp', '.jpg', '.jpeg', '.png', '.gif')):
+        return True
+    try:
+        import PIL.Image as Image
+        image_raw = Image.open(file)
+        even = (image_raw.size[0] % 2) == 0
+        image_raw.close()
+        return even
+    except Exception:
+        return False
+
+
 # 流式处理所有image文件
 # 头文件保存目标数据描述表,源文件保存数据源,二进制文件保存源文件的流式版本
-def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
+def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name, src_path='.'):
     scui_image_parser_h = scui_image_parser_list[0]
     scui_image_parser_c = scui_image_parser_list[1]
     scui_image_parser_bin = scui_image_parser_list[2]
     scui_image_parser_sub = scui_image_parser_list[3]
     # 检查子路径是否存在,不存在则创建它
     os.makedirs(scui_image_parser_sub, exist_ok=True)
+    # 过滤宽度为奇数的图片(需要偶数宽度), 枚举/数据表/数据处理统一跳过
+    file_path_list = [f for f in file_path_list if scui_image_width_even(f)]
     # 头文件添加前缀, 源文件添加前缀
     scui_image_parser_h.write('#ifndef SCUI_IMAGE_PARSER_H\n')
     scui_image_parser_h.write('#define SCUI_IMAGE_PARSER_H\n\n')
@@ -267,7 +284,9 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
     scui_image_num = 0
     for file in file_path_list:
         scui_image_num += 1
-        scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
+        # 去除src根目录段(image_src/), 保留实际资源子路径, 缩短枚举长度
+        file_short = os.path.relpath(file, src_path).replace('\\', '/')
+        scui_image_tag = (project_name + '_' + file_short).replace('.', '').replace('\\', '_').replace('/', '_').replace(' ', '_')
         scui_image_ofs = hex(eval(offset_value) + scui_image_num)
         scui_image_parser_h.write('\tscui_image_%s, // %s\n' % (scui_image_tag, scui_image_ofs))
     scui_image_parser_h.write('} scui_image_parser_handle_t;\n\n')
@@ -280,7 +299,9 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
         scui_image_tag_index  = str(file).find('\\index\\') != -1
         scui_image_tag_frame = False
         scui_image_pkg_over = False
-        scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
+        # 去除src根目录段(image_src/), 保留实际资源子路径, 缩短枚举长度
+        file_short = os.path.relpath(file, src_path).replace('\\', '/')
+        scui_image_tag = (project_name + '_' + file_short).replace('.', '').replace('\\', '_').replace('/', '_').replace(' ', '_')
         scui_image_byte = 0
         scui_image_type = 'scui_image_type_bmp'
         scui_pixel_cf = 'scui_pixel_cf_bmp565'
@@ -335,14 +356,14 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
                 image_std = PIL.Image.open(file).convert('RGBA')
             except Exception as e:
                 print('image parse fail :', e)
-                return
+                continue
             # print(image_raw.size)       # 图片尺寸
             # print(image_raw.mode)       # 图片模式
             # print(image_raw.getbands())
             # 图片宽度应该是偶数
             if (image_raw.size[0] % 2) != 0:
                 print('image %s width is odd:' % file)
-                return
+                continue
         # 自定义打包格式(索引量化优先)
         if scui_image_tag_index:
             pixel_stream, scui_pixel_cf = scui_image_pixel_stream(
@@ -453,7 +474,8 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
         scui_image_struct += '};\n\n'
         scui_image_parser_c.write(scui_image_struct)
         # 我们生成一个子记录,用于外界解析时使用(内部只使用全部bin)
-        scui_image_parser_sub_file = os.path.join(scui_image_parser_sub, scui_image_tag)
+        scui_image_sub_file = scui_image_tag.replace('/', '_')
+        scui_image_parser_sub_file = os.path.join(scui_image_parser_sub, scui_image_sub_file)
         with open(scui_image_parser_sub_file, mode='w', encoding='utf-8') as file:
             file.write('\nconst uint8_t scui_image_array[] = {\n\t')
             # 迭代字节数据流, 将其转为hex字符
@@ -482,7 +504,9 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
     # 填充数据表
     scui_image_parser_c.write('const void * const scui_image_parser_table[%d] = {\n' % len(file_path_list))
     for file in file_path_list:
-        scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
+        # 去除src根目录段(image_src/), 保留实际资源子路径, 缩短枚举长度
+        file_short = os.path.relpath(file, src_path).replace('\\', '/')
+        scui_image_tag = (project_name + '_' + file_short).replace('.', '').replace('\\', '_').replace('/', '_').replace(' ', '_')
         scui_image_parser_c.write('\t(void *)&%s,\n' % scui_image_tag)
     scui_image_parser_c.write('};\n')
 
@@ -560,7 +584,7 @@ def scui_image_parser():
         scui_image_parser_bin,
         scui_image_parser_sub,
     ]
-    scui_image_parser_all(file_path_list, scui_image_parser_list, project_name)
+    scui_image_parser_all(file_path_list, scui_image_parser_list, project_name, src_path)
     scui_image_parser_h.close()
     scui_image_parser_c.close()
     scui_image_parser_bin.close()

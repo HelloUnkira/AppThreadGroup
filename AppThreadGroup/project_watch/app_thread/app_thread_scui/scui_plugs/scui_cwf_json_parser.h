@@ -17,8 +17,8 @@
 /* 总计: 28字节 */
 
 /* 单个 image info 约定 */
-/* uint8_t  format;   --> scui_cwf_json_image_cf_t 转译成 scui_pixel_cf_t 类型 */
-/* uint8_t  type;     --> scui_image_type_t */
+/* uint8_t  format;   --> scui_cwf_json_pixel_cf_t 转译成 scui_pixel_cf_t 类型 */
+/* uint8_t  type;     --> scui_cwf_json_image_cf_t 转译成 scui_image_type_t */
 /* uint32_t height;   --> 转译成uintptr_t */
 /* uint32_t width;    --> 转译成uintptr_t */
 /* uint32_t size_bin; --> 转译成uintptr_t */

@@ -6,8 +6,8 @@
 
 /* #define SCUI_HANDLE_OFFSET_WIDGET    ((scui_handle_t)0x1000)     *//* 句柄表偏移:控件 */
 /* #define SCUI_HANDLE_OFFSET_IMAGE     ((scui_handle_t)0x2000)     *//* 句柄表偏移:图片描述 */
-/* #define SCUI_HANDLE_OFFSET_FONT      ((scui_handle_t)0x3000)     *//* 句柄表偏移:字库描述 */
-/* #define SCUI_HANDLE_OFFSET_LANG      ((scui_handle_t)0x4000)     *//* 句柄表偏移:多语言表 */
+/* #define SCUI_HANDLE_OFFSET_FONT      ((scui_handle_t)0x4000)     *//* 句柄表偏移:字库描述 */
+/* #define SCUI_HANDLE_OFFSET_LANG      ((scui_handle_t)0x5000)     *//* 句柄表偏移:多语言表 */
 
 /* 空回调,测试控件使用 */
 #define SCUI_WIDGET_PARSER_EVENT_CB_EMPTY       (0)

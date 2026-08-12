@@ -173,12 +173,18 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
         uint32_t data_bin = scui_cwf_json_u32(&image_info[22 * idx + 2 + 4 * 4]);
         
         switch (format) {
-        case scui_cwf_json_image_cf_alpha4:   parser->image_src[idx].format = scui_pixel_cf_alpha4;   break;
-        case scui_cwf_json_image_cf_alpha8:   parser->image_src[idx].format = scui_pixel_cf_alpha8;   break;
-        case scui_cwf_json_image_cf_bmp565:   parser->image_src[idx].format = scui_pixel_cf_bmp565;   break;
-        case scui_cwf_json_image_cf_bmp888:   parser->image_src[idx].format = scui_pixel_cf_bmp888;   break;
-        case scui_cwf_json_image_cf_bmp8565:  parser->image_src[idx].format = scui_pixel_cf_bmp8565;  break;
-        case scui_cwf_json_image_cf_bmp8888:  parser->image_src[idx].format = scui_pixel_cf_bmp8888;  break;
+        case scui_cwf_json_pixel_cf_alpha1:   parser->image_src[idx].format = scui_pixel_cf_alpha1;   break;
+        case scui_cwf_json_pixel_cf_alpha2:   parser->image_src[idx].format = scui_pixel_cf_alpha2;   break;
+        case scui_cwf_json_pixel_cf_alpha4:   parser->image_src[idx].format = scui_pixel_cf_alpha4;   break;
+        case scui_cwf_json_pixel_cf_alpha8:   parser->image_src[idx].format = scui_pixel_cf_alpha8;   break;
+        case scui_cwf_json_pixel_cf_index1:   parser->image_src[idx].format = scui_pixel_cf_index1;   break;
+        case scui_cwf_json_pixel_cf_index2:   parser->image_src[idx].format = scui_pixel_cf_index2;   break;
+        case scui_cwf_json_pixel_cf_index4:   parser->image_src[idx].format = scui_pixel_cf_index4;   break;
+        case scui_cwf_json_pixel_cf_index8:   parser->image_src[idx].format = scui_pixel_cf_index8;   break;
+        case scui_cwf_json_pixel_cf_bmp565:   parser->image_src[idx].format = scui_pixel_cf_bmp565;   break;
+        case scui_cwf_json_pixel_cf_bmp888:   parser->image_src[idx].format = scui_pixel_cf_bmp888;   break;
+        case scui_cwf_json_pixel_cf_bmp8565:  parser->image_src[idx].format = scui_pixel_cf_bmp8565;  break;
+        case scui_cwf_json_pixel_cf_bmp8888:  parser->image_src[idx].format = scui_pixel_cf_bmp8888;  break;
         default: SCUI_LOG_ERROR("unknown cwf json image format:%d", format);
         }
         parser->image_src[idx].type = type;
@@ -337,12 +343,18 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
             uint32_t data_bin = scui_cwf_json_u32(&image_info[22 * 0 + 2 + 4 * 4]);
             
             switch (format) {
-            case scui_cwf_json_image_cf_alpha4:   image_src->format = scui_pixel_cf_alpha4;   break;
-            case scui_cwf_json_image_cf_alpha8:   image_src->format = scui_pixel_cf_alpha8;   break;
-            case scui_cwf_json_image_cf_bmp565:   image_src->format = scui_pixel_cf_bmp565;   break;
-            case scui_cwf_json_image_cf_bmp888:   image_src->format = scui_pixel_cf_bmp888;   break;
-            case scui_cwf_json_image_cf_bmp8565:  image_src->format = scui_pixel_cf_bmp8565;  break;
-            case scui_cwf_json_image_cf_bmp8888:  image_src->format = scui_pixel_cf_bmp8888;  break;
+            case scui_cwf_json_pixel_cf_alpha1:   image_src->format = scui_pixel_cf_alpha1;   break;
+            case scui_cwf_json_pixel_cf_alpha2:   image_src->format = scui_pixel_cf_alpha2;   break;
+            case scui_cwf_json_pixel_cf_alpha4:   image_src->format = scui_pixel_cf_alpha4;   break;
+            case scui_cwf_json_pixel_cf_alpha8:   image_src->format = scui_pixel_cf_alpha8;   break;
+            case scui_cwf_json_pixel_cf_index1:   image_src->format = scui_pixel_cf_index1;   break;
+            case scui_cwf_json_pixel_cf_index2:   image_src->format = scui_pixel_cf_index2;   break;
+            case scui_cwf_json_pixel_cf_index4:   image_src->format = scui_pixel_cf_index4;   break;
+            case scui_cwf_json_pixel_cf_index8:   image_src->format = scui_pixel_cf_index8;   break;
+            case scui_cwf_json_pixel_cf_bmp565:   image_src->format = scui_pixel_cf_bmp565;   break;
+            case scui_cwf_json_pixel_cf_bmp888:   image_src->format = scui_pixel_cf_bmp888;   break;
+            case scui_cwf_json_pixel_cf_bmp8565:  image_src->format = scui_pixel_cf_bmp8565;  break;
+            case scui_cwf_json_pixel_cf_bmp8888:  image_src->format = scui_pixel_cf_bmp8888;  break;
             default: SCUI_LOG_ERROR("unknown cwf json image format:%d", format);
             }
             image_src->type = type;

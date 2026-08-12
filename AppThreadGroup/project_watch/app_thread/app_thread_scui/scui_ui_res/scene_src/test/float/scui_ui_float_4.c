@@ -77,7 +77,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         xchart1_maker.widget.parent = SCUI_UI_SCENE_FLOAT_4;
         xchart1_maker.widget.color.color.full = 0xFF4F4F4F;
         xchart1_maker.type = scui_xchart_type_hist;
-        xchart1_maker.hist.edge = scui_image_prj_image_src_repeat_05_dotbmp;
+        xchart1_maker.hist.edge = scui_image_prj_repeat_05_dotbmp;
         xchart1_maker.hist.value_min = 60;
         xchart1_maker.hist.value_max = 220;
         xchart1_maker.hist.offset.x  = 5;
@@ -106,7 +106,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         xchart2_maker.widget.parent = SCUI_UI_SCENE_FLOAT_4;
         xchart2_maker.widget.color.color.full = 0xFF4F4F4F;
         xchart2_maker.type = scui_xchart_type_line;
-        xchart2_maker.line.edge = scui_image_prj_image_src_repeat_05_dotbmp;
+        xchart2_maker.line.edge = scui_image_prj_repeat_05_dotbmp;
         xchart2_maker.line.width     = 2;
         xchart2_maker.line.value_min = 60;
         xchart2_maker.line.value_max = 220;

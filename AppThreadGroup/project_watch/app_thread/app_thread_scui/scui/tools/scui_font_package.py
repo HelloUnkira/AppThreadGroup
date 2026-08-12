@@ -7,7 +7,7 @@ import json
 
 # 句柄表偏移:字库描述
 scui_font_offset_name = 'SCUI_HANDLE_OFFSET_FONT'
-scui_font_offset_value = '0x3000 - 1'
+scui_font_offset_value = '0x4000 - 1'
 
 
 # 流式处理所有font文件

@@ -145,7 +145,7 @@ void scui_custom_ready(void)
     scui_window_switch_set_move_type(scui_window_switch_move);
     
     /* 窗口交互参数 */
-    scui_handle_t shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
+    scui_handle_t shadow = scui_image_prj_00_3d_Trans_Lightpng;
     // scui_window_transform_flap1_shadow(shadow);
     // scui_window_transform_flap2_shadow(shadow);
     // scui_window_transform_cube_shadow(shadow);

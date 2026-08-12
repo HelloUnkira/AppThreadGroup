@@ -27,7 +27,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         /* 设置背景 */
-        scui_widget_image_set(SCUI_UI_SCENE_TEST, scui_image_prj_image_src_watchface_bg_01_bgjpg);
+        scui_widget_image_set(SCUI_UI_SCENE_TEST, scui_image_prj_watchface_bg_01_bgjpg);
         
         #if 1 /* test string widget */
         scui_string_maker_t string_maker = {0};
@@ -123,7 +123,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         xvedio_maker.widget.clip.w   = 80;
         xvedio_maker.widget.clip.h   = 80;
         xvedio_maker.iframe.type     = scui_image_type_gif;
-        xvedio_maker.iframe.handle   = scui_image_prj_image_src_vedio_bulbgif;
+        xvedio_maker.iframe.handle   = scui_image_prj_vedio_bulbgif;
         xvedio_maker.iframe.gif.loop = 100;
         scui_widget_create(&xvedio_maker, &xvedio_handle);
         
@@ -132,7 +132,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         xvedio_maker.widget.clip.w   = 100;
         xvedio_maker.widget.clip.h   = 100;
         xvedio_maker.iframe.type     = scui_image_type_lottie;
-        xvedio_maker.iframe.handle   = scui_image_prj_image_src_vedio_musiclottiejson;
+        xvedio_maker.iframe.handle   = scui_image_prj_vedio_musiclottiejson;
         scui_widget_create(&xvedio_maker, &xvedio_handle);
         
         xvedio_maker.widget.clip.x   = SCUI_VER_RES / 8 - 40;
@@ -140,7 +140,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         xvedio_maker.widget.clip.w   = 100;
         xvedio_maker.widget.clip.h   = 100;
         xvedio_maker.iframe.type     = scui_image_type_lottie;
-        xvedio_maker.iframe.handle   = scui_image_prj_image_src_vedio_comfirmlottiejson;
+        xvedio_maker.iframe.handle   = scui_image_prj_vedio_comfirmlottiejson;
         scui_widget_create(&xvedio_maker, &xvedio_handle);
         #endif
         

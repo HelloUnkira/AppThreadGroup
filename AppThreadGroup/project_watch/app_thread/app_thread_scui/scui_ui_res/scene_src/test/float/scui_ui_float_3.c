@@ -59,9 +59,9 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         break;
     case scui_event_draw_graph: {
         
-        scui_handle_t image_bg   = scui_image_prj_image_src_03_activity_ring_big_max_01_bjbmp;
-        scui_handle_t image_edge = scui_image_prj_image_src_03_activity_ring_big_max_02_bj_00bmp;
-        scui_handle_t image_ring = scui_image_prj_image_src_03_activity_ring_big_max_03_bj_01bmp;
+        scui_handle_t image_bg   = scui_image_prj_03_activity_ring_big_max_01_bjjpg;
+        scui_handle_t image_edge = scui_image_prj_03_activity_ring_big_max_02_bj_00bmp;
+        scui_handle_t image_ring = scui_image_prj_03_activity_ring_big_max_03_bj_01bmp;
         
         /* 绘制圆环背景图: */
         // scui_widget_draw_color(event->object, NULL, }, (scui_color_t){.color.full = 0xFFFFFFFF);
@@ -141,10 +141,10 @@ void scui_ui_scene_float_3_btn_event_proc(scui_event_t *event)
         button_maker.widget.clip.h = 72;
         button_maker.widget.clip.x = SCUI_HOR_RES / 2 - button_maker.widget.clip.w / 2;
         button_maker.widget.clip.y = SCUI_VER_RES / 4 - button_maker.widget.clip.h / 2;
-        button_maker.image.image[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
-        button_maker.image.image[1] = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
-        button_maker.image.image[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
-        button_maker.image.image[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
+        button_maker.image.image[0] = scui_image_prj_repeat_card_04_r36_1jpg;
+        button_maker.image.image[1] = scui_image_prj_repeat_card_05_r36_2jpg;
+        button_maker.image.image[2] = scui_image_prj_repeat_card_06_r36_3jpg;
+        button_maker.image.image[3] = scui_image_prj_repeat_card_07_r36_4jpg;
         button_maker.image.delta = -1;
         scui_widget_create(&button_maker, &button_bandle);
         
@@ -152,10 +152,10 @@ void scui_ui_scene_float_3_btn_event_proc(scui_event_t *event)
         button_maker.widget.clip.x  = SCUI_HOR_RES / 2 - button_maker.widget.clip.w / 2;
         button_maker.widget.clip.y += button_maker.widget.clip.h + 15;
         button_maker.widget.clip.h  = 72 + 20;
-        button_maker.image.image[0] = scui_image_prj_image_src_repeat_box_sleep_breathe_02_left_upbmp;
-        button_maker.image.image[1] = scui_image_prj_image_src_repeat_box_sleep_breathe_04_right_upbmp;
-        button_maker.image.image[2] = scui_image_prj_image_src_repeat_box_sleep_breathe_01_left_downbmp;
-        button_maker.image.image[3] = scui_image_prj_image_src_repeat_box_sleep_breathe_03_right_downbmp;
+        button_maker.image.image[0] = scui_image_prj_repeat_box_sleep_breathe_02_left_upjpg;
+        button_maker.image.image[1] = scui_image_prj_repeat_box_sleep_breathe_04_right_upjpg;
+        button_maker.image.image[2] = scui_image_prj_repeat_box_sleep_breathe_01_left_downjpg;
+        button_maker.image.image[3] = scui_image_prj_repeat_box_sleep_breathe_03_right_downjpg;
         button_maker.image.delta = 4;
         scui_widget_create(&button_maker, &button_bandle);
         
@@ -163,10 +163,10 @@ void scui_ui_scene_float_3_btn_event_proc(scui_event_t *event)
         button_maker.widget.clip.x  = SCUI_HOR_RES / 2 - button_maker.widget.clip.w / 2;
         button_maker.widget.clip.y += 5;
         button_maker.widget.clip.h  = 72 + 10;
-        button_maker.image.image[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
-        button_maker.image.image[1] = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
-        button_maker.image.image[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
-        button_maker.image.image[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
+        button_maker.image.image[0] = scui_image_prj_repeat_card_04_r36_1jpg;
+        button_maker.image.image[1] = scui_image_prj_repeat_card_05_r36_2jpg;
+        button_maker.image.image[2] = scui_image_prj_repeat_card_06_r36_3jpg;
+        button_maker.image.image[3] = scui_image_prj_repeat_card_07_r36_4jpg;
         button_maker.image.delta = 0;
         scui_widget_create(&button_maker, &button_bandle);
         
@@ -175,10 +175,10 @@ void scui_ui_scene_float_3_btn_event_proc(scui_event_t *event)
         button_maker.widget.clip.y += button_maker.widget.clip.h + 15;
         button_maker.widget.clip.h  = 72 + 15;
         button_maker.mode = scui_button_mode_scale;
-        button_maker.image.image[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
-        button_maker.image.image[1] = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
-        button_maker.image.image[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
-        button_maker.image.image[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
+        button_maker.image.image[0] = scui_image_prj_repeat_card_04_r36_1jpg;
+        button_maker.image.image[1] = scui_image_prj_repeat_card_05_r36_2jpg;
+        button_maker.image.image[2] = scui_image_prj_repeat_card_06_r36_3jpg;
+        button_maker.image.image[3] = scui_image_prj_repeat_card_07_r36_4jpg;
         button_maker.image.delta = -1;
         scui_widget_create(&button_maker, &button_bandle);
         

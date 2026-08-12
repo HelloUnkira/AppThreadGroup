@@ -3,20 +3,20 @@
     "layout": [
         {
             "type":     "scui_cwf_json_type_img_preview",
-            "image_src": ["cwf_image_preview_01_1jpg"]
+            "image_src": ["cwf_preview_01_1jpg"]
         },
         {
             "type":     "scui_cwf_json_type_img_simple",
             "x":        0,
             "y":        0,
-            "image_src": ["cwf_image_bg_01_1jpg"]
+            "image_src": ["cwf_bg_01_1jpg"]
         },
         
         {
             "type":     "scui_cwf_json_type_img_simple",
             "x":        80,
             "y":        186,
-            "image_src": ["cwf_image_char_batt_02_01bmp"]
+            "image_src": ["cwf_char_batt_02_01jpg"]
         },
         
         {
@@ -24,18 +24,18 @@
             "x":        310,
             "y":        291,
             "image_src": [
-                "cwf_image_char_month_13_12bmp",
-                "cwf_image_char_month_14_13bmp",
-                "cwf_image_char_month_15_14bmp",
-                "cwf_image_char_month_16_15bmp",
-                "cwf_image_char_month_17_16bmp",
-                "cwf_image_char_month_18_17bmp",
-                "cwf_image_char_month_19_18bmp",
-                "cwf_image_char_month_20_19bmp",
-                "cwf_image_char_month_21_20bmp",
-                "cwf_image_char_month_22_21bmp",
-                "cwf_image_char_month_23_22bmp",
-                "cwf_image_char_month_24_23bmp"
+                "cwf_char_month_13_12jpg",
+                "cwf_char_month_14_13jpg",
+                "cwf_char_month_15_14jpg",
+                "cwf_char_month_16_15jpg",
+                "cwf_char_month_17_16jpg",
+                "cwf_char_month_18_17jpg",
+                "cwf_char_month_19_18jpg",
+                "cwf_char_month_20_19jpg",
+                "cwf_char_month_21_20jpg",
+                "cwf_char_month_22_21jpg",
+                "cwf_char_month_23_22jpg",
+                "cwf_char_month_24_23jpg"
             ]
         },
         {
@@ -43,13 +43,13 @@
             "x":        340,
             "y":        177,
             "image_src": [
-                "cwf_image_char_week_08_07png",
-                "cwf_image_char_week_09_08png",
-                "cwf_image_char_week_10_09png",
-                "cwf_image_char_week_11_10png",
-                "cwf_image_char_week_12_11png",
-                "cwf_image_char_week_13_12png",
-                "cwf_image_char_week_14_13png"
+                "cwf_char_week_08_07png",
+                "cwf_char_week_09_08png",
+                "cwf_char_week_10_09png",
+                "cwf_char_week_11_10png",
+                "cwf_char_week_12_11png",
+                "cwf_char_week_13_12png",
+                "cwf_char_week_14_13png"
             ]
         },
         
@@ -58,17 +58,17 @@
             "x":        40,
             "y":        201,
             "image_src": [
-                "cwf_image_icon_batt_01_00bmp",
-                "cwf_image_icon_batt_02_01bmp",
-                "cwf_image_icon_batt_03_02bmp",
-                "cwf_image_icon_batt_04_03bmp",
-                "cwf_image_icon_batt_05_04bmp",
-                "cwf_image_icon_batt_06_04bmp",
-                "cwf_image_icon_batt_07_06bmp",
-                "cwf_image_icon_batt_08_07bmp",
-                "cwf_image_icon_batt_09_08bmp",
-                "cwf_image_icon_batt_10_09bmp",
-                "cwf_image_icon_batt_11_10bmp"
+                "cwf_icon_batt_01_00jpg",
+                "cwf_icon_batt_02_01jpg",
+                "cwf_icon_batt_03_02jpg",
+                "cwf_icon_batt_04_03jpg",
+                "cwf_icon_batt_05_04jpg",
+                "cwf_icon_batt_06_04jpg",
+                "cwf_icon_batt_07_06jpg",
+                "cwf_icon_batt_08_07jpg",
+                "cwf_icon_batt_09_08jpg",
+                "cwf_icon_batt_10_09jpg",
+                "cwf_icon_batt_11_10jpg"
             ]
         },
         
@@ -77,17 +77,17 @@
             "x":        220,
             "y":        40,
             "image_src": [
-                "cwf_image_icon_progress_kcal_01_00bmp",
-                "cwf_image_icon_progress_kcal_02_01bmp",
-                "cwf_image_icon_progress_kcal_03_02bmp",
-                "cwf_image_icon_progress_kcal_04_03bmp",
-                "cwf_image_icon_progress_kcal_05_04bmp",
-                "cwf_image_icon_progress_kcal_06_05bmp",
-                "cwf_image_icon_progress_kcal_07_06bmp",
-                "cwf_image_icon_progress_kcal_08_07bmp",
-                "cwf_image_icon_progress_kcal_09_08bmp",
-                "cwf_image_icon_progress_kcal_10_09bmp",
-                "cwf_image_icon_progress_kcal_11_10bmp"
+                "cwf_icon_progress_kcal_01_00jpg",
+                "cwf_icon_progress_kcal_02_01jpg",
+                "cwf_icon_progress_kcal_03_02jpg",
+                "cwf_icon_progress_kcal_04_03jpg",
+                "cwf_icon_progress_kcal_05_04jpg",
+                "cwf_icon_progress_kcal_06_05jpg",
+                "cwf_icon_progress_kcal_07_06jpg",
+                "cwf_icon_progress_kcal_08_07jpg",
+                "cwf_icon_progress_kcal_09_08jpg",
+                "cwf_icon_progress_kcal_10_09jpg",
+                "cwf_icon_progress_kcal_11_10jpg"
             ]
         },
         {
@@ -95,17 +95,17 @@
             "x":        128,
             "y":        304,
             "image_src": [
-                "cwf_image_icon_progress_step_01_00bmp",
-                "cwf_image_icon_progress_step_02_01bmp",
-                "cwf_image_icon_progress_step_03_02bmp",
-                "cwf_image_icon_progress_step_04_03bmp",
-                "cwf_image_icon_progress_step_05_04bmp",
-                "cwf_image_icon_progress_step_06_05bmp",
-                "cwf_image_icon_progress_step_07_06bmp",
-                "cwf_image_icon_progress_step_08_07bmp",
-                "cwf_image_icon_progress_step_09_08bmp",
-                "cwf_image_icon_progress_step_10_09bmp",
-                "cwf_image_icon_progress_step_11_10bmp"
+                "cwf_icon_progress_step_01_00jpg",
+                "cwf_icon_progress_step_02_01jpg",
+                "cwf_icon_progress_step_03_02jpg",
+                "cwf_icon_progress_step_04_03jpg",
+                "cwf_icon_progress_step_05_04jpg",
+                "cwf_icon_progress_step_06_05jpg",
+                "cwf_icon_progress_step_07_06jpg",
+                "cwf_icon_progress_step_08_07jpg",
+                "cwf_icon_progress_step_09_08jpg",
+                "cwf_icon_progress_step_10_09jpg",
+                "cwf_icon_progress_step_11_10jpg"
             ]
         },
         
@@ -116,16 +116,16 @@
             "bits":     0,
             "span":     0,
             "image_src": [
-                "cwf_image_num_batt_04_03bmp",
-                "cwf_image_num_batt_05_04bmp",
-                "cwf_image_num_batt_06_05bmp",
-                "cwf_image_num_batt_07_06bmp",
-                "cwf_image_num_batt_08_07bmp",
-                "cwf_image_num_batt_09_08bmp",
-                "cwf_image_num_batt_10_09bmp",
-                "cwf_image_num_batt_11_10bmp",
-                "cwf_image_num_batt_12_11bmp",
-                "cwf_image_num_batt_13_12bmp"
+                "cwf_num_batt_04_03jpg",
+                "cwf_num_batt_05_04jpg",
+                "cwf_num_batt_06_05jpg",
+                "cwf_num_batt_07_06jpg",
+                "cwf_num_batt_08_07jpg",
+                "cwf_num_batt_09_08jpg",
+                "cwf_num_batt_10_09jpg",
+                "cwf_num_batt_11_10jpg",
+                "cwf_num_batt_12_11jpg",
+                "cwf_num_batt_13_12jpg"
             ]
         },
         {
@@ -135,16 +135,16 @@
             "bits":     0,
             "span":     0,
             "image_src": [
-                "cwf_image_num_date_04_03bmp",
-                "cwf_image_num_date_05_04bmp",
-                "cwf_image_num_date_06_05bmp",
-                "cwf_image_num_date_07_06bmp",
-                "cwf_image_num_date_08_07bmp",
-                "cwf_image_num_date_09_08bmp",
-                "cwf_image_num_date_10_09bmp",
-                "cwf_image_num_date_11_10bmp",
-                "cwf_image_num_date_12_11bmp",
-                "cwf_image_num_date_13_12bmp"
+                "cwf_num_date_04_03jpg",
+                "cwf_num_date_05_04jpg",
+                "cwf_num_date_06_05jpg",
+                "cwf_num_date_07_06jpg",
+                "cwf_num_date_08_07jpg",
+                "cwf_num_date_09_08jpg",
+                "cwf_num_date_10_09jpg",
+                "cwf_num_date_11_10jpg",
+                "cwf_num_date_12_11jpg",
+                "cwf_num_date_13_12jpg"
             ]
         },
         {
@@ -154,16 +154,16 @@
             "bits":     0,
             "span":     0,
             "image_src": [
-                "cwf_image_num_hour_min_04_03png",
-                "cwf_image_num_hour_min_05_04png",
-                "cwf_image_num_hour_min_06_05png",
-                "cwf_image_num_hour_min_07_06png",
-                "cwf_image_num_hour_min_08_07png",
-                "cwf_image_num_hour_min_09_08png",
-                "cwf_image_num_hour_min_10_09png",
-                "cwf_image_num_hour_min_11_10png",
-                "cwf_image_num_hour_min_12_11png",
-                "cwf_image_num_hour_min_13_12png"
+                "cwf_num_hour_min_04_03png",
+                "cwf_num_hour_min_05_04png",
+                "cwf_num_hour_min_06_05png",
+                "cwf_num_hour_min_07_06png",
+                "cwf_num_hour_min_08_07png",
+                "cwf_num_hour_min_09_08png",
+                "cwf_num_hour_min_10_09png",
+                "cwf_num_hour_min_11_10png",
+                "cwf_num_hour_min_12_11png",
+                "cwf_num_hour_min_13_12png"
             ]
         },
         {
@@ -173,16 +173,16 @@
             "bits":     0,
             "span":     0,
             "image_src": [
-                "cwf_image_num_hour_min_04_03png",
-                "cwf_image_num_hour_min_05_04png",
-                "cwf_image_num_hour_min_06_05png",
-                "cwf_image_num_hour_min_07_06png",
-                "cwf_image_num_hour_min_08_07png",
-                "cwf_image_num_hour_min_09_08png",
-                "cwf_image_num_hour_min_10_09png",
-                "cwf_image_num_hour_min_11_10png",
-                "cwf_image_num_hour_min_12_11png",
-                "cwf_image_num_hour_min_13_12png"
+                "cwf_num_hour_min_04_03png",
+                "cwf_num_hour_min_05_04png",
+                "cwf_num_hour_min_06_05png",
+                "cwf_num_hour_min_07_06png",
+                "cwf_num_hour_min_08_07png",
+                "cwf_num_hour_min_09_08png",
+                "cwf_num_hour_min_10_09png",
+                "cwf_num_hour_min_11_10png",
+                "cwf_num_hour_min_12_11png",
+                "cwf_num_hour_min_13_12png"
             ]
         },
         
@@ -193,16 +193,16 @@
             "bits":     0,
             "span":     0,
             "image_src": [
-                "cwf_image_num_weather_kcal_step_heart_04_03png",
-                "cwf_image_num_weather_kcal_step_heart_05_04png",
-                "cwf_image_num_weather_kcal_step_heart_06_05png",
-                "cwf_image_num_weather_kcal_step_heart_07_06png",
-                "cwf_image_num_weather_kcal_step_heart_08_07png",
-                "cwf_image_num_weather_kcal_step_heart_09_08png",
-                "cwf_image_num_weather_kcal_step_heart_10_09png",
-                "cwf_image_num_weather_kcal_step_heart_11_10png",
-                "cwf_image_num_weather_kcal_step_heart_12_11png",
-                "cwf_image_num_weather_kcal_step_heart_13_12png"
+                "cwf_num_weather_kcal_step_heart_04_03png",
+                "cwf_num_weather_kcal_step_heart_05_04png",
+                "cwf_num_weather_kcal_step_heart_06_05png",
+                "cwf_num_weather_kcal_step_heart_07_06png",
+                "cwf_num_weather_kcal_step_heart_08_07png",
+                "cwf_num_weather_kcal_step_heart_09_08png",
+                "cwf_num_weather_kcal_step_heart_10_09png",
+                "cwf_num_weather_kcal_step_heart_11_10png",
+                "cwf_num_weather_kcal_step_heart_12_11png",
+                "cwf_num_weather_kcal_step_heart_13_12png"
             ]
         },
         {
@@ -212,16 +212,16 @@
             "bits":     0,
             "span":     0,
             "image_src": [
-                "cwf_image_num_weather_kcal_step_heart_04_03png",
-                "cwf_image_num_weather_kcal_step_heart_05_04png",
-                "cwf_image_num_weather_kcal_step_heart_06_05png",
-                "cwf_image_num_weather_kcal_step_heart_07_06png",
-                "cwf_image_num_weather_kcal_step_heart_08_07png",
-                "cwf_image_num_weather_kcal_step_heart_09_08png",
-                "cwf_image_num_weather_kcal_step_heart_10_09png",
-                "cwf_image_num_weather_kcal_step_heart_11_10png",
-                "cwf_image_num_weather_kcal_step_heart_12_11png",
-                "cwf_image_num_weather_kcal_step_heart_13_12png"
+                "cwf_num_weather_kcal_step_heart_04_03png",
+                "cwf_num_weather_kcal_step_heart_05_04png",
+                "cwf_num_weather_kcal_step_heart_06_05png",
+                "cwf_num_weather_kcal_step_heart_07_06png",
+                "cwf_num_weather_kcal_step_heart_08_07png",
+                "cwf_num_weather_kcal_step_heart_09_08png",
+                "cwf_num_weather_kcal_step_heart_10_09png",
+                "cwf_num_weather_kcal_step_heart_11_10png",
+                "cwf_num_weather_kcal_step_heart_12_11png",
+                "cwf_num_weather_kcal_step_heart_13_12png"
             ]
         },
         {
@@ -231,16 +231,16 @@
             "bits":     0,
             "span":     0,
             "image_src": [
-                "cwf_image_num_weather_kcal_step_heart_04_03png",
-                "cwf_image_num_weather_kcal_step_heart_05_04png",
-                "cwf_image_num_weather_kcal_step_heart_06_05png",
-                "cwf_image_num_weather_kcal_step_heart_07_06png",
-                "cwf_image_num_weather_kcal_step_heart_08_07png",
-                "cwf_image_num_weather_kcal_step_heart_09_08png",
-                "cwf_image_num_weather_kcal_step_heart_10_09png",
-                "cwf_image_num_weather_kcal_step_heart_11_10png",
-                "cwf_image_num_weather_kcal_step_heart_12_11png",
-                "cwf_image_num_weather_kcal_step_heart_13_12png"
+                "cwf_num_weather_kcal_step_heart_04_03png",
+                "cwf_num_weather_kcal_step_heart_05_04png",
+                "cwf_num_weather_kcal_step_heart_06_05png",
+                "cwf_num_weather_kcal_step_heart_07_06png",
+                "cwf_num_weather_kcal_step_heart_08_07png",
+                "cwf_num_weather_kcal_step_heart_09_08png",
+                "cwf_num_weather_kcal_step_heart_10_09png",
+                "cwf_num_weather_kcal_step_heart_11_10png",
+                "cwf_num_weather_kcal_step_heart_12_11png",
+                "cwf_num_weather_kcal_step_heart_13_12png"
             ]
         },
         
@@ -248,19 +248,19 @@
             "type":     "scui_cwf_json_type_img_simple",
             "x":        104,
             "y":        150,
-            "image_src": ["cwf_image_unit_char_batt_01_00bmp"]
+            "image_src": ["cwf_unit_char_batt_01_00jpg"]
         },
         {
             "type":     "scui_cwf_json_type_img_simple",
             "x":        220,
             "y":        134,
-            "image_src": ["cwf_image_unit_char_kcal_02_01png"]
+            "image_src": ["cwf_unit_char_kcal_02_01png"]
         },
         {
             "type":     "scui_cwf_json_type_img_simple",
             "x":        206,
             "y":        315,
-            "image_src": ["cwf_image_unit_char_step_02_01png"]
+            "image_src": ["cwf_unit_char_step_02_01png"]
         },
         
         {
@@ -275,9 +275,9 @@
             "sy":        233,
             "s_cy":      203,
             "image_src": [
-                "cwf_image_h_01_hpng",
-                "cwf_image_m_01_mpng",
-                "cwf_image_s_01_spng"
+                "cwf_h_01_hpng",
+                "cwf_m_01_mpng",
+                "cwf_s_01_spng"
             ]
         }
     ]

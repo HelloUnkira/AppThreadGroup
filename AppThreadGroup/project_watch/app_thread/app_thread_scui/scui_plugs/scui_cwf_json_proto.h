@@ -4,13 +4,32 @@
 #define SCUI_CWF_JSON_VER		{17, 1, 0, 0}
 
 typedef enum {
-	scui_cwf_json_image_cf_none = 0,
-	scui_cwf_json_image_cf_alpha4,
-	scui_cwf_json_image_cf_alpha8,
-	scui_cwf_json_image_cf_bmp565,
-	scui_cwf_json_image_cf_bmp888,
-	scui_cwf_json_image_cf_bmp8565,
-	scui_cwf_json_image_cf_bmp8888,
+	scui_cwf_json_pixel_cf_none = 0,
+	scui_cwf_json_pixel_cf_alpha1,
+	scui_cwf_json_pixel_cf_alpha2,
+	scui_cwf_json_pixel_cf_alpha4,
+	scui_cwf_json_pixel_cf_alpha8,
+	scui_cwf_json_pixel_cf_index1,
+	scui_cwf_json_pixel_cf_index2,
+	scui_cwf_json_pixel_cf_index4,
+	scui_cwf_json_pixel_cf_index8,
+	scui_cwf_json_pixel_cf_bmp565,
+	scui_cwf_json_pixel_cf_bmp888,
+	scui_cwf_json_pixel_cf_bmp8565,
+	scui_cwf_json_pixel_cf_bmp8888,
+	scui_cwf_json_pixel_cf_num,
+} scui_cwf_json_pixel_cf_t;
+
+typedef enum {
+	scui_cwf_json_image_cf_bmp = 0,
+	scui_cwf_json_image_cf_idx,
+	scui_cwf_json_image_cf_lz4,
+	scui_cwf_json_image_cf_jpg,
+	scui_cwf_json_image_cf_png,
+	scui_cwf_json_image_cf_gif,
+	scui_cwf_json_image_cf_lottie,
+	scui_cwf_json_image_cf_mp4,
+	scui_cwf_json_image_cf_mem,
 	scui_cwf_json_image_cf_num,
 } scui_cwf_json_image_cf_t;
 

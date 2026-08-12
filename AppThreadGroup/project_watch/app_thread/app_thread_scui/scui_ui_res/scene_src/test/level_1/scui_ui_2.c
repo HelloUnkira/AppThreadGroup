@@ -203,9 +203,9 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         
         custom_maker.widget.parent = event->object;
         custom_maker.type = scui_custom_type_spinner;
-        custom_maker.data.spinner.spinner = scui_image_prj_image_src_400X400pxbmp;
-        // custom_maker.data.spinner.spinner = scui_image_prj_image_src_400X400pxpng;
-        custom_maker.data.spinner.edge = scui_image_prj_image_src_400X400px_dotbmp;
+        custom_maker.data.spinner.spinner = scui_image_prj_400X400pxjpg;
+        // custom_maker.data.spinner.spinner = scui_image_prj_400X400pxpng;
+        custom_maker.data.spinner.edge = scui_image_prj_400X400px_dotbmp;
         custom_maker.data.spinner.color.filter = true;
         custom_maker.data.spinner.angle_s = 270;
         custom_maker.data.spinner.angle_l = 60;

@@ -6,7 +6,7 @@
     "sheet": "translate",
     "anno":  "句柄表偏移:多语言表",
     "offset_name":  "SCUI_HANDLE_OFFSET_LANG",
-    "offset_value": "0x4000 - 1",
+    "offset_value": "0x5000 - 1",
     "language": [
         "zh",
         "en",

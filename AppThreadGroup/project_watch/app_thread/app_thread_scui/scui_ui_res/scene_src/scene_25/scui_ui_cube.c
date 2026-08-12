@@ -31,12 +31,12 @@ void scui_ui_scene_cube_event_proc(scui_event_t *event)
         
         /* 界面数据加载准备 */
         
-        scui_ui_res_local->image[0] = scui_image_prj_image_src_00_theme_icon_00_heart_09_08png;
-        scui_ui_res_local->image[1] = scui_image_prj_image_src_00_theme_icon_01_spo2_09_08png;
-        scui_ui_res_local->image[2] = scui_image_prj_image_src_00_theme_icon_02_message_09_08png;
-        scui_ui_res_local->image[3] = scui_image_prj_image_src_00_theme_icon_04_call_09_08png;
-        scui_ui_res_local->image[4] = scui_image_prj_image_src_00_theme_icon_05_sport_record_09_08png;
-        scui_ui_res_local->image[5] = scui_image_prj_image_src_00_theme_icon_06_activity_09_08png;
+        scui_ui_res_local->image[0] = scui_image_prj_00_theme_icon_00_heart_09_08png;
+        scui_ui_res_local->image[1] = scui_image_prj_00_theme_icon_01_spo2_09_08png;
+        scui_ui_res_local->image[2] = scui_image_prj_00_theme_icon_02_message_09_08png;
+        scui_ui_res_local->image[3] = scui_image_prj_00_theme_icon_04_call_09_08png;
+        scui_ui_res_local->image[4] = scui_image_prj_00_theme_icon_05_sport_record_09_08png;
+        scui_ui_res_local->image[5] = scui_image_prj_00_theme_icon_06_activity_09_08png;
         scui_ui_res_local->size = 102;
         
         scui_ui_res_local->rotate.x = 45.0f;
