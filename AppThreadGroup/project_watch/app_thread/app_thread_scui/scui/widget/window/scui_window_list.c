@@ -669,14 +669,14 @@ void scui_window_active(scui_handle_t handle)
     /* 先失活旧的焦点窗口 */
     if (acts_valid_last && scui_handle_remap(handle_last)) {
         scui_event_define(event, handle_last, true, scui_event_focus_lost, NULL);
-        SCUI_LOG_WARN("window %u focus lost", event.object);
+        SCUI_LOG_INFO("window %u focus lost", event.object);
         scui_event_notify(&event);
     }
     
     /* 后激活新的焦点窗口 */
     if (acts_valid_curr && scui_handle_remap(handle_curr)) {
         scui_event_define(event, handle_curr, true, scui_event_focus_get, NULL);
-        SCUI_LOG_WARN("window %u focus get", event.object);
+        SCUI_LOG_INFO("window %u focus get", event.object);
         scui_event_notify(&event);
     }
     

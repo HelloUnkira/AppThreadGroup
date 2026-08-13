@@ -50,6 +50,31 @@ static void scui_monitor_anima_expire(void *instance)
         scui_mem_size_pct(scui_mem_type_user),
     };
     
+    /* 内存分配峰值监测: 每出现一个新的最大值打印一次 */
+    static uint32_t mem_peak_rcd[SCUI_MEM_TYPE_NUM] = {0};
+    uint32_t mem_peak[SCUI_MEM_TYPE_NUM] = {
+        scui_mem_size_peak(scui_mem_type_mix),
+        scui_mem_size_peak(scui_mem_type_font),
+        scui_mem_size_peak(scui_mem_type_graph),
+        scui_mem_size_peak(scui_mem_type_user),
+    };
+    scui_mem_type_t mem_peak_type[SCUI_MEM_TYPE_NUM] = {
+        scui_mem_type_mix,
+        scui_mem_type_font,
+        scui_mem_type_graph,
+        scui_mem_type_user,
+    };
+    for (uint8_t idx = 0; idx < scui_arr_len(mem_peak); idx++)
+        if (mem_peak_rcd[idx] < mem_peak[idx]) {
+            mem_peak_rcd[idx] = mem_peak[idx];
+            uint32_t mem_peak_total = scui_mem_size_total(mem_peak_type[idx]);
+            uint32_t mem_peak_pct = mem_peak_total == 0 ? 0 : (uint32_t)((uint64_t)mem_peak[idx] * 100 / mem_peak_total);
+            if (mem_peak_type[idx] == scui_mem_type_graph)
+                SCUI_LOG_INFO("mem peak type:%d, size:%.02fM, pct:%d%%", mem_peak_type[idx], (float)mem_peak[idx] / 1024 / 1024, mem_peak_pct);
+            else
+                SCUI_LOG_INFO("mem peak type:%d, size:%.02fK, pct:%d%%", mem_peak_type[idx], (float)mem_peak[idx] / 1024, mem_peak_pct);
+        }
+    
     static float mem_used_rcd[SCUI_MEM_TYPE_NUM] = {0};
     if (scui_dist(mem_used[0][0], mem_used_rcd[0]) > mem_used[0][1] ||
         scui_dist(mem_used[1][0], mem_used_rcd[1]) > mem_used[1][1] ||

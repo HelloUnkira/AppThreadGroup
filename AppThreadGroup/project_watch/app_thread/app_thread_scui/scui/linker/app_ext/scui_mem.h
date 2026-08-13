@@ -74,6 +74,7 @@ typedef struct {
     scui_mutex_t mutex;
     uintptr_t size_total[scui_mem_type_num];
     uintptr_t size_used[scui_mem_type_num];
+    uintptr_t size_peak[scui_mem_type_num];
     
     /* out of memory: */
     /* invalid:该OOM无法处理, 在崩溃前做最后日志输出 */
@@ -131,6 +132,12 @@ uint32_t scui_mem_size_frag(scui_mem_type_t type);
  *@retval 内存大小
  */
 uint32_t scui_mem_size_used(scui_mem_type_t type);
+
+/*@brief 内存模组统计(峰值)
+ *@param type 内存类型
+ *@retval 内存大小
+ */
+uint32_t scui_mem_size_peak(scui_mem_type_t type);
 
 /*@brief 内存模组统计(总计值)
  *@param type 内存类型

@@ -41,7 +41,7 @@ void scui_check_time_anima_expire(void *instance)
     /* 约减超时等待 */
     if (scui_check_time.over_tick != 0 &&
         scui_check_time.over_tick != SCUI_CHECK_TIME_OVER_UNUSE) {
-        SCUI_LOG_WARN("check time over:%u", scui_check_time.over_tick);
+        SCUI_LOG_INFO("check time over:%u", scui_check_time.over_tick);
         scui_check_time.over_tick--;
         return;
     }
@@ -58,7 +58,7 @@ void scui_check_time_anima_expire(void *instance)
     /* 约减空闲等待 */
     if (scui_check_time.idle_tick != 0 &&
         scui_check_time.idle_tick != SCUI_CHECK_TIME_IDLE_UNUSE) {
-        SCUI_LOG_WARN("check time idle:%u", scui_check_time.idle_tick);
+        SCUI_LOG_INFO("check time idle:%u", scui_check_time.idle_tick);
         scui_check_time.idle_tick--;
         return;
     }
