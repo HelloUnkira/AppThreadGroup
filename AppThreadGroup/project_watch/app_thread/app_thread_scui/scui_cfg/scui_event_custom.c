@@ -18,6 +18,9 @@
  */
 static void scui_event_custom_system(scui_event_t *event)
 {
+    /* UI系统状态标记: start后才能响应stop/pause/resume */
+    static bool ui_system_run = false;
+    
     switch (event->type) {
     case scui_event_engine_ready:
         scui_event_mask_over(event);
@@ -27,6 +30,89 @@ static void scui_event_custom_system(scui_event_t *event)
         scui_event_mask_over(event);
         scui_custom_show();
         break;
+    
+    
+    
+    case scui_event_ui_start: {
+        scui_event_mask_over(event);
+        SCUI_LOG_WARN("ui start");
+        ui_system_run = true;
+        
+        /* 启用scui性能监控 */
+        #if SCUI_MONITOR_USE
+        scui_monitor_show(false);
+        #endif
+        
+        /* 启用monkey test */
+        #if SCUI_MONKEY_TEST
+        scui_monkey_test();
+        #endif
+        
+        /* 开启超时模组 */
+        #if SCUI_CHECK_TIME
+        scui_check_time_ready();
+        scui_check_time_over_reset(0, false);
+        scui_check_time_idle_reset(0, false);
+        scui_check_time_work(true);
+        #endif
+        
+        /* 进入主界面 */
+        scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
+            scui_event_ui_home_goto, NULL);
+        scui_event_notify(&event_ui);
+        break;
+    }
+    case scui_event_ui_stop: {
+        scui_event_mask_over(event);
+        if (!ui_system_run) break;
+        SCUI_LOG_WARN("ui stop");
+        ui_system_run = false;
+        
+        /* 关闭超时模组 */
+        #if SCUI_CHECK_TIME
+        scui_check_time_work(false);
+        #endif
+        
+        /* 回空窗口 */
+        scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
+            scui_event_ui_none_goto, NULL);
+        scui_event_notify(&event_ui);
+        break;
+    }
+    case scui_event_ui_pause: {
+        scui_event_mask_over(event);
+        if (!ui_system_run) break;
+        SCUI_LOG_WARN("ui pause");
+        
+        /* 暂停超时模组 */
+        #if SCUI_CHECK_TIME
+        scui_check_time_work(false);
+        #endif
+        
+        scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
+            scui_event_ui_standy_enter, NULL);
+        scui_event_notify(&event_ui);
+        break;
+    }
+    case scui_event_ui_resume: {
+        scui_event_mask_over(event);
+        if (!ui_system_run) break;
+        SCUI_LOG_WARN("ui resume");
+        
+        /* 恢复超时模组 */
+        #if SCUI_CHECK_TIME
+        scui_check_time_over_reset(0, false);
+        scui_check_time_idle_reset(0, false);
+        scui_check_time_work(true);
+        #endif
+        
+        scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
+            scui_event_ui_standy_exit, NULL);
+        scui_event_notify(&event_ui);
+        break;
+    }
+    
+    
     
     case scui_event_check_time_over:
         scui_event_mask_over(event);
@@ -178,6 +264,15 @@ void scui_event_custom_myself(scui_event_t *event)
         
         if (handle_top != SCUI_UI_SCENE_NONE) {
             scui_window_stack_reset_by(SCUI_UI_SCENE_NONE,
+                scui_window_switch_none, scui_opt_dir_none, false);
+        }
+        break;
+    }
+    case scui_event_ui_test_goto: {
+        scui_event_mask_over(event);
+        
+        if (handle_top != SCUI_UI_SCENE_TEST_UI_MAIN) {
+            scui_window_stack_reset_by(SCUI_UI_SCENE_TEST_UI_MAIN,
                 scui_window_switch_none, scui_opt_dir_none, false);
         }
         break;

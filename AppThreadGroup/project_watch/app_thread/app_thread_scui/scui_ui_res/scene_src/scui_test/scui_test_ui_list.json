@@ -1,0 +1,14 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":              "测试列表",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.indev_ptr":   "true",
+            "widget.color.color.full":  "0xFF101010",
+            "widget.child_num":         "1",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_LIST",
+            "widget.event_cb":          "scui_test_ui_list_event_proc"
+        }
+    ]
+}

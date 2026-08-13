@@ -13,11 +13,17 @@ typedef enum {
     /* 系统事件:超时/空闲 */
     scui_event_check_time_over,
     scui_event_check_time_idle,
+    /* 系统事件:全局调度 */
+    scui_event_ui_start,
+    scui_event_ui_resume,
+    scui_event_ui_pause,
+    scui_event_ui_stop,
     
     
     
     scui_event_ui_none_goto,
     scui_event_ui_home_goto,
+    scui_event_ui_test_goto,
     scui_event_ui_standy_enter,
     scui_event_ui_standy_exit,
     

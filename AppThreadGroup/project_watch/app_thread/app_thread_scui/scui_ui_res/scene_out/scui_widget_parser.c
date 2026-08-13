@@ -82,6 +82,12 @@ static void scui_ui_scene_popup_event_proc(scui_event_t *event)
 static void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
 {
 }
+static void scui_test_ui_list_event_proc(scui_event_t *event)
+{
+}
+static void scui_test_ui_main_event_proc(scui_event_t *event)
+{
+}
 static void scui_ui_scene_activity_event_proc(scui_event_t *event)
 {
 }
@@ -238,6 +244,8 @@ extern void scui_ui_scene_waterfall_scroll_event(scui_event_t *event);
 extern void scui_ui_scene_waterfall_bar_arc_event(scui_event_t *event);
 extern void scui_ui_scene_popup_event_proc(scui_event_t *event);
 extern void scui_ui_scene_popup_bg_event_proc(scui_event_t *event);
+extern void scui_test_ui_list_event_proc(scui_event_t *event);
+extern void scui_test_ui_main_event_proc(scui_event_t *event);
 extern void scui_ui_scene_activity_event_proc(scui_event_t *event);
 extern void scui_ui_scene_activity_scroll_event(scui_event_t *event);
 extern void scui_ui_scene_activity_bar_arc_event_proc(scui_event_t *event);
@@ -812,6 +820,53 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_BG = {
 	.widget.parent                  = SCUI_UI_SCENE_POPUP_SCALE,
 	.widget.event_cb                = scui_ui_scene_popup_bg_event_proc,
 	.widget.child_num               = 5,
+};
+
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST_UI_LIST = {
+	/* 默认配置 */
+	.widget.type                    = scui_widget_type_window,
+	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
+	.widget.clip.w                  = SCUI_HOR_RES,
+	.widget.clip.h                  = SCUI_VER_RES,
+	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
+
+	/* 自定义配置 */
+	.widget.style.indev_ptr         = true,
+	.widget.color.color.full        = 0xFF101010,
+	.widget.myself                  = SCUI_UI_SCENE_TEST_UI_LIST,
+	.widget.event_cb                = scui_test_ui_list_event_proc,
+	.widget.child_num               = 1,
+};
+
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST_UI_MAIN = {
+	/* 默认配置 */
+	.widget.type                    = scui_widget_type_window,
+	.widget.style.buffer            = true,
+	.widget.style.fully_bg          = true,
+	.widget.clip.w                  = SCUI_HOR_RES,
+	.widget.clip.h                  = SCUI_VER_RES,
+	.level                          = 0,
+	.switch_enc                     = scui_opt_pos_all,
+	.switch_key                     = scui_opt_pos_all,
+	.switch_enc_way                 = scui_opt_dir_ver,
+	.switch_key_id[0]               = scui_event_key_val_down,
+	.switch_key_id[1]               = scui_event_key_val_up,
+	.switch_key_id[2]               = scui_event_key_val_right,
+	.switch_key_id[3]               = scui_event_key_val_left,
+
+	/* 自定义配置 */
+	.widget.color.color.full        = 0xFF101010,
+	.widget.myself                  = SCUI_UI_SCENE_TEST_UI_MAIN,
+	.widget.event_cb                = scui_test_ui_main_event_proc,
+	.widget.child_num               = 2,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY = {
@@ -1712,7 +1767,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.widget.child_num               = 10,
 };
 
-const void * const scui_widget_parser_table[72] = {
+const void * const scui_widget_parser_table[74] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
@@ -1740,6 +1795,8 @@ const void * const scui_widget_parser_table[72] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_SCALE,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_BG,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_LIST,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_MAIN,
 	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY,
 	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL,
 	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_BAR_ARC,

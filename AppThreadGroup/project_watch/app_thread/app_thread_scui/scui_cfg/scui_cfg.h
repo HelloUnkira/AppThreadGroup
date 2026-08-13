@@ -248,6 +248,8 @@
 #define SCUI_MONITOR_USE                            (1)
 /* indev猴子测试 */
 #define SCUI_MONKEY_TEST                            (0)
+/* 开机进测试界面 */
+#define SCUI_SYSTEM_TEST                            (1)
 /* 超时/空闲模组 */
 #define SCUI_CHECK_TIME                             (1)
 #define SCUI_CHECK_TIME_OVER_UNUSE                  (0xFF)
