@@ -292,11 +292,8 @@ void scui_image_src_read(scui_image_t *image, void *data)
         scui_LZ4F_FreeFunction(NULL, com_data);
         SCUI_ASSERT(scui_LZ4F_size_cur == 0);
         
-        if (dec_ret != 0)
-            SCUI_LOG_ERROR("%s", LZ4F_getErrorName(dec_ret));
-        if (dec_err != 0)
-            SCUI_LOG_ERROR("%s", LZ4F_getErrorName(dec_err));
-        
+        if (dec_ret != 0) SCUI_LOG_ERROR("%s", LZ4F_getErrorName(dec_ret));
+        if (dec_err != 0) SCUI_LOG_ERROR("%s", LZ4F_getErrorName(dec_err));
         SCUI_ASSERT(dec_ret == 0);
         SCUI_ASSERT(dec_err == 0);
         

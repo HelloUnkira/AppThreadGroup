@@ -183,6 +183,7 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
         scui_event_notify(&event);
     }
     
+    string->args.utf8   = string->str_utf8;
     string->args.update = true;
     scui_widget_draw(handle, NULL, false, 0);
 }
@@ -219,6 +220,7 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
         scui_event_notify(&event);
     }
     
+    string->args.utf8   = string->str_utf8;
     string->args.update = true;
     scui_widget_draw(handle, NULL, false, 0);
 }

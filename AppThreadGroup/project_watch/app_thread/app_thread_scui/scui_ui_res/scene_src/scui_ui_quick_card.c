@@ -292,7 +292,7 @@ void scui_ui_scene_quick_card_event_proc(scui_event_t *event)
         scui_area_t clip = scui_widget_clip(event->object);
         clip.x += 4; clip.y += 4;
         scui_widget_draw_image(event->object, &clip,
-    scui_image_prj_03_activity_ring_big_max_03_bj_01bmp,
+    scui_image_prj_act_ring_big_max_03_bj_01bmp,
     NULL,
     SCUI_COLOR_MAKE32(true, 0xFF000000, 0xFF404040));
         #endif

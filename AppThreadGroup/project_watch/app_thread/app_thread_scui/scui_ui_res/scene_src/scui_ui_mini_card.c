@@ -96,7 +96,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
         #if 1
         switch (type) {
         case scui_ui_scene_mini_card_type_music_control: {
-            scui_handle_t image = scui_image_prj_19_widget_music_01_bgjpg;
+            scui_handle_t image = scui_image_prj_wgt_music_01_bgjpg;
             scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_UNUSED);
             break;
         }
@@ -124,9 +124,9 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
         switch (type) {
         case scui_ui_scene_mini_card_type_daily_exercise: {
             // 三环绘制
-            scui_handle_t image_bg   = scui_image_prj_19_widget_activity_01_bgjpg;
-            scui_handle_t image_edge = scui_image_prj_19_widget_activity_04_dotbmp;
-            scui_handle_t image_ring = scui_image_prj_19_widget_activity_05_ringbmp;
+            scui_handle_t image_bg   = scui_image_prj_wgt_act_01_bgjpg;
+            scui_handle_t image_edge = scui_image_prj_wgt_act_04_dotbmp;
+            scui_handle_t image_ring = scui_image_prj_wgt_act_05_ringbmp;
             scui_area_t clip_bg = {.x = 250, .y = 22,};
             clip_bg.w = scui_image_w(image_bg); clip_bg.h = scui_image_h(image_bg);
             scui_area_t clip_fg = {.x = 250, .y = 22,};
@@ -143,9 +143,9 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             scui_widget_draw_ring(event->object, &clip_fg, image_ring, NULL, +158, color_dist, +262, pct_dist, image_edge);
             
             // 绘制小图标
-            scui_handle_t image_icon_kcal = scui_image_prj_19_widget_activity_02_caloriesjpg;
-            scui_handle_t image_icon_step = scui_image_prj_19_widget_activity_08_stepsjpg;
-            scui_handle_t image_icon_dist = scui_image_prj_19_widget_activity_03_distancejpg;
+            scui_handle_t image_icon_kcal = scui_image_prj_wgt_act_02_caloriesjpg;
+            scui_handle_t image_icon_step = scui_image_prj_wgt_act_08_stepsjpg;
+            scui_handle_t image_icon_dist = scui_image_prj_wgt_act_03_distjpg;
             scui_area_t clip_icon_kcal = {.x = 25, .y = 23,};
             clip_icon_kcal.w = scui_image_w(image_icon_kcal); clip_icon_kcal.h = scui_image_h(image_icon_kcal);
             scui_area_t clip_icon_step = {.x = 25, .y = 73,};
@@ -157,9 +157,9 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             scui_widget_draw_image(event->object, &clip_icon_dist, image_icon_dist, NULL, SCUI_COLOR_FILTER_TRANS);
             
             // 绘制数字图标
-            scui_handle_t image_digit_kcal = scui_image_prj_19_widget_activity_num_pink_04_03jpg;
-            scui_handle_t image_digit_step = scui_image_prj_19_widget_activity_num_yellow_04_03jpg;
-            scui_handle_t image_digit_dist = scui_image_prj_19_widget_activity_num_blue_04_03jpg;
+            scui_handle_t image_digit_kcal = scui_image_prj_wgt_act_num_pink_04_03jpg;
+            scui_handle_t image_digit_step = scui_image_prj_wgt_act_num_yellow_04_03jpg;
+            scui_handle_t image_digit_dist = scui_image_prj_wgt_act_num_blue_04_03jpg;
             uint8_t char_digit_kcal[10] = {0};
             uint8_t char_digit_step[10] = {0};
             uint8_t char_digit_dist[10] = {0};
@@ -199,9 +199,9 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             scui_string_update_text(scui_ui_res_local->title_music, SCUI_LANG_0X010b);
             
             // 不同状态显示不同图标
-            scui_handle_t image0 = scui_image_prj_19_widget_music_04_upjpg;
-            scui_handle_t image1 = scui_image_prj_19_widget_music_05_pausedjpg;
-            scui_handle_t image2 = scui_image_prj_19_widget_music_02_nextjpg;
+            scui_handle_t image0 = scui_image_prj_wgt_music_04_upjpg;
+            scui_handle_t image1 = scui_image_prj_wgt_music_05_pausedjpg;
+            scui_handle_t image2 = scui_image_prj_wgt_music_02_nextjpg;
             
             scui_area_t btn_clip_0 = {.x = 60, .y = 99,};
             btn_clip_0.w = scui_image_w(image0); btn_clip_0.h = scui_image_h(image0);
@@ -219,7 +219,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
         case scui_ui_scene_mini_card_type_spo2:
         case scui_ui_scene_mini_card_type_stress: {
             
-            scui_handle_t image = scui_image_prj_19_widget_06_retryjpg;
+            scui_handle_t image = scui_image_prj_wgt_06_retryjpg;
             scui_area_t image_clip = {.x = 298, .y = 66,};
             image_clip.w = scui_image_w(image); image_clip.h = scui_image_h(image);
             scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
@@ -318,7 +318,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
         case scui_ui_scene_mini_card_type_alarm: {
             
             if (scui_presenter.alarm_none()) {
-                scui_handle_t image = scui_image_prj_19_widget_01_arrowjpg;
+                scui_handle_t image = scui_image_prj_wgt_01_arrowjpg;
                 scui_area_t image_clip = {.x = 24, .y = 139,};
                 image_clip.w = scui_image_w(image); image_clip.h = scui_image_h(image);
                 scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
@@ -403,8 +403,8 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             
             if (scui_presenter.sleep_none()) {
                 
-                scui_handle_t image_l = scui_image_prj_22_sleep_home_bar_03_grey_00jpg;
-                scui_handle_t image_r = scui_image_prj_22_sleep_home_bar_04_grey_01jpg;
+                scui_handle_t image_l = scui_image_prj_sleep_home_bar_03_grey_00jpg;
+                scui_handle_t image_r = scui_image_prj_sleep_home_bar_04_grey_01jpg;
                 scui_area_t image_clip_l = {.x = 28, .y = 137,};
                 image_clip_l.w = scui_image_w(image_l); image_clip_l.h = scui_image_h(image_l);
                 scui_area_t image_clip_r = {.x = 28 + width - scui_image_w(image_r), .y = 137,};
@@ -432,16 +432,16 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
                     0xFF00F0EC, 0xFFFF923E,
                 };
                 scui_handle_t image_l4[4] = {
-                    scui_image_prj_22_sleep_home_bar_09_zi_00jpg,
-                    scui_image_prj_22_sleep_home_bar_01_blue_00jpg,
-                    scui_image_prj_22_sleep_home_bar_07_qing_00jpg,
-                    scui_image_prj_22_sleep_home_bar_05_prange_00jpg,
+                    scui_image_prj_sleep_home_bar_09_zi_00jpg,
+                    scui_image_prj_sleep_home_bar_01_blue_00jpg,
+                    scui_image_prj_sleep_home_bar_07_qing_00jpg,
+                    scui_image_prj_sleep_home_bar_05_prange_00jpg,
                 };
                 scui_handle_t image_r4[4] = {
-                    scui_image_prj_22_sleep_home_bar_10_zi_01jpg,
-                    scui_image_prj_22_sleep_home_bar_02_blue_01jpg,
-                    scui_image_prj_22_sleep_home_bar_08_qing_01jpg,
-                    scui_image_prj_22_sleep_home_bar_06_prange_01jpg,
+                    scui_image_prj_sleep_home_bar_10_zi_01jpg,
+                    scui_image_prj_sleep_home_bar_02_blue_01jpg,
+                    scui_image_prj_sleep_home_bar_08_qing_01jpg,
+                    scui_image_prj_sleep_home_bar_06_prange_01jpg,
                 };
                 
                 uint8_t pct4[4] = {0};
@@ -547,20 +547,20 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
         case scui_ui_scene_mini_card_type_compass: {
             
             /* 指北针背景表图 */
-            scui_handle_t image = scui_image_prj_19_widget_compass_02_bgjpg;
+            scui_handle_t image = scui_image_prj_wgt_cmps_02_bgjpg;
             scui_area_t image_clip = {.x = 298, .y = 73,};
             image_clip.w = scui_image_w(image); image_clip.h = scui_image_h(image);
             scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             
             if (scui_presenter.compass_invalid()) {
                 
-                scui_handle_t image = scui_image_prj_19_widget_01_arrowjpg;
+                scui_handle_t image = scui_image_prj_wgt_01_arrowjpg;
                 scui_area_t image_clip = {.x = 24, .y = 136,};
                 image_clip.w = scui_image_w(image); image_clip.h = scui_image_h(image);
                 scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             } else {
                 
-                scui_handle_t image = scui_image_prj_19_widget_compass_03_arrowpng;
+                scui_handle_t image = scui_image_prj_wgt_cmps_03_arrowpng;
                 
                 scui_point_t center = {
                     .x = scui_image_w(image) / 2,
@@ -647,7 +647,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             scui_custom_data_config_image_text(&custom_data, image_digit_list, SCUI_COLOR_FILTER_TRANS, 3, digit_num, 0);
             scui_custom_draw_image_text(event->object, &clip_digit, &custom_data);
             
-            scui_handle_t image = scui_image_prj_19_widget_02_pausedjpg;
+            scui_handle_t image = scui_image_prj_wgt_02_pausedjpg;
             scui_area_t image_clip = {.x = 298, .y = 66,};
             image_clip.w = scui_image_w(image); image_clip.h = scui_image_h(image);
             scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
@@ -669,7 +669,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             scui_lang_get(&lang_type);
             const char *lang_str = scui_lang_str(SCUI_LANG_0X013c, lang_type);
             
-            scui_handle_t image = scui_image_prj_19_widget_timer_01_bgjpg;
+            scui_handle_t image = scui_image_prj_wgt_tmr_01_bgjpg;
             for (uint8_t idx = 0; idx < scui_arr_len(image_clip4); idx++) {
                 scui_area_t image_clip = {.x = image_clip4[idx].x, .y = image_clip4[idx].y,};
                 image_clip.w = scui_image_w(image); image_clip.h = scui_image_h(image);
@@ -684,7 +684,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
         case scui_ui_scene_mini_card_type_world_time: {
             
             /* 背景图 */
-            scui_handle_t image = scui_image_prj_19_widget_02_bgjpg;
+            scui_handle_t image = scui_image_prj_wgt_02_bgjpg;
             scui_area_t image_clip = {.x = clip_w - scui_image_w(image), .y = clip_h - scui_image_h(image),};
             image_clip.w = scui_image_w(image); image_clip.h = scui_image_h(image);
             scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
@@ -1393,7 +1393,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 scui_widget_create(&string_t_maker, &string_handle);
                 
                 #if 1
-                scui_handle_t image = scui_image_prj_19_widget_timer_01_bgjpg;
+                scui_handle_t image = scui_image_prj_wgt_tmr_01_bgjpg;
                 scui_coord_t  image_w = scui_image_w(image);
                 scui_coord_t  image_h = scui_image_h(image);
                 scui_area_t   image_clip4[4] = {

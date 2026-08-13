@@ -157,8 +157,8 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         custom_maker.widget.clip.h = SCUI_VER_RES * 5 / 13 - 10 * 2;
         custom_maker.type = scui_custom_type_spinner;
         custom_maker.data = custom_data_zero;
-        custom_maker.data.spinner.spinner = scui_image_prj_19_widget_activity_05_ringbmp;
-        custom_maker.data.spinner.edge = scui_image_prj_19_widget_activity_04_dotbmp;
+        custom_maker.data.spinner.spinner = scui_image_prj_wgt_act_05_ringbmp;
+        custom_maker.data.spinner.edge = scui_image_prj_wgt_act_04_dotbmp;
         custom_maker.data.spinner.color.color_l.full = 0xFFFFFFFF;
         custom_maker.data.spinner.color.color_d.full = 0xFF404040;
         custom_maker.data.spinner.color.filter = true;

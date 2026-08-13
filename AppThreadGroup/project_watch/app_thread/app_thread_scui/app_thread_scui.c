@@ -45,7 +45,7 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     static uint8_t count = 0;
     
     scui_cache_image_unit_t image_unit = {0};
-    scui_handle_t handle = scui_image_prj_00_theme_02_ringjpg;
+    scui_handle_t handle = scui_image_prj_theme_02_ringjpg;
     image_unit.image = scui_handle_source(handle);
     scui_area_t src_clip = {
         .w = image_unit.image->pixel.width,

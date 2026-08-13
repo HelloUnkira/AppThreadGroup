@@ -59,9 +59,9 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         break;
     case scui_event_draw_graph: {
         
-        scui_handle_t image_bg   = scui_image_prj_03_activity_ring_big_max_01_bjjpg;
-        scui_handle_t image_edge = scui_image_prj_03_activity_ring_big_max_02_bj_00bmp;
-        scui_handle_t image_ring = scui_image_prj_03_activity_ring_big_max_03_bj_01bmp;
+        scui_handle_t image_bg   = scui_image_prj_act_ring_big_max_01_bjjpg;
+        scui_handle_t image_edge = scui_image_prj_act_ring_big_max_02_bj_00bmp;
+        scui_handle_t image_ring = scui_image_prj_act_ring_big_max_03_bj_01bmp;
         
         /* 绘制圆环背景图: */
         // scui_widget_draw_color(event->object, NULL, }, (scui_color_t){.color.full = 0xFFFFFFFF);
