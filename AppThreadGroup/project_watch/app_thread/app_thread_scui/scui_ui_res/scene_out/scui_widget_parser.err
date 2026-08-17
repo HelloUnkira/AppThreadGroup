@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "d:\_GitSource_\GitHub\AppThreadGroup\AppThreadGroup\project_watch\app_thread\app_thread_scui\scui\tools\scui_widget_parser.py", line 486, in <module>
-    input('请按任意键退出...')
-EOFError: EOF when reading a line

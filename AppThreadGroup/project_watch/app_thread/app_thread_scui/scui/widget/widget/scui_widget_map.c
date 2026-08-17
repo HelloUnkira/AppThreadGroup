@@ -7,6 +7,16 @@
 
 #include "scui.h"
 
+static scui_widget_cb_cfg_t scui_widget_ready_cfg = NULL;
+
+/*@brief 控件默认配置回调注册
+ *@param cfg 默认配置回调
+ */
+void scui_widget_ready_register(scui_widget_cb_cfg_t cfg)
+{
+    scui_widget_ready_cfg = cfg;
+}
+
 /*@brief 控件树检查
  *@param handle 控件句柄
  */
@@ -193,6 +203,16 @@ void scui_widget_clean(scui_handle_t handle)
     }
 }
 
+/*@brief 控件默认配置
+ *@param maker 控件构造器实例
+ *@param type  控件类型
+ */
+void scui_widget_ready(void *maker, scui_widget_type_t type)
+{
+    SCUI_ASSERT(scui_widget_ready_cfg != NULL);
+    scui_widget_ready_cfg(maker, type);
+}
+
 /*@brief 销毁控件
  *@param handle 控件句柄
  */
@@ -258,10 +278,10 @@ void scui_widget_layout_tree(scui_handle_t handle)
     if (scui_handle_remap(handle))
         return;
     
-    scui_widget_t *widget = NULL;
-    scui_widget_maker_t *widget_maker = NULL;
-    widget = widget_maker = scui_handle_source_check(handle);
-    SCUI_ASSERT(widget_maker->parent == SCUI_HANDLE_INVALID);
+    const scui_widget_json_val_t *val = NULL;
+    scui_widget_json_key_t *key = scui_handle_source_check(handle);
+    val = scui_widget_json_key_find(key, scui_widget_json_field_widget_parent);
+    SCUI_ASSERT(val->handle == SCUI_HANDLE_INVALID);
     
     scui_handle_table_t *handle_table = scui_handle_table_find(handle);
     SCUI_ASSERT(handle_table != NULL);
@@ -269,15 +289,52 @@ void scui_widget_layout_tree(scui_handle_t handle)
     do {
         /* 先创建根控件,然后延续依次创建剩下的控件 */
         /* 静态控件规则为,一个窗口为一段连续句柄,父控件在前子控件在后 */
+        val = scui_widget_json_key_find(key, scui_widget_json_field_widget_type);
+        scui_widget_type_t type = (scui_widget_type_t)val->handle;
+        SCUI_ASSERT(type > scui_widget_type_unknown);
+        SCUI_ASSERT(type < scui_widget_type_num);
+        
+        scui_widget_map_t *widget_map = NULL;
+        scui_widget_map_find(type, &widget_map);
+        scui_widget_maker_t *widget_maker = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->maker);
+        memset(widget_maker, 0, widget_map->maker);
+        
+        scui_widget_ready(widget_maker, type);
+        for (scui_handle_t i = 0; i < key->num; i++) {
+            if (key->cfg[i] == NULL) continue;
+            
+            key->cfg[i](widget_maker, (void *)&key->val[i]);
+        }
+        
         scui_widget_create(widget_maker, &handle);
+        SCUI_MEM_FREE(widget_maker);
+        handle++;
         /* 迭代到下一个句柄 */
-        widget_maker = scui_handle_source(++handle);
-        if (widget_maker == NULL)
-            break;
-        widget = widget_maker;
+        if (handle  >= handle_table->offset + handle_table->number) break;
+        void *source = scui_handle_source(handle);
+        if  (source == NULL) break;
+        
         /* 一直迭代到下一个根控件句柄前停下 */
-        if ((scui_handle_unmap(handle) && widget_maker->parent == SCUI_HANDLE_INVALID) ||
-            (scui_handle_remap(handle) && widget->parent == SCUI_HANDLE_INVALID))
-            break;
-    } while (handle < handle_table->offset + handle_table->number);
+        if (scui_handle_unmap(handle)) {
+            key = (scui_widget_json_key_t *)source;
+            val = scui_widget_json_key_find(key, scui_widget_json_field_widget_parent);
+            if (val->handle == SCUI_HANDLE_INVALID)
+                break;
+        } else {
+            scui_widget_t *widget_c = (scui_widget_t *)source;
+            if (widget_c->parent == SCUI_HANDLE_INVALID)
+                break;
+        }
+    } while (true);
+}
+
+/*@brief  控件快速访问字段值查找
+ *@param  key   控件配置表键
+ *@param  field 字段id
+ *@retval 字段值
+ */
+const scui_widget_json_val_t * scui_widget_json_key_find(const scui_widget_json_key_t *key, scui_widget_json_field_t field)
+{
+    if (field < scui_widget_json_field_num) return &key->val[field];
+    SCUI_ASSERT(false); return NULL;
 }

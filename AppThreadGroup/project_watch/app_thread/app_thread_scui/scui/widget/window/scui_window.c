@@ -96,9 +96,10 @@ void scui_window_invoke(scui_event_t *event)
             if (handle_s == SCUI_HANDLE_INVALID) continue;
             if (scui_handle_remap(handle_s)) continue;
             
-            scui_widget_maker_t *widget_maker = scui_handle_source_check(handle_s);
-            scui_window_maker_t *window_maker = (void *)widget_maker;
-            if (!window_maker->preload) continue;
+            const scui_widget_json_val_t *val = NULL;
+            scui_widget_json_key_t *key = scui_handle_source_check(handle_s);
+            val = scui_widget_json_key_find(key, scui_widget_json_field_window_preload);
+            if (!val->handle) continue;
             
             /* 预加载检查完毕, 现在加载它 */
             scui_widget_show(handle_s, false);

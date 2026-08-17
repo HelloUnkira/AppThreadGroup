@@ -155,10 +155,21 @@ void scui_widget_color_set(scui_handle_t handle, scui_color_t color);
 /*************************************************************************************************/
 /*************************************************************************************************/
 
+/*@brief 控件默认配置回调注册
+ *@param cfg 默认配置回调
+ */
+void scui_widget_ready_register(scui_widget_cb_cfg_t cfg);
+
 /*@brief 销毁所有子控件
  *@param handle 控件句柄
  */
 void scui_widget_clean(scui_handle_t handle);
+
+/*@brief 控件默认配置
+ *@param maker 控件构造器实例
+ *@param type  控件类型
+ */
+void scui_widget_ready(void *maker, scui_widget_type_t type);
 
 /*@brief 销毁控件
  *@param handle 控件句柄

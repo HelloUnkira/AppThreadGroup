@@ -90,6 +90,9 @@ void scui_ready(void)
     scui_event_register_custom(scui_event_custom_myself);
     scui_event_register_finish(scui_event_custom_finish);
     
+    /* 控件默认配置注册(ready回调外部注册的默认配置函数) */
+    scui_widget_ready_register(scui_widget_maker_def_cfg);
+    
     scui_handle_table_t table = {0};
     /* 句柄表(widget) */
     table.offset = SCUI_HANDLE_OFFSET_WIDGET + 1;

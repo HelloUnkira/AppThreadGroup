@@ -35,53 +35,132 @@ typedef enum {
 	SCUI_UI_SCENE_POPUP_BG, // 4122, 0x101a
 	SCUI_UI_SCENE_TEST_UI_LIST, // 4123, 0x101b
 	SCUI_UI_SCENE_TEST_UI_MAIN, // 4124, 0x101c
-	SCUI_UI_SCENE_ACTIVITY, // 4125, 0x101d
-	SCUI_UI_SCENE_ACTIVITY_SCROLL, // 4126, 0x101e
-	SCUI_UI_SCENE_ACTIVITY_BAR_ARC, // 4127, 0x101f
-	SCUI_UI_SCENE_ACTIVITY_SCROLL_RING_BIG_3, // 4128, 0x1020
-	SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_TITLE, // 4129, 0x1021
-	SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_SUM, // 4130, 0x1022
-	SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_KCAL, // 4131, 0x1023
-	SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_STEP, // 4132, 0x1024
-	SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_DIST, // 4133, 0x1025
-	SCUI_UI_SCENE_ACTIVITY_SCROLL_BLANK, // 4134, 0x1026
-	SCUI_UI_SCENE_HOME, // 4135, 0x1027
-	SCUI_UI_SCENE_MINI_CARD, // 4136, 0x1028
-	SCUI_UI_SCENE_MINI_CARD_BAR_ARC, // 4137, 0x1029
-	SCUI_UI_SCENE_MINI_CARD_MASK, // 4138, 0x102a
-	SCUI_UI_SCENE_NONE, // 4139, 0x102b
-	SCUI_UI_SCENE_NOTIFY, // 4140, 0x102c
-	SCUI_UI_SCENE_QUICK_CARD, // 4141, 0x102d
-	SCUI_UI_SCENE_STANDBY, // 4142, 0x102e
-	SCUI_UI_SCENE_FLOAT_1, // 4143, 0x102f
-	SCUI_UI_SCENE_FLOAT_1_1, // 4144, 0x1030
-	SCUI_UI_SCENE_FLOAT_1_2, // 4145, 0x1031
-	SCUI_UI_SCENE_FLOAT_2, // 4146, 0x1032
-	SCUI_UI_SCENE_FLOAT_3, // 4147, 0x1033
-	SCUI_UI_SCENE_FLOAT_3_RING, // 4148, 0x1034
-	SCUI_UI_SCENE_FLOAT_3_BTN, // 4149, 0x1035
-	SCUI_UI_SCENE_FLOAT_4, // 4150, 0x1036
-	SCUI_UI_SCENE_1, // 4151, 0x1037
-	SCUI_UI_SCENE_1_SCROLL, // 4152, 0x1038
-	SCUI_UI_SCENE_1_SCROLL_PAGE_1, // 4153, 0x1039
-	SCUI_UI_SCENE_1_SCROLL_PAGE_2, // 4154, 0x103a
-	SCUI_UI_SCENE_1_SCROLL_PAGE_3, // 4155, 0x103b
-	SCUI_UI_SCENE_2, // 4156, 0x103c
-	SCUI_UI_SCENE_2_BAR_ARC, // 4157, 0x103d
-	SCUI_UI_SCENE_3, // 4158, 0x103e
-	SCUI_UI_SCENE_6, // 4159, 0x103f
-	SCUI_UI_SCENE_6_1, // 4160, 0x1040
-	SCUI_UI_SCENE_6_2, // 4161, 0x1041
-	SCUI_UI_SCENE_6_3, // 4162, 0x1042
-	SCUI_UI_SCENE_6_4, // 4163, 0x1043
-	SCUI_UI_SCENE_6_5, // 4164, 0x1044
-	SCUI_UI_SCENE_6_6, // 4165, 0x1045
-	SCUI_UI_SCENE_6_7, // 4166, 0x1046
-	SCUI_UI_SCENE_6_8, // 4167, 0x1047
-	SCUI_UI_SCENE_6_9, // 4168, 0x1048
-	SCUI_UI_SCENE_TEST, // 4169, 0x1049
+	SCUI_UI_SCENE_TEST_UI_MAIN_HOME, // 4125, 0x101d
+	SCUI_UI_SCENE_TEST_UI_MAIN_TEST, // 4126, 0x101e
+	SCUI_UI_SCENE_ACTIVITY, // 4127, 0x101f
+	SCUI_UI_SCENE_ACTIVITY_SCROLL, // 4128, 0x1020
+	SCUI_UI_SCENE_ACTIVITY_BAR_ARC, // 4129, 0x1021
+	SCUI_UI_SCENE_ACTIVITY_SCROLL_RING_BIG_3, // 4130, 0x1022
+	SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_TITLE, // 4131, 0x1023
+	SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_SUM, // 4132, 0x1024
+	SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_KCAL, // 4133, 0x1025
+	SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_STEP, // 4134, 0x1026
+	SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_DIST, // 4135, 0x1027
+	SCUI_UI_SCENE_ACTIVITY_SCROLL_BLANK, // 4136, 0x1028
+	SCUI_UI_SCENE_HOME, // 4137, 0x1029
+	SCUI_UI_SCENE_MINI_CARD, // 4138, 0x102a
+	SCUI_UI_SCENE_MINI_CARD_BAR_ARC, // 4139, 0x102b
+	SCUI_UI_SCENE_MINI_CARD_MASK, // 4140, 0x102c
+	SCUI_UI_SCENE_NONE, // 4141, 0x102d
+	SCUI_UI_SCENE_NOTIFY, // 4142, 0x102e
+	SCUI_UI_SCENE_QUICK_CARD, // 4143, 0x102f
+	SCUI_UI_SCENE_STANDBY, // 4144, 0x1030
+	SCUI_UI_SCENE_FLOAT_1, // 4145, 0x1031
+	SCUI_UI_SCENE_FLOAT_1_1, // 4146, 0x1032
+	SCUI_UI_SCENE_FLOAT_1_2, // 4147, 0x1033
+	SCUI_UI_SCENE_FLOAT_2, // 4148, 0x1034
+	SCUI_UI_SCENE_FLOAT_3, // 4149, 0x1035
+	SCUI_UI_SCENE_FLOAT_3_RING, // 4150, 0x1036
+	SCUI_UI_SCENE_FLOAT_3_BTN, // 4151, 0x1037
+	SCUI_UI_SCENE_FLOAT_4, // 4152, 0x1038
+	SCUI_UI_SCENE_1, // 4153, 0x1039
+	SCUI_UI_SCENE_1_SCROLL, // 4154, 0x103a
+	SCUI_UI_SCENE_1_SCROLL_PAGE_1, // 4155, 0x103b
+	SCUI_UI_SCENE_1_SCROLL_PAGE_2, // 4156, 0x103c
+	SCUI_UI_SCENE_1_SCROLL_PAGE_3, // 4157, 0x103d
+	SCUI_UI_SCENE_2, // 4158, 0x103e
+	SCUI_UI_SCENE_2_BAR_ARC, // 4159, 0x103f
+	SCUI_UI_SCENE_3, // 4160, 0x1040
+	SCUI_UI_SCENE_6, // 4161, 0x1041
+	SCUI_UI_SCENE_6_1, // 4162, 0x1042
+	SCUI_UI_SCENE_6_2, // 4163, 0x1043
+	SCUI_UI_SCENE_6_3, // 4164, 0x1044
+	SCUI_UI_SCENE_6_4, // 4165, 0x1045
+	SCUI_UI_SCENE_6_5, // 4166, 0x1046
+	SCUI_UI_SCENE_6_6, // 4167, 0x1047
+	SCUI_UI_SCENE_6_7, // 4168, 0x1048
+	SCUI_UI_SCENE_6_8, // 4169, 0x1049
+	SCUI_UI_SCENE_6_9, // 4170, 0x104a
+	SCUI_UI_SCENE_TEST, // 4171, 0x104b
 } scui_widget_parser_handle_t;
 
-extern const void * const scui_widget_parser_table[74];
+extern const void * const scui_widget_parser_table[76];
+
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_CUBE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_LANTERN_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_LANTERN_CUSTOM_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_SOCCER_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_HONEYCOMB_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_HONEYCOMB_SCROLL_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_LIST_ARC_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_LIST_ARC_SCROLL_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_LIST_ARC_BAR_ARC_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_LIST_ARC_MASK_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_LIST_SCALE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_LIST_SCALE_BAR_ARC_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_LIST_SCALE_MASK_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_SPREAD_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_SPREAD_CUSTOM_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_THUMBWHEEL_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_THUMBWHEEL_CUSTOM_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_WATERFALL_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_WATERFALL_BAR_ARC_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_POPUP_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_POPUP_SCALE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_POPUP_BG_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_LIST_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_MAIN_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_MAIN_HOME_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_MAIN_TEST_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_ACTIVITY_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_ACTIVITY_BAR_ARC_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_RING_BIG_3_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_TITLE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_SUM_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_KCAL_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_STEP_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_DIST_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_BLANK_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_HOME_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_MINI_CARD_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_MINI_CARD_BAR_ARC_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_MINI_CARD_MASK_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_NONE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_NOTIFY_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_QUICK_CARD_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_STANDBY_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_1_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_1_1_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_1_2_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_2_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_3_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_3_RING_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_3_BTN_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_4_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_1_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_1_SCROLL_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_1_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_2_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_3_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_2_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_2_BAR_ARC_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_3_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_1_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_2_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_3_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_4_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_5_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_6_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_7_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_8_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_9_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_key;
 
 #endif

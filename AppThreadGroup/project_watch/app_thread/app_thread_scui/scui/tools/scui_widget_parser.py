@@ -5,114 +5,316 @@ import sys
 import json
 
 
+# ============================================================
+# 配置(原 scui_widget_parser.json 内联到脚本头部)
+# 句柄表偏移:控件
+SCUI_WIDGET_PARSER_OFFSET_NAME = 'SCUI_HANDLE_OFFSET_WIDGET'
+SCUI_WIDGET_PARSER_OFFSET_VALUE = '0x1000 - 1'
+# 分析脚本与临时结果(代码动态参数表: 控件名前缀/字段枚举/字段路径→值槽)
+SCUI_WIDGET_ANALYZE_PY = os.path.join(os.path.dirname(__file__), 'scui_widget_analyze.py')
+SCUI_WIDGET_ANALYZE_TMP = os.path.join(os.path.dirname(__file__), 'scui_widget_analyze.tmp')
+# ============================================================
+
+# 分析结果(脚本启动时由 scui_widget_analyze.py 生成)
+SCUI_WIDGET_PARSER_PREFIXES = []
+SCUI_WIDGET_PARSER_FIRST_FIELDS = []
+SCUI_WIDGET_PARSER_PATH_SLOTS = {}
+
+
+# 启动准备: 调用分析脚本生成动态参数表并加载
+def scui_widget_parser_ready():
+    global SCUI_WIDGET_PARSER_PREFIXES, SCUI_WIDGET_PARSER_FIRST_FIELDS, SCUI_WIDGET_PARSER_PATH_SLOTS
+    try:
+        import subprocess
+        subprocess.check_call([sys.executable, SCUI_WIDGET_ANALYZE_PY, SCUI_WIDGET_ANALYZE_TMP])
+        with open(SCUI_WIDGET_ANALYZE_TMP, 'r', encoding='utf-8') as fp:
+            result = json.load(fp)
+        SCUI_WIDGET_PARSER_PREFIXES = result['prefixes']
+        SCUI_WIDGET_PARSER_FIRST_FIELDS = [tuple(x) for x in result['first_fields']]
+        SCUI_WIDGET_PARSER_PATH_SLOTS = result['path_slots']
+        try:
+            os.remove(SCUI_WIDGET_ANALYZE_TMP)
+        except Exception:
+            pass
+        return True
+    except Exception as e:
+        print('[cfg ready] failed: %s' % e)
+        return False
+
+
+# 前置字段列表(启动时从分析结果加载)
+def scui_widget_parser_first_fields():
+    return SCUI_WIDGET_PARSER_FIRST_FIELDS
+
+
+# 控件类型 → maker 类型映射(启动时从分析结果加载)
+def scui_widget_parser_class_maker():
+    from scui_widget_analyze import SCUI_WIDGET_CLASS_MAKER
+    return dict(SCUI_WIDGET_CLASS_MAKER)
+
+
+# 字段路径转C标识符段
+def scui_widget_parser_field_ident(path):
+    return re.sub(r'[\.\[\]]', '_', path).rstrip('_')
+
+
+# 生成字段setter名
+def scui_widget_parser_setter_name(field, prefix):
+    if field.startswith('widget.'):
+        return 'scui_widget_json_' + scui_widget_parser_field_ident(field)
+    return 'scui_widget_json_%s_%s' % (prefix, scui_widget_parser_field_ident(field))
+
+
+# 字段路径规范化(去数组索引: sibling[2] → sibling)
+def scui_widget_parser_path_normalize(field):
+    return re.sub(r'\[\d+\]', '', field)
+
+
+# 字段值槽成员选择(查分析表: 按控件类型查完整路径 → 值槽; 未命中校验报错)
+def scui_widget_parser_val_member(field, wtype):
+    if field == 'widget.event_cb':
+        return 'event'
+    if 'color' in field and field.endswith('.full'):
+        return 'color'
+    maker = scui_widget_parser_class_maker().get(wtype, '')
+    path = scui_widget_parser_path_normalize(field)
+    slot = SCUI_WIDGET_PARSER_PATH_SLOTS.get(maker, {}).get(path)
+    if slot is None:
+        print('[json check] field not in code: %s (type %s)' % (field, wtype))
+        return 'handle'
+    return slot
+
+
 # 流式处理所有widget文件
-def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widget_parser_table, defaults_map):
-    scui_widget_parser_h = scui_widget_parser_list[0]
-    scui_widget_parser_c = scui_widget_parser_list[1]
+# 输出: parser.h(句柄枚举+表键声明+一级表声明)
+#       parser.c(event_cb空入口+static setter+cfg数组+val数组+表键定义+一级表)
+# 字段枚举与key_find为源维护(scui_widget.h / scui_widget_map.c), 脚本只同步生成映射
+def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, defaults_map):
+    parser_h = scui_widget_parser_list[0]
+    parser_c = scui_widget_parser_list[1]
+    # 前置字段(未构建阶段获取, 固定前段): 从分析结果加载
+    first_fields = scui_widget_parser_first_fields()
+    first_set = set(f for (scope, f) in first_fields)
     # 头文件添加前缀, 源文件添加前缀
-    scui_widget_parser_h.write('#ifndef SCUI_WIDGET_PARSER_H\n')
-    scui_widget_parser_h.write('#define SCUI_WIDGET_PARSER_H\n\n')
-    scui_widget_parser_h.write('/*一个通过scui_widget_parser脚本生成的widget表\n */\n\n')
-    scui_widget_parser_c.write('/*一个通过scui_widget_parser脚本生成的widget表\n */\n\n')
-    scui_widget_parser_c.write('#include \"scui.h\"\n\n')
-    # 填充数据表
-    offset_name = scui_widget_parser_table['offset_name']
-    offset_value = scui_widget_parser_table['offset_value']
-    scui_widget_parser_h.write('typedef enum {\n')
-    scui_widget_parser_h.write('\t%s = %s,\n' % (offset_name, offset_value))
+    parser_h.write('#ifndef SCUI_WIDGET_PARSER_H\n')
+    parser_h.write('#define SCUI_WIDGET_PARSER_H\n\n')
+    parser_h.write('/*一个通过scui_widget_parser脚本生成的widget表\n */\n\n')
+    parser_c.write('/*一个通过scui_widget_parser脚本生成的widget表\n */\n\n')
+    parser_c.write('#include "scui.h"\n\n')
+    # 填充句柄枚举
+    offset_name = SCUI_WIDGET_PARSER_OFFSET_NAME
+    offset_value = SCUI_WIDGET_PARSER_OFFSET_VALUE
+    parser_h.write('typedef enum {\n')
+    parser_h.write('\t%s = %s,\n' % (offset_name, offset_value))
     scui_widget_parser_handle_num = 0
     for scene in scene_list:
         for widget in scene['widget']:
             try:
                 scui_widget_parser_handle_num += 1
                 scui_widget_parser_handle_ofs = eval(offset_value) + scui_widget_parser_handle_num
-                scui_widget_parser_h.write('\t%s, // %s, %s\n' % (widget['widget.myself'], scui_widget_parser_handle_ofs, hex(scui_widget_parser_handle_ofs)))
+                parser_h.write('\t%s, // %s, %s\n' % (widget['widget.myself'], scui_widget_parser_handle_ofs, hex(scui_widget_parser_handle_ofs)))
             except Exception as e:
                 print(widget)
                 print(e)
                 return
-    scui_widget_parser_h.write('} scui_widget_parser_handle_t;\n\n')
-    scui_widget_parser_h.write('extern const void * const scui_widget_parser_table[%s];\n\n' % scui_widget_parser_handle_num)
-    scui_widget_parser_h.write('#endif\n')
-    # 填充函数定义或者声明
-    scui_widget_parser_c.write('#if defined(SCUI_WIDGET_PARSER_EVENT_CB_EMPTY) && SCUI_WIDGET_PARSER_EVENT_CB_EMPTY == 1\n')
+    parser_h.write('} scui_widget_parser_handle_t;\n\n')
+    parser_h.write('extern const void * const scui_widget_parser_table[%s];\n\n' % scui_widget_parser_handle_num)
+    # 填充event_cb空入口(parser.c)
+    # EMPTY: 统一一个空函数, 本地宏替换各事件名(去重)
+    event_cb_list = []
     for scene in scene_list:
         for widget in scene['widget']:
             try:
-                scui_event_cb = 'static void %s(scui_event_t *event)'
-                scui_widget_parser_c.write('%s\n{\n}\n' % scui_event_cb % widget['widget.event_cb'])
+                cb = widget['widget.event_cb']
+                if cb not in event_cb_list:
+                    event_cb_list.append(cb)
             except Exception as e:
                 pass
-    scui_widget_parser_c.write('#else\n')
+    parser_c.write('#if defined(SCUI_WIDGET_PARSER_EVENT_CB_EMPTY) && SCUI_WIDGET_PARSER_EVENT_CB_EMPTY == 1\n')
+    parser_c.write('static void scui_widget_parser_event_cb_empty(scui_event_t *event)\n{\n}\n')
+    for cb in event_cb_list:
+        parser_c.write('#define %-44s scui_widget_parser_event_cb_empty\n' % cb)
+    parser_c.write('#else\n')
+    for cb in event_cb_list:
+        parser_c.write('extern void %s(scui_event_t *event);\n' % cb)
+    parser_c.write('#endif\n\n')
+    # 类名 → maker 映射
+    class_maker = {}
+    prefix_class = {}
+    for wclass, maker in scui_widget_parser_class_maker().items():
+        prefix = maker
+        if prefix.startswith('scui_'):
+            prefix = prefix[5:]
+        if prefix.endswith('_maker_t'):
+            prefix = prefix[:-len('_maker_t')]
+        class_maker[wclass] = (maker, prefix + '_maker', prefix)
+        prefix_class[prefix] = (wclass, maker)
+    # 前置字段setter: 从源枚举(scui_widget_json_field_t)推导, 不硬编码
+    setter_map = {}
+    for (scope, f) in first_fields:
+        if scope == 'base':
+            key = ('base', f)
+            fvar = 'widget_maker'
+            fcast = 'scui_widget_maker_t'
+            fpre = 'widget'
+            member = f[len('widget.'):]
+            # 基域字段查任意类型表(widget基域所有类型都有), 用window
+            wclass = 'scui_widget_type_window'
+        else:
+            if scope not in prefix_class:
+                print('[field setter] unknown prefix: %s' % scope)
+                continue
+            wclass, maker = prefix_class[scope]
+            key = (wclass, f)
+            fvar = scope + '_maker'
+            fcast = maker
+            fpre = scope
+            member = f
+        setter_map[key] = {
+            'name':   scui_widget_parser_setter_name(f, fpre),
+            'fvar':   fvar,
+            'fcast':  fcast,
+            'member': member,
+            'val':    scui_widget_parser_val_member(f, wclass),
+        }
+    # child_num特殊setter(自动统计字段, 不在源枚举)
+    setter_map[('base', 'widget.child_num')] = {'name': 'scui_widget_json_widget_child_num', 'fvar': 'widget_maker', 'fcast': 'scui_widget_maker_t', 'member': 'child_num', 'val': 'handle'}
+    # 收集字段setter定义集合(从场景json)
     for scene in scene_list:
         for widget in scene['widget']:
-            try:
-                scui_event_cb = 'extern void %s(scui_event_t *event);'
-                scui_widget_parser_c.write('%s\n' % scui_event_cb % widget['widget.event_cb'])
-            except Exception as e:
-                pass
-    scui_widget_parser_c.write('#endif\n\n')
-    # 对目标控件集合进行流式处理,提取数据内容
-    for scene in scene_list:
-        for widget in scene['widget']:
-            print(widget['widget.myself'])
-            # 写入结构
-            scui_widget_tag = 'scui_widget_' + widget['widget.myself']
-            scui_widget_type_unknown = True
-            for widget_maker in scui_widget_parser_table['widget']:
-                if widget['widget.type'] == widget_maker['class']:
-                    scui_widget_parser_c.write('static const %s %s = {\n' % (widget_maker['maker'], scui_widget_tag))
-                    scui_widget_type_unknown = False
-                    break
-            # 未知类型
-            if scui_widget_type_unknown:
+            wtype = widget['widget.type']
+            if wtype not in class_maker:
                 print('\nwidget type unknown\n')
                 print(widget)
                 continue
-            # 统计本控件有多少布局孩子
-            scui_widget_field_child_num = 0
-            for field in widget:
-                if field == 'widget.child_num':
-                    scui_widget_field_child_num = eval(widget[field])
-                    break
-            # 统计本控件有多少布局孩子
-            for target in scene['widget']:
-                try:
-                    if widget['widget.myself'] == target['widget.parent']:
-                        scui_widget_field_child_num += 1
-                except Exception as e:
-                    pass
-            # 填充默认数据目标（使用 C 指定初始化器的后覆盖前机制）
-            scui_widget_parser_c.write('\t/* 默认配置 */\n')
-            wtype = widget['widget.type']
-            if wtype in defaults_map:
-                for def_field, def_value in defaults_map[wtype].items():
-                    scui_widget_parser_c.write('\t.%-30s = %s,\n' % (def_field, def_value))
-            scui_widget_parser_c.write('\n\t/* 自定义配置 */\n')
-            # 填充指定数据目标（跳过与默认配置重复的字段减少冗余）
-            if wtype in defaults_map:
-                defs = defaults_map[wtype]
-            else:
-                defs = {}
+            maker, var, prefix = class_maker[wtype]
             for field in widget:
                 if field == 'annotation':
                     continue
-                if field == 'widget.child_num':
-                    continue
-                # 跳过与默认配置重复的字段（.c 输出中包括 widget.type）
-                if field in defs and str(widget[field]) == str(defs[field]):
-                    continue
-                scui_widget_parser_c.write('\t.%-30s = %s,\n' % (field, widget[field]))
-            if scui_widget_field_child_num != 0:
-                scui_widget_parser_c.write('\t.%-30s = %s,\n' % ("widget.child_num", str(scui_widget_field_child_num)))
-            scui_widget_parser_c.write('};\n\n')
-    # 填充数据表
-    scui_widget_parser_c.write('const void * const scui_widget_parser_table[%s] = {\n' % scui_widget_parser_handle_num)
+                if field.startswith('widget.'):
+                    key = ('base', field)
+                    fvar = 'widget_maker'
+                    fcast = 'scui_widget_maker_t'
+                    fpre = 'widget'
+                    member = field[len('widget.'):]
+                else:
+                    key = (wtype, field)
+                    fvar = var
+                    fcast = maker
+                    fpre = prefix
+                    member = field
+                setter_map[key] = {
+                    'name':   scui_widget_parser_setter_name(field, fpre),
+                    'fvar':   fvar,
+                    'fcast':  fcast,
+                    'member': member,
+                    'val':    scui_widget_parser_val_member(field, wtype),
+                }
+    # 其余字段顺序(按字典序, 不含枚举前置字段)
+    rest_order = []
+    rest = set()
+    for key in setter_map:
+        f = key[1]
+        if f not in first_set:
+            rest.add(f)
+    rest_order.extend(sorted(rest))
+    # 填充字段setter定义(parser.c, static; 供cfg数组引用)
+    for key in sorted(setter_map):
+        s = setter_map[key]
+        parser_c.write('static void %s(void *maker, void *field)\n' % s['name'])
+        parser_c.write('{\n')
+        parser_c.write('\t%s *%s = (%s *)maker;\n' % (s['fcast'], s['fvar'], s['fcast']))
+        parser_c.write('\t%s->%s = ((scui_widget_json_val_t *)field)->%s;\n' % (s['fvar'], s['member'], s['val']))
+        parser_c.write('}\n\n')
+    # 对目标控件集合进行流式处理,生成cfg数组+val数组+表键(parser.c)
     for scene in scene_list:
         for widget in scene['widget']:
-            scui_widget_tag = 'scui_widget_' + widget['widget.myself']
-            scui_widget_parser_c.write('\t(void *)&%s,\n' % scui_widget_tag)
-    scui_widget_parser_c.write('};\n')
+            myself = widget['widget.myself']
+            print(myself)
+            wtype = widget['widget.type']
+            if wtype not in class_maker:
+                continue
+            maker, var, prefix = class_maker[wtype]
+            # 统计本控件有多少布局孩子
+            child_num = 0
+            for field in widget:
+                if field == 'widget.child_num':
+                    child_num = eval(widget[field])
+                    break
+            for target in scene['widget']:
+                try:
+                    if myself == target['widget.parent']:
+                        child_num += 1
+                except Exception as e:
+                    pass
+            # 收集字段条目(前段枚举槽对齐+后段其余字段紧凑)
+            entry_list = []
+            # 前段: 枚举槽(与字段枚举下标对齐, 控件无该字段则NULL占位)
+            for (scope, f) in first_fields:
+                if scope == 'base':
+                    fkey = ('base', f)
+                    applicable = True
+                else:
+                    fkey = (wtype, f)
+                    applicable = (scope == prefix)
+                if not applicable:
+                    entry_list.append((None, 'handle', '0'))
+                    continue
+                if f in widget:
+                    value = widget[f]
+                elif f == 'widget.parent':
+                    value = 'SCUI_HANDLE_INVALID'
+                elif f == 'preload':
+                    value = '0'
+                else:
+                    entry_list.append((None, 'handle', '0'))
+                    continue
+                s = setter_map[fkey]
+                entry_list.append((s['name'], s['val'], value))
+            # 后段: 其余字段(按字典序)
+            for f in rest_order:
+                if f not in widget:
+                    continue
+                value = widget[f]
+                if f.startswith('widget.'):
+                    s = setter_map[('base', f)]
+                else:
+                    s = setter_map[(wtype, f)]
+                entry_list.append((s['name'], s['val'], value))
+            # 自动统计的child_num(json未显式但存在静态子)
+            if child_num != 0 and 'widget.child_num' not in widget:
+                entry_list.append(('scui_widget_json_widget_child_num', 'handle', str(child_num)))
+            # 填充字段函数钩子数组
+            parser_c.write('static void (*const scui_widget_%s_cfg[])(void *maker, void *field) = {\n' % myself)
+            for (sname, vmember, value) in entry_list:
+                if sname is None:
+                    parser_c.write('\tNULL,\n')
+                else:
+                    parser_c.write('\t%s,\n' % sname)
+            parser_c.write('};\n\n')
+            # 填充字段值数组
+            parser_c.write('static const scui_widget_json_val_t scui_widget_%s_val[] = {\n' % myself)
+            for (sname, vmember, value) in entry_list:
+                if sname is None:
+                    parser_c.write('\t{ .handle = 0, },\n')
+                else:
+                    parser_c.write('\t{ .%s = %s, },\n' % (vmember, value))
+            parser_c.write('};\n\n')
+            # 填充表键定义(parser.c)
+            parser_c.write('const scui_widget_json_key_t scui_widget_%s_key = {\n' % myself)
+            parser_c.write('\t.num = scui_arr_len(scui_widget_%s_cfg),\n' % myself)
+            parser_c.write('\t.val = scui_widget_%s_val,\n' % myself)
+            parser_c.write('\t.cfg = scui_widget_%s_cfg,\n' % myself)
+            parser_c.write('};\n\n')
+            # 填充表键声明(parser.h)
+            parser_h.write('extern const scui_widget_json_key_t scui_widget_%s_key;\n' % myself)
+    parser_h.write('\n#endif\n')
+    # 填充一级数据表(parser.c)
+    parser_c.write('const void * const scui_widget_parser_table[%s] = {\n' % scui_widget_parser_handle_num)
+    for scene in scene_list:
+        for widget in scene['widget']:
+            parser_c.write('\t(void *)&scui_widget_%s_key,\n' % widget['widget.myself'])
+    parser_c.write('};\n')
     pass
 
 
@@ -149,7 +351,7 @@ class ScuiRedirectPrint(object):
 
 
 # 生成 scui_xxx_maker.c / scui_xxx_maker.h（从默认配置 JSON 自动生成）
-def scui_widget_maker_generate(dst_path, def_path, defaults_map, parser_table):
+def scui_widget_maker_generate(dst_path, def_path, defaults_map):
     base_name = os.path.splitext(os.path.basename(def_path))[0]
     scui_widget_maker_h = open(os.path.join(dst_path, base_name + '.h'), mode='w', encoding='utf-8')
     scui_widget_maker_c = open(os.path.join(dst_path, base_name + '.c'), mode='w', encoding='utf-8')
@@ -166,10 +368,7 @@ def scui_widget_maker_generate(dst_path, def_path, defaults_map, parser_table):
     scui_widget_maker_h.write('#endif\n')
     scui_widget_maker_h.close()
 
-    # 建立 class → maker 类型映射
-    class_to_maker = {}
-    for entry in parser_table.get('widget', []):
-        class_to_maker[entry['class']] = entry['maker']
+    class_to_maker = scui_widget_parser_class_maker()
 
     scui_widget_maker_c.write('/*一个通过scui_widget_parser脚本生成的widget动态构造器配置\n */\n\n')
     scui_widget_maker_c.write('#include "scui.h"\n\n')
@@ -211,7 +410,7 @@ def scui_widget_maker_generate(dst_path, def_path, defaults_map, parser_table):
 
 
 # JSON 对齐格式化：将 dict 内字段按最长 key 对齐 value 列
-def _json_aligned_format(obj, indent=0, step=4):
+def scui_widget_parser_json_aligned_format(obj, indent=0, step=4):
     """递归格式化 JSON 对象，对每个 dict 内的字段做 value 列对齐"""
     sp = ' ' * step
     isp = sp * indent
@@ -226,7 +425,7 @@ def _json_aligned_format(obj, indent=0, step=4):
         for i, (k, v) in enumerate(items):
             key_str = json.dumps(k, ensure_ascii=False)
             pad = ' ' * (max_klen - len(key_str))
-            val_str = _json_aligned_format(v, indent + 1, step)
+            val_str = scui_widget_parser_json_aligned_format(v, indent + 1, step)
             comma = ',' if i < len(items) - 1 else ''
             lines.append('%s%s: %s%s%s' % (isp + sp, key_str, pad, val_str, comma))
         lines.append(isp + '}')
@@ -237,7 +436,7 @@ def _json_aligned_format(obj, indent=0, step=4):
             return '[]'
         lines = ['[']
         for i, item in enumerate(obj):
-            val_str = _json_aligned_format(item, indent + 1, step)
+            val_str = scui_widget_parser_json_aligned_format(item, indent + 1, step)
             comma = ',' if i < len(obj) - 1 else ''
             lines.append('%s%s%s' % (isp + sp, val_str, comma))
         lines.append(isp + ']')
@@ -253,7 +452,7 @@ def _json_aligned_format(obj, indent=0, step=4):
         return json.dumps(obj, ensure_ascii=False)
 
 
-def scui_json_realign(src_path, def_name):
+def scui_widget_parser_json_realign(src_path, def_name):
     """重新对齐 scene_src 下所有 JSON 文件的字段"""
     count = 0
     for dirpath, dirnames, filenames in os.walk(src_path):
@@ -267,7 +466,7 @@ def scui_json_realign(src_path, def_name):
             try:
                 with open(full, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                formatted = _json_aligned_format(data, step=4)
+                formatted = scui_widget_parser_json_aligned_format(data, step=4)
                 with open(full, 'w', encoding='utf-8') as f:
                     f.write(formatted)
                     f.write('\n')
@@ -279,7 +478,7 @@ def scui_json_realign(src_path, def_name):
 
 
 # 清理 scene_src 下所有 JSON，去除与默认配置重复的字段（保留 widget.type）
-def scui_json_cleanup(src_path, def_name, defaults_map):
+def scui_widget_parser_json_cleanup(src_path, def_name, defaults_map):
     removed_total = 0
     for dirpath, dirnames, filenames in os.walk(src_path):
         dirnames[:] = [d for d in dirnames if '#' not in os.path.join(dirpath, d)]
@@ -311,7 +510,7 @@ def scui_json_cleanup(src_path, def_name, defaults_map):
                         file_removed += 1
                 if file_removed > 0:
                     with open(full, 'w', encoding='utf-8') as f:
-                        f.write(_json_aligned_format(data, step=4))
+                        f.write(scui_widget_parser_json_aligned_format(data, step=4))
                         f.write('\n')
                     print('  [JSON cleanup] %s: -%d field(s)' % (os.path.basename(full), file_removed))
                     removed_total += file_removed
@@ -321,7 +520,7 @@ def scui_json_cleanup(src_path, def_name, defaults_map):
 
 
 # 清理 .c 文件中 scui_widget_maker_def_cfg() 已覆盖的冗余字段赋值
-def scui_c_cleanup(c_root, defaults_map):
+def scui_widget_parser_c_cleanup(c_root, defaults_map):
     total_removed = 0
     for dirpath, dirnames, filenames in os.walk(c_root):
         if 'scene_out' in dirpath:
@@ -390,16 +589,10 @@ def scui_c_cleanup(c_root, defaults_map):
 
 # 主流程
 def scui_widget_parser():
-    # json转Python字符串并转标准字典
-    parser_path = os.path.join(os.path.dirname(__file__), 'scui_widget_parser.json')
-    json_file = open(parser_path, 'r', encoding='utf-8')
-    json_dict = json.loads(json_file.read())
-    json_file.close()
-    if json_dict['type'] != r'scui widget parser table':
-        print('parser table unknown')
+    # 脚本启动: 先准备动态参数表(代码分析)
+    if not scui_widget_parser_ready():
+        print('cfg ready failed')
         return
-    scui_widget_parser_table = json_dict
-    # print(scui_widget_parser_table)
     # 参数列表:文件根目录,输出目录,默认配置json[, cleanup]
     if len(sys.argv) < 4 or len(sys.argv) > 5:
         print('argv list not match, need: src_path dst_path default_json [cleanup]')
@@ -430,11 +623,11 @@ def scui_widget_parser():
             if wclass:
                 defaults_map[wclass] = wdefault
     # print('default config loaded:', list(defaults_map.keys()), '\n\n')
-    
+
     # 步骤1：清理 JSON 源文件中与默认配置重复的字段（在读取之前）
     if do_cleanup:
-        scui_json_cleanup(src_path, os.path.basename(def_path), defaults_map)
-        scui_json_realign(src_path, os.path.basename(def_path))
+        scui_widget_parser_json_cleanup(src_path, os.path.basename(def_path), defaults_map)
+        scui_widget_parser_json_realign(src_path, os.path.basename(def_path))
 
     # print重定向
     sys.stdout = ScuiRedirectPrint(sys.stdout, file=os.path.join(dst_path, 'scui_widget_parser.out'))   # redirect print
@@ -466,15 +659,16 @@ def scui_widget_parser():
     scui_widget_parser_h = open(os.path.join(dst_path, 'scui_widget_parser.h'), mode='w', encoding='utf-8')
     scui_widget_parser_c = open(os.path.join(dst_path, 'scui_widget_parser.c'), mode='w', encoding='utf-8')
     scui_widget_parser_list = [scui_widget_parser_h, scui_widget_parser_c]
-    scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widget_parser_table, defaults_map)
+    scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, defaults_map)
     scui_widget_parser_h.close()
     scui_widget_parser_c.close()
     # 生成 maker 默认初始化 .c/.h
-    scui_widget_maker_generate(dst_path, def_path, defaults_map, scui_widget_parser_table)
+    scui_widget_maker_generate(dst_path, def_path, defaults_map)
+
     # 步骤最后：清理手写 .c 文件中 scui_widget_maker_def_cfg() 已覆盖的冗余字段
     if do_cleanup:
         c_root = os.path.normpath(os.path.join(src_path, os.pardir, os.pardir))
-        scui_c_cleanup(c_root, defaults_map)
+        scui_widget_parser_c_cleanup(c_root, defaults_map)
 
 
 if __name__ == '__main__':

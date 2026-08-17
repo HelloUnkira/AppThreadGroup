@@ -5,9 +5,49 @@
             "annotation":              "测试入口主界面",
             "widget.type":              "scui_widget_type_window",
             "widget.color.color.full":  "0xFF101010",
-            "widget.child_num":         "2",
-            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_MAIN",
-            "widget.event_cb":          "scui_test_ui_main_event_proc"
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_MAIN"
+        },
+        {
+            "annotation":              "测试入口主界面-条目1:进入主界面",
+            "widget.type":              "scui_widget_type_string",
+            "widget.style.indev_ptr":   "true",
+            "widget.style.fully_bg":    "true",
+            "widget.color.color.full":  "0xFF404040",
+            "widget.clip.x":            "SCUI_HOR_RES / 2 - 100",
+            "widget.clip.y":            "SCUI_VER_RES / 4 - 30",
+            "widget.clip.w":            "200",
+            "widget.clip.h":            "60",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_MAIN_HOME",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_MAIN",
+            "widget.event_cb":          "scui_test_ui_main_home_event_proc",
+            "args.align_hor":           "2",
+            "args.align_ver":           "2",
+            "args.color.color_s.full":  "0xFF00FF00",
+            "args.color.color_e.full":  "0xFF00FF00",
+            "args.color.filter":        "true",
+            "args.lang":                "scui_lang_type_en",
+            "font_idx":                 "SCUI_FONT_IDX_36"
+        },
+        {
+            "annotation":              "测试入口主界面-条目2:进入测试列表",
+            "widget.type":              "scui_widget_type_string",
+            "widget.style.indev_ptr":   "true",
+            "widget.style.fully_bg":    "true",
+            "widget.color.color.full":  "0xFF404040",
+            "widget.clip.x":            "SCUI_HOR_RES / 2 - 100",
+            "widget.clip.y":            "SCUI_VER_RES * 3 / 4 - 30",
+            "widget.clip.w":            "200",
+            "widget.clip.h":            "60",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_MAIN_TEST",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_MAIN",
+            "widget.event_cb":          "scui_test_ui_main_test_event_proc",
+            "args.align_hor":           "2",
+            "args.align_ver":           "2",
+            "args.color.color_s.full":  "0xFF00FFFF",
+            "args.color.color_e.full":  "0xFF00FFFF",
+            "args.color.filter":        "true",
+            "args.lang":                "scui_lang_type_en",
+            "font_idx":                 "SCUI_FONT_IDX_36"
         }
     ]
 }
