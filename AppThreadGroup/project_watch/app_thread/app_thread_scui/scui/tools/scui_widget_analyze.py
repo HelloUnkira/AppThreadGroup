@@ -261,13 +261,21 @@ def scui_widget_analyze(out_path):
         'prefixes':     prefixes,
         'first_fields': first_fields,
         'path_slots':   path_slots,
+        'class_maker':  SCUI_WIDGET_CLASS_MAKER,
     }
     with open(out_path, 'w', encoding='utf-8') as fp:
         json.dump(result, fp, ensure_ascii=False, indent=1)
     print('[analyze] tmp: %s' % os.path.basename(out_path))
-    print('[analyze] prefixes: %s' % prefixes)
-    print('[analyze] first_fields: %s' % first_fields)
+    print('[analyze] prefixes:')
+    for item in prefixes:
+        print('  %s' % item)
+    print()
+    print('[analyze] first_fields:')
+    for item in first_fields:
+        print('  %s' % (item,))
+    print()
     print('[analyze] path_slots: %d' % len(path_slots))
+    print()
     return result
 
 

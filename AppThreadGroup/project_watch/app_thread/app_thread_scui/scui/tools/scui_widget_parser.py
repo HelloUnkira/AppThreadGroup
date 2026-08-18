@@ -19,23 +19,28 @@ SCUI_WIDGET_ANALYZE_TMP = os.path.join(os.path.dirname(__file__), 'scui_widget_a
 SCUI_WIDGET_PARSER_PREFIXES = []
 SCUI_WIDGET_PARSER_FIRST_FIELDS = []
 SCUI_WIDGET_PARSER_PATH_SLOTS = {}
+SCUI_WIDGET_PARSER_CLASS_MAKER = {}
 
 
 # 启动准备: 调用分析脚本生成动态参数表并加载
 def scui_widget_parser_ready():
-    global SCUI_WIDGET_PARSER_PREFIXES, SCUI_WIDGET_PARSER_FIRST_FIELDS, SCUI_WIDGET_PARSER_PATH_SLOTS
+    global SCUI_WIDGET_PARSER_PREFIXES, SCUI_WIDGET_PARSER_FIRST_FIELDS, SCUI_WIDGET_PARSER_PATH_SLOTS, SCUI_WIDGET_PARSER_CLASS_MAKER
     try:
         import subprocess
-        subprocess.check_call([sys.executable, SCUI_WIDGET_ANALYZE_PY, SCUI_WIDGET_ANALYZE_TMP])
+        subprocess.check_call([sys.executable, '-B', SCUI_WIDGET_ANALYZE_PY, SCUI_WIDGET_ANALYZE_TMP])
         with open(SCUI_WIDGET_ANALYZE_TMP, 'r', encoding='utf-8') as fp:
             result = json.load(fp)
         SCUI_WIDGET_PARSER_PREFIXES = result['prefixes']
         SCUI_WIDGET_PARSER_FIRST_FIELDS = [tuple(x) for x in result['first_fields']]
         SCUI_WIDGET_PARSER_PATH_SLOTS = result['path_slots']
+        SCUI_WIDGET_PARSER_CLASS_MAKER = result.get('class_maker', {})
         try:
             os.remove(SCUI_WIDGET_ANALYZE_TMP)
         except Exception:
             pass
+        # 顺手清理 analyze 模块编译缓存(与tmp同目录的__pycache__)
+        import shutil
+        shutil.rmtree(os.path.join(os.path.dirname(SCUI_WIDGET_ANALYZE_PY), '__pycache__'), ignore_errors=True)
         return True
     except Exception as e:
         print('[cfg ready] failed: %s' % e)
@@ -47,10 +52,10 @@ def scui_widget_parser_first_fields():
     return SCUI_WIDGET_PARSER_FIRST_FIELDS
 
 
-# 控件类型 → maker 类型映射(启动时从分析结果加载)
+# 控件类型 → maker 类型映射(启动时从分析结果加载, 不import模块)
+SCUI_WIDGET_PARSER_CLASS_MAKER = {}
 def scui_widget_parser_class_maker():
-    from scui_widget_analyze import SCUI_WIDGET_CLASS_MAKER
-    return dict(SCUI_WIDGET_CLASS_MAKER)
+    return SCUI_WIDGET_PARSER_CLASS_MAKER
 
 
 # 字段路径转C标识符段
@@ -132,8 +137,10 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, defaults_
                 pass
     parser_c.write('#if defined(SCUI_WIDGET_PARSER_EVENT_CB_EMPTY) && SCUI_WIDGET_PARSER_EVENT_CB_EMPTY == 1\n')
     parser_c.write('static void scui_widget_parser_event_cb_empty(scui_event_t *event)\n{\n}\n')
+    # 垂直对齐: 按最长宏名补白 + 固定间隙(不在乎整体长度)
+    cb_pad = max(len(cb) for cb in event_cb_list) + 1
     for cb in event_cb_list:
-        parser_c.write('#define %-44s scui_widget_parser_event_cb_empty\n' % cb)
+        parser_c.write('#define %-*s scui_widget_parser_event_cb_empty\n' % (cb_pad, cb))
     parser_c.write('#else\n')
     for cb in event_cb_list:
         parser_c.write('extern void %s(scui_event_t *event);\n' % cb)
@@ -308,6 +315,8 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, defaults_
             parser_c.write('};\n\n')
             # 填充表键声明(parser.h)
             parser_h.write('extern const scui_widget_json_key_t scui_widget_%s_key;\n' % myself)
+        print()
+    print()
     parser_h.write('\n#endif\n')
     # 填充一级数据表(parser.c)
     parser_c.write('const void * const scui_widget_parser_table[%s] = {\n' % scui_widget_parser_handle_num)
@@ -396,9 +405,11 @@ def scui_widget_maker_generate(dst_path, def_path, defaults_map):
             var_name = var_name[:-2]
         scui_widget_maker_c.write('\tcase %s: {\n' % wclass)
         scui_widget_maker_c.write('\t\t%s *%s = (%s *)maker;\n\t\t\n' % (maker_type, var_name, maker_type))
+        # 垂直对齐: 按最长字段名补白 + 固定间隙(不在乎整体长度)
+        field_max = max((len(field) for field, _ in wdefault.items()), default=0) + 1
         for field, value in wdefault.items():
             c_field = field.replace('.', '.')
-            scui_widget_maker_c.write('\t\t%s->%-30s = %s;\n' % (var_name, c_field, value))
+            scui_widget_maker_c.write('\t\t%s->%-*s = %s;\n' % (var_name, field_max, c_field, value))
         scui_widget_maker_c.write('\t\tbreak;\n')
         scui_widget_maker_c.write('\t}\n')
 
