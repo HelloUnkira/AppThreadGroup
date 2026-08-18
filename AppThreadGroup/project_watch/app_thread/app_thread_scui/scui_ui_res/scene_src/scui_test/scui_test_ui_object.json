@@ -1,0 +1,51 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "widget.type":     "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.myself":   "SCUI_UI_SCENE_TEST_UI_OBJECT",
+            "widget.event_cb": "scui_test_ui_object_event_proc"
+        },
+        {
+            "widget.type":     "scui_widget_type_scroll",
+            "widget.myself":   "SCUI_UI_SCENE_TEST_UI_OBJECT_SCROLL",
+            "widget.parent":   "SCUI_UI_SCENE_TEST_UI_OBJECT",
+            "widget.event_cb": "scui_test_ui_object_scroll_event_proc",
+            "skip":            "scui_opt_pos_all",
+            "route_enc":       "SCUI_VER_RES",
+            "route_key":       "SCUI_VER_RES",
+            "springback":      "70"
+        },
+        {
+            "annotation":      "page_1",
+            "widget.type":     "scui_widget_type_custom",
+            "widget.clip.w":   "SCUI_HOR_RES",
+            "widget.clip.h":   "SCUI_VER_RES",
+            "widget.myself":   "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_1",
+            "widget.parent":   "SCUI_UI_SCENE_TEST_UI_OBJECT_SCROLL",
+            "widget.event_cb": "scui_test_ui_object_page_1_event_proc",
+            "widget.child_num": "50"
+        },
+        {
+            "annotation":      "page_2",
+            "widget.type":     "scui_widget_type_custom",
+            "widget.clip.w":   "SCUI_HOR_RES",
+            "widget.clip.h":   "SCUI_VER_RES",
+            "widget.myself":   "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_2",
+            "widget.parent":   "SCUI_UI_SCENE_TEST_UI_OBJECT_SCROLL",
+            "widget.event_cb": "scui_test_ui_object_page_2_event_proc",
+            "widget.child_num": "50"
+        },
+        {
+            "annotation":      "page_3",
+            "widget.type":     "scui_widget_type_custom",
+            "widget.clip.w":   "SCUI_HOR_RES",
+            "widget.clip.h":   "SCUI_VER_RES",
+            "widget.myself":   "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_3",
+            "widget.parent":   "SCUI_UI_SCENE_TEST_UI_OBJECT_SCROLL",
+            "widget.event_cb": "scui_test_ui_object_page_3_event_proc",
+            "widget.child_num": "50"
+        }
+    ]
+}
