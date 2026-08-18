@@ -10,6 +10,31 @@
 
 #include "scui.h"
 
+/*@brief 临时迁移的 spinner 测试(宏控制, 默认关闭)
+ *@param event 事件
+ */
+void scui_test_ui_ring_spinner_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        scui_custom_data_t *data = NULL;
+        scui_custom_data_inst(event->object, &data);
+        
+        static scui_coord_t spinner_cnt  = 0;
+        static scui_coord_t spinner_tick = 1500;
+        spinner_cnt += event->tick;
+        if (spinner_cnt >  spinner_tick)
+            spinner_cnt -= spinner_tick;
+        
+        data->spinner.percent = scui_map(spinner_cnt, 0, spinner_tick, 0, 100);
+        scui_widget_draw(event->object, NULL, false, 0);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 /*@brief 窗口事件响应回调
  *@param event 事件
  */
@@ -18,8 +43,31 @@ void scui_test_ui_ring_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_create:
+    case scui_event_create: {
+        #if 0
+        /* 临时迁移自 ui_2 的 spinner 测试 */
+        scui_custom_maker_t custom_maker = {0};
+        scui_handle_t       custom_handle = SCUI_HANDLE_INVALID;
+        
+        scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
+        custom_maker.widget.parent = event->object;
+        custom_maker.type = scui_custom_type_spinner;
+        custom_maker.data.spinner.spinner = scui_image_prj_400X400pxjpg;
+        custom_maker.data.spinner.edge = scui_image_prj_400X400px_dotbmp;
+        custom_maker.data.spinner.color.filter = true;
+        custom_maker.data.spinner.angle_s = 270;
+        custom_maker.data.spinner.angle_l = 60;
+        custom_maker.data.spinner.way = 1;
+        custom_maker.widget.clip.x = (SCUI_HOR_RES - scui_image_w(custom_maker.data.spinner.spinner)) / 2;
+        custom_maker.widget.clip.y = (SCUI_VER_RES - scui_image_h(custom_maker.data.spinner.spinner)) / 2;
+        custom_maker.widget.clip.w = scui_image_w(custom_maker.data.spinner.spinner);
+        custom_maker.widget.clip.h = scui_image_h(custom_maker.data.spinner.spinner);
+        custom_maker.widget.event_cb = scui_test_ui_ring_spinner_event_proc;
+        scui_widget_create(&custom_maker, &custom_handle);
+        scui_widget_child_move_background(custom_handle);
+        #endif
         break;
+    }
     case scui_event_destroy:
         break;
     case scui_event_focus_get:

@@ -101,36 +101,9 @@ typedef enum {
 	SCUI_UI_SCENE_NOTIFY, // 4188, 0x105c
 	SCUI_UI_SCENE_QUICK_CARD, // 4189, 0x105d
 	SCUI_UI_SCENE_STANDBY, // 4190, 0x105e
-	SCUI_UI_SCENE_FLOAT_1, // 4191, 0x105f
-	SCUI_UI_SCENE_FLOAT_1_1, // 4192, 0x1060
-	SCUI_UI_SCENE_FLOAT_1_2, // 4193, 0x1061
-	SCUI_UI_SCENE_FLOAT_2, // 4194, 0x1062
-	SCUI_UI_SCENE_FLOAT_3, // 4195, 0x1063
-	SCUI_UI_SCENE_FLOAT_3_RING, // 4196, 0x1064
-	SCUI_UI_SCENE_FLOAT_3_BTN, // 4197, 0x1065
-	SCUI_UI_SCENE_FLOAT_4, // 4198, 0x1066
-	SCUI_UI_SCENE_1, // 4199, 0x1067
-	SCUI_UI_SCENE_1_SCROLL, // 4200, 0x1068
-	SCUI_UI_SCENE_1_SCROLL_PAGE_1, // 4201, 0x1069
-	SCUI_UI_SCENE_1_SCROLL_PAGE_2, // 4202, 0x106a
-	SCUI_UI_SCENE_1_SCROLL_PAGE_3, // 4203, 0x106b
-	SCUI_UI_SCENE_2, // 4204, 0x106c
-	SCUI_UI_SCENE_2_BAR_ARC, // 4205, 0x106d
-	SCUI_UI_SCENE_3, // 4206, 0x106e
-	SCUI_UI_SCENE_6, // 4207, 0x106f
-	SCUI_UI_SCENE_6_1, // 4208, 0x1070
-	SCUI_UI_SCENE_6_2, // 4209, 0x1071
-	SCUI_UI_SCENE_6_3, // 4210, 0x1072
-	SCUI_UI_SCENE_6_4, // 4211, 0x1073
-	SCUI_UI_SCENE_6_5, // 4212, 0x1074
-	SCUI_UI_SCENE_6_6, // 4213, 0x1075
-	SCUI_UI_SCENE_6_7, // 4214, 0x1076
-	SCUI_UI_SCENE_6_8, // 4215, 0x1077
-	SCUI_UI_SCENE_6_9, // 4216, 0x1078
-	SCUI_UI_SCENE_TEST, // 4217, 0x1079
 } scui_widget_parser_handle_t;
 
-extern const void * const scui_widget_parser_table[122];
+extern const void * const scui_widget_parser_table[95];
 
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM_key;
@@ -227,32 +200,5 @@ extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_NONE_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_NOTIFY_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_QUICK_CARD_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_STANDBY_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_1_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_1_1_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_1_2_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_2_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_3_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_3_RING_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_3_BTN_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_FLOAT_4_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_1_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_1_SCROLL_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_1_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_2_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_1_SCROLL_PAGE_3_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_2_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_2_BAR_ARC_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_3_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_1_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_2_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_3_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_4_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_5_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_6_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_7_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_8_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_6_9_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_key;
 
 #endif

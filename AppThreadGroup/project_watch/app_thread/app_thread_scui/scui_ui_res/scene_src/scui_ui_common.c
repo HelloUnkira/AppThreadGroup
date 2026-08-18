@@ -174,45 +174,45 @@ void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type)
             // SCUI_LANG_0X0030,
         };
         static const scui_handle_t list_jump[] = {
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            // SCUI_UI_SCENE_6,
-            // SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            // SCUI_UI_SCENE_NONE,
+            // SCUI_UI_SCENE_NONE,
         };
         
         scui_ui_scene_list_num   = scui_arr_len(list_image);
@@ -315,43 +315,43 @@ void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type)
         #endif
         
         static const scui_handle_t list_jump[SCUI_UI_HONEYCOMB_LIST_NUM] = {
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
-            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
+            SCUI_UI_SCENE_NONE,
         };
         
         scui_ui_scene_list_num   = SCUI_UI_HONEYCOMB_LIST_NUM;
@@ -377,7 +377,7 @@ void scui_ui_scene_mini_card_cfg(void)
     // type list default:
     for (uint32_t idx = 0; idx < scui_ui_scene_mini_card_type_num;idx++) {
          scui_ui_scene_mini_card_type[idx] = idx;
-         scui_ui_scene_mini_card_jump[idx] = SCUI_UI_SCENE_6;
+         scui_ui_scene_mini_card_jump[idx] = SCUI_UI_SCENE_NONE;
     }
     scui_ui_scene_mini_card_num = scui_ui_scene_mini_card_type_num;
     
@@ -392,16 +392,6 @@ void scui_ui_scene_return(void)
     scui_handle_t stack_top  = 0;
     scui_window_stack_nest(&stack_nest);
     scui_window_stack_top(&stack_top);
-    
-    // 浮窗界面, 要跳回属于它自己的主窗口
-    if (stack_top == SCUI_UI_SCENE_FLOAT_1 ||
-        stack_top == SCUI_UI_SCENE_FLOAT_2 ||
-        stack_top == SCUI_UI_SCENE_FLOAT_3 ||
-        stack_top == SCUI_UI_SCENE_FLOAT_4) {
-        // 回到主界面
-        scui_window_stack_cover(SCUI_UI_SCENE_TEST);
-        return;
-    }
     
     if (stack_nest > 1) {
         // 返回上一层

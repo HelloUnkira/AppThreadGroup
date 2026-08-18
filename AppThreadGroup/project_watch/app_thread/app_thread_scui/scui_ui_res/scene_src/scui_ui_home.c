@@ -151,48 +151,74 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
     #endif
     
     case scui_event_key_click: {
-        if (event->key_id != scui_event_key_val_enter)
+        if (event->key_id == scui_event_key_val_esc) {
+            /* 特殊键(Esc): 切换窗口切换动画类型 */
+            scui_window_switch_type_t jump_type = 0;
+            scui_window_switch_type_t move_type = 0;
+            scui_window_switch_get_jump_type(&jump_type);
+            scui_window_switch_get_move_type(&move_type);
+            jump_type++;
+            move_type++;
+            
+            if (jump_type <= scui_window_switch_single_s)
+                jump_type  = scui_window_switch_single_e - 1;
+            if (jump_type >= scui_window_switch_single_e)
+                jump_type  = scui_window_switch_single_s + 1;
+            
+            if (move_type <= scui_window_switch_single_s)
+                move_type  = scui_window_switch_single_e - 1;
+            if (move_type >= scui_window_switch_single_e)
+                move_type  = scui_window_switch_single_s + 1;
+            
+            scui_window_switch_set_jump_type(jump_type);
+            scui_window_switch_set_move_type(move_type);
+            
+            scui_event_mask_over(event);
             break;
+        }
         
-        static scui_ui_scene_list_type_t type = 0; type++;
-        if (type < scui_ui_scene_list_type_s + 1)
-            type = scui_ui_scene_list_type_e - 1;
-        if (type > scui_ui_scene_list_type_e - 1)
-            type = scui_ui_scene_list_type_s + 1;
-        
-        switch (type) {
-        #if SCUI_MEM_FEAT_MINI == 0
-        case scui_ui_scene_list_type_list_scale: { // 缩放列表
-            #if 0
-            // 裁内存选择(去掉过场动画)
-            scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false,
-                scui_window_switch_none, scui_opt_dir_none);
-            #else
-            scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
+        if (event->key_id == scui_event_key_val_enter) {
+            static scui_ui_scene_list_type_t type = 0; type++;
+            if (type < scui_ui_scene_list_type_s + 1)
+                type = scui_ui_scene_list_type_e - 1;
+            if (type > scui_ui_scene_list_type_e - 1)
+                type = scui_ui_scene_list_type_s + 1;
+            
+            switch (type) {
+            #if SCUI_MEM_FEAT_MINI == 0
+            case scui_ui_scene_list_type_list_scale: { // 缩放列表
+                #if 0
+                // 裁内存选择(去掉过场动画)
+                scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false,
+                    scui_window_switch_none, scui_opt_dir_none);
+                #else
+                scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
+                #endif
+                break;
+            }
             #endif
-            break;
-        }
-        #endif
-        case scui_ui_scene_list_type_list_arc: // 弧形列表
-            scui_window_stack_add(SCUI_UI_SCENE_LIST_ARC, false);
-            break;
-        case scui_ui_scene_list_type_honeycomb: // 蜂窝
-            scui_window_stack_add(SCUI_UI_SCENE_HONEYCOMB, false);
-            break;
-        case scui_ui_scene_list_type_waterfall: // 瀑布
-            scui_window_stack_add(SCUI_UI_SCENE_WATERFALL, false);
-            break;
-        case scui_ui_scene_list_type_themewheel: // 波轮
-            scui_window_stack_add(SCUI_UI_SCENE_THUMBWHEEL, false);
-            break;
-        case scui_ui_scene_list_type_spread: // 扩散
-            scui_window_stack_add(SCUI_UI_SCENE_SPREAD, false);
-            break;
-        default:
-            break;
+            case scui_ui_scene_list_type_list_arc: // 弧形列表
+                scui_window_stack_add(SCUI_UI_SCENE_LIST_ARC, false);
+                break;
+            case scui_ui_scene_list_type_honeycomb: // 蜂窝
+                scui_window_stack_add(SCUI_UI_SCENE_HONEYCOMB, false);
+                break;
+            case scui_ui_scene_list_type_waterfall: // 瀑布
+                scui_window_stack_add(SCUI_UI_SCENE_WATERFALL, false);
+                break;
+            case scui_ui_scene_list_type_themewheel: // 波轮
+                scui_window_stack_add(SCUI_UI_SCENE_THUMBWHEEL, false);
+                break;
+            case scui_ui_scene_list_type_spread: // 扩散
+                scui_window_stack_add(SCUI_UI_SCENE_SPREAD, false);
+                break;
+            default:
+                break;
+            }
+            
+            scui_event_mask_over(event);
         }
         
-        scui_event_mask_over(event);
         break;
     }
     default:

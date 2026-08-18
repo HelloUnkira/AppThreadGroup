@@ -5,8 +5,7 @@
             "widget.type":      "scui_widget_type_window",
             "widget.myself":    "SCUI_UI_SCENE_SOCCER",
             "widget.event_cb":  "scui_ui_scene_soccer_event_proc",
-            "widget.child_num": "10",
-            "sibling[0]":       "SCUI_UI_SCENE_2"
+            "widget.child_num": "10"
         },
         {
             "widget.type":            "scui_widget_type_custom",

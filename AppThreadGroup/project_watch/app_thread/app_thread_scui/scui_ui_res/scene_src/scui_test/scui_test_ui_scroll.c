@@ -39,6 +39,29 @@ void scui_test_ui_scroll_ver_event_proc(scui_event_t *event)
     }
 }
 
+/*@brief 纯色自定义子控件事件回调(点击播放淡出缩放动画)
+ *@param event 事件
+ */
+void scui_test_ui_scroll_custom_anima_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_ptr_click: {
+        scui_event_mask_over(event);
+        
+        /* 点击子控件播放两级动画: 淡出 + 水平缩放 */
+        scui_widget_anima_create(event->object, 2);
+        scui_handle_t anima1 = scui_widget_anima_fade_out(event->object, 300, 0);
+        scui_handle_t anima2 = scui_widget_anima_zoom_out_h(event->object, 200, 50);
+        scui_widget_anima_submit(event->object, anima1, 1); /* 第一步 */
+        scui_widget_anima_submit(event->object, anima2, 2); /* 第二步 */
+        scui_widget_anima_start(event->object);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 /*@brief 纯色自定义子控件构造基座(随机背景颜色)
  *@param parent 父控件句柄
  *@retval 构造器
@@ -86,10 +109,12 @@ static void scui_test_ui_scroll_create_ver(void)
     scui_widget_create(&scroll_maker, &scroll_handle);
     scui_ui_res_local->scroll = scroll_handle;
     
-    /* 子控件: 纯色 custom(随机颜色) */
+    /* 子控件: 纯色 custom(随机颜色, 点击动画) */
     for (uint8_t idx = 0; idx < 10; idx++) {
         scui_custom_maker_t custom_maker = scui_test_ui_scroll_custom_base(scroll_handle);
         scui_handle_t       custom_handle = SCUI_HANDLE_INVALID;
+        custom_maker.widget.style.indev_ptr = true;
+        custom_maker.widget.event_cb  = scui_test_ui_scroll_custom_anima_event_proc;
         custom_maker.widget.clip.w = SCUI_HOR_RES * 707 / 1000;
         custom_maker.widget.clip.h = SCUI_HOR_RES / 6;
         scui_widget_create(&custom_maker, &custom_handle);
