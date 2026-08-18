@@ -1,0 +1,16 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":              "图表测试窗口",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.style.indev_enc":   "true",
+            "widget.style.indev_key":   "true",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_CHART",
+            "widget.child_num":         "5",
+            "widget.event_cb":          "scui_test_ui_chart_event_proc"
+        }
+    ]
+}

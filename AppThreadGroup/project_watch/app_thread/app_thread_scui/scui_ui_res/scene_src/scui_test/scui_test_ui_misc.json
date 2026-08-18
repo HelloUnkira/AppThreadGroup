@@ -1,0 +1,14 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":              "杂项测试窗口",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_MISC",
+            "widget.child_num":         "20",
+            "widget.event_cb":          "scui_test_ui_misc_event_proc"
+        }
+    ]
+}

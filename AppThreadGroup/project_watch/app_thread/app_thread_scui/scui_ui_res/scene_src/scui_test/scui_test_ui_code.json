@@ -1,0 +1,38 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":              "码测试窗口",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_CODE",
+            "widget.event_cb":          "scui_test_ui_code_event_proc"
+        },
+        {
+            "annotation":              "qrcode 码",
+            "widget.type":             "scui_widget_type_custom",
+            "widget.style.fully_bg":   "true",
+            "widget.clip.x":           "SCUI_HOR_RES / 4",
+            "widget.clip.y":           "SCUI_VER_RES * 1 / 8",
+            "widget.clip.w":           "SCUI_HOR_RES / 2",
+            "widget.clip.h":           "SCUI_VER_RES / 2",
+            "widget.myself":           "SCUI_UI_SCENE_TEST_UI_CODE_1",
+            "widget.parent":           "SCUI_UI_SCENE_TEST_UI_CODE",
+            "widget.child_num":        "2",
+            "widget.event_cb":         "scui_test_ui_code_1_event_proc"
+        },
+        {
+            "annotation":              "barcode 码",
+            "widget.type":             "scui_widget_type_custom",
+            "widget.style.fully_bg":   "true",
+            "widget.clip.x":           "15",
+            "widget.clip.y":           "SCUI_VER_RES * 11 / 16",
+            "widget.clip.w":           "SCUI_HOR_RES - 30",
+            "widget.clip.h":           "SCUI_VER_RES / 4",
+            "widget.myself":           "SCUI_UI_SCENE_TEST_UI_CODE_2",
+            "widget.parent":           "SCUI_UI_SCENE_TEST_UI_CODE",
+            "widget.child_num":        "2",
+            "widget.event_cb":         "scui_test_ui_code_2_event_proc"
+        }
+    ]
+}
