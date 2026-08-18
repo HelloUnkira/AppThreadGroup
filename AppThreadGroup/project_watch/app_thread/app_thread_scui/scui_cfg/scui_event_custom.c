@@ -13,14 +13,14 @@
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 
+/* UI系统状态标记: start后才能响应stop/pause/resume */
+static bool ui_system_run = false;
+
 /*@brief 事件响应
  *@param event 事件包
  */
 static void scui_event_custom_system(scui_event_t *event)
 {
-    /* UI系统状态标记: start后才能响应stop/pause/resume */
-    static bool ui_system_run = false;
-    
     switch (event->type) {
     case scui_event_engine_ready:
         scui_event_mask_over(event);
@@ -170,9 +170,6 @@ static void scui_event_custom_window(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_focus_get: {
-        /* 窗口属性已迁移至 JSON 静态布局(scui_ui_maker.json默认参数 + scene JSON指定)
-         * 此处保留骨架供运行时动态配置使用
-         */
         break;
     }
     case scui_event_focus_lost: {
@@ -327,6 +324,7 @@ void scui_event_custom_finish(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_ptr_fling:
+        if (!ui_system_run) break;
         if (app_module_system_dlps_get())
             break;
         
@@ -338,6 +336,12 @@ void scui_event_custom_finish(scui_event_t *event)
         }
         break;
     case scui_event_key_click:
+        if (!ui_system_run) {
+            
+            scui_window_stack_reset_by(SCUI_UI_SCENE_TEST_UI_MAIN,
+                scui_window_switch_none, scui_opt_dir_none, false);
+            break;
+        }
         if (app_module_system_dlps_get())
             break;
         

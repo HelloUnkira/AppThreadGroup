@@ -1,0 +1,14 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":              "滚动配置测试窗口(接收按键, 销毁重建scroll)",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.indev_key":   "true",
+            "widget.color.color.full":  "0xFF101010",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_SCROLL",
+            "widget.child_num":          "10",
+            "widget.event_cb":          "scui_test_ui_scroll_event_proc"
+        }
+    ]
+}

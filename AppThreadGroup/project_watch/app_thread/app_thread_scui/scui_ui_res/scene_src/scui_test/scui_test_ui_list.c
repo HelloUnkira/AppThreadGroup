@@ -1,6 +1,8 @@
 /*实现目标:
  *    窗口:scui_test_ui_list
- *    测试列表: 动态创建占位标题, 后续逐步填充
+ *    构件: 静态 scroll(居中内切正方形) + 5个string条目
+ *    条目: 垂直布局, 文本居中, 文本需函数动态设置
+ *    交互: 点击条目跳转滚动配置测试界面
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
@@ -8,41 +10,26 @@
 
 #include "scui.h"
 
-/*@brief 控件事件响应回调
+/*@brief 列表条目事件回调(设文本+点击跳转滚动配置测试界面)
  *@param event 事件
  */
-void scui_test_ui_list_event_proc(scui_event_t *event)
+void scui_test_ui_list_item_event_proc(scui_event_t *event)
 {
+    static const char * const item_text[5] = {
+        "Test Multiply Scroll", "2.Text", "3.Text", "4.Text", "5.Text",
+    };
+    
     switch (event->type) {
     case scui_event_create: {
-        scui_area_t widget_clip = scui_widget_clip(event->object);
-        
-        scui_string_maker_t string_maker = {0};
-        scui_handle_t string_handle = SCUI_HANDLE_INVALID;
-        
-        /* 占位标题: 水平居中, 垂直居中 */
-        scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
-        string_maker.widget.parent              = event->object;
-        string_maker.widget.style.fully_bg      = true;
-        string_maker.widget.color.color.full    = 0xFF404040;
-        string_maker.widget.clip.x              = widget_clip.w / 2 - 100;
-        string_maker.widget.clip.y              = widget_clip.h / 2 - 30;
-        string_maker.widget.clip.w              = 200;
-        string_maker.widget.clip.h              = 60;
-        string_maker.args.align_hor             = 2;
-        string_maker.args.align_ver             = 2;
-        string_maker.args.color.color_s.full    = 0xFF00FF00;
-        string_maker.args.color.color_e.full    = 0xFF00FF00;
-        string_maker.args.color.filter          = true;
-        string_maker.args.lang                  = scui_lang_type_en;
-        string_maker.font_idx                   = SCUI_FONT_IDX_36;
-        scui_widget_create(&string_maker, &string_handle);
-        scui_string_update_str(string_handle, (uint8_t *)"Test List");
+        /* 文本只能通过函数调用设置 */
+        scui_handle_t index = scui_widget_child_to_index(event->object);
+        scui_string_update_str(event->object, item_text[index]);
         break;
     }
     case scui_event_ptr_click: {
         scui_event_mask_over(event);
-        scui_ui_scene_return();
+        scui_window_stack_cover_by(SCUI_UI_SCENE_TEST_UI_SCROLL,
+            scui_window_switch_none, scui_opt_dir_none);
         break;
     }
     default:
