@@ -1,8 +1,8 @@
 /*实现目标:
  *    窗口:scui_test_ui_list
- *    构件: 静态 scroll(居中内切正方形) + 5个string条目
+ *    构件: 静态 scroll(居中内切正方形) + 10个string条目
  *    条目: 垂直布局, 文本居中, 文本需函数动态设置
- *    交互: 点击条目跳转滚动配置测试界面
+ *    交互: 点击条目跳转对应测试界面
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
@@ -15,14 +15,20 @@
  */
 void scui_test_ui_list_item_event_proc(scui_event_t *event)
 {
-    static const char * const item_text[5] = {
-        "Test Multiply Scroll", "Test Multiply String", "Test Menial Object", "Test Symbol Char", "5.Text",
+    static const char * const item_text[10] = {
+        "Test Multiply Scroll", "Test Multiply String", "Test Menial Object", "Test Symbol Char", "Test Automatic Icon",
+        "Test Draw Graph", "7.Text", "8.Text", "9.Text", "10.Text",
     };
-    static const scui_handle_t item_scene[5] = {
+    static const scui_handle_t item_scene[10] = {
         SCUI_UI_SCENE_TEST_UI_SCROLL,
         SCUI_UI_SCENE_TEST_UI_STRING,
         SCUI_UI_SCENE_TEST_UI_OBJECT,
         SCUI_UI_SCENE_TEST_UI_SYMBOL,
+        SCUI_UI_SCENE_TEST_UI_ICON,
+        SCUI_UI_SCENE_TEST_UI_GRAPH,
+        SCUI_HANDLE_INVALID,
+        SCUI_HANDLE_INVALID,
+        SCUI_HANDLE_INVALID,
         SCUI_HANDLE_INVALID,
     };
     

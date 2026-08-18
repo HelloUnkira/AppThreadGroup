@@ -1,0 +1,479 @@
+/*实现目标:
+ *    窗口:scui_test_ui_graph
+ *    用途: 测试基础图元绘制(从 scui_ui_6 挖取)
+ *    构件: 9个custom 3x3网格
+ *    graph_1: pixel_line X交叉
+ *    graph_2: pixel_circle 实心
+ *    graph_3: pixel_circle 描边x4
+ *    graph_4: pixel_arc 实心(动画)
+ *    graph_5: pixel_arc 描边(动画)
+ *    graph_6/7/8: 纯色填充
+ *    graph_9: 拖动
+ */
+
+#define SCUI_LOG_LOCAL_STATUS       1
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+
+#include "scui.h"
+
+/*@brief 窗口事件响应回调
+ *@param event 事件
+ */
+void scui_test_ui_graph_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_create:
+        break;
+    case scui_event_destroy:
+        break;
+    case scui_event_key_click:
+        scui_widget_draw(event->object, NULL, false, 0);
+        break;
+    default:
+        break;
+    }
+}
+
+/*@brief graph_1 控件事件响应回调(pixel_line)
+ *@param event 事件
+ */
+void scui_test_ui_graph_1_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_draw_graph: {
+        
+        scui_color_t color_black = {0};
+        scui_area_t  clip = {
+            .x = 10,
+            .y = 10,
+            .w = scui_widget_clip(event->object).w - 10 * 2,
+            .h = scui_widget_clip(event->object).h - 10 * 2,
+        };
+        scui_widget_draw_color(event->object, &clip, color_black);
+        
+        scui_coord_t del_x = clip.w - 10;
+        scui_coord_t del_y = clip.h - 10;
+        scui_point_t pos_s = {0};
+        scui_point_t pos_e = {0};
+        scui_area_m_to_s(&clip, &clip);
+        
+        scui_alpha_t alpha = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha);
+        scui_color_t color_mix = {
+            .color.full = 0xFF00FF00,
+        };
+        scui_draw_dsc_t draw_dsc = {
+            .type = scui_draw_type_pixel_line,
+            .graph.src_width = 2,
+        };
+        
+        pos_s.x = clip.x1 + 5;
+        pos_s.y = clip.y1 + 5;
+        pos_e.x = clip.x2 - 10;
+        pos_e.y = clip.y2 - 10;
+        draw_dsc.graph.src_pos_1 = pos_s;
+        draw_dsc.graph.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        pos_s.x = clip.x1 + 5;
+        pos_s.y = clip.y2 - 10;
+        pos_e.x = clip.x2 - 10;
+        pos_e.y = clip.y1 + 5;
+        draw_dsc.graph.src_pos_1 = pos_s;
+        draw_dsc.graph.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        
+        pos_s.x = clip.x1 + 5;
+        pos_s.y = clip.y1 + 5;
+        pos_e.x = pos_s.x;
+        pos_e.y = clip.y2 - 10;
+        draw_dsc.graph.src_pos_1 = pos_s;
+        draw_dsc.graph.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        pos_s.x = clip.x1 + 5;
+        pos_s.y = clip.y1 + 5;
+        pos_e.x = clip.x2 - 10;
+        pos_e.y = pos_s.y;
+        draw_dsc.graph.src_pos_1 = pos_s;
+        draw_dsc.graph.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        
+        pos_s.x = clip.x1 + 5;
+        pos_s.y = clip.y1 + 5;
+        pos_e.x = pos_s.x + del_x / 2;
+        pos_e.y = clip.y2 - 10;
+        draw_dsc.graph.src_pos_1 = pos_s;
+        draw_dsc.graph.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        pos_s.x = clip.x2 - 10;
+        pos_s.y = clip.y1 + 5;
+        pos_e.x = clip.x1 + 5 + del_x / 2;
+        pos_e.y = clip.y2 - 10;
+        draw_dsc.graph.src_pos_1 = pos_s;
+        draw_dsc.graph.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        pos_s.x = clip.x1 + 5;
+        pos_s.y = clip.y2 - 10;
+        pos_e.x = clip.x2 - 10;
+        pos_e.y = clip.y1 + 5 + del_y / 2;
+        draw_dsc.graph.src_pos_1 = pos_s;
+        draw_dsc.graph.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        pos_s.x = clip.x1 + 5;
+        pos_s.y = clip.y1 + 5;
+        pos_e.x = clip.x2 - 10;
+        pos_e.y = clip.y1 + 5 + del_y / 2;
+        draw_dsc.graph.src_pos_1 = pos_s;
+        draw_dsc.graph.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief graph_2 控件事件响应回调(pixel_circle 实心)
+ *@param event 事件
+ */
+void scui_test_ui_graph_2_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_draw_graph: {
+        
+        scui_color_t color_black = {0};
+        scui_area_t  clip = {
+            .x = 10,
+            .y = 10,
+            .w = scui_widget_clip(event->object).w - 10 * 2,
+            .h = scui_widget_clip(event->object).h - 10 * 2,
+        };
+        scui_widget_draw_color(event->object, &clip, color_black);
+        
+        scui_alpha_t alpha = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha);
+        scui_color_t color_mix = {
+            .color.full = 0xFF00FF00,
+        };
+        scui_draw_dsc_t draw_dsc = {
+            .type = scui_draw_type_pixel_circle,
+            .graph.src_width    = clip.w / 2 - 5,
+            .graph.src_radius   = clip.w / 2 - 5,
+            .graph.src_center.x = clip.x + clip.w / 2,
+            .graph.src_center.y = clip.y + clip.h / 2,
+        };
+        
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief graph_3 控件事件响应回调(pixel_circle 描边x4)
+ *@param event 事件
+ */
+void scui_test_ui_graph_3_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_draw_graph: {
+        
+        scui_color_t color_black = {0};
+        scui_area_t  clip = {
+            .x = 10,
+            .y = 10,
+            .w = scui_widget_clip(event->object).w - 10 * 2,
+            .h = scui_widget_clip(event->object).h - 10 * 2,
+        };
+        scui_widget_draw_color(event->object, &clip, color_black);
+        
+        scui_alpha_t alpha = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha);
+        scui_color_t color_mix = {
+            .color.full = 0xFF00FF00,
+        };
+        scui_draw_dsc_t draw_dsc = {
+            .type = scui_draw_type_pixel_circle,
+            .graph.src_width    = 2,
+            .graph.src_radius   = clip.w / 2 - 5,
+            .graph.src_center.x = clip.x + clip.w / 2,
+            .graph.src_center.y = clip.y + clip.h / 2,
+        };
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        
+        scui_area_t widget_clip = clip;
+        widget_clip = clip;
+        widget_clip.w /= 4;
+        widget_clip.h /= 4;
+        draw_dsc.graph.src_radius = clip.w / 4 - 5;
+        
+        draw_dsc.graph.src_center.x = clip.x + clip.w / 2 - clip.w / 8;
+        draw_dsc.graph.src_center.y = clip.y + clip.h / 2 - clip.h / 8;
+        widget_clip.x = clip.x + clip.w / 2 - clip.w / 8 - clip.w / 4;
+        widget_clip.y = clip.y + clip.h / 2 - clip.h / 8 - clip.h / 4;
+        scui_widget_draw_graph(event->object, &widget_clip, alpha, color_mix, &draw_dsc);
+        
+        draw_dsc.graph.src_center.x = clip.x + clip.w / 2 + clip.w / 8;
+        draw_dsc.graph.src_center.y = clip.y + clip.h / 2 - clip.h / 8;
+        widget_clip.x = clip.x + clip.w / 2 + clip.w / 8;
+        widget_clip.y = clip.y + clip.h / 2 - clip.h / 8 - clip.h / 4;
+        scui_widget_draw_graph(event->object, &widget_clip, alpha, color_mix, &draw_dsc);
+        
+        draw_dsc.graph.src_center.x = clip.x + clip.w / 2 - clip.w / 8;
+        draw_dsc.graph.src_center.y = clip.y + clip.h / 2 + clip.h / 8;
+        widget_clip.x = clip.x + clip.w / 2 - clip.w / 8 - clip.w / 4;
+        widget_clip.y = clip.y + clip.h / 2 + clip.h / 8;
+        scui_widget_draw_graph(event->object, &widget_clip, alpha, color_mix, &draw_dsc);
+        
+        draw_dsc.graph.src_center.x = clip.x + clip.w / 2 + clip.w / 8;
+        draw_dsc.graph.src_center.y = clip.y + clip.h / 2 + clip.h / 8;
+        widget_clip.x = clip.x + clip.w / 2 + clip.w / 8;
+        widget_clip.y = clip.y + clip.h / 2 + clip.h / 8;
+        scui_widget_draw_graph(event->object, &widget_clip, alpha, color_mix, &draw_dsc);
+        
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief graph_4 控件事件响应回调(pixel_arc 实心,动画)
+ *@param event 事件
+ */
+void scui_test_ui_graph_4_event_proc(scui_event_t *event)
+{
+    static uint16_t cnt = 0;
+    static uint16_t rnd = 1;
+    static uint16_t tick = 1000;
+    static scui_coord_t src_angle_s = 0;
+    static scui_coord_t src_angle_e = 30;
+    
+    switch (event->type) {
+    case scui_event_create:
+    case scui_event_destroy: {
+        rnd = 1;
+        src_angle_s = 0;
+        src_angle_e = 30;
+        break;
+    }
+    case scui_event_anima_elapse:
+        
+        cnt += event->tick;
+        if (cnt >  tick) {
+            cnt -= tick;
+            rnd ++;
+        }
+        
+        src_angle_s = scui_map(cnt, 0, tick, 0, 360);
+        src_angle_e = src_angle_s + rnd * 30;
+        scui_widget_draw(event->object, NULL, false, 0);
+        
+        break;
+    case scui_event_draw_graph: {
+        
+        scui_color_t color_black = {0};
+        scui_area_t  clip = {
+            .x = 10,
+            .y = 10,
+            .w = scui_widget_clip(event->object).w - 10 * 2,
+            .h = scui_widget_clip(event->object).h - 10 * 2,
+        };
+        scui_widget_draw_color(event->object, &clip, color_black);
+        
+        scui_alpha_t alpha = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha);
+        scui_color_t color_mix = {
+            .color.full = 0xFF00FF00,
+        };
+        scui_draw_dsc_t draw_dsc = {
+            .type = scui_draw_type_pixel_arc,
+            .graph.src_width    = clip.w / 2 - 10,
+            .graph.src_radius   = clip.w / 2 - 10,
+            .graph.src_center.x = clip.x + clip.w / 2,
+            .graph.src_center.y = clip.y + clip.h / 2,
+            .graph.src_angle_s  = src_angle_s,
+            .graph.src_angle_e  = src_angle_e,
+        };
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        SCUI_LOG_INFO("angle:<%3d, %3d>", src_angle_s, src_angle_e);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief graph_5 控件事件响应回调(pixel_arc 描边,动画)
+ *@param event 事件
+ */
+void scui_test_ui_graph_5_event_proc(scui_event_t *event)
+{
+    static uint16_t cnt = 0;
+    static uint16_t rnd = 1;
+    static uint16_t tick = 1000;
+    static scui_coord_t src_angle_s = 0;
+    static scui_coord_t src_angle_e = 30;
+    
+    switch (event->type) {
+    case scui_event_create:
+    case scui_event_destroy: {
+        rnd = 1;
+        src_angle_s = 0;
+        src_angle_e = 30;
+        break;
+    }
+    case scui_event_anima_elapse:
+        
+        cnt += event->tick;
+        if (cnt >  tick) {
+            cnt -= tick;
+            rnd ++;
+        }
+        
+        src_angle_s = scui_map(cnt, 0, tick, 0, 360);
+        src_angle_e = src_angle_s + rnd * 30;
+        scui_widget_draw(event->object, NULL, false, 0);
+        
+        break;
+    case scui_event_draw_graph: {
+        
+        scui_color_t color_black = {0};
+        scui_area_t  clip = {
+            .x = 10,
+            .y = 10,
+            .w = scui_widget_clip(event->object).w - 10 * 2,
+            .h = scui_widget_clip(event->object).h - 10 * 2,
+        };
+        scui_widget_draw_color(event->object, &clip, color_black);
+        
+        scui_alpha_t alpha = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha);
+        scui_color_t color_mix = {
+            .color.full = 0xFF00FF00,
+        };
+        scui_draw_dsc_t draw_dsc = {
+            .type = scui_draw_type_pixel_arc,
+            .graph.src_width    = 2,
+            .graph.src_radius   = clip.w / 2 - 10,
+            .graph.src_center.x = clip.x + clip.w / 2,
+            .graph.src_center.y = clip.y + clip.h / 2,
+            .graph.src_angle_s  = src_angle_s,
+            .graph.src_angle_e  = src_angle_e,
+        };
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_dsc);
+        SCUI_LOG_INFO("angle:<%3d, %3d>", src_angle_s, src_angle_e);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief graph_6 控件事件响应回调
+ *@param event 事件
+ */
+void scui_test_ui_graph_6_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_draw_graph: {
+        
+        scui_color_t color_black = {0};
+        scui_area_t  clip = {
+            .x = 10,
+            .y = 10,
+            .w = scui_widget_clip(event->object).w - 10 * 2,
+            .h = scui_widget_clip(event->object).h - 10 * 2,
+        };
+        scui_widget_draw_color(event->object, &clip, color_black);
+        
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief graph_7 控件事件响应回调
+ *@param event 事件
+ */
+void scui_test_ui_graph_7_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_draw_graph: {
+        
+        scui_color_t color_black = {0};
+        scui_area_t  clip = {
+            .x = 10,
+            .y = 10,
+            .w = scui_widget_clip(event->object).w - 10 * 2,
+            .h = scui_widget_clip(event->object).h - 10 * 2,
+        };
+        scui_widget_draw_color(event->object, &clip, color_black);
+        
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief graph_8 控件事件响应回调
+ *@param event 事件
+ */
+void scui_test_ui_graph_8_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_draw_graph: {
+        
+        scui_color_t color_black = {0};
+        scui_area_t  clip = {
+            .x = 10,
+            .y = 10,
+            .w = scui_widget_clip(event->object).w - 10 * 2,
+            .h = scui_widget_clip(event->object).h - 10 * 2,
+        };
+        scui_widget_draw_color(event->object, &clip, color_black);
+        
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief graph_9 控件事件响应回调(拖动)
+ *@param event 事件
+ */
+void scui_test_ui_graph_9_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_draw_graph: {
+        
+        scui_color_t color_black = {0};
+        scui_area_t  clip = {
+            .x = 10,
+            .y = 10,
+            .w = scui_widget_clip(event->object).w - 10 * 2,
+            .h = scui_widget_clip(event->object).h - 10 * 2,
+        };
+        scui_widget_draw_color(event->object, &clip, color_black);
+        
+        break;
+    }
+    case scui_event_ptr_move: {
+        scui_event_mask_over(event);
+        
+        scui_point_t offset = {0};
+        /* 基础控件拖动效果 */
+        offset.x = event->ptr_e.x - event->ptr_s.x;
+        offset.y = event->ptr_e.y - event->ptr_s.y;
+        scui_widget_move_ofs(event->object, &offset);
+        break;
+    }
+    default:
+        break;
+    }
+}
