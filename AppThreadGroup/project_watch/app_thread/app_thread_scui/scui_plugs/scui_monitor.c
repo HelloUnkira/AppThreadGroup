@@ -204,10 +204,9 @@ void scui_monitor_show(bool buffer)
 {
     if (scui_monitor.window == SCUI_HANDLE_INVALID) {
         
-        scui_window_maker_t window_maker = {0};
+        scui_window_maker_define(window_maker);
         scui_handle_t window_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&window_maker, scui_widget_type_window);
         window_maker.widget.style.buffer   = buffer;
         window_maker.widget.style.fully_bg = buffer;
         window_maker.widget.format = SCUI_PIXEL_CF_DEF_A;
@@ -223,10 +222,9 @@ void scui_monitor_show(bool buffer)
         scui_monitor.window = window_handle;
         
         /* 创建显示信息文本,都是英文 */
-        scui_string_maker_t string_maker = {0};
+        scui_string_maker_define(string_maker);
         scui_handle_t string_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
         string_maker.widget.parent              = window_handle;
         string_maker.widget.clip.x              = 0;
         string_maker.widget.clip.y              = 0;

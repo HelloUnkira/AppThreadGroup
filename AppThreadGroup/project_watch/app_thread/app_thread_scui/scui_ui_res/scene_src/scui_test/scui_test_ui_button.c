@@ -62,10 +62,9 @@ void scui_test_ui_button_event_proc(scui_event_t *event)
         static const scui_coord_t btn_delta[2] = {-1, 4};
         
         for (uint8_t idx = 0; idx < 2; idx++) {
-            scui_custom_maker_t custom_maker = {0};
+            scui_custom_maker_define(custom_maker);
             scui_handle_t       custom_handle = SCUI_HANDLE_INVALID;
             
-            scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
             custom_maker.widget.style.indev_ptr = true;
             custom_maker.widget.parent   = event->object;
             custom_maker.widget.event_cb = scui_test_ui_button_item_event_proc;
@@ -88,10 +87,9 @@ void scui_test_ui_button_event_proc(scui_event_t *event)
         
         #if 1
         /* menial btn 倒数2: 点击缩放动画(动画用 menial 配置) */
-        scui_menial_maker_t menial_maker = {0};
+        scui_menial_maker_define(menial_maker);
         scui_handle_t       menial_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&menial_maker, scui_widget_type_menial);
         menial_maker.widget.parent   = event->object;
         menial_maker.widget.event_cb = scui_test_ui_button_item_event_proc;
         menial_maker.widget.clip.w   = btn_w;
@@ -117,10 +115,9 @@ void scui_test_ui_button_event_proc(scui_event_t *event)
         #if 1
         /* menial btn 倒数1: 四类 part 同显(阴影/外部线/边框/背景) */
         /* btn 默认循环绘制 sha->box->edge->bg, 此处外部覆盖 sha/box/edge 的 prop/tran */
-        scui_menial_maker_t menial2_maker = {0};
+        scui_menial_maker_define(menial2_maker);
         scui_handle_t       menial2_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&menial2_maker, scui_widget_type_menial);
         menial2_maker.widget.parent   = event->object;
         menial2_maker.widget.event_cb = scui_test_ui_button_item_event_proc;
         menial2_maker.widget.clip.w   = btn_w;

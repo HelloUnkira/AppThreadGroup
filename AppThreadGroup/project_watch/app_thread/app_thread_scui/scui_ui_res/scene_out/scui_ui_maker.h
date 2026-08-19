@@ -8,6 +8,6 @@
  *@param maker 控件构造器实例指针
  *@param type  控件类型(scui_widget_type_t)
  */
-void scui_widget_maker_def_cfg(void *maker, scui_widget_type_t type);
+void scui_ui_maker(void *maker, scui_widget_type_t type);
 
 #endif

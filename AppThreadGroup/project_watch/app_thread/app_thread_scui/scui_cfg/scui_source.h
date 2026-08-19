@@ -26,6 +26,7 @@
 #include "scui_presenter.h"             /* presenter */
 #include "scui_ready.h"                 /* ready */
 #include "scui_ui_maker.h"              /* maker */
+#include "scui_ui_apply.h"              /* apply */
 #include "scui_ui.h"                    /* ui */
 
 #endif

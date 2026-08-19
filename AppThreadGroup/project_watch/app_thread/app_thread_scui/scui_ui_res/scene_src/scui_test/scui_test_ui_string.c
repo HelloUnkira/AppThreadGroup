@@ -39,10 +39,9 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         
         /* 备注: 如果需要使用动态文字缩放, 则应该放弃掉缓冲帧和级联着色, 否则可能会爆内存 */
         
-        scui_string_maker_t string_maker = {0};
+        scui_string_maker_define(string_maker);
         scui_handle_t       string_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
         string_maker.widget.parent     = event->object;
         string_maker.args.line_width   = 2;
         string_maker.args.mode_scroll  = 1;

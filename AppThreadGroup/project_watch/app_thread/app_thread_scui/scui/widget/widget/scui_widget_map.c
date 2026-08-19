@@ -7,14 +7,23 @@
 
 #include "scui.h"
 
-static scui_widget_cb_cfg_t scui_widget_ready_cfg = NULL;
+static scui_widget_cb_maker_t scui_widget_cb_maker = NULL;
+static scui_widget_cb_apply_t scui_widget_cb_apply = NULL;
 
-/*@brief 控件默认配置回调注册
- *@param cfg 默认配置回调
+/*@brief 控件配置回调注册
+ *@param maker 控件配置回调
  */
-void scui_widget_ready_register(scui_widget_cb_cfg_t cfg)
+void scui_widget_cb_maker_register(scui_widget_cb_maker_t maker)
 {
-    scui_widget_ready_cfg = cfg;
+    scui_widget_cb_maker = maker;
+}
+
+/*@brief 控件应用回调注册
+ *@param apply 控件应用回调
+ */
+void scui_widget_cb_apply_register(scui_widget_cb_apply_t apply)
+{
+    scui_widget_cb_apply = apply;
 }
 
 /*@brief 控件树检查
@@ -183,14 +192,14 @@ void scui_widget_clean(scui_handle_t handle)
     }
 }
 
-/*@brief 控件默认配置
+/*@brief 控件默认配置(make前)
  *@param maker 控件构造器实例
  *@param type  控件类型
  */
 void scui_widget_ready(void *maker, scui_widget_type_t type)
 {
-    SCUI_ASSERT(scui_widget_ready_cfg != NULL);
-    scui_widget_ready_cfg(maker, type);
+    SCUI_ASSERT(scui_widget_cb_maker != NULL);
+    scui_widget_cb_maker(maker, type);
 }
 
 /*@brief 销毁控件
@@ -234,6 +243,7 @@ void scui_widget_create(void *maker, scui_handle_t *handle)
     maker = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->maker);
     memcpy(maker, widget_maker, widget_map->maker);
     widget_maker = maker;
+    
     /* 创建控件实例 */
     scui_widget_t *widget = SCUI_MEM_ZALLOC(scui_mem_type_mix, widget_map->size);
     /* 备注:动态构造器是不知道句柄的 */
@@ -241,6 +251,10 @@ void scui_widget_create(void *maker, scui_handle_t *handle)
     /* widget_maker->myself = SCUI_HANDLE_INVALID; */
     widget_map->make(widget, widget_maker, handle);
     SCUI_MEM_FREE(widget_maker);
+    
+    /* 控件创建后:控件应用回调 */
+    SCUI_ASSERT(scui_widget_cb_apply != NULL);
+    scui_widget_cb_apply(widget->myself);
     
     /* 控件构建后:控件构建事件 */
     scui_event_define(event, widget->myself, true, scui_event_create, NULL);

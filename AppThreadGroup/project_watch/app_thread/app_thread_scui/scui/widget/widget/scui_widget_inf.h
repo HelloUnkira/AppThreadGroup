@@ -155,10 +155,15 @@ void scui_widget_color_set(scui_handle_t handle, scui_color_t color);
 /*************************************************************************************************/
 /*************************************************************************************************/
 
-/*@brief 控件默认配置回调注册
- *@param cfg 默认配置回调
+/*@brief 控件配置回调注册
+ *@param maker 控件配置回调
  */
-void scui_widget_ready_register(scui_widget_cb_cfg_t cfg);
+void scui_widget_cb_maker_register(scui_widget_cb_maker_t maker);
+
+/*@brief 控件应用回调注册
+ *@param apply 控件应用回调
+ */
+void scui_widget_cb_apply_register(scui_widget_cb_apply_t apply);
 
 /*@brief 销毁所有子控件
  *@param handle 控件句柄
@@ -181,6 +186,27 @@ void scui_widget_destroy(scui_handle_t handle);
  *@param handle 控件句柄
  */
 void scui_widget_create(void *maker, scui_handle_t *handle);
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+/*@brief 控件构造器实例定义
+ */
+#define scui_widget_maker_define(name, type) \
+    scui_##type##_maker_t name = {0}; scui_widget_ready(&name, scui_widget_type_##type)
+
+/*@brief 构造器实例定义
+ */
+#define scui_window_maker_define(name)  scui_widget_maker_define(name, window)
+#define scui_custom_maker_define(name)  scui_widget_maker_define(name, custom)
+#define scui_scroll_maker_define(name)  scui_widget_maker_define(name, scroll)
+#define scui_string_maker_define(name)  scui_widget_maker_define(name, string)
+#define scui_roller_maker_define(name)  scui_widget_maker_define(name, roller)
+#define scui_xvedio_maker_define(name)  scui_widget_maker_define(name, xvedio)
+#define scui_xwatch_maker_define(name)  scui_widget_maker_define(name, xwatch)
+#define scui_object_maker_define(name)  scui_widget_maker_define(name, object)
+#define scui_menial_maker_define(name)  scui_widget_maker_define(name, menial)
 
 /*************************************************************************************************/
 /*************************************************************************************************/

@@ -118,10 +118,9 @@ void scui_ui_scene_xfloat_create(scui_event_t *event, scui_opt_pos_t pos, scui_e
     scui_area_t clip_z = scui_widget_area(event->object);
     scui_area_t clip_p = scui_widget_clip(event->object);
     
-    scui_scroll_maker_t scroll_maker = {0};
+    scui_scroll_maker_define(scroll_maker);
     scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
     
-    scui_widget_maker_def_cfg(&scroll_maker, scui_widget_type_scroll);
     scroll_maker.widget.style.indev_key = true;
     scroll_maker.widget.clip            = clip_z;
     scroll_maker.widget.parent          = event->object;
@@ -147,10 +146,9 @@ void scui_ui_scene_xfloat_create(scui_event_t *event, scui_opt_pos_t pos, scui_e
     if (scui_opt_bits_check(pos, scui_opt_pos_u | scui_opt_pos_l)) {wseq[0] = 1; wseq[1] = 0;}
     if (scui_opt_bits_check(pos, scui_opt_pos_d | scui_opt_pos_r)) {wseq[0] = 0; wseq[1] = 1;}
     for (uint8_t idx = 0; idx < 2; idx++) {
-        scui_custom_maker_t custom_maker = {0};
+        scui_custom_maker_define(custom_maker);
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
         custom_maker.widget.parent   = scroll_handle;
         custom_maker.widget.event_cb = scui_ui_scene_xfloat_item_event;
         

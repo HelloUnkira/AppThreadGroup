@@ -143,9 +143,8 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
         
         {
             /* 上半部分留白 */
-            scui_custom_maker_t spacer_maker = {0};
+            scui_custom_maker_define(spacer_maker);
             scui_handle_t spacer_handle = SCUI_HANDLE_INVALID;
-            scui_widget_maker_def_cfg(&spacer_maker, scui_widget_type_custom);
             spacer_maker.widget.style.fully_bg  = true;
             spacer_maker.widget.style.cover_fg  = true;
             spacer_maker.widget.style.indev_ptr = false;
@@ -157,9 +156,8 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
         
         /* 列表项(核心区域) */
         {
-            scui_custom_maker_t item_maker = {0};
+            scui_custom_maker_define(item_maker);
             scui_handle_t item_handle = SCUI_HANDLE_INVALID;
-            scui_widget_maker_def_cfg(&item_maker, scui_widget_type_custom);
             
             item_maker.widget.style.buffer    = true;
             item_maker.widget.style.buffer_d  = true;
@@ -177,9 +175,8 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
                 scui_widget_create(&item_maker, &item_handle);
                 scui_ui_res_local->item_list[idx] = item_handle;
                 
-                scui_string_maker_t string_maker = {0};
+                scui_string_maker_define(string_maker);
                 scui_handle_t string_handle = SCUI_HANDLE_INVALID;
-                string_maker.widget.type             = scui_widget_type_string;
                 string_maker.widget.parent           = item_handle;
                 string_maker.widget.clip.x           = 52 + 8 + 20;
                 string_maker.widget.clip.w           = item_maker.widget.clip.w - (52 + 16 + 8 * 2);
@@ -199,9 +196,8 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
         
         /* 下半部分留白 */
         {
-            scui_custom_maker_t spacer_maker = {0};
+            scui_custom_maker_define(spacer_maker);
             scui_handle_t spacer_handle = SCUI_HANDLE_INVALID;
-            scui_widget_maker_def_cfg(&spacer_maker, scui_widget_type_custom);
             spacer_maker.widget.style.fully_bg  = true;
             spacer_maker.widget.style.cover_fg  = true;
             spacer_maker.widget.style.indev_ptr = false;
@@ -245,9 +241,8 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         /* 清空图像资源缓存并加载该场景资源 */
         scui_ui_scene_list_cfg(scui_ui_scene_list_type_list_scale);
         
-        scui_scroll_maker_t scroll_maker = {0};
+        scui_scroll_maker_define(scroll_maker);
         scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
-        scui_widget_maker_def_cfg(&scroll_maker, scui_widget_type_scroll);
         scroll_maker.widget.style.fully_bg  = true;
         scroll_maker.widget.style.indev_enc = true;
         scroll_maker.widget.style.indev_key = true;

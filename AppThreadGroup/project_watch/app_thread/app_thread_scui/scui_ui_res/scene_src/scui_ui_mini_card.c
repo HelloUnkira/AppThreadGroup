@@ -921,9 +921,8 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
         
         {
             /* 上半部分留白 */
-            scui_custom_maker_t spacer_maker = {0};
+            scui_custom_maker_define(spacer_maker);
             scui_handle_t spacer_handle = SCUI_HANDLE_INVALID;
-            scui_widget_maker_def_cfg(&spacer_maker, scui_widget_type_custom);
             spacer_maker.widget.style.indev_ptr = false;
             spacer_maker.widget.parent          = event->object;
             spacer_maker.widget.clip.w          = SCUI_HOR_RES;
@@ -934,12 +933,10 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
         // list的各个子控件树
         for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
             
-            scui_custom_maker_t cont_maker = {0};
-            scui_custom_maker_t item_maker = {0};
+            scui_custom_maker_define(cont_maker);
+            scui_custom_maker_define(item_maker);
             scui_handle_t cont_handle = SCUI_HANDLE_INVALID;
             scui_handle_t item_handle = SCUI_HANDLE_INVALID;
-            scui_widget_maker_def_cfg(&cont_maker, scui_widget_type_custom);
-            scui_widget_maker_def_cfg(&item_maker, scui_widget_type_custom);
             
             cont_maker.widget.style.fully_bg  = true;
             cont_maker.widget.parent          = event->object;
@@ -968,10 +965,9 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
             
             
             
-            scui_string_maker_t string_maker = {0};
+            scui_string_maker_define(string_maker);
             scui_handle_t string_handle = SCUI_HANDLE_INVALID;
             
-            scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
             string_maker.widget.parent     = item_handle;
             string_maker.widget.clip.w     = item_maker.widget.clip.w;
             string_maker.widget.clip.h     = item_maker.widget.clip.h;
@@ -1485,9 +1481,8 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
         
         /* 下半部分留白 */
         {
-            scui_custom_maker_t spacer_maker = {0};
+            scui_custom_maker_define(spacer_maker);
             scui_handle_t spacer_handle = SCUI_HANDLE_INVALID;
-            scui_widget_maker_def_cfg(&spacer_maker, scui_widget_type_custom);
             spacer_maker.widget.style.indev_ptr = false;
             spacer_maker.widget.parent          = event->object;
             spacer_maker.widget.clip.w          = SCUI_HOR_RES;
@@ -1539,10 +1534,9 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         // 清空图像资源缓存
         scui_ui_scene_mini_card_cfg();
         
-        scui_scroll_maker_t scroll_maker = {0};
+        scui_scroll_maker_define(scroll_maker);
         scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&scroll_maker, scui_widget_type_scroll);
         scroll_maker.widget.style.fully_bg  = true;
         scroll_maker.widget.style.indev_enc = true;
         scroll_maker.widget.style.indev_key = true;

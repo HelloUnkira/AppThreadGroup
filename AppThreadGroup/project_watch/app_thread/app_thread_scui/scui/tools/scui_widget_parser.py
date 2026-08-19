@@ -373,7 +373,7 @@ def scui_widget_maker_generate(dst_path, def_path, defaults_map):
     scui_widget_maker_h.write(' *@param maker 控件构造器实例指针\n')
     scui_widget_maker_h.write(' *@param type  控件类型(scui_widget_type_t)\n')
     scui_widget_maker_h.write(' */\n')
-    scui_widget_maker_h.write('void scui_widget_maker_def_cfg(void *maker, scui_widget_type_t type);\n\n')
+    scui_widget_maker_h.write('void scui_ui_maker(void *maker, scui_widget_type_t type);\n\n')
     scui_widget_maker_h.write('#endif\n')
     scui_widget_maker_h.close()
 
@@ -385,7 +385,7 @@ def scui_widget_maker_generate(dst_path, def_path, defaults_map):
     scui_widget_maker_c.write(' *@param maker 控件构造器实例指针\n')
     scui_widget_maker_c.write(' *@param type  控件类型(scui_widget_type_t)\n')
     scui_widget_maker_c.write(' */\n')
-    scui_widget_maker_c.write('void scui_widget_maker_def_cfg(void *maker, scui_widget_type_t type)\n')
+    scui_widget_maker_c.write('void scui_ui_maker(void *maker, scui_widget_type_t type)\n')
     scui_widget_maker_c.write('{\n')
     scui_widget_maker_c.write('\tswitch (type) {\n')
 
@@ -530,7 +530,7 @@ def scui_widget_parser_json_cleanup(src_path, def_name, defaults_map):
     print('[JSON cleanup] total removed: %d fields\n' % removed_total)
 
 
-# 清理 .c 文件中 scui_widget_maker_def_cfg() 已覆盖的冗余字段赋值
+# 清理 .c 文件中 scui_ui_maker() 已覆盖的冗余字段赋值
 def scui_widget_parser_c_cleanup(c_root, defaults_map):
     total_removed = 0
     for dirpath, dirnames, filenames in os.walk(c_root):
@@ -551,11 +551,23 @@ def scui_widget_parser_c_cleanup(c_root, defaults_map):
                 except Exception:
                     continue
 
-            # 第一遍：收集 def_cfg(&var, type) → (var_name, widget_type)
+            # 第一遍：收集默认配置已覆盖的构造器 (var_name → widget_type)
+            # 兼容两种形式:
+            #   旧: scui_ui_maker(&var, scui_widget_type_TYPE);
+            #   新: scui_TYPE_maker_define(var);
             def_cfg_map = {}
             for line in lines:
+                # 新范式宏: scui_TYPE_maker_define(var);
+                m = re.match(r'^\s*scui_(\w+)_maker_define\((\w+)\)\s*;\s*$', line)
+                if m:
+                    var = m.group(2)
+                    wtype = 'scui_widget_type_' + m.group(1)
+                    if var not in def_cfg_map:
+                        def_cfg_map[var] = wtype
+                    continue
+                # 旧范式调用: scui_ui_maker(&var, scui_widget_type_TYPE);
                 m = re.match(
-                    r'^\s*scui_widget_maker_def_cfg\(&(\w+),\s*(scui_widget_type_\w+)\);',
+                    r'^\s*scui_ui_maker\(&(\w+),\s*(scui_widget_type_\w+)\);',
                     line
                 )
                 if m:
@@ -676,7 +688,7 @@ def scui_widget_parser():
     # 生成 maker 默认初始化 .c/.h
     scui_widget_maker_generate(dst_path, def_path, defaults_map)
 
-    # 步骤最后：清理手写 .c 文件中 scui_widget_maker_def_cfg() 已覆盖的冗余字段
+    # 步骤最后：清理手写 .c 文件中 scui_ui_maker() 已覆盖的冗余字段
     if do_cleanup:
         c_root = os.path.normpath(os.path.join(src_path, os.pardir, os.pardir))
         scui_widget_parser_c_cleanup(c_root, defaults_map)

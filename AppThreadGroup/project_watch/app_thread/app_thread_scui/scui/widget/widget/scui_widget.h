@@ -70,11 +70,13 @@ typedef struct {
 /*@brief 控件配置回调
  *@brief 控件构造回调
  *@brief 控件析构回调
+ *@brief 控件应用回调
  *@brief 控件事件回调
  */
-typedef void (*scui_widget_cb_cfg_t)(void *widget, scui_widget_type_t type);
+typedef void (*scui_widget_cb_maker_t)(void *maker, scui_widget_type_t type);
 typedef void (*scui_widget_cb_make_t)(void *widget, void *maker, scui_handle_t *handle);
 typedef void (*scui_widget_cb_burn_t)(scui_handle_t handle);
+typedef void (*scui_widget_cb_apply_t)(scui_handle_t handle);
 typedef scui_event_cb_t scui_widget_cb_invoke_t;
 
 /*@brief 控件处理映射表

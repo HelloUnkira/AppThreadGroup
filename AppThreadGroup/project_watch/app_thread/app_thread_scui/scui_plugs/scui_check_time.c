@@ -77,7 +77,7 @@ void scui_check_time_anima_expire(void *instance)
  *@param over_tick 超时时间
  *@param over_temp 临时重置
  */
-void scui_check_time_over_reset(uint8_t over_tick, bool over_temp)
+void scui_check_time_over_reset(uint8_t over_tick, bool over_temp)
 {
     scui_check_time.over = true;
     scui_check_time.over_temp = over_temp;
@@ -96,7 +96,7 @@ void scui_check_time_over_reset(uint8_t over_tick, bool over_temp)
  *@param idle_tick 空闲时间
  *@param idle_temp 临时重置
  */
-void scui_check_time_idle_reset(uint8_t idle_tick, bool idle_temp)
+void scui_check_time_idle_reset(uint8_t idle_tick, bool idle_temp)
 {
     scui_check_time.idle = true;
     scui_check_time.idle_temp = idle_temp;

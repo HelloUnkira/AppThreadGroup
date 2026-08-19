@@ -53,10 +53,9 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_custom_maker_t item_maker = {0};
+        scui_custom_maker_define(item_maker);
         scui_handle_t item_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&item_maker, scui_widget_type_custom);
         item_maker.widget.clip.w      = SCUI_HOR_RES;
         item_maker.widget.parent      = event->object;
         item_maker.widget.child_num   = 1;
@@ -70,10 +69,9 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
         for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
             scui_widget_create(&item_maker, &item_handle);
             
-            scui_custom_maker_t group_maker = {0};
+            scui_custom_maker_define(group_maker);
             scui_handle_t group_handle = SCUI_HANDLE_INVALID;
             
-            scui_widget_maker_def_cfg(&group_maker, scui_widget_type_custom);
             group_maker.widget.style.indev_ptr   = true;
             group_maker.widget.clip.w            = item_maker.widget.clip.w;
             group_maker.widget.clip.h            = item_maker.widget.clip.h;
@@ -82,10 +80,9 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             group_maker.widget.event_cb          = scui_ui_scene_item_arc_event_proc;
             scui_widget_create(&group_maker, &group_handle);
             
-            scui_custom_maker_t icon_maker = {0};
+            scui_custom_maker_define(icon_maker);
             scui_handle_t icon_handle = SCUI_HANDLE_INVALID;
             
-            scui_widget_maker_def_cfg(&icon_maker, scui_widget_type_custom);
             icon_maker.widget.style.fully_bg    = true;
             icon_maker.widget.image             = scui_ui_scene_list_image[idx] + 4;
             icon_maker.widget.clip.w            = scui_image_w(icon_maker.widget.image);
@@ -96,10 +93,9 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             // 去一个就行了, image的size是固定一样的
             scui_ui_res_local->string_width = group_maker.widget.clip.w - (icon_maker.widget.clip.w + 8 * 2);
             
-            scui_string_maker_t string_maker = {0};
+            scui_string_maker_define(string_maker);
             scui_handle_t string_handle = SCUI_HANDLE_INVALID;
             
-            scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
             string_maker.widget.parent              = group_handle;
             string_maker.args.color.color_s.full    = 0xFFFFFFFF;
             string_maker.args.color.color_e.full    = 0xFFFFFFFF;

@@ -114,10 +114,9 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         scui_area_t widget_clip = scui_widget_clip(event->object);
         
         scui_custom_data_t custom_data_zero = {0};
-        scui_custom_maker_t custom_maker = {0};
+        scui_custom_maker_define(custom_maker);
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
         custom_maker.widget.parent = event->object;
         custom_maker.widget.style.fully_bg = true;
         

@@ -81,10 +81,6 @@ void scui_menial_make(void *inst, void *inst_maker, scui_handle_t *handle)
     menial_info->make(false, menial);
     SCUI_ASSERT(menial->type > scui_menial_type_none);
     SCUI_ASSERT(menial->type < scui_menial_type_num);
-    
-    /* 样式应用 */
-    void SCUI_WIDGET_MENIAL_STYLE_DEF(scui_handle_t handle);
-    SCUI_WIDGET_MENIAL_STYLE_DEF(widget->myself);
 }
 
 /*@brief 控件析构

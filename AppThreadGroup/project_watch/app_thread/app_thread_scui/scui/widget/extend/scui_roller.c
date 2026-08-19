@@ -211,10 +211,9 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     scui_roller_t *roller = (void *)widget;
     
     /* 基类对象同步(同步外界给的部分状态) */
-    scui_custom_maker_t custom_maker = {0};
+    scui_custom_maker_define(custom_maker);
     scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
     
-    scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
     
     /* 子控件创建 */
     custom_maker.widget.clip = maker->widget.clip;

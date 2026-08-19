@@ -225,9 +225,8 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     #endif
     
     /* 构建一个父容器,用于承载cwf */
-    scui_custom_maker_t custom_maker = {0};
+    scui_custom_maker_define(custom_maker);
     
-    scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
     custom_maker.widget.clip      = scui_widget_clip(parent);
     custom_maker.widget.parent    = parent;
     custom_maker.widget.child_num = parser->list_num;

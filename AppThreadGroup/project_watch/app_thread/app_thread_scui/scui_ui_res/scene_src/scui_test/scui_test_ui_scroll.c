@@ -68,9 +68,8 @@ void scui_test_ui_scroll_custom_anima_event_proc(scui_event_t *event)
  */
 static scui_custom_maker_t scui_test_ui_scroll_custom_base(scui_handle_t parent)
 {
-    scui_custom_maker_t custom_maker = {0};
+    scui_custom_maker_define(custom_maker);
     
-    scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
     custom_maker.widget.style.fully_bg = true;
     custom_maker.widget.parent = parent;
     custom_maker.widget.color.color.ch.a = 0xFF;
@@ -84,10 +83,9 @@ static scui_custom_maker_t scui_test_ui_scroll_custom_base(scui_handle_t parent)
  */
 static void scui_test_ui_scroll_create_ver(void)
 {
-    scui_scroll_maker_t scroll_maker = {0};
+    scui_scroll_maker_define(scroll_maker);
     scui_handle_t       scroll_handle = SCUI_HANDLE_INVALID;
     
-    scui_widget_maker_def_cfg(&scroll_maker, scui_widget_type_scroll);
     scroll_maker.widget.style.fully_bg     = true;
     scroll_maker.widget.style.sched_widget = true;
     scroll_maker.widget.clip.x = (SCUI_HOR_RES - SCUI_HOR_RES * 707 / 1000) / 2;
@@ -125,10 +123,9 @@ static void scui_test_ui_scroll_create_ver(void)
  */
 static void scui_test_ui_scroll_create_hor(void)
 {
-    scui_scroll_maker_t scroll_maker = {0};
+    scui_scroll_maker_define(scroll_maker);
     scui_handle_t       scroll_handle = SCUI_HANDLE_INVALID;
     
-    scui_widget_maker_def_cfg(&scroll_maker, scui_widget_type_scroll);
     scroll_maker.widget.style.fully_bg     = true;
     scroll_maker.widget.style.sched_widget = true;
     scroll_maker.widget.clip.x = (SCUI_HOR_RES - SCUI_HOR_RES * 707 / 1000) / 2;
@@ -163,14 +160,13 @@ static void scui_test_ui_scroll_create_hor(void)
  */
 static void scui_test_ui_scroll_create_free(void)
 {
-    scui_scroll_maker_t scroll_maker = {0};
+    scui_scroll_maker_define(scroll_maker);
     scui_handle_t       scroll_handle = SCUI_HANDLE_INVALID;
     scui_coord_t        scroll_w = SCUI_HOR_RES * 707 / 1000;
     scui_coord_t        scroll_h = SCUI_VER_RES * 707 / 1000;
     scui_coord_t        custom_w = SCUI_HOR_RES / 8;
     scui_coord_t        custom_h = SCUI_VER_RES / 8;
     
-    scui_widget_maker_def_cfg(&scroll_maker, scui_widget_type_scroll);
     scroll_maker.widget.style.fully_bg     = true;
     scroll_maker.widget.style.sched_widget = true;
     scroll_maker.widget.clip.x = (SCUI_HOR_RES - scroll_w) / 2;
@@ -205,12 +201,11 @@ static void scui_test_ui_scroll_create_free(void)
  */
 static void scui_test_ui_scroll_create_nest(void)
 {
-    scui_scroll_maker_t scroll_maker = {0};
+    scui_scroll_maker_define(scroll_maker);
     scui_handle_t       scroll_handle = SCUI_HANDLE_INVALID;
     scui_coord_t        scroll_w = SCUI_HOR_RES * 707 / 1000;
     scui_coord_t        item_h = SCUI_HOR_RES / 6;
     
-    scui_widget_maker_def_cfg(&scroll_maker, scui_widget_type_scroll);
     scroll_maker.widget.style.fully_bg     = true;
     scroll_maker.widget.style.sched_widget = true;
     scroll_maker.widget.clip.x = (SCUI_HOR_RES - scroll_w) / 2;
@@ -233,10 +228,9 @@ static void scui_test_ui_scroll_create_nest(void)
     
     /* 子控件: 内嵌水平滚动(随机颜色, 边缘对齐粘连) */
     for (uint8_t idx = 0; idx < 6; idx++) {
-        scui_scroll_maker_t scroll2_maker = {0};
+        scui_scroll_maker_define(scroll2_maker);
         scui_handle_t       scroll2_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&scroll2_maker, scui_widget_type_scroll);
         scroll2_maker.widget.style.fully_bg     = true;
         scroll2_maker.widget.style.sched_widget = true;
         scroll2_maker.widget.clip.w = scroll_w;

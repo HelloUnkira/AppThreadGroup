@@ -46,10 +46,9 @@ void scui_test_ui_ring_event_proc(scui_event_t *event)
     case scui_event_create: {
         #if 0
         /* 临时迁移自 ui_2 的 spinner 测试 */
-        scui_custom_maker_t custom_maker = {0};
+        scui_custom_maker_define(custom_maker);
         scui_handle_t       custom_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
         custom_maker.widget.parent = event->object;
         custom_maker.type = scui_custom_type_spinner;
         custom_maker.data.spinner.spinner = scui_image_prj_400X400pxjpg;

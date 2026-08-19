@@ -21,7 +21,7 @@ void scui_test_ui_icon_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         #if 1
-        scui_xvedio_maker_t xvedio_maker = {0};
+        scui_xvedio_maker_define(xvedio_maker);
         scui_handle_t xvedio_handle = SCUI_HANDLE_INVALID;
         
         /* 垂直居中, 水平居中靠摆一排 */
@@ -32,7 +32,6 @@ void scui_test_ui_icon_event_proc(scui_event_t *event)
             xvedio_total += xvedio_w[idx] + xvedio_gap;
         xvedio_total -= xvedio_gap;
         
-        scui_widget_maker_def_cfg(&xvedio_maker, scui_widget_type_xvedio);
         xvedio_maker.widget.parent  = event->object;
         
         xvedio_maker.widget.clip.x   = (SCUI_HOR_RES - xvedio_total) / 2;

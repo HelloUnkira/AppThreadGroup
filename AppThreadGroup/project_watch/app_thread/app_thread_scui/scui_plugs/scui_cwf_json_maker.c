@@ -367,9 +367,8 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             break;
         case scui_cwf_json_type_img_simple: {
             SCUI_ASSERT(res->img_num == 1);
-            scui_custom_maker_t custom_maker = {0};
+            scui_custom_maker_define(custom_maker);
             
-            scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
             custom_maker.widget.clip.x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "x")) + 0.1;
             custom_maker.widget.clip.y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "y")) + 0.1;
             custom_maker.widget.clip.w = res->img_w;
@@ -383,9 +382,8 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         }
         case scui_cwf_json_type_img_watch: {
             SCUI_ASSERT(res->img_num == 3);
-            scui_xwatch_maker_t xwatch_maker = {0};
+            scui_xwatch_maker_define(xwatch_maker);
             
-            scui_widget_maker_def_cfg(&xwatch_maker, scui_widget_type_xwatch);
             xwatch_maker.widget.clip   = scui_widget_clip(parser->parent);
             xwatch_maker.widget.parent = parser->parent;
             xwatch_maker.image[0] = parser->image_hit[res->img_ofs[0]];
@@ -423,9 +421,8 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         case scui_cwf_json_type_img_temp: {
             /* 数字类固定都是10个 */
             SCUI_ASSERT(res->img_num == 10);
-            scui_custom_maker_t custom_maker = {0};
+            scui_custom_maker_define(custom_maker);
             
-            scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
             custom_maker.widget.clip.x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "x")) + 0.1;
             custom_maker.widget.clip.y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "y")) + 0.1;
             custom_maker.widget.clip.w = res->img_w;
@@ -453,9 +450,8 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             if (parser->list_type[idx] == scui_cwf_json_type_img_ampm)
                 SCUI_ASSERT(res->img_num == 2);
             
-            scui_custom_maker_t custom_maker = {0};
+            scui_custom_maker_define(custom_maker);
             
-            scui_widget_maker_def_cfg(&custom_maker, scui_widget_type_custom);
             custom_maker.widget.clip.x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "x")) + 0.1;
             custom_maker.widget.clip.y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "y")) + 0.1;
             custom_maker.widget.clip.w = scui_image_w(parser->image_hit[res->img_ofs[0]]);
@@ -487,10 +483,9 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         uint32_t align = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "align")) + 0.1;
         uint32_t size  = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "size")) + 0.1;
         
-        scui_string_maker_t string_maker = {0};
+        scui_string_maker_define(string_maker);
         scui_handle_t string_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
         string_maker.widget.clip.x              = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "x")) + 0.1;
         string_maker.widget.clip.y              = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "y")) + 0.1;
         string_maker.widget.clip.w              = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "w")) + 0.1;

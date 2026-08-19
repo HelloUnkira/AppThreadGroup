@@ -161,10 +161,9 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_string_maker_t string_maker = {0};
+        scui_string_maker_define(string_maker);
         scui_handle_t string_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&string_maker, scui_widget_type_string);
         string_maker.widget.parent              = event->object;
         string_maker.widget.clip.w              = SCUI_HOR_RES;
         string_maker.widget.clip.h              = 40;
@@ -346,10 +345,9 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         // chart hist (menial cht)
-        scui_menial_maker_t menial_maker = {0};
+        scui_menial_maker_define(menial_maker);
         scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&menial_maker, scui_widget_type_menial);
         menial_maker.widget.clip.x = 0;
         menial_maker.widget.clip.y = 100;
         menial_maker.widget.clip.w = SCUI_HOR_RES;
@@ -518,10 +516,9 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         // chart hist (menial cht)
-        scui_menial_maker_t menial_maker = {0};
+        scui_menial_maker_define(menial_maker);
         scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&menial_maker, scui_widget_type_menial);
         menial_maker.widget.clip.x = 0;
         menial_maker.widget.clip.y = 100;
         menial_maker.widget.clip.w = SCUI_HOR_RES;
@@ -691,10 +688,9 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         // chart hist (menial cht)
-        scui_menial_maker_t menial_maker = {0};
+        scui_menial_maker_define(menial_maker);
         scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
         
-        scui_widget_maker_def_cfg(&menial_maker, scui_widget_type_menial);
         menial_maker.widget.clip.x = 0;
         menial_maker.widget.clip.y = 100;
         menial_maker.widget.clip.w = SCUI_HOR_RES;

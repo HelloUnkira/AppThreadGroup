@@ -90,8 +90,9 @@ void scui_ready(void)
     scui_event_register_custom(scui_event_custom_myself);
     scui_event_register_finish(scui_event_custom_finish);
     
-    /* 控件默认配置注册(ready回调外部注册的默认配置函数) */
-    scui_widget_ready_register(scui_widget_maker_def_cfg);
+    /* 控件默认配置与应用注册(make前配置 + make后应用样式) */
+    scui_widget_cb_maker_register(scui_ui_maker);
+    scui_widget_cb_apply_register(scui_ui_apply);
     
     scui_handle_table_t table = {0};
     /* 句柄表(widget) */
