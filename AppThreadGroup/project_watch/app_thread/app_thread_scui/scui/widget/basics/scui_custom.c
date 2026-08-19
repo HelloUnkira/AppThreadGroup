@@ -26,6 +26,10 @@ void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle)
     if (custom_maker->type != scui_custom_type_none)
         widget_maker->style.sched_anima = true;
     
+    /* 可选标记ptr事件 */
+    if (custom_maker->type == scui_custom_type_image_crect4)
+        widget_maker->style.indev_ptr = true;
+    
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_custom));
@@ -106,6 +110,14 @@ void scui_custom_invoke(scui_event_t *event)
     case scui_event_draw_ready: {
         /* 回收可能因为文本绘制而存留在控件内的资源 */
         scui_custom_text_recycle(widget->myself);
+        break;
+    }
+    case scui_event_ptr_click: {
+        /* 仅按钮类子类型支持点击事件(四角图) */
+        if (custom->type != scui_custom_type_image_crect4) {
+            scui_event_define(event, widget->myself, true, scui_event_button_click, NULL);
+            scui_event_notify(&event);
+        }
         break;
     }
     case scui_event_draw_graph: {

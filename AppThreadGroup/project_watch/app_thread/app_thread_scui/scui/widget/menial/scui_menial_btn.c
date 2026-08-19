@@ -187,10 +187,19 @@ void scui_menial_btn_invoke(scui_event_t *event)
     
     case scui_event_draw_graph: {
         
-        scui_object_prop_t prop = {0};
-        prop.part = scui_object_part_rect_bg;
-        scui_object_state_get(event->object, &prop.state);
-        scui_object_draw_rect(event->object, &prop);
+        /* 默认绘制全部 part: 阴影->外部线->边框->背景 */
+        static const scui_object_type_t part_table[] = {
+            scui_object_part_rect_sha,
+            scui_object_part_rect_box,
+            scui_object_part_rect_edge,
+            scui_object_part_rect_bg,
+        };
+        for (uint8_t idx = 0; idx < scui_arr_len(part_table); idx++) {
+            scui_object_prop_t prop = {0};
+            prop.part = part_table[idx];
+            scui_object_state_get(event->object, &prop.state);
+            scui_object_draw_rect(event->object, &prop);
+        }
         break;
     }
     default:

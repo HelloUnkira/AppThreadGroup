@@ -69,18 +69,6 @@
             "default": {
                 "widget.type": "scui_widget_type_menial"
             }
-        },
-        {
-            "class": "scui_widget_type_button",
-            "default": {
-                "widget.type": "scui_widget_type_button"
-            }
-        },
-        {
-            "class": "scui_widget_type_xchart",
-            "default": {
-                "widget.type": "scui_widget_type_xchart"
-            }
         }
     ]
 }

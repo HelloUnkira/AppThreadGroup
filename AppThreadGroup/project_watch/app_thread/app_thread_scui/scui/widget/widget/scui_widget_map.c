@@ -163,26 +163,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .inherit = false,
             .name    = "menial",
         },
-        [scui_widget_type_button] = {
-            .size    = sizeof(scui_button_t),
-            .maker   = sizeof(scui_button_maker_t),
-            .base    = scui_widget_type_button,
-            .make    = scui_button_make,
-            .burn    = scui_button_burn,
-            .invoke  = scui_button_invoke,
-            .inherit = false,
-            .name    = "button",
-        },
-        [scui_widget_type_xchart] = {
-            .size    = sizeof(scui_xchart_t),
-            .maker   = sizeof(scui_xchart_maker_t),
-            .base    = scui_widget_type_xchart,
-            .make    = scui_xchart_make,
-            .burn    = scui_xchart_burn,
-            .invoke  = scui_xchart_invoke,
-            .inherit = false,
-            .name    = "xchart",
-        },
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);

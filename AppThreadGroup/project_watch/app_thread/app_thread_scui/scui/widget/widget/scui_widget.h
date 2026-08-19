@@ -16,8 +16,6 @@ typedef enum {
     /* 可选控件 */
     scui_widget_type_object,    /* 对象控件 */
     scui_widget_type_menial,    /* 仆从控件 */
-    scui_widget_type_button,    /* 纯色按钮 */
-    scui_widget_type_xchart,    /* 图表控件 */
     /* 继续补充... */
     scui_widget_type_num,
 } scui_widget_type_t;

@@ -32,7 +32,7 @@ static void scui_widget_parser_event_cb_empty(scui_event_t *event)
 #define scui_ui_scene_waterfall_bar_arc_event                  scui_widget_parser_event_cb_empty
 #define scui_ui_scene_popup_event_proc                         scui_widget_parser_event_cb_empty
 #define scui_ui_scene_popup_bg_event_proc                      scui_widget_parser_event_cb_empty
-#define scui_test_ui_button_window_event_proc                  scui_widget_parser_event_cb_empty
+#define scui_test_ui_button_event_proc                         scui_widget_parser_event_cb_empty
 #define scui_test_ui_chart_event_proc                          scui_widget_parser_event_cb_empty
 #define scui_test_ui_code_event_proc                           scui_widget_parser_event_cb_empty
 #define scui_test_ui_code_1_event_proc                         scui_widget_parser_event_cb_empty
@@ -104,7 +104,7 @@ extern void scui_ui_scene_waterfall_scroll_event(scui_event_t *event);
 extern void scui_ui_scene_waterfall_bar_arc_event(scui_event_t *event);
 extern void scui_ui_scene_popup_event_proc(scui_event_t *event);
 extern void scui_ui_scene_popup_bg_event_proc(scui_event_t *event);
-extern void scui_test_ui_button_window_event_proc(scui_event_t *event);
+extern void scui_test_ui_button_event_proc(scui_event_t *event);
 extern void scui_test_ui_chart_event_proc(scui_event_t *event);
 extern void scui_test_ui_code_event_proc(scui_event_t *event);
 extern void scui_test_ui_code_1_event_proc(scui_event_t *event);
@@ -1232,7 +1232,7 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_BUTTON_val
 	{ .handle = SCUI_HANDLE_INVALID, },
 	{ .sbitfd = 0, },
 	{ .handle = 10, },
-	{ .event = scui_test_ui_button_window_event_proc, },
+	{ .event = scui_test_ui_button_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_BUTTON, },
 	{ .sbitfd = true, },
 	{ .sbitfd = true, },

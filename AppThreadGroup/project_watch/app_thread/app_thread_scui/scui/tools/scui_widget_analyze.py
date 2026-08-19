@@ -20,8 +20,6 @@ SCUI_WIDGET_CLASS_MAKER = {
     'scui_widget_type_xwatch':  'scui_xwatch_maker_t',
     'scui_widget_type_object':  'scui_object_maker_t',
     'scui_widget_type_menial':  'scui_menial_maker_t',
-    'scui_widget_type_button':  'scui_button_maker_t',
-    'scui_widget_type_xchart':  'scui_xchart_maker_t',
 }
 # 字段枚举定义源(相对本脚本)
 SCUI_WIDGET_JSON_FIELD_SOURCE = '../widget/widget/scui_widget.h'

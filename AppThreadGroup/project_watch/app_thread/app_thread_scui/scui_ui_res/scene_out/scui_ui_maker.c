@@ -79,18 +79,6 @@ void scui_widget_maker_def_cfg(void *maker, scui_widget_type_t type)
 		menial_maker->widget.type  = scui_widget_type_menial;
 		break;
 	}
-	case scui_widget_type_button: {
-		scui_button_maker_t *button_maker = (scui_button_maker_t *)maker;
-		
-		button_maker->widget.type  = scui_widget_type_button;
-		break;
-	}
-	case scui_widget_type_xchart: {
-		scui_xchart_maker_t *xchart_maker = (scui_xchart_maker_t *)maker;
-		
-		xchart_maker->widget.type  = scui_widget_type_xchart;
-		break;
-	}
 	default:
 		break;
 	}
