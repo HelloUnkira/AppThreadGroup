@@ -106,25 +106,38 @@ void scui_object_state_set(scui_handle_t handle, scui_object_type_t state);
 /* 简要宏化简属性过渡的添加: */
 
 /* scui_object_prop_add宏化简 */
-#define scui_object_prop_new(handle_v, part_v, style_v, state_v, data_v)        \
+#define scui_object_prop_add_s(handle_v, part_v, style_v, state_v, data_v)      \
 do {                                                                            \
     scui_object_prop_t scui_op_i = {                                            \
-        .part  = scui_object_part_##part_v,                                     \
-        .style = scui_object_style_##style_v,                                   \
-        .state = scui_object_state_##state_v,                                   \
-        .data  = data_v,};                                                      \
+        .part  = part_v,                                                        \
+        .style = style_v,                                                       \
+        .state = state_v,                                                       \
+        .data  = data_v,                                                        \
+    };                                                                          \
     scui_object_prop_add(handle_v, &scui_op_i);                                 \
 } while (0)                                                                     \
 
+/* scui_object_prop_sync宏化简 */
+#define scui_object_prop_sync_s(handle_v, part_v, style_v, state_v, data_v)     \
+do {                                                                            \
+    scui_object_prop_t scui_op_i = {                                            \
+        .part  = part_v,                                                        \
+        .style = style_v,                                                       \
+        .state = state_v,                                                       \
+    };                                                                          \
+    if (scui_object_prop_sync(handle_v, &scui_op_i))                            \
+        data_v = scui_op_i.data;                                                \
+} while (0)                                                                     \
+
 /* scui_object_tran_add宏化简 */
-#define scui_object_tran_new(handle_v, part_v, style_v, state_p_v, state_n_v,   \
-    data_p_v, data_n_v, path_v, time_v, delay_v)                                \
+#define scui_object_tran_add_s(handle_v, part_v, style_v,                       \
+    state_p_v, state_n_v, data_p_v, data_n_v, path_v, time_v, delay_v)          \
 do {                                                                            \
     scui_object_tran_t scui_ot_i = {                                            \
-        .part    = scui_object_part_##part_v,                                   \
-        .style   = scui_object_style_##style_v,                                 \
-        .state_p = scui_object_state_##state_p_v,                               \
-        .state_n = scui_object_state_##state_n_v,                               \
+        .part    = part_v,                                                      \
+        .style   = style_v,                                                     \
+        .state_p = state_p_v,                                                   \
+        .state_n = state_n_v,                                                   \
         .data_p  = data_p_v,                                                    \
         .data_n  = data_n_v,                                                    \
         .path    = path_v,                                                      \
@@ -135,12 +148,12 @@ do {                                                                            
 } while (0)                                                                     \
 
 /* scui_object_tran_add宏二次化简 */
-#define scui_object_tran_new2(handle_v, part_v, style_v, state_p_v, state_n_v,  \
-    data_p_v, data_n_v, path_v, time_v, delay_v)                                \
+#define scui_object_tran_add_s2(handle_v, part_v, style_v,                      \
+    state_p_v, state_n_v, data_p_v, data_n_v, path_v, time_v, delay_v)          \
 do {                                                                            \
-    scui_object_tran_new(handle_v, part_v, style_v, state_p_v, state_n_v,       \
+    scui_object_tran_add_s(handle_v, part_v, style_v, state_p_v, state_n_v,     \
     data_p_v, data_n_v, path_v, time_v, delay_v);                               \
-    scui_object_tran_new(handle_v, part_v, style_v, state_n_v, state_p_v,       \
+    scui_object_tran_add_s(handle_v, part_v, style_v, state_n_v, state_p_v,     \
     data_n_v, data_p_v, path_v, time_v, delay_v);                               \
 } while (0)                                                                     \
 

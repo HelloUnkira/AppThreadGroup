@@ -40,19 +40,23 @@ void scui_test_ui_chart_event_proc(scui_event_t *event)
         menial_maker.widget.clip.w = SCUI_HOR_RES * 11 / 25;
         menial_maker.widget.clip.h = SCUI_VER_RES * 11 / 25;
         menial_maker.type = scui_menial_type_cht;
-        menial_maker.data.cht.round = true;
         menial_maker.data.cht.area.x = 5;
         menial_maker.data.cht.area.y = 0;
         menial_maker.data.cht.area.w = menial_maker.widget.clip.w - 10;
         menial_maker.data.cht.area.h = menial_maker.widget.clip.h - 10;
-        menial_maker.data.cht.color.color.full = 0xFFFF0000;
         menial_maker.data.cht.value_min = 60;
         menial_maker.data.cht.value_max = 220;
         menial_maker.data.cht.type   = 0;
         menial_maker.data.cht.number = 20;
         menial_maker.data.cht.space  = 4;
-        menial_maker.data.cht.width  = 6;
         scui_widget_create(&menial_maker, &menial_handle);
+        
+        scui_menial_cht_res_t cht_res = {0};
+        cht_res.round  = true;
+        cht_res.width  = 6;
+        cht_res.color.color.full = 0xFFFF0000;
+        cht_res.part = scui_object_part_rect_item;
+        scui_menial_cht_style(menial_handle, &cht_res);
         scui_menial_cht_hist_data(menial_handle, vlist_min, vlist_max);
         #endif
         
@@ -63,8 +67,11 @@ void scui_test_ui_chart_event_proc(scui_event_t *event)
         menial_maker.data.cht.type   = 1;
         menial_maker.data.cht.number = 100;
         menial_maker.data.cht.space  = 4;
-        menial_maker.data.cht.width  = 2;
         scui_widget_create(&menial_maker, &menial_handle);
+        
+        cht_res.width  = 2;
+        cht_res.part = scui_object_part_line_item;
+        scui_menial_cht_style(menial_handle, &cht_res);
         
         for (uint8_t idx = 0; idx < 100; idx++) {
             scui_coord_t base = 60;

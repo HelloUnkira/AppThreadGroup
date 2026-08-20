@@ -377,7 +377,8 @@ static bool scui_object_draw_prop_sync(scui_handle_t handle, scui_object_prop_t 
         local_prop.data  = local_data_zero;
         local_prop.style = offset + idx;
         if (!scui_object_prop_sync(handle, &local_prop)) {
-             SCUI_LOG_ERROR("lose rect style %d", idx);
+             SCUI_LOG_INFO("lose prop style %d", idx);
+             /* 屏蔽该警告, 可能需要该返回值 */
              return false;
         }
         

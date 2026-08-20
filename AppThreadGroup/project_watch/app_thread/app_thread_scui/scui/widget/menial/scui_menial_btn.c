@@ -17,14 +17,7 @@ void scui_menial_btn_make(bool maker, void *inst)
     scui_menial_maker_t *menial_maker = inst;
     
     if (maker) {
-        
-        /* 必须标记widget事件 */
-        menial_maker->widget.style.sched_widget = true;
     } else {
-        
-        /* 未配置使用默认值 */
-        if (menial->data.btn.lim  == 0) menial->data.btn.lim  = SCUI_WIDGET_MENIAL_BTN_PCT;
-        if (menial->data.btn.fixed)     menial->data.btn.lim  = 100;
     }
 }
 
@@ -33,6 +26,123 @@ void scui_menial_btn_make(bool maker, void *inst)
  */
 void scui_menial_btn_burn(scui_menial_t *menial)
 {
+}
+
+/*@brief 控件样式应用(子类型)
+ *@param handle 控件句柄
+ *@param res    样式资源
+ */
+void scui_menial_btn_style(scui_handle_t handle, scui_menial_btn_res_t *res)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
+    
+    /* 几何属性(def<->pre) */
+    scui_object_sub_t sub = {.part = res->part};
+    sub.rect.alpha.alpha       = scui_alpha_cover;
+    sub.rect.align.align       = scui_opt_pos_c;
+    sub.rect.width.number      = widget->clip.w;
+    sub.rect.height.number     = widget->clip.h;
+    sub.rect.radius.number     = res->radius;
+    sub.rect.side_width.number = res->width;
+    
+    sub.state = scui_object_state_def;
+    scui_object_prop_rect(handle, &sub);
+    sub.state = scui_object_state_pre;
+    scui_object_prop_rect(handle, &sub);
+    
+    if (menial->data.btn.check) {
+        sub.state = scui_object_state_chk;
+        scui_object_prop_rect(handle, &sub);
+    }
+    
+    scui_coord_t time = res->time;
+    if (time == 0) time = SCUI_WIDGET_MENIAL_BTN_TIME;
+    
+    scui_coord_t lim = res->lim;
+    if (lim == 0) lim = SCUI_WIDGET_MENIAL_BTN_PCT;
+    scui_multi_t scale_w = (scui_multi_t)widget->clip.w * lim / 100;
+    scui_multi_t scale_h = (scui_multi_t)widget->clip.h * lim / 100;
+    
+    /* def<->pre: 颜色/缩放/动画 */
+    {
+        scui_color32_t color_l = res->color[0].color_l;
+        scui_color32_t color_d = res->color[0].color_d;
+        
+        /* color bg prop */
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_color,
+            scui_object_state_def, scui_object_data_color32(color_l));
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_color,
+            scui_object_state_pre, scui_object_data_color32(color_d));
+        /* color bg tran(def<->pre) */
+        scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_color,
+            scui_object_state_def, scui_object_state_pre, scui_object_data_color32(color_l),
+            scui_object_data_color32(color_d), NULL, time, 0);
+        
+        /* width && height prop */
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
+            scui_object_state_def, scui_object_data_number(scale_w));
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
+            scui_object_state_pre, scui_object_data_number(widget->clip.w));
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_height,
+            scui_object_state_def, scui_object_data_number(scale_h));
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_height,
+            scui_object_state_pre, scui_object_data_number(widget->clip.h));
+        
+        if (!menial->data.btn.fixed) {
+            /* width && height tran(def<->pre) */
+            scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_width,
+                scui_object_state_def, scui_object_state_pre, scui_object_data_number(scale_w),
+                scui_object_data_number(widget->clip.w), NULL, time, 0);
+            
+            scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_height,
+                scui_object_state_def, scui_object_state_pre, scui_object_data_number(scale_h),
+                scui_object_data_number(widget->clip.h), NULL, time, 0);
+        }
+    }
+    
+    /* chk<->pre: 颜色/缩放/动画(选中时) */
+    if (menial->data.btn.check) {
+        scui_color32_t color_l = res->color[1].color_l;
+        scui_color32_t color_d = res->color[1].color_d;
+        
+        /* color bg prop */
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_color,
+            scui_object_state_chk, scui_object_data_color32(color_l));
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_color,
+            scui_object_state_pre, scui_object_data_color32(color_d));
+        
+        /* color bg tran(chk<->pre) */
+        scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_color,
+            scui_object_state_chk, scui_object_state_pre, scui_object_data_color32(color_l),
+            scui_object_data_color32(color_d), NULL, time, 0);
+        
+        /* width && height prop */
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
+            scui_object_state_chk, scui_object_data_number(scale_w));
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
+            scui_object_state_pre, scui_object_data_number(widget->clip.w));
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_height,
+            scui_object_state_chk, scui_object_data_number(scale_h));
+        scui_object_prop_add_s(handle, res->part, scui_object_style_rect_height,
+            scui_object_state_pre, scui_object_data_number(widget->clip.h));
+        
+        if (!menial->data.btn.fixed) {
+            /* width && height tran(chk<->pre) */
+            scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_width,
+                scui_object_state_chk, scui_object_state_pre, scui_object_data_number(scale_w),
+                scui_object_data_number(widget->clip.w), NULL, time, 0);
+            
+            scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_height,
+                scui_object_state_chk, scui_object_state_pre, scui_object_data_number(scale_h),
+                scui_object_data_number(widget->clip.h), NULL, time, 0);
+        }
+    }
+    
+    /* 同步全局time属性(默认值/可覆盖) */
+    scui_object_prop_add_s(handle, scui_object_part_main,
+        scui_object_style_main_time, scui_object_state_def,
+        scui_object_data_number(time));
 }
 
 /*@brief 事件处理回调(子类型)
@@ -88,100 +198,10 @@ void scui_menial_btn_invoke(scui_event_t *event)
     }
     
     case scui_event_create: {
-        scui_area_t widget_clip = scui_widget_clip(event->object);
-        scui_object_sub_t sub = {0};
         
-        sub.rect.alpha.alpha       = scui_alpha_cover;
-        sub.rect.align.align       = scui_opt_pos_c;
-        sub.rect.width.number      = widget_clip.w;
-        sub.rect.height.number     = widget_clip.h;
-        sub.rect.radius.number     = menial->data.btn.radius;
-        sub.rect.side_width.number = menial->data.btn.width;
-        
+        /* 运行状态初始化(运行时初值已由构造器拷贝) */
         scui_object_press_set(event->object, true);
         scui_object_check_set(event->object, menial->data.btn.check);
-        
-        /* def<->pre */
-        if (true) {
-            sub.part  = scui_object_part_rect_bg;
-            sub.state = scui_object_state_def;
-            scui_object_prop_rect(event->object, &sub);
-            
-            sub.part  = scui_object_part_rect_bg;
-            sub.state = scui_object_state_pre;
-            scui_object_prop_rect(event->object, &sub);
-        }
-        /* chk */
-        if (menial->data.btn.check) {
-            
-            sub.part  = scui_object_part_rect_bg;
-            sub.state = scui_object_state_chk;
-            scui_object_prop_rect(event->object, &sub);
-        }
-        
-        scui_multi_t scale_w = (scui_multi_t)widget_clip.w * menial->data.btn.lim / 100;
-        scui_multi_t scale_h = (scui_multi_t)widget_clip.h * menial->data.btn.lim / 100;
-        scui_multi_t default_w = widget_clip.w;
-        scui_multi_t default_h = widget_clip.h;
-        
-        /* 同步全局time属性(默认值/可覆盖) */
-        scui_coord_t main_time = menial->data.btn.time;
-        if (main_time == 0) main_time = SCUI_WIDGET_MENIAL_BTN_TIME;
-        scui_object_prop_new(event->object, main, main_time, def, scui_object_data_number(main_time));
-        
-        /* def<->pre */
-        if (true) {
-            /* color bg prop */
-            scui_object_prop_new(event->object, rect_bg, rect_color, def, scui_object_data_color32(menial->data.btn.color[0].color_l));
-            scui_object_prop_new(event->object, rect_bg, rect_color, pre, scui_object_data_color32(menial->data.btn.color[0].color_d));
-            
-            /* color bg tran */
-            scui_object_tran_new2(event->object, rect_bg, rect_color, def, pre,
-                scui_object_data_color32(menial->data.btn.color[0].color_l),
-                scui_object_data_color32(menial->data.btn.color[0].color_d),
-                NULL, main_time, 0);
-            
-            /* width && height prop */
-            scui_object_prop_new(event->object, rect_bg, rect_width,  def, scui_object_data_number(scale_w));
-            scui_object_prop_new(event->object, rect_bg, rect_width,  pre, scui_object_data_number(default_w));
-            scui_object_prop_new(event->object, rect_bg, rect_height, def, scui_object_data_number(scale_h));
-            scui_object_prop_new(event->object, rect_bg, rect_height, pre, scui_object_data_number(default_h));
-            
-            if (!menial->data.btn.fixed) {
-                /* width && height tran */
-                scui_object_tran_new2(event->object, rect_bg, rect_width,  def, pre, scui_object_data_number(scale_w),
-                    scui_object_data_number(default_w), NULL, main_time, 0);
-                scui_object_tran_new2(event->object, rect_bg, rect_height, def, pre, scui_object_data_number(scale_h),
-                    scui_object_data_number(default_h), NULL, main_time, 0);
-            }
-        }
-        
-        /* chk<->pre */
-        if (menial->data.btn.check) {
-            /* color bg prop */
-            scui_object_prop_new(event->object, rect_bg, rect_color, chk, scui_object_data_color32(menial->data.btn.color[1].color_l));
-            scui_object_prop_new(event->object, rect_bg, rect_color, pre, scui_object_data_color32(menial->data.btn.color[1].color_d));
-            
-            /* color bg tran */
-            scui_object_tran_new2(event->object, rect_bg, rect_color, chk, pre,
-                scui_object_data_color32(menial->data.btn.color[1].color_l),
-                scui_object_data_color32(menial->data.btn.color[1].color_d),
-                NULL, main_time, 0);
-            
-            /* width && height prop */
-            scui_object_prop_new(event->object, rect_bg, rect_width,  chk, scui_object_data_number(scale_w));
-            scui_object_prop_new(event->object, rect_bg, rect_width,  pre, scui_object_data_number(default_w));
-            scui_object_prop_new(event->object, rect_bg, rect_height, chk, scui_object_data_number(scale_h));
-            scui_object_prop_new(event->object, rect_bg, rect_height, pre, scui_object_data_number(default_h));
-            
-            if (!menial->data.btn.fixed) {
-                /* width && height tran */
-                scui_object_tran_new2(event->object, rect_bg, rect_width,  chk, pre, scui_object_data_number(scale_w),
-                    scui_object_data_number(default_w), NULL, main_time, 0);
-                scui_object_tran_new2(event->object, rect_bg, rect_height, chk, pre, scui_object_data_number(scale_h),
-                    scui_object_data_number(default_h), NULL, main_time, 0);
-            }
-        }
         break;
     }
     
@@ -195,8 +215,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
             scui_object_part_rect_bg,
         };
         for (uint8_t idx = 0; idx < scui_arr_len(part_table); idx++) {
-            scui_object_prop_t prop = {0};
-            prop.part = part_table[idx];
+            scui_object_prop_t prop = {.part = part_table[idx]};
             scui_object_state_get(event->object, &prop.state);
             scui_object_draw_rect(event->object, &prop);
         }

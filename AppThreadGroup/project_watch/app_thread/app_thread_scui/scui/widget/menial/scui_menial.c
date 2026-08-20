@@ -11,9 +11,9 @@
  *@param type 控件子类型
  *@param info 控件子类型信息
  */
-static void scui_menial_info_map_find(scui_menial_type_t type, scui_menial_sub_info_t **info)
+static void scui_menial_sub_find(scui_menial_type_t type, scui_menial_sub_t **sub)
 {
-    static const scui_menial_sub_info_t scui_menial_info[scui_menial_type_num] = {
+    static const scui_menial_sub_t scui_menial_sub[scui_menial_type_num] = {
         
         [scui_menial_type_btn] = {
             .make   = scui_menial_btn_make,
@@ -37,10 +37,10 @@ static void scui_menial_info_map_find(scui_menial_type_t type, scui_menial_sub_i
         },
     };
     
-    SCUI_ASSERT(info != NULL);
-    SCUI_ASSERT(type >  scui_menial_type_none);
-    SCUI_ASSERT(type <  scui_menial_type_num);
-    *info = &scui_menial_info[type];
+    SCUI_ASSERT(sub != NULL);
+    SCUI_ASSERT(type > scui_menial_type_none);
+    SCUI_ASSERT(type < scui_menial_type_num);
+    *sub = &scui_menial_sub[type];
 }
 
 /*@brief 控件构造
@@ -60,9 +60,14 @@ void scui_menial_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_menial_t *menial = widget;
     scui_menial_maker_t *menial_maker = widget_maker;
     
-    scui_menial_sub_info_t *menial_info = NULL;
-    scui_menial_info_map_find(menial_maker->type, &menial_info);
-    menial_info->make(true, menial_maker);
+    /* 必须标记ptr,anima,widget事件 */
+    widget_maker->style.indev_ptr    = true;
+    widget_maker->style.sched_anima  = true;
+    widget_maker->style.sched_widget = true;
+    
+    scui_menial_sub_t *menial_sub = NULL;
+    scui_menial_sub_find(menial_maker->type, &menial_sub);
+    menial_sub->make(true, menial_maker);
     
     /* 构造派生控件实例 */
     scui_object_make(widget, widget_maker, handle);
@@ -78,7 +83,7 @@ void scui_menial_make(void *inst, void *inst_maker, scui_handle_t *handle)
     /* 资源同步与构造 */
     menial->type = menial_maker->type;
     menial->data = menial_maker->data;
-    menial_info->make(false, menial);
+    menial_sub->make(false, menial);
     SCUI_ASSERT(menial->type > scui_menial_type_none);
     SCUI_ASSERT(menial->type < scui_menial_type_num);
 }
@@ -93,9 +98,9 @@ void scui_menial_burn(scui_handle_t handle)
     scui_menial_t *menial = (void *)widget;
     
     /* 资源析构 */
-    scui_menial_sub_info_t *menial_info = NULL;
-    scui_menial_info_map_find(menial->type, &menial_info);
-    menial_info->burn(menial);
+    scui_menial_sub_t *menial_sub = NULL;
+    scui_menial_sub_find(menial->type, &menial_sub);
+    menial_sub->burn(menial);
     
     /* 析构派生控件实例 */
     scui_object_burn(widget->myself);
@@ -140,7 +145,7 @@ void scui_menial_invoke(scui_event_t *event)
     scui_object_invoke(event);
     
     /* 事件处理回调:子控件 */
-    scui_menial_sub_info_t *menial_info = NULL;
-    scui_menial_info_map_find(menial->type, &menial_info);
-    menial_info->invoke(event);
+    scui_menial_sub_t *menial_sub = NULL;
+    scui_menial_sub_find(menial->type, &menial_sub);
+    menial_sub->invoke(event);
 }

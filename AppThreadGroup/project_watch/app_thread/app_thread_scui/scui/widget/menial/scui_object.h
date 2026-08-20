@@ -2,7 +2,8 @@
 #define SCUI_OBJECT_H
 
 /*对象控件(lvgl式)
- *它会吸收lvgl控件设计部分思想
+ *它会吸收lvgl控件
+设计部分思想
  *最终为用于menial控件继承使用
  */
 
@@ -36,9 +37,10 @@ typedef enum {
     scui_object_part_rect_edge, /* 边界(可选扩充) */
     scui_object_part_rect_box,  /* 盒子(可选扩充) */
     scui_object_part_rect_sha,  /* 阴影(可选扩充) */
+    scui_object_part_rect_item, /* 条目 */
+    scui_object_part_line_item, /* 条目 */
     scui_object_part_arc_bg,    /* 背景 */
     scui_object_part_arc_fg,    /* 前景 */
-    scui_object_part_line,      /*  */
     
     /*************************************************************************/
     scui_object_style_main_time_s = scui_object_type_style + scui_object_type_sub1,

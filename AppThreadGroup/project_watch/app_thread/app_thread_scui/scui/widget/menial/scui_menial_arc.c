@@ -17,29 +17,7 @@ void scui_menial_arc_make(bool maker, void *inst)
     scui_menial_maker_t *menial_maker = inst;
     
     if (maker) {
-        
-        /* 必须标记anima事件 */
-        menial_maker->widget.style.sched_anima = true;
     } else {
-        
-        /* 未配置使用默认值 */
-        if (SCUI_IS_ZERO_VAL_F(menial->data.arc.angle_s) &&
-            SCUI_IS_ZERO_VAL_F(menial->data.arc.angle_e)) {
-            menial->data.arc.angle_s = 0.0f;
-            menial->data.arc.angle_e = 360.0f;
-        }
-        
-        if (menial->data.arc.spinner) {
-            menial->data.arc.angle_s = 0.0f;
-            menial->data.arc.angle_e = 360.0f;
-            SCUI_ASSERT(menial->data.arc.width != 0);
-        }
-        
-        /* 未配置使用默认值 */
-        scui_coord3_t angle_s = menial->data.arc.angle_s;
-        scui_coord3_t angle_e = menial->data.arc.angle_e;
-        scui_coord3_t angle_d = scui_dist(angle_s, angle_e);
-        menial->data.arc.angle_d = angle_d;
     }
 }
 
@@ -48,6 +26,82 @@ void scui_menial_arc_make(bool maker, void *inst)
  */
 void scui_menial_arc_burn(scui_menial_t *menial)
 {
+}
+
+/*@brief 控件样式应用(子类型)
+ *@param handle 控件句柄
+ *@param res    样式资源
+ */
+void scui_menial_arc_style(scui_handle_t handle, scui_menial_arc_res_t *res)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
+    
+    scui_coord3_t angle_s = res->angle_s;
+    scui_coord3_t angle_e = res->angle_e;
+    if (menial->data.arc.spinner) {
+        angle_s = 0.0f;  angle_e = 360.0f;
+    }
+    
+    /* 补充一个容错的默认参数值 */
+    if (!menial->data.arc.spinner &&
+        SCUI_IS_ZERO_VAL_F(scui_dist(angle_s, angle_e))) {
+        angle_s = 0.0f; angle_e = 360.0f;
+    }
+    
+    scui_coord_t idx = 0;
+    if (res->part == scui_object_part_arc_bg) idx = 0;
+    if (res->part == scui_object_part_arc_fg) idx = 1;
+    
+    scui_object_sub_t sub = {.part = res->part};
+    sub.arc.alpha.alpha        = scui_alpha_cover;
+    sub.arc.angle_s.number     = angle_s;
+    sub.arc.angle_e.number     = angle_e;
+    sub.arc.center.point       = res->center;
+    sub.arc.radius.number      = res->radius;
+    sub.arc.side_width.number  = res->width;
+    sub.arc.multi.multi.round  = res->round;
+    sub.arc.multi.multi.grad_w = res->gradw;
+    sub.arc.multi.multi.grad   = res->grad;
+    sub.arc.color.color32      = res->color[idx].color_s;
+    sub.arc.color_grad.color32 = res->color[idx].color_e;
+    
+    sub.state = scui_object_state_def;
+    scui_object_prop_arc(handle, &sub);
+    
+    if (res->part == scui_object_part_arc_bg);
+    if (res->part == scui_object_part_arc_fg) {
+        
+        /* 同步全局time属性(默认值/可覆盖) */
+        scui_coord_t time = res->time;
+        if (time == 0) time = SCUI_WIDGET_MENIAL_ARC_TIME;
+        scui_coord3_t angle_d = scui_dist(angle_s, angle_e);
+        time = time * angle_d / 360.0f;
+        
+        scui_object_prop_add_s(handle, scui_object_part_main,
+            scui_object_style_main_time, scui_object_state_def,
+            scui_object_data_number(time));
+        
+        /* 样式修改复位到默认值 */
+        scui_menial_arc_update_value(handle, 0.0f, false);
+    }
+}
+
+/*@brief 控件当前值(子类型)
+ *@param handle 控件句柄
+ *@param angle  目标角度
+ */
+void scui_menial_arc_current_angle(scui_handle_t handle, scui_coord3_t *angle)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
+    
+    SCUI_ASSERT(menial->type == scui_menial_type_arc);
+    if (menial->data.arc.spinner) return;
+    /* spinner不使用此接口 */
+    
+    *angle = menial->data.arc.angle_c;
 }
 
 /*@brief 控件更新值(子类型)
@@ -88,17 +142,21 @@ void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, boo
     
     if (anim) {
         /* 同步time属性 */
-        scui_object_prop_t prop_time = {
-            .part  = scui_object_part_main,
-            .state = scui_object_state_def,
-            .style = scui_object_style_main_time,
-        };
-        scui_object_prop_sync(handle, &prop_time);
+        scui_object_data_t main_time = {0};
+        scui_object_prop_sync_s(handle, scui_object_part_main,
+            scui_object_style_main_time, scui_object_state_def, main_time);
         
-        scui_coord3_t angle_d = menial->data.arc.angle_d;
+        scui_object_data_t angle_s = {0};
+        scui_object_data_t angle_e = {0};
+        scui_object_prop_sync_s(handle, scui_object_part_arc_bg,
+            scui_object_style_arc_angle_s, scui_object_state_def, angle_s);
+        scui_object_prop_sync_s(handle, scui_object_part_arc_bg,
+            scui_object_style_arc_angle_e, scui_object_state_def, angle_e);
+        
+        scui_coord3_t angle_d = scui_dist(angle_s.number, angle_e.number);
         scui_coord3_t val_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
         tran_def.time = scui_map(val_dif, 0, angle_d, 0,
-            prop_time.data.number * angle_d / 360.0f);
+            main_time.number * angle_d / 360.0f);
         
         /* 过渡动画更新 */
         scui_object_tran_add(handle, &tran_def);
@@ -110,23 +168,6 @@ void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, boo
         prop_def.data.number = tran_def.data_n.number;
         scui_object_prop_add(handle, &prop_def);
     }
-}
-
-/*@brief 控件当前值(子类型)
- *@param handle 控件句柄
- *@param angle  目标角度
- */
-void scui_menial_arc_current_angle(scui_handle_t handle, scui_coord3_t *angle)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_menial_t *menial = (void *)widget;
-    
-    SCUI_ASSERT(menial->type == scui_menial_type_arc);
-    if (menial->data.arc.spinner) return;
-    /* spinner不使用此接口 */
-    
-    *angle = menial->data.arc.angle_c;
 }
 
 /*@brief 控件更新值(子类型)
@@ -144,13 +185,18 @@ void scui_menial_arc_update_value(scui_handle_t handle, scui_coord3_t value, boo
     if (menial->data.arc.spinner) return;
     /* spinner不使用此接口 */
     
-    /*  */
+    /* 端点基准从bg取(稳定), fg为动态进度 */
+    scui_object_data_t angle_s = {0};
+    scui_object_data_t angle_e = {0};
+    scui_object_prop_sync_s(handle, scui_object_part_arc_bg,
+        scui_object_style_arc_angle_s, scui_object_state_def, angle_s);
+    scui_object_prop_sync_s(handle, scui_object_part_arc_bg,
+        scui_object_style_arc_angle_e, scui_object_state_def, angle_e);
+    
     value = scui_clamp(value, 0.0f, 100.0f);
-    scui_coord3_t angle_s = menial->data.arc.angle_s;
-    scui_coord3_t angle_e = menial->data.arc.angle_e;
     scui_menial_arc_update_angle(handle, menial->data.arc.anti ?
-        scui_map(value, 100.0f, 0.0f, angle_s, angle_e) :
-        scui_map(value, 0.0f, 100.0f, angle_s, angle_e), anim);
+        scui_map(value, 100.0f, 0.0f, angle_s.number, angle_e.number) :
+        scui_map(value, 0.0f, 100.0f, angle_s.number, angle_e.number), anim);
 }
 
 /*@brief 事件处理回调(子类型)
@@ -167,20 +213,17 @@ void scui_menial_arc_invoke(scui_event_t *event)
         
         if (menial->data.arc.spinner) {
             /* 同步time属性(旋转速度) */
-            scui_object_prop_t prop_time = {
-                .part  = scui_object_part_main,
-                .state = scui_object_state_def,
-                .style = scui_object_style_main_time,
-            };
-            scui_object_prop_sync(event->object, &prop_time);
+            scui_object_data_t main_time = {0};
+            scui_object_prop_sync_s(event->object, scui_object_part_main,
+                scui_object_style_main_time, scui_object_state_def, main_time);
             
-            scui_coord3_t angle_d = menial->data.arc.angle_d;
-            menial->data.arc.angle_c += scui_map(event->tick, 0, prop_time.data.number, 0.0f, angle_d);
+            /* spinner端点基准固化 */
+            scui_coord3_t angle_s = 0.0f;
+            scui_coord3_t angle_e = 360.0f;
+            scui_coord3_t angle_d = 360.0f;
+            menial->data.arc.angle_c += scui_map(event->tick, 0, main_time.number, 0.0f, angle_d);
             if (menial->data.arc.angle_c > 360) menial->data.arc.angle_c -= 360;
             
-            /* 加载圆环前景(angle_s, angle_e) */
-            scui_coord3_t angle_s = menial->data.arc.angle_s;
-            scui_coord3_t angle_e = menial->data.arc.angle_e;
             scui_coord_t  angle_w = menial->data.arc.anti ? -1 : +1;
             scui_coord_t  angle_c = menial->data.arc.angle_c;
             angle_c = scui_map(angle_c, 0, angle_d, 0, 360);
@@ -191,8 +234,8 @@ void scui_menial_arc_invoke(scui_event_t *event)
             
             SCUI_LOG_INFO("angle:%d", angle_c);
             scui_coord_t  angle_p = scui_mabs(angle_c % 180, 180);
-            angle_s += angle_w * path_map(angle_p, 0, 180, 0, 360);
-            angle_e += angle_w * scui_map(angle_p, 0, 180, 0, 360) + angle_w * angle_d;
+            angle_s += angle_w * path_map(angle_p, 0, 180, 0, angle_d);
+            angle_e += angle_w * scui_map(angle_p, 0, 180, 0, angle_d) + angle_w * angle_d;
             
             /* 加载圆环背景(0, 360) */
             scui_object_prop_t prop_def = {0};
@@ -219,49 +262,6 @@ void scui_menial_arc_invoke(scui_event_t *event)
             prop_def.style = scui_object_style_arc_angle_e;
             scui_object_prop_add(event->object, &prop_def);
         }
-        break;
-    }
-    case scui_event_create: {
-        scui_area_t widget_clip = scui_widget_clip(event->object);
-        scui_object_sub_t sub = {0};
-        
-        /* spinner的time不做计算, 默认按360度给入 */
-        if (!menial->data.arc.spinner) {
-            scui_coord3_t angle_s = menial->data.arc.angle_s;
-            scui_coord3_t angle_e = menial->data.arc.angle_e;
-            scui_coord3_t angle_d = scui_dist(angle_s, angle_e);
-            menial->data.arc.time = menial->data.arc.time * angle_d / 360.0f;
-        }
-        
-        sub.arc.alpha.alpha        = scui_alpha_cover;
-        sub.arc.angle_s.number     = 0;
-        sub.arc.angle_e.number     = 360;
-        sub.arc.center.point.x     = widget_clip.w / 2;
-        sub.arc.center.point.y     = widget_clip.h / 2;
-        sub.arc.radius.number      = menial->data.arc.radius;
-        sub.arc.side_width.number  = menial->data.arc.width;
-        sub.arc.multi.multi.round  = menial->data.arc.round;
-        sub.arc.multi.multi.grad_w = menial->data.arc.gradw;
-        sub.arc.multi.multi.grad   = menial->data.arc.grad;
-        
-        sub.part  = scui_object_part_arc_bg;
-        sub.state = scui_object_state_def;
-        sub.arc.color.color32 = menial->data.arc.color[0].color_s;
-        sub.arc.color_grad.color32 = menial->data.arc.color[0].color_e;
-        scui_object_prop_arc(event->object, &sub);
-        
-        sub.part  = scui_object_part_arc_fg;
-        sub.state = scui_object_state_def;
-        sub.arc.color.color32 = menial->data.arc.color[1].color_s;
-        sub.arc.color_grad.color32 = menial->data.arc.color[1].color_e;
-        scui_object_prop_arc(event->object, &sub);
-        
-        /* 同步全局time属性(默认值/可覆盖) */
-        scui_coord_t main_time = menial->data.arc.time;
-        if (main_time == 0) main_time = SCUI_WIDGET_MENIAL_BTN_TIME;
-        scui_object_prop_new(event->object, main, main_time, def, scui_object_data_number(main_time));
-        
-        scui_menial_arc_update_value(event->object, 0.0f, false);
         break;
     }
     case scui_event_draw_graph: {

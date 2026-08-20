@@ -18,7 +18,7 @@ void scui_menial_cht_make(bool maker, void *inst)
     
     if (maker) {
     } else {
-        /* 这里加点断言判断参数的有效性 */
+        /* 这里加点断言判断运行初值的有效性 */
         SCUI_ASSERT(menial->data.cht.value_min < menial->data.cht.value_max);
         SCUI_ASSERT(menial->data.cht.number != 0);
         SCUI_ASSERT(menial->data.cht.area.w != 0);
@@ -26,8 +26,8 @@ void scui_menial_cht_make(bool maker, void *inst)
         
         /* 限制(冗余限制) */
         if (menial->data.cht.space <= 0) menial->data.cht.space = 1;
-        if (menial->data.cht.width <= 0) menial->data.cht.width = 1;
         
+        /* 运行数据缓冲分配(按运行初值) */
         switch (menial->data.cht.type) {
         default:SCUI_ASSERT(false);break;
         case 0: {
@@ -71,6 +71,47 @@ void scui_menial_cht_burn(scui_menial_t *menial)
         SCUI_MEM_FREE(menial->data.cht.vlist_pos);
         break;
     }
+    }
+}
+
+/*@brief 控件样式应用(子类型)
+ *@param handle 控件句柄
+ *@param res    样式资源
+ */
+void scui_menial_cht_style(scui_handle_t handle, scui_menial_cht_res_t *res)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
+    
+    switch (res->part) {
+    case scui_object_part_line_item: {
+        /* 线型图表(折线) */
+        scui_object_sub_t sub = {0};
+        sub.line.alpha.alpha       = scui_alpha_cover;
+        sub.line.color.color32     = res->color.color;
+        sub.line.area.area         = menial->data.cht.area;
+        sub.line.vpos_num.number   = menial->data.cht.number;
+        sub.line.side_width.number = scui_max(res->width, 1);
+        sub.line.multi.multi.round = res->round;
+        sub.part  = scui_object_part_line_item;
+        sub.state = scui_object_state_def;
+        scui_object_prop_line(handle, &sub);
+        break;
+    }
+    case scui_object_part_rect_item: {
+        /* 直方图表(柱状) */
+        scui_object_sub_t sub = {0};
+        sub.rect.alpha.alpha   = scui_alpha_cover;
+        sub.rect.color.color32 = res->color.color;
+        sub.rect.width.number  = scui_max(res->width, 1);
+        sub.rect.radius.number = res->round ? -1 : 0;
+        sub.part  = scui_object_part_rect_item;
+        sub.state = scui_object_state_def;
+        scui_object_prop_rect(handle, &sub);
+        break;
+    }
+    default:
+        break;
     }
 }
 
@@ -132,38 +173,8 @@ void scui_menial_cht_invoke(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_create: {
-        scui_area_t widget_clip = scui_widget_clip(event->object);
-        switch (menial->data.cht.type) {
-        default:SCUI_ASSERT(false);break;
-        case 0: {
-            scui_object_sub_t sub = {0};
-            
-            sub.rect.alpha.alpha       = scui_alpha_cover;
-            sub.rect.color.color32     = menial->data.cht.color.color;
-            sub.rect.width.number      = menial->data.cht.width;
-            sub.rect.radius.number     = menial->data.cht.round ? -1 : 0;
-            
-            sub.part  = scui_object_part_rect_bg;
-            sub.state = scui_object_state_def;
-            scui_object_prop_rect(event->object, &sub);
-            break;
-        }
-        case 1: {
-            scui_object_sub_t sub = {0};
-            
-            sub.line.alpha.alpha       = scui_alpha_cover;
-            sub.line.color.color32     = menial->data.cht.color.color;
-            sub.line.area.area         = menial->data.cht.area;
-            sub.line.vpos_num.number   = menial->data.cht.number;
-            sub.line.side_width.number = menial->data.cht.width;
-            sub.line.multi.multi.round = menial->data.cht.round;
-            
-            sub.part  = scui_object_part_line;
-            sub.state = scui_object_state_def;
-            scui_object_prop_line(event->object, &sub);
-            break;
-        }
-        }
+        
+        /* 运行时数据已就绪(样式由 apply 应用默认) */
         break;
     }
     case scui_event_draw_graph: {
@@ -171,8 +182,12 @@ void scui_menial_cht_invoke(scui_event_t *event)
         switch (menial->data.cht.type) {
         default:SCUI_ASSERT(false);break;
         case 0: {
+            scui_object_data_t width = {0};
+            scui_object_prop_sync_s(event->object, scui_object_part_rect_item,
+                scui_object_style_rect_width, scui_object_state_def, width);
+            
             scui_object_prop_t prop = {0};
-            prop.part = scui_object_part_rect_bg;
+            prop.part = scui_object_part_rect_item;
             scui_object_state_get(event->object, &prop.state);
             
             scui_point_t offset = menial->data.cht.area.pos;
@@ -183,10 +198,10 @@ void scui_menial_cht_invoke(scui_event_t *event)
                     menial->data.cht.value_min, menial->data.cht.value_max, menial->data.cht.area.h, 0);
                 
                 scui_point_t point = offset;
-                offset.x += menial->data.cht.width + menial->data.cht.space;
+                offset.x += width.number + menial->data.cht.space;
                 
                 /* 值为0, 不进行绘制 */
-                if (offset_1y - offset_2y < menial->data.cht.width)
+                if (offset_1y - offset_2y < width.number)
                     continue;
                 
                 prop.data.point = point;
@@ -202,6 +217,10 @@ void scui_menial_cht_invoke(scui_event_t *event)
         }
         case 1: {
             
+            scui_object_data_t width = {0};
+            scui_object_prop_sync_s(event->object, scui_object_part_line_item,
+                scui_object_style_line_side_width, scui_object_state_def, width);
+            
             scui_point_t offset = menial->data.cht.area.pos;
             for (scui_coord_t idx = 0; idx + 1 < menial->data.cht.number; idx++) {
                 scui_coord_t offset_1y = scui_map(menial->data.cht.vlist_dot[idx + 0],
@@ -215,11 +234,11 @@ void scui_menial_cht_invoke(scui_event_t *event)
                 menial->data.cht.vlist_pos[idx + 0] = offset_1;
                 menial->data.cht.vlist_pos[idx + 1] = offset_2;
                 
-                offset.x += menial->data.cht.width + menial->data.cht.space;
+                offset.x += width.number + menial->data.cht.space;
             }
             
             scui_object_prop_t prop = {
-                .part  = scui_object_part_line,
+                .part  = scui_object_part_line_item,
                 .state = scui_object_state_def,
                 .style = scui_object_style_line_vpos,
                 .data.pointer = menial->data.cht.vlist_pos,

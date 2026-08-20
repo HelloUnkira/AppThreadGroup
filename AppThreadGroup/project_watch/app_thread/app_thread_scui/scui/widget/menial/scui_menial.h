@@ -14,58 +14,35 @@ typedef union {
     
     /* field(btn): */
     struct {
-        scui_color_t  color[2];     /* 颜色(未选中[0]选中[1]; l->d) */
-        scui_coord_t  width;        /* 边界(实心:<=0;空心:>0) */
-        scui_coord_t  radius;       /* 圆角半径(最大:<0) */
-        scui_sbitfd_t fixed:1;      /* 无点击动画(可选) */
-        scui_sbitfd_t check:1;      /* 选中标记(可选) */
-        scui_coord_t  time;         /* 动画时间(ms) */
-        scui_coord_t  lim;          /* 缩小限制(pct) */
+        scui_sbitfd_t fixed:1;      /* 无点击动画 */
+        scui_sbitfd_t check:1;      /* 选中标记 */
     } btn;
     
     /* field(arc): */
     struct {
-        scui_point_t  center;       /* 弧心 */
-        scui_coord_t  width;        /* 弧宽(扇形:<= 0;弧型:>0) */
-        scui_coord_t  radius;       /* 半径(>0) */
-        scui_coord3_t angle_d;      /* 角度距离 */
         scui_coord3_t angle_c;      /* 当前角度 */
-        scui_coord3_t angle_s;      /* 起始角度(默认:0.0f) */
-        scui_coord3_t angle_e;      /* 结束角度(默认:360.0f) */
-        scui_color_t  color[2];     /* 颜色(背景[0]前景[1]) */
-        scui_coord_t  time;         /* 动画时间(ms) */
-        scui_sbitfd_t spinner:1;    /* 加载圆环(可选) */
-        scui_sbitfd_t round:1;      /* 端点圆角(可选) */
-        scui_sbitfd_t gradw:1;      /* 渐变方向(水平:0;垂直:1) */
-        scui_sbitfd_t grad:1;       /* 渐变(可选)(s->e) */
+        scui_sbitfd_t spinner:1;    /* 加载圆环 */
         scui_sbitfd_t anti:1;       /* 反方向 */
     } arc;
     
     /* field(bar): */
     struct {
-        scui_color_t  color[2];     /* 颜色(背景[0]前景[1]) */
-        scui_coord_t  radius;       /* 圆角半径(最大:<0) */
-        scui_coord_t  value_cur;    /* 当前进度 */
-        scui_coord3_t value_lim;    /* 进度限制(默认:100.0f) */
-        scui_sbitfd_t value_int:1;  /* 进度单元(可选) */
-        scui_sbitfd_t ext_slider:1; /* 滑动交互(扩展:可选) */
-        scui_sbitfd_t ext_switch:1; /* 点击开关(扩展:可选) */
-        scui_coord_t  time;         /* 动画时间(ms) */
-        scui_sbitfd_t grad:1;       /* 渐变(可选)(s->e) */
         scui_sbitfd_t way:1;        /* 方向(水平:0;垂直:1) */
+        scui_coord_t  value_cur;    /* 当前进度 */
+        scui_coord3_t value_lim;    /* 进度限制(默认:100) */
+        scui_sbitfd_t value_int:1;  /* 进度单元 */
+        scui_sbitfd_t ext_slider:1; /* 滑动交互 */
+        scui_sbitfd_t ext_switch:1; /* 点击开关 */
     } bar;
     
     /* field(cht): */
     struct {
         scui_sbitfd_t type:2;       /* 0:hist;1:line; */
-        scui_sbitfd_t round:1;      /* 端点圆角 */
         scui_area_t   area;         /* 区域 */
-        scui_color_t  color;        /* 颜色 */
         scui_coord_t  value_min;    /* 最小取值 */
         scui_coord_t  value_max;    /* 最大取值 */
         scui_coord_t  number;       /* 条目数量 */
         scui_coord_t  space;        /* 条目间隙 */
-        scui_coord_t  width;        /* 线宽 */
         scui_coord_t *vlist_min;    /* 内部:hist */
         scui_coord_t *vlist_max;    /* 内部:hist */
         scui_coord_t *vlist_dot;    /* 内部:line */
@@ -113,7 +90,7 @@ typedef struct {
     scui_menial_sub_make_t make;
     scui_menial_sub_burn_t burn;
     scui_event_cb_t invoke;
-} scui_menial_sub_info_t;
+} scui_menial_sub_t;
 
 /* menial_type:<s> */
 void scui_menial_btn_make(bool maker, void *inst);

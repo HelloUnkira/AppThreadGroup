@@ -17,19 +17,13 @@ void scui_menial_bar_make(bool maker, void *inst)
     scui_menial_maker_t *menial_maker = inst;
     
     if (maker) {
-        
+    } else {
         /* 不能同时开启slider和switch */
-        bool ext_slider = menial_maker->data.bar.ext_slider;
-        bool ext_switch = menial_maker->data.bar.ext_switch;
+        bool ext_slider = menial->data.bar.ext_slider;
+        bool ext_switch = menial->data.bar.ext_switch;
         SCUI_ASSERT(!(ext_slider && ext_switch));
         
-        /* 必须标记widget事件 */
-        /* 条件标记ptr事件 */
-        menial_maker->widget.style.sched_widget = true;
-        menial_maker->widget.style.indev_ptr    = ext_slider || ext_switch;
-    } else {
-        
-        /* 未配置使用默认值 */
+        /* 运行时默认(未配置补默认), 样式默认由 apply 应用常规 res */
         if (SCUI_IS_ZERO_VAL_F(menial->data.bar.value_lim))
             menial->data.bar.value_lim = 100.0f;
     }
@@ -40,6 +34,64 @@ void scui_menial_bar_make(bool maker, void *inst)
  */
 void scui_menial_bar_burn(scui_menial_t *menial)
 {
+}
+
+/*@brief 控件样式应用(子类型)
+ *@param handle 控件句柄
+ *@param res    样式资源
+ */
+void scui_menial_bar_style(scui_handle_t handle, scui_menial_bar_res_t *res)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
+    
+    scui_coord_t idx = 0;
+    if (res->part == scui_object_part_rect_bg) idx = 0;
+    if (res->part == scui_object_part_rect_fg) idx = 1;
+    
+    scui_object_sub_t sub = {.part = res->part};
+    sub.rect.alpha.alpha           = scui_alpha_cover;
+    sub.rect.align.align           = scui_opt_pos_l | scui_opt_pos_u;
+    sub.rect.width.number          = widget->clip.w;
+    sub.rect.height.number         = widget->clip.h;
+    sub.rect.radius.number         = res->radius;
+    sub.rect.multi.multi.grad_w    = menial->data.bar.way;
+    sub.rect.multi.multi.grad      = res->grad;
+    sub.rect.color.color32         = res->color[idx].color_s;
+    sub.rect.color_grad.color32    = res->color[idx].color_e;
+    
+    if (res->part == scui_object_part_rect_fg) {
+        sub.rect.width.number  = menial->data.bar.way ? widget->clip.w : 0;
+        sub.rect.height.number = menial->data.bar.way ? 0 : widget->clip.h;
+    }
+    
+    sub.state = scui_object_state_def;
+    scui_object_prop_rect(handle, &sub);
+    
+    /* 同步全局time属性(默认值/可覆盖) */
+    scui_coord_t time = res->time;
+    if (time == 0) time = SCUI_WIDGET_MENIAL_BAR_TIME;
+    scui_object_prop_add_s(handle, scui_object_part_main,
+        scui_object_style_main_time, scui_object_state_def,
+        scui_object_data_number(time));
+    
+    /* 样式修改复位到默认值 */
+    scui_menial_bar_update_value(handle, 0.0f, false);
+}
+
+/*@brief 控件当前值(子类型)
+ *@param handle 控件句柄
+ *@param value  目标进度
+ */
+void scui_menial_bar_current_value(scui_handle_t handle, scui_coord3_t *value)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_menial_t *menial = (void *)widget;
+    
+    SCUI_ASSERT(menial->type == scui_menial_type_bar);
+    
+    *value = menial->data.bar.value_cur;
 }
 
 /*@brief 控件更新值(子类型)
@@ -84,14 +136,18 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
     scui_area_t  dst_part = widget->clip;
     scui_coord3_t value_d = menial->data.bar.value_lim;
     scui_coord3_t value_c = menial->data.bar.value_cur;
-    scui_coord3_t value_m = menial->data.bar.radius * 2;
+    scui_object_data_t value_m = {0};
+    scui_object_prop_sync_s(handle, scui_object_part_rect_bg,
+        scui_object_style_rect_radius, scui_object_state_def, value_m);
+    
+    value_m.number *= 2;
     scui_coord3_t value_l = scui_min(dst_part.w, dst_part.h);
-    if (value_m < 0) value_m = value_l;
-    value_m = scui_clamp(value_m, 0, value_l);
+    if (value_m.number < 0) value_m.number = value_l;
+    value_m.number = scui_clamp(value_m.number, 0, value_l);
     
     scui_coord_t size_max = way ? dst_part.h : dst_part.w;
-    scui_coord_t size_min = scui_map(value_c, 0.0f, value_d, 0, size_max - value_m);
-    size_min = scui_clamp(value_m + size_min, value_m, size_max);
+    scui_coord_t size_min = scui_map(value_c, 0.0f, value_d, 0, size_max - value_m.number);
+    size_min = scui_clamp(value_m.number + size_min, value_m.number, size_max);
     #endif
     
     tran_def.part    = prop_def.part;
@@ -104,17 +160,14 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
     
     if (anim) {
         /* 同步time属性 */
-        scui_object_prop_t prop_time = {
-            .part  = scui_object_part_main,
-            .state = scui_object_state_def,
-            .style = scui_object_style_main_time,
-        };
-        scui_object_prop_sync(handle, &prop_time);
+        scui_object_data_t main_time = {0};
+        scui_object_prop_sync_s(handle, scui_object_part_main,
+            scui_object_style_main_time, scui_object_state_def, main_time);
         
         scui_coord_t  val_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
         scui_coord3_t value_d = menial->data.bar.value_lim;
         tran_def.time = scui_map(val_dif, 0, size_max, 0,
-            prop_time.data.number * value_d / 100.0f);
+            main_time.number * value_d / 100.0f);
         
         /* 过渡动画更新 */
         scui_object_tran_add(handle, &tran_def);
@@ -126,21 +179,6 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
         prop_def.data.number = tran_def.data_n.number;
         scui_object_prop_add(handle, &prop_def);
     }
-}
-
-/*@brief 控件当前值(子类型)
- *@param handle 控件句柄
- *@param value  目标进度
- */
-void scui_menial_bar_current_value(scui_handle_t handle, scui_coord3_t *value)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_menial_t *menial = (void *)widget;
-    
-    SCUI_ASSERT(menial->type == scui_menial_type_bar);
-    
-    *value = menial->data.bar.value_cur;
 }
 
 /*@brief 事件处理回调(子类型)
@@ -159,13 +197,12 @@ void scui_menial_bar_invoke(scui_event_t *event)
         if (!scui_widget_event_inside(event))
              break;
         
-        scui_event_mask_over(event);
-        
         scui_coord3_t value_c = menial->data.bar.value_cur;
         scui_coord3_t value_d = menial->data.bar.value_lim;
         value_c = (value_c > value_d / 2) ? 0.0f : value_d;
         
         scui_menial_bar_update_value(widget->myself, value_c, true);
+        scui_event_mask_over(event);
         break;
     }
     case scui_event_ptr_move: {
@@ -175,7 +212,6 @@ void scui_menial_bar_invoke(scui_event_t *event)
             !widget->state.indev_ptr_hold)
              break;
         
-        scui_event_mask_over(event);
         scui_point_t ptr_c = event->ptr_e;
         scui_area_t  dst_part = widget->clip;
         scui_area_m_to_s(&dst_part, &dst_part);
@@ -193,6 +229,7 @@ void scui_menial_bar_invoke(scui_event_t *event)
         }
         
         scui_menial_bar_update_value(widget->myself, value_c, false);
+        scui_event_mask_over(event);
         break;
     }
     case scui_event_ptr_down:
@@ -200,41 +237,6 @@ void scui_menial_bar_invoke(scui_event_t *event)
         widget->state.indev_ptr_hold = false;
         break;
     
-    case scui_event_create: {
-        scui_area_t widget_clip = scui_widget_clip(event->object);
-        scui_object_sub_t sub = {0};
-        
-        sub.rect.alpha.alpha           = scui_alpha_cover;
-        sub.rect.align.align           = scui_opt_pos_l | scui_opt_pos_u;
-        sub.rect.width.number          = widget_clip.w;
-        sub.rect.height.number         = widget_clip.h;
-        sub.rect.radius.number         = menial->data.bar.radius;
-        sub.rect.multi.multi.grad_w    = menial->data.bar.way;
-        sub.rect.multi.multi.grad      = menial->data.bar.grad;
-        
-        sub.part  = scui_object_part_rect_bg;
-        sub.state = scui_object_state_def;
-        sub.rect.color.color32 = menial->data.bar.color[0].color_s;
-        sub.rect.color_grad.color32 = menial->data.bar.color[0].color_e;
-        scui_object_prop_rect(event->object, &sub);
-        
-        sub.part  = scui_object_part_rect_fg;
-        sub.state = scui_object_state_def;
-        sub.rect.color.color32 = menial->data.bar.color[1].color_s;
-        sub.rect.color_grad.color32 = menial->data.bar.color[1].color_e;
-        scui_object_prop_rect(event->object, &sub);
-        
-        /* 需要按下变色时考虑(需要过渡动画) */
-        // sub.state = scui_object_state_pre;
-        
-        /* 同步全局time属性(默认值/可覆盖) */
-        scui_coord_t main_time = menial->data.bar.time;
-        if (main_time == 0) main_time = SCUI_WIDGET_MENIAL_BTN_TIME;
-        scui_object_prop_new(event->object, main, main_time, def, scui_object_data_number(main_time));
-        
-        scui_menial_bar_update_value(event->object, 0.0f, false);
-        break;
-    }
     case scui_event_draw_graph: {
         
         scui_object_prop_t prop = {0};

@@ -354,7 +354,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         menial_maker.widget.clip.h = 86;
         menial_maker.widget.parent = event->object;
         menial_maker.type = scui_menial_type_cht;
-        menial_maker.data.cht.round = true;
+        menial_maker.data.cht.type      = 0;
         menial_maker.data.cht.value_min = 0;
         menial_maker.data.cht.value_max = 100;
         menial_maker.data.cht.number    = 24;
@@ -363,8 +363,13 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         menial_maker.data.cht.area.w  = SCUI_HOR_RES - 42;
         menial_maker.data.cht.area.h  = 86;
         menial_maker.data.cht.space   = 4;
-        menial_maker.data.cht.color.color.full = 0xFFF9104F;
         scui_widget_create(&menial_maker, &menial_handle);
+        
+        scui_menial_cht_res_t cht_res = {0};
+        cht_res.round  = true;
+        cht_res.color.color.full = 0xFFF9104F;
+        cht_res.part = scui_object_part_rect_item;
+        scui_menial_cht_style(menial_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_kcal_day7_24(scui_presenter.get_week(), day7_24);
@@ -525,7 +530,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         menial_maker.widget.clip.h = 86;
         menial_maker.widget.parent = event->object;
         menial_maker.type = scui_menial_type_cht;
-        menial_maker.data.cht.round = true;
+        menial_maker.data.cht.type      = 0;
         menial_maker.data.cht.value_min = 0;
         menial_maker.data.cht.value_max = 100;
         menial_maker.data.cht.number    = 24;
@@ -534,8 +539,13 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         menial_maker.data.cht.area.w  = SCUI_HOR_RES - 42;
         menial_maker.data.cht.area.h  = 86;
         menial_maker.data.cht.space   = 4;
-        menial_maker.data.cht.color.color.full = 0xFFE1CC00;
         scui_widget_create(&menial_maker, &menial_handle);
+        
+        scui_menial_cht_res_t cht_res = {0};
+        cht_res.round  = true;
+        cht_res.color.color.full = 0xFFE1CC00;
+        cht_res.part = scui_object_part_rect_item;
+        scui_menial_cht_style(menial_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_step_day7_24(scui_presenter.get_week(), day7_24);
@@ -697,7 +707,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         menial_maker.widget.clip.h = 86;
         menial_maker.widget.parent = event->object;
         menial_maker.type = scui_menial_type_cht;
-        menial_maker.data.cht.round = true;
+        menial_maker.data.cht.type      = 0;
         menial_maker.data.cht.value_min = 0;
         menial_maker.data.cht.value_max = 100;
         menial_maker.data.cht.number    = 24;
@@ -706,8 +716,13 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         menial_maker.data.cht.area.w  = SCUI_HOR_RES - 42;
         menial_maker.data.cht.area.h  = 86;
         menial_maker.data.cht.space   = 4;
-        menial_maker.data.cht.color.color.full = 0xFF00B7FF;
         scui_widget_create(&menial_maker, &menial_handle);
+        
+        scui_menial_cht_res_t cht_res = {0};
+        cht_res.round  = true;
+        cht_res.color.color.full = 0xFF00B7FF;
+        cht_res.part = scui_object_part_rect_item;
+        scui_menial_cht_style(menial_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_dist_day7_24(scui_presenter.get_week(), day7_24);

@@ -97,17 +97,21 @@ void scui_test_ui_button_event_proc(scui_event_t *event)
         menial_maker.widget.clip.x   = SCUI_HOR_RES / 2 - btn_w / 2;
         menial_maker.widget.clip.y   = cur_y;
         menial_maker.type = scui_menial_type_btn;
-        menial_maker.data.btn.color[0].color_l.full = 0xFF00FF00;
-        menial_maker.data.btn.color[0].color_d.full = 0xFF008000;
-        menial_maker.data.btn.color[1].color_l.full = 0xFF000080;
-        menial_maker.data.btn.color[1].color_d.full = 0xFF000080;
-        menial_maker.data.btn.fixed  = 0;   /* 开启动画 */
-        menial_maker.data.btn.check  = 1;
-        menial_maker.data.btn.width  = 3;
-        menial_maker.data.btn.radius = 20;
-        menial_maker.data.btn.time   = 200; /* 动画时间 */
-        menial_maker.data.btn.lim    = 80;  /* 缩小限制 */
+        menial_maker.data.btn.check = 1;   /* 运行初值: 点击切换 */
         scui_widget_create(&menial_maker, &menial_handle);
+        
+        /* 创建后应用样式(用户自定义) */
+        scui_menial_btn_res_t res = {0};
+        res.color[0].color_l.full = 0xFF00FF00;
+        res.color[0].color_d.full = 0xFF008000;
+        res.color[1].color_l.full = 0xFF000080;
+        res.color[1].color_d.full = 0xFF000080;
+        res.width  = 3;
+        res.radius = 20;
+        res.time   = 200; /* 动画时间 */
+        res.lim    = 80;  /* 缩小限制 */
+        res.part = scui_object_part_rect_bg;
+        scui_menial_btn_style(menial_handle, &res);
         
         cur_y += 100 + btn_gap;
         #endif
@@ -125,115 +129,60 @@ void scui_test_ui_button_event_proc(scui_event_t *event)
         menial2_maker.widget.clip.x   = SCUI_HOR_RES / 2 - btn_w / 2;
         menial2_maker.widget.clip.y   = cur_y;
         menial2_maker.type = scui_menial_type_btn;
-        menial2_maker.data.btn.color[0].color_l.full = 0xFF87CEFA;
-        menial2_maker.data.btn.color[0].color_d.full = 0xFF4682B4;
-        menial2_maker.data.btn.color[1].color_l.full = 0xFF87CEFA;
-        menial2_maker.data.btn.color[1].color_d.full = 0xFF4682B4;
-        menial2_maker.data.btn.fixed  = 0;
-        menial2_maker.data.btn.check  = 1;
-        menial2_maker.data.btn.width  = 3;
-        menial2_maker.data.btn.radius = 20;
-        menial2_maker.data.btn.time   = 200;
-        menial2_maker.data.btn.lim    = 90;
+        menial2_maker.data.btn.check = 1;   /* 运行初值: 点击切换 */
         scui_widget_create(&menial2_maker, &menial2_handle);
         
-        /* 外部覆盖: 参考 btn create 的 bg 完整配置模式, 复制到 edge/box/sha */
-        /* 各 part 均含: 几何 prop_rect + 状态色 prop_new + 缩放 prop_new + tran_new2 动画 */
-        scui_object_sub_t sub = {0};
-        scui_area_t widget_clip = {
-            .w = btn_w,
-            .h = 100,
-        };
-        scui_coord_t radius = 20;
-        scui_coord_t width  = 3;
-        scui_coord_t main_time = 200;
+        /* 创建后应用样式(用户自定义): 背景用 menial2 参数, 边框/盒子/阴影各自参数 */
+        /* 复用同一套 btn style, 通配到各部件(几何外扩系数由 style 按 part 自动推导) */
+        scui_menial_btn_res_t bg_res = {0};
+        bg_res.color[0].color_l.full = 0xFF87CEFA;
+        bg_res.color[0].color_d.full = 0xFF4682B4;
+        bg_res.color[1].color_l.full = 0xFF87CEFA;
+        bg_res.color[1].color_d.full = 0xFF4682B4;
+        bg_res.width  = 3;
+        bg_res.radius = 20;
+        bg_res.time   = 200;
+        bg_res.lim    = 90;
+        bg_res.part = scui_object_part_rect_bg;
+        scui_menial_btn_style(menial2_handle, &bg_res);
         
-        scui_multi_t scale_w = (scui_multi_t)widget_clip.w * 90 / 100;
-        scui_multi_t scale_h = (scui_multi_t)widget_clip.h * 90 / 100;
-        scui_multi_t default_w = widget_clip.w;
-        scui_multi_t default_h = widget_clip.h;
+        /* 外部覆盖: edge/box/sha 各部件(复用同一套 btn style) */
+        scui_menial_btn_res_t edge_res = {0};
+        edge_res.color[0].color_l.full = 0xFFFFFFFF;
+        edge_res.color[0].color_d.full = 0xFFFFFFFF;
+        edge_res.color[1].color_l.full = 0xFFFFFFFF;
+        edge_res.color[1].color_d.full = 0xFFFFFFFF;
+        edge_res.width  = 3;
+        edge_res.radius = 20;
+        edge_res.time   = 200;
+        edge_res.lim    = 90;
         
-        /* 边框 edge */
-        {
-            sub.rect.alpha.alpha       = scui_alpha_cover;
-            sub.rect.align.align       = scui_opt_pos_c;
-            sub.rect.width.number      = widget_clip.w + width * 1;
-            sub.rect.height.number     = widget_clip.h + width * 1;
-            sub.rect.radius.number     = radius + width * 1;
-            sub.rect.side_width.number = width;
-            sub.part  = scui_object_part_rect_edge;
-            sub.state = scui_object_state_def;
-            scui_object_prop_rect(menial2_handle, &sub);
-            sub.state = scui_object_state_pre;
-            scui_object_prop_rect(menial2_handle, &sub);
-            
-            scui_object_prop_new(menial2_handle, rect_edge, rect_color, def, scui_object_data_color32(0xFFFFFFFF));
-            scui_object_prop_new(menial2_handle, rect_edge, rect_color, pre, scui_object_data_color32(0xFFFFFFFF));
-            scui_object_tran_new2(menial2_handle, rect_edge, rect_color, def, pre,
-                scui_object_data_color32(0xFFFFFFFF), scui_object_data_color32(0xFFFFFFFF), NULL, main_time, 0);
-            
-            scui_object_prop_new(menial2_handle, rect_edge, rect_width,  def, scui_object_data_number(scale_w));
-            scui_object_prop_new(menial2_handle, rect_edge, rect_width,  pre, scui_object_data_number(default_w));
-            scui_object_prop_new(menial2_handle, rect_edge, rect_height, def, scui_object_data_number(scale_h));
-            scui_object_prop_new(menial2_handle, rect_edge, rect_height, pre, scui_object_data_number(default_h));
-            scui_object_tran_new2(menial2_handle, rect_edge, rect_width,  def, pre,
-                scui_object_data_number(scale_w), scui_object_data_number(default_w), NULL, main_time, 0);
-            scui_object_tran_new2(menial2_handle, rect_edge, rect_height, def, pre,
-                scui_object_data_number(scale_h), scui_object_data_number(default_h), NULL, main_time, 0);
-        }
+        scui_menial_btn_res_t box_res = {0};
+        box_res.color[0].color_l.full = 0xFFFF0000;
+        box_res.color[0].color_d.full = 0xFFFF0000;
+        box_res.color[1].color_l.full = 0xFFFF0000;
+        box_res.color[1].color_d.full = 0xFFFF0000;
+        box_res.width  = 3;
+        box_res.radius = 20;
+        box_res.time   = 200;
+        box_res.lim    = 90;
         
-        /* 外部线 box */
-        {
-            sub.rect.width.number      = widget_clip.w + width * 2;
-            sub.rect.height.number     = widget_clip.h + width * 2;
-            sub.rect.radius.number     = radius + width * 2;
-            sub.part  = scui_object_part_rect_box;
-            sub.state = scui_object_state_def;
-            scui_object_prop_rect(menial2_handle, &sub);
-            sub.state = scui_object_state_pre;
-            scui_object_prop_rect(menial2_handle, &sub);
-            
-            scui_object_prop_new(menial2_handle, rect_box, rect_color, def, scui_object_data_color32(0xFFFF0000));
-            scui_object_prop_new(menial2_handle, rect_box, rect_color, pre, scui_object_data_color32(0xFFFF0000));
-            scui_object_tran_new2(menial2_handle, rect_box, rect_color, def, pre,
-                scui_object_data_color32(0xFFFF0000), scui_object_data_color32(0xFFFF0000), NULL, main_time, 0);
-            
-            scui_object_prop_new(menial2_handle, rect_box, rect_width,  def, scui_object_data_number(scale_w));
-            scui_object_prop_new(menial2_handle, rect_box, rect_width,  pre, scui_object_data_number(default_w));
-            scui_object_prop_new(menial2_handle, rect_box, rect_height, def, scui_object_data_number(scale_h));
-            scui_object_prop_new(menial2_handle, rect_box, rect_height, pre, scui_object_data_number(default_h));
-            scui_object_tran_new2(menial2_handle, rect_box, rect_width,  def, pre,
-                scui_object_data_number(scale_w), scui_object_data_number(default_w), NULL, main_time, 0);
-            scui_object_tran_new2(menial2_handle, rect_box, rect_height, def, pre,
-                scui_object_data_number(scale_h), scui_object_data_number(default_h), NULL, main_time, 0);
-        }
+        scui_menial_btn_res_t sha_res = {0};
+        sha_res.color[0].color_l.full = 0xFF00FF00;
+        sha_res.color[0].color_d.full = 0xFF00FF00;
+        sha_res.color[1].color_l.full = 0xFF00FF00;
+        sha_res.color[1].color_d.full = 0xFF00FF00;
+        sha_res.width  = 3;
+        sha_res.radius = 20;
+        sha_res.time   = 200;
+        sha_res.lim    = 90;
         
-        /* 阴影 sha */
-        {
-            sub.rect.width.number      = widget_clip.w + width * 3;
-            sub.rect.height.number     = widget_clip.h + width * 3;
-            sub.rect.radius.number     = radius + width * 3;
-            sub.rect.alpha.alpha       = scui_alpha_pct50;
-            sub.part  = scui_object_part_rect_sha;
-            sub.state = scui_object_state_def;
-            scui_object_prop_rect(menial2_handle, &sub);
-            sub.state = scui_object_state_pre;
-            scui_object_prop_rect(menial2_handle, &sub);
-            
-            scui_object_prop_new(menial2_handle, rect_sha, rect_color, def, scui_object_data_color32(0xFF00FF00));
-            scui_object_prop_new(menial2_handle, rect_sha, rect_color, pre, scui_object_data_color32(0xFF00FF00));
-            scui_object_tran_new2(menial2_handle, rect_sha, rect_color, def, pre,
-                scui_object_data_color32(0xFF00FF00), scui_object_data_color32(0xFF00FF00), NULL, main_time, 0);
-            
-            scui_object_prop_new(menial2_handle, rect_sha, rect_width,  def, scui_object_data_number(scale_w));
-            scui_object_prop_new(menial2_handle, rect_sha, rect_width,  pre, scui_object_data_number(default_w));
-            scui_object_prop_new(menial2_handle, rect_sha, rect_height, def, scui_object_data_number(scale_h));
-            scui_object_prop_new(menial2_handle, rect_sha, rect_height, pre, scui_object_data_number(default_h));
-            scui_object_tran_new2(menial2_handle, rect_sha, rect_width,  def, pre,
-                scui_object_data_number(scale_w), scui_object_data_number(default_w), NULL, main_time, 0);
-            scui_object_tran_new2(menial2_handle, rect_sha, rect_height, def, pre,
-                scui_object_data_number(scale_h), scui_object_data_number(default_h), NULL, main_time, 0);
-        }
+        edge_res.part = scui_object_part_rect_edge;
+        box_res.part  = scui_object_part_rect_box;
+        sha_res.part  = scui_object_part_rect_sha;
+        scui_menial_btn_style(menial2_handle, &edge_res);
+        scui_menial_btn_style(menial2_handle, &box_res);
+        scui_menial_btn_style(menial2_handle, &sha_res);
         #endif
         
         break;
