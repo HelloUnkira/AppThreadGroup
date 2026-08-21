@@ -27,7 +27,7 @@ void scui_test_ui_chart_event_proc(scui_event_t *event)
         }
         
         scui_menial_maker_define(menial_maker);
-        scui_handle_t       menial_handle = SCUI_HANDLE_INVALID;
+        scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
         
         menial_maker.widget.parent = event->object;
         

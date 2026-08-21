@@ -31,25 +31,6 @@ static struct {
  */
 void scui_ui_scene_float_s_event_proc(scui_event_t * event)
 {
-    #if 0
-    switch (event->type) {
-    case scui_event_create:
-        break;
-    case scui_event_destroy:
-        break;
-        
-    case scui_event_draw_graph: {
-        
-        scui_handle_t handle_m  = SCUI_HANDLE_INVALID;
-        scui_linear_s_get(event->object, &handle_m);
-        
-        scui_widget_draw_color(event->object, NULL, SCUI_COLOR32_WHITE);
-        break;
-    }
-    default:
-        break;
-    }
-    #endif
 }
 
 

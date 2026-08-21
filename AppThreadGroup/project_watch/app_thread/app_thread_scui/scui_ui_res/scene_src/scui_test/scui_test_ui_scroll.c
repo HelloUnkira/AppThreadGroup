@@ -84,7 +84,7 @@ static scui_custom_maker_t scui_test_ui_scroll_custom_base(scui_handle_t parent)
 static void scui_test_ui_scroll_create_ver(void)
 {
     scui_scroll_maker_define(scroll_maker);
-    scui_handle_t       scroll_handle = SCUI_HANDLE_INVALID;
+    scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
     
     scroll_maker.widget.style.fully_bg     = true;
     scroll_maker.widget.style.sched_widget = true;
@@ -110,7 +110,7 @@ static void scui_test_ui_scroll_create_ver(void)
     /* 子控件: 纯色 custom(随机颜色, 点击动画) */
     for (uint8_t idx = 0; idx < 10; idx++) {
         scui_custom_maker_t custom_maker = scui_test_ui_scroll_custom_base(scroll_handle);
-        scui_handle_t       custom_handle = SCUI_HANDLE_INVALID;
+        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
         custom_maker.widget.style.indev_ptr = true;
         custom_maker.widget.event_cb  = scui_test_ui_scroll_custom_anima_event_proc;
         custom_maker.widget.clip.w = SCUI_HOR_RES * 707 / 1000;
@@ -124,7 +124,7 @@ static void scui_test_ui_scroll_create_ver(void)
 static void scui_test_ui_scroll_create_hor(void)
 {
     scui_scroll_maker_define(scroll_maker);
-    scui_handle_t       scroll_handle = SCUI_HANDLE_INVALID;
+    scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
     
     scroll_maker.widget.style.fully_bg     = true;
     scroll_maker.widget.style.sched_widget = true;
@@ -149,7 +149,7 @@ static void scui_test_ui_scroll_create_hor(void)
     /* 子控件: 纯色 custom(随机颜色) */
     for (uint8_t idx = 0; idx < 8; idx++) {
         scui_custom_maker_t custom_maker = scui_test_ui_scroll_custom_base(scroll_handle);
-        scui_handle_t       custom_handle = SCUI_HANDLE_INVALID;
+        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
         custom_maker.widget.clip.w = SCUI_HOR_RES / 4;
         custom_maker.widget.clip.h = SCUI_VER_RES * 707 / 1000;
         scui_widget_create(&custom_maker, &custom_handle);
@@ -161,7 +161,7 @@ static void scui_test_ui_scroll_create_hor(void)
 static void scui_test_ui_scroll_create_free(void)
 {
     scui_scroll_maker_define(scroll_maker);
-    scui_handle_t       scroll_handle = SCUI_HANDLE_INVALID;
+    scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
     scui_coord_t        scroll_w = SCUI_HOR_RES * 707 / 1000;
     scui_coord_t        scroll_h = SCUI_VER_RES * 707 / 1000;
     scui_coord_t        custom_w = SCUI_HOR_RES / 8;
@@ -188,7 +188,7 @@ static void scui_test_ui_scroll_create_free(void)
     /* 子控件: 小正方形(随机颜色), 网格摆放有间隔 */
     for (uint8_t idx = 0; idx < 25; idx++) {
         scui_custom_maker_t custom_maker = scui_test_ui_scroll_custom_base(scroll_handle);
-        scui_handle_t       custom_handle = SCUI_HANDLE_INVALID;
+        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
         custom_maker.widget.clip.x = scui_map(idx % 5, 0, 5, - custom_w, scroll_w + custom_w);
         custom_maker.widget.clip.y = scui_map(idx / 5, 0, 5, - custom_h, scroll_h + custom_h);
         custom_maker.widget.clip.w = custom_w;
@@ -202,7 +202,7 @@ static void scui_test_ui_scroll_create_free(void)
 static void scui_test_ui_scroll_create_nest(void)
 {
     scui_scroll_maker_define(scroll_maker);
-    scui_handle_t       scroll_handle = SCUI_HANDLE_INVALID;
+    scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
     scui_coord_t        scroll_w = SCUI_HOR_RES * 707 / 1000;
     scui_coord_t        item_h = SCUI_HOR_RES / 6;
     
@@ -229,7 +229,7 @@ static void scui_test_ui_scroll_create_nest(void)
     /* 子控件: 内嵌水平滚动(随机颜色, 边缘对齐粘连) */
     for (uint8_t idx = 0; idx < 6; idx++) {
         scui_scroll_maker_define(scroll2_maker);
-        scui_handle_t       scroll2_handle = SCUI_HANDLE_INVALID;
+        scui_handle_t scroll2_handle = SCUI_HANDLE_INVALID;
         
         scroll2_maker.widget.style.fully_bg     = true;
         scroll2_maker.widget.style.sched_widget = true;
@@ -251,7 +251,7 @@ static void scui_test_ui_scroll_create_nest(void)
         bool wide_first = scui_rand(10) % 2 == 0;
         for (uint8_t sub = 0; sub < 2; sub++) {
             scui_custom_maker_t custom_maker = scui_test_ui_scroll_custom_base(scroll2_handle);
-            scui_handle_t       custom_handle = SCUI_HANDLE_INVALID;
+            scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
             custom_maker.widget.clip.w = (sub == 0) == wide_first ? scroll_w : scroll_w / 2;
             custom_maker.widget.clip.h = item_h;
             scui_widget_create(&custom_maker, &custom_handle);

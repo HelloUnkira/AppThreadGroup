@@ -75,24 +75,24 @@ static void scui_object_tvg_rect_cb(scui_draw_dsc_t *draw_dsc)
         line_4[1].line_to[1] = (scui_point_t){x + w - r, y + h};
         line_4[1].line_to[2] = (scui_point_t){x + r, y + h};
         line_4[1].line_to[3] = (scui_point_t){x + r, y + h - sw};
-        line_4[1].grad_to[0] = line_4[0].line_to[3];
-        line_4[1].grad_to[1] = line_4[0].line_to[2];
+        line_4[1].grad_to[0] = line_4[1].line_to[3];
+        line_4[1].grad_to[1] = line_4[1].line_to[2];
         
         line_4[2].move_to    = (scui_point_t){x, y + r};
         line_4[2].line_to[0] = (scui_point_t){x + sw, y + r};
         line_4[2].line_to[1] = (scui_point_t){x + sw, y + h - r};
         line_4[2].line_to[2] = (scui_point_t){x, y + h - r};
         line_4[2].line_to[3] = (scui_point_t){x, y + r};
-        line_4[2].grad_to[0] = line_4[0].line_to[0];
-        line_4[2].grad_to[1] = line_4[0].line_to[3];
+        line_4[2].grad_to[0] = line_4[2].line_to[0];
+        line_4[2].grad_to[1] = line_4[2].line_to[3];
         
         line_4[3].move_to    = (scui_point_t){x + w, y + r};
         line_4[3].line_to[0] = (scui_point_t){x + w - sw, y + r};
         line_4[3].line_to[1] = (scui_point_t){x + w - sw, y + h - r};
         line_4[3].line_to[2] = (scui_point_t){x + w, y + h - r};
         line_4[3].line_to[3] = (scui_point_t){x + w, y + r};
-        line_4[3].grad_to[0] = line_4[0].line_to[0];
-        line_4[3].grad_to[1] = line_4[0].line_to[3];
+        line_4[3].grad_to[0] = line_4[3].line_to[0];
+        line_4[3].grad_to[1] = line_4[3].line_to[3];
         
         for (scui_coord_t idx = 0; idx < 4; idx++) {
             scui_coord_t x = line_4[idx].move_to.x;
@@ -107,10 +107,10 @@ static void scui_object_tvg_rect_cb(scui_draw_dsc_t *draw_dsc)
                 tvg_shape_line_to(paint,x , y);
             }
             
-            scui_coord_t x1 = line_4[3].grad_to[0].x;
-            scui_coord_t y1 = line_4[3].grad_to[0].y;
-            scui_coord_t x2 = line_4[3].grad_to[1].x;
-            scui_coord_t y2 = line_4[3].grad_to[1].y;
+            scui_coord_t x1 = line_4[idx].grad_to[0].x;
+            scui_coord_t y1 = line_4[idx].grad_to[0].y;
+            scui_coord_t x2 = line_4[idx].grad_to[1].x;
+            scui_coord_t y2 = line_4[idx].grad_to[1].y;
             Tvg_Gradient* grad = tvg_linear_gradient_new();
             tvg_linear_gradient_set(grad, x1, y1, x2, y2);
             tvg_gradient_set_color_stops(grad, color2, 2);

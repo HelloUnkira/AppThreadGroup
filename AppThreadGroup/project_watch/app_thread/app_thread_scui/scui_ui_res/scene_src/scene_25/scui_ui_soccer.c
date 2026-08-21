@@ -247,7 +247,7 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
             scui_coord3_t (*normal_z_bg)[5] = scui_ui_res_local->normal_z_bg;
             scui_coord3_t (*normal_z_fg)[5] = scui_ui_res_local->normal_z_fg;
             if (normal_z_bg[idx_j][idx_i] < -0.0f) {
-                scui_handle_t   image_bg = scui_ui_res_local->image_bg;
+                scui_handle_t image_bg = scui_ui_res_local->image_bg;
                 scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
                 scui_matrix_t (*inv_matrix_bg)[5] = scui_ui_res_local->inv_matrix_bg;
                 scui_widget_draw_image_3d(event->object, NULL, image_bg, NULL,

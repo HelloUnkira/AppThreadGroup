@@ -47,7 +47,7 @@ void scui_test_ui_ring_event_proc(scui_event_t *event)
         #if 0
         /* 临时迁移自 ui_2 的 spinner 测试 */
         scui_custom_maker_define(custom_maker);
-        scui_handle_t       custom_handle = SCUI_HANDLE_INVALID;
+        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
         
         custom_maker.widget.parent = event->object;
         custom_maker.type = scui_custom_type_spinner;

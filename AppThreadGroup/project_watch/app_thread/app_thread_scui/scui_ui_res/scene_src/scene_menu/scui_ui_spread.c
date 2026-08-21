@@ -161,7 +161,7 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
                 scui_multi_t  img_x    = (scui_cos4096(angle + angle_ofs) * skew_ofs) >> 12;
                 scui_multi_t  img_y    = (scui_sin4096(angle + angle_ofs) * skew_ofs) >> 12;
                 scui_coord_t  idx_ofs  = angle / SCUI_UI_SPREAD_ANGLE_UNIT - lst_idx * img_num_rad;
-                scui_handle_t lst_ofs  = scui_mabs(idx_ofs, (int64_t)scui_ui_scene_list_num);
+                scui_handle_t lst_ofs = scui_mabs(idx_ofs, (int64_t)scui_ui_scene_list_num);
                 scui_area_t   dst_clip = {0};
                 dst_clip.x = widget_cx + img_x - image_w / 2;
                 dst_clip.y = widget_cy + img_y - image_h / 2;
