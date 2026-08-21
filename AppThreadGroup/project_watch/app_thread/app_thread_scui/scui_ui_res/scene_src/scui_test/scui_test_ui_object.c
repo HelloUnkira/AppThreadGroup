@@ -101,10 +101,10 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         menial_maker.type = scui_menial_type_btn;
         
         scui_menial_btn_res_t btn_res = {0};
-        btn_res.color[0].color_l.full = 0xFF00FF00;
-        btn_res.color[0].color_d.full = 0xFF008000;
-        btn_res.color[1].color_l.full = 0xFFFF0000;
-        btn_res.color[1].color_d.full = 0xFF800000;
+        btn_res.color[0].color_s.full = 0xFF00FF00;  /* def */
+        btn_res.color[1].color_s.full = 0xFF008000;  /* pre */
+        btn_res.color[2].color_s.full = 0xFFFF0000;  /* chk */
+        btn_res.color[3].color_s.full = 0xFF800000;  /* chk pre */
         
         menial_maker.data.btn.fixed = 1;
         menial_maker.data.btn.check = 1;

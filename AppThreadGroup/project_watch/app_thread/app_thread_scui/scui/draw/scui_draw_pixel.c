@@ -17,7 +17,7 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
     scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
     scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
     scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
+    scui_coord_t    src_stroke  =  draw_dsc->graph.src_stroke;
     scui_point_t    src_pos_1   =  draw_dsc->graph.src_pos_1;
     scui_point_t    src_pos_2   =  draw_dsc->graph.src_pos_2;
     /* draw dsc args<e> */
@@ -27,8 +27,8 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    if (src_width <= 0)
-        src_width  = 1;
+    if (src_stroke <= 0)
+        src_stroke  = 1;
     
     /* 基础线不使用此接口绘制 */
     if (src_pos_1.x == src_pos_2.x ||
@@ -63,7 +63,7 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
         
         scui_multi_t dt = pos_s.x;
         clip_d.x = pos_s.x;
-        clip_d.h = src_width - 1;
+        clip_d.h = src_stroke - 1;
         
         if (dx > 0)
             dt = pos_s.x - 1;
@@ -81,7 +81,7 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
             }
             
             clip_d.w = dt - clip_d.x;
-            clip_d.y = pos_s.y + idx_j - src_width / 2;
+            clip_d.y = pos_s.y + idx_j - src_stroke / 2;
             
             /* 上下两边渐变补偿颜色打点 */
             for (scui_multi_t idx_i = 0; idx_i < clip_d.w; idx_i++) {
@@ -128,7 +128,7 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
         clip_d.x = pos_s.x;
         clip_d.y = pos_s.y;
         clip_d.h = 0;
-        clip_d.w = src_width - 1;
+        clip_d.w = src_stroke - 1;
         
         if (dx < 0) {
             dx = -dx;
@@ -139,7 +139,7 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
             
             clip_d.y = clip_d.y + clip_d.h;
             clip_d.h = pos_s.y + idx_i * dy / dx - clip_d.y;
-            clip_d.x = pos_s.x + idx_i * df - src_width / 2;
+            clip_d.x = pos_s.x + idx_i * df - src_stroke / 2;
             
             /* 上下两边渐变补偿颜色打点 */
             for (scui_multi_t idx_j = 0; idx_j < clip_d.h; idx_j++) {
@@ -193,7 +193,7 @@ static void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
     scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
     scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
     scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
+    scui_coord_t    src_stroke  =  draw_dsc->graph.src_stroke;
     scui_point_t    src_pos_1   =  draw_dsc->graph.src_pos_1;
     scui_point_t    src_pos_2   =  draw_dsc->graph.src_pos_2;
     /* draw dsc args<e> */
@@ -203,8 +203,8 @@ static void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    if (src_width <= 0)
-        src_width  = 1;
+    if (src_stroke <= 0)
+        src_stroke  = 1;
     
     scui_area_t draw_area = {0};
     scui_area_t dst_area = scui_surface_area(dst_surface);
@@ -233,8 +233,8 @@ static void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
         };
         scui_area_m_by_s(&src_clip, &src_clip);
         
-        if (src_pos_1.x == src_pos_2.x) src_clip.w += src_width - 1;
-        if (src_pos_1.y == src_pos_2.y) src_clip.h += src_width - 1;
+        if (src_pos_1.x == src_pos_2.x) src_clip.w += src_stroke - 1;
+        if (src_pos_1.y == src_pos_2.y) src_clip.h += src_stroke - 1;
         
         scui_area_t dst_area = {0};
         if (!scui_area_inter(&dst_area, &draw_area, &src_clip))
@@ -252,7 +252,7 @@ static void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
 void scui_draw_hline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width)
 {
     draw_dsc->type = scui_draw_type_pixel_line;
-    draw_dsc->graph.src_width   = width;
+    draw_dsc->graph.src_stroke  = width;
     draw_dsc->graph.src_pos_1.x = x;
     draw_dsc->graph.src_pos_1.y = y;
     draw_dsc->graph.src_pos_2.x = x + len - 1;
@@ -267,7 +267,7 @@ void scui_draw_hline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, 
 void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width)
 {
     draw_dsc->type = scui_draw_type_pixel_line;
-    draw_dsc->graph.src_width   = width;
+    draw_dsc->graph.src_stroke  = width;
     draw_dsc->graph.src_pos_1.x = x;
     draw_dsc->graph.src_pos_1.y = y;
     draw_dsc->graph.src_pos_2.x = x;
@@ -299,12 +299,12 @@ void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
             (src_pos_1.x == src_pos_2.x || src_pos_1.y == src_pos_2.y)) {
             /* 外部入口简单调整一下居中对齐 */
             if (src_pos_1.x == src_pos_2.x) {
-                draw_dsc->graph.src_pos_1.x -= draw_dsc->graph.src_width / 2;
-                draw_dsc->graph.src_pos_2.x -= draw_dsc->graph.src_width / 2;
+                draw_dsc->graph.src_pos_1.x -= draw_dsc->graph.src_stroke / 2;
+                draw_dsc->graph.src_pos_2.x -= draw_dsc->graph.src_stroke / 2;
             }
             if (src_pos_1.y == src_pos_2.y) {
-                draw_dsc->graph.src_pos_1.y -= draw_dsc->graph.src_width / 2;
-                draw_dsc->graph.src_pos_2.y -= draw_dsc->graph.src_width / 2;
+                draw_dsc->graph.src_pos_1.y -= draw_dsc->graph.src_stroke / 2;
+                draw_dsc->graph.src_pos_2.y -= draw_dsc->graph.src_stroke / 2;
             }
             scui_draw_sline(draw_dsc);
             return;

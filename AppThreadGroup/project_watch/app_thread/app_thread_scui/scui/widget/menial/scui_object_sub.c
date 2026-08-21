@@ -19,7 +19,7 @@ static void scui_object_tvg_rect_cb(scui_draw_dsc_t *draw_dsc)
     scui_area_t    *dst_part    = &draw_dsc->graph.dst_part;
     scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
     scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
+    scui_coord_t    src_stroke  =  draw_dsc->graph.src_stroke;
     scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
     scui_coord_t    src_shadow  =  draw_dsc->graph.src_shadow;
     scui_sbitfd_t   src_grad_w  =  draw_dsc->graph.src_grad_w;
@@ -43,7 +43,7 @@ static void scui_object_tvg_rect_cb(scui_draw_dsc_t *draw_dsc)
         {1.0, .r = c_e.ch.r, .g = c_e.ch.g, .b = c_e.ch.b, .a = c_e.ch.a,},
     };
     
-    scui_coord_t sw = src_width;
+    scui_coord_t sw = src_stroke;
     scui_coord_t x = dst_part->x - offset.x;
     scui_coord_t y = dst_part->y - offset.y;
     scui_coord_t w = dst_part->w;
@@ -51,7 +51,7 @@ static void scui_object_tvg_rect_cb(scui_draw_dsc_t *draw_dsc)
     scui_coord_t r = src_radius;
     
     if (src_shadow) {
-        if (src_width == 0 || src_width >= src_radius) {
+        if (src_stroke == 0 || src_stroke >= src_radius) {
             SCUI_LOG_ERROR("unsupport fill grad");
             return;
         }
@@ -161,7 +161,7 @@ static void scui_object_tvg_rect_cb(scui_draw_dsc_t *draw_dsc)
         uint8_t x_g = src_color.color.ch.g;
         uint8_t x_b = src_color.color.ch.b;
         
-        if (src_width == 0 || src_width >= src_radius) {
+        if (src_stroke == 0 || src_stroke >= src_radius) {
             
             tvg_shape_move_to(paint, x + r, y);
             tvg_shape_line_to(paint, x + w - r, y);
@@ -206,7 +206,7 @@ static void scui_object_tvg_rect_cb(scui_draw_dsc_t *draw_dsc)
             tvg_shape_append_arc(paint, x + r, y + r, r, 180, 90, 0);
             
             tvg_shape_set_stroke_color(paint, x_r, x_g, x_b, x_a);
-            tvg_shape_set_stroke_width(paint, src_width);
+            tvg_shape_set_stroke_width(paint, src_stroke);
         }
         
         if (src_grad) {
@@ -215,7 +215,7 @@ static void scui_object_tvg_rect_cb(scui_draw_dsc_t *draw_dsc)
             else tvg_linear_gradient_set(grad, x, y, x + w, y);
             tvg_gradient_set_color_stops(grad, color2, 2);
             
-            if (src_width == 0 || src_width >= src_radius)
+            if (src_stroke == 0 || src_stroke >= src_radius)
                 tvg_shape_set_linear_gradient(paint, grad);
             else tvg_shape_set_stroke_linear_gradient(paint, grad);
         }
@@ -231,7 +231,7 @@ static void scui_object_tvg_arc_cb(scui_draw_dsc_t *draw_dsc)
     scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
     scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
     scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
+    scui_coord_t    src_stroke  =  draw_dsc->graph.src_stroke;
     scui_coord_t    src_radius  =  draw_dsc->graph.src_radius;
     scui_point_t    src_center  =  draw_dsc->graph.src_center;
     scui_coord_t    src_angle_s =  draw_dsc->graph.src_angle_s;
@@ -251,8 +251,8 @@ static void scui_object_tvg_arc_cb(scui_draw_dsc_t *draw_dsc)
     Tvg_Paint *paint = tvg_shape_new();
     tvg_paint_set_opacity(paint, src_alpha);
     
-    scui_coord_t full = (src_width == 0 || src_width >= src_radius) ? 1 : 0;
-    scui_coord_t s_width = (src_width == 0 || src_width >= src_radius) ? 0 : src_width;
+    scui_coord_t full = (src_stroke == 0 || src_stroke >= src_radius) ? 1 : 0;
+    scui_coord_t stroke = (src_stroke == 0 || src_stroke >= src_radius) ? 0 : src_stroke;
     
     /* 一个弧形扇形 */
     scui_coord_t a_s  = src_angle_s;
@@ -279,12 +279,12 @@ static void scui_object_tvg_arc_cb(scui_draw_dsc_t *draw_dsc)
         tvg_gradient_set_color_stops(p_grad, g_cs, 2);
         if (full) tvg_shape_set_linear_gradient(paint, p_grad);
         else tvg_shape_set_stroke_linear_gradient(paint, p_grad);
-        tvg_shape_set_stroke_width(paint, s_width);
+        tvg_shape_set_stroke_width(paint, stroke);
     } else {
         uint8_t f_a = 0, f_r = 0, f_g = 0, f_b = 0;
         uint8_t s_a = 0, s_r = 0, s_g = 0, s_b = 0;
         
-        if (src_width == 0 || src_width >= src_radius) {
+        if (src_stroke == 0 || src_stroke >= src_radius) {
             f_a = src_color.color.ch.a;
             f_r = src_color.color.ch.r;
             f_g = src_color.color.ch.g;
@@ -294,12 +294,12 @@ static void scui_object_tvg_arc_cb(scui_draw_dsc_t *draw_dsc)
             s_r = src_color.color.ch.r;
             s_g = src_color.color.ch.g;
             s_b = src_color.color.ch.b;
-            s_width = src_width;
+            stroke = src_stroke;
         }
         
         tvg_shape_set_fill_color(paint, f_r, f_g, f_b, f_a);
         tvg_shape_set_stroke_color(paint, s_r, s_g, s_b, s_a);
-        tvg_shape_set_stroke_width(paint, s_width);
+        tvg_shape_set_stroke_width(paint, stroke);
     }
     
     tvg_canvas_push(canvas, paint);
@@ -312,7 +312,7 @@ static void scui_object_tvg_line_cb(scui_draw_dsc_t *draw_dsc)
     scui_area_t    *dst_clip    = &draw_dsc->graph.dst_clip;
     scui_alpha_t    src_alpha   =  draw_dsc->graph.src_alpha;
     scui_color_t    src_color   =  draw_dsc->graph.src_color;
-    scui_coord_t    src_width   =  draw_dsc->graph.src_width;
+    scui_coord_t    src_stroke  =  draw_dsc->graph.src_stroke;
     scui_point_t   *src_vpos    =  draw_dsc->graph.src_vpos;
     scui_coord_t    src_vpos_c  =  draw_dsc->graph.src_vpos_c;
     bool            src_round   =  draw_dsc->graph.src_round;
@@ -321,8 +321,8 @@ static void scui_object_tvg_line_cb(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    if (src_width <= 0)
-        src_width  = 1;
+    if (src_stroke <= 0)
+        src_stroke  = 1;
     
     if (src_vpos_c == 0)
         return;
@@ -346,7 +346,7 @@ static void scui_object_tvg_line_cb(scui_draw_dsc_t *draw_dsc)
         tvg_shape_line_to(paint, src_vpos[idx].x - dst_clip->x, src_vpos[idx].y - dst_clip->y);
     
     if (src_round) tvg_shape_set_stroke_cap(paint, TVG_STROKE_CAP_ROUND);
-    tvg_shape_set_stroke_width(paint, src_width);
+    tvg_shape_set_stroke_width(paint, src_stroke);
     tvg_shape_set_stroke_color(paint, s_r, s_g, s_b, s_a);
     tvg_canvas_push(canvas, paint);
 }
@@ -431,7 +431,7 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     alpha = scui_alpha_mix(alpha, widget->alpha);
     scui_color_t color = {
         .color_s = src_data[scui_object_style_idx(rect_color)].color32,
-        .color_e = src_data[scui_object_style_idx(rect_color_grad)].color32,
+        .color_e = src_data[scui_object_style_idx(rect_grad_c)].color32,
     };
     
     scui_area_t dst_area = {0};
@@ -443,22 +443,22 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     scui_opt_pos_t align = src_data[scui_object_style_idx(rect_align)].align;
     scui_coord_t   width = src_data[scui_object_style_idx(rect_width)].number;
     scui_coord_t  height = src_data[scui_object_style_idx(rect_height)].number;
-    scui_coord_t s_width = src_data[scui_object_style_idx(rect_side_width)].number;
+    scui_coord_t stroke = src_data[scui_object_style_idx(rect_stroke)].number;
     
     if (scui_opt_bits_equal(align, scui_opt_pos_hor))
-        dst_area.x += (dst_area.w - (width  - s_width * 2)) / 2;
+        dst_area.x += (dst_area.w - width) / 2;
     else if (scui_opt_bits_equal(align, scui_opt_pos_l));
     else if (scui_opt_bits_equal(align, scui_opt_pos_r))
-        dst_area.x += (dst_area.w - (width  - s_width * 2));
+        dst_area.x += (dst_area.w - width);
     
     if (scui_opt_bits_equal(align, scui_opt_pos_ver))
-        dst_area.y += (dst_area.h - (height - s_width * 2)) / 2;
+        dst_area.y += (dst_area.h - height) / 2;
     else if (scui_opt_bits_equal(align, scui_opt_pos_u));
     else if (scui_opt_bits_equal(align, scui_opt_pos_d))
-        dst_area.y += (dst_area.h - (height - s_width * 2));
+        dst_area.y += (dst_area.h - height);
     
-    dst_area.w = (width  - s_width * 2);
-    dst_area.h = (height - s_width * 2);
+    dst_area.w = width;
+    dst_area.h = height;
     
     /* 检查信息 */
     if (dst_area.w == 0 || width  == 0 ||
@@ -468,14 +468,14 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     /* tvg draw cb */
     scui_draw_dsc_t draw_dsc = {0};
     draw_dsc.type = scui_draw_type_pixel_tvg;
-    draw_dsc.graph.dst_part   = dst_area;
-    draw_dsc.graph.src_width  = s_width;
-    draw_dsc.graph.src_radius = src_data[scui_object_style_idx(rect_radius)].number;
-    draw_dsc.graph.src_shadow = src_data[scui_object_style_idx(rect_multi)].multi.shadow;
-    draw_dsc.graph.src_grad_w = src_data[scui_object_style_idx(rect_multi)].multi.grad_w;
-    draw_dsc.graph.src_grad   = src_data[scui_object_style_idx(rect_multi)].multi.grad;
+    draw_dsc.graph.dst_part     = dst_area;
+    draw_dsc.graph.src_stroke   = stroke;
+    draw_dsc.graph.src_radius   = src_data[scui_object_style_idx(rect_radius)].number;
+    draw_dsc.graph.src_shadow   = src_data[scui_object_style_idx(rect_multi)].multi.shadow;
+    draw_dsc.graph.src_grad_w   = src_data[scui_object_style_idx(rect_multi)].multi.grad_w;
+    draw_dsc.graph.src_grad     = src_data[scui_object_style_idx(rect_multi)].multi.grad;
     #if SCUI_DRAW_USE_THORVG
-    draw_dsc.graph.src_tvg_cb = scui_object_tvg_rect_cb;
+    draw_dsc.graph.src_tvg_cb   = scui_object_tvg_rect_cb;
     #endif
     
     scui_widget_draw_graph(widget->myself, NULL, alpha, color, &draw_dsc);
@@ -530,13 +530,13 @@ bool scui_object_draw_arc(scui_handle_t handle, scui_object_prop_t *prop)
     alpha = scui_alpha_mix(alpha, widget->alpha);
     scui_color_t color = {
         .color_s = src_data[scui_object_style_idx(arc_color)].color32,
-        .color_e = src_data[scui_object_style_idx(arc_color_grad)].color32,
+        .color_e = src_data[scui_object_style_idx(arc_grad_c)].color32,
     };
     
     scui_draw_dsc_t draw_dsc = {0};
     draw_dsc.type = scui_draw_type_pixel_tvg;
     draw_dsc.graph.src_center  = src_data[scui_object_style_idx(arc_center)].point;
-    draw_dsc.graph.src_width   = src_data[scui_object_style_idx(arc_side_width)].number;
+    draw_dsc.graph.src_stroke  = src_data[scui_object_style_idx(arc_stroke)].number;
     draw_dsc.graph.src_radius  = src_data[scui_object_style_idx(arc_radius)].number;
     draw_dsc.graph.src_angle_s = src_data[scui_object_style_idx(arc_angle_s)].number;
     draw_dsc.graph.src_angle_e = src_data[scui_object_style_idx(arc_angle_e)].number;
@@ -547,7 +547,7 @@ bool scui_object_draw_arc(scui_handle_t handle, scui_object_prop_t *prop)
     draw_dsc.graph.src_tvg_cb  = scui_object_tvg_arc_cb;
     #endif
     
-    draw_dsc.graph.src_radius   -= draw_dsc.graph.src_width / 2  + 1;
+    draw_dsc.graph.src_radius   -= draw_dsc.graph.src_stroke / 2  + 1;
     
     scui_widget_draw_graph(widget->myself, NULL, alpha, color, &draw_dsc);
     
@@ -609,7 +609,7 @@ bool scui_object_draw_line(scui_handle_t handle, scui_object_prop_t *prop)
     draw_dsc.type = scui_draw_type_pixel_tvg;
     draw_dsc.graph.src_vpos   = src_data[scui_object_style_idx(line_vpos)].pointer;
     draw_dsc.graph.src_vpos_c = src_data[scui_object_style_idx(line_vpos_num)].number;
-    draw_dsc.graph.src_width  = src_data[scui_object_style_idx(line_side_width)].number;
+    draw_dsc.graph.src_stroke  = src_data[scui_object_style_idx(line_stroke)].number;
     draw_dsc.graph.src_round  = src_data[scui_object_style_idx(line_multi)].multi.round;
     #if SCUI_DRAW_USE_THORVG
     draw_dsc.graph.src_tvg_cb = scui_object_tvg_line_cb;

@@ -522,7 +522,7 @@ static void scui_widget_event_process(scui_event_t *event)
         {
             scui_draw_dsc_t draw_dsc = {0};
             draw_dsc.type = scui_draw_type_pixel_line;
-            draw_dsc.graph.src_width = 1;
+            draw_dsc.graph.src_stroke = 1;
             scui_alpha_t alpha = widget->alpha;
             scui_color_t color = {
                 .color.ch.a = 0xFF,

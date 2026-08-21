@@ -59,8 +59,8 @@ typedef enum {
     scui_object_style_rect_width,
     scui_object_style_rect_height,
     scui_object_style_rect_radius,
-    scui_object_style_rect_side_width,
-    scui_object_style_rect_color_grad,
+    scui_object_style_rect_stroke,
+    scui_object_style_rect_grad_c,
     scui_object_style_rect_multi,
     
     scui_object_style_rect_e,
@@ -74,8 +74,8 @@ typedef enum {
     scui_object_style_arc_angle_e,
     scui_object_style_arc_center,
     scui_object_style_arc_radius,
-    scui_object_style_arc_side_width,
-    scui_object_style_arc_color_grad,
+    scui_object_style_arc_stroke,
+    scui_object_style_arc_grad_c,
     scui_object_style_arc_multi,
     
     scui_object_style_arc_e,
@@ -88,7 +88,7 @@ typedef enum {
     scui_object_style_line_area,
     scui_object_style_line_vpos,
     scui_object_style_line_vpos_num,
-    scui_object_style_line_side_width,
+    scui_object_style_line_stroke,
     scui_object_style_line_multi,
     
     scui_object_style_line_e,

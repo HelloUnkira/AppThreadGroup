@@ -380,7 +380,7 @@ do {                                                                            
     scui_dd_i->graph.src_center  = (draw_dsc_v)->graph.src_center;                  \
     scui_dd_i->graph.src_angle_s = (draw_dsc_v)->graph.src_angle_s;                 \
     scui_dd_i->graph.src_angle_e = (draw_dsc_v)->graph.src_angle_e;                 \
-    scui_dd_i->graph.src_width   = (draw_dsc_v)->graph.src_width;                   \
+    scui_dd_i->graph.src_stroke  = (draw_dsc_v)->graph.src_stroke;                  \
     scui_dd_i->graph.src_radius  = (draw_dsc_v)->graph.src_radius;                  \
     scui_dd_i->graph.src_pos_1   = (draw_dsc_v)->graph.src_pos_1;                   \
     scui_dd_i->graph.src_pos_2   = (draw_dsc_v)->graph.src_pos_2;                   \

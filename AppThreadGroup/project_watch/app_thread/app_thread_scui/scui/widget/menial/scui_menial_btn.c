@@ -37,14 +37,21 @@ void scui_menial_btn_style(scui_handle_t handle, scui_menial_btn_res_t *res)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_menial_t *menial = (void *)widget;
     
+    /* 部件宽高 */
+    scui_coord_t area_w = res->area.w ? res->area.w : widget->clip.w;
+    scui_coord_t area_h = res->area.h ? res->area.h : widget->clip.h;
+    
     /* 几何属性(def<->pre) */
     scui_object_sub_t sub = {.part = res->part};
-    sub.rect.alpha.alpha       = scui_alpha_cover;
-    sub.rect.align.align       = scui_opt_pos_c;
-    sub.rect.width.number      = widget->clip.w;
-    sub.rect.height.number     = widget->clip.h;
-    sub.rect.radius.number     = res->radius;
-    sub.rect.side_width.number = res->width;
+    sub.rect.alpha.alpha        = scui_alpha_cover;
+    sub.rect.align.align        = scui_opt_pos_c;
+    sub.rect.width.number       = area_w;
+    sub.rect.height.number      = area_h;
+    sub.rect.radius.number      = res->radius;
+    sub.rect.stroke.number      = res->width;
+    sub.rect.multi.multi.grad   = res->grad;
+    sub.rect.multi.multi.grad_w = res->gradw;
+    sub.rect.multi.multi.shadow = res->shadow;
     
     sub.state = scui_object_state_def;
     scui_object_prop_rect(handle, &sub);
@@ -61,81 +68,101 @@ void scui_menial_btn_style(scui_handle_t handle, scui_menial_btn_res_t *res)
     
     scui_coord_t lim = res->lim;
     if (lim == 0) lim = SCUI_WIDGET_MENIAL_BTN_PCT;
-    scui_multi_t scale_w = (scui_multi_t)widget->clip.w * lim / 100;
-    scui_multi_t scale_h = (scui_multi_t)widget->clip.h * lim / 100;
+    scui_multi_t scale_w = (scui_multi_t)area_w * lim / 100;
+    scui_multi_t scale_h = (scui_multi_t)area_h * lim / 100;
     
     /* def<->pre: 颜色/缩放/动画 */
     {
-        scui_color32_t color_l = res->color[0].color_l;
-        scui_color32_t color_d = res->color[0].color_d;
-        
-        /* color bg prop */
+        /* color prop(def<->pre): color_s状态色, color_e渐变 */
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_color,
-            scui_object_state_def, scui_object_data_color32(color_l));
+            scui_object_state_def, scui_object_data_color32(res->color[0].color_s));
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_color,
-            scui_object_state_pre, scui_object_data_color32(color_d));
-        /* color bg tran(def<->pre) */
+            scui_object_state_pre, scui_object_data_color32(res->color[1].color_s));
+        /* color tran(def<->pre) */
         scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_color,
-            scui_object_state_def, scui_object_state_pre, scui_object_data_color32(color_l),
-            scui_object_data_color32(color_d), NULL, time, 0);
+            scui_object_state_def, scui_object_state_pre,
+            scui_object_data_color32(res->color[0].color_s),
+            scui_object_data_color32(res->color[1].color_s), NULL, time, 0);
+        
+        if (res->grad) {
+            /* grad_c prop(def<->pre): 渐变终点 */
+            scui_object_prop_add_s(handle, res->part, scui_object_style_rect_grad_c,
+                scui_object_state_def, scui_object_data_color32(res->color[0].color_e));
+            scui_object_prop_add_s(handle, res->part, scui_object_style_rect_grad_c,
+                scui_object_state_pre, scui_object_data_color32(res->color[1].color_e));
+            /* grad_c tran(def<->pre) */
+            scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_grad_c,
+                scui_object_state_def, scui_object_state_pre,
+                scui_object_data_color32(res->color[0].color_e),
+                scui_object_data_color32(res->color[1].color_e), NULL, time, 0);
+        }
         
         /* width && height prop */
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
             scui_object_state_def, scui_object_data_number(scale_w));
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
-            scui_object_state_pre, scui_object_data_number(widget->clip.w));
+            scui_object_state_pre, scui_object_data_number(area_w));
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_height,
             scui_object_state_def, scui_object_data_number(scale_h));
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_height,
-            scui_object_state_pre, scui_object_data_number(widget->clip.h));
+            scui_object_state_pre, scui_object_data_number(area_h));
         
         if (!menial->data.btn.fixed) {
             /* width && height tran(def<->pre) */
             scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_width,
                 scui_object_state_def, scui_object_state_pre, scui_object_data_number(scale_w),
-                scui_object_data_number(widget->clip.w), NULL, time, 0);
+                scui_object_data_number(area_w), NULL, time, 0);
             
             scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_height,
                 scui_object_state_def, scui_object_state_pre, scui_object_data_number(scale_h),
-                scui_object_data_number(widget->clip.h), NULL, time, 0);
+                scui_object_data_number(area_h), NULL, time, 0);
         }
     }
     
     /* chk<->pre: 颜色/缩放/动画(选中时) */
     if (menial->data.btn.check) {
-        scui_color32_t color_l = res->color[1].color_l;
-        scui_color32_t color_d = res->color[1].color_d;
-        
-        /* color bg prop */
+        /* color prop(chk<->pre): color_s状态色, color_e渐变 */
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_color,
-            scui_object_state_chk, scui_object_data_color32(color_l));
+            scui_object_state_chk, scui_object_data_color32(res->color[2].color_s));
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_color,
-            scui_object_state_pre, scui_object_data_color32(color_d));
-        
-        /* color bg tran(chk<->pre) */
+            scui_object_state_pre, scui_object_data_color32(res->color[3].color_s));
+        /* color tran(chk<->pre) */
         scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_color,
-            scui_object_state_chk, scui_object_state_pre, scui_object_data_color32(color_l),
-            scui_object_data_color32(color_d), NULL, time, 0);
+            scui_object_state_chk, scui_object_state_pre,
+            scui_object_data_color32(res->color[2].color_s),
+            scui_object_data_color32(res->color[3].color_s), NULL, time, 0);
+        
+        if (res->grad) {
+            /* grad_c prop(chk<->pre): 渐变终点 */
+            scui_object_prop_add_s(handle, res->part, scui_object_style_rect_grad_c,
+                scui_object_state_chk, scui_object_data_color32(res->color[2].color_e));
+            scui_object_prop_add_s(handle, res->part, scui_object_style_rect_grad_c,
+                scui_object_state_pre, scui_object_data_color32(res->color[3].color_e));
+            /* grad_c tran(chk<->pre) */
+            scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_grad_c,
+                scui_object_state_chk, scui_object_state_pre, scui_object_data_color32(res->color[2].color_e),
+                scui_object_data_color32(res->color[3].color_e), NULL, time, 0);
+        }
         
         /* width && height prop */
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
             scui_object_state_chk, scui_object_data_number(scale_w));
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
-            scui_object_state_pre, scui_object_data_number(widget->clip.w));
+            scui_object_state_pre, scui_object_data_number(area_w));
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_height,
             scui_object_state_chk, scui_object_data_number(scale_h));
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_height,
-            scui_object_state_pre, scui_object_data_number(widget->clip.h));
+            scui_object_state_pre, scui_object_data_number(area_h));
         
         if (!menial->data.btn.fixed) {
             /* width && height tran(chk<->pre) */
             scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_width,
                 scui_object_state_chk, scui_object_state_pre, scui_object_data_number(scale_w),
-                scui_object_data_number(widget->clip.w), NULL, time, 0);
+                scui_object_data_number(area_w), NULL, time, 0);
             
             scui_object_tran_add_s2(handle, res->part, scui_object_style_rect_height,
                 scui_object_state_chk, scui_object_state_pre, scui_object_data_number(scale_h),
-                scui_object_data_number(widget->clip.h), NULL, time, 0);
+                scui_object_data_number(area_h), NULL, time, 0);
         }
     }
     

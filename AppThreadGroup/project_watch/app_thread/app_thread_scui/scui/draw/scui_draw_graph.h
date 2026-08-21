@@ -269,7 +269,7 @@ typedef struct {
         scui_point_t        src_center;     /* 旋转中心 */
         scui_coord_t        src_angle_s;    /* 起始角度 */
         scui_coord_t        src_angle_e;    /* 结束角度 */
-        scui_coord_t        src_width;      /* 线宽, 环宽, 边界宽 */
+        scui_coord_t        src_stroke;     /* 线宽, 环宽, 边界宽 */
         scui_coord_t        src_radius;     /* 弧, 圆半径 */
         scui_point_t        src_pos_1;      /* 坐标点 */
         scui_point_t        src_pos_2;      /* 坐标点 */

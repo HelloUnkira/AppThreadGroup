@@ -64,7 +64,7 @@ void scui_test_ui_graph_1_event_proc(scui_event_t *event)
         };
         scui_draw_dsc_t draw_dsc = {
             .type = scui_draw_type_pixel_line,
-            .graph.src_width = 2,
+            .graph.src_stroke = 2,
         };
         
         pos_s.x = clip.x1 + 5;
@@ -157,7 +157,7 @@ void scui_test_ui_graph_2_event_proc(scui_event_t *event)
         };
         scui_draw_dsc_t draw_dsc = {
             .type = scui_draw_type_pixel_circle,
-            .graph.src_width    = clip.w / 2 - 5,
+            .graph.src_stroke   = clip.w / 2 - 5,
             .graph.src_radius   = clip.w / 2 - 5,
             .graph.src_center.x = clip.x + clip.w / 2,
             .graph.src_center.y = clip.y + clip.h / 2,
@@ -196,7 +196,7 @@ void scui_test_ui_graph_3_event_proc(scui_event_t *event)
         };
         scui_draw_dsc_t draw_dsc = {
             .type = scui_draw_type_pixel_circle,
-            .graph.src_width    = 2,
+            .graph.src_stroke   = 2,
             .graph.src_radius   = clip.w / 2 - 5,
             .graph.src_center.x = clip.x + clip.w / 2,
             .graph.src_center.y = clip.y + clip.h / 2,
@@ -290,7 +290,7 @@ void scui_test_ui_graph_4_event_proc(scui_event_t *event)
         };
         scui_draw_dsc_t draw_dsc = {
             .type = scui_draw_type_pixel_arc,
-            .graph.src_width    = clip.w / 2 - 10,
+            .graph.src_stroke   = clip.w / 2 - 10,
             .graph.src_radius   = clip.w / 2 - 10,
             .graph.src_center.x = clip.x + clip.w / 2,
             .graph.src_center.y = clip.y + clip.h / 2,
@@ -356,7 +356,7 @@ void scui_test_ui_graph_5_event_proc(scui_event_t *event)
         };
         scui_draw_dsc_t draw_dsc = {
             .type = scui_draw_type_pixel_arc,
-            .graph.src_width    = 2,
+            .graph.src_stroke   = 2,
             .graph.src_radius   = clip.w / 2 - 10,
             .graph.src_center.x = clip.x + clip.w / 2,
             .graph.src_center.y = clip.y + clip.h / 2,

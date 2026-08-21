@@ -322,7 +322,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
         
         scui_draw_dsc_t draw_dsc = {0};
         draw_dsc.type = scui_draw_type_pixel_line;
-        draw_dsc.graph.src_width = 2;
+        draw_dsc.graph.src_stroke = 2;
         draw_dsc.graph.src_pos_1.x = clip_line.x1;
         draw_dsc.graph.src_pos_1.y = clip_line.y1;
         draw_dsc.graph.src_pos_2.x = clip_line.x2;
@@ -450,7 +450,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
 
                 scui_draw_dsc_t draw_dsc = {0};
                 draw_dsc.type = scui_draw_type_pixel_line;
-                draw_dsc.graph.src_width = 2;
+                draw_dsc.graph.src_stroke = 2;
                 draw_dsc.graph.src_pos_1.x = clip_line.x1;
                 draw_dsc.graph.src_pos_1.y = clip_line.y1;
                 draw_dsc.graph.src_pos_2.x = clip_line.x1;
@@ -499,7 +499,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         
         scui_draw_dsc_t draw_dsc = {0};
         draw_dsc.type = scui_draw_type_pixel_line;
-        draw_dsc.graph.src_width = 2;
+        draw_dsc.graph.src_stroke = 2;
         draw_dsc.graph.src_pos_1.x = clip_line.x1;
         draw_dsc.graph.src_pos_1.y = clip_line.y1;
         draw_dsc.graph.src_pos_2.x = clip_line.x2;
@@ -626,7 +626,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
 
                 scui_draw_dsc_t draw_dsc = {0};
                 draw_dsc.type = scui_draw_type_pixel_line;
-                draw_dsc.graph.src_width = 2;
+                draw_dsc.graph.src_stroke = 2;
                 draw_dsc.graph.src_pos_1.x = clip_line.x1;
                 draw_dsc.graph.src_pos_1.y = clip_line.y1;
                 draw_dsc.graph.src_pos_2.x = clip_line.x1;
@@ -675,7 +675,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         
         scui_draw_dsc_t draw_dsc = {0};
         draw_dsc.type = scui_draw_type_pixel_line;
-        draw_dsc.graph.src_width = 2;
+        draw_dsc.graph.src_stroke = 2;
         draw_dsc.graph.src_pos_1.x = clip_line.x1;
         draw_dsc.graph.src_pos_1.y = clip_line.y1;
         draw_dsc.graph.src_pos_2.x = clip_line.x2;
@@ -803,7 +803,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
 
                 scui_draw_dsc_t draw_dsc = {0};
                 draw_dsc.type = scui_draw_type_pixel_line;
-                draw_dsc.graph.src_width = 2;
+                draw_dsc.graph.src_stroke = 2;
                 draw_dsc.graph.src_pos_1.x = clip_line.x1;
                 draw_dsc.graph.src_pos_1.y = clip_line.y1;
                 draw_dsc.graph.src_pos_2.x = clip_line.x1;
@@ -852,7 +852,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         
         scui_draw_dsc_t draw_dsc = {0};
         draw_dsc.type = scui_draw_type_pixel_line;
-        draw_dsc.graph.src_width = 2;
+        draw_dsc.graph.src_stroke = 2;
         draw_dsc.graph.src_pos_1.x = clip_line.x1;
         draw_dsc.graph.src_pos_1.y = clip_line.y1;
         draw_dsc.graph.src_pos_2.x = clip_line.x2;

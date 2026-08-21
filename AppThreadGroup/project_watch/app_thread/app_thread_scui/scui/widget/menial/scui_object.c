@@ -516,10 +516,10 @@ static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         break;
     }
     case scui_object_style_arc_color:
-    case scui_object_style_arc_color_grad:
+    case scui_object_style_arc_grad_c:
     case scui_object_style_line_color:
     case scui_object_style_rect_color:
-    case scui_object_style_rect_color_grad: {
+    case scui_object_style_rect_grad_c: {
         scui_color32_t color32_p = local_tran->data_p.color32;
         scui_color32_t color32_n = local_tran->data_n.color32;
         scui_color32_mix_with(&prop.data.color32, &color32_n, &color32_p, pct_c);

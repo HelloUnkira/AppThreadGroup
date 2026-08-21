@@ -55,16 +55,16 @@ void scui_menial_arc_style(scui_handle_t handle, scui_menial_arc_res_t *res)
     
     scui_object_sub_t sub = {.part = res->part};
     sub.arc.alpha.alpha        = scui_alpha_cover;
+    sub.arc.color.color32      = res->color[idx].color_s;
     sub.arc.angle_s.number     = angle_s;
     sub.arc.angle_e.number     = angle_e;
     sub.arc.center.point       = res->center;
     sub.arc.radius.number      = res->radius;
-    sub.arc.side_width.number  = res->width;
+    sub.arc.stroke.number      = res->width;
     sub.arc.multi.multi.round  = res->round;
     sub.arc.multi.multi.grad_w = res->gradw;
     sub.arc.multi.multi.grad   = res->grad;
-    sub.arc.color.color32      = res->color[idx].color_s;
-    sub.arc.color_grad.color32 = res->color[idx].color_e;
+    sub.arc.grad_c.color32     = res->color[idx].color_e;
     
     sub.state = scui_object_state_def;
     scui_object_prop_arc(handle, &sub);

@@ -26,9 +26,11 @@ void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle)
     if (custom_maker->type != scui_custom_type_none)
         widget_maker->style.sched_anima = true;
     
-    /* 可选标记ptr事件 */
-    if (custom_maker->type == scui_custom_type_image_crect4)
-        widget_maker->style.indev_ptr = true;
+    /* 可选标记ptr,widget事件 */
+    if (custom_maker->type == scui_custom_type_image_crect4) {
+        widget_maker->style.indev_ptr    = true;
+        widget_maker->style.sched_widget = true;
+    }
     
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle);

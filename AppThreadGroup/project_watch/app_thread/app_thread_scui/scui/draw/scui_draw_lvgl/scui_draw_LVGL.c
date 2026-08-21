@@ -1642,7 +1642,7 @@ bool scui_draw_ctx_graph_LVGL(scui_draw_dsc_t *draw_dsc)
     ctx_from_dsc(&ctx, draw_dsc);
     switch (draw_dsc->type) {
     case scui_draw_type_pixel_line: {
-        scui_coord_t width = draw_dsc->graph.src_width;
+        scui_coord_t width = draw_dsc->graph.src_stroke;
         if (width <= 0) width = 1;
         lv_draw_sw_line(&ctx, src_color, src_alpha, width,
             &draw_dsc->graph.src_pos_1, &draw_dsc->graph.src_pos_2);
@@ -1656,7 +1656,7 @@ bool scui_draw_ctx_graph_LVGL(scui_draw_dsc_t *draw_dsc)
         return true;
     }
     case scui_draw_type_pixel_circle: {
-        scui_coord_t width  = draw_dsc->graph.src_width;
+        scui_coord_t width  = draw_dsc->graph.src_stroke;
         scui_coord_t radius = draw_dsc->graph.src_radius;
         if (width > 0 && width < radius) {  /* EGUI: 0<width<radius → 空心圆环 */
             /* 圆环：用 crect 的 ring 模式 */
@@ -1682,7 +1682,7 @@ bool scui_draw_ctx_graph_LVGL(scui_draw_dsc_t *draw_dsc)
         return true;
     }
     case scui_draw_type_pixel_crect: {
-        scui_coord_t width = draw_dsc->graph.src_width;
+        scui_coord_t width = draw_dsc->graph.src_stroke;
         lv_draw_sw_crect(&ctx, src_color, src_alpha, width,
             &draw_dsc->graph.dst_part, draw_dsc->graph.src_radius);
 #if SCUI_DRAW_BOUNDS_LOG
@@ -1695,7 +1695,7 @@ bool scui_draw_ctx_graph_LVGL(scui_draw_dsc_t *draw_dsc)
         return true;
     }
     case scui_draw_type_pixel_arc: {
-        scui_coord_t width  = draw_dsc->graph.src_width;
+        scui_coord_t width  = draw_dsc->graph.src_stroke;
         scui_coord_t radius = draw_dsc->graph.src_radius;
         bool rounded = draw_dsc->graph.src_round != 0;
         lv_draw_sw_arc(&ctx, src_color, src_alpha, width,

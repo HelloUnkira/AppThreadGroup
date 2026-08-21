@@ -175,8 +175,8 @@ typedef struct {
     scui_object_data_t width;           /* 部件宽 */
     scui_object_data_t height;          /* 部件高 */
     scui_object_data_t radius;          /* 部件圆角(背景) */
-    scui_object_data_t side_width;      /* 部件宽度(边框) */
-    scui_object_data_t color_grad;      /* 部件色调(渐变) */
+    scui_object_data_t stroke;          /* 部件宽度(边框) */
+    scui_object_data_t grad_c;          /* 部件色调(渐变) */
     scui_object_data_t multi;           /* 部件渐变标记/方向 */
     } rect;
     struct {
@@ -186,8 +186,8 @@ typedef struct {
     scui_object_data_t angle_e;         /* 角度 */
     scui_object_data_t center;          /* 中心 */
     scui_object_data_t radius;          /* 半径 */
-    scui_object_data_t side_width;      /* 弧宽(扇形:<= 0;弧型:>0) */
-    scui_object_data_t color_grad;      /* 部件色调(渐变) */
+    scui_object_data_t stroke;          /* 弧宽(扇形:<= 0;弧型:>0) */
+    scui_object_data_t grad_c;          /* 部件色调(渐变) */
     scui_object_data_t multi;           /* 端点,渐变标记/方向 */
     } arc;
     struct {
@@ -196,7 +196,7 @@ typedef struct {
     scui_object_data_t area;            /* 区域 */
     scui_object_data_t vpos;            /* 端点序列 */
     scui_object_data_t vpos_num;        /* 端点序列数 */
-    scui_object_data_t side_width;      /* 线宽 */
+    scui_object_data_t stroke;          /* 线宽 */
     scui_object_data_t multi;           /* 端点 */
     } line;
     };

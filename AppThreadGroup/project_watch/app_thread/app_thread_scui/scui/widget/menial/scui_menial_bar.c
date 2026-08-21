@@ -51,14 +51,14 @@ void scui_menial_bar_style(scui_handle_t handle, scui_menial_bar_res_t *res)
     
     scui_object_sub_t sub = {.part = res->part};
     sub.rect.alpha.alpha           = scui_alpha_cover;
+    sub.rect.color.color32         = res->color[idx].color_s;
     sub.rect.align.align           = scui_opt_pos_l | scui_opt_pos_u;
     sub.rect.width.number          = widget->clip.w;
     sub.rect.height.number         = widget->clip.h;
     sub.rect.radius.number         = res->radius;
     sub.rect.multi.multi.grad_w    = menial->data.bar.way;
     sub.rect.multi.multi.grad      = res->grad;
-    sub.rect.color.color32         = res->color[idx].color_s;
-    sub.rect.color_grad.color32    = res->color[idx].color_e;
+    sub.rect.grad_c.color32        = res->color[idx].color_e;
     
     if (res->part == scui_object_part_rect_fg) {
         sub.rect.width.number  = menial->data.bar.way ? widget->clip.w : 0;

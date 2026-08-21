@@ -97,7 +97,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     draw_dsc_line.graph.dst_clip    = dst_clip_v;
     draw_dsc_line.graph.src_alpha   = src_alpha;
     draw_dsc_line.graph.src_color   = src_args->color;
-    draw_dsc_line.graph.src_width   = src_args->line_width;
+    draw_dsc_line.graph.src_stroke  = src_args->line_width;
     draw_dsc_line.graph.src_pos_1.x = line_multi ? 0 : src_args->offset;
     draw_dsc_line.graph.src_pos_2.x = line_multi ? 0 : src_args->offset;
     draw_dsc_line.graph.src_pos_1.y = line_multi ? src_args->offset : 0;

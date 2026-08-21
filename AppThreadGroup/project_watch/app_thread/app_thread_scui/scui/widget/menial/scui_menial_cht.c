@@ -91,8 +91,9 @@ void scui_menial_cht_style(scui_handle_t handle, scui_menial_cht_res_t *res)
         sub.line.color.color32     = res->color.color;
         sub.line.area.area         = menial->data.cht.area;
         sub.line.vpos_num.number   = menial->data.cht.number;
-        sub.line.side_width.number = scui_max(res->width, 1);
+        sub.line.stroke.number     = scui_max(res->width, 1);
         sub.line.multi.multi.round = res->round;
+        
         sub.part  = scui_object_part_line_item;
         sub.state = scui_object_state_def;
         scui_object_prop_line(handle, &sub);
@@ -105,6 +106,7 @@ void scui_menial_cht_style(scui_handle_t handle, scui_menial_cht_res_t *res)
         sub.rect.color.color32 = res->color.color;
         sub.rect.width.number  = scui_max(res->width, 1);
         sub.rect.radius.number = res->round ? -1 : 0;
+        
         sub.part  = scui_object_part_rect_item;
         sub.state = scui_object_state_def;
         scui_object_prop_rect(handle, &sub);
@@ -219,7 +221,7 @@ void scui_menial_cht_invoke(scui_event_t *event)
             
             scui_object_data_t width = {0};
             scui_object_prop_sync_s(event->object, scui_object_part_line_item,
-                scui_object_style_line_side_width, scui_object_state_def, width);
+                scui_object_style_line_stroke, scui_object_state_def, width);
             
             scui_point_t offset = menial->data.cht.area.pos;
             for (scui_coord_t idx = 0; idx + 1 < menial->data.cht.number; idx++) {

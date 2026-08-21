@@ -23,8 +23,8 @@ void scui_ui_apply(scui_handle_t handle)
         case scui_menial_type_btn: {
             /* 常规 res: 天蓝圆角, 点击变红 */
             scui_menial_btn_res_t res = {0};
-            res.color[0].color_l.full = 0xFF2196F3;
-            res.color[0].color_d.full = 0xFFF44336;
+            res.color[0].color_s.full = 0xFF2196F3;
+            res.color[1].color_s.full = 0xFFF44336;
             res.radius = -1;
             
             res.part = scui_object_part_rect_bg;

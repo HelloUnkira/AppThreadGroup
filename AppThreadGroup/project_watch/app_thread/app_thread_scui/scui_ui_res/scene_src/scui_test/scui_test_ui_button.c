@@ -102,10 +102,10 @@ void scui_test_ui_button_event_proc(scui_event_t *event)
         
         /* 创建后应用样式(用户自定义) */
         scui_menial_btn_res_t res = {0};
-        res.color[0].color_l.full = 0xFF00FF00;
-        res.color[0].color_d.full = 0xFF008000;
-        res.color[1].color_l.full = 0xFF000080;
-        res.color[1].color_d.full = 0xFF000080;
+        res.color[0].color_s.full = 0xFF00FF00;  /* def */
+        res.color[1].color_s.full = 0xFF008000;  /* pre */
+        res.color[2].color_s.full = 0xFF000080;  /* chk */
+        res.color[3].color_s.full = 0xFF000080;  /* chk pre */
         res.width  = 3;
         res.radius = 20;
         res.time   = 200; /* 动画时间 */
@@ -132,54 +132,54 @@ void scui_test_ui_button_event_proc(scui_event_t *event)
         menial2_maker.data.btn.check = 1;   /* 运行初值: 点击切换 */
         scui_widget_create(&menial2_maker, &menial2_handle);
         
-        /* 创建后应用样式(用户自定义): 背景用 menial2 参数, 边框/盒子/阴影各自参数 */
-        /* 复用同一套 btn style, 通配到各部件(几何外扩系数由 style 按 part 自动推导) */
+        /* 创建后应用样式 */
         scui_menial_btn_res_t bg_res = {0};
-        bg_res.color[0].color_l.full = 0xFF87CEFA;
-        bg_res.color[0].color_d.full = 0xFF4682B4;
-        bg_res.color[1].color_l.full = 0xFF87CEFA;
-        bg_res.color[1].color_d.full = 0xFF4682B4;
-        bg_res.width  = 3;
-        bg_res.radius = 20;
-        bg_res.time   = 200;
-        bg_res.lim    = 90;
         bg_res.part = scui_object_part_rect_bg;
-        scui_menial_btn_style(menial2_handle, &bg_res);
+        bg_res.color[0].color_s.full = 0xFF87CEFA;  /* def */
+        bg_res.color[1].color_s.full = 0xFF4682B4;  /* pre */
+        bg_res.color[2].color_s.full = 0xFF87CEFA;  /* chk */
+        bg_res.color[3].color_s.full = 0xFF4682B4;  /* chk pre */
+        bg_res.area.w = btn_w - (12 + 4 + 4) * 2;
+        bg_res.area.h = 100 - (12 + 4 + 4) * 2;
+        bg_res.width  = 0;
+        bg_res.radius = 44 - (12 + 4 + 4);
         
-        /* 外部覆盖: edge/box/sha 各部件(复用同一套 btn style) */
+        /* edge/box/sha 各部件 */
         scui_menial_btn_res_t edge_res = {0};
-        edge_res.color[0].color_l.full = 0xFFFFFFFF;
-        edge_res.color[0].color_d.full = 0xFFFFFFFF;
-        edge_res.color[1].color_l.full = 0xFFFFFFFF;
-        edge_res.color[1].color_d.full = 0xFFFFFFFF;
-        edge_res.width  = 3;
-        edge_res.radius = 20;
-        edge_res.time   = 200;
-        edge_res.lim    = 90;
+        edge_res.part = scui_object_part_rect_edge;
+        edge_res.color[0].color_s.full = 0xFFFFFFFF;  /* def */
+        edge_res.color[1].color_s.full = 0xFFFFFFFF;  /* pre */
+        edge_res.color[2].color_s.full = 0xFFFFFFFF;  /* chk */
+        edge_res.color[3].color_s.full = 0xFFFFFFFF;  /* chk pre */
+        edge_res.area.w = btn_w - (12 + 4) * 2;
+        edge_res.area.h = 100 - (12 + 4) * 2;
+        edge_res.width  = 4;
+        edge_res.radius = 44 - (12 + 4);
         
         scui_menial_btn_res_t box_res = {0};
-        box_res.color[0].color_l.full = 0xFFFF0000;
-        box_res.color[0].color_d.full = 0xFFFF0000;
-        box_res.color[1].color_l.full = 0xFFFF0000;
-        box_res.color[1].color_d.full = 0xFFFF0000;
-        box_res.width  = 3;
-        box_res.radius = 20;
-        box_res.time   = 200;
-        box_res.lim    = 90;
+        box_res.part  = scui_object_part_rect_box;
+        box_res.color[0].color_s.full = 0xFFFF0000;  /* def */
+        box_res.color[1].color_s.full = 0xFFFF0000;  /* pre */
+        box_res.color[2].color_s.full = 0xFFFF0000;  /* chk */
+        box_res.color[3].color_s.full = 0xFFFF0000;  /* chk pre */
+        box_res.area.w = btn_w - (12) * 2;
+        box_res.area.h = 100 - (12) * 2;
+        box_res.width  = 4;
+        box_res.radius = 44 - (12);
         
         scui_menial_btn_res_t sha_res = {0};
-        sha_res.color[0].color_l.full = 0xFF00FF00;
-        sha_res.color[0].color_d.full = 0xFF00FF00;
-        sha_res.color[1].color_l.full = 0xFF00FF00;
-        sha_res.color[1].color_d.full = 0xFF00FF00;
-        sha_res.width  = 3;
-        sha_res.radius = 20;
-        sha_res.time   = 200;
-        sha_res.lim    = 90;
-        
-        edge_res.part = scui_object_part_rect_edge;
-        box_res.part  = scui_object_part_rect_box;
         sha_res.part  = scui_object_part_rect_sha;
+        sha_res.color[0].color_s.full = 0xFF00FF00;  /* def */
+        sha_res.color[1].color_s.full = 0xFF00FF00;  /* pre */
+        sha_res.color[2].color_s.full = 0xFF00FF00;  /* chk */
+        sha_res.color[3].color_s.full = 0xFF00FF00;  /* chk pre */
+        sha_res.area.w = btn_w - (0) * 2;
+        sha_res.area.h = 100 - (0) * 2;
+        sha_res.width  = 12;
+        sha_res.radius = 44 - (0);
+        sha_res.shadow = 1;
+        
+        scui_menial_btn_style(menial2_handle, &bg_res);
         scui_menial_btn_style(menial2_handle, &edge_res);
         scui_menial_btn_style(menial2_handle, &box_res);
         scui_menial_btn_style(menial2_handle, &sha_res);
