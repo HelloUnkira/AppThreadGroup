@@ -24,17 +24,27 @@ static struct {
     bool    ptr_long_jump;
 } * scui_ui_res_local = NULL;
 
-
-
 /*@brief 控件事件响应回调
  *@param event 事件
  */
 void scui_ui_scene_float_s_event_proc(scui_event_t * event)
 {
+    switch (event->type) {
+    case scui_event_draw_graph: {
+        
+        scui_color_t color = {
+            .color.ch.a = 0xFF,
+            .color.ch.r = scui_rand(0xFF),
+            .color.ch.g = scui_rand(0xFF),
+            .color.ch.b = scui_rand(0xFF),
+        };
+        scui_widget_draw_color(event->object, NULL, color);
+        break;
+    }
+    default:
+        break;
+    }
 }
-
-
-
 
 /*@brief 控件事件响应回调
  *@param event 事件
@@ -52,10 +62,10 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         
         // xfloat 构造测试
         // 常用于华强北风格手表, 表盘界面右拉出快捷栏(属于插件,并非控件,一次只能使用一个)
-        // scui_ui_scene_xfloat_create(event, scui_opt_pos_l, scui_ui_scene_float_s_event_proc);
-        // scui_ui_scene_xfloat_create(event, scui_opt_pos_r, scui_ui_scene_float_s_event_proc);
-        // scui_ui_scene_xfloat_create(event, scui_opt_pos_u, scui_ui_scene_float_s_event_proc);
-        // scui_ui_scene_xfloat_create(event, scui_opt_pos_d, scui_ui_scene_float_s_event_proc);
+        // scui_ui_scene_xfloat_create(event->object, SCUI_HOR_RES / 3, scui_opt_pos_l, scui_ui_scene_float_s_event_proc);
+        // scui_ui_scene_xfloat_create(event->object, SCUI_HOR_RES / 3, scui_opt_pos_r, scui_ui_scene_float_s_event_proc);
+        // scui_ui_scene_xfloat_create(event->object, SCUI_VER_RES / 3, scui_opt_pos_u, scui_ui_scene_float_s_event_proc);
+        // scui_ui_scene_xfloat_create(event->object, SCUI_VER_RES / 3, scui_opt_pos_d, scui_ui_scene_float_s_event_proc);
         break;
     case scui_event_destroy:
         // cwf json 测试
