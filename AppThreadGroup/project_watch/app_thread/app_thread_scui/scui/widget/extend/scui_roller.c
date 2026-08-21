@@ -69,7 +69,6 @@ static void scui_roller_event(scui_event_t *event)
         break;
     case scui_event_draw_buffer: {
         
-        /* 列表控件是当前控件的父控件 */
         SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
         scui_handle_t  handle = scui_widget_parent(event->object);
         scui_widget_t *widget = scui_handle_source_check(handle);
@@ -214,15 +213,14 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     scui_custom_maker_define(custom_maker);
     scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
     
-    
     /* 子控件创建 */
     custom_maker.widget.clip = maker->widget.clip;
     custom_maker.widget.style.buffer    = true;
-    // custom_maker.widget.style.buffer_d  = true;
+    custom_maker.widget.style.buffer_d  = true;
     custom_maker.widget.style.fully_bg  = true;
     custom_maker.widget.style.indev_ptr = true;
-    custom_maker.widget.format          = SCUI_PIXEL_CF_DEF_A;
     custom_maker.widget.parent          = widget->myself;
+    custom_maker.widget.format          = SCUI_PIXEL_CF_DEF;
     custom_maker.widget.event_cb        = scui_roller_event;
     custom_maker.widget.child_num       = 1;
     scui_widget_create(&custom_maker, &custom_handle);

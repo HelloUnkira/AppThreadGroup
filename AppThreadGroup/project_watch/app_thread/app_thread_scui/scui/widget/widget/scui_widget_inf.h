@@ -212,6 +212,13 @@ void scui_widget_create(void *maker, scui_handle_t *handle);
 /*************************************************************************************************/
 /*************************************************************************************************/
 
+/*@brief 控件坐标剥离
+ *@param handle 控件句柄
+ *@param point  点坐标
+ *@retval 成功失败
+ */
+bool scui_widget_switch_point(scui_handle_t handle, scui_point_t *point);
+
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点

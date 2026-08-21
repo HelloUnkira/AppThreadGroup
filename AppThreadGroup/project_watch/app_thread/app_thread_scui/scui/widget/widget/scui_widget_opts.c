@@ -7,6 +7,32 @@
 
 #include "scui.h"
 
+/*@brief 控件坐标剥离
+ *@param handle 控件句柄
+ *@param point  点坐标
+ *@retval 成功失败
+ */
+bool scui_widget_switch_point(scui_handle_t handle, scui_point_t *point)
+{
+    scui_handle_t  handle_t = scui_widget_tree(handle);
+    scui_widget_t *widget_t = scui_handle_source_check(handle_t);
+    scui_widget_t *widget   = scui_handle_source_check(handle);
+    
+    scui_area_t clip_t = scui_widget_clip_tree(handle);
+    if (widget   != widget_t) {
+        clip_t.x += widget_t->clip.x;
+        clip_t.y += widget_t->clip.y;
+    }
+    
+    if (scui_area_point(&clip_t, point)) {
+        point->x -= clip_t.x;
+        point->y -= clip_t.y;
+        return true;
+    }
+    
+    return false;
+}
+
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点

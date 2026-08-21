@@ -165,8 +165,9 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         arc_res.radius   = 100 / 2;
         arc_res.time     = 1500;
         
-        menial_maker.data.arc.spinner = 1;
-        menial_maker.data.arc.anti    = 1;
+        menial_maker.data.arc.anti = 1;
+        menial_maker.data.arc.ext_touch = 0;
+        menial_maker.data.arc.ext_spinner = 1;
         arc_res.width   = 8;
         arc_res.round   = 1;
         arc_res.gradw   = 0;
@@ -177,9 +178,6 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         
         arc_res.part = scui_object_part_arc_bg;
         scui_menial_arc_style(menial_handle, &arc_res);
-        
-        arc_res.angle_s = 270;
-        arc_res.angle_e = 270 + 60;
         arc_res.part = scui_object_part_arc_fg;
         scui_menial_arc_style(menial_handle, &arc_res);
         scui_ui_res_local->menial_arc_1 = menial_handle;
@@ -188,8 +186,9 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         arc_res.angle_e = 0;
         arc_res.time    = 0;
         
-        menial_maker.data.arc.spinner = 0;
-        menial_maker.data.arc.anti    = 1;
+        menial_maker.data.arc.anti = 1;
+        menial_maker.data.arc.ext_touch = 0;
+        menial_maker.data.arc.ext_spinner = 0;
         arc_res.width   = 0;
         arc_res.round   = 0;
         arc_res.gradw   = 1;
@@ -203,8 +202,9 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         scui_menial_arc_style(menial_handle, &arc_res);
         scui_ui_res_local->menial_arc_2 = menial_handle;
         
-        menial_maker.data.arc.spinner = 0;
-        menial_maker.data.arc.anti    = 0;
+        menial_maker.data.arc.anti = 0;
+        menial_maker.data.arc.ext_touch = 1;
+        menial_maker.data.arc.ext_spinner = 0;
         arc_res.width   = 8;
         arc_res.round   = 1;
         arc_res.gradw   = 1;
@@ -449,8 +449,8 @@ void scui_test_ui_object_event_proc(scui_event_t *event)
         //     scui_ui_res_local->menial_arc_v, false);
         scui_menial_arc_update_value(scui_ui_res_local->menial_arc_2,
             scui_ui_res_local->menial_arc_v, false);
-        scui_menial_arc_update_value(scui_ui_res_local->menial_arc_3,
-            scui_ui_res_local->menial_arc_v, false);
+        // scui_menial_arc_update_value(scui_ui_res_local->menial_arc_3,
+        //     scui_ui_res_local->menial_arc_v, false);
         #endif
         
         #if 1

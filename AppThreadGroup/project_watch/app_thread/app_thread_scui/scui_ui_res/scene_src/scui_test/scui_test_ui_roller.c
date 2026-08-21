@@ -72,8 +72,8 @@ void scui_test_ui_roller_event_proc(scui_event_t *event)
         
         string_maker.args.align_hor             = 2;
         string_maker.args.align_ver             = 2;
-        string_maker.args.color.color_s.full    = 0xFF0000FF;
-        string_maker.args.color.color_e.full    = 0xFF0000FF;
+        string_maker.args.color.color_s.full    = 0xFF2196F3;
+        string_maker.args.color.color_e.full    = 0xFF2196F3;
         string_maker.args.color.filter          = true;
         string_maker.widget.clip.w              = roller_maker.widget.clip.w;
         string_maker.widget.clip.h              = roller_maker.widget.clip.h / 5;

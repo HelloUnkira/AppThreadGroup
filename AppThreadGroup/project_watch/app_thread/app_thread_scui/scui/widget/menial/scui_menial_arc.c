@@ -18,6 +18,10 @@ void scui_menial_arc_make(bool maker, void *inst)
     
     if (maker) {
     } else {
+        /* 不能同时开启touch和spinner */
+        bool ext_touch   = menial->data.arc.ext_touch;
+        bool ext_spinner = menial->data.arc.ext_spinner;
+        SCUI_ASSERT(!(ext_touch && ext_spinner));
     }
 }
 
@@ -39,12 +43,12 @@ void scui_menial_arc_style(scui_handle_t handle, scui_menial_arc_res_t *res)
     
     scui_coord3_t angle_s = res->angle_s;
     scui_coord3_t angle_e = res->angle_e;
-    if (menial->data.arc.spinner) {
+    if (menial->data.arc.ext_spinner) {
         angle_s = 0.0f;  angle_e = 360.0f;
     }
     
     /* 补充一个容错的默认参数值 */
-    if (!menial->data.arc.spinner &&
+    if (!menial->data.arc.ext_spinner &&
         SCUI_IS_ZERO_VAL_F(scui_dist(angle_s, angle_e))) {
         angle_s = 0.0f; angle_e = 360.0f;
     }
@@ -98,7 +102,7 @@ void scui_menial_arc_current_angle(scui_handle_t handle, scui_coord3_t *angle)
     scui_menial_t *menial = (void *)widget;
     
     SCUI_ASSERT(menial->type == scui_menial_type_arc);
-    if (menial->data.arc.spinner) return;
+    if (menial->data.arc.ext_spinner) return;
     /* spinner不使用此接口 */
     
     *angle = menial->data.arc.angle_c;
@@ -116,7 +120,7 @@ void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, boo
     scui_menial_t *menial = (void *)widget;
     
     SCUI_ASSERT(menial->type == scui_menial_type_arc);
-    if (menial->data.arc.spinner) return;
+    if (menial->data.arc.ext_spinner) return;
     /* spinner不使用此接口 */
     
     menial->data.arc.angle_c = angle;
@@ -182,7 +186,7 @@ void scui_menial_arc_update_value(scui_handle_t handle, scui_coord3_t value, boo
     scui_menial_t *menial = (void *)widget;
     
     SCUI_ASSERT(menial->type == scui_menial_type_arc);
-    if (menial->data.arc.spinner) return;
+    if (menial->data.arc.ext_spinner) return;
     /* spinner不使用此接口 */
     
     /* 端点基准从bg取(稳定), fg为动态进度 */
@@ -211,7 +215,7 @@ void scui_menial_arc_invoke(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         
-        if (menial->data.arc.spinner) {
+        if (menial->data.arc.ext_spinner) {
             /* 同步time属性(旋转速度) */
             scui_object_data_t main_time = {0};
             scui_object_prop_sync_s(event->object, scui_object_part_main,
@@ -264,6 +268,82 @@ void scui_menial_arc_invoke(scui_event_t *event)
         }
         break;
     }
+    case scui_event_ptr_move: {
+        if (!menial->data.arc.ext_touch)
+             break;
+        if (!widget->state.indev_ptr_hold)
+             break;
+        
+        scui_point_t point = event->ptr_e;
+        scui_widget_switch_point(event->object, &point);
+        
+        scui_object_data_t center = {0};
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg,
+            scui_object_style_arc_center, scui_object_state_def, center);
+        
+        scui_coord_t cx = center.point.x;
+        scui_coord_t cy = center.point.y;
+        scui_coord_t x = +(point.x - cx);
+        scui_coord_t y = -(point.y - cy);
+        if (x == 0 && y == 0) break;
+        
+        /* 从bg读基准端点(稳定) */
+        scui_object_data_t angle_s = {0};
+        scui_object_data_t angle_e = {0};
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg,
+            scui_object_style_arc_angle_s, scui_object_state_def, angle_s);
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg,
+            scui_object_style_arc_angle_e, scui_object_state_def, angle_e);
+        
+        scui_coord_t angle_d = scui_dist(angle_s.number, angle_e.number);
+        scui_coord_t angle_n_down = (menial->data.arc.angle_down - angle_s.number + 360) % 360;
+        /* 值从落点(角)起始: 落点归一化到bg范围得value_base, 再加指针增量, 卡在[0,100] */
+        if (angle_n_down > angle_d) angle_n_down = angle_d;
+        
+        scui_coord3_t value_base = menial->data.arc.anti ?
+            (angle_d - angle_n_down) * 100.0f / angle_d :
+            angle_n_down * 100.0f / angle_d;
+        
+        scui_coord_t angle = (scui_atan2(x, y) - 90 + 360) % 360;
+        scui_coord_t delta = angle - menial->data.arc.angle_down;
+        if (delta > +180) delta -= 360;
+        if (delta < -180) delta += 360;
+        
+        scui_coord3_t value = value_base + (menial->data.arc.anti ?
+            -delta : delta) * 100.0f / angle_d;
+        
+        value = scui_clamp(value, 0.0f, 100.0f);
+        scui_menial_arc_update_value(event->object, value, false);
+        scui_event_mask_over(event);
+        break;
+    }
+    case scui_event_ptr_down: {
+        if (!menial->data.arc.ext_touch)
+             break;
+        
+        scui_point_t point = event->ptr_c;
+        scui_widget_switch_point(event->object, &point);
+        
+        scui_object_data_t center = {0};
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg,
+            scui_object_style_arc_center, scui_object_state_def, center);
+        
+        scui_coord_t cx = center.point.x;
+        scui_coord_t cy = center.point.y;
+        scui_coord_t x = +(point.x - cx);
+        scui_coord_t y = -(point.y - cy);
+        if (x == 0 && y == 0) break;
+        
+        scui_coord_t angle = (scui_atan2(x, y) - 90 + 360) % 360;
+        menial->data.arc.angle_down = angle;
+        
+        widget->state.indev_ptr_hold = true;
+        scui_menial_arc_update_angle(event->object, angle, false);
+        break;
+    }
+    case scui_event_ptr_up:
+        widget->state.indev_ptr_hold = false;
+        break;
     case scui_event_draw_graph: {
         
         scui_object_prop_t prop = {0};

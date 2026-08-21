@@ -14,39 +14,41 @@ typedef union {
     
     /* field(btn): */
     struct {
-        scui_sbitfd_t fixed:1;      /* 无点击动画 */
-        scui_sbitfd_t check:1;      /* 选中标记 */
+        scui_sbitfd_t fixed:1;          /* 无点击动画 */
+        scui_sbitfd_t check:1;          /* 选中标记 */
     } btn;
     
     /* field(arc): */
     struct {
-        scui_coord3_t angle_c;      /* 当前角度 */
-        scui_sbitfd_t spinner:1;    /* 加载圆环 */
-        scui_sbitfd_t anti:1;       /* 反方向 */
+        scui_coord3_t angle_c;          /* 当前角度 */
+        scui_sbitfd_t anti:1;           /* 反方向 */
+        scui_sbitfd_t ext_touch:1;      /* 跟手修改 */
+        scui_sbitfd_t ext_spinner:1;    /* 加载圆环 */
+        scui_coord_t  angle_down;       /* 跟手:落点角度 */
     } arc;
     
     /* field(bar): */
     struct {
-        scui_sbitfd_t way:1;        /* 方向(水平:0;垂直:1) */
-        scui_coord_t  value_cur;    /* 当前进度 */
-        scui_coord3_t value_lim;    /* 进度限制(默认:100) */
-        scui_sbitfd_t value_int:1;  /* 进度单元 */
-        scui_sbitfd_t ext_slider:1; /* 滑动交互 */
-        scui_sbitfd_t ext_switch:1; /* 点击开关 */
+        scui_sbitfd_t way:1;            /* 方向(水平:0;垂直:1) */
+        scui_coord_t  value_cur;        /* 当前进度 */
+        scui_coord3_t value_lim;        /* 进度限制(默认:100) */
+        scui_sbitfd_t value_int:1;      /* 进度单元 */
+        scui_sbitfd_t ext_slider:1;     /* 滑动交互 */
+        scui_sbitfd_t ext_switch:1;     /* 点击开关 */
     } bar;
     
     /* field(cht): */
     struct {
-        scui_sbitfd_t type:2;       /* 0:hist;1:line; */
-        scui_area_t   area;         /* 区域 */
-        scui_coord_t  value_min;    /* 最小取值 */
-        scui_coord_t  value_max;    /* 最大取值 */
-        scui_coord_t  number;       /* 条目数量 */
-        scui_coord_t  space;        /* 条目间隙 */
-        scui_coord_t *vlist_min;    /* 内部:hist */
-        scui_coord_t *vlist_max;    /* 内部:hist */
-        scui_coord_t *vlist_dot;    /* 内部:line */
-        scui_point_t *vlist_pos;    /* 内部:line(bak) */
+        scui_sbitfd_t type:2;           /* 0:hist;1:line; */
+        scui_area_t   area;             /* 区域 */
+        scui_coord_t  value_min;        /* 最小取值 */
+        scui_coord_t  value_max;        /* 最大取值 */
+        scui_coord_t  number;           /* 条目数量 */
+        scui_coord_t  space;            /* 条目间隙 */
+        scui_coord_t *vlist_min;        /* 内部:hist */
+        scui_coord_t *vlist_max;        /* 内部:hist */
+        scui_coord_t *vlist_dot;        /* 内部:line */
+        scui_point_t *vlist_pos;        /* 内部:line(bak) */
     } cht;
     
     /* keep add... */
