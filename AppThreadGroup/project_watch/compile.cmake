@@ -29,6 +29,7 @@ endif()
 # /* 屏蔽警告4090:限定符类型不对 */
 # /* 屏蔽警告4100:未引用的形参 */
 # /* 屏蔽警告4127:条件表达式是常量 */
+# /* 屏蔽警告4113:参数列表不同 */
 # /* 屏蔽警告4146:无符号类型运用负运算符 */
 # /* 屏蔽警告4189:局部变量初始化但不使用 */
 # /* 屏蔽警告4200:0大小数组 */
@@ -63,6 +64,7 @@ add_compile_options(/wd4057)
 add_compile_options(/wd4090)
 add_compile_options(/wd4100)
 add_compile_options(/wd4127)
+add_compile_options(/wd4113)
 add_compile_options(/wd4146)
 add_compile_options(/wd4133)
 add_compile_options(/wd4189)

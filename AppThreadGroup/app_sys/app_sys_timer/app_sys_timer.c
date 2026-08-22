@@ -16,6 +16,7 @@ static app_sys_timer_list_t app_sys_timer_list = {0};
 bool app_sys_timer_stop(app_sys_timer_t *timer)
 {
     bool retval = false;
+    timer->reload = false;
     app_sys_timer_t *current = NULL;
     app_mutex_process(&app_sys_timer_list.mutex, app_mutex_take);
     /* 检查等待者队列 */

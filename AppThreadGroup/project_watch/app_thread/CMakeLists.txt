@@ -8,6 +8,13 @@ target_sources(app_thread PRIVATE ${SOURCES})
 file(GLOB_RECURSE SOURCES app_thread_manage/*.c)
 target_sources(app_thread PRIVATE ${SOURCES})
 
+# 本地Python脚本执行,更新源
+set(PYTHON "python.exe")
+execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_manage/app_module_protocol/app_json_xfer/app_json_xfer_parser.py
+                ${CMAKE_CURRENT_SOURCE_DIR}/../app_third/lib_nanopb/nanopb_out
+                ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_manage/app_module_protocol/app_json_xfer
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_manage/app_module_protocol/app_json_xfer)
+
 if (app_thread_group_use_lvgl)
 # 本地Python脚本执行,更新源
 set(PYTHON "python.exe")
