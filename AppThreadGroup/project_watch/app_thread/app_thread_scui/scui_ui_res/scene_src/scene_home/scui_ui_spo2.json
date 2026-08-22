@@ -1,0 +1,76 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":               "血氧界面",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.style.indev_key":   "true",
+            "widget.color.color.full":  "0xFF000000",
+            "widget.myself":            "SCUI_UI_SCENE_SPO2",
+            "widget.event_cb":          "scui_ui_scene_spo2_event_proc",
+            "preload":                  "1",
+            "sibling[2]":               "SCUI_UI_SCENE_HR",
+            "sibling[3]":               "SCUI_UI_SCENE_STRESS"
+        },
+        {
+            "annotation":            "血氧界面-绘制区",
+            "widget.type":           "scui_widget_type_custom",
+            "widget.style.fully_bg": "true",
+            "widget.style.sched_anima":"true",
+            "widget.color.color.full":"0xFF000000",
+            "widget.clip.w":         "SCUI_HOR_RES",
+            "widget.clip.h":         "SCUI_VER_RES",
+            "widget.myself":         "SCUI_UI_SCENE_SPO2_BODY",
+            "widget.parent":         "SCUI_UI_SCENE_SPO2",
+            "widget.event_cb":       "scui_ui_scene_spo2_body_event_proc"
+        },
+        {
+            "annotation":              "血氧界面-标题",
+            "widget.type":              "scui_widget_type_string",
+            "widget.clip.y":            "282",
+            "widget.clip.w":            "SCUI_HOR_RES",
+            "widget.clip.h":            "40",
+            "widget.myself":            "SCUI_UI_SCENE_SPO2_TITLE",
+            "widget.parent":            "SCUI_UI_SCENE_SPO2_BODY",
+            "args.align_hor":           "2",
+            "args.align_ver":           "2",
+            "args.color.color_s.full":  "0xFF00E2EE",
+            "args.color.color_e.full":  "0xFF00E2EE",
+            "args.color.filter":        "true",
+            "font_idx":                 "SCUI_FONT_IDX_32"
+        },
+        {
+            "annotation":              "血氧界面-大数字",
+            "widget.type":              "scui_widget_type_string",
+            "widget.clip.y":            "326",
+            "widget.clip.w":            "SCUI_HOR_RES",
+            "widget.clip.h":            "70",
+            "widget.myself":            "SCUI_UI_SCENE_SPO2_VALUE",
+            "widget.parent":            "SCUI_UI_SCENE_SPO2_BODY",
+            "args.align_hor":           "2",
+            "args.align_ver":           "2",
+            "args.color.color_s.full":  "0xFFFFFFFF",
+            "args.color.color_e.full":  "0xFFFFFFFF",
+            "args.color.filter":        "true",
+            "args.lang":                "scui_lang_type_ascii",
+            "font_idx":                 "SCUI_FONT_IDX_X64"
+        },
+        {
+            "annotation":              "血氧界面-单位",
+            "widget.type":              "scui_widget_type_string",
+            "widget.clip.y":            "396",
+            "widget.clip.w":            "SCUI_HOR_RES",
+            "widget.clip.h":            "40",
+            "widget.myself":            "SCUI_UI_SCENE_SPO2_UNIT",
+            "widget.parent":            "SCUI_UI_SCENE_SPO2_BODY",
+            "args.align_hor":           "2",
+            "args.align_ver":           "2",
+            "args.color.color_s.full":  "0xFF00E2EE",
+            "args.color.color_e.full":  "0xFF00E2EE",
+            "args.color.filter":        "true",
+            "font_idx":                 "SCUI_FONT_IDX_32"
+        }
+    ]
+}

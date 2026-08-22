@@ -1,0 +1,91 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":               "压力界面",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.style.indev_key":   "true",
+            "widget.color.color.full":  "0xFF000000",
+            "widget.myself":            "SCUI_UI_SCENE_STRESS",
+            "widget.event_cb":          "scui_ui_scene_stress_event_proc",
+            "preload":                  "1",
+            "sibling[2]":               "SCUI_UI_SCENE_SPO2",
+            "sibling[3]":               "SCUI_UI_SCENE_SLEEP"
+        },
+        {
+            "annotation":            "压力界面-绘制区",
+            "widget.type":           "scui_widget_type_custom",
+            "widget.style.fully_bg": "true",
+            "widget.style.sched_anima":"true",
+            "widget.color.color.full":"0xFF000000",
+            "widget.clip.w":         "SCUI_HOR_RES",
+            "widget.clip.h":         "SCUI_VER_RES",
+            "widget.myself":         "SCUI_UI_SCENE_STRESS_BODY",
+            "widget.parent":         "SCUI_UI_SCENE_STRESS",
+            "widget.event_cb":       "scui_ui_scene_stress_body_event_proc"
+        },
+        {
+            "annotation":              "压力界面-标题",
+            "widget.type":              "scui_widget_type_string",
+            "widget.clip.y":            "40",
+            "widget.clip.w":            "SCUI_HOR_RES",
+            "widget.clip.h":            "40",
+            "widget.myself":            "SCUI_UI_SCENE_STRESS_TITLE",
+            "widget.parent":            "SCUI_UI_SCENE_STRESS_BODY",
+            "args.align_hor":           "2",
+            "args.align_ver":           "2",
+            "args.color.color_s.full":  "0xFF00C8FF",
+            "args.color.color_e.full":  "0xFF00C8FF",
+            "args.color.filter":        "true",
+            "font_idx":                 "SCUI_FONT_IDX_32"
+        },
+        {
+            "annotation":              "压力界面-大数字",
+            "widget.type":              "scui_widget_type_string",
+            "widget.clip.y":            "200",
+            "widget.clip.w":            "SCUI_HOR_RES",
+            "widget.clip.h":            "70",
+            "widget.myself":            "SCUI_UI_SCENE_STRESS_VALUE",
+            "widget.parent":            "SCUI_UI_SCENE_STRESS_BODY",
+            "args.align_hor":           "2",
+            "args.align_ver":           "2",
+            "args.color.color_s.full":  "0xFFFFFFFF",
+            "args.color.color_e.full":  "0xFFFFFFFF",
+            "args.color.filter":        "true",
+            "args.lang":                "scui_lang_type_ascii",
+            "font_idx":                 "SCUI_FONT_IDX_X64"
+        },
+        {
+            "annotation":              "压力界面-等级",
+            "widget.type":              "scui_widget_type_string",
+            "widget.clip.y":            "285",
+            "widget.clip.w":            "SCUI_HOR_RES",
+            "widget.clip.h":            "40",
+            "widget.myself":            "SCUI_UI_SCENE_STRESS_LEVEL",
+            "widget.parent":            "SCUI_UI_SCENE_STRESS_BODY",
+            "args.align_hor":           "2",
+            "args.align_ver":           "2",
+            "args.color.color_s.full":  "0xFF00C8FF",
+            "args.color.color_e.full":  "0xFF00C8FF",
+            "args.color.filter":        "true",
+            "font_idx":                 "SCUI_FONT_IDX_32"
+        },
+        {
+            "annotation":              "压力界面-测量时间",
+            "widget.type":              "scui_widget_type_string",
+            "widget.clip.y":            "360",
+            "widget.clip.w":            "SCUI_HOR_RES",
+            "widget.clip.h":            "40",
+            "widget.myself":            "SCUI_UI_SCENE_STRESS_TIME",
+            "widget.parent":            "SCUI_UI_SCENE_STRESS_BODY",
+            "args.align_hor":           "2",
+            "args.align_ver":           "2",
+            "args.color.color_s.full":  "0xFF4D4D4D",
+            "args.color.color_e.full":  "0xFF4D4D4D",
+            "args.color.filter":        "true",
+            "font_idx":                 "SCUI_FONT_IDX_32"
+        }
+    ]
+}
