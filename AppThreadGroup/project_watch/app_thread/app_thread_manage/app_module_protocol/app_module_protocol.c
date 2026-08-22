@@ -75,12 +75,100 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
     }
     #elif APP_MODULE_PROTOCOL_USE_NANOPB
     switch (protocol->notify.type) {
+    case app_module_protocol_ack: {
+         app_nanopb_xfer_notify_ack();
+         break;
+    }
     case app_module_protocol_trace_text: {
          app_nanopb_xfer_notify_trace_text();
          break;
     }
+    case app_module_protocol_device_info: {
+         app_nanopb_xfer_notify_device_info();
+         break;
+    }
+    case app_module_protocol_device_param: {
+         app_nanopb_xfer_notify_device_param();
+         break;
+    }
+    case app_module_protocol_elec_card: {
+         app_nanopb_xfer_notify_elec_card();
+         break;
+    }
     case app_module_protocol_system_clock: {
          app_nanopb_xfer_notify_system_clock();
+         break;
+    }
+    case app_module_protocol_world_clock: {
+         app_nanopb_xfer_notify_world_clock();
+         break;
+    }
+    case app_module_protocol_alarm: {
+         app_nanopb_xfer_notify_alarm();
+         break;
+    }
+    case app_module_protocol_weather: {
+         app_nanopb_xfer_notify_weather();
+         break;
+    }
+    case app_module_protocol_heart_rate: {
+         app_nanopb_xfer_notify_heart_rate();
+         break;
+    }
+    case app_module_protocol_music: {
+         app_nanopb_xfer_notify_music();
+         break;
+    }
+    case app_module_protocol_msg_info: {
+         app_nanopb_xfer_notify_msg_info();
+         break;
+    }
+    case app_module_protocol_contact: {
+         app_nanopb_xfer_notify_contact();
+         break;
+    }
+    case app_module_protocol_sport_tgt: {
+         app_nanopb_xfer_notify_sport_tgt();
+         break;
+    }
+    case app_module_protocol_user_phys: {
+         app_nanopb_xfer_notify_user_phys();
+         break;
+    }
+    case app_module_protocol_motion_sum: {
+         app_nanopb_xfer_notify_motion_sum();
+         break;
+    }
+    case app_module_protocol_sport_state: {
+         app_nanopb_xfer_notify_sport_state();
+         break;
+    }
+    case app_module_protocol_not_disturb: {
+         app_nanopb_xfer_notify_not_disturb();
+         break;
+    }
+    case app_module_protocol_position: {
+         app_nanopb_xfer_notify_position();
+         break;
+    }
+    case app_module_protocol_fem_cycle: {
+         app_nanopb_xfer_notify_fem_cycle();
+         break;
+    }
+    case app_module_protocol_account: {
+         app_nanopb_xfer_notify_account();
+         break;
+    }
+    case app_module_protocol_sport_mng: {
+         app_nanopb_xfer_notify_sport_mng();
+         break;
+    }
+    case app_module_protocol_sport_rcd: {
+         app_nanopb_xfer_notify_sport_rcd();
+         break;
+    }
+    case app_module_protocol_ota: {
+         app_nanopb_xfer_notify_ota();
          break;
     }
     default: {
@@ -88,8 +176,6 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
         break;
     }
     }
-    #else
-    #error "app module protocol is unknown"
     #endif
 }
 
@@ -102,15 +188,16 @@ void app_module_protocol_respond_handler(uint8_t *data, uint32_t size)
     app_module_protocol_t *protocol = (void *)data;
     /* 检查数据流 */
     APP_SYS_LOG_INFO_RAW("size:%d%s", protocol->respond.size, app_sys_log_line());
-    APP_SYS_LOG_INFO_RAW("data:%s%s", protocol->respond.data, app_sys_log_line());
+    APP_SYS_LOG_INFO_RAW("data:");
+    for (uint32_t idx = 0; idx < protocol->respond.size; idx++)
+        APP_SYS_LOG_INFO_RAW("%02x ", protocol->respond.data[idx]);
+        APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     
     #if 0
     #elif APP_MODULE_PROTOCOL_USE_JSON
     app_json_xfer_respond(protocol->respond.data);
     #elif APP_MODULE_PROTOCOL_USE_NANOPB
     app_nanopb_xfer_respond(protocol->respond.data, protocol->respond.size);
-    #else
-    #error "app module protocol is unknown"
     #endif
     
     if (protocol->respond.dynamic)

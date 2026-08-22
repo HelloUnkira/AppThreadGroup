@@ -82,15 +82,6 @@ int main(int argc, char *argv[])
         
         /* 以下是功能测试 */
         #if 0
-        #elif 0
-        /* test protocol(1s later) */
-        if (count == 1000 * 1) {
-            app_module_protocol_t protocol = {
-              //.notify.type = app_module_protocol_system_clock,
-                .notify.type = app_module_protocol_trace_text,
-            };
-            app_module_protocol_notify(&protocol);
-        }
         /* 差不多的东西放在一起测试 */
         /* test stopwatch,countdown,group alarm */
         if (count == 1000 * 1) {
@@ -101,8 +92,6 @@ int main(int argc, char *argv[])
             app_module_countdown_start();
             app_module_remind_alarm_test();
         }
-        #elif 0
-        #else
         #endif
     }
     

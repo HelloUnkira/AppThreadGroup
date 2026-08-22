@@ -3,8 +3,30 @@
 
 typedef enum {
     app_module_protocol_default = 0,
+    app_module_protocol_ack,
     app_module_protocol_trace_text,
+    app_module_protocol_device_info,
+    app_module_protocol_device_param,
+    app_module_protocol_elec_card,
     app_module_protocol_system_clock,
+    app_module_protocol_world_clock,
+    app_module_protocol_alarm,
+    app_module_protocol_weather,
+    app_module_protocol_heart_rate,
+    app_module_protocol_music,
+    app_module_protocol_msg_info,
+    app_module_protocol_contact,
+    app_module_protocol_sport_tgt,
+    app_module_protocol_user_phys,
+    app_module_protocol_motion_sum,
+    app_module_protocol_sport_state,
+    app_module_protocol_not_disturb,
+    app_module_protocol_position,
+    app_module_protocol_fem_cycle,
+    app_module_protocol_account,
+    app_module_protocol_sport_mng,
+    app_module_protocol_sport_rcd,
+    app_module_protocol_ota,
 } app_module_protocol_notify_type_t;
 
 typedef struct {

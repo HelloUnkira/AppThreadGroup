@@ -5,18 +5,41 @@ option java_package = "com.message_set.nanopb";
 option java_outer_classname = "AppPB_MsgSetProto";
 /* 依赖包 */
 import "app_nanopb_aux.proto";
-import "app_nanopb_mix.proto";
+import "app_nanopb_sys.proto";
+import "app_nanopb_func.proto";
+import "app_nanopb_flie.proto";
 
 /* 组合消息(所有nanopb子消息打包成一个整体) */
 message AppPB_MsgSet {
     /* 单一性组合消息 */
     oneof payload {
         /* 内部消息:0x01~0x20 */
-        AppPB_ACK           ack             = 0x0001;
+        AppPB_ACK          ack            = 0x0001;
         /* 系统消息:0x21~0x50 */
-        AppPB_TraceText     trace_text      = 0x0021;
+        AppPB_TraceTxt     trace_text     = 0x0021;
+        AppPB_DevInfo      device_info    = 0x0030;
+        AppPB_DevParam     device_param   = 0x0031;
+        AppPB_ElecCard     elec_card      = 0x0032;
         /* 功能消息:0x50~ */
-        AppPB_SystemClock   system_clock    = 0x0050;
-        AppPB_WorldClock    world_clock     = 0x0051;
+        AppPB_SysClock     system_clock   = 0x0050;
+        AppPB_WorldClock   world_clock    = 0x0051;
+        AppPB_Alarm        alarm          = 0x0052;
+        AppPB_Weather      weather        = 0x0053;
+        AppPB_HeartRate    heart_rate     = 0x0054;
+        AppPB_Music        music          = 0x0055;
+        AppPB_MsgInfo      msg_info       = 0x0056;
+        AppPB_Contact      contact        = 0x0057;
+        AppPB_SportTgt     sport_tgt      = 0x0058;
+        AppPB_UserPhys     user_phys      = 0x0059;
+        AppPB_MotionSum    motion_sum     = 0x005a;
+        AppPB_SportState   sport_state    = 0x005b;
+        AppPB_NotDisturb   not_disturb    = 0x005c;
+        AppPB_Position     position       = 0x005d;
+        AppPB_FemCycle     fem_cycle      = 0x005e;
+        AppPB_Account      account        = 0x005f;
+        AppPB_SportMng     sport_mng      = 0x0060;
+        AppPB_SportRcd     sport_rcd      = 0x0061;
+        /* 文件消息:0x80~ */
+        AppPB_Ota          ota            = 0x0082;
     }
 }

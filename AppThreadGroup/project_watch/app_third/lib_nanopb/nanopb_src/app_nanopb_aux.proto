@@ -15,5 +15,11 @@ message AppPB_ACK {
         CHK_FAILED  = 0x02;     //CheckSum校验失败
     }
     
-    ErrorCode error_code = 1;
+    ErrorCode  error_code = 1;
+}
+
+/* 传输日志消息 */
+/* 追踪日志消息文本最大限制 APP_MODULE_TRACE_TEXT_MAX + 1 */
+message AppPB_TraceTxt {
+    string  trace_text = 1 [(nanopb).max_size = 129];  //单条传输文本消息
 }

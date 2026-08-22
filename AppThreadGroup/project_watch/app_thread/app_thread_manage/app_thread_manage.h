@@ -24,6 +24,8 @@ typedef enum {
 #define APP_MODULE_PROTOCOL_USE_NANOPB          1
 /* 本地回环:用于测试数据通路的上层环路 */
 #define APP_MODULE_PROTOCOL_LOCAL_LOOPBACK      1
+/* 协议自检:开机时经回环发包,验证各协议消息收发通路 */
+#define APP_MODULE_PROTOCOL_TEST_ENABLE         1
 
 /* 子线程模组 */
 #include "app_module_transfer.h"

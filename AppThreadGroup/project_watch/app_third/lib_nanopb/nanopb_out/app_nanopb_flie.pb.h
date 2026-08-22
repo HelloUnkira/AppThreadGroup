@@ -11,32 +11,39 @@
 
 /* Struct definitions */
 /* 文件扩展消息 */
-typedef struct _AppPB_FileDescriptor {
+typedef struct _AppPB_FileDes {
     char name[256]; /* 包括路径和尾缀 */
     uint64_t utc64; /* 文件UTC64修改时间 */
     uint32_t crc32; /* 文件CRC32校验 */
     uint32_t size; /* 文件总大小 */
     uint8_t crc8; /* 描述符CRC8校验 */
-} AppPB_FileDescriptor;
+} AppPB_FileDes;
 
-typedef PB_BYTES_ARRAY_T(512) AppPB_FilePackage_data_t;
+typedef PB_BYTES_ARRAY_T(512) AppPB_FilePkg_data_t;
 /* 文件分包消息 */
-typedef struct _AppPB_FilePackage {
+typedef struct _AppPB_FilePkg {
     uint16_t index; /* 当前分包索引 */
     uint32_t base; /* 当前分包相对文件偏移 */
     uint16_t size; /* 当前分包数据流大小 */
     uint8_t crc8; /* 当前分包CRC8校验 */
-    AppPB_FilePackage_data_t data; /* 当前分包数据流 */
-} AppPB_FilePackage;
+    AppPB_FilePkg_data_t data; /* 当前分包数据流 */
+} AppPB_FilePkg;
 
 /* 文件消息 */
 typedef struct _AppPB_File {
     pb_size_t which_payload;
     union {
-        AppPB_FileDescriptor descriptor; /* 文件描述符 */
-        AppPB_FilePackage package; /* 文件分包 */
+        AppPB_FileDes descriptor; /* 文件描述符 */
+        AppPB_FilePkg package; /* 文件分包 */
     } payload;
 } AppPB_File;
+
+/* OTA升级消息(UTE 0xC8) */
+typedef struct _AppPB_Ota {
+    uint8_t cmd; /* 升级命令(0取消/1继续) */
+    uint8_t state; /* 状态 */
+    uint8_t ready_cond; /* 就绪条件(0可/1电低/2同版/3高温/4其他) */
+} AppPB_Ota;
 
 
 #ifdef __cplusplus
@@ -44,67 +51,82 @@ extern "C" {
 #endif
 
 /* Initializer values for message structs */
-#define AppPB_FileDescriptor_init_default        {"", 0, 0, 0, 0}
-#define AppPB_FilePackage_init_default           {0, 0, 0, 0, {0, {0}}}
-#define AppPB_File_init_default                  {0, {AppPB_FileDescriptor_init_default}}
-#define AppPB_FileDescriptor_init_zero           {"", 0, 0, 0, 0}
-#define AppPB_FilePackage_init_zero              {0, 0, 0, 0, {0, {0}}}
-#define AppPB_File_init_zero                     {0, {AppPB_FileDescriptor_init_zero}}
+#define AppPB_FileDes_init_default               {"", 0, 0, 0, 0}
+#define AppPB_FilePkg_init_default               {0, 0, 0, 0, {0, {0}}}
+#define AppPB_File_init_default                  {0, {AppPB_FileDes_init_default}}
+#define AppPB_Ota_init_default                   {0, 0, 0}
+#define AppPB_FileDes_init_zero                  {"", 0, 0, 0, 0}
+#define AppPB_FilePkg_init_zero                  {0, 0, 0, 0, {0, {0}}}
+#define AppPB_File_init_zero                     {0, {AppPB_FileDes_init_zero}}
+#define AppPB_Ota_init_zero                      {0, 0, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define AppPB_FileDescriptor_name_tag            1
-#define AppPB_FileDescriptor_utc64_tag           2
-#define AppPB_FileDescriptor_crc32_tag           3
-#define AppPB_FileDescriptor_size_tag            4
-#define AppPB_FileDescriptor_crc8_tag            5
-#define AppPB_FilePackage_index_tag              1
-#define AppPB_FilePackage_base_tag               2
-#define AppPB_FilePackage_size_tag               3
-#define AppPB_FilePackage_crc8_tag               4
-#define AppPB_FilePackage_data_tag               5
+#define AppPB_FileDes_name_tag                   1
+#define AppPB_FileDes_utc64_tag                  2
+#define AppPB_FileDes_crc32_tag                  3
+#define AppPB_FileDes_size_tag                   4
+#define AppPB_FileDes_crc8_tag                   5
+#define AppPB_FilePkg_index_tag                  1
+#define AppPB_FilePkg_base_tag                   2
+#define AppPB_FilePkg_size_tag                   3
+#define AppPB_FilePkg_crc8_tag                   4
+#define AppPB_FilePkg_data_tag                   5
 #define AppPB_File_descriptor_tag                1
 #define AppPB_File_package_tag                   2
+#define AppPB_Ota_cmd_tag                        1
+#define AppPB_Ota_state_tag                      2
+#define AppPB_Ota_ready_cond_tag                 3
 
 /* Struct field encoding specification for nanopb */
-#define AppPB_FileDescriptor_FIELDLIST(X, a) \
+#define AppPB_FileDes_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, STRING,   name,              1) \
 X(a, STATIC,   SINGULAR, UINT64,   utc64,             2) \
 X(a, STATIC,   SINGULAR, UINT64,   crc32,             3) \
 X(a, STATIC,   SINGULAR, UINT64,   size,              4) \
 X(a, STATIC,   SINGULAR, UINT64,   crc8,              5)
-#define AppPB_FileDescriptor_CALLBACK NULL
-#define AppPB_FileDescriptor_DEFAULT NULL
+#define AppPB_FileDes_CALLBACK NULL
+#define AppPB_FileDes_DEFAULT NULL
 
-#define AppPB_FilePackage_FIELDLIST(X, a) \
+#define AppPB_FilePkg_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UINT64,   index,             1) \
 X(a, STATIC,   SINGULAR, UINT64,   base,              2) \
 X(a, STATIC,   SINGULAR, UINT64,   size,              3) \
 X(a, STATIC,   SINGULAR, UINT64,   crc8,              4) \
 X(a, STATIC,   SINGULAR, BYTES,    data,              5)
-#define AppPB_FilePackage_CALLBACK NULL
-#define AppPB_FilePackage_DEFAULT NULL
+#define AppPB_FilePkg_CALLBACK NULL
+#define AppPB_FilePkg_DEFAULT NULL
 
 #define AppPB_File_FIELDLIST(X, a) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,descriptor,payload.descriptor),   1) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,package,payload.package),   2)
 #define AppPB_File_CALLBACK NULL
 #define AppPB_File_DEFAULT NULL
-#define AppPB_File_payload_descriptor_MSGTYPE AppPB_FileDescriptor
-#define AppPB_File_payload_package_MSGTYPE AppPB_FilePackage
+#define AppPB_File_payload_descriptor_MSGTYPE AppPB_FileDes
+#define AppPB_File_payload_package_MSGTYPE AppPB_FilePkg
 
-extern const pb_msgdesc_t AppPB_FileDescriptor_msg;
-extern const pb_msgdesc_t AppPB_FilePackage_msg;
+#define AppPB_Ota_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UINT64,   cmd,               1) \
+X(a, STATIC,   SINGULAR, UINT64,   state,             2) \
+X(a, STATIC,   SINGULAR, UINT64,   ready_cond,        3)
+#define AppPB_Ota_CALLBACK NULL
+#define AppPB_Ota_DEFAULT NULL
+
+extern const pb_msgdesc_t AppPB_FileDes_msg;
+extern const pb_msgdesc_t AppPB_FilePkg_msg;
 extern const pb_msgdesc_t AppPB_File_msg;
+extern const pb_msgdesc_t AppPB_Ota_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
-#define AppPB_FileDescriptor_fields &AppPB_FileDescriptor_msg
-#define AppPB_FilePackage_fields &AppPB_FilePackage_msg
+#define AppPB_FileDes_fields &AppPB_FileDes_msg
+#define AppPB_FilePkg_fields &AppPB_FilePkg_msg
 #define AppPB_File_fields &AppPB_File_msg
+#define AppPB_Ota_fields &AppPB_Ota_msg
 
 /* Maximum encoded size of messages (where known) */
-#define AppPB_FileDescriptor_size                284
-#define AppPB_FilePackage_size                   532
+#define AppPB_FileDes_size                       284
+#define AppPB_FilePkg_size                       532
 #define AppPB_File_size                          535
+#define AppPB_Ota_size                           9
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -5,7 +5,9 @@
 #define PB_APP_NANOPB_SET_PB_H_INCLUDED
 #include <pb.h>
 #include "app_nanopb_aux.pb.h"
-#include "app_nanopb_mix.pb.h"
+#include "app_nanopb_sys.pb.h"
+#include "app_nanopb_func.pb.h"
+#include "app_nanopb_flie.pb.h"
 
 #if PB_PROTO_HEADER_VERSION != 40
 #error Regenerate this file with the current version of nanopb generator.
@@ -19,10 +21,31 @@ typedef struct _AppPB_MsgSet {
         /* 内部消息:0x01~0x20 */
         AppPB_ACK ack;
         /* 系统消息:0x21~0x50 */
-        AppPB_TraceText trace_text;
+        AppPB_TraceTxt trace_text;
+        AppPB_DevInfo device_info;
+        AppPB_DevParam device_param;
+        AppPB_ElecCard elec_card;
         /* 功能消息:0x50~ */
-        AppPB_SystemClock system_clock;
+        AppPB_SysClock system_clock;
         AppPB_WorldClock world_clock;
+        AppPB_Alarm alarm;
+        AppPB_Weather weather;
+        AppPB_HeartRate heart_rate;
+        AppPB_Music music;
+        AppPB_MsgInfo msg_info;
+        AppPB_Contact contact;
+        AppPB_SportTgt sport_tgt;
+        AppPB_UserPhys user_phys;
+        AppPB_MotionSum motion_sum;
+        AppPB_SportState sport_state;
+        AppPB_NotDisturb not_disturb;
+        AppPB_Position position;
+        AppPB_FemCycle fem_cycle;
+        AppPB_Account account;
+        AppPB_SportMng sport_mng;
+        AppPB_SportRcd sport_rcd;
+        /* 文件消息:0x80~ */
+        AppPB_Ota ota;
     } payload;
 } AppPB_MsgSet;
 
@@ -38,21 +61,81 @@ extern "C" {
 /* Field tags (for use in manual encoding/decoding) */
 #define AppPB_MsgSet_ack_tag                     1
 #define AppPB_MsgSet_trace_text_tag              33
+#define AppPB_MsgSet_device_info_tag             48
+#define AppPB_MsgSet_device_param_tag            49
+#define AppPB_MsgSet_elec_card_tag               50
 #define AppPB_MsgSet_system_clock_tag            80
 #define AppPB_MsgSet_world_clock_tag             81
+#define AppPB_MsgSet_alarm_tag                   82
+#define AppPB_MsgSet_weather_tag                 83
+#define AppPB_MsgSet_heart_rate_tag              84
+#define AppPB_MsgSet_music_tag                   85
+#define AppPB_MsgSet_msg_info_tag                86
+#define AppPB_MsgSet_contact_tag                 87
+#define AppPB_MsgSet_sport_tgt_tag               88
+#define AppPB_MsgSet_user_phys_tag               89
+#define AppPB_MsgSet_motion_sum_tag              90
+#define AppPB_MsgSet_sport_state_tag             91
+#define AppPB_MsgSet_not_disturb_tag             92
+#define AppPB_MsgSet_position_tag                93
+#define AppPB_MsgSet_fem_cycle_tag               94
+#define AppPB_MsgSet_account_tag                 95
+#define AppPB_MsgSet_sport_mng_tag               96
+#define AppPB_MsgSet_sport_rcd_tag               97
+#define AppPB_MsgSet_ota_tag                     130
 
 /* Struct field encoding specification for nanopb */
 #define AppPB_MsgSet_FIELDLIST(X, a) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ack,payload.ack),   1) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,trace_text,payload.trace_text),  33) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,device_info,payload.device_info),  48) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,device_param,payload.device_param),  49) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,elec_card,payload.elec_card),  50) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,system_clock,payload.system_clock),  80) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,world_clock,payload.world_clock),  81)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,world_clock,payload.world_clock),  81) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,alarm,payload.alarm),  82) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,weather,payload.weather),  83) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,heart_rate,payload.heart_rate),  84) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,music,payload.music),  85) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,msg_info,payload.msg_info),  86) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,contact,payload.contact),  87) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sport_tgt,payload.sport_tgt),  88) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,user_phys,payload.user_phys),  89) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,motion_sum,payload.motion_sum),  90) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sport_state,payload.sport_state),  91) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,not_disturb,payload.not_disturb),  92) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,position,payload.position),  93) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,fem_cycle,payload.fem_cycle),  94) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,account,payload.account),  95) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sport_mng,payload.sport_mng),  96) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sport_rcd,payload.sport_rcd),  97) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ota,payload.ota), 130)
 #define AppPB_MsgSet_CALLBACK NULL
 #define AppPB_MsgSet_DEFAULT NULL
 #define AppPB_MsgSet_payload_ack_MSGTYPE AppPB_ACK
-#define AppPB_MsgSet_payload_trace_text_MSGTYPE AppPB_TraceText
-#define AppPB_MsgSet_payload_system_clock_MSGTYPE AppPB_SystemClock
+#define AppPB_MsgSet_payload_trace_text_MSGTYPE AppPB_TraceTxt
+#define AppPB_MsgSet_payload_device_info_MSGTYPE AppPB_DevInfo
+#define AppPB_MsgSet_payload_device_param_MSGTYPE AppPB_DevParam
+#define AppPB_MsgSet_payload_elec_card_MSGTYPE AppPB_ElecCard
+#define AppPB_MsgSet_payload_system_clock_MSGTYPE AppPB_SysClock
 #define AppPB_MsgSet_payload_world_clock_MSGTYPE AppPB_WorldClock
+#define AppPB_MsgSet_payload_alarm_MSGTYPE AppPB_Alarm
+#define AppPB_MsgSet_payload_weather_MSGTYPE AppPB_Weather
+#define AppPB_MsgSet_payload_heart_rate_MSGTYPE AppPB_HeartRate
+#define AppPB_MsgSet_payload_music_MSGTYPE AppPB_Music
+#define AppPB_MsgSet_payload_msg_info_MSGTYPE AppPB_MsgInfo
+#define AppPB_MsgSet_payload_contact_MSGTYPE AppPB_Contact
+#define AppPB_MsgSet_payload_sport_tgt_MSGTYPE AppPB_SportTgt
+#define AppPB_MsgSet_payload_user_phys_MSGTYPE AppPB_UserPhys
+#define AppPB_MsgSet_payload_motion_sum_MSGTYPE AppPB_MotionSum
+#define AppPB_MsgSet_payload_sport_state_MSGTYPE AppPB_SportState
+#define AppPB_MsgSet_payload_not_disturb_MSGTYPE AppPB_NotDisturb
+#define AppPB_MsgSet_payload_position_MSGTYPE AppPB_Position
+#define AppPB_MsgSet_payload_fem_cycle_MSGTYPE AppPB_FemCycle
+#define AppPB_MsgSet_payload_account_MSGTYPE AppPB_Account
+#define AppPB_MsgSet_payload_sport_mng_MSGTYPE AppPB_SportMng
+#define AppPB_MsgSet_payload_sport_rcd_MSGTYPE AppPB_SportRcd
+#define AppPB_MsgSet_payload_ota_MSGTYPE AppPB_Ota
 
 extern const pb_msgdesc_t AppPB_MsgSet_msg;
 
@@ -60,7 +143,7 @@ extern const pb_msgdesc_t AppPB_MsgSet_msg;
 #define AppPB_MsgSet_fields &AppPB_MsgSet_msg
 
 /* Maximum encoded size of messages (where known) */
-#define AppPB_MsgSet_size                        141
+#define AppPB_MsgSet_size                        362
 
 #ifdef __cplusplus
 } /* extern "C" */

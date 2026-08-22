@@ -23,6 +23,11 @@ typedef struct _AppPB_ACK {
     AppPB_ACK_ErrorCode error_code;
 } AppPB_ACK;
 
+/* 追踪日志消息文本最大限制 APP_MODULE_TRACE_TEXT_MAX + 1 */
+typedef struct _AppPB_TraceTxt {
+    char trace_text[129]; /* 单条传输文本消息 */
+} AppPB_TraceTxt;
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,12 +41,16 @@ extern "C" {
 #define AppPB_ACK_error_code_ENUMTYPE AppPB_ACK_ErrorCode
 
 
+
 /* Initializer values for message structs */
 #define AppPB_ACK_init_default                   {_AppPB_ACK_ErrorCode_MIN}
+#define AppPB_TraceTxt_init_default              {""}
 #define AppPB_ACK_init_zero                      {_AppPB_ACK_ErrorCode_MIN}
+#define AppPB_TraceTxt_init_zero                 {""}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define AppPB_ACK_error_code_tag                 1
+#define AppPB_TraceTxt_trace_text_tag            1
 
 /* Struct field encoding specification for nanopb */
 #define AppPB_ACK_FIELDLIST(X, a) \
@@ -49,13 +58,21 @@ X(a, STATIC,   SINGULAR, UENUM,    error_code,        1)
 #define AppPB_ACK_CALLBACK NULL
 #define AppPB_ACK_DEFAULT NULL
 
+#define AppPB_TraceTxt_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, STRING,   trace_text,        1)
+#define AppPB_TraceTxt_CALLBACK NULL
+#define AppPB_TraceTxt_DEFAULT NULL
+
 extern const pb_msgdesc_t AppPB_ACK_msg;
+extern const pb_msgdesc_t AppPB_TraceTxt_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
 #define AppPB_ACK_fields &AppPB_ACK_msg
+#define AppPB_TraceTxt_fields &AppPB_TraceTxt_msg
 
 /* Maximum encoded size of messages (where known) */
 #define AppPB_ACK_size                           2
+#define AppPB_TraceTxt_size                      131
 
 #ifdef __cplusplus
 } /* extern "C" */

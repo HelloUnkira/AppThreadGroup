@@ -1,0 +1,217 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+/* Java包字段:Java编译时使用 */
+option java_package = "com.message_func.nanopb";
+option java_outer_classname = "AppPB_MsgFuncProto";
+/* 依赖包 */
+import "nanopb.proto";
+
+/* 闹钟消息(UTE 0xC7, 最多MAX_ALARM_SUPPORT=5组) */
+message AppPB_Alarm {
+    uint64  index  = 1 [(nanopb).int_size = IS_8];   //闹钟索引
+    uint64  repeat = 2 [(nanopb).int_size = IS_8];   //重复日bit0周日..bit6周六
+    uint64  on     = 3 [(nanopb).int_size = IS_8];   //开关
+    uint64  hour   = 4 [(nanopb).int_size = IS_8];   //小时
+    uint64  min    = 5 [(nanopb).int_size = IS_8];   //分钟
+    string  name   = 6 [(nanopb).max_size = 128];    //名字
+}
+
+/* 天气消息(UTE 0xE0) */
+message AppPB_Weather {
+    sint64  temp_cur = 1 [(nanopb).int_size = IS_16];  //当前气温
+    sint64  temp_max = 2 [(nanopb).int_size = IS_16];  //最高气温
+    sint64  temp_min = 3 [(nanopb).int_size = IS_16];  //最低气温
+    uint64  phen     = 4 [(nanopb).int_size = IS_8];   //天气现象
+    uint64  humi     = 5 [(nanopb).int_size = IS_8];   //湿度
+    uint64  uv       = 6 [(nanopb).int_size = IS_8];   //紫外线
+    sint64  pm25     = 7 [(nanopb).int_size = IS_16];  //PM2.5
+    sint64  aqi      = 8 [(nanopb).int_size = IS_16];  //空气质量
+    string  city     = 9 [(nanopb).max_size = 64];     //城市
+    repeated AppPB_WeatherDay day = 10 [(nanopb).max_count = 7];  //未来7天
+}
+/* 未来单天天气 */
+message AppPB_WeatherDay {
+    sint64  temp_max = 1 [(nanopb).int_size = IS_16];  //最高气温
+    sint64  temp_min = 2 [(nanopb).int_size = IS_16];  //最低气温
+    uint64  phen     = 3 [(nanopb).int_size = IS_8];   //天气现象
+    uint64  humi     = 4 [(nanopb).int_size = IS_8];   //湿度
+}
+
+/* 勿扰消息(UTE 0xEA) */
+message AppPB_NotDisturb {
+    uint64  on     = 1 [(nanopb).int_size = IS_8];   //勿扰开关
+    uint64  shour  = 2 [(nanopb).int_size = IS_8];   //开始小时
+    uint64  smin   = 3 [(nanopb).int_size = IS_8];   //开始分钟
+    uint64  ehour  = 4 [(nanopb).int_size = IS_8];   //结束小时
+    uint64  emin   = 5 [(nanopb).int_size = IS_8];   //结束分钟
+    uint64  repeat = 6 [(nanopb).int_size = IS_8];   //重复日
+}
+
+/* 心率参数消息(UTE 0xE1) */
+message AppPB_HeartRate {
+    uint64  is_auto     = 1 [(nanopb).int_size = IS_8];  //自动测量开关
+    uint64  lwarn_on    = 2 [(nanopb).int_size = IS_8];  //低心率提醒开关
+    uint64  hwarn_on    = 3 [(nanopb).int_size = IS_8];  //高心率提醒开关
+    uint64  lwarn       = 4 [(nanopb).int_size = IS_8];  //低提醒值
+    uint64  hwarn       = 5 [(nanopb).int_size = IS_8];  //高提醒值
+    uint64  test_min    = 6 [(nanopb).int_size = IS_16]; //自动测试间隔(分钟)
+    uint64  static_type = 7 [(nanopb).int_size = IS_8];  //静态心率类型
+}
+
+/* 音乐消息(UTE 0xE2) */
+message AppPB_Music {
+    string  singer    = 1 [(nanopb).max_size = 64];  //歌手
+    string  song_name = 2 [(nanopb).max_size = 64];  //曲名
+    uint64  play_st   = 3 [(nanopb).int_size = IS_8]; //播放状态
+    uint64  max_vol   = 4 [(nanopb).int_size = IS_8]; //最大音量
+    uint64  cur_vol   = 5 [(nanopb).int_size = IS_8]; //当前音量
+    uint64  app_st    = 6 [(nanopb).int_size = IS_8]; //app状态
+}
+
+/* 消息通知(UTE 0xB0~B3) */
+message AppPB_MsgInfo {
+    string  app_name = 1 [(nanopb).max_size = 64];  //应用名
+    string  contact  = 2 [(nanopb).max_size = 64];  //联系人
+    string  content  = 3 [(nanopb).max_size = 128]; //内容
+    uint64  msg_id   = 4 [(nanopb).int_size = IS_8]; //消息ID
+    string  phone    = 5 [(nanopb).max_size = 32];  //电话
+    uint64  msg_type = 6 [(nanopb).int_size = IS_8]; //消息类型
+    uint64  vibrate  = 7 [(nanopb).int_size = IS_8]; //震动开关
+}
+
+/* 联系人(UTE 0xC0) */
+message AppPB_Contact {
+    string  name      = 1 [(nanopb).max_size = 128]; //联系人名
+    uint64  name_len  = 2 [(nanopb).int_size = IS_16]; //名字长度
+    string  phone     = 3 [(nanopb).max_size = 32];  //号码
+    uint64  phone_len = 4 [(nanopb).int_size = IS_16]; //号码长度
+    uint64  state     = 5 [(nanopb).int_size = IS_8];  //接听/挂断
+}
+
+/* 运动目标(UTE 0xC1) */
+message AppPB_SportTgt {
+    uint64  motion_t  = 1 [(nanopb).int_size = IS_8];  //运动类型
+    uint64  goal_type = 2 [(nanopb).int_size = IS_8];  //目标类型
+    uint64  step      = 3 [(nanopb).int_size = IS_32]; //目标步数
+    uint64  kcal      = 4 [(nanopb).int_size = IS_32]; //目标卡路里
+    uint64  meter     = 5 [(nanopb).int_size = IS_32]; //目标距离(米)
+    uint64  duration  = 6 [(nanopb).int_size = IS_32]; //目标时长
+}
+
+/* 用户身体信息(UTE 0xC2) */
+message AppPB_UserPhys {
+    uint64  age       = 1 [(nanopb).int_size = IS_8];  //年龄
+    uint64  birthday  = 2 [(nanopb).int_size = IS_32]; //生日(时间戳)
+    uint64  gender    = 3 [(nanopb).int_size = IS_8];  //性别
+    uint64  height    = 4 [(nanopb).int_size = IS_32]; //身高(cm)
+    uint64  weight    = 5 [(nanopb).int_size = IS_32]; //体重
+    uint64  vo2max    = 6 [(nanopb).int_size = IS_32]; //最大摄氧量
+    uint64  run_step  = 7 [(nanopb).int_size = IS_32]; //跑步步长
+    uint64  walk_step = 8 [(nanopb).int_size = IS_32]; //走路步长
+}
+
+/* 运动汇总(UTE 0xC3) */
+message AppPB_MotionSum {
+    uint64  hr_value   = 1 [(nanopb).int_size = IS_8];  //最后心率值
+    uint64  hr_ts      = 2 [(nanopb).int_size = IS_32]; //心率时间戳
+    uint64  kcal       = 3 [(nanopb).int_size = IS_32]; //卡路里
+    uint64  distance   = 4 [(nanopb).int_size = IS_32]; //距离
+    uint64  elevation  = 5 [(nanopb).int_size = IS_32]; //爬升
+    uint64  sleep_time = 6 [(nanopb).int_size = IS_32]; //睡眠时长
+    uint64  step       = 7 [(nanopb).int_size = IS_32]; //步数
+}
+
+/* 运动状态(UTE 0xE5) */
+message AppPB_SportState {
+    uint64  monitor_st   = 1 [(nanopb).int_size = IS_8];  //监测占用
+    uint64  operator_t   = 2 [(nanopb).int_size = IS_8];  //执行类型
+    uint64  sport_type   = 3 [(nanopb).int_size = IS_8];  //运动分类
+    uint64  start_time   = 4 [(nanopb).int_size = IS_32]; //开始时间
+    uint64  workout_type = 5 [(nanopb).int_size = IS_8]; //单次运动类型
+    uint64  op_time      = 6 [(nanopb).int_size = IS_32]; //操作时间
+}
+
+/* 地理位置(UTE 0xE9) */
+message AppPB_Position {
+    uint64  speed      = 1 [(nanopb).int_size = IS_8];   //速度(dm/s)
+    uint64  distance   = 2 [(nanopb).int_size = IS_16];  //距离(分米)
+    sint64  altitude   = 3 [(nanopb).int_size = IS_16];  //海拔(米)
+    uint64  total_dist = 4 [(nanopb).int_size = IS_32];  //总距离(分米)
+    uint64  start_time = 5 [(nanopb).int_size = IS_32];  //开始时间
+    uint64  end_time   = 6 [(nanopb).int_size = IS_32];  //结束时间
+    sint64  latitude   = 7 [(nanopb).int_size = IS_32];  //纬度(WGS84 1e-7)
+    sint64  longitude  = 8 [(nanopb).int_size = IS_32];  //经度(WGS84 1e-7)
+    uint64  bearing    = 9 [(nanopb).int_size = IS_16];  //方向0~360
+    uint64  accuracy   = 10 [(nanopb).int_size = IS_16]; //精度(米)
+}
+
+/* 生理周期(UTE 0xE6) */
+message AppPB_FemCycle {
+    uint64  remind_sw         = 1 [(nanopb).int_size = IS_8];   //总开关
+    uint64  menstr_remind     = 2 [(nanopb).int_size = IS_8];   //经期开始提醒
+    uint64  menstr_end_remind = 3 [(nanopb).int_size = IS_8];   //经期结束提醒
+    uint64  ovulat_remind     = 4 [(nanopb).int_size = IS_8];   //易孕开始提醒
+    uint64  ovulat_end_remind = 5 [(nanopb).int_size = IS_8];   //易孕结束提醒
+    uint64  cycle_start       = 6 [(nanopb).int_size = IS_32];  //经期开始时间
+    uint64  cycle_end         = 7 [(nanopb).int_size = IS_32];  //经期结束时间
+    uint64  keep_days         = 8 [(nanopb).int_size = IS_8];   //持续天数
+    uint64  cycle_days        = 9 [(nanopb).int_size = IS_16];  //周期天数
+}
+
+/* 账户(UTE 0xE7) */
+message AppPB_Account {
+    string  account    = 1 [(nanopb).max_size = 255]; //账号
+    uint64  acc_len    = 2 [(nanopb).int_size = IS_8]; //账号长度
+    uint64  pair_state = 3 [(nanopb).int_size = IS_8]; //配对状态
+    uint64  app_role   = 4 [(nanopb).int_size = IS_8]; //app角色
+}
+
+/* 运动管理(UTE 0xEC) */
+message AppPB_SportMng {
+    uint64  max_add_num = 1 [(nanopb).int_size = IS_8];  //最大可添加数
+    uint64  min_add_num = 2 [(nanopb).int_size = IS_8];  //最小可添加数
+    repeated uint64 sport_type = 3 [(nanopb).max_count = 32]; //运动类型列表
+}
+
+/* 运动记录(UTE 0xE8) */
+message AppPB_SportRcd {
+    uint64  id         = 1 [(nanopb).int_size = IS_16]; //记录ID
+    uint64  status     = 2 [(nanopb).int_size = IS_8];  //状态
+    uint64  start_time = 3 [(nanopb).int_size = IS_32]; //开始时间
+    uint64  end_time   = 4 [(nanopb).int_size = IS_32]; //结束时间
+    uint64  calorie    = 5 [(nanopb).int_size = IS_32]; //卡路里
+    uint64  distance   = 6 [(nanopb).int_size = IS_32]; //距离(米)
+    uint64  step       = 7 [(nanopb).int_size = IS_32]; //步数
+    uint64  duration   = 8 [(nanopb).int_size = IS_32]; //时长(秒)
+    uint64  speed      = 9 [(nanopb).int_size = IS_16]; //速度
+    uint64  type       = 10 [(nanopb).int_size = IS_8]; //运动类型
+}
+
+/* 系统时钟消息(日历时间) */
+message AppPB_SysClock {
+    /* 系统时钟制式 */
+    enum Mode {
+        IS_24 = 0;
+        IS_12 = 1;
+    }
+    uint64  year   = 1 [(nanopb).int_size = IS_16]; //年(UTC的0时区)
+    uint64  month  = 2 [(nanopb).int_size = IS_8];  //月(UTC的0时区)
+    uint64  day    = 3 [(nanopb).int_size = IS_8];  //日(UTC的0时区)
+    uint64  hour   = 4 [(nanopb).int_size = IS_8];  //时(UTC的0时区)
+    uint64  minute = 5 [(nanopb).int_size = IS_8];  //分(UTC的0时区)
+    uint64  second = 6 [(nanopb).int_size = IS_8];  //秒(UTC的0时区)
+    sint64  zone   = 7 [(nanopb).int_size = IS_32]; //时区偏移(秒),带符号
+    Mode    mode   = 8;                              //系统时钟制式
+}
+
+/* 世界时钟消息 */
+/* 这里携带俩个额外的参数确定世界时钟数量以及当前世界时钟位置 */
+message AppPB_WorldClock {
+    uint32  now_index   = 1 [(nanopb).int_size = IS_8];     //世界时钟当前索引
+    uint32  max_count   = 2 [(nanopb).int_size = IS_8];     //世界时钟数量
+    string  city_name   = 3 [(nanopb).max_size = 100];      //城市名称
+    sint64  zone_offset = 4 [(nanopb).int_size = IS_32];    //时区偏移(秒),带符号
+    double  longitude   = 5;                                //经度:东经+,西经-
+    double  latitude    = 6;                                //维度:北纬+,南纬-
+    uint32  city_id     = 7 [(nanopb).int_size = IS_32];    //城市ID
+}

@@ -8,6 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
+#include "app_module_protocol_test.h"
 
 /*@brief 子线程服务例程就绪部
  */
@@ -15,6 +16,11 @@ static void app_thread_manage_routine_ready_cb(void)
 {
     /* 软件模组初始化 */
     app_module_protocol_ready();
+    
+    /* 协议自检:开机回环发包,验证协议消息收发通路 */
+    #if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test();
+    #endif
 }
 
 /*@brief 子线程服务例程处理部

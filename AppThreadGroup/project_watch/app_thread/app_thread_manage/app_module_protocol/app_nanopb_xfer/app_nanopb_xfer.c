@@ -65,11 +65,77 @@ bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
     /* 匹配数据包 */
     bool retval = false;
     switch (message.which_payload) {
+    case AppPB_MsgSet_ack_tag:
+        retval = app_nanopb_xfer_respond_ack(&message);
+        break;
     case AppPB_MsgSet_trace_text_tag:
         retval = app_nanopb_xfer_respond_trace_text(&message);
         break;
+    case AppPB_MsgSet_device_info_tag:
+        retval = app_nanopb_xfer_respond_device_info(&message);
+        break;
+    case AppPB_MsgSet_device_param_tag:
+        retval = app_nanopb_xfer_respond_device_param(&message);
+        break;
+    case AppPB_MsgSet_elec_card_tag:
+        retval = app_nanopb_xfer_respond_elec_card(&message);
+        break;
     case AppPB_MsgSet_system_clock_tag:
         retval = app_nanopb_xfer_respond_system_clock(&message);
+        break;
+    case AppPB_MsgSet_world_clock_tag:
+        retval = app_nanopb_xfer_respond_world_clock(&message);
+        break;
+    case AppPB_MsgSet_alarm_tag:
+        retval = app_nanopb_xfer_respond_alarm(&message);
+        break;
+    case AppPB_MsgSet_weather_tag:
+        retval = app_nanopb_xfer_respond_weather(&message);
+        break;
+    case AppPB_MsgSet_heart_rate_tag:
+        retval = app_nanopb_xfer_respond_heart_rate(&message);
+        break;
+    case AppPB_MsgSet_music_tag:
+        retval = app_nanopb_xfer_respond_music(&message);
+        break;
+    case AppPB_MsgSet_msg_info_tag:
+        retval = app_nanopb_xfer_respond_msg_info(&message);
+        break;
+    case AppPB_MsgSet_contact_tag:
+        retval = app_nanopb_xfer_respond_contact(&message);
+        break;
+    case AppPB_MsgSet_sport_tgt_tag:
+        retval = app_nanopb_xfer_respond_sport_tgt(&message);
+        break;
+    case AppPB_MsgSet_user_phys_tag:
+        retval = app_nanopb_xfer_respond_user_phys(&message);
+        break;
+    case AppPB_MsgSet_motion_sum_tag:
+        retval = app_nanopb_xfer_respond_motion_sum(&message);
+        break;
+    case AppPB_MsgSet_sport_state_tag:
+        retval = app_nanopb_xfer_respond_sport_state(&message);
+        break;
+    case AppPB_MsgSet_not_disturb_tag:
+        retval = app_nanopb_xfer_respond_not_disturb(&message);
+        break;
+    case AppPB_MsgSet_position_tag:
+        retval = app_nanopb_xfer_respond_position(&message);
+        break;
+    case AppPB_MsgSet_fem_cycle_tag:
+        retval = app_nanopb_xfer_respond_fem_cycle(&message);
+        break;
+    case AppPB_MsgSet_account_tag:
+        retval = app_nanopb_xfer_respond_account(&message);
+        break;
+    case AppPB_MsgSet_sport_mng_tag:
+        retval = app_nanopb_xfer_respond_sport_mng(&message);
+        break;
+    case AppPB_MsgSet_sport_rcd_tag:
+        retval = app_nanopb_xfer_respond_sport_rcd(&message);
+        break;
+    case AppPB_MsgSet_ota_tag:
+        retval = app_nanopb_xfer_respond_ota(&message);
         break;
     default:
         APP_SYS_LOG_INFO_RAW("unknown nanopb type:%d%s", message.which_payload, app_sys_log_line());
