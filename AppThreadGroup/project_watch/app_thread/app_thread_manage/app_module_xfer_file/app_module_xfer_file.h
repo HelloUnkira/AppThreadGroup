@@ -1,8 +1,6 @@
 #ifndef APP_MODULE_XFER_FILE_H
 #define APP_MODULE_XFER_FILE_H
 
-#include "app_nanopb_set.pb.h"
-
 /* 文件传输公共常量:json/nanopb共用 */
 #define APP_MODULE_XFER_FILE_IMAGE_SIZE   1024   /* 文件内容缓冲大小 */
 #define APP_MODULE_XFER_FILE_SEND_PERIOD  100    /* ack/分包轮询周期 */

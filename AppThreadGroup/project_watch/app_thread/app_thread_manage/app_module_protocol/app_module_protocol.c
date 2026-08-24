@@ -57,123 +57,6 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
 {
     app_module_protocol_t *protocol = (void *)data;
     
-    #if 0
-    #elif APP_MODULE_PROTOCOL_USE_JSON
-    switch (protocol->notify.type) {
-    case app_module_protocol_ack: {
-         app_json_xfer_notify_ack();
-         break;
-    }
-    case app_module_protocol_trace_text: {
-         app_json_xfer_notify_trace_text();
-         break;
-    }
-    case app_module_protocol_device_info: {
-         app_json_xfer_notify_device_info();
-         break;
-    }
-    case app_module_protocol_device_param: {
-         app_json_xfer_notify_device_param();
-         break;
-    }
-    case app_module_protocol_elec_card: {
-         app_json_xfer_notify_elec_card();
-         break;
-    }
-    case app_module_protocol_system_clock: {
-         app_json_xfer_notify_system_clock();
-         break;
-    }
-    case app_module_protocol_world_clock: {
-         app_json_xfer_notify_world_clock();
-         break;
-    }
-    case app_module_protocol_alarm: {
-         app_json_xfer_notify_alarm();
-         break;
-    }
-    case app_module_protocol_weather: {
-         app_json_xfer_notify_weather();
-         break;
-    }
-    case app_module_protocol_heart_rate: {
-         app_json_xfer_notify_heart_rate();
-         break;
-    }
-    case app_module_protocol_music: {
-         app_json_xfer_notify_music();
-         break;
-    }
-    case app_module_protocol_msg_info: {
-         app_json_xfer_notify_msg_info();
-         break;
-    }
-    case app_module_protocol_contact: {
-         app_json_xfer_notify_contact();
-         break;
-    }
-    case app_module_protocol_sport_tgt: {
-         app_json_xfer_notify_sport_tgt();
-         break;
-    }
-    case app_module_protocol_user_phys: {
-         app_json_xfer_notify_user_phys();
-         break;
-    }
-    case app_module_protocol_motion_sum: {
-         app_json_xfer_notify_motion_sum();
-         break;
-    }
-    case app_module_protocol_sport_state: {
-         app_json_xfer_notify_sport_state();
-         break;
-    }
-    case app_module_protocol_not_disturb: {
-         app_json_xfer_notify_not_disturb();
-         break;
-    }
-    case app_module_protocol_position: {
-         app_json_xfer_notify_position();
-         break;
-    }
-    case app_module_protocol_fem_cycle: {
-         app_json_xfer_notify_fem_cycle();
-         break;
-    }
-    case app_module_protocol_account: {
-         app_json_xfer_notify_account();
-         break;
-    }
-    case app_module_protocol_sport_mng: {
-         app_json_xfer_notify_sport_mng();
-         break;
-    }
-    case app_module_protocol_sport_rcd: {
-         app_json_xfer_notify_sport_rcd();
-         break;
-    }
-    case app_module_protocol_file: {
-         app_json_xfer_notify_file();
-         break;
-    }
-    case app_module_protocol_file_step: {
-         app_json_xfer_file_step();
-         break;
-    }
-    case app_module_protocol_ctrl_step: {
-         app_json_xfer_ctrl_step();
-         break;
-    }
-    case app_module_protocol_ota: {
-         app_json_xfer_notify_ota();
-         break;
-    }
-    default: {
-        APP_SYS_LOG_ERROR("protocol have unknown type:%d", protocol->notify.type);
-        break;
-    }
-    }
-    #elif APP_MODULE_PROTOCOL_USE_NANOPB
     switch (protocol->notify.type) {
     case app_module_protocol_ack: {
          app_nanopb_xfer_notify_ack();
@@ -288,7 +171,6 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
         break;
     }
     }
-    #endif
 }
 
 /*@brief 传输协议
@@ -305,12 +187,7 @@ void app_module_protocol_respond_handler(uint8_t *data, uint32_t size)
         APP_SYS_LOG_INFO_RAW("%02x ", protocol->respond.data[idx]);
         APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     
-    #if 0
-    #elif APP_MODULE_PROTOCOL_USE_JSON
-    app_json_xfer_respond(protocol->respond.data);
-    #elif APP_MODULE_PROTOCOL_USE_NANOPB
     app_nanopb_xfer_respond(protocol->respond.data, protocol->respond.size);
-    #endif
     
     if (protocol->respond.dynamic)
         app_mem_free(protocol->respond.data);
@@ -321,18 +198,10 @@ void app_module_protocol_respond_handler(uint8_t *data, uint32_t size)
  */
 void app_module_protocol_ready(void)
 {
-    #if 0
-    #elif APP_MODULE_PROTOCOL_USE_JSON
-    /* cJSON组件初始化 */
-    cJSON_Hooks cjson_hooks = {
-        .malloc_fn = app_mem_alloc,
-        .free_fn   = app_mem_free,
-    };
-    cJSON_InitHooks(&cjson_hooks);
-    #elif APP_MODULE_PROTOCOL_USE_NANOPB
+    #if APP_MODULE_PROTOCOL_USE_NANOPB
     /* 注入通用文件传输引擎的nanopb原语 */
     app_nanopb_xfer_file_init();
     #else
-    #error "app module protocol is unknown"
+    #error "app module protocol only support nanopb"
     #endif
 }

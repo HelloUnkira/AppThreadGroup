@@ -11,6 +11,8 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_protocol_lib.h"
+#include "app_module_xfer_file.h"
+#include "app_module_protocol_test.h"
 
 /* 文件发送状态机上下文 */
 typedef struct {

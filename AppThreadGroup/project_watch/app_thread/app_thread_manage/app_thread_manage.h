@@ -19,18 +19,18 @@ typedef enum {
     /*  */
 } app_thread_manage_module_event_t;
 
-/* 序列化方式(USE_NANOPB/USE_JSON二选一) */
-#define APP_MODULE_PROTOCOL_USE_JSON            0
+/* 序列化方式(仅nanopb,关闭判断见app_module_protocol_ready) */
 #define APP_MODULE_PROTOCOL_USE_NANOPB          1
 /* 回环测试:数据通路上层环路 */
 #define APP_MODULE_PROTOCOL_LOCAL_LOOPBACK      1
 /* 协议自检:开机回环发包 */
 #define APP_MODULE_PROTOCOL_TEST_ENABLE         1
-#define APP_MODULE_PROTOCOL_TEST_PERIOD         150
 
 /* 子线程模组 */
 #include "app_module_transfer.h"
 #include "app_module_protocol.h"
+#include "app_module_protocol_test.h"
+#include "app_module_xfer_file.h"
 #include "app_protocol_lib.h"
 
 #endif

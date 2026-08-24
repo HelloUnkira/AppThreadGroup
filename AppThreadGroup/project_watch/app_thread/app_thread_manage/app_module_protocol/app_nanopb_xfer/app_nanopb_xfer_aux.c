@@ -1,5 +1,5 @@
 /*实现目标:
- *    nanopb协议-应答(aux)消息的打包与接收
+ *    nanopb协议子部件
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS    1
