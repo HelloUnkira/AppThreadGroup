@@ -4,7 +4,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL     1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -263,6 +263,11 @@ bool app_json_xfer_respond(uint8_t *json_stream)
         if (app_json_xfer_unpack_sport_rcd(payload, &message.payload.sport_rcd))
             retval = app_json_xfer_respond_sport_rcd(&message);
         break;
+    case app_json_xfer_msg_is_file: {
+        uint32_t phase = (uint32_t)cJSON_GetNumberValue(cJSON_GetObjectItem(json_item, "phase"));
+        retval = app_json_xfer_respond_file(payload, phase);
+        break;
+    }
     case app_json_xfer_msg_is_ota:
         if (app_json_xfer_unpack_ota(payload, &message.payload.ota))
             retval = app_json_xfer_respond_ota(&message);

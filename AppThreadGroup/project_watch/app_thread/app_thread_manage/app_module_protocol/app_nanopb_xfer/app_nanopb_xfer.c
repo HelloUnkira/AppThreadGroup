@@ -4,7 +4,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL     1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -36,9 +36,10 @@ bool app_nanopb_xfer_notify(app_module_transfer_chan_t channel, AppPB_MsgSet *me
         APP_SYS_LOG_INFO_RAW("%02x ", buffer[idx]);
         APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     /* 传输nanopb数据流 */
-    app_module_transfer_notify(channel, buffer, size);
+    bool retval = app_module_transfer_notify(channel, buffer, size);
     /* 回收nanopb缓冲区 */
     app_mem_free(buffer);
+    return retval;
 }
 
 /*@brief 协议适配层,接收协议数据
@@ -137,9 +138,18 @@ bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
     case AppPB_MsgSet_ota_tag:
         retval = app_nanopb_xfer_respond_ota(&message);
         break;
+    case AppPB_MsgSet_file_tag:
+        retval = app_nanopb_xfer_respond_file(&message);
+        break;
     default:
         APP_SYS_LOG_INFO_RAW("unknown nanopb type:%d%s", message.which_payload, app_sys_log_line());
         break;
+    }
+    /* 协议内部自动应答:接收消息处理成功后,回ack表明已接收并标记是哪一个notify的应答
+     *  ack特殊:不回环、不再应答; 文件消息有独立分阶段应答,不走此处 */
+    if (retval && message.which_payload != AppPB_MsgSet_ack_tag &&
+        message.which_payload != AppPB_MsgSet_file_tag) {
+        app_nanopb_xfer_notify_ack_ext((uint16_t)message.which_payload, AppPB_ACK_ErrorCode_SUCCEED, 0);
     }
     return retval;
 }

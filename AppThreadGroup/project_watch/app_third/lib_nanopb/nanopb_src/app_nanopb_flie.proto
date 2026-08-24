@@ -24,12 +24,18 @@ message AppPB_FilePkg {
     bytes   data  = 5 [(nanopb).max_size = 512];     //当前分包数据流
 }
 
+/* 文件传输结束消息 */
+message AppPB_FileEnd {
+    uint64  code = 1 [(nanopb).int_size = IS_8];    //传输结果(0成功/1校验失败/2其他)
+}
+
 /* 文件消息 */
 message AppPB_File {
     /* 单一性组合消息 */
     oneof payload {
-        AppPB_FileDes descriptor = 1;   //文件描述符
+        AppPB_FileDes descriptor = 1;   //文件描述符(传输开始)
         AppPB_FilePkg package    = 2;   //文件分包
+        AppPB_FileEnd done       = 3;   //文件传输结束
     }
 }
 

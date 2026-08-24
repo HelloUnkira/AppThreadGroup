@@ -123,6 +123,19 @@ cJSON *app_json_xfer_pack_file_des(const AppPB_FileDes *msg);
  */
 bool app_json_xfer_unpack_file_des(cJSON *obj, AppPB_FileDes *msg);
 
+/*@brief 打包转换 FileEnd 消息为 JSON 对象
+ *@param msg 源消息结构体
+ *@retval 生成的 JSON 对象(需要调用者 cJSON_Delete 回收)
+ */
+cJSON *app_json_xfer_pack_file_end(const AppPB_FileEnd *msg);
+
+/*@brief 解析转换 JSON 对象为 FileEnd 消息结构体
+ *@param obj 源 JSON 对象
+ *@param msg 目标消息结构体
+ *@retval 解析是否成功
+ */
+bool app_json_xfer_unpack_file_end(cJSON *obj, AppPB_FileEnd *msg);
+
 /*@brief 打包转换 HeartRate 消息为 JSON 对象
  *@param msg 源消息结构体
  *@retval 生成的 JSON 对象(需要调用者 cJSON_Delete 回收)

@@ -4,7 +4,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL     1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -12,6 +12,34 @@
 #include "app_protocol_lib.h"
 
 #if APP_MODULE_PROTOCOL_USE_JSON
+
+/*@brief 打包推送文件传输阶段消息
+ *       {"type":0x0080,"phase":0/1,"payload":<文件描述符/结束>}
+ *@param message 装载的文件子消息
+ *@param phase   文件传输阶段
+ */
+static void app_json_xfer_notify_file_phase(AppPB_MsgSet *message, uint32_t phase)
+{
+    /* 创建传输对象 */
+    cJSON *json_item = cJSON_CreateObject();
+    cJSON_AddNumberToObject(json_item, "type", message->which_payload);
+    cJSON_AddNumberToObject(json_item, "phase", phase);
+    /* 匹配子消息并转换负载 */
+    cJSON *payload = NULL;
+    if (message->payload.file.which_payload == AppPB_File_descriptor_tag)
+        payload = app_json_xfer_pack_file_des(&message->payload.file.payload.descriptor);
+    else if (message->payload.file.which_payload == AppPB_File_done_tag)
+        payload = app_json_xfer_pack_file_end(&message->payload.file.payload.done);
+    if (payload == NULL) {
+        cJSON_Delete(json_item);
+        return;
+    }
+    cJSON_AddItemToObject(json_item, "payload", payload);
+    /* 传输对象发送通知 */
+    app_json_xfer_notify(app_module_transfer_chan_high, json_item);
+    /* 销毁传输对象 */
+    cJSON_Delete(json_item);
+}
 
 /*@brief 传输接收应答
  */
@@ -58,10 +86,11 @@ void app_json_xfer_notify_trace_text(void)
                 break;
             /* 放不下下一条则结束当前负载(该条已窥探消耗) */
             uint32_t item_len = strlen(item);
-            if (used + item_len >= APP_SYS_LOG_TEXT_LIMIT)
+            if (used + item_len + 1 >= APP_SYS_LOG_TEXT_LIMIT)
                 break;
             memcpy(trace + used, item, item_len);
             used += item_len;
+            trace[used++] = '\n';
             trace[used] = '\0';
         }
         /* 无累积则结束 */
@@ -84,18 +113,9 @@ bool app_json_xfer_respond_trace_text(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_device_info(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_device_info_tag,
-        .payload.device_info = {
-            .model   = "NAL-WB00",
-            .hw_ver  = "V1.0",
-            .sw_ver  = "V1.0",
-            .sn      = "AT3380123",
-            .bt_addr = "11:22:33:44:55:66",
-            .pid     = "AT338",
-            .battery = 85,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_device_info_tag;
+    app_module_protocol_test_fill_device_info(&message.payload.device_info);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -118,16 +138,9 @@ bool app_json_xfer_respond_device_info(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_device_param(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_device_param_tag,
-        .payload.device_param = {
-            .lang_id = 0,
-            .zone    = 8 * 3600,
-            .is_12h  = 0,
-            .is_mi   = 0,
-            .brt     = 50,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_device_param_tag;
+    app_module_protocol_test_fill_device_param(&message.payload.device_param);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -148,13 +161,9 @@ bool app_json_xfer_respond_device_param(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_elec_card(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_elec_card_tag,
-        .payload.elec_card = {
-            .is_activate = true,
-            .is_reported = false,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_elec_card_tag;
+    app_module_protocol_test_fill_elec_card(&message.payload.elec_card);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -225,16 +234,9 @@ bool app_json_xfer_respond_system_clock(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_world_clock(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_world_clock_tag,
-        .payload.world_clock = {
-            .now_index   = 0,
-            .max_count   = 1,
-            .city_name   = "Beijing",
-            .zone_offset = 8 * 3600,
-            .city_id     = 0,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_world_clock_tag;
+    app_module_protocol_test_fill_world_clock(&message.payload.world_clock);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -254,17 +256,9 @@ bool app_json_xfer_respond_world_clock(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_alarm(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_alarm_tag,
-        .payload.alarm = {
-            .index  = 0,
-            .repeat = 0x3E,
-            .on     = 1,
-            .hour   = 7,
-            .min    = 30,
-            .name   = "wakeup",
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_alarm_tag;
+    app_module_protocol_test_fill_alarm(&message.payload.alarm);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -286,26 +280,9 @@ bool app_json_xfer_respond_alarm(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_weather(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_weather_tag,
-        .payload.weather = {
-            .temp_cur = 26,
-            .temp_max = 31,
-            .temp_min = 22,
-            .phen     = 1,
-            .humi     = 60,
-            .uv       = 5,
-            .pm25     = 35,
-            .aqi      = 45,
-            .city     = "shenzhen",
-            .day_count = 3,
-            .day = {
-                { .temp_max = 31, .temp_min = 22, .phen = 1, .humi = 60 },
-                { .temp_max = 30, .temp_min = 21, .phen = 2, .humi = 65 },
-                { .temp_max = 29, .temp_min = 20, .phen = 1, .humi = 70 },
-            },
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_weather_tag;
+    app_module_protocol_test_fill_weather(&message.payload.weather);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -328,18 +305,9 @@ bool app_json_xfer_respond_weather(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_heart_rate(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_heart_rate_tag,
-        .payload.heart_rate = {
-            .is_auto     = 1,
-            .lwarn_on    = 1,
-            .hwarn_on    = 1,
-            .lwarn       = 50,
-            .hwarn       = 120,
-            .test_min    = 30,
-            .static_type = 0,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_heart_rate_tag;
+    app_module_protocol_test_fill_heart_rate(&message.payload.heart_rate);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -359,17 +327,9 @@ bool app_json_xfer_respond_heart_rate(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_music(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_music_tag,
-        .payload.music = {
-            .singer    = "Jay",
-            .song_name = "Cloud",
-            .play_st   = 1,
-            .max_vol   = 10,
-            .cur_vol   = 6,
-            .app_st    = 1,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_music_tag;
+    app_module_protocol_test_fill_music(&message.payload.music);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -390,17 +350,9 @@ bool app_json_xfer_respond_music(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_msg_info(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_msg_info_tag,
-        .payload.msg_info = {
-            .app_name = "wechat",
-            .contact  = "tom",
-            .content  = "hello",
-            .msg_id   = 1,
-            .msg_type = 1,
-            .vibrate  = 1,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_msg_info_tag;
+    app_module_protocol_test_fill_msg_info(&message.payload.msg_info);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -421,16 +373,9 @@ bool app_json_xfer_respond_msg_info(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_contact(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_contact_tag,
-        .payload.contact = {
-            .name      = "tom",
-            .name_len  = 3,
-            .phone     = "13800138000",
-            .phone_len = 11,
-            .state     = 1,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_contact_tag;
+    app_module_protocol_test_fill_contact(&message.payload.contact);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -449,17 +394,9 @@ bool app_json_xfer_respond_contact(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_sport_tgt(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_sport_tgt_tag,
-        .payload.sport_tgt = {
-            .motion_t  = 1,
-            .goal_type = 1,
-            .step      = 10000,
-            .kcal      = 500,
-            .meter     = 8000,
-            .duration  = 7200,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_sport_tgt_tag;
+    app_module_protocol_test_fill_sport_tgt(&message.payload.sport_tgt);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -479,19 +416,9 @@ bool app_json_xfer_respond_sport_tgt(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_user_phys(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_user_phys_tag,
-        .payload.user_phys = {
-            .age        = 30,
-            .birthday   = 0,
-            .gender     = 1,
-            .height     = 175,
-            .weight     = 65,
-            .vo2max     = 45,
-            .run_step   = 80,
-            .walk_step  = 70,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_user_phys_tag;
+    app_module_protocol_test_fill_user_phys(&message.payload.user_phys);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -511,18 +438,9 @@ bool app_json_xfer_respond_user_phys(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_motion_sum(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_motion_sum_tag,
-        .payload.motion_sum = {
-            .hr_value   = 75,
-            .hr_ts      = 0,
-            .kcal       = 300,
-            .distance   = 5000,
-            .elevation  = 100,
-            .sleep_time = 480,
-            .step       = 8000,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_motion_sum_tag;
+    app_module_protocol_test_fill_motion_sum(&message.payload.motion_sum);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -542,17 +460,9 @@ bool app_json_xfer_respond_motion_sum(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_sport_state(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_sport_state_tag,
-        .payload.sport_state = {
-            .monitor_st   = 0,
-            .operator_t   = 0,
-            .sport_type   = 1,
-            .start_time   = 0,
-            .workout_type = 1,
-            .op_time      = 0,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_sport_state_tag;
+    app_module_protocol_test_fill_sport_state(&message.payload.sport_state);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -571,17 +481,9 @@ bool app_json_xfer_respond_sport_state(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_not_disturb(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_not_disturb_tag,
-        .payload.not_disturb = {
-            .on     = 1,
-            .shour  = 22,
-            .smin   = 0,
-            .ehour  = 7,
-            .emin   = 0,
-            .repeat = 0x7F,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_not_disturb_tag;
+    app_module_protocol_test_fill_not_disturb(&message.payload.not_disturb);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -603,21 +505,9 @@ bool app_json_xfer_respond_not_disturb(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_position(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_position_tag,
-        .payload.position = {
-            .speed      = 10,
-            .distance   = 1000,
-            .altitude   = 30,
-            .total_dist = 10000,
-            .start_time = 0,
-            .end_time   = 0,
-            .latitude   = 22540000,
-            .longitude  = 114000000,
-            .bearing    = 90,
-            .accuracy   = 5,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_position_tag;
+    app_module_protocol_test_fill_position(&message.payload.position);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -638,20 +528,9 @@ bool app_json_xfer_respond_position(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_fem_cycle(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_fem_cycle_tag,
-        .payload.fem_cycle = {
-            .remind_sw         = 1,
-            .menstr_remind     = 1,
-            .menstr_end_remind = 1,
-            .ovulat_remind     = 0,
-            .ovulat_end_remind = 0,
-            .cycle_start       = 0,
-            .cycle_end         = 0,
-            .keep_days         = 5,
-            .cycle_days        = 28,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_fem_cycle_tag;
+    app_module_protocol_test_fill_fem_cycle(&message.payload.fem_cycle);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -670,15 +549,9 @@ bool app_json_xfer_respond_fem_cycle(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_account(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_account_tag,
-        .payload.account = {
-            .account    = "user01",
-            .acc_len    = 6,
-            .pair_state = 1,
-            .app_role   = 1,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_account_tag;
+    app_module_protocol_test_fill_account(&message.payload.account);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -697,15 +570,9 @@ bool app_json_xfer_respond_account(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_sport_mng(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_sport_mng_tag,
-        .payload.sport_mng = {
-            .max_add_num      = 10,
-            .min_add_num      = 1,
-            .sport_type_count = 3,
-            .sport_type       = { 1, 2, 3 },
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_sport_mng_tag;
+    app_module_protocol_test_fill_sport_mng(&message.payload.sport_mng);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -724,21 +591,9 @@ bool app_json_xfer_respond_sport_mng(AppPB_MsgSet *message)
  */
 void app_json_xfer_notify_sport_rcd(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_sport_rcd_tag,
-        .payload.sport_rcd = {
-            .id         = 1,
-            .status     = 1,
-            .start_time = 0,
-            .end_time   = 3600,
-            .calorie    = 300,
-            .distance   = 5000,
-            .step       = 6000,
-            .duration   = 3600,
-            .speed      = 10,
-            .type       = 1,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_sport_rcd_tag;
+    app_module_protocol_test_fill_sport_rcd(&message.payload.sport_rcd);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 
@@ -756,18 +611,148 @@ bool app_json_xfer_respond_sport_rcd(AppPB_MsgSet *message)
     return true;
 }
 
+/*@brief 文件发送限速状态机
+ *       限速原因:无ack流控前一口气发包会堵死线程管道;
+ *       每个定时周期(APP_MODULE_XFER_FILE_SEND_PERIOD)发送一个文件子消息;
+ *       JSON只传元数据,阶段:开始(描述符)-结束,与nanopb子协议保持一致
+ */
+typedef enum {
+    app_json_file_send_start = 0,  /* 待发文件描述符 */
+    app_json_file_send_end,        /* 待发文件结束 */
+} app_json_file_send_phase_t;
+
+typedef struct {
+    app_sys_timer_t timer;                              /* 发包限速定时器 */
+    bool            active;                             /* 发送流程是否进行中 */
+    uint8_t         image[APP_MODULE_XFER_FILE_IMAGE_SIZE]; /* 待发送的文件内容 */
+    uint32_t        file_size;                          /* 文件总大小 */
+    uint32_t        file_crc32;                         /* 文件CRC32 */
+    uint32_t        phase;                              /* 当前发送阶段 */
+} app_json_file_send_t;
+static app_json_file_send_t app_json_file_send = {0};
+
+/*@brief 文件发送限速定时器回调
+ *       每个定时周期向manage线程投递一次发包步进;
+ *       实际发包在manage线程执行,与protocol_test同构,避免跨线程操作传输层
+ */
+static void app_json_file_send_timer_handler(void *timer)
+{
+    /* 发送流程结束则不再投递 */
+    if (!app_json_file_send.active)
+        return;
+    app_module_protocol_t protocol = {.notify.status = 0,};
+    protocol.notify.type = app_module_protocol_file_step;
+    app_module_protocol_notify(&protocol);
+}
+
+/*@brief 文件传输限速发包步进
+ *       每次步进发送一个文件子消息(开始(描述符)->结束)
+ */
+void app_json_xfer_file_step(void)
+{
+    /* 发送流程结束则停止限速定时器 */
+    if (!app_json_file_send.active) {
+        app_sys_timer_stop(&app_json_file_send.timer);
+        return;
+    }
+    /* 阶段:文件传输开始(描述符) */
+    if (app_json_file_send.phase == app_json_file_send_start) {
+        AppPB_MsgSet msg_start = {
+            .which_payload = AppPB_MsgSet_file_tag,
+            .payload.file = {
+                .which_payload = AppPB_File_descriptor_tag,
+            },
+        };
+        AppPB_FileDes *des = &msg_start.payload.file.payload.descriptor;
+        snprintf(des->name, sizeof(des->name), "%s", app_module_protocol_test_file_name());
+        des->utc64 = 0;
+        des->crc32 = app_json_file_send.file_crc32;
+        des->size  = app_json_file_send.file_size;
+        des->crc8  = app_module_xfer_file_descriptor_crc8(des);
+        app_json_xfer_notify_file_phase(&msg_start, APP_JSON_XFER_FILE_PHASE_START);
+        app_json_file_send.phase = app_json_file_send_end;
+        return;
+    }
+    /* 阶段:文件传输结束 */
+    if (app_json_file_send.phase == app_json_file_send_end) {
+        AppPB_MsgSet msg_end = {
+            .which_payload = AppPB_MsgSet_file_tag,
+            .payload.file = {
+                .which_payload = AppPB_File_done_tag,
+                .payload.done = { .code = 0 },
+            },
+        };
+        app_json_xfer_notify_file_phase(&msg_end, APP_JSON_XFER_FILE_PHASE_END);
+        /* 传输完成,停止限速定时器并复位状态 */
+        app_json_file_send.active = false;
+        app_sys_timer_stop(&app_json_file_send.timer);
+        APP_SYS_LOG_INFO("file transfer send done size:%u", app_json_file_send.file_size);
+        return;
+    }
+}
+
+/*@brief 打包传输文件(开始->结束)
+ *       数据源为日志队列内容(设备上报log文件场景),与trace_text同源;
+ *       二进制分包数据无法用 JSON 承载,故只传输文件元数据结构;
+ *       限速发送:启动软件定时器,每个周期投递一次发包步进,避免发包过多堵死线程管道
+ */
+void app_json_xfer_notify_file(void)
+{
+    /* 发送流程进行中则忽略新请求 */
+    if (app_json_file_send.active)
+        return;
+    /* 组装文件内容:从日志队列提取条目,以换行分隔 */
+    app_json_file_send.file_size  = app_module_xfer_file_build(app_json_file_send.image, sizeof(app_json_file_send.image));
+    app_json_file_send.file_crc32 = app_sys_crc32(app_json_file_send.image, app_json_file_send.file_size);
+    app_json_file_send.phase      = app_json_file_send_start;
+    app_json_file_send.active     = true;
+    /* 启动发包限速定时器 */
+    app_json_file_send.timer.expired = app_json_file_send_timer_handler;
+    app_json_file_send.timer.peroid  = APP_MODULE_XFER_FILE_SEND_PERIOD;
+    app_json_file_send.timer.reload  = 1;
+    app_sys_timer_start(&app_json_file_send.timer);
+}
+
+/*@brief 传输接收文件(开始/结束)
+ *@param payload JSON数据负载
+ *@param phase   文件传输阶段(开始/结束)
+ */
+bool app_json_xfer_respond_file(cJSON *payload, uint32_t phase)
+{
+    if (phase == APP_JSON_XFER_FILE_PHASE_START) {
+        AppPB_FileDes des = AppPB_FileDes_init_zero;
+        if (!app_json_xfer_unpack_file_des(payload, &des)) {
+            APP_SYS_LOG_WARN("file descriptor unpack fail");
+            return false;
+        }
+        /* 描述符CRC8校验 */
+        if (des.crc8 != app_module_xfer_file_descriptor_crc8(&des)) {
+            APP_SYS_LOG_WARN("file descriptor crc8 fail");
+            return false;
+        }
+        APP_SYS_LOG_INFO("file transfer start name:%s size:%u crc32:%08x", des.name, des.size, des.crc32);
+        return true;
+    }
+    if (phase == APP_JSON_XFER_FILE_PHASE_END) {
+        AppPB_FileEnd end = AppPB_FileEnd_init_zero;
+        if (!app_json_xfer_unpack_file_end(payload, &end)) {
+            APP_SYS_LOG_WARN("file end unpack fail");
+            return false;
+        }
+        APP_SYS_LOG_INFO("file transfer end code:%u", end.code);
+        return true;
+    }
+    APP_SYS_LOG_ERROR("file have unknown phase:%u", phase);
+    return false;
+}
+
 /*@brief 打包传输OTA升级
  */
 void app_json_xfer_notify_ota(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_ota_tag,
-        .payload.ota = {
-            .cmd             = 1,
-            .state           = 0,
-            .ready_cond      = 0,
-        },
-    };
+    AppPB_MsgSet message = {0};
+    message.which_payload = AppPB_MsgSet_ota_tag;
+    app_module_protocol_test_fill_ota(&message.payload.ota);
     app_json_xfer_notify_msg(app_module_transfer_chan_low, &message);
 }
 

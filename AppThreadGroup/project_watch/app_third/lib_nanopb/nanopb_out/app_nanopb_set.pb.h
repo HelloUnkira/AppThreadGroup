@@ -45,6 +45,7 @@ typedef struct _AppPB_MsgSet {
         AppPB_SportMng sport_mng;
         AppPB_SportRcd sport_rcd;
         /* 文件消息:0x80~ */
+        AppPB_File file;
         AppPB_Ota ota;
     } payload;
 } AppPB_MsgSet;
@@ -82,6 +83,7 @@ extern "C" {
 #define AppPB_MsgSet_account_tag                 95
 #define AppPB_MsgSet_sport_mng_tag               96
 #define AppPB_MsgSet_sport_rcd_tag               97
+#define AppPB_MsgSet_file_tag                    128
 #define AppPB_MsgSet_ota_tag                     130
 
 /* Struct field encoding specification for nanopb */
@@ -109,6 +111,7 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,fem_cycle,payload.fem_cycle),  94) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,account,payload.account),  95) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sport_mng,payload.sport_mng),  96) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sport_rcd,payload.sport_rcd),  97) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,file,payload.file), 128) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ota,payload.ota), 130)
 #define AppPB_MsgSet_CALLBACK NULL
 #define AppPB_MsgSet_DEFAULT NULL
@@ -135,6 +138,7 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ota,payload.ota), 130)
 #define AppPB_MsgSet_payload_account_MSGTYPE AppPB_Account
 #define AppPB_MsgSet_payload_sport_mng_MSGTYPE AppPB_SportMng
 #define AppPB_MsgSet_payload_sport_rcd_MSGTYPE AppPB_SportRcd
+#define AppPB_MsgSet_payload_file_MSGTYPE AppPB_File
 #define AppPB_MsgSet_payload_ota_MSGTYPE AppPB_Ota
 
 extern const pb_msgdesc_t AppPB_MsgSet_msg;
@@ -143,7 +147,7 @@ extern const pb_msgdesc_t AppPB_MsgSet_msg;
 #define AppPB_MsgSet_fields &AppPB_MsgSet_msg
 
 /* Maximum encoded size of messages (where known) */
-#define AppPB_MsgSet_size                        362
+#define AppPB_MsgSet_size                        539
 
 #ifdef __cplusplus
 } /* extern "C" */

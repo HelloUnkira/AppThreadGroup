@@ -211,6 +211,29 @@ def main():
         all_messages.update(messages)
         all_msgtype.update(msgtype_map)
 
+    # 传递性跳过含 BYTES 的消息: 某消息(或其嵌套消息)含 BYTES 字段时其整体
+    # 无法用 JSON 表示,避免生成引用缺失子 pack/unpack 的坏代码(如 File 包裹 FilePkg)
+    has_bytes = set()
+    changed = True
+    while changed:
+        changed = False
+        for name in list(all_messages.keys()):
+            if name in has_bytes:
+                continue
+            for rule, ftype, fname, tag in all_messages[name]:
+                if ftype == 'BYTES':
+                    has_bytes.add(name)
+                    changed = True
+                    break
+                if ftype == 'MESSAGE':
+                    sub = all_msgtype.get('%s_%s' % (name, fname))
+                    if sub and sub in has_bytes:
+                        has_bytes.add(name)
+                        changed = True
+                        break
+    for name in has_bytes:
+        all_messages.pop(name, None)
+
     # 按依赖顺序: 嵌套消息先声明。简单起见按消息名排序
     names = sorted(all_messages.keys())
 

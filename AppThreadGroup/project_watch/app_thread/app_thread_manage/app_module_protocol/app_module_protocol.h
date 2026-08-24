@@ -26,6 +26,9 @@ typedef enum {
     app_module_protocol_account,
     app_module_protocol_sport_mng,
     app_module_protocol_sport_rcd,
+    app_module_protocol_file,
+    app_module_protocol_file_step,   /* 文件传输限速发包步进(内部使用) */
+    app_module_protocol_ctrl_step,   /* 通用确认引擎ack轮询步进(内部使用) */
     app_module_protocol_ota,
 } app_module_protocol_notify_type_t;
 

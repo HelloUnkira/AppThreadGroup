@@ -1,8 +1,10 @@
 #ifndef APP_PROTOCOL_LIB_H
 #define APP_PROTOCOL_LIB_H
 
-#if 0
-#elif APP_MODULE_PROTOCOL_USE_JSON
+/* 公共:xfer文件基础 */
+#include "app_module_xfer_file.h"
+
+#if APP_MODULE_PROTOCOL_USE_JSON
 #include "cJSON.h"
 #include "app_nanopb_set.pb.h"
 #include "app_json_xfer.h"
@@ -17,8 +19,10 @@
 #include "app_nanopb_xfer_sys.h"
 #include "app_nanopb_xfer_func.h"
 #include "app_nanopb_xfer_flie.h"
-#else
-#error "app protocol is unknown"
+#include "app_nanopb_xfer_ctrl.h"
 #endif
+
+#include "app_module_protocol_test.h"
+#include "app_module_protocol_test_data.h"
 
 #endif

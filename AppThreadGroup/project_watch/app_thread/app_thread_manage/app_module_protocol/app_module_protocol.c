@@ -4,7 +4,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL     1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -152,6 +152,18 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
          app_json_xfer_notify_sport_rcd();
          break;
     }
+    case app_module_protocol_file: {
+         app_json_xfer_notify_file();
+         break;
+    }
+    case app_module_protocol_file_step: {
+         app_json_xfer_file_step();
+         break;
+    }
+    case app_module_protocol_ctrl_step: {
+         app_json_xfer_ctrl_step();
+         break;
+    }
     case app_module_protocol_ota: {
          app_json_xfer_notify_ota();
          break;
@@ -255,6 +267,18 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
          app_nanopb_xfer_notify_sport_rcd();
          break;
     }
+    case app_module_protocol_file: {
+         app_nanopb_xfer_notify_file();
+         break;
+    }
+    case app_module_protocol_file_step: {
+         app_nanopb_xfer_file_step();
+         break;
+    }
+    case app_module_protocol_ctrl_step: {
+         app_nanopb_xfer_ctrl_step();
+         break;
+    }
     case app_module_protocol_ota: {
          app_nanopb_xfer_notify_ota();
          break;
@@ -306,6 +330,8 @@ void app_module_protocol_ready(void)
     };
     cJSON_InitHooks(&cjson_hooks);
     #elif APP_MODULE_PROTOCOL_USE_NANOPB
+    /* 注入通用文件传输引擎的nanopb原语 */
+    app_nanopb_xfer_file_init();
     #else
     #error "app module protocol is unknown"
     #endif

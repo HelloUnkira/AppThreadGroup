@@ -4,7 +4,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL     1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -33,10 +33,8 @@ static void app_module_transfer_respond_timeout_timer_handler(void *timer)
  */
 static inline uint32_t app_module_transfer_max_size(app_module_transfer_chan_t channel)
 {
-    if (channel == app_module_transfer_chan_low)
-        return 20;
-    if (channel == app_module_transfer_chan_high)
-        return 255;
+    if (channel == app_module_transfer_chan_low)  return 20;
+    if (channel == app_module_transfer_chan_high) return 255;
 }
 
 /*@brief 接收协议数据并拆包发送

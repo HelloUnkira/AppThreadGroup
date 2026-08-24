@@ -20,7 +20,9 @@ typedef enum _AppPB_ACK_ErrorCode {
 /* Struct definitions */
 /* 辅助应答消息 */
 typedef struct _AppPB_ACK {
-    AppPB_ACK_ErrorCode error_code;
+    AppPB_ACK_ErrorCode error_code; /* 当次应答错误码 */
+    uint16_t type; /* 应答消息类型:小协议=MsgSet oneof tag;文件=File子消息tag(descriptor=1/package=2/done=3) */
+    uint16_t index; /* 应答对象索引(文件分包拉取游标/重传索引),非文件默认0 */
 } AppPB_ACK;
 
 /* 追踪日志消息文本最大限制 APP_MODULE_TRACE_TEXT_MAX + 1 */
@@ -43,18 +45,22 @@ extern "C" {
 
 
 /* Initializer values for message structs */
-#define AppPB_ACK_init_default                   {_AppPB_ACK_ErrorCode_MIN}
+#define AppPB_ACK_init_default                   {_AppPB_ACK_ErrorCode_MIN, 0, 0}
 #define AppPB_TraceTxt_init_default              {""}
-#define AppPB_ACK_init_zero                      {_AppPB_ACK_ErrorCode_MIN}
+#define AppPB_ACK_init_zero                      {_AppPB_ACK_ErrorCode_MIN, 0, 0}
 #define AppPB_TraceTxt_init_zero                 {""}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define AppPB_ACK_error_code_tag                 1
+#define AppPB_ACK_type_tag                       2
+#define AppPB_ACK_index_tag                      3
 #define AppPB_TraceTxt_trace_text_tag            1
 
 /* Struct field encoding specification for nanopb */
 #define AppPB_ACK_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, UENUM,    error_code,        1)
+X(a, STATIC,   SINGULAR, UENUM,    error_code,        1) \
+X(a, STATIC,   SINGULAR, UINT64,   type,              2) \
+X(a, STATIC,   SINGULAR, UINT64,   index,             3)
 #define AppPB_ACK_CALLBACK NULL
 #define AppPB_ACK_DEFAULT NULL
 
@@ -71,7 +77,7 @@ extern const pb_msgdesc_t AppPB_TraceTxt_msg;
 #define AppPB_TraceTxt_fields &AppPB_TraceTxt_msg
 
 /* Maximum encoded size of messages (where known) */
-#define AppPB_ACK_size                           2
+#define AppPB_ACK_size                           10
 #define AppPB_TraceTxt_size                      131
 
 #ifdef __cplusplus

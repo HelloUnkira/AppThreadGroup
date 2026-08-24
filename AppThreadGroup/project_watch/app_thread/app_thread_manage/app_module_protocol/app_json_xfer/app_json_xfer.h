@@ -5,6 +5,10 @@
 
 #include "app_nanopb_set.pb.h"
 
+/* 文件传输阶段:json元数据载荷,与nanopb子协议保持语义一致 */
+#define APP_JSON_XFER_FILE_PHASE_START   0   /* 开始(描述符) */
+#define APP_JSON_XFER_FILE_PHASE_END     1   /* 结束 */
+
 /* JSON消息类型,与nanopb协议tag值保持一致 */
 typedef enum {
     app_json_xfer_msg_is_default      = 0x0000,
@@ -31,6 +35,7 @@ typedef enum {
     app_json_xfer_msg_is_account      = 0x005f,
     app_json_xfer_msg_is_sport_mng    = 0x0060,
     app_json_xfer_msg_is_sport_rcd    = 0x0061,
+    app_json_xfer_msg_is_file         = 0x0080,
     app_json_xfer_msg_is_ota          = 0x0082,
 } app_json_xfer_msg_type_t;
 
@@ -104,6 +109,9 @@ bool app_json_xfer_respond_sport_mng(AppPB_MsgSet *message);
 void app_json_xfer_notify_sport_rcd(void);
 bool app_json_xfer_respond_sport_rcd(AppPB_MsgSet *message);
 /* 文件消息 */
+void app_json_xfer_notify_file(void);
+void app_json_xfer_file_step(void);
+bool app_json_xfer_respond_file(cJSON *payload, uint32_t phase);
 void app_json_xfer_notify_ota(void);
 bool app_json_xfer_respond_ota(AppPB_MsgSet *message);
 

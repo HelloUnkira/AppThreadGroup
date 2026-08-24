@@ -1,14 +1,12 @@
 #ifndef APP_MODULE_TRANSFER_H
 #define APP_MODULE_TRANSFER_H
 
-/* 协议传输缓冲区最大块 */
-#define APP_MODULE_TRANSFER_BLOCK   1024
-
+/* 传输缓冲块 */
+#define APP_MODULE_TRANSFER_BLOCK               1024
 /* 传输接收超时 */
-#define APP_MODULE_TRANSFER_RESPOND_TIMEOUT 3000
+#define APP_MODULE_TRANSFER_RESPOND_TIMEOUT     3000
 
-/* 传输信道 */
-/* 不同的信道对应不同的底层传输媒介 */
+/* 传输信道:不同信道对应不同底层传输媒介 */
 typedef enum {
     app_module_transfer_chan_low = 0,   /* 低速传输信道,默认信道 */
     app_module_transfer_chan_high,      /* 高速传输信道 */

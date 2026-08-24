@@ -25,6 +25,20 @@ def nanopb_recuse_build(path) -> None:
             nanopb_recuse_build(path + '\\' + item)
 
 
+def nanopb_to_crlf(out_dir) -> None:
+    """将生成目录下的 .pb.h/.pb.c 统一转为 CRLF 行尾(P0 强规则,禁止 LF-only)"""
+    for root, _dirs, files in os.walk(out_dir):
+        for item in files:
+            if not (item.endswith('.pb.h') or item.endswith('.pb.c')):
+                continue
+            path = os.path.join(root, item)
+            with open(path, 'rb') as fp:
+                data = fp.read()
+            data = data.replace(b'\r\n', b'\n').replace(b'\n', b'\r\n')
+            with open(path, 'wb') as fp:
+                fp.write(data)
+
+
 if __name__ == '__main__':
     if not os.path.exists(r'.\nanopb_x86'):
         with zipfile.ZipFile('nanopb_x86.zip', 'r') as zip_src:
@@ -32,4 +46,5 @@ if __name__ == '__main__':
     if not os.path.exists(r'.\nanopb_out'):
         os.makedirs(r'.\nanopb_out')
     nanopb_recuse_build(r'.\nanopb_src')
+    nanopb_to_crlf(r'.\nanopb_out')
     print('nanopb protoc recuse build finish')

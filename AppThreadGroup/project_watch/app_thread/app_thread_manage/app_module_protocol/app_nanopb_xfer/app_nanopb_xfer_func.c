@@ -3,7 +3,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL     1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -16,18 +16,13 @@
  */
 void app_nanopb_xfer_notify_alarm(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_alarm_tag,
-        .payload.alarm = {
-            .index  = 0,
-            .repeat = 0x3E,
-            .on     = 1,
-            .hour   = 7,
-            .min    = 30,
-            .name   = "wakeup",
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_alarm(&message);
+#else
+    message.which_payload = AppPB_MsgSet_alarm_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收闹钟
@@ -48,27 +43,13 @@ bool app_nanopb_xfer_respond_alarm(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_weather(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_weather_tag,
-        .payload.weather = {
-            .temp_cur = 26,
-            .temp_max = 31,
-            .temp_min = 22,
-            .phen     = 1,
-            .humi     = 60,
-            .uv       = 5,
-            .pm25     = 35,
-            .aqi      = 45,
-            .city     = "shenzhen",
-            .day_count = 3,
-            .day = {
-                { .temp_max = 31, .temp_min = 22, .phen = 1, .humi = 60 },
-                { .temp_max = 30, .temp_min = 21, .phen = 2, .humi = 65 },
-                { .temp_max = 29, .temp_min = 20, .phen = 1, .humi = 70 },
-            },
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_weather(&message);
+#else
+    message.which_payload = AppPB_MsgSet_weather_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收天气
@@ -90,19 +71,13 @@ bool app_nanopb_xfer_respond_weather(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_heart_rate(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_heart_rate_tag,
-        .payload.heart_rate = {
-            .is_auto     = 1,
-            .lwarn_on    = 1,
-            .hwarn_on    = 1,
-            .lwarn       = 50,
-            .hwarn       = 120,
-            .test_min    = 30,
-            .static_type = 0,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_heart_rate(&message);
+#else
+    message.which_payload = AppPB_MsgSet_heart_rate_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收心率参数
@@ -121,18 +96,13 @@ bool app_nanopb_xfer_respond_heart_rate(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_music(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_music_tag,
-        .payload.music = {
-            .singer    = "Jay",
-            .song_name = "Cloud",
-            .play_st   = 1,
-            .max_vol   = 10,
-            .cur_vol   = 6,
-            .app_st    = 1,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_music(&message);
+#else
+    message.which_payload = AppPB_MsgSet_music_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收音乐
@@ -152,18 +122,13 @@ bool app_nanopb_xfer_respond_music(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_msg_info(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_msg_info_tag,
-        .payload.msg_info = {
-            .app_name = "wechat",
-            .contact  = "tom",
-            .content  = "hello",
-            .msg_id   = 1,
-            .msg_type = 1,
-            .vibrate  = 1,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_msg_info(&message);
+#else
+    message.which_payload = AppPB_MsgSet_msg_info_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收消息通知
@@ -183,17 +148,13 @@ bool app_nanopb_xfer_respond_msg_info(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_contact(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_contact_tag,
-        .payload.contact = {
-            .name      = "tom",
-            .name_len  = 3,
-            .phone     = "13800138000",
-            .phone_len = 11,
-            .state     = 1,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_contact(&message);
+#else
+    message.which_payload = AppPB_MsgSet_contact_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收联系人
@@ -211,18 +172,13 @@ bool app_nanopb_xfer_respond_contact(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_sport_tgt(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_sport_tgt_tag,
-        .payload.sport_tgt = {
-            .motion_t  = 1,
-            .goal_type = 1,
-            .step      = 10000,
-            .kcal      = 500,
-            .meter     = 8000,
-            .duration  = 7200,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_sport_tgt(&message);
+#else
+    message.which_payload = AppPB_MsgSet_sport_tgt_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收运动目标
@@ -241,20 +197,13 @@ bool app_nanopb_xfer_respond_sport_tgt(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_user_phys(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_user_phys_tag,
-        .payload.user_phys = {
-            .age        = 30,
-            .birthday   = 0,
-            .gender     = 1,
-            .height     = 175,
-            .weight     = 65,
-            .vo2max     = 45,
-            .run_step   = 80,
-            .walk_step  = 70,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_user_phys(&message);
+#else
+    message.which_payload = AppPB_MsgSet_user_phys_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收用户身体信息
@@ -273,19 +222,13 @@ bool app_nanopb_xfer_respond_user_phys(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_motion_sum(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_motion_sum_tag,
-        .payload.motion_sum = {
-            .hr_value   = 75,
-            .hr_ts      = 0,
-            .kcal       = 300,
-            .distance   = 5000,
-            .elevation  = 100,
-            .sleep_time = 480,
-            .step       = 8000,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_motion_sum(&message);
+#else
+    message.which_payload = AppPB_MsgSet_motion_sum_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收运动汇总
@@ -304,18 +247,13 @@ bool app_nanopb_xfer_respond_motion_sum(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_sport_state(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_sport_state_tag,
-        .payload.sport_state = {
-            .monitor_st   = 0,
-            .operator_t   = 0,
-            .sport_type   = 1,
-            .start_time   = 0,
-            .workout_type = 1,
-            .op_time      = 0,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_sport_state(&message);
+#else
+    message.which_payload = AppPB_MsgSet_sport_state_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收运动状态
@@ -333,18 +271,13 @@ bool app_nanopb_xfer_respond_sport_state(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_not_disturb(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_not_disturb_tag,
-        .payload.not_disturb = {
-            .on     = 1,
-            .shour  = 22,
-            .smin   = 0,
-            .ehour  = 7,
-            .emin   = 0,
-            .repeat = 0x7F,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_not_disturb(&message);
+#else
+    message.which_payload = AppPB_MsgSet_not_disturb_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收勿扰
@@ -365,22 +298,13 @@ bool app_nanopb_xfer_respond_not_disturb(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_position(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_position_tag,
-        .payload.position = {
-            .speed      = 10,
-            .distance   = 1000,
-            .altitude   = 30,
-            .total_dist = 10000,
-            .start_time = 0,
-            .end_time   = 0,
-            .latitude   = 22540000,
-            .longitude  = 114000000,
-            .bearing    = 90,
-            .accuracy   = 5,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_position(&message);
+#else
+    message.which_payload = AppPB_MsgSet_position_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收地理位置
@@ -400,21 +324,13 @@ bool app_nanopb_xfer_respond_position(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_fem_cycle(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_fem_cycle_tag,
-        .payload.fem_cycle = {
-            .remind_sw         = 1,
-            .menstr_remind     = 1,
-            .menstr_end_remind = 1,
-            .ovulat_remind     = 0,
-            .ovulat_end_remind = 0,
-            .cycle_start       = 0,
-            .cycle_end         = 0,
-            .keep_days         = 5,
-            .cycle_days        = 28,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_fem_cycle(&message);
+#else
+    message.which_payload = AppPB_MsgSet_fem_cycle_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收生理周期
@@ -432,16 +348,13 @@ bool app_nanopb_xfer_respond_fem_cycle(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_account(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_account_tag,
-        .payload.account = {
-            .account    = "user01",
-            .acc_len    = 6,
-            .pair_state = 1,
-            .app_role   = 1,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_account(&message);
+#else
+    message.which_payload = AppPB_MsgSet_account_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收账户
@@ -459,16 +372,13 @@ bool app_nanopb_xfer_respond_account(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_sport_mng(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_sport_mng_tag,
-        .payload.sport_mng = {
-            .max_add_num    = 10,
-            .min_add_num    = 1,
-            .sport_type_count = 3,
-            .sport_type     = { 1, 2, 3 },
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_sport_mng(&message);
+#else
+    message.which_payload = AppPB_MsgSet_sport_mng_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收运动管理
@@ -486,22 +396,13 @@ bool app_nanopb_xfer_respond_sport_mng(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_sport_rcd(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_sport_rcd_tag,
-        .payload.sport_rcd = {
-            .id         = 1,
-            .status     = 1,
-            .start_time = 0,
-            .end_time   = 3600,
-            .calorie    = 300,
-            .distance   = 5000,
-            .step       = 6000,
-            .duration   = 3600,
-            .speed      = 10,
-            .type       = 1,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_sport_rcd(&message);
+#else
+    message.which_payload = AppPB_MsgSet_sport_rcd_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收运动记录
@@ -539,7 +440,7 @@ void app_nanopb_xfer_notify_system_clock(void)
         },
     };
     /* 传输对象发送通知 */
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收系统时钟
@@ -575,17 +476,13 @@ bool app_nanopb_xfer_respond_system_clock(AppPB_MsgSet *message)
  */
 void app_nanopb_xfer_notify_world_clock(void)
 {
-    AppPB_MsgSet message = {
-        .which_payload = AppPB_MsgSet_world_clock_tag,
-        .payload.world_clock = {
-            .now_index   = 0,
-            .max_count   = 1,
-            .city_name   = "Beijing",
-            .zone_offset = 8 * 3600,
-            .city_id     = 0,
-        },
-    };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    AppPB_MsgSet message = {0};
+#if APP_MODULE_PROTOCOL_TEST_ENABLE
+    app_module_protocol_test_fill_world_clock(&message);
+#else
+    message.which_payload = AppPB_MsgSet_world_clock_tag;
+#endif
+    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收世界时钟

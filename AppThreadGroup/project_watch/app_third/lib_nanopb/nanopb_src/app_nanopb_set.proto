@@ -40,6 +40,7 @@ message AppPB_MsgSet {
         AppPB_SportMng     sport_mng      = 0x0060;
         AppPB_SportRcd     sport_rcd      = 0x0061;
         /* 文件消息:0x80~ */
+        AppPB_File         file           = 0x0080;
         AppPB_Ota          ota            = 0x0082;
     }
 }

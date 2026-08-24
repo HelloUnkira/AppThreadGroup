@@ -15,7 +15,9 @@ message AppPB_ACK {
         CHK_FAILED  = 0x02;     //CheckSum校验失败
     }
     
-    ErrorCode  error_code = 1;
+    ErrorCode  error_code = 1;                                     //当次应答错误码
+    uint64     type       = 2 [(nanopb).int_size = IS_16];         //应答消息类型:小协议=MsgSet oneof tag;文件=File子消息tag(descriptor=1/package=2/done=3)
+    uint64     index      = 3 [(nanopb).int_size = IS_16];         //应答对象索引(文件分包拉取游标/重传索引),非文件默认0
 }
 
 /* 传输日志消息 */
