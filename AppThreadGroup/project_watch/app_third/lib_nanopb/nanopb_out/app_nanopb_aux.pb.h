@@ -10,25 +10,51 @@
 #endif
 
 /* Enum definitions */
-/* 当次应答错误码 */
-typedef enum _AppPB_ACK_ErrorCode {
-    AppPB_ACK_ErrorCode_SUCCEED = 0, /* 无错误,应答成功 */
-    AppPB_ACK_ErrorCode_CRC_FAILED = 1, /* CRC校验失败 */
-    AppPB_ACK_ErrorCode_CHK_FAILED = 2 /* CheckSum校验失败 */
-} AppPB_ACK_ErrorCode;
+/* 错误码(错误类型) */
+typedef enum _AppPB_ACK_Code {
+    AppPB_ACK_Code_SUCCEED = 0, /* 应答成功 */
+    AppPB_ACK_Code_CRC_FAILED = 1, /* CRC校验失败 */
+    AppPB_ACK_Code_CHK_FAILED = 2, /* CheckSum校验失败 */
+    AppPB_ACK_Code_PKG_INVALID = 3 /* 分包无效(包错误) */
+} AppPB_ACK_Code;
+
+/* 子类型 */
+typedef enum _AppPB_ACK_Type {
+    AppPB_ACK_Type_MINI_MSG = 0, /* 小消息 */
+    AppPB_ACK_Type_FILE_MSG = 1 /* 文件消息 */
+} AppPB_ACK_Type;
+
+/* 关键消息(请求语义) */
+typedef enum _AppPB_ACK_Info {
+    AppPB_ACK_Info_NO_QUESTION = 0, /* 无疑问 */
+    AppPB_ACK_Info_REQUEST_REPEAT = 1 /* 要求重发 */
+} AppPB_ACK_Info;
+
+/* 请求读取的文件类型 */
+typedef enum _AppPB_Sync_Type {
+    AppPB_Sync_Type_SYNC_FT_NONE = 0, /* 不读文件,读普通消息 */
+    AppPB_Sync_Type_SYNC_FT_LOG = 1, /* 日志文件 */
+    AppPB_Sync_Type_SYNC_FT_FW = 2, /* 固件文件 */
+    AppPB_Sync_Type_SYNC_FT_CWF = 3, /* 云表盘文件 */
+    AppPB_Sync_Type_SYNC_FT_SWF = 4 /* 息屏表盘文件 */
+} AppPB_Sync_Type;
 
 /* Struct definitions */
 /* 辅助应答消息 */
 typedef struct _AppPB_ACK {
-    AppPB_ACK_ErrorCode error_code; /* 当次应答错误码 */
-    uint16_t type; /* 应答消息类型:小协议=MsgSet oneof tag;文件=File子消息tag(descriptor=1/package=2/done=3) */
-    uint16_t index; /* 应答对象索引(文件分包拉取游标/重传索引),非文件默认0 */
+    AppPB_ACK_Code code; /* 应答错误码 */
+    AppPB_ACK_Type type; /* 应答类别 */
+    AppPB_ACK_Info info; /* 关键消息 */
+    /* message编码: */
+    uint16_t msg;
 } AppPB_ACK;
 
-/* 追踪日志消息文本最大限制 APP_MODULE_TRACE_TEXT_MAX + 1 */
-typedef struct _AppPB_TraceTxt {
-    char trace_text[129]; /* 单条传输文本消息 */
-} AppPB_TraceTxt;
+/* 辅助同步消息(读请求) */
+typedef struct _AppPB_Sync {
+    AppPB_Sync_Type type;
+    /* message编码: */
+    uint16_t msg;
+} AppPB_Sync;
 
 
 #ifdef __cplusplus
@@ -36,49 +62,68 @@ extern "C" {
 #endif
 
 /* Helper constants for enums */
-#define _AppPB_ACK_ErrorCode_MIN AppPB_ACK_ErrorCode_SUCCEED
-#define _AppPB_ACK_ErrorCode_MAX AppPB_ACK_ErrorCode_CHK_FAILED
-#define _AppPB_ACK_ErrorCode_ARRAYSIZE ((AppPB_ACK_ErrorCode)(AppPB_ACK_ErrorCode_CHK_FAILED+1))
+#define _AppPB_ACK_Code_MIN AppPB_ACK_Code_SUCCEED
+#define _AppPB_ACK_Code_MAX AppPB_ACK_Code_PKG_INVALID
+#define _AppPB_ACK_Code_ARRAYSIZE ((AppPB_ACK_Code)(AppPB_ACK_Code_PKG_INVALID+1))
 
-#define AppPB_ACK_error_code_ENUMTYPE AppPB_ACK_ErrorCode
+#define _AppPB_ACK_Type_MIN AppPB_ACK_Type_MINI_MSG
+#define _AppPB_ACK_Type_MAX AppPB_ACK_Type_FILE_MSG
+#define _AppPB_ACK_Type_ARRAYSIZE ((AppPB_ACK_Type)(AppPB_ACK_Type_FILE_MSG+1))
 
+#define _AppPB_ACK_Info_MIN AppPB_ACK_Info_NO_QUESTION
+#define _AppPB_ACK_Info_MAX AppPB_ACK_Info_REQUEST_REPEAT
+#define _AppPB_ACK_Info_ARRAYSIZE ((AppPB_ACK_Info)(AppPB_ACK_Info_REQUEST_REPEAT+1))
+
+#define _AppPB_Sync_Type_MIN AppPB_Sync_Type_SYNC_FT_NONE
+#define _AppPB_Sync_Type_MAX AppPB_Sync_Type_SYNC_FT_SWF
+#define _AppPB_Sync_Type_ARRAYSIZE ((AppPB_Sync_Type)(AppPB_Sync_Type_SYNC_FT_SWF+1))
+
+#define AppPB_ACK_code_ENUMTYPE AppPB_ACK_Code
+#define AppPB_ACK_type_ENUMTYPE AppPB_ACK_Type
+#define AppPB_ACK_info_ENUMTYPE AppPB_ACK_Info
+
+#define AppPB_Sync_type_ENUMTYPE AppPB_Sync_Type
 
 
 /* Initializer values for message structs */
-#define AppPB_ACK_init_default                   {_AppPB_ACK_ErrorCode_MIN, 0, 0}
-#define AppPB_TraceTxt_init_default              {""}
-#define AppPB_ACK_init_zero                      {_AppPB_ACK_ErrorCode_MIN, 0, 0}
-#define AppPB_TraceTxt_init_zero                 {""}
+#define AppPB_ACK_init_default                   {_AppPB_ACK_Code_MIN, _AppPB_ACK_Type_MIN, _AppPB_ACK_Info_MIN, 0}
+#define AppPB_Sync_init_default                  {_AppPB_Sync_Type_MIN, 0}
+#define AppPB_ACK_init_zero                      {_AppPB_ACK_Code_MIN, _AppPB_ACK_Type_MIN, _AppPB_ACK_Info_MIN, 0}
+#define AppPB_Sync_init_zero                     {_AppPB_Sync_Type_MIN, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define AppPB_ACK_error_code_tag                 1
+#define AppPB_ACK_code_tag                       1
 #define AppPB_ACK_type_tag                       2
-#define AppPB_ACK_index_tag                      3
-#define AppPB_TraceTxt_trace_text_tag            1
+#define AppPB_ACK_info_tag                       3
+#define AppPB_ACK_msg_tag                        4
+#define AppPB_Sync_type_tag                      1
+#define AppPB_Sync_msg_tag                       2
 
 /* Struct field encoding specification for nanopb */
 #define AppPB_ACK_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, UENUM,    error_code,        1) \
-X(a, STATIC,   SINGULAR, UINT64,   type,              2) \
-X(a, STATIC,   SINGULAR, UINT64,   index,             3)
+X(a, STATIC,   SINGULAR, UENUM,    code,              1) \
+X(a, STATIC,   SINGULAR, UENUM,    type,              2) \
+X(a, STATIC,   SINGULAR, UENUM,    info,              3) \
+X(a, STATIC,   SINGULAR, UINT32,   msg,               4)
 #define AppPB_ACK_CALLBACK NULL
 #define AppPB_ACK_DEFAULT NULL
 
-#define AppPB_TraceTxt_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, STRING,   trace_text,        1)
-#define AppPB_TraceTxt_CALLBACK NULL
-#define AppPB_TraceTxt_DEFAULT NULL
+#define AppPB_Sync_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UENUM,    type,              1) \
+X(a, STATIC,   SINGULAR, UINT32,   msg,               2)
+#define AppPB_Sync_CALLBACK NULL
+#define AppPB_Sync_DEFAULT NULL
 
 extern const pb_msgdesc_t AppPB_ACK_msg;
-extern const pb_msgdesc_t AppPB_TraceTxt_msg;
+extern const pb_msgdesc_t AppPB_Sync_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
 #define AppPB_ACK_fields &AppPB_ACK_msg
-#define AppPB_TraceTxt_fields &AppPB_TraceTxt_msg
+#define AppPB_Sync_fields &AppPB_Sync_msg
 
 /* Maximum encoded size of messages (where known) */
 #define AppPB_ACK_size                           10
-#define AppPB_TraceTxt_size                      131
+#define AppPB_Sync_size                          6
 
 #ifdef __cplusplus
 } /* extern "C" */

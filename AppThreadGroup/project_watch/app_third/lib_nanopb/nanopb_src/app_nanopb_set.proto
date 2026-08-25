@@ -4,8 +4,8 @@ option optimize_for = LITE_RUNTIME;
 option java_package = "com.message_set.nanopb";
 option java_outer_classname = "AppPB_MsgSetProto";
 /* 依赖包 */
+import "nanopb.proto";
 import "app_nanopb_aux.proto";
-import "app_nanopb_sys.proto";
 import "app_nanopb_func.proto";
 import "app_nanopb_flie.proto";
 
@@ -15,8 +15,8 @@ message AppPB_MsgSet {
     oneof payload {
         /* 内部消息:0x01~0x20 */
         AppPB_ACK          ack            = 0x0001;
-        /* 系统消息:0x21~0x50 */
-        AppPB_TraceTxt     trace_text     = 0x0021;
+        AppPB_Sync         sync           = 0x0002;
+        /* 系统消息:0x30~0x4f */
         AppPB_DevInfo      device_info    = 0x0030;
         AppPB_DevParam     device_param   = 0x0031;
         AppPB_ElecCard     elec_card      = 0x0032;
@@ -41,6 +41,7 @@ message AppPB_MsgSet {
         AppPB_SportRcd     sport_rcd      = 0x0061;
         /* 文件消息:0x80~ */
         AppPB_File         file           = 0x0080;
-        AppPB_Ota          ota            = 0x0082;
     }
+    /* 整包统一校验:包合并后对整包序列化计算 */
+    uint64 crc8 = 3 [(nanopb).int_size = IS_8];
 }

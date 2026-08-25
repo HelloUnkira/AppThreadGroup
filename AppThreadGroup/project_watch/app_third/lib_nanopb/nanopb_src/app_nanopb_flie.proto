@@ -6,42 +6,76 @@ option java_outer_classname = "AppPB_MsgFileProto";
 /* 依赖包 */
 import "nanopb.proto";
 
-/* 文件扩展消息 */
-message AppPB_FileDes {
-    string  name  = 1 [(nanopb).max_size = 256];     //包括路径和尾缀
-    uint64  utc64 = 2 [(nanopb).int_size = IS_64];   //文件UTC64修改时间
-    uint64  crc32 = 3 [(nanopb).int_size = IS_32];   //文件CRC32校验
-    uint64  size  = 4 [(nanopb).int_size = IS_32];   //文件总大小
-    uint64  crc8  = 5 [(nanopb).int_size = IS_8];    //描述符CRC8校验
+/* 文件传输字 */
+message AppPB_FileXFer {
+    /* 传输类型 */
+    enum Type {
+        FILE_XFER  = 0;     //传输通知
+        FILE_START = 1;     //传输开始
+        FILE_END   = 2;     //传输结束
+        FILE_STATE = 3;     //状态同步(对端期望续传位置)
+    }
+    /* 传输结果 */
+    enum Code {
+        XFER_OK         = 0;     //传输成功
+        XFER_ERR_CHK    = 1;     //校验失败
+        XFER_ERR_SIZE   = 2;     //长度不对
+        XFER_ERR_OTHER  = 3;     //其他
+    }
+    /* 升级命令(OTA) */
+    enum Cmd {
+        OTA_CANCEL    = 0;    //取消
+        OTA_CONTINUE  = 1;    //继续
+    }
+    /* 升级就绪条件 */
+    enum Cond {
+        READY        = 0;    //可升级
+        LOW_POWER    = 1;    //电量低
+        SAME_VERSION = 2;    //同版本
+        HIGH_TEMP    = 3;    //高温
+        OTA_OTHER    = 4;    //其他
+    }
+    /* 合并说明: OTA 属文件(FW)传输,其命令/就绪/状态一并归入"文件传输字" */
+    Type   type   = 1 [(nanopb).int_size = IS_8];  //传输状态
+    Code   code   = 2 [(nanopb).int_size = IS_8];  //传输结果
+    Cmd    cmd    = 3 [(nanopb).int_size = IS_8];  //升级命令
+    uint64 state  = 4 [(nanopb).int_size = IS_8];  //升级状态
+    Cond   cond   = 5 [(nanopb).int_size = IS_8];  //升级就绪条件
+    uint64 offset = 6 [(nanopb).int_size = IS_32]; //断点/进度偏移(分包传输出错时指示续传位置)
 }
 
-/* 文件分包消息 */
+/* 文件描述符 */
+message AppPB_FileDes {
+    /* 传输文件类型 */
+    enum TYPE {
+        FILE_IS_LOG = 0;    //日志
+        FILE_IS_FW  = 1;    //固件
+        FILE_IS_CWF = 2;    //云表盘
+        FILE_IS_SWF = 3;    //息屏表盘
+    }
+
+    TYPE    type  = 1 [(nanopb).int_size = IS_8];    //文件类型:接收方据此决定处理方式
+    string  name  = 2 [(nanopb).max_size = 256];     //含路径和尾缀
+    uint64  utc64 = 3 [(nanopb).int_size = IS_64];   //文件修改时间(UTC64)
+    uint64  size  = 4 [(nanopb).int_size = IS_32];   //文件总大小
+    uint64  crc8  = 5 [(nanopb).int_size = IS_8];    //文件整体CRC8校验
+    uint64  cks8  = 6 [(nanopb).int_size = IS_8];    //文件整体Checksum8校验
+}
+
+/* 文件分包 */
 message AppPB_FilePkg {
     uint64  index = 1 [(nanopb).int_size = IS_16];   //当前分包索引
     uint64  base  = 2 [(nanopb).int_size = IS_32];   //当前分包相对文件偏移
     uint64  size  = 3 [(nanopb).int_size = IS_16];   //当前分包数据流大小
-    uint64  crc8  = 4 [(nanopb).int_size = IS_8];    //当前分包CRC8校验
-    bytes   data  = 5 [(nanopb).max_size = 512];     //当前分包数据流
-}
-
-/* 文件传输结束消息 */
-message AppPB_FileEnd {
-    uint64  code = 1 [(nanopb).int_size = IS_8];    //传输结果(0成功/1校验失败/2其他)
+    bytes   data  = 4 [(nanopb).max_size = 512];     //当前分包数据流
 }
 
 /* 文件消息 */
 message AppPB_File {
     /* 单一性组合消息 */
     oneof payload {
-        AppPB_FileDes descriptor = 1;   //文件描述符(传输开始)
-        AppPB_FilePkg package    = 2;   //文件分包
-        AppPB_FileEnd done       = 3;   //文件传输结束
+        AppPB_FileXFer xfer  = 1;   //文件传输字(含状态同步)
+        AppPB_FileDes  des   = 2;   //文件描述符
+        AppPB_FilePkg  pkg   = 3;   //文件分包
     }
-}
-
-/* OTA升级消息(UTE 0xC8) */
-message AppPB_Ota {
-    uint64  cmd        = 1 [(nanopb).int_size = IS_8];  //升级命令(0取消/1继续)
-    uint64  state      = 2 [(nanopb).int_size = IS_8];  //状态
-    uint64  ready_cond = 3 [(nanopb).int_size = IS_8];  //就绪条件(0可/1电低/2同版/3高温/4其他)
 }

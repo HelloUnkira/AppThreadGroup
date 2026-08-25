@@ -292,6 +292,12 @@ uint8_t app_sys_crc8(uint8_t *data, uint32_t size);
  */
 uint32_t app_sys_checksum32(void *data, uint32_t size);
 
+/*@brief 计算数据流的checksum8校验
+ *@param data 数据流
+ *@param size 数据大小
+ */
+uint8_t app_sys_checksum8(void *data, uint32_t size);
+
 /*@brief 计算定积分
  *@param fun 函数
  *@param l 左区间

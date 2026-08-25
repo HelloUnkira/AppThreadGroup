@@ -17,6 +17,32 @@ typedef enum _AppPB_SysClock_Mode {
 } AppPB_SysClock_Mode;
 
 /* Struct definitions */
+/* 系统消息:设备信息(UTE 0xA4) */
+typedef struct _AppPB_DevInfo {
+    char model[16]; /* 设备型号 */
+    char hw_ver[16]; /* 硬件版本 */
+    char sw_ver[16]; /* 软件版本 */
+    char sn[32]; /* 序列号 */
+    char bt_addr[32]; /* 蓝牙地址 */
+    char pid[16]; /* 产品ID */
+    uint8_t battery; /* 电量 */
+} AppPB_DevInfo;
+
+/* 系统消息:设备参数(UTE 0xA5) */
+typedef struct _AppPB_DevParam {
+    uint8_t lang_id; /* 语言ID */
+    uint32_t zone; /* 时区 */
+    uint8_t is_12h; /* 12/24小时制 */
+    uint8_t is_mi; /* 距离单位(英里) */
+    uint8_t brt; /* 屏幕亮度 */
+} AppPB_DevParam;
+
+/* 系统消息:电子保卡(UTE 0xA2) */
+typedef struct _AppPB_ElecCard {
+    bool is_activate; /* 是否已激活 */
+    bool is_reported; /* 是否已上报 */
+} AppPB_ElecCard;
+
 /* 闹钟消息(UTE 0xC7, 最多MAX_ALARM_SUPPORT=5组) */
 typedef struct _AppPB_Alarm {
     uint8_t index; /* 闹钟索引 */
@@ -213,7 +239,7 @@ typedef struct _AppPB_SysClock {
     AppPB_SysClock_Mode mode; /* 系统时钟制式 */
 } AppPB_SysClock;
 
-/* 这里携带俩个额外的参数确定世界时钟数量以及当前世界时钟位置 */
+/* 世界时钟消息 */
 typedef struct _AppPB_WorldClock {
     uint8_t now_index; /* 世界时钟当前索引 */
     uint8_t max_count; /* 世界时钟数量 */
@@ -251,11 +277,17 @@ extern "C" {
 
 
 
+
+
+
 #define AppPB_SysClock_mode_ENUMTYPE AppPB_SysClock_Mode
 
 
 
 /* Initializer values for message structs */
+#define AppPB_DevInfo_init_default               {"", "", "", "", "", "", 0}
+#define AppPB_DevParam_init_default              {0, 0, 0, 0, 0}
+#define AppPB_ElecCard_init_default              {0, 0}
 #define AppPB_Alarm_init_default                 {0, 0, 0, 0, 0, ""}
 #define AppPB_Weather_init_default               {0, 0, 0, 0, 0, 0, 0, 0, "", 0, {AppPB_WeatherDay_init_default, AppPB_WeatherDay_init_default, AppPB_WeatherDay_init_default, AppPB_WeatherDay_init_default, AppPB_WeatherDay_init_default, AppPB_WeatherDay_init_default, AppPB_WeatherDay_init_default}}
 #define AppPB_WeatherDay_init_default            {0, 0, 0, 0}
@@ -275,6 +307,9 @@ extern "C" {
 #define AppPB_SportRcd_init_default              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 #define AppPB_SysClock_init_default              {0, 0, 0, 0, 0, 0, 0, _AppPB_SysClock_Mode_MIN}
 #define AppPB_WorldClock_init_default            {0, 0, "", 0, 0, 0, 0}
+#define AppPB_DevInfo_init_zero                  {"", "", "", "", "", "", 0}
+#define AppPB_DevParam_init_zero                 {0, 0, 0, 0, 0}
+#define AppPB_ElecCard_init_zero                 {0, 0}
 #define AppPB_Alarm_init_zero                    {0, 0, 0, 0, 0, ""}
 #define AppPB_Weather_init_zero                  {0, 0, 0, 0, 0, 0, 0, 0, "", 0, {AppPB_WeatherDay_init_zero, AppPB_WeatherDay_init_zero, AppPB_WeatherDay_init_zero, AppPB_WeatherDay_init_zero, AppPB_WeatherDay_init_zero, AppPB_WeatherDay_init_zero, AppPB_WeatherDay_init_zero}}
 #define AppPB_WeatherDay_init_zero               {0, 0, 0, 0}
@@ -296,6 +331,20 @@ extern "C" {
 #define AppPB_WorldClock_init_zero               {0, 0, "", 0, 0, 0, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
+#define AppPB_DevInfo_model_tag                  1
+#define AppPB_DevInfo_hw_ver_tag                 2
+#define AppPB_DevInfo_sw_ver_tag                 3
+#define AppPB_DevInfo_sn_tag                     4
+#define AppPB_DevInfo_bt_addr_tag                5
+#define AppPB_DevInfo_pid_tag                    6
+#define AppPB_DevInfo_battery_tag                7
+#define AppPB_DevParam_lang_id_tag               1
+#define AppPB_DevParam_zone_tag                  2
+#define AppPB_DevParam_is_12h_tag                3
+#define AppPB_DevParam_is_mi_tag                 4
+#define AppPB_DevParam_brt_tag                   5
+#define AppPB_ElecCard_is_activate_tag           1
+#define AppPB_ElecCard_is_reported_tag           2
 #define AppPB_Alarm_index_tag                    1
 #define AppPB_Alarm_repeat_tag                   2
 #define AppPB_Alarm_on_tag                       3
@@ -427,6 +476,32 @@ extern "C" {
 #define AppPB_WorldClock_city_id_tag             7
 
 /* Struct field encoding specification for nanopb */
+#define AppPB_DevInfo_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, STRING,   model,             1) \
+X(a, STATIC,   SINGULAR, STRING,   hw_ver,            2) \
+X(a, STATIC,   SINGULAR, STRING,   sw_ver,            3) \
+X(a, STATIC,   SINGULAR, STRING,   sn,                4) \
+X(a, STATIC,   SINGULAR, STRING,   bt_addr,           5) \
+X(a, STATIC,   SINGULAR, STRING,   pid,               6) \
+X(a, STATIC,   SINGULAR, UINT64,   battery,           7)
+#define AppPB_DevInfo_CALLBACK NULL
+#define AppPB_DevInfo_DEFAULT NULL
+
+#define AppPB_DevParam_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UINT64,   lang_id,           1) \
+X(a, STATIC,   SINGULAR, UINT64,   zone,              2) \
+X(a, STATIC,   SINGULAR, UINT64,   is_12h,            3) \
+X(a, STATIC,   SINGULAR, UINT64,   is_mi,             4) \
+X(a, STATIC,   SINGULAR, UINT64,   brt,               5)
+#define AppPB_DevParam_CALLBACK NULL
+#define AppPB_DevParam_DEFAULT NULL
+
+#define AppPB_ElecCard_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, BOOL,     is_activate,       1) \
+X(a, STATIC,   SINGULAR, BOOL,     is_reported,       2)
+#define AppPB_ElecCard_CALLBACK NULL
+#define AppPB_ElecCard_DEFAULT NULL
+
 #define AppPB_Alarm_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UINT64,   index,             1) \
 X(a, STATIC,   SINGULAR, UINT64,   repeat,            2) \
@@ -633,6 +708,9 @@ X(a, STATIC,   SINGULAR, UINT32,   city_id,           7)
 #define AppPB_WorldClock_CALLBACK NULL
 #define AppPB_WorldClock_DEFAULT NULL
 
+extern const pb_msgdesc_t AppPB_DevInfo_msg;
+extern const pb_msgdesc_t AppPB_DevParam_msg;
+extern const pb_msgdesc_t AppPB_ElecCard_msg;
 extern const pb_msgdesc_t AppPB_Alarm_msg;
 extern const pb_msgdesc_t AppPB_Weather_msg;
 extern const pb_msgdesc_t AppPB_WeatherDay_msg;
@@ -654,6 +732,9 @@ extern const pb_msgdesc_t AppPB_SysClock_msg;
 extern const pb_msgdesc_t AppPB_WorldClock_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
+#define AppPB_DevInfo_fields &AppPB_DevInfo_msg
+#define AppPB_DevParam_fields &AppPB_DevParam_msg
+#define AppPB_ElecCard_fields &AppPB_ElecCard_msg
 #define AppPB_Alarm_fields &AppPB_Alarm_msg
 #define AppPB_Weather_fields &AppPB_Weather_msg
 #define AppPB_WeatherDay_fields &AppPB_WeatherDay_msg
@@ -678,6 +759,9 @@ extern const pb_msgdesc_t AppPB_WorldClock_msg;
 #define AppPB_Account_size                       266
 #define AppPB_Alarm_size                         145
 #define AppPB_Contact_size                       174
+#define AppPB_DevInfo_size                       137
+#define AppPB_DevParam_size                      18
+#define AppPB_ElecCard_size                      4
 #define AppPB_FemCycle_size                      34
 #define AppPB_HeartRate_size                     22
 #define AppPB_MotionSum_size                     39

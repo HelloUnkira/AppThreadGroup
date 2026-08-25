@@ -5,7 +5,6 @@
 #define PB_APP_NANOPB_SET_PB_H_INCLUDED
 #include <pb.h>
 #include "app_nanopb_aux.pb.h"
-#include "app_nanopb_sys.pb.h"
 #include "app_nanopb_func.pb.h"
 #include "app_nanopb_flie.pb.h"
 
@@ -20,8 +19,8 @@ typedef struct _AppPB_MsgSet {
     union {
         /* 内部消息:0x01~0x20 */
         AppPB_ACK ack;
-        /* 系统消息:0x21~0x50 */
-        AppPB_TraceTxt trace_text;
+        AppPB_Sync sync;
+        /* 系统消息:0x30~0x4f */
         AppPB_DevInfo device_info;
         AppPB_DevParam device_param;
         AppPB_ElecCard elec_card;
@@ -46,8 +45,9 @@ typedef struct _AppPB_MsgSet {
         AppPB_SportRcd sport_rcd;
         /* 文件消息:0x80~ */
         AppPB_File file;
-        AppPB_Ota ota;
     } payload;
+    /* 整包统一校验:包合并后对整包序列化计算 */
+    uint8_t crc8;
 } AppPB_MsgSet;
 
 
@@ -56,12 +56,12 @@ extern "C" {
 #endif
 
 /* Initializer values for message structs */
-#define AppPB_MsgSet_init_default                {0, {AppPB_ACK_init_default}}
-#define AppPB_MsgSet_init_zero                   {0, {AppPB_ACK_init_zero}}
+#define AppPB_MsgSet_init_default                {0, {AppPB_ACK_init_default}, 0}
+#define AppPB_MsgSet_init_zero                   {0, {AppPB_ACK_init_zero}, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define AppPB_MsgSet_ack_tag                     1
-#define AppPB_MsgSet_trace_text_tag              33
+#define AppPB_MsgSet_sync_tag                    2
 #define AppPB_MsgSet_device_info_tag             48
 #define AppPB_MsgSet_device_param_tag            49
 #define AppPB_MsgSet_elec_card_tag               50
@@ -84,12 +84,13 @@ extern "C" {
 #define AppPB_MsgSet_sport_mng_tag               96
 #define AppPB_MsgSet_sport_rcd_tag               97
 #define AppPB_MsgSet_file_tag                    128
-#define AppPB_MsgSet_ota_tag                     130
+#define AppPB_MsgSet_crc8_tag                    3
 
 /* Struct field encoding specification for nanopb */
 #define AppPB_MsgSet_FIELDLIST(X, a) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ack,payload.ack),   1) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,trace_text,payload.trace_text),  33) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sync,payload.sync),   2) \
+X(a, STATIC,   SINGULAR, UINT64,   crc8,              3) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,device_info,payload.device_info),  48) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,device_param,payload.device_param),  49) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,elec_card,payload.elec_card),  50) \
@@ -111,12 +112,11 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,fem_cycle,payload.fem_cycle),  94) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,account,payload.account),  95) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sport_mng,payload.sport_mng),  96) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sport_rcd,payload.sport_rcd),  97) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,file,payload.file), 128) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ota,payload.ota), 130)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,file,payload.file), 128)
 #define AppPB_MsgSet_CALLBACK NULL
 #define AppPB_MsgSet_DEFAULT NULL
 #define AppPB_MsgSet_payload_ack_MSGTYPE AppPB_ACK
-#define AppPB_MsgSet_payload_trace_text_MSGTYPE AppPB_TraceTxt
+#define AppPB_MsgSet_payload_sync_MSGTYPE AppPB_Sync
 #define AppPB_MsgSet_payload_device_info_MSGTYPE AppPB_DevInfo
 #define AppPB_MsgSet_payload_device_param_MSGTYPE AppPB_DevParam
 #define AppPB_MsgSet_payload_elec_card_MSGTYPE AppPB_ElecCard
@@ -139,7 +139,6 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ota,payload.ota), 130)
 #define AppPB_MsgSet_payload_sport_mng_MSGTYPE AppPB_SportMng
 #define AppPB_MsgSet_payload_sport_rcd_MSGTYPE AppPB_SportRcd
 #define AppPB_MsgSet_payload_file_MSGTYPE AppPB_File
-#define AppPB_MsgSet_payload_ota_MSGTYPE AppPB_Ota
 
 extern const pb_msgdesc_t AppPB_MsgSet_msg;
 

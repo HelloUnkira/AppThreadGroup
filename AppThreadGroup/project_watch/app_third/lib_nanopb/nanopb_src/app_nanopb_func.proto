@@ -6,6 +6,32 @@ option java_outer_classname = "AppPB_MsgFuncProto";
 /* 依赖包 */
 import "nanopb.proto";
 
+/* 系统消息:设备信息(UTE 0xA4) */
+message AppPB_DevInfo {
+    string  model   = 1 [(nanopb).max_size = 16];   //设备型号
+    string  hw_ver  = 2 [(nanopb).max_size = 16];   //硬件版本
+    string  sw_ver  = 3 [(nanopb).max_size = 16];   //软件版本
+    string  sn      = 4 [(nanopb).max_size = 32];   //序列号
+    string  bt_addr = 5 [(nanopb).max_size = 32];   //蓝牙地址
+    string  pid     = 6 [(nanopb).max_size = 16];   //产品ID
+    uint64  battery = 7 [(nanopb).int_size = IS_8]; //电量
+}
+
+/* 系统消息:设备参数(UTE 0xA5) */
+message AppPB_DevParam {
+    uint64  lang_id = 1 [(nanopb).int_size = IS_8];  //语言ID
+    uint64  zone    = 2 [(nanopb).int_size = IS_32]; //时区
+    uint64  is_12h  = 3 [(nanopb).int_size = IS_8];  //12/24小时制
+    uint64  is_mi   = 4 [(nanopb).int_size = IS_8];  //距离单位(英里)
+    uint64  brt     = 5 [(nanopb).int_size = IS_8];  //屏幕亮度
+}
+
+/* 系统消息:电子保卡(UTE 0xA2) */
+message AppPB_ElecCard {
+    bool  is_activate = 1;   //是否已激活
+    bool  is_reported = 2;   //是否已上报
+}
+
 /* 闹钟消息(UTE 0xC7, 最多MAX_ALARM_SUPPORT=5组) */
 message AppPB_Alarm {
     uint64  index  = 1 [(nanopb).int_size = IS_8];   //闹钟索引
@@ -205,7 +231,6 @@ message AppPB_SysClock {
 }
 
 /* 世界时钟消息 */
-/* 这里携带俩个额外的参数确定世界时钟数量以及当前世界时钟位置 */
 message AppPB_WorldClock {
     uint32  now_index   = 1 [(nanopb).int_size = IS_8];     //世界时钟当前索引
     uint32  max_count   = 2 [(nanopb).int_size = IS_8];     //世界时钟数量

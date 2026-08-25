@@ -6,6 +6,15 @@
 #error Regenerate this file with the current version of nanopb generator.
 #endif
 
+PB_BIND(AppPB_DevInfo, AppPB_DevInfo, AUTO)
+
+
+PB_BIND(AppPB_DevParam, AppPB_DevParam, AUTO)
+
+
+PB_BIND(AppPB_ElecCard, AppPB_ElecCard, AUTO)
+
+
 PB_BIND(AppPB_Alarm, AppPB_Alarm, AUTO)
 
 

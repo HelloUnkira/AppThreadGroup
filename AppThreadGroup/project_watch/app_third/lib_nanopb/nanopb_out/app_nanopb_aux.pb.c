@@ -9,7 +9,10 @@
 PB_BIND(AppPB_ACK, AppPB_ACK, AUTO)
 
 
-PB_BIND(AppPB_TraceTxt, AppPB_TraceTxt, AUTO)
+PB_BIND(AppPB_Sync, AppPB_Sync, AUTO)
+
+
+
 
 
 

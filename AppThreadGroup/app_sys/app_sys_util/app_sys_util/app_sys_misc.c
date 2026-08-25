@@ -332,6 +332,18 @@ uint32_t app_sys_checksum32(void *data, uint32_t size)
     return checksum;
 }
 
+/*@brief 计算数据流的checksum8校验
+ *@param data 数据流
+ *@param size 数据大小
+ */
+uint8_t app_sys_checksum8(void *data, uint32_t size)
+{
+    uint8_t *data1 = (uint8_t *)data, checksum = 0;
+    for(uint32_t idx = 0; idx < size; idx++)
+        checksum += data1[idx];
+    return checksum;
+}
+
 /*@brief 计算定积分
  *@param fun 函数
  *@param l 左区间

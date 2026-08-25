@@ -9,91 +9,172 @@
 #error Regenerate this file with the current version of nanopb generator.
 #endif
 
+/* Enum definitions */
+/* 传输类型 */
+typedef enum _AppPB_FileXFer_Type {
+    AppPB_FileXFer_Type_FILE_XFER = 0, /* 传输通知 */
+    AppPB_FileXFer_Type_FILE_START = 1, /* 传输开始 */
+    AppPB_FileXFer_Type_FILE_END = 2, /* 传输结束 */
+    AppPB_FileXFer_Type_FILE_STATE = 3 /* 状态同步(对端期望续传位置) */
+} AppPB_FileXFer_Type;
+
+/* 传输结果 */
+typedef enum _AppPB_FileXFer_Code {
+    AppPB_FileXFer_Code_XFER_OK = 0, /* 传输成功 */
+    AppPB_FileXFer_Code_XFER_ERR_CHK = 1, /* 校验失败 */
+    AppPB_FileXFer_Code_XFER_ERR_SIZE = 2, /* 长度不对 */
+    AppPB_FileXFer_Code_XFER_ERR_OTHER = 3 /* 其他 */
+} AppPB_FileXFer_Code;
+
+/* 升级命令(OTA) */
+typedef enum _AppPB_FileXFer_Cmd {
+    AppPB_FileXFer_Cmd_OTA_CANCEL = 0, /* 取消 */
+    AppPB_FileXFer_Cmd_OTA_CONTINUE = 1 /* 继续 */
+} AppPB_FileXFer_Cmd;
+
+/* 升级就绪条件 */
+typedef enum _AppPB_FileXFer_Cond {
+    AppPB_FileXFer_Cond_READY = 0, /* 可升级 */
+    AppPB_FileXFer_Cond_LOW_POWER = 1, /* 电量低 */
+    AppPB_FileXFer_Cond_SAME_VERSION = 2, /* 同版本 */
+    AppPB_FileXFer_Cond_HIGH_TEMP = 3, /* 高温 */
+    AppPB_FileXFer_Cond_OTA_OTHER = 4 /* 其他 */
+} AppPB_FileXFer_Cond;
+
+/* 传输文件类型 */
+typedef enum _AppPB_FileDes_TYPE {
+    AppPB_FileDes_TYPE_FILE_IS_LOG = 0, /* 日志 */
+    AppPB_FileDes_TYPE_FILE_IS_FW = 1, /* 固件 */
+    AppPB_FileDes_TYPE_FILE_IS_CWF = 2, /* 云表盘 */
+    AppPB_FileDes_TYPE_FILE_IS_SWF = 3 /* 息屏表盘 */
+} AppPB_FileDes_TYPE;
+
 /* Struct definitions */
-/* 文件扩展消息 */
+/* 文件传输字 */
+typedef struct _AppPB_FileXFer {
+    /* 合并说明: OTA 属文件(FW)传输,其命令/就绪/状态一并归入"文件传输字" */
+    AppPB_FileXFer_Type type; /* 传输状态 */
+    AppPB_FileXFer_Code code; /* 传输结果 */
+    AppPB_FileXFer_Cmd cmd; /* 升级命令 */
+    uint8_t state; /* 升级状态 */
+    AppPB_FileXFer_Cond cond; /* 升级就绪条件 */
+    uint32_t offset; /* 断点/进度偏移(分包传输出错时指示续传位置) */
+} AppPB_FileXFer;
+
+/* 文件描述符 */
 typedef struct _AppPB_FileDes {
-    char name[256]; /* 包括路径和尾缀 */
-    uint64_t utc64; /* 文件UTC64修改时间 */
-    uint32_t crc32; /* 文件CRC32校验 */
+    AppPB_FileDes_TYPE type; /* 文件类型:接收方据此决定处理方式 */
+    char name[256]; /* 含路径和尾缀 */
+    uint64_t utc64; /* 文件修改时间(UTC64) */
     uint32_t size; /* 文件总大小 */
-    uint8_t crc8; /* 描述符CRC8校验 */
+    uint8_t crc8; /* 文件整体CRC8校验 */
+    uint8_t cks8; /* 文件整体Checksum8校验 */
 } AppPB_FileDes;
 
 typedef PB_BYTES_ARRAY_T(512) AppPB_FilePkg_data_t;
-/* 文件分包消息 */
+/* 文件分包 */
 typedef struct _AppPB_FilePkg {
     uint16_t index; /* 当前分包索引 */
     uint32_t base; /* 当前分包相对文件偏移 */
     uint16_t size; /* 当前分包数据流大小 */
-    uint8_t crc8; /* 当前分包CRC8校验 */
     AppPB_FilePkg_data_t data; /* 当前分包数据流 */
 } AppPB_FilePkg;
-
-/* 文件传输结束消息 */
-typedef struct _AppPB_FileEnd {
-    uint8_t code; /* 传输结果(0成功/1校验失败/2其他) */
-} AppPB_FileEnd;
 
 /* 文件消息 */
 typedef struct _AppPB_File {
     pb_size_t which_payload;
     union {
-        AppPB_FileDes descriptor; /* 文件描述符(传输开始) */
-        AppPB_FilePkg package; /* 文件分包 */
-        AppPB_FileEnd done; /* 文件传输结束 */
+        AppPB_FileXFer xfer; /* 文件传输字(含状态同步) */
+        AppPB_FileDes des; /* 文件描述符 */
+        AppPB_FilePkg pkg; /* 文件分包 */
     } payload;
 } AppPB_File;
-
-/* OTA升级消息(UTE 0xC8) */
-typedef struct _AppPB_Ota {
-    uint8_t cmd; /* 升级命令(0取消/1继续) */
-    uint8_t state; /* 状态 */
-    uint8_t ready_cond; /* 就绪条件(0可/1电低/2同版/3高温/4其他) */
-} AppPB_Ota;
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/* Helper constants for enums */
+#define _AppPB_FileXFer_Type_MIN AppPB_FileXFer_Type_FILE_XFER
+#define _AppPB_FileXFer_Type_MAX AppPB_FileXFer_Type_FILE_STATE
+#define _AppPB_FileXFer_Type_ARRAYSIZE ((AppPB_FileXFer_Type)(AppPB_FileXFer_Type_FILE_STATE+1))
+
+#define _AppPB_FileXFer_Code_MIN AppPB_FileXFer_Code_XFER_OK
+#define _AppPB_FileXFer_Code_MAX AppPB_FileXFer_Code_XFER_ERR_OTHER
+#define _AppPB_FileXFer_Code_ARRAYSIZE ((AppPB_FileXFer_Code)(AppPB_FileXFer_Code_XFER_ERR_OTHER+1))
+
+#define _AppPB_FileXFer_Cmd_MIN AppPB_FileXFer_Cmd_OTA_CANCEL
+#define _AppPB_FileXFer_Cmd_MAX AppPB_FileXFer_Cmd_OTA_CONTINUE
+#define _AppPB_FileXFer_Cmd_ARRAYSIZE ((AppPB_FileXFer_Cmd)(AppPB_FileXFer_Cmd_OTA_CONTINUE+1))
+
+#define _AppPB_FileXFer_Cond_MIN AppPB_FileXFer_Cond_READY
+#define _AppPB_FileXFer_Cond_MAX AppPB_FileXFer_Cond_OTA_OTHER
+#define _AppPB_FileXFer_Cond_ARRAYSIZE ((AppPB_FileXFer_Cond)(AppPB_FileXFer_Cond_OTA_OTHER+1))
+
+#define _AppPB_FileDes_TYPE_MIN AppPB_FileDes_TYPE_FILE_IS_LOG
+#define _AppPB_FileDes_TYPE_MAX AppPB_FileDes_TYPE_FILE_IS_SWF
+#define _AppPB_FileDes_TYPE_ARRAYSIZE ((AppPB_FileDes_TYPE)(AppPB_FileDes_TYPE_FILE_IS_SWF+1))
+
+#define AppPB_FileXFer_type_ENUMTYPE AppPB_FileXFer_Type
+#define AppPB_FileXFer_code_ENUMTYPE AppPB_FileXFer_Code
+#define AppPB_FileXFer_cmd_ENUMTYPE AppPB_FileXFer_Cmd
+#define AppPB_FileXFer_cond_ENUMTYPE AppPB_FileXFer_Cond
+
+#define AppPB_FileDes_type_ENUMTYPE AppPB_FileDes_TYPE
+
+
+
+
 /* Initializer values for message structs */
-#define AppPB_FileDes_init_default               {"", 0, 0, 0, 0}
-#define AppPB_FilePkg_init_default               {0, 0, 0, 0, {0, {0}}}
-#define AppPB_FileEnd_init_default               {0}
-#define AppPB_File_init_default                  {0, {AppPB_FileDes_init_default}}
-#define AppPB_Ota_init_default                   {0, 0, 0}
-#define AppPB_FileDes_init_zero                  {"", 0, 0, 0, 0}
-#define AppPB_FilePkg_init_zero                  {0, 0, 0, 0, {0, {0}}}
-#define AppPB_FileEnd_init_zero                  {0}
-#define AppPB_File_init_zero                     {0, {AppPB_FileDes_init_zero}}
-#define AppPB_Ota_init_zero                      {0, 0, 0}
+#define AppPB_FileXFer_init_default              {_AppPB_FileXFer_Type_MIN, _AppPB_FileXFer_Code_MIN, _AppPB_FileXFer_Cmd_MIN, 0, _AppPB_FileXFer_Cond_MIN, 0}
+#define AppPB_FileDes_init_default               {_AppPB_FileDes_TYPE_MIN, "", 0, 0, 0, 0}
+#define AppPB_FilePkg_init_default               {0, 0, 0, {0, {0}}}
+#define AppPB_File_init_default                  {0, {AppPB_FileXFer_init_default}}
+#define AppPB_FileXFer_init_zero                 {_AppPB_FileXFer_Type_MIN, _AppPB_FileXFer_Code_MIN, _AppPB_FileXFer_Cmd_MIN, 0, _AppPB_FileXFer_Cond_MIN, 0}
+#define AppPB_FileDes_init_zero                  {_AppPB_FileDes_TYPE_MIN, "", 0, 0, 0, 0}
+#define AppPB_FilePkg_init_zero                  {0, 0, 0, {0, {0}}}
+#define AppPB_File_init_zero                     {0, {AppPB_FileXFer_init_zero}}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define AppPB_FileDes_name_tag                   1
-#define AppPB_FileDes_utc64_tag                  2
-#define AppPB_FileDes_crc32_tag                  3
+#define AppPB_FileXFer_type_tag                  1
+#define AppPB_FileXFer_code_tag                  2
+#define AppPB_FileXFer_cmd_tag                   3
+#define AppPB_FileXFer_state_tag                 4
+#define AppPB_FileXFer_cond_tag                  5
+#define AppPB_FileXFer_offset_tag                6
+#define AppPB_FileDes_type_tag                   1
+#define AppPB_FileDes_name_tag                   2
+#define AppPB_FileDes_utc64_tag                  3
 #define AppPB_FileDes_size_tag                   4
 #define AppPB_FileDes_crc8_tag                   5
+#define AppPB_FileDes_cks8_tag                   6
 #define AppPB_FilePkg_index_tag                  1
 #define AppPB_FilePkg_base_tag                   2
 #define AppPB_FilePkg_size_tag                   3
-#define AppPB_FilePkg_crc8_tag                   4
-#define AppPB_FilePkg_data_tag                   5
-#define AppPB_FileEnd_code_tag                   1
-#define AppPB_File_descriptor_tag                1
-#define AppPB_File_package_tag                   2
-#define AppPB_File_done_tag                      3
-#define AppPB_Ota_cmd_tag                        1
-#define AppPB_Ota_state_tag                      2
-#define AppPB_Ota_ready_cond_tag                 3
+#define AppPB_FilePkg_data_tag                   4
+#define AppPB_File_xfer_tag                      1
+#define AppPB_File_des_tag                       2
+#define AppPB_File_pkg_tag                       3
 
 /* Struct field encoding specification for nanopb */
+#define AppPB_FileXFer_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UENUM,    type,              1) \
+X(a, STATIC,   SINGULAR, UENUM,    code,              2) \
+X(a, STATIC,   SINGULAR, UENUM,    cmd,               3) \
+X(a, STATIC,   SINGULAR, UINT64,   state,             4) \
+X(a, STATIC,   SINGULAR, UENUM,    cond,              5) \
+X(a, STATIC,   SINGULAR, UINT64,   offset,            6)
+#define AppPB_FileXFer_CALLBACK NULL
+#define AppPB_FileXFer_DEFAULT NULL
+
 #define AppPB_FileDes_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, STRING,   name,              1) \
-X(a, STATIC,   SINGULAR, UINT64,   utc64,             2) \
-X(a, STATIC,   SINGULAR, UINT64,   crc32,             3) \
+X(a, STATIC,   SINGULAR, UENUM,    type,              1) \
+X(a, STATIC,   SINGULAR, STRING,   name,              2) \
+X(a, STATIC,   SINGULAR, UINT64,   utc64,             3) \
 X(a, STATIC,   SINGULAR, UINT64,   size,              4) \
-X(a, STATIC,   SINGULAR, UINT64,   crc8,              5)
+X(a, STATIC,   SINGULAR, UINT64,   crc8,              5) \
+X(a, STATIC,   SINGULAR, UINT64,   cks8,              6)
 #define AppPB_FileDes_CALLBACK NULL
 #define AppPB_FileDes_DEFAULT NULL
 
@@ -101,52 +182,36 @@ X(a, STATIC,   SINGULAR, UINT64,   crc8,              5)
 X(a, STATIC,   SINGULAR, UINT64,   index,             1) \
 X(a, STATIC,   SINGULAR, UINT64,   base,              2) \
 X(a, STATIC,   SINGULAR, UINT64,   size,              3) \
-X(a, STATIC,   SINGULAR, UINT64,   crc8,              4) \
-X(a, STATIC,   SINGULAR, BYTES,    data,              5)
+X(a, STATIC,   SINGULAR, BYTES,    data,              4)
 #define AppPB_FilePkg_CALLBACK NULL
 #define AppPB_FilePkg_DEFAULT NULL
 
-#define AppPB_FileEnd_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, UINT64,   code,              1)
-#define AppPB_FileEnd_CALLBACK NULL
-#define AppPB_FileEnd_DEFAULT NULL
-
 #define AppPB_File_FIELDLIST(X, a) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,descriptor,payload.descriptor),   1) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,package,payload.package),   2) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,done,payload.done),   3)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,xfer,payload.xfer),   1) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,des,payload.des),   2) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,pkg,payload.pkg),   3)
 #define AppPB_File_CALLBACK NULL
 #define AppPB_File_DEFAULT NULL
-#define AppPB_File_payload_descriptor_MSGTYPE AppPB_FileDes
-#define AppPB_File_payload_package_MSGTYPE AppPB_FilePkg
-#define AppPB_File_payload_done_MSGTYPE AppPB_FileEnd
+#define AppPB_File_payload_xfer_MSGTYPE AppPB_FileXFer
+#define AppPB_File_payload_des_MSGTYPE AppPB_FileDes
+#define AppPB_File_payload_pkg_MSGTYPE AppPB_FilePkg
 
-#define AppPB_Ota_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, UINT64,   cmd,               1) \
-X(a, STATIC,   SINGULAR, UINT64,   state,             2) \
-X(a, STATIC,   SINGULAR, UINT64,   ready_cond,        3)
-#define AppPB_Ota_CALLBACK NULL
-#define AppPB_Ota_DEFAULT NULL
-
+extern const pb_msgdesc_t AppPB_FileXFer_msg;
 extern const pb_msgdesc_t AppPB_FileDes_msg;
 extern const pb_msgdesc_t AppPB_FilePkg_msg;
-extern const pb_msgdesc_t AppPB_FileEnd_msg;
 extern const pb_msgdesc_t AppPB_File_msg;
-extern const pb_msgdesc_t AppPB_Ota_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
+#define AppPB_FileXFer_fields &AppPB_FileXFer_msg
 #define AppPB_FileDes_fields &AppPB_FileDes_msg
 #define AppPB_FilePkg_fields &AppPB_FilePkg_msg
-#define AppPB_FileEnd_fields &AppPB_FileEnd_msg
 #define AppPB_File_fields &AppPB_File_msg
-#define AppPB_Ota_fields &AppPB_Ota_msg
 
 /* Maximum encoded size of messages (where known) */
-#define AppPB_FileDes_size                       284
-#define AppPB_FileEnd_size                       3
-#define AppPB_FilePkg_size                       532
-#define AppPB_File_size                          535
-#define AppPB_Ota_size                           9
+#define AppPB_FileDes_size                       283
+#define AppPB_FilePkg_size                       529
+#define AppPB_FileXFer_size                      17
+#define AppPB_File_size                          532
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -4,7 +4,8 @@
 typedef enum {
     app_module_protocol_default = 0,
     app_module_protocol_ack,
-    app_module_protocol_trace_text,
+    app_module_protocol_sync,
+    
     app_module_protocol_device_info,
     app_module_protocol_device_param,
     app_module_protocol_elec_card,
@@ -27,27 +28,27 @@ typedef enum {
     app_module_protocol_sport_mng,
     app_module_protocol_sport_rcd,
     app_module_protocol_file,
-    app_module_protocol_file_step,   /* 文件传输限速发包步进(内部使用) */
-    app_module_protocol_ctrl_step,   /* 通用确认引擎ack轮询步进(内部使用) */
-    app_module_protocol_ota,
+    app_module_protocol_file_step,   /* 文件步进(内部使用) */
+    app_module_protocol_ctrl_step,   /* ack轮询步进(内部使用) */
 } app_module_protocol_notify_type_t;
 
 typedef struct {
-    struct {
-        uint32_t type;      //传输类型
-        uint32_t status;    //传输流程状态,内部约定
-    } notify;
-    struct {
-        uint8_t *data;      //传输数据
-        uint32_t size;      //传输数据大小
-        uint64_t dynamic:1; //传输数据是否为动态
-    } respond;
+    uint32_t type;      //传输类型(notify)
+    uint32_t status;    //传输流程状态,内部约定(notify)
+    uint8_t *data;      //传输数据
+    uint32_t size;      //传输数据大小
+    uint64_t dynamic:1; //传输数据是否为动态
 } app_module_protocol_t;
+
+/* 协议事件优先级:应答/同步走异步发送优先响应 */
+#define app_module_protocol_ack_priority   app_thread_package_priority_normal_above
+#define app_module_protocol_sync_priority  app_thread_package_priority_real_time
 
 /*@brief 传输协议
  *@param protocol 传输协议包(栈资源,非堆资源或静态资源)
+ *@param priority 事件优先级(app_thread_package_priority_*,0为默认)
  */
-void app_module_protocol_notify(app_module_protocol_t *protocol);
+void app_module_protocol_notify(app_module_protocol_t *protocol, uint32_t priority);
 
 /*@brief 传输协议
  *@param protocol 传输协议包(栈资源,非堆资源或静态资源)

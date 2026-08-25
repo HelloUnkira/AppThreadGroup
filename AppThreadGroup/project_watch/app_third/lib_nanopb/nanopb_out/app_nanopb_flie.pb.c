@@ -6,19 +6,21 @@
 #error Regenerate this file with the current version of nanopb generator.
 #endif
 
+PB_BIND(AppPB_FileXFer, AppPB_FileXFer, AUTO)
+
+
 PB_BIND(AppPB_FileDes, AppPB_FileDes, 2)
 
 
 PB_BIND(AppPB_FilePkg, AppPB_FilePkg, 2)
 
 
-PB_BIND(AppPB_FileEnd, AppPB_FileEnd, AUTO)
-
-
 PB_BIND(AppPB_File, AppPB_File, 2)
 
 
-PB_BIND(AppPB_Ota, AppPB_Ota, AUTO)
+
+
+
 
 
 

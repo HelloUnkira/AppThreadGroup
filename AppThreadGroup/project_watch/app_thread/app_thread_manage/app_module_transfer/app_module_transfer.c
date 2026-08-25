@@ -197,9 +197,9 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
                 APP_SYS_LOG_INFO_RAW(app_sys_log_line());
             /* 传输到目标 */
             app_module_protocol_t protocol = {
-                .respond.data    = zone[transfer->chan].stream,
-                .respond.size    = zone[transfer->chan].offset,
-                .respond.dynamic = true,
+                .data    = zone[transfer->chan].stream,
+                .size    = zone[transfer->chan].offset,
+                .dynamic = true,
             };
             app_module_protocol_respond(&protocol);
         }

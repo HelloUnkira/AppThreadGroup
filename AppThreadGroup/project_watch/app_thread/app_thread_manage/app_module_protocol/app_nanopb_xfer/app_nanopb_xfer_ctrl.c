@@ -11,22 +11,10 @@
 
 #if APP_MODULE_PROTOCOL_USE_NANOPB
 
-/* 在飞事务上下文:一次仅一个待确认notify */
-typedef struct {
-    app_sys_timer_t timer;                          /* ack轮询定时器 */
-    bool            active;                         /* 有在飞事务 */
-    bool            ack_ok;                         /* 本事务已收ack */
-    uint16_t        msg_tag;                        /* 事务消息tag */
-    uint16_t        retry;                          /* 重发计数 */
-    app_module_transfer_chan_t channel;             /* 传输信道 */
-    uint8_t        *frame;                          /* 编码后待重发帧 */
-    size_t          frame_size;                     /* 帧大小 */
-    app_nanopb_xfer_ctrl_done_t on_done;            /* 完成回调 */
-    uint32_t        user;                           /* 回调参数 */
-} app_nanopb_xfer_ctrl_t;
+/* 确认引擎静态上下文:一次未决发送 */
 static app_nanopb_xfer_ctrl_t app_nanopb_ctrl = {0};
 
-/* 结束在飞事务并回调 */
+/* 结束未决发送并回调 */
 static void app_nanopb_xfer_ctrl_close(bool ok)
 {
     if (!app_nanopb_ctrl.active)
@@ -48,9 +36,9 @@ static void app_nanopb_xfer_ctrl_timer_handler(void *timer)
 {
     if (!app_nanopb_ctrl.active)
         return;
-    app_module_protocol_t protocol = {.notify.status = 0,};
-    protocol.notify.type = app_module_protocol_ctrl_step;
-    app_module_protocol_notify(&protocol);
+    app_module_protocol_t protocol = {.status = 0,};
+    protocol.type = app_module_protocol_ctrl_step;
+    app_module_protocol_notify(&protocol, 0);
 }
 
 /* 设置确认完成回调 */
@@ -60,13 +48,14 @@ void app_nanopb_xfer_ctrl_set_done(app_nanopb_xfer_ctrl_done_t on_done, uint32_t
     app_nanopb_ctrl.user    = user;
 }
 
-/* 推送待确认协议数据(发包等ack),有在飞事务则拒绝 */
+/* 推送待确认协议数据(发包等ack),有未决发送则拒绝 */
 bool app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_t channel, AppPB_MsgSet *message)
 {
     if (app_nanopb_ctrl.active) {
         APP_SYS_LOG_WARN("ctrl busy, drop tag:%u", message->which_payload);
         return false;
     }
+    app_nanopb_xfer_crc8_calc(message);
     size_t size = 0;
     if (!pb_get_encoded_size(&size, AppPB_MsgSet_fields, message))
          APP_SYS_LOG_ERROR("ctrl encode size fail:%u", (uint32_t)message->which_payload);
@@ -106,12 +95,12 @@ void app_nanopb_xfer_ctrl_step(void)
 }
 
 /* 消费对端ack:匹配当前事务则结束 */
-bool app_nanopb_xfer_ctrl_respond_ack(uint16_t type, uint8_t code, uint16_t index)
+bool app_nanopb_xfer_ctrl_respond_ack(uint16_t msg, uint8_t code)
 {
-    if (!app_nanopb_ctrl.active || type != app_nanopb_ctrl.msg_tag)
+    if (!app_nanopb_ctrl.active || msg != app_nanopb_ctrl.msg_tag)
         return false;
-    bool ok = (code == AppPB_ACK_ErrorCode_SUCCEED);
-    APP_SYS_LOG_INFO("ctrl ack tag:%u ok:%d", type, ok);
+    bool ok = (code == AppPB_ACK_Code_SUCCEED);
+    APP_SYS_LOG_INFO("ctrl ack tag:%u ok:%d", msg, ok);
     app_nanopb_xfer_ctrl_close(ok);
     return true;
 }
@@ -123,7 +112,7 @@ void app_nanopb_xfer_ctrl_notify_done(uint16_t msg_tag, bool ok)
         app_nanopb_ctrl.on_done(msg_tag, ok, app_nanopb_ctrl.user);
 }
 
-/* 是否有在飞确认事务 */
+/* 是否有未决发送 */
 bool app_nanopb_xfer_ctrl_active(void)
 {
     return app_nanopb_ctrl.active;

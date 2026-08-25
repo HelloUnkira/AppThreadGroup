@@ -29,8 +29,6 @@ typedef enum {
 /* 子线程模组 */
 #include "app_module_transfer.h"
 #include "app_module_protocol.h"
-#include "app_module_protocol_test.h"
 #include "app_module_xfer_file.h"
-#include "app_protocol_lib.h"
 
 #endif

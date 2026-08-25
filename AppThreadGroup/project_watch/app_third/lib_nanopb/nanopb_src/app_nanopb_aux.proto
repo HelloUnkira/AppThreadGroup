@@ -1,27 +1,49 @@
 syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
-/* Java包字段:Java编译时使用 */
 option java_package = "com.message_aux.nanopb";
 option java_outer_classname = "AppPB_MsgFileAux";
-/* 依赖包 */
 import "nanopb.proto";
 
 /* 辅助应答消息 */
 message AppPB_ACK {
-    /* 当次应答错误码 */
-    enum ErrorCode {
-        SUCCEED     = 0x00;     //无错误,应答成功
+    /* 错误码(错误类型) */
+    enum Code {
+        SUCCEED     = 0x00;     //应答成功
         CRC_FAILED  = 0x01;     //CRC校验失败
         CHK_FAILED  = 0x02;     //CheckSum校验失败
+        PKG_INVALID = 0x03;     //分包无效(包错误)
     }
+    /* 子类型 */
+    enum Type {
+        MINI_MSG = 0x00;        //小消息
+        FILE_MSG = 0x01;        //文件消息
+    }
+    /* 关键消息(请求语义) */
+    enum Info {
+        NO_QUESTION    = 0x00;     //无疑问
+        REQUEST_REPEAT = 0x01;     //要求重发
+    }
+
+    Code code = 1;  //应答错误码
+    Type type = 2;  //应答类别
+    Info info = 3;  //关键消息
     
-    ErrorCode  error_code = 1;                                     //当次应答错误码
-    uint64     type       = 2 [(nanopb).int_size = IS_16];         //应答消息类型:小协议=MsgSet oneof tag;文件=File子消息tag(descriptor=1/package=2/done=3)
-    uint64     index      = 3 [(nanopb).int_size = IS_16];         //应答对象索引(文件分包拉取游标/重传索引),非文件默认0
+    /* message编码: */
+    uint32 msg = 4 [(nanopb).int_size = IS_16];
 }
 
-/* 传输日志消息 */
-/* 追踪日志消息文本最大限制 APP_MODULE_TRACE_TEXT_MAX + 1 */
-message AppPB_TraceTxt {
-    string  trace_text = 1 [(nanopb).max_size = 129];  //单条传输文本消息
+/* 辅助同步消息(读请求) */
+message AppPB_Sync {
+    /* 请求读取的文件类型 */
+    enum Type {
+        SYNC_FT_NONE = 0;    //不读文件,读普通消息
+        SYNC_FT_LOG  = 1;    //日志文件
+        SYNC_FT_FW   = 2;    //固件文件
+        SYNC_FT_CWF  = 3;    //云表盘文件
+        SYNC_FT_SWF  = 4;    //息屏表盘文件
+    }
+    Type type = 1;
+    
+    /* message编码: */
+    uint32 msg = 2 [(nanopb).int_size = IS_16];
 }

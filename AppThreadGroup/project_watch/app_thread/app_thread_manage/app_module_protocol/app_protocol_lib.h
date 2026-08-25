@@ -9,7 +9,6 @@
 #include "app_nanopb_set.pb.h"
 #include "app_nanopb_xfer.h"
 #include "app_nanopb_xfer_aux.h"
-#include "app_nanopb_xfer_sys.h"
 #include "app_nanopb_xfer_func.h"
 #include "app_nanopb_xfer_flie.h"
 #include "app_nanopb_xfer_ctrl.h"

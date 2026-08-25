@@ -3,28 +3,55 @@
 
 #if APP_MODULE_PROTOCOL_USE_NANOPB
 
-/*@brief 打包传输应答
- */
-void app_nanopb_xfer_notify_ack(void);
+/* ack异步发送参数(经协议事件包携带) */
+typedef struct {
+    uint8_t  code;
+    uint8_t  info;
+    uint16_t msg;
+} app_nanopb_xfer_ack_arg_t;
 
-/*@brief 打包传输扩展应答(双边流控通用)
- *@param type       应答消息类型(小协议=MsgSet oneof tag;文件=File子消息tag)
- *@param error_code 应答错误码(SUCCEED/CRC_FAILED/CHK_FAILED)
- *@param index      应答对象索引(文件分包拉取游标/重传索引)
+/* sync异步发送参数(经协议事件包携带) */
+typedef struct {
+    uint8_t  type;
+    uint16_t msg;
+} app_nanopb_xfer_sync_arg_t;
+
+/*@brief 打包传输应答
+ *@param code 应答错误码(AppPB_ACK_Code)
+ *@param info 请求语义(AppPB_ACK_Info)
+ *@param msg  被应答的消息标识
  */
-void app_nanopb_xfer_notify_ack_ext(uint16_t type, uint8_t error_code, uint16_t index);
+void app_nanopb_xfer_notify_ack_async(uint8_t code, uint8_t info, uint16_t msg);
+
+/*@brief 打包传输同步读请求
+ *@param type 同步类型(AppPB_Sync_Type)
+ *@param msg  目标消息标识(传参:要启动的流程)
+ */
+void app_nanopb_xfer_notify_sync_async(uint8_t type, uint16_t msg);
+
+/*@brief 打包传输应答
+ *@param code 应答错误码(AppPB_ACK_Code)
+ *@param info 请求语义(AppPB_ACK_Info)
+ *@param msg  被应答的消息标识
+ */
+void app_nanopb_xfer_notify_ack(uint8_t code, uint8_t info, uint16_t msg);
 
 /*@brief 传输接收应答
+ *@param message 响应消息
  */
 bool app_nanopb_xfer_respond_ack(AppPB_MsgSet *message);
 
-/*@brief 打包传输系统追踪日志文本
+/*@brief 打包传输同步读请求(系统指令)
+ *@param type 同步类型(AppPB_Sync_Type)
+ *@param msg  目标消息标识(传参:要启动的流程)
  */
-void app_nanopb_xfer_notify_trace_text(void);
+void app_nanopb_xfer_notify_sync(uint8_t type, uint16_t msg);
 
-/*@brief 传输接收系统追踪日志文本
+/*@brief 传输接收同步读请求:回ack后产生对应notify启动流程
+ *@param message 读请求
+ *@retval 是否成功
  */
-bool app_nanopb_xfer_respond_trace_text(AppPB_MsgSet *message);
+bool app_nanopb_xfer_respond_sync(AppPB_MsgSet *message);
 
 #endif
 

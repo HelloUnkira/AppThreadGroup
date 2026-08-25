@@ -3,6 +3,12 @@
 
 #if APP_MODULE_PROTOCOL_USE_NANOPB
 
+/*@brief 协议适配层,整包crc8计算(清零编码后回填)
+ *@param message nanopb集合对象
+ *@retval 整包crc8值
+ */
+uint8_t app_nanopb_xfer_crc8_calc(AppPB_MsgSet *message);
+
 /*@brief 协议适配层,推送协议数据
  *@param message nanopb集合对象
  *@retval 推送是否成功
