@@ -11,6 +11,7 @@ typedef enum {
 /* 线程模组事件 */
 typedef enum {
     /* 协议传输模组事件 */
+    app_thread_manage_protocol_linker,
     app_thread_manage_protocol_notify,
     app_thread_manage_protocol_respond,
     /* 协议传输模组事件 */
@@ -24,7 +25,7 @@ typedef enum {
 /* 回环测试:数据通路上层环路 */
 #define APP_MODULE_PROTOCOL_LOCAL_LOOPBACK      1
 /* 协议自检:开机回环发包 */
-#define APP_MODULE_PROTOCOL_TEST_ENABLE         1
+#define APP_MODULE_PROTOCOL_TEST_ENABLE         0
 
 /* 子线程模组 */
 #include "app_module_transfer.h"

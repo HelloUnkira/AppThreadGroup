@@ -4,7 +4,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -38,11 +38,11 @@ uint8_t app_nanopb_xfer_crc8_calc(AppPB_MsgSet *message)
     return crc8;
 }
 
-/*@brief 协议适配层,推送协议数据
+/*@brief 协议适配层,发送协议数据(底端)
  *@param message nanopb集合对象
  *@retval 推送是否成功
  */
-bool app_nanopb_xfer_notify(app_module_transfer_chan_t channel, AppPB_MsgSet *message)
+bool app_nanopb_xfer_notify_lower(app_module_transfer_chan_t channel, AppPB_MsgSet *message)
 {
     size_t size = 0;
     app_nanopb_xfer_crc8_calc(message);
@@ -66,6 +66,95 @@ bool app_nanopb_xfer_notify(app_module_transfer_chan_t channel, AppPB_MsgSet *me
     /* 回收nanopb缓冲区 */
     app_mem_free(buffer);
     return retval;
+}
+
+/*@brief 协议适配层,发送协议数据
+ *@param node 协议发送节点
+ *@retval 应答等待
+ */
+bool app_nanopb_xfer_notify(app_module_protocol_t *node)
+{
+    switch (node->type) {
+    case app_module_protocol_ack: {
+        app_nanopb_xfer_ack_arg_t *arg = (void *)node->data;
+        app_nanopb_xfer_notify_ack(arg->code, arg->info, arg->msg);
+        return false;
+    }
+    case app_module_protocol_sync: {
+        app_nanopb_xfer_sync_arg_t *arg = (void *)node->data;
+        app_nanopb_xfer_notify_sync(arg->type, arg->msg);
+        return true;
+    }
+    case app_module_protocol_file:
+        return app_nanopb_xfer_notify_file();
+    
+    case app_module_protocol_device_info:
+        app_nanopb_xfer_notify_device_info();
+        return true;
+    case app_module_protocol_device_param:
+        app_nanopb_xfer_notify_device_param();
+        return true;
+    case app_module_protocol_elec_card:
+        app_nanopb_xfer_notify_elec_card();
+        return true;
+    case app_module_protocol_system_clock:
+        app_nanopb_xfer_notify_system_clock();
+        return true;
+    case app_module_protocol_world_clock:
+        app_nanopb_xfer_notify_world_clock();
+        return true;
+    case app_module_protocol_alarm:
+        app_nanopb_xfer_notify_alarm();
+        return true;
+    case app_module_protocol_weather:
+        app_nanopb_xfer_notify_weather();
+        return true;
+    case app_module_protocol_heart_rate:
+        app_nanopb_xfer_notify_heart_rate();
+        return true;
+    case app_module_protocol_music:
+        app_nanopb_xfer_notify_music();
+        return true;
+    case app_module_protocol_msg_info:
+        app_nanopb_xfer_notify_msg_info();
+        return true;
+    case app_module_protocol_contact:
+        app_nanopb_xfer_notify_contact();
+        return true;
+    case app_module_protocol_sport_tgt:
+        app_nanopb_xfer_notify_sport_tgt();
+        return true;
+    case app_module_protocol_user_phys:
+        app_nanopb_xfer_notify_user_phys();
+        return true;
+    case app_module_protocol_motion_sum:
+        app_nanopb_xfer_notify_motion_sum();
+        return true;
+    case app_module_protocol_sport_state:
+        app_nanopb_xfer_notify_sport_state();
+        return true;
+    case app_module_protocol_not_disturb:
+        app_nanopb_xfer_notify_not_disturb();
+        return true;
+    case app_module_protocol_position:
+        app_nanopb_xfer_notify_position();
+        return true;
+    case app_module_protocol_fem_cycle:
+        app_nanopb_xfer_notify_fem_cycle();
+        return true;
+    case app_module_protocol_account:
+        app_nanopb_xfer_notify_account();
+        return true;
+    case app_module_protocol_sport_mng:
+        app_nanopb_xfer_notify_sport_mng();
+        return true;
+    case app_module_protocol_sport_rcd:
+        app_nanopb_xfer_notify_sport_rcd();
+        return true;
+    default:
+        APP_SYS_ASSERT(false);
+        return false;
+    }
 }
 
 /*@brief 协议适配层,接收协议数据

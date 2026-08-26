@@ -1,8 +1,10 @@
 #ifndef APP_MODULE_PROTOCOL_H
 #define APP_MODULE_PROTOCOL_H
 
+/*@brief 协议通知类型 */
 typedef enum {
     app_module_protocol_default = 0,
+    
     app_module_protocol_ack,
     app_module_protocol_sync,
     
@@ -27,30 +29,50 @@ typedef enum {
     app_module_protocol_account,
     app_module_protocol_sport_mng,
     app_module_protocol_sport_rcd,
-    app_module_protocol_file,
-    app_module_protocol_file_step,   /* 文件步进(内部使用) */
-    app_module_protocol_ctrl_step,   /* ack轮询步进(内部使用) */
-} app_module_protocol_notify_type_t;
+    app_module_protocol_file,        /* 文件传输(启动引擎,后续子步由timer驱动) */
+} app_module_protocol_type_t;
 
+/* 协议发送:事件子优先级 */
+#define APP_MODULE_PROTOCOL_PRIO_NORMAL    app_thread_package_priority_normal + 0
+#define APP_MODULE_PROTOCOL_PRIO_FILE      app_thread_package_priority_normal + 1
+#define APP_MODULE_PROTOCOL_PRIO_SYNC      app_thread_package_priority_normal + 2
+#define APP_MODULE_PROTOCOL_PRIO_ACK       app_thread_package_priority_normal + 3
+
+/* 协议发送:ACK超时(ms) */
+#define app_module_protocol_ack_timeout    3000
+
+/*@brief 协议发送节点
+ */
 typedef struct {
+    app_sys_list_dln_t dl_node;
+    /* 基础成员信息 */
     uint32_t type;      //传输类型(notify)
-    uint32_t status;    //传输流程状态,内部约定(notify)
     uint8_t *data;      //传输数据
     uint32_t size;      //传输数据大小
-    uint64_t dynamic:1; //传输数据是否为动态
+    uint64_t dynamic:1; //动态数据标记
+    /* 节点成员状态 */
+    uint8_t  chan;      //传输信道
+    uint8_t  close;     //节点关闭标记
+    uint8_t  pending;   //已发等ack
+    uint8_t  priority;  //子优先级(队列排序)
 } app_module_protocol_t;
 
-/* 协议事件优先级:应答/同步走异步发送优先响应 */
-#define app_module_protocol_ack_priority   app_thread_package_priority_normal_above
-#define app_module_protocol_sync_priority  app_thread_package_priority_real_time
+/*@brief 协议发送队列
+ */
+typedef struct {
+    app_mutex_t mutex;
+    app_sys_timer_t timer;
+    app_sys_list_dll_t list;
+    /* 当前发送节点单独定义为实例,不在队列内 */
+} app_module_protocol_notify_list_t;
 
 /*@brief 传输协议
  *@param protocol 传输协议包(栈资源,非堆资源或静态资源)
- *@param priority 事件优先级(app_thread_package_priority_*,0为默认)
+ *@param priority 事件优先级(app_thread_package_priority_*,非0优先,大者先发)
  */
 void app_module_protocol_notify(app_module_protocol_t *protocol, uint32_t priority);
 
-/*@brief 传输协议
+/*@brief 传输协议(接收)
  *@param protocol 传输协议包(栈资源,非堆资源或静态资源)
  */
 void app_module_protocol_respond(app_module_protocol_t *protocol);
@@ -66,6 +88,17 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size);
  *@param size 传输数据大小
  */
 void app_module_protocol_respond_handler(uint8_t *data, uint32_t size);
+
+/*@brief linker桥接(最高优先事件):接收侧ack/sync完成广播驱动file监听器推进
+ *@param data 链路事件负载
+ *@param size 负载大小
+ */
+void app_module_protocol_linker_handler(uint8_t *data, uint32_t size);
+
+/*@brief linker桥接:投递高优先linker事件(接收侧ack/sync完成驱动file监听器)
+ *@param protocol 链路节点(栈资源)
+ */
+void app_module_protocol_linker(app_module_protocol_t *protocol);
 
 /*@brief 系统时钟模组初始化
  *       内部使用: 被namage线程使用

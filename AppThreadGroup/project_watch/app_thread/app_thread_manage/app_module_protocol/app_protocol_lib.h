@@ -10,7 +10,6 @@
 #include "app_nanopb_xfer.h"
 #include "app_nanopb_xfer_aux.h"
 #include "app_nanopb_xfer_func.h"
-#include "app_nanopb_xfer_flie.h"
-#include "app_nanopb_xfer_ctrl.h"
+#include "app_nanopb_xfer_file.h"
 
 #endif

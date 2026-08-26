@@ -23,6 +23,8 @@ static bool app_thread_manage_routine_package_cb(app_thread_package_t *package, 
 {
     switch (package->module) {
     case app_thread_manage_protocol: {
+        if (package->event == app_thread_manage_protocol_linker)
+            app_module_protocol_linker_handler(package->data, package->size);
         if (package->event == app_thread_manage_protocol_notify)
             app_module_protocol_notify_handler(package->data, package->size);
         if (package->event == app_thread_manage_protocol_respond)

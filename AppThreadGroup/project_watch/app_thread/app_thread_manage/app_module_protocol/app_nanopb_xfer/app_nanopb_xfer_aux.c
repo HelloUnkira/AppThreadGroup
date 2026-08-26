@@ -3,7 +3,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -23,12 +23,11 @@ void app_nanopb_xfer_notify_ack_async(uint8_t code, uint8_t info, uint16_t msg)
     arg->code = code; arg->info = info; arg->msg = msg;
     app_module_protocol_t protocol = {
         .type    = app_module_protocol_ack,
-        .status  = 0,
         .data    = (uint8_t *)arg,
         .size    = sizeof(app_nanopb_xfer_ack_arg_t),
         .dynamic = true,
     };
-    app_module_protocol_notify(&protocol, app_module_protocol_ack_priority);
+    app_module_protocol_notify(&protocol, APP_MODULE_PROTOCOL_PRIO_ACK);
 }
 
 /*@brief 打包传输同步读请求
@@ -41,12 +40,11 @@ void app_nanopb_xfer_notify_sync_async(uint8_t type, uint16_t msg)
     arg->type = type; arg->msg = msg;
     app_module_protocol_t protocol = {
         .type    = app_module_protocol_sync,
-        .status  = 0,
         .data    = (uint8_t *)arg,
         .size    = sizeof(app_nanopb_xfer_sync_arg_t),
         .dynamic = true,
     };
-    app_module_protocol_notify(&protocol, app_module_protocol_sync_priority);
+    app_module_protocol_notify(&protocol, APP_MODULE_PROTOCOL_PRIO_SYNC);
 }
 
 /*@brief 打包传输应答
@@ -65,7 +63,7 @@ void app_nanopb_xfer_notify_ack(uint8_t code, uint8_t info, uint16_t msg)
             .msg  = msg,
         },
     };
-    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
+    app_nanopb_xfer_notify_lower(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收应答
@@ -76,10 +74,19 @@ bool app_nanopb_xfer_respond_ack(AppPB_MsgSet *message)
     AppPB_ACK *ack = &message->payload.ack;
     APP_SYS_LOG_INFO("ack.code:%u msg:%u", ack->code, ack->msg);
     
-    /* 注入文件发送状态机(文件传输内部流程) */
-    app_nanopb_xfer_file_ack(ack);
-    /* 注入通用确认引擎(常规协议notify确认:消费ack→完成回调→推进下一notify) */
-    app_nanopb_xfer_ctrl_respond_ack((uint16_t)ack->msg, (uint8_t)ack->code);
+    /* 收到ack:投高优先linker事件,由linker统一反馈file引擎+推进协议队列(去同步回调) */
+    app_nanopb_xfer_ack_arg_t *arg = app_mem_alloc(sizeof(app_nanopb_xfer_ack_arg_t));
+    if (arg == NULL) return true;
+    arg->code = (uint8_t)ack->code;
+    arg->info = (uint8_t)ack->info;
+    arg->msg  = ack->msg;
+    app_module_protocol_t protocol = {
+        .type    = app_module_protocol_ack,
+        .data    = (uint8_t *)arg,
+        .size    = sizeof(app_nanopb_xfer_ack_arg_t),
+        .dynamic = true,
+    };
+    app_module_protocol_linker(&protocol);
     return true;
 }
 
@@ -96,7 +103,7 @@ void app_nanopb_xfer_notify_sync(uint8_t type, uint16_t msg)
             .msg  = msg,
         },
     };
-    app_nanopb_xfer_ctrl_notify(app_module_transfer_chan_low, &message);
+    app_nanopb_xfer_notify_lower(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收同步读请求:回ack后按目标msg分派启动器
@@ -109,7 +116,7 @@ bool app_nanopb_xfer_respond_sync(AppPB_MsgSet *message)
     APP_SYS_LOG_INFO("sync.type:%u msg:%u", sync->type, sync->msg);
     
     /* 收到sync:产生对应notify事件,交由协议层按目标启动流程 */
-    app_module_protocol_t protocol = {.status = 0,};
+    app_module_protocol_t protocol = {0};
     switch (sync->msg) {
     case AppPB_MsgSet_file_tag:
         protocol.type = app_module_protocol_file;

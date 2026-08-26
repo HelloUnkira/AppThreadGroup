@@ -9,11 +9,18 @@
  */
 uint8_t app_nanopb_xfer_crc8_calc(AppPB_MsgSet *message);
 
-/*@brief 协议适配层,推送协议数据
+/*@brief 协议适配层,发送协议数据(底端)
+ *@param channel 传输信道
  *@param message nanopb集合对象
  *@retval 推送是否成功
  */
-bool app_nanopb_xfer_notify(app_module_transfer_chan_t channel, AppPB_MsgSet *message);
+bool app_nanopb_xfer_notify_lower(app_module_transfer_chan_t channel, AppPB_MsgSet *message);
+
+/*@brief 协议适配层,发送协议数据
+ *@param node 协议发送节点
+ *@retval 应答等待
+ */
+bool app_nanopb_xfer_notify(app_module_protocol_t *node);
 
 /*@brief 协议适配层,接收协议数据
  *@param buffer nanopb编码流
