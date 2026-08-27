@@ -86,6 +86,15 @@ void scui_window_invoke(scui_event_t *event)
     scui_window_t *window = (void *)widget;
     
     switch (event->type) {
+    case scui_event_focus_lost:
+        /* 非活跃窗口:窗口冻结 */
+        scui_window_draw_lock_set(event->object, true);
+        break;
+    case scui_event_focus_get:
+        /* 活跃窗口:窗口更新 */
+        scui_window_draw_lock_set(event->object, false);
+        break;
+    
     case scui_event_window_preload: {
         /* 检查它的四个临近窗口 */
         /* 如果有预加载标记 */

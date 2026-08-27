@@ -255,14 +255,8 @@ static void scui_window_move_anima_state(uint8_t type)
             if (scui_window_switch.type == scui_window_switch_cover_out)
                 handle_t = scui_window_switch.list[1];
             
-            /* 问题:存在之后的窗口重绘失效当前虚化 */
-            /* 暂定:锁定窗口绘制, 禁止绘制该控件树 */
-            scui_window_draw_lock_set(handle_t, true);
-            
             /* 背景窗口虚化 */
-            scui_widget_draw(handle_t, NULL, false, 0);
             scui_widget_draw_blur(handle_t, NULL);
-            // scui_widget_draw_blur(handle_t, NULL);
             SCUI_LOG_INFO("");
         }
         break;
@@ -280,9 +274,9 @@ static void scui_window_move_anima_state(uint8_t type)
             if (scui_window_switch.type == scui_window_switch_cover_out)
                 handle_t = scui_window_switch.list[1];
             
-            /* 窗口绘制解锁(解锁所有窗口即可) */
-            scui_window_draw_lock_set(handle_t, false);
+            /* 背景窗口虚化去除 */
             scui_widget_draw(handle_t, NULL, false, 0);
+            SCUI_LOG_INFO("");
         }
         break;
     }

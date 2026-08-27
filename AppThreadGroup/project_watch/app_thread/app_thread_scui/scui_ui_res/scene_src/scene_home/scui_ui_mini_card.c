@@ -87,10 +87,9 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             }
         
         scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[match_idx];
-        scui_area_t clip = scui_widget_area(event->object);
-        scui_widget_t *widget = scui_handle_source_check(event->object);
-        scui_multi_t clip_w = widget->clip.w;  // for dimension queries
-        scui_multi_t clip_h = widget->clip.h;
+        scui_area_t  clip = scui_widget_area(event->object);
+        scui_multi_t clip_w = clip.w;
+        scui_multi_t clip_h = clip.h;
         
         /* 先绘制背景 */
         #if 1
@@ -101,7 +100,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             break;
         }
         default: {
-            scui_area_t   clip = scui_widget_area(event->object);
+            scui_area_t   clip  = scui_widget_area(event->object);
             scui_color_t  color = {.color.full = 0xFF282828,};
             scui_handle_t image[4] = {
                 scui_image_prj_repeat_card_04_r36_1jpg,
@@ -176,11 +175,11 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             scui_handle_t image_digit_step_list[10] = {0};
             scui_handle_t image_digit_dist_list[10] = {0};
             for (scui_coord_t idx = 0; idx < digit_kcal_num; idx++)
-                image_digit_kcal_list[idx] = image_digit_kcal + char_digit_kcal[idx] - '0';
+                image_digit_kcal_list[idx] = image_digit_kcal + (char_digit_kcal[idx] - '0') * 2;
             for (scui_coord_t idx = 0; idx < digit_step_num; idx++)
-                image_digit_step_list[idx] = image_digit_step + char_digit_step[idx] - '0';
+                image_digit_step_list[idx] = image_digit_step + (char_digit_step[idx] - '0') * 2;
             for (scui_coord_t idx = 0; idx < digit_dist_num; idx++)
-                image_digit_dist_list[idx] = image_digit_dist + char_digit_dist[idx] - '0';
+                image_digit_dist_list[idx] = image_digit_dist + (char_digit_dist[idx] - '0') * 2;
             scui_custom_data_t custom_data_kcal;
             scui_custom_data_config_image_text(&custom_data_kcal, image_digit_kcal_list, SCUI_COLOR_FILTER_TRANS, 3, digit_kcal_num, 0);
             scui_custom_draw_image_text(event->object, &clip_digit_kcal, &custom_data_kcal);
@@ -734,7 +733,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
     case scui_event_draw_buffer: {
         
         // 计算当前控件中心到父控件中心距离
-        scui_area_t clip_p = scui_widget_clip(scui_widget_tree(event->object));
+        scui_area_t clip_p = scui_widget_area(scui_widget_tree(event->object));
         scui_area_t clip_w = scui_widget_clip(event->object);
         
         #if 1
@@ -949,7 +948,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
             item_maker.widget.style.buffer_d  = true;
             item_maker.widget.style.fully_bg  = true;
             item_maker.widget.style.indev_ptr = true;
-            item_maker.widget.format          = SCUI_PIXEL_CF_DEF_A;
+            item_maker.widget.format          = SCUI_PIXEL_CF_DEF;
             item_maker.widget.parent          = cont_handle;
             item_maker.widget.clip.w          = 410;
             item_maker.widget.clip.h          = 180;

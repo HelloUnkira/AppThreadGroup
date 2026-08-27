@@ -30,7 +30,7 @@ static void scui_ui_scene_quick_card_item_event(scui_event_t *event)
             }
         
         /* 绘制背景 */
-        scui_area_t   clip = scui_widget_area(event->object);
+        scui_area_t   clip  = scui_widget_area(event->object);
         scui_color_t  color = {.color.full = 0xFF282828,};
         scui_handle_t image[4] = {
             scui_image_prj_repeat_card_04_r36_1jpg,
@@ -49,7 +49,7 @@ static void scui_ui_scene_quick_card_item_event(scui_event_t *event)
     case scui_event_draw_buffer: {
         
         // 计算当前控件中心到父控件中心距离
-        scui_area_t clip_p = scui_widget_clip(scui_widget_tree(event->object));
+        scui_area_t clip_p = scui_widget_area(scui_widget_tree(event->object));
         scui_area_t clip_w = scui_widget_clip(event->object);
         
         #if 1
@@ -155,7 +155,7 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
             item_maker.widget.style.buffer_d  = true;
             item_maker.widget.style.fully_bg  = true;
             item_maker.widget.style.indev_ptr = true;
-            item_maker.widget.format          = SCUI_PIXEL_CF_DEF_A;
+            item_maker.widget.format          = SCUI_PIXEL_CF_DEF;
             item_maker.widget.parent          = cont_handle;
             item_maker.widget.clip.w          = 410;
             item_maker.widget.clip.h          = 180;
@@ -262,9 +262,10 @@ void scui_ui_scene_quick_card_event_proc(scui_event_t *event)
         scroll_maker.widget.clip.h = SCUI_VER_RES;
         scroll_maker.widget.parent = event->object;
         scroll_maker.widget.event_cb   = scui_ui_scene_quick_card_scroll_event;
-        scroll_maker.widget.child_num  = scui_ui_res_local->list_num;
+        scroll_maker.widget.child_num  = scui_ui_res_local->list_num + 2;
         scroll_maker.pos        = scui_opt_pos_c;
         scroll_maker.dir        = scui_opt_dir_ver;
+        scroll_maker.skip       = scui_opt_pos_all;
         scroll_maker.space      = 3;
         scroll_maker.route_enc  = 117;
         scroll_maker.route_key  = 117;
