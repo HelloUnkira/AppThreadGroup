@@ -131,6 +131,46 @@ void app_nanopb_xfer_notify_sport_rcd(void);
  */
 bool app_nanopb_xfer_respond_sport_rcd(AppPB_MsgSet *message);
 
+/*@brief 打包传输显示与菜单
+ */
+void app_nanopb_xfer_notify_display_info(void);
+
+/*@brief 传输接收显示与菜单
+ */
+bool app_nanopb_xfer_respond_display_info(AppPB_MsgSet *message);
+
+/*@brief 打包传输App绑定
+ */
+void app_nanopb_xfer_notify_app_bind(void);
+
+/*@brief 传输接收App绑定
+ */
+bool app_nanopb_xfer_respond_app_bind(AppPB_MsgSet *message);
+
+/*@brief 打包传输省电/影院/运动识别
+ */
+void app_nanopb_xfer_notify_power(void);
+
+/*@brief 传输接收省电/影院/运动识别
+ */
+bool app_nanopb_xfer_respond_power(AppPB_MsgSet *message);
+
+/*@brief 打包传输睡眠设置
+ */
+void app_nanopb_xfer_notify_sleep_set(void);
+
+/*@brief 传输接收睡眠设置
+ */
+bool app_nanopb_xfer_respond_sleep_set(AppPB_MsgSet *message);
+
+/*@brief 打包传输表盘配置
+ */
+void app_nanopb_xfer_notify_watch_cfg(void);
+
+/*@brief 传输接收表盘配置
+ */
+bool app_nanopb_xfer_respond_watch_cfg(AppPB_MsgSet *message);
+
 /*@brief 打包传输系统时钟
  */
 void app_nanopb_xfer_notify_system_clock(void);

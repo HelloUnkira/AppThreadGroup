@@ -11,16 +11,31 @@
  */
 typedef enum {
     app_module_data_center_src_none = 0,
-    app_module_data_center_src_module_source,           /* 模组资源 */
-    app_module_data_center_src_module_weather,          /* 模组资源 */
-    app_module_data_center_src_module_world_time,       /* 模组资源 */
-    app_module_data_center_src_remind_alarm,            /* 提醒闹钟 */
-    app_module_data_center_src_remind_calendar,         /* 提醒日历 */
-    app_module_data_center_src_remind_matter,           /* 提醒事项 */
-    app_module_data_center_src_system_profile,          /* 系统配置 */
-    app_module_data_center_src_system_data,             /* 系统数据 */
-    app_module_data_center_src_user_profile,            /* 用户配置 */
-    app_module_data_center_src_user_data,               /* 用户数据 */
+    app_module_data_center_src_module_source,            /* 模组资源 */
+    app_module_data_center_src_module_weather,           /* 模组资源 */
+    app_module_data_center_src_module_world_time,        /* 模组资源 */
+    app_module_data_center_src_remind_alarm,             /* 提醒闹钟 */
+    app_module_data_center_src_remind_calendar,          /* 提醒日历 */
+    app_module_data_center_src_remind_matter,            /* 提醒事项 */
+    app_module_data_center_src_system_profile,           /* 系统配置 */
+    app_module_data_center_src_system_data,              /* 系统数据(绑定/省电/影院/运动识别) */
+    app_module_data_center_src_user_profile,             /* 用户体征+运动目标+手势 */
+    app_module_data_center_src_system_time,              /* 系统时间与显示格式 */
+    app_module_data_center_src_display_info,             /* 显示与菜单(背光/主题/菜单) */
+    app_module_data_center_src_sleep_setting,            /* 睡眠设置 */
+    app_module_data_center_src_heart_health,             /* 心率/血氧/血压/压力/情绪 */
+    app_module_data_center_src_watch_config,             /* 表盘配置 */
+    app_module_data_center_src_protocol_device_info,     /* 协议存储:设备信息 */
+    app_module_data_center_src_protocol_elec_card,       /* 协议存储:电子保卡 */
+    app_module_data_center_src_protocol_music,           /* 协议存储:音乐 */
+    app_module_data_center_src_protocol_msg_info,        /* 协议存储:消息通知 */
+    app_module_data_center_src_protocol_contact,         /* 协议存储:联系人 */
+    app_module_data_center_src_protocol_account,         /* 协议存储:账户 */
+    app_module_data_center_src_protocol_sport_state,     /* 协议存储:运动状态 */
+    app_module_data_center_src_protocol_fem_cycle,       /* 协议存储:生理周期 */
+    app_module_data_center_src_protocol_sport_mng,       /* 协议存储:运动管理 */
+    app_module_data_center_src_protocol_sport_rcd,       /* 协议存储:运动记录 */
+    app_module_data_center_src_protocol_position,        /* 协议存储:地理位置 */
     app_module_data_center_src_num,
 } app_module_data_center_src_type_t;
 
@@ -79,198 +94,260 @@ typedef struct {
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(system profile) */
         struct {
-            uint64_t id:16;             // 设备号
-            uint64_t is_pair:1;         // 配对状态
-            uint64_t ver_major:8;       // 主版本号
-            uint64_t ver_minor:8;       // 次版本号
-            uint64_t ver_patch:8;       // 补版本号
-            uint8_t  system_mode;       // 设备工作模式
-            /* system profile: backlight */
-            struct {
-                uint8_t backlight_level;
-                uint8_t cover_sleep:1;      // 覆盖息屏开关
-                uint8_t dtouch_awake:1;     // 双击亮屏开关
-                uint8_t opera:1;            // 0 as auto mode
-                                            // 1 as manual mode
-                uint8_t use_sensor:1;       // 使用环境光传感器
-                uint8_t app_control:1;      // 手动模式下远程控制使能
-                uint8_t auto_onoff:1;       // 自动模式下背光调节使能
-                uint8_t auto_time_s[2];     // 自动监控开始时间[时,分]
-                uint8_t auto_time_e[2];     // 自动监控结束时间[时,分]
-            } backlight;
+            uint8_t system_mode;            // 设备工作模式
         } system_profile;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(system data) */
         struct {
-            /*  */
-            uint64_t batt_chg_s_utc:36;     // 设备开始充电utc
-            uint64_t batt_chg_e_utc:36;     // 设备结束充电utc
-            uint64_t ble_conn_utc:36;       // BLE断连时utc
-            uint64_t ble_conn_onoff:1;      // 1 as open
-                                            // 0 as close
-            /* system data: bind authorization */
+            /* system data: app bind */
             struct {
-                uint8_t disp_code[12];      // 显示的授权码
-                uint8_t auth_code[12];      // 保存的授权码
-                uint8_t auth_status:1;      // 授权状态
-                uint8_t bind_status:1;      // 绑定状态
-                uint8_t bind_request:1;     // 请求绑定
-            } bind_auth;
+                uint32_t new_bind_uid;      // 新绑定用户ID
+                uint32_t save_bind_uid;     // 已保存用户ID
+                uint32_t qr_random;         // 二维码随机码
+                uint8_t  conn_before:1;     // 曾经连接过
+                uint8_t  bind_notify:1;     // 有绑定通知
+                uint8_t  our_app_conn:1;    // 已连自家APP
+                uint8_t  bind_start:1;      // 正在绑定
+                uint8_t  disp_screen:1;     // 已显示二维码界面
+                uint8_t  conn_sec_cnt;      // 连接秒计数
+            } app_binding;
             /* system data: power save */
             struct {
-                uint8_t onoff:1;                // 省电模式开关
-                uint8_t gesture:1;              // 手势亮屏开关
-                uint8_t cover_sleep:1;          // 覆盖息屏开关
-                uint8_t dtouch_awake:1;         // 双击亮屏开关
-                uint8_t backlight_auto:1;       // 背光自动模式开关
-                uint8_t backlight_level:1;      // 背光等级
-                uint8_t backlight_duration:1;   // 背光持续时间
-                /* 省电模式主要针对屏幕亮灭做限制,可以继续添加其他内容 */
-            } save_power;
-            /* system data: device usage statistics */
-            struct {
-                uint64_t record_utc:36;         // 第一次更新UTC
-                uint8_t  detect_level;          // 检测电量
-                uint8_t  detect_count;          // 检测计数
-                uint8_t  battery_level;         // 电量
-                struct {
-                    uint64_t utc:36;            // 记录时间
-                    uint64_t voltage:16;        // 电压值
-                    uint64_t percent:8;         // 电量
-                } charge[3];                    // [0:开始;1:结束;2:充满]
-                struct {
-                    uint64_t bright:24;         // 亮屏时长(s)
-                    uint64_t vibrate:24;        // 震动时长(s)
-                    uint64_t accelerate:24;     // 加速度计时长(s)
-                    uint64_t geomagnetism:24;   // 地磁计时长(s)
-                    uint64_t gyroscope:24;      // 陀螺仪时长(s)
-                    uint64_t barometer:24;      // 气压计时长(s)
-                    uint64_t gnss:24;           // GNSS计时长(s)
-                    uint64_t light_green:24;    // 绿灯时长(s)
-                    uint64_t light_red:24;      // 红灯时长(s)
-                    uint64_t infrared:24;       // 红外时长(s)
-                    uint64_t ble_time:24;       // BLE连接时长
-                    uint64_t ble_cnt:24;        // BLE连接次数
-                    uint64_t bt_time:24;        // BT连接时长
-                    uint64_t bt_cnt:24;         // BT连接次数
-                    uint64_t key:16;            // 按键次数
-                } duration;
-            } device_usage;
-            /* keep adding */
+                uint8_t power_save:1;       // 省电模式
+                uint8_t everbright:1;       // 屏幕常亮
+                uint8_t hr_auto:1;          // 省电下心率自动
+                uint8_t spo2_auto:1;        // 省电下血氧自动
+                uint8_t pressure_auto:1;    // 省电下压力自动
+                uint8_t emotion_auto:1;     // 省电下情绪自动
+                uint8_t theater:1;          // 影院模式
+                uint8_t motion_reco:1;      // 运动识别
+            } power;
         } system_data;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(user profile) */
         struct {
-            uint64_t brithday_utc:36;   // brithday
-            uint64_t version_app:9;     // major:minor:patch(3:3:3)
-            uint8_t height;             // cm
-            uint8_t weight;             // cm
-            uint8_t stride;             // stride cm
-            uint8_t stride_run;         // stride run cm
-            uint8_t stride_walk;        // stride walk cm
-            uint8_t gender:1;           // 0 as boy, 1 as girl
-            uint8_t metric:1;           // 0 as km, 1 as mi
-            uint8_t mode_time:1;        // 0 as 24 mode, 1 as 12 mode
-            uint8_t mode_temp:1;        // 0 as C" mode, 1 as F" mode
-            uint8_t mode_voice:1;       // 1 as open, 0 as close
-            uint8_t mode_vibrate:1;     // 1 as open, 0 as close
-            uint8_t state_bind:1;       // 0 as unbind, 1 as bind
-            uint8_t state_hand:1;       // 0 as left, 1 as right
-            uint8_t state_week:2;       // 0 as start in monday
-                                        // 1 as start in sunday
-                                        // 2 as start in saturday
-            uint8_t phone_type:2;       // 0 as Android
-                                        // 1 as IOS
-                                        // 2 as Harmony
-            uint8_t find_phone:1;       // 1 as open, 0 as close
-            uint8_t find_band:1;        // 1 as open, 0 as close
-            uint8_t lang;               // language
-            /* user profile: user gesture */
+            uint32_t birthday;              // 生日
+            uint8_t  age;                   // 年龄
+            uint8_t  gender;                // 性别
+            uint16_t height;                // 身高(cm)
+            uint16_t weight;                // 体重(kg)
+            uint8_t  stride_run;            // 跑步步长(cm)
+            uint8_t  stride_walk;           // 走路步长(cm)
             struct {
-                uint8_t shake:1;        // shake
-                uint8_t wrist:1;        // wrist
-                uint8_t time_s[2];      // wrist:监控起始[时,分]
-                uint8_t time_e[2];      // wrist:监控结束[时,分]
-            } gesture;
-            /* user profile: user goal */
-            struct {
-                uint64_t step:32;               // 步数
-                uint64_t step_week:32;          // 步数(周目标)
-                uint64_t calories:16;           // 活动卡路里(kcal)
-                uint64_t calories_min:16;       // 活动卡路里最小值(kcal)
-                uint64_t calories_max:16;       // 活动卡路里最大值(kcal)
-                uint64_t distance:32;           // 距离
-                uint64_t time_walk:8;           // 走动时长(hour)
-                uint64_t time_sleep:16;         // 睡眠时长(min)
-                uint64_t time_duration:32;      // 中高时长(min)
-                uint64_t onoff:1;               // 1 as open, 0 as close
+                uint32_t step;              // 目标步数
+                uint32_t kcal;              // 目标卡路里(kcal)
+                uint32_t meter;             // 目标距离(m)
+                uint32_t duration;          // 目标时长(s)
+                uint32_t mh_duration;       // 目标中高强度时长(s)
             } goal;
-            /* user profile: user volume */
             struct {
-                uint8_t volume_system_level;
-                uint8_t volume_system_index;
-                uint8_t volume_notify_level;
-                uint8_t volume_notify_index;
-                uint8_t volume_call_level;
-                uint8_t volume_call_index;
-                uint8_t volume_alarm_level;
-                uint8_t volume_alarm_index;
-                uint8_t volume_sport_level;
-                uint8_t volume_sport_index;
-            } volume;
-            /* user profile: user fitness monitor */
-            struct {
-                uint8_t time_s[2];              // 监控起始[时,分]
-                uint8_t time_e[2];              // 监控结束[时,分]
-                uint8_t notify:2;               // 0 as close
-                                                // 1 as mute
-                                                // 2 as allow
-                                                // 3 as disallow
-                uint8_t onoff:1;                // 1 as open, 0 as close
-            } fitness;
-            /* user profile: user noise monitor */
-            struct {
-                uint8_t time_s[2];              // 监控起始[时,分]
-                uint8_t time_e[2];              // 监控结束[时,分]
-                uint8_t value;                  // 阈值
-                uint8_t onoff:1;                // 1 as open, 0 as close
-                uint8_t onoff_noise:1;          // 1 as open, 0 as close
-            } noise;
-            /* user profile: user temperature monitor */
-            struct {
-                uint8_t time_s[2];              // 监控起始[时,分]
-                uint8_t time_e[2];              // 监控结束[时,分]
-                uint8_t onoff:1;                // 1 as open, 0 as close
-            } temperature;
-            /* keep adding */
+                uint8_t shake:1;            // shake
+                uint8_t wrist:1;            // wrist
+                uint8_t time_s[2];          // wrist:监控起始[时,分]
+                uint8_t time_e[2];          // wrist:监控结束[时,分]
+            } gesture;
         } user_profile;
         /* --------------------------------------------------------------------- */
-        /* 数据中心管理资源(user data) */
+        /* 数据中心管理资源(system time) */
         struct {
-            /* user data: ui args */
+            uint32_t zone:16;               // 时区偏移(小时)
+            uint32_t date_fmt:1;            // 日期格式
+            uint32_t is_12h:1;              // 12/24小时制
+            uint32_t is_metric:1;           // 公/英制
+            uint32_t lang;                  // 语言ID
+            uint32_t sync_on:1;             // 时间同步开关
+        } system_time;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(display info) */
+        struct {
+            uint8_t display_off_sec;        // 熄屏时间
+            uint8_t backlight_percent;      // 背光亮度
+            uint8_t last_brightness;        // 上次背光
+            uint8_t theme_screen;           // 菜单主题
+            uint8_t effect_style;           // 切换特效
+            uint8_t interface_style;        // 一级菜单特效
+            uint8_t jump_home;              // 跳回首页
+            uint8_t dial_lock:1;            // 表盘切换锁
+        } display_info;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(sleep setting) */
+        struct {
             struct {
-                /* user data: aod watchface */
-                struct {
-                    uint8_t time_s[2];              // 提醒起始[时,分]
-                    uint8_t time_e[2];              // 提醒结束[时,分]
-                    uint8_t index:8;                // 表盘索引号
-                    uint8_t onoff:1;                // 1 as open, 0 as close
-                } aod_watchface;
-                /* user data: theme */
-                uint8_t theme;
-            } ui_args;
-            /* user data: function usage statistics(buried data) */
+                uint8_t day_of_week;        // 有效星期
+                uint8_t fall_hour;          // 入睡时
+                uint8_t fall_min;           // 入睡分
+                uint8_t wake_hour;          // 起床时
+                uint8_t wake_min;           // 起床分
+                uint8_t is_alarm:1;         // 是否到闹钟
+            } schedule[7];
+            uint8_t  mode_switch:1;         // 睡眠模式开关
+            uint8_t  mode_status:1;         // 睡眠模式生效中
+            uint16_t target_duration;       // 睡眠目标(min)
+            uint8_t  remind_switch:1;       // 睡眠提醒开关
+            uint16_t remind;                // 提前提醒(min)
+            uint8_t  snooze_on:1;           // 贪睡开关
+            uint32_t snooze_time;           // 贪睡时间
+            uint8_t  snooze_cnt;            // 贪睡次数
+        } sleep_setting;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(heart health) */
+        struct {
+            uint8_t  hr_value;              // 最近心率
+            uint32_t hr_ts;                 // 心率时间戳
+            uint8_t  rest_hr;               // 静息心率
+            uint32_t rest_hr_ts;            // 静息心率时间戳
+            uint8_t  spo2;                  // 血氧
+            uint32_t spo2_ts;               // 血氧时间戳
+            uint8_t  pressure;              // 压力
+            uint32_t pressure_ts;           // 压力时间戳
+            uint8_t  emotion;               // 情绪
+            uint32_t emotion_ts;            // 情绪时间戳
+            uint8_t  sbp;                   // 收缩压
+            uint8_t  dbp;                   // 舒张压
+            uint32_t bp_ts;                 // 血压时间戳
             struct {
-                uint8_t  usage_type;
-                /* use count:(use type is enum re) */
-                uint16_t usage_count[app_module_config_usage_num];
-                uint16_t usage_queue[3];        // [0:curr;1:prev;2:prev 1]
-                uint16_t sports_list_queue[3];  // [0:curr;1:prev;2:prev 1]
-                uint16_t sports_list_count[app_module_config_usage_sports_list];
-                uint16_t sports_list_type[app_module_config_usage_sports_list];
-            } func_usage;
-            /* keep adding */
-        } user_data;
+                uint8_t hr_auto:1;          // 心率自动测试
+                uint8_t spo2_auto:1;        // 血氧自动测试
+                uint8_t bp_auto:1;          // 血压自动测试
+                uint8_t pressure_auto:1;    // 压力自动测试
+                uint8_t emotion_auto:1;     // 情绪自动测试
+                uint8_t hr_interval;        // 心率间隔(min)
+                uint8_t spo2_interval;      // 血氧间隔(min)
+                uint8_t bp_interval;        // 血压间隔(min)
+            } auto_test;
+            struct {
+                uint8_t lwarn_on:1;         // 低心率提醒
+                uint8_t hwarn_on:1;         // 高心率提醒
+                uint8_t lwarn;              // 低提醒值
+                uint8_t hwarn;              // 高提醒值
+                uint8_t spo2_warn:1;        // 血氧下限提醒
+                uint8_t spo2_limit;         // 血氧下限值
+            } warn;
+        } heart_health;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(watch config) */
+        struct {
+            uint16_t pixel_width;           // 表盘宽
+            uint16_t pixel_height;          // 表盘高
+            uint32_t file_crc32;            // 表盘文件CRC32
+            uint8_t  cur_index;             // 当前表盘索引
+            uint8_t  aod_index;             // AOD表盘索引
+            uint8_t  sort[8];               // 表盘排序
+        } watch_config;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol device info) */
+        struct {
+            char    model[16];              // 设备型号
+            char    hw_ver[16];             // 硬件版本
+            char    sw_ver[16];             // 软件版本
+            char    sn[32];                 // 序列号
+            char    bt_addr[32];            // 蓝牙地址
+            char    pid[16];                // 产品ID
+            uint8_t battery;                // 电量
+        } protocol_device_info;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol elec card) */
+        struct {
+            uint8_t is_activate;            // 是否激活
+            uint8_t is_reported;            // 是否上报
+        } protocol_elec_card;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol music) */
+        struct {
+            char    singer[64];             // 歌手
+            char    song_name[64];          // 曲名
+            uint8_t play_st;                // 播放状态
+            uint8_t max_vol;                // 最大音量
+            uint8_t cur_vol;                // 当前音量
+            uint8_t app_st;                 // app状态
+        } protocol_music;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol msg info) */
+        struct {
+            char    app_name[64];           // 应用名
+            char    contact[64];            // 联系人
+            char    content[128];           // 内容
+            char    phone[32];              // 电话
+            uint8_t msg_id;                 // 消息ID
+            uint8_t msg_type;               // 消息类型
+            uint8_t vibrate;                // 震动开关
+        } protocol_msg_info;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol contact) */
+        struct {
+            char     name[128];             // 联系人名
+            uint16_t name_len;              // 名字长度
+            char     phone[32];             // 号码
+            uint16_t phone_len;             // 号码长度
+            uint8_t  state;                 // 接听/挂断
+        } protocol_contact;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol account) */
+        struct {
+            char    account[255];           // 账号
+            uint8_t acc_len;                // 账号长度
+            uint8_t pair_state;             // 配对状态
+            uint8_t app_role;               // app角色
+        } protocol_account;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol sport state) */
+        struct {
+            uint8_t  monitor_st;            // 监测占用
+            uint8_t  operator_t;            // 执行类型
+            uint8_t  sport_type;            // 运动分类
+            uint32_t start_time;            // 开始时间
+            uint8_t  workout_type;          // 单次运动类型
+            uint32_t op_time;               // 操作时间
+        } protocol_sport_state;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol fem cycle) */
+        struct {
+            uint8_t  remind_sw;             // 总开关
+            uint8_t  menstr_remind;         // 经期开始提醒
+            uint8_t  menstr_end_remind;     // 经期结束提醒
+            uint8_t  ovulat_remind;         // 易孕开始提醒
+            uint8_t  ovulat_end_remind;     // 易孕结束提醒
+            uint32_t cycle_start;           // 经期开始时间
+            uint32_t cycle_end;             // 经期结束时间
+            uint8_t  keep_days;             // 持续天数
+            uint16_t cycle_days;            // 周期天数
+        } protocol_fem_cycle;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol sport mng) */
+        struct {
+            uint8_t max_add_num;            // 最大可添加数
+            uint8_t min_add_num;            // 最小可添加数
+            uint8_t sport_type_count;       // 运动类型数量
+            uint8_t sport_type[32];         // 运动类型列表
+        } protocol_sport_mng;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol sport rcd) */
+        struct {
+            uint16_t id;                    // 记录ID
+            uint8_t  status;                // 状态
+            uint32_t start_time;            // 开始时间
+            uint32_t end_time;              // 结束时间
+            uint32_t calorie;               // 卡路里
+            uint32_t distance;              // 距离(米)
+            uint32_t step;                  // 步数
+            uint32_t duration;              // 时长(秒)
+            uint16_t speed;                 // 速度
+            uint8_t  type;                  // 运动类型
+        } protocol_sport_rcd;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(protocol position) */
+        struct {
+            uint8_t  speed;                 // 速度(dm/s)
+            uint16_t distance;              // 距离(分米)
+            int16_t  altitude;              // 海拔(米)
+            uint32_t total_dist;            // 总距离(分米)
+            uint32_t start_time;            // 开始时间
+            uint32_t end_time;              // 结束时间
+            int32_t  latitude;              // 纬度
+            int32_t  longitude;             // 经度
+            uint16_t bearing;               // 方向
+            uint16_t accuracy;              // 精度
+        } protocol_position;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源:keep adding */
         /* --------------------------------------------------------------------- */

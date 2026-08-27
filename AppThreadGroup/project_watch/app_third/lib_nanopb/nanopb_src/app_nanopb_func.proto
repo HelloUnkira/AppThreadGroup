@@ -240,3 +240,72 @@ message AppPB_WorldClock {
     double  latitude    = 6;                                //维度:北纬+,南纬-
     uint32  city_id     = 7 [(nanopb).int_size = IS_32];    //城市ID
 }
+
+/* 显示与菜单消息(UTE auxiliary/displayinfo) */
+message AppPB_DisplayInfo {
+    uint64  display_off_sec = 1 [(nanopb).int_size = IS_8];  //熄屏时间
+    uint64  backlight       = 2 [(nanopb).int_size = IS_8];  //背光亮度
+    uint64  last_brt        = 3 [(nanopb).int_size = IS_8];  //上次背光
+    uint64  theme_screen    = 4 [(nanopb).int_size = IS_8];  //菜单主题
+    uint64  effect_style    = 5 [(nanopb).int_size = IS_8];  //切换特效
+    uint64  interface_style = 6 [(nanopb).int_size = IS_8];  //一级菜单特效
+    uint64  jump_home       = 7 [(nanopb).int_size = IS_8];  //跳回首页
+    uint64  dial_lock       = 8 [(nanopb).int_size = IS_8];  //表盘切换锁
+}
+
+/* App绑定消息(UTE appBinding) */
+message AppPB_AppBind {
+    uint64  new_bind_uid  = 1 [(nanopb).int_size = IS_32];   //新绑定用户ID
+    uint64  save_bind_uid = 2 [(nanopb).int_size = IS_32];   //已保存用户ID
+    uint64  qr_random     = 3 [(nanopb).int_size = IS_32];   //二维码随机码
+    uint64  conn_before   = 4 [(nanopb).int_size = IS_8];    //曾经连接过
+    uint64  bind_notify   = 5 [(nanopb).int_size = IS_8];    //有绑定通知
+    uint64  our_app_conn  = 6 [(nanopb).int_size = IS_8];    //已连自家APP
+    uint64  bind_start    = 7 [(nanopb).int_size = IS_8];    //正在绑定
+    uint64  disp_screen   = 8 [(nanopb).int_size = IS_8];    //已显示二维码
+    uint64  conn_sec_cnt  = 9 [(nanopb).int_size = IS_8];    //连接秒计数
+}
+
+/* 省电/影院/运动识别消息(UTE powerSavingInfo/theaterInfo/motionRecoInfo) */
+message AppPB_Power {
+    uint64  power_save    = 1 [(nanopb).int_size = IS_8];    //省电模式
+    uint64  everbright    = 2 [(nanopb).int_size = IS_8];    //屏幕常亮
+    uint64  hr_auto       = 3 [(nanopb).int_size = IS_8];    //省电下心率自动
+    uint64  spo2_auto     = 4 [(nanopb).int_size = IS_8];    //省电下血氧自动
+    uint64  pressure_auto = 5 [(nanopb).int_size = IS_8];    //省电下压力自动
+    uint64  emotion_auto  = 6 [(nanopb).int_size = IS_8];    //省电下情绪自动
+    uint64  theater       = 7 [(nanopb).int_size = IS_8];    //影院模式
+    uint64  motion_reco   = 8 [(nanopb).int_size = IS_8];    //运动识别
+}
+
+/* 睡眠设置消息(UTE sleepSetting) */
+message AppPB_SleepSet {
+    /* 单天作息 */
+    message Schedule {
+        uint64  day_of_week = 1 [(nanopb).int_size = IS_8];  //有效星期
+        uint64  fall_hour   = 2 [(nanopb).int_size = IS_8];  //入睡时
+        uint64  fall_min    = 3 [(nanopb).int_size = IS_8];  //入睡分
+        uint64  wake_hour   = 4 [(nanopb).int_size = IS_8];  //起床时
+        uint64  wake_min    = 5 [(nanopb).int_size = IS_8];  //起床分
+        uint64  is_alarm    = 6 [(nanopb).int_size = IS_8];  //是否到闹钟
+    }
+    repeated Schedule schedule    = 1 [(nanopb).max_count = 7];  //7天作息
+    uint64  mode_switch   = 2 [(nanopb).int_size = IS_8];    //睡眠模式开关
+    uint64  mode_status   = 3 [(nanopb).int_size = IS_8];    //睡眠模式生效中
+    uint64  target_dur    = 4 [(nanopb).int_size = IS_16];   //睡眠目标(min)
+    uint64  remind_switch = 5 [(nanopb).int_size = IS_8];    //睡眠提醒开关
+    uint64  remind        = 6 [(nanopb).int_size = IS_16];   //提前提醒(min)
+    uint64  snooze_on     = 7 [(nanopb).int_size = IS_8];    //贪睡开关
+    uint64  snooze_time   = 8 [(nanopb).int_size = IS_32];   //贪睡时间
+    uint64  snooze_cnt    = 9 [(nanopb).int_size = IS_8];    //贪睡次数
+}
+
+/* 表盘配置消息(UTE watchConfigInfo/watchSortInfo) */
+message AppPB_WatchCfg {
+    uint64  pixel_width  = 1 [(nanopb).int_size = IS_16];    //表盘宽
+    uint64  pixel_height = 2 [(nanopb).int_size = IS_16];    //表盘高
+    uint64  file_crc32   = 3 [(nanopb).int_size = IS_32];    //表盘文件CRC32
+    uint64  cur_index    = 4 [(nanopb).int_size = IS_8];     //当前表盘索引
+    uint64  aod_index    = 5 [(nanopb).int_size = IS_8];     //AOD表盘索引
+    repeated uint64 sort = 6 [(nanopb).max_count = 8];       //表盘排序
+}

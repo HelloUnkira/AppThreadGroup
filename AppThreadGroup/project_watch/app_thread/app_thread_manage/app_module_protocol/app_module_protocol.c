@@ -23,6 +23,12 @@ static bool app_module_protocol_notify_prio(app_sys_list_dln_t *node_1, app_sys_
     return protocol_node_a->priority > protocol_node_b->priority;
 }
 
+/*@brief 事件包合并回调
+ */
+static bool app_module_protocol_notify_absorb_handler(void *pkg_old, void *pkg_new)
+{
+}
+
 /*@brief ack超时回调:file超时则失败,否则关闭当前节点
  */
 static void app_module_protocol_notify_timer_handler(void *timer)
@@ -43,8 +49,8 @@ static void app_module_protocol_notify_timer_handler(void *timer)
     app_module_protocol_notify(&trigger, 0);
 }
 
-/*@brief linker桥接:投递高优先linker事件(接收侧ack完成驱动发送侧)
- *@param protocol 链路节点(栈资源)
+/*@brief 传输协议
+ *@param protocol 链路节点(栈资源,非堆资源或静态资源)
  */
 void app_module_protocol_linker(app_module_protocol_t *protocol)
 {
@@ -70,19 +76,16 @@ void app_module_protocol_notify(app_module_protocol_t *protocol, uint32_t priori
 {
     /* 空触发:直接投事件驱动调度 */
     if (protocol->type == app_module_protocol_default) {
-        app_module_protocol_t *copy = app_mem_alloc(sizeof(app_module_protocol_t));
-        memcpy(copy, protocol, sizeof(app_module_protocol_t));
         app_thread_package_t package = {
             .thread  = app_thread_id_manage,
             .module  = app_thread_manage_protocol,
             .event   = app_thread_manage_protocol_notify,
-            .dynamic = true,
-            .data    = copy,
-            .size    = sizeof(app_module_protocol_t),
+            .absorb  = app_module_protocol_notify_absorb_handler,
         };
         app_thread_package_notify(&package);
         return;
     }
+    
     /* 业务消息:拷贝入等待队列,投空事件触发调度 */
     app_module_protocol_t *node = app_mem_alloc(sizeof(app_module_protocol_t));
     memcpy(node, protocol, sizeof(app_module_protocol_t));
@@ -91,6 +94,7 @@ void app_module_protocol_notify(app_module_protocol_t *protocol, uint32_t priori
     app_mutex_process(&app_module_protocol_notify_list.mutex, app_mutex_take);
     app_sys_queue_dlpq_enqueue(&app_module_protocol_notify_list.list, &node->dl_node, app_module_protocol_notify_prio);
     app_mutex_process(&app_module_protocol_notify_list.mutex, app_mutex_give);
+    
     app_module_protocol_t trigger = {0};
     app_module_protocol_notify(&trigger, 0);
 }
@@ -114,7 +118,7 @@ void app_module_protocol_respond(app_module_protocol_t *protocol)
     app_thread_package_notify(&package);
 }
 
-/*@brief linker回调:ack到达,推进file状态机并入队下一个file,关闭当前节点
+/*@brief 传输协议(链接)
  *@param data 链路事件负载
  *@param size 负载大小
  */
@@ -129,8 +133,12 @@ void app_module_protocol_linker_handler(uint8_t *data, uint32_t size)
         app_nanopb_xfer_file_ack(arg->code == AppPB_ACK_Code_SUCCEED);
         #endif
         
-        if (app_module_protocol_notify_node != NULL)
+        if (app_module_protocol_notify_node != NULL) {
             app_module_protocol_notify_node->close = 1;
+            APP_SYS_LOG_WARN("protocol ack access: type:%u chan:%u",
+                app_module_protocol_notify_node->type,
+                app_module_protocol_notify_node->chan);
+        }
         
         app_module_protocol_t trigger = {0};
         app_module_protocol_notify(&trigger, 0);
@@ -143,14 +151,14 @@ void app_module_protocol_linker_handler(uint8_t *data, uint32_t size)
         app_mem_free(protocol->data);
 }
 
-/*@brief notify调度:取队首→分派发送→瞬时清空或一应一答等ack
+/*@brief 传输协议(发送)
  *@param data 传输数据
  *@param size 传输数据大小
  */
 void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
 {
     app_module_protocol_t *protocol = (void *)data;
-    APP_SYS_ASSERT(protocol->type == app_module_protocol_default);
+    APP_SYS_ASSERT(protocol == NULL);
     
     /* 检查队列是否有ack出去(特殊):ack不阻塞,若无条件发出去并清掉 */
     while (true) {
@@ -185,14 +193,14 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
     
     /* 当前有节点在等ack:不取新的 */
     if (app_module_protocol_notify_node != NULL)
-        goto done;
+        return;
     
     /* 取队首挂为当前节点 */
     app_mutex_process(&app_module_protocol_notify_list.mutex, app_mutex_take);
     app_sys_list_dln_t *node = app_sys_list_dll_head(&app_module_protocol_notify_list.list);
     if (node != NULL) app_sys_list_dll_remove(&app_module_protocol_notify_list.list, node);
     app_mutex_process(&app_module_protocol_notify_list.mutex, app_mutex_give);
-    if (node == NULL) goto done;
+    if (node == NULL) return;
     
     app_sys_list_dln_reset(node);
     app_module_protocol_notify_node = app_sys_own_ofs(app_module_protocol_t, dl_node, node);
@@ -219,10 +227,6 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
         app_module_protocol_t trigger = {0};
         app_module_protocol_notify(&trigger, 0);
     }
-    
-    done:
-    if (protocol->dynamic)
-        app_mem_free(protocol->data);
 }
 
 /*@brief 传输协议(接收)
@@ -257,7 +261,7 @@ static void app_module_protocol_notify_node_test_run(void)
     static const app_module_protocol_type_t msg[] = {
         app_module_protocol_device_info, app_module_protocol_device_param,
         app_module_protocol_elec_card,   app_module_protocol_system_clock,
-        app_module_protocol_world_clock,  app_module_protocol_alarm,
+        app_module_protocol_world_clock, app_module_protocol_alarm,
         app_module_protocol_weather,     app_module_protocol_heart_rate,
         app_module_protocol_music,       app_module_protocol_msg_info,
         app_module_protocol_contact,     app_module_protocol_sport_tgt,
@@ -265,7 +269,10 @@ static void app_module_protocol_notify_node_test_run(void)
         app_module_protocol_sport_state, app_module_protocol_not_disturb,
         app_module_protocol_position,    app_module_protocol_fem_cycle,
         app_module_protocol_account,     app_module_protocol_sport_mng,
-        app_module_protocol_sport_rcd,
+        app_module_protocol_sport_rcd,   app_module_protocol_display_info,
+        app_module_protocol_app_bind,    app_module_protocol_power,
+        app_module_protocol_sleep_set,   app_module_protocol_watch_cfg,
+        
         app_module_protocol_file,        /* 文件内部多子步,经timer/linker推进 */
     };
     for (uint32_t idx = 0; idx < app_sys_arr_len(msg); idx++) {

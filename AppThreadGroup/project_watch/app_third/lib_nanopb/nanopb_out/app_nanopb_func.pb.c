@@ -72,6 +72,24 @@ PB_BIND(AppPB_SysClock, AppPB_SysClock, AUTO)
 PB_BIND(AppPB_WorldClock, AppPB_WorldClock, AUTO)
 
 
+PB_BIND(AppPB_DisplayInfo, AppPB_DisplayInfo, AUTO)
+
+
+PB_BIND(AppPB_AppBind, AppPB_AppBind, AUTO)
+
+
+PB_BIND(AppPB_Power, AppPB_Power, AUTO)
+
+
+PB_BIND(AppPB_SleepSet, AppPB_SleepSet, AUTO)
+
+
+PB_BIND(AppPB_SleepSet_Schedule, AppPB_SleepSet_Schedule, AUTO)
+
+
+PB_BIND(AppPB_WatchCfg, AppPB_WatchCfg, AUTO)
+
+
 
 
 #ifndef PB_CONVERT_DOUBLE_FLOAT

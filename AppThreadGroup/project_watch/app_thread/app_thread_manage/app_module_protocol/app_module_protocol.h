@@ -29,6 +29,11 @@ typedef enum {
     app_module_protocol_account,
     app_module_protocol_sport_mng,
     app_module_protocol_sport_rcd,
+    app_module_protocol_display_info,
+    app_module_protocol_app_bind,
+    app_module_protocol_power,
+    app_module_protocol_sleep_set,
+    app_module_protocol_watch_cfg,
     app_module_protocol_file,        /* 文件传输(启动引擎,后续子步由timer驱动) */
 } app_module_protocol_type_t;
 
@@ -67,8 +72,13 @@ typedef struct {
 } app_module_protocol_notify_list_t;
 
 /*@brief 传输协议
+ *@param protocol 链路节点(栈资源,非堆资源或静态资源)
+ */
+void app_module_protocol_linker(app_module_protocol_t *protocol);
+
+/*@brief 传输协议
  *@param protocol 传输协议包(栈资源,非堆资源或静态资源)
- *@param priority 事件优先级(app_thread_package_priority_*,非0优先,大者先发)
+ *@param priority 子优先级(0为默认,大者先发)
  */
 void app_module_protocol_notify(app_module_protocol_t *protocol, uint32_t priority);
 
@@ -77,30 +87,25 @@ void app_module_protocol_notify(app_module_protocol_t *protocol, uint32_t priori
  */
 void app_module_protocol_respond(app_module_protocol_t *protocol);
 
-/*@brief 传输协议
- *@param data 传输数据
- *@param size 传输数据大小
- */
-void app_module_protocol_notify_handler(uint8_t *data, uint32_t size);
-
-/*@brief 传输协议
- *@param data 传输数据
- *@param size 传输数据大小
- */
-void app_module_protocol_respond_handler(uint8_t *data, uint32_t size);
-
-/*@brief linker桥接(最高优先事件):接收侧ack/sync完成广播驱动file监听器推进
+/*@brief 传输协议(链接)
  *@param data 链路事件负载
  *@param size 负载大小
  */
 void app_module_protocol_linker_handler(uint8_t *data, uint32_t size);
 
-/*@brief linker桥接:投递高优先linker事件(接收侧ack/sync完成驱动file监听器)
- *@param protocol 链路节点(栈资源)
+/*@brief 传输协议(发送)
+ *@param data 传输数据
+ *@param size 传输数据大小
  */
-void app_module_protocol_linker(app_module_protocol_t *protocol);
+void app_module_protocol_notify_handler(uint8_t *data, uint32_t size);
 
-/*@brief 系统时钟模组初始化
+/*@brief 传输协议(接收)
+ *@param data 传输数据
+ *@param size 传输数据大小
+ */
+void app_module_protocol_respond_handler(uint8_t *data, uint32_t size);
+
+/*@brief 协议模组初始化
  *       内部使用: 被namage线程使用
  */
 void app_module_protocol_ready(void);

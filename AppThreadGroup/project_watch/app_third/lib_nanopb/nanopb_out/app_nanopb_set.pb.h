@@ -43,6 +43,11 @@ typedef struct _AppPB_MsgSet {
         AppPB_Account account;
         AppPB_SportMng sport_mng;
         AppPB_SportRcd sport_rcd;
+        AppPB_DisplayInfo display_info;
+        AppPB_AppBind app_bind;
+        AppPB_Power power;
+        AppPB_SleepSet sleep_set;
+        AppPB_WatchCfg watch_cfg;
         /* 文件消息:0x80~ */
         AppPB_File file;
     } payload;
@@ -83,6 +88,11 @@ extern "C" {
 #define AppPB_MsgSet_account_tag                 95
 #define AppPB_MsgSet_sport_mng_tag               96
 #define AppPB_MsgSet_sport_rcd_tag               97
+#define AppPB_MsgSet_display_info_tag            98
+#define AppPB_MsgSet_app_bind_tag                99
+#define AppPB_MsgSet_power_tag                   100
+#define AppPB_MsgSet_sleep_set_tag               101
+#define AppPB_MsgSet_watch_cfg_tag               102
 #define AppPB_MsgSet_file_tag                    128
 #define AppPB_MsgSet_crc8_tag                    3
 
@@ -112,6 +122,11 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,fem_cycle,payload.fem_cycle),  94) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,account,payload.account),  95) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sport_mng,payload.sport_mng),  96) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sport_rcd,payload.sport_rcd),  97) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,display_info,payload.display_info),  98) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,app_bind,payload.app_bind),  99) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,power,payload.power), 100) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sleep_set,payload.sleep_set), 101) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,watch_cfg,payload.watch_cfg), 102) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,file,payload.file), 128)
 #define AppPB_MsgSet_CALLBACK NULL
 #define AppPB_MsgSet_DEFAULT NULL
@@ -138,6 +153,11 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,file,payload.file), 128)
 #define AppPB_MsgSet_payload_account_MSGTYPE AppPB_Account
 #define AppPB_MsgSet_payload_sport_mng_MSGTYPE AppPB_SportMng
 #define AppPB_MsgSet_payload_sport_rcd_MSGTYPE AppPB_SportRcd
+#define AppPB_MsgSet_payload_display_info_MSGTYPE AppPB_DisplayInfo
+#define AppPB_MsgSet_payload_app_bind_MSGTYPE AppPB_AppBind
+#define AppPB_MsgSet_payload_power_MSGTYPE AppPB_Power
+#define AppPB_MsgSet_payload_sleep_set_MSGTYPE AppPB_SleepSet
+#define AppPB_MsgSet_payload_watch_cfg_MSGTYPE AppPB_WatchCfg
 #define AppPB_MsgSet_payload_file_MSGTYPE AppPB_File
 
 extern const pb_msgdesc_t AppPB_MsgSet_msg;

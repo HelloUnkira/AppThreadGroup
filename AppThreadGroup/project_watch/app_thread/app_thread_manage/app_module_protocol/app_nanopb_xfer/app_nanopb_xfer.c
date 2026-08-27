@@ -151,6 +151,21 @@ bool app_nanopb_xfer_notify(app_module_protocol_t *node)
     case app_module_protocol_sport_rcd:
         app_nanopb_xfer_notify_sport_rcd();
         return true;
+    case app_module_protocol_display_info:
+        app_nanopb_xfer_notify_display_info();
+        return true;
+    case app_module_protocol_app_bind:
+        app_nanopb_xfer_notify_app_bind();
+        return true;
+    case app_module_protocol_power:
+        app_nanopb_xfer_notify_power();
+        return true;
+    case app_module_protocol_sleep_set:
+        app_nanopb_xfer_notify_sleep_set();
+        return true;
+    case app_module_protocol_watch_cfg:
+        app_nanopb_xfer_notify_watch_cfg();
+        return true;
     default:
         APP_SYS_ASSERT(false);
         return false;
@@ -255,6 +270,21 @@ bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
         break;
     case AppPB_MsgSet_sport_rcd_tag:
         retval = app_nanopb_xfer_respond_sport_rcd(&message);
+        break;
+    case AppPB_MsgSet_display_info_tag:
+        retval = app_nanopb_xfer_respond_display_info(&message);
+        break;
+    case AppPB_MsgSet_app_bind_tag:
+        retval = app_nanopb_xfer_respond_app_bind(&message);
+        break;
+    case AppPB_MsgSet_power_tag:
+        retval = app_nanopb_xfer_respond_power(&message);
+        break;
+    case AppPB_MsgSet_sleep_set_tag:
+        retval = app_nanopb_xfer_respond_sleep_set(&message);
+        break;
+    case AppPB_MsgSet_watch_cfg_tag:
+        retval = app_nanopb_xfer_respond_watch_cfg(&message);
         break;
     case AppPB_MsgSet_file_tag:
         retval = app_nanopb_xfer_respond_file(&message);

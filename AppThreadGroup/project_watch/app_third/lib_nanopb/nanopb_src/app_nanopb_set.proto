@@ -39,6 +39,11 @@ message AppPB_MsgSet {
         AppPB_Account      account        = 0x005f;
         AppPB_SportMng     sport_mng      = 0x0060;
         AppPB_SportRcd     sport_rcd      = 0x0061;
+        AppPB_DisplayInfo  display_info   = 0x0062;
+        AppPB_AppBind      app_bind       = 0x0063;
+        AppPB_Power        power          = 0x0064;
+        AppPB_SleepSet     sleep_set      = 0x0065;
+        AppPB_WatchCfg     watch_cfg      = 0x0066;
         /* 文件消息:0x80~ */
         AppPB_File         file           = 0x0080;
     }

@@ -21,9 +21,24 @@ app_module_data_center_src_table_t app_module_data_center_src_table[] = {
     {app_module_data_center_src_remind_calendar,    "remind calendar",      sizeof(app_module_data_center_src->module_remind_calendar)},
     {app_module_data_center_src_remind_matter,      "remind matter",        sizeof(app_module_data_center_src->module_remind_matter)},
     {app_module_data_center_src_system_profile,     "system profile",       sizeof(app_module_data_center_src->system_profile)},
-    {app_module_data_center_src_system_data,        "system data"   ,       sizeof(app_module_data_center_src->system_data)},
-    {app_module_data_center_src_user_profile,       "user profile"  ,       sizeof(app_module_data_center_src->user_profile)},
-    {app_module_data_center_src_user_data,          "user data"     ,       sizeof(app_module_data_center_src->user_data)},
+    {app_module_data_center_src_system_data,        "system data",          sizeof(app_module_data_center_src->system_data)},
+    {app_module_data_center_src_user_profile,       "user profile",         sizeof(app_module_data_center_src->user_profile)},
+    {app_module_data_center_src_system_time,        "system time",          sizeof(app_module_data_center_src->system_time)},
+    {app_module_data_center_src_display_info,       "display info",         sizeof(app_module_data_center_src->display_info)},
+    {app_module_data_center_src_sleep_setting,      "sleep setting",        sizeof(app_module_data_center_src->sleep_setting)},
+    {app_module_data_center_src_heart_health,       "heart health",         sizeof(app_module_data_center_src->heart_health)},
+    {app_module_data_center_src_watch_config,       "watch config",         sizeof(app_module_data_center_src->watch_config)},
+    {app_module_data_center_src_protocol_device_info, "protocol device info", sizeof(app_module_data_center_src->protocol_device_info)},
+    {app_module_data_center_src_protocol_elec_card,   "protocol elec card",   sizeof(app_module_data_center_src->protocol_elec_card)},
+    {app_module_data_center_src_protocol_music,       "protocol music",       sizeof(app_module_data_center_src->protocol_music)},
+    {app_module_data_center_src_protocol_msg_info,    "protocol msg info",    sizeof(app_module_data_center_src->protocol_msg_info)},
+    {app_module_data_center_src_protocol_contact,     "protocol contact",     sizeof(app_module_data_center_src->protocol_contact)},
+    {app_module_data_center_src_protocol_account,     "protocol account",     sizeof(app_module_data_center_src->protocol_account)},
+    {app_module_data_center_src_protocol_sport_state, "protocol sport state", sizeof(app_module_data_center_src->protocol_sport_state)},
+    {app_module_data_center_src_protocol_fem_cycle,   "protocol fem cycle",   sizeof(app_module_data_center_src->protocol_fem_cycle)},
+    {app_module_data_center_src_protocol_sport_mng,   "protocol sport mng",   sizeof(app_module_data_center_src->protocol_sport_mng)},
+    {app_module_data_center_src_protocol_sport_rcd,   "protocol sport rcd",   sizeof(app_module_data_center_src->protocol_sport_rcd)},
+    {app_module_data_center_src_protocol_position,    "protocol position",    sizeof(app_module_data_center_src->protocol_position)},
 };
 uint32_t app_module_data_center_src_table_size = app_sys_arr_len(app_module_data_center_src_table);
 
@@ -64,7 +79,37 @@ void app_module_data_center_src_reset(void)
         break;
     case app_module_data_center_src_user_profile:
         break;
-    case app_module_data_center_src_user_data:
+    case app_module_data_center_src_system_time:
+        break;
+    case app_module_data_center_src_display_info:
+        break;
+    case app_module_data_center_src_sleep_setting:
+        break;
+    case app_module_data_center_src_heart_health:
+        break;
+    case app_module_data_center_src_watch_config:
+        break;
+    case app_module_data_center_src_protocol_device_info:
+        break;
+    case app_module_data_center_src_protocol_elec_card:
+        break;
+    case app_module_data_center_src_protocol_music:
+        break;
+    case app_module_data_center_src_protocol_msg_info:
+        break;
+    case app_module_data_center_src_protocol_contact:
+        break;
+    case app_module_data_center_src_protocol_account:
+        break;
+    case app_module_data_center_src_protocol_sport_state:
+        break;
+    case app_module_data_center_src_protocol_fem_cycle:
+        break;
+    case app_module_data_center_src_protocol_sport_mng:
+        break;
+    case app_module_data_center_src_protocol_sport_rcd:
+        break;
+    case app_module_data_center_src_protocol_position:
         break;
     default:
         break;

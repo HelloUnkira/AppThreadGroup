@@ -250,6 +250,78 @@ typedef struct _AppPB_WorldClock {
     uint32_t city_id; /* 城市ID */
 } AppPB_WorldClock;
 
+/* 显示与菜单消息(UTE auxiliary/displayinfo) */
+typedef struct _AppPB_DisplayInfo {
+    uint8_t display_off_sec; /* 熄屏时间 */
+    uint8_t backlight; /* 背光亮度 */
+    uint8_t last_brt; /* 上次背光 */
+    uint8_t theme_screen; /* 菜单主题 */
+    uint8_t effect_style; /* 切换特效 */
+    uint8_t interface_style; /* 一级菜单特效 */
+    uint8_t jump_home; /* 跳回首页 */
+    uint8_t dial_lock; /* 表盘切换锁 */
+} AppPB_DisplayInfo;
+
+/* App绑定消息(UTE appBinding) */
+typedef struct _AppPB_AppBind {
+    uint32_t new_bind_uid; /* 新绑定用户ID */
+    uint32_t save_bind_uid; /* 已保存用户ID */
+    uint32_t qr_random; /* 二维码随机码 */
+    uint8_t conn_before; /* 曾经连接过 */
+    uint8_t bind_notify; /* 有绑定通知 */
+    uint8_t our_app_conn; /* 已连自家APP */
+    uint8_t bind_start; /* 正在绑定 */
+    uint8_t disp_screen; /* 已显示二维码 */
+    uint8_t conn_sec_cnt; /* 连接秒计数 */
+} AppPB_AppBind;
+
+/* 省电/影院/运动识别消息(UTE powerSavingInfo/theaterInfo/motionRecoInfo) */
+typedef struct _AppPB_Power {
+    uint8_t power_save; /* 省电模式 */
+    uint8_t everbright; /* 屏幕常亮 */
+    uint8_t hr_auto; /* 省电下心率自动 */
+    uint8_t spo2_auto; /* 省电下血氧自动 */
+    uint8_t pressure_auto; /* 省电下压力自动 */
+    uint8_t emotion_auto; /* 省电下情绪自动 */
+    uint8_t theater; /* 影院模式 */
+    uint8_t motion_reco; /* 运动识别 */
+} AppPB_Power;
+
+/* 单天作息 */
+typedef struct _AppPB_SleepSet_Schedule {
+    uint8_t day_of_week; /* 有效星期 */
+    uint8_t fall_hour; /* 入睡时 */
+    uint8_t fall_min; /* 入睡分 */
+    uint8_t wake_hour; /* 起床时 */
+    uint8_t wake_min; /* 起床分 */
+    uint8_t is_alarm; /* 是否到闹钟 */
+} AppPB_SleepSet_Schedule;
+
+/* 睡眠设置消息(UTE sleepSetting) */
+typedef struct _AppPB_SleepSet {
+    pb_size_t schedule_count;
+    AppPB_SleepSet_Schedule schedule[7]; /* 7天作息 */
+    uint8_t mode_switch; /* 睡眠模式开关 */
+    uint8_t mode_status; /* 睡眠模式生效中 */
+    uint16_t target_dur; /* 睡眠目标(min) */
+    uint8_t remind_switch; /* 睡眠提醒开关 */
+    uint16_t remind; /* 提前提醒(min) */
+    uint8_t snooze_on; /* 贪睡开关 */
+    uint32_t snooze_time; /* 贪睡时间 */
+    uint8_t snooze_cnt; /* 贪睡次数 */
+} AppPB_SleepSet;
+
+/* 表盘配置消息(UTE watchConfigInfo/watchSortInfo) */
+typedef struct _AppPB_WatchCfg {
+    uint16_t pixel_width; /* 表盘宽 */
+    uint16_t pixel_height; /* 表盘高 */
+    uint32_t file_crc32; /* 表盘文件CRC32 */
+    uint8_t cur_index; /* 当前表盘索引 */
+    uint8_t aod_index; /* AOD表盘索引 */
+    pb_size_t sort_count;
+    uint64_t sort[8]; /* 表盘排序 */
+} AppPB_WatchCfg;
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -284,6 +356,12 @@ extern "C" {
 
 
 
+
+
+
+
+
+
 /* Initializer values for message structs */
 #define AppPB_DevInfo_init_default               {"", "", "", "", "", "", 0}
 #define AppPB_DevParam_init_default              {0, 0, 0, 0, 0}
@@ -307,6 +385,12 @@ extern "C" {
 #define AppPB_SportRcd_init_default              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 #define AppPB_SysClock_init_default              {0, 0, 0, 0, 0, 0, 0, _AppPB_SysClock_Mode_MIN}
 #define AppPB_WorldClock_init_default            {0, 0, "", 0, 0, 0, 0}
+#define AppPB_DisplayInfo_init_default           {0, 0, 0, 0, 0, 0, 0, 0}
+#define AppPB_AppBind_init_default               {0, 0, 0, 0, 0, 0, 0, 0, 0}
+#define AppPB_Power_init_default                 {0, 0, 0, 0, 0, 0, 0, 0}
+#define AppPB_SleepSet_init_default              {0, {AppPB_SleepSet_Schedule_init_default, AppPB_SleepSet_Schedule_init_default, AppPB_SleepSet_Schedule_init_default, AppPB_SleepSet_Schedule_init_default, AppPB_SleepSet_Schedule_init_default, AppPB_SleepSet_Schedule_init_default, AppPB_SleepSet_Schedule_init_default}, 0, 0, 0, 0, 0, 0, 0, 0}
+#define AppPB_SleepSet_Schedule_init_default     {0, 0, 0, 0, 0, 0}
+#define AppPB_WatchCfg_init_default              {0, 0, 0, 0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}}
 #define AppPB_DevInfo_init_zero                  {"", "", "", "", "", "", 0}
 #define AppPB_DevParam_init_zero                 {0, 0, 0, 0, 0}
 #define AppPB_ElecCard_init_zero                 {0, 0}
@@ -329,6 +413,12 @@ extern "C" {
 #define AppPB_SportRcd_init_zero                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 #define AppPB_SysClock_init_zero                 {0, 0, 0, 0, 0, 0, 0, _AppPB_SysClock_Mode_MIN}
 #define AppPB_WorldClock_init_zero               {0, 0, "", 0, 0, 0, 0}
+#define AppPB_DisplayInfo_init_zero              {0, 0, 0, 0, 0, 0, 0, 0}
+#define AppPB_AppBind_init_zero                  {0, 0, 0, 0, 0, 0, 0, 0, 0}
+#define AppPB_Power_init_zero                    {0, 0, 0, 0, 0, 0, 0, 0}
+#define AppPB_SleepSet_init_zero                 {0, {AppPB_SleepSet_Schedule_init_zero, AppPB_SleepSet_Schedule_init_zero, AppPB_SleepSet_Schedule_init_zero, AppPB_SleepSet_Schedule_init_zero, AppPB_SleepSet_Schedule_init_zero, AppPB_SleepSet_Schedule_init_zero, AppPB_SleepSet_Schedule_init_zero}, 0, 0, 0, 0, 0, 0, 0, 0}
+#define AppPB_SleepSet_Schedule_init_zero        {0, 0, 0, 0, 0, 0}
+#define AppPB_WatchCfg_init_zero                 {0, 0, 0, 0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define AppPB_DevInfo_model_tag                  1
@@ -474,6 +564,52 @@ extern "C" {
 #define AppPB_WorldClock_longitude_tag           5
 #define AppPB_WorldClock_latitude_tag            6
 #define AppPB_WorldClock_city_id_tag             7
+#define AppPB_DisplayInfo_display_off_sec_tag    1
+#define AppPB_DisplayInfo_backlight_tag          2
+#define AppPB_DisplayInfo_last_brt_tag           3
+#define AppPB_DisplayInfo_theme_screen_tag       4
+#define AppPB_DisplayInfo_effect_style_tag       5
+#define AppPB_DisplayInfo_interface_style_tag    6
+#define AppPB_DisplayInfo_jump_home_tag          7
+#define AppPB_DisplayInfo_dial_lock_tag          8
+#define AppPB_AppBind_new_bind_uid_tag           1
+#define AppPB_AppBind_save_bind_uid_tag          2
+#define AppPB_AppBind_qr_random_tag              3
+#define AppPB_AppBind_conn_before_tag            4
+#define AppPB_AppBind_bind_notify_tag            5
+#define AppPB_AppBind_our_app_conn_tag           6
+#define AppPB_AppBind_bind_start_tag             7
+#define AppPB_AppBind_disp_screen_tag            8
+#define AppPB_AppBind_conn_sec_cnt_tag           9
+#define AppPB_Power_power_save_tag               1
+#define AppPB_Power_everbright_tag               2
+#define AppPB_Power_hr_auto_tag                  3
+#define AppPB_Power_spo2_auto_tag                4
+#define AppPB_Power_pressure_auto_tag            5
+#define AppPB_Power_emotion_auto_tag             6
+#define AppPB_Power_theater_tag                  7
+#define AppPB_Power_motion_reco_tag              8
+#define AppPB_SleepSet_Schedule_day_of_week_tag  1
+#define AppPB_SleepSet_Schedule_fall_hour_tag    2
+#define AppPB_SleepSet_Schedule_fall_min_tag     3
+#define AppPB_SleepSet_Schedule_wake_hour_tag    4
+#define AppPB_SleepSet_Schedule_wake_min_tag     5
+#define AppPB_SleepSet_Schedule_is_alarm_tag     6
+#define AppPB_SleepSet_schedule_tag              1
+#define AppPB_SleepSet_mode_switch_tag           2
+#define AppPB_SleepSet_mode_status_tag           3
+#define AppPB_SleepSet_target_dur_tag            4
+#define AppPB_SleepSet_remind_switch_tag         5
+#define AppPB_SleepSet_remind_tag                6
+#define AppPB_SleepSet_snooze_on_tag             7
+#define AppPB_SleepSet_snooze_time_tag           8
+#define AppPB_SleepSet_snooze_cnt_tag            9
+#define AppPB_WatchCfg_pixel_width_tag           1
+#define AppPB_WatchCfg_pixel_height_tag          2
+#define AppPB_WatchCfg_file_crc32_tag            3
+#define AppPB_WatchCfg_cur_index_tag             4
+#define AppPB_WatchCfg_aod_index_tag             5
+#define AppPB_WatchCfg_sort_tag                  6
 
 /* Struct field encoding specification for nanopb */
 #define AppPB_DevInfo_FIELDLIST(X, a) \
@@ -708,6 +844,77 @@ X(a, STATIC,   SINGULAR, UINT32,   city_id,           7)
 #define AppPB_WorldClock_CALLBACK NULL
 #define AppPB_WorldClock_DEFAULT NULL
 
+#define AppPB_DisplayInfo_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UINT64,   display_off_sec,   1) \
+X(a, STATIC,   SINGULAR, UINT64,   backlight,         2) \
+X(a, STATIC,   SINGULAR, UINT64,   last_brt,          3) \
+X(a, STATIC,   SINGULAR, UINT64,   theme_screen,      4) \
+X(a, STATIC,   SINGULAR, UINT64,   effect_style,      5) \
+X(a, STATIC,   SINGULAR, UINT64,   interface_style,   6) \
+X(a, STATIC,   SINGULAR, UINT64,   jump_home,         7) \
+X(a, STATIC,   SINGULAR, UINT64,   dial_lock,         8)
+#define AppPB_DisplayInfo_CALLBACK NULL
+#define AppPB_DisplayInfo_DEFAULT NULL
+
+#define AppPB_AppBind_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UINT64,   new_bind_uid,      1) \
+X(a, STATIC,   SINGULAR, UINT64,   save_bind_uid,     2) \
+X(a, STATIC,   SINGULAR, UINT64,   qr_random,         3) \
+X(a, STATIC,   SINGULAR, UINT64,   conn_before,       4) \
+X(a, STATIC,   SINGULAR, UINT64,   bind_notify,       5) \
+X(a, STATIC,   SINGULAR, UINT64,   our_app_conn,      6) \
+X(a, STATIC,   SINGULAR, UINT64,   bind_start,        7) \
+X(a, STATIC,   SINGULAR, UINT64,   disp_screen,       8) \
+X(a, STATIC,   SINGULAR, UINT64,   conn_sec_cnt,      9)
+#define AppPB_AppBind_CALLBACK NULL
+#define AppPB_AppBind_DEFAULT NULL
+
+#define AppPB_Power_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UINT64,   power_save,        1) \
+X(a, STATIC,   SINGULAR, UINT64,   everbright,        2) \
+X(a, STATIC,   SINGULAR, UINT64,   hr_auto,           3) \
+X(a, STATIC,   SINGULAR, UINT64,   spo2_auto,         4) \
+X(a, STATIC,   SINGULAR, UINT64,   pressure_auto,     5) \
+X(a, STATIC,   SINGULAR, UINT64,   emotion_auto,      6) \
+X(a, STATIC,   SINGULAR, UINT64,   theater,           7) \
+X(a, STATIC,   SINGULAR, UINT64,   motion_reco,       8)
+#define AppPB_Power_CALLBACK NULL
+#define AppPB_Power_DEFAULT NULL
+
+#define AppPB_SleepSet_FIELDLIST(X, a) \
+X(a, STATIC,   REPEATED, MESSAGE,  schedule,          1) \
+X(a, STATIC,   SINGULAR, UINT64,   mode_switch,       2) \
+X(a, STATIC,   SINGULAR, UINT64,   mode_status,       3) \
+X(a, STATIC,   SINGULAR, UINT64,   target_dur,        4) \
+X(a, STATIC,   SINGULAR, UINT64,   remind_switch,     5) \
+X(a, STATIC,   SINGULAR, UINT64,   remind,            6) \
+X(a, STATIC,   SINGULAR, UINT64,   snooze_on,         7) \
+X(a, STATIC,   SINGULAR, UINT64,   snooze_time,       8) \
+X(a, STATIC,   SINGULAR, UINT64,   snooze_cnt,        9)
+#define AppPB_SleepSet_CALLBACK NULL
+#define AppPB_SleepSet_DEFAULT NULL
+#define AppPB_SleepSet_schedule_MSGTYPE AppPB_SleepSet_Schedule
+
+#define AppPB_SleepSet_Schedule_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UINT64,   day_of_week,       1) \
+X(a, STATIC,   SINGULAR, UINT64,   fall_hour,         2) \
+X(a, STATIC,   SINGULAR, UINT64,   fall_min,          3) \
+X(a, STATIC,   SINGULAR, UINT64,   wake_hour,         4) \
+X(a, STATIC,   SINGULAR, UINT64,   wake_min,          5) \
+X(a, STATIC,   SINGULAR, UINT64,   is_alarm,          6)
+#define AppPB_SleepSet_Schedule_CALLBACK NULL
+#define AppPB_SleepSet_Schedule_DEFAULT NULL
+
+#define AppPB_WatchCfg_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UINT64,   pixel_width,       1) \
+X(a, STATIC,   SINGULAR, UINT64,   pixel_height,      2) \
+X(a, STATIC,   SINGULAR, UINT64,   file_crc32,        3) \
+X(a, STATIC,   SINGULAR, UINT64,   cur_index,         4) \
+X(a, STATIC,   SINGULAR, UINT64,   aod_index,         5) \
+X(a, STATIC,   REPEATED, UINT64,   sort,              6)
+#define AppPB_WatchCfg_CALLBACK NULL
+#define AppPB_WatchCfg_DEFAULT NULL
+
 extern const pb_msgdesc_t AppPB_DevInfo_msg;
 extern const pb_msgdesc_t AppPB_DevParam_msg;
 extern const pb_msgdesc_t AppPB_ElecCard_msg;
@@ -730,6 +937,12 @@ extern const pb_msgdesc_t AppPB_SportMng_msg;
 extern const pb_msgdesc_t AppPB_SportRcd_msg;
 extern const pb_msgdesc_t AppPB_SysClock_msg;
 extern const pb_msgdesc_t AppPB_WorldClock_msg;
+extern const pb_msgdesc_t AppPB_DisplayInfo_msg;
+extern const pb_msgdesc_t AppPB_AppBind_msg;
+extern const pb_msgdesc_t AppPB_Power_msg;
+extern const pb_msgdesc_t AppPB_SleepSet_msg;
+extern const pb_msgdesc_t AppPB_SleepSet_Schedule_msg;
+extern const pb_msgdesc_t AppPB_WatchCfg_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
 #define AppPB_DevInfo_fields &AppPB_DevInfo_msg
@@ -754,13 +967,21 @@ extern const pb_msgdesc_t AppPB_WorldClock_msg;
 #define AppPB_SportRcd_fields &AppPB_SportRcd_msg
 #define AppPB_SysClock_fields &AppPB_SysClock_msg
 #define AppPB_WorldClock_fields &AppPB_WorldClock_msg
+#define AppPB_DisplayInfo_fields &AppPB_DisplayInfo_msg
+#define AppPB_AppBind_fields &AppPB_AppBind_msg
+#define AppPB_Power_fields &AppPB_Power_msg
+#define AppPB_SleepSet_fields &AppPB_SleepSet_msg
+#define AppPB_SleepSet_Schedule_fields &AppPB_SleepSet_Schedule_msg
+#define AppPB_WatchCfg_fields &AppPB_WatchCfg_msg
 
 /* Maximum encoded size of messages (where known) */
 #define AppPB_Account_size                       266
 #define AppPB_Alarm_size                         145
+#define AppPB_AppBind_size                       36
 #define AppPB_Contact_size                       174
 #define AppPB_DevInfo_size                       137
 #define AppPB_DevParam_size                      18
+#define AppPB_DisplayInfo_size                   24
 #define AppPB_ElecCard_size                      4
 #define AppPB_FemCycle_size                      34
 #define AppPB_HeartRate_size                     22
@@ -769,12 +990,16 @@ extern const pb_msgdesc_t AppPB_WorldClock_msg;
 #define AppPB_Music_size                         142
 #define AppPB_NotDisturb_size                    18
 #define AppPB_Position_size                      49
+#define AppPB_Power_size                         24
+#define AppPB_SleepSet_Schedule_size             18
+#define AppPB_SleepSet_size                      169
 #define AppPB_SportMng_size                      358
 #define AppPB_SportRcd_size                      50
 #define AppPB_SportState_size                    24
 #define AppPB_SportTgt_size                      30
 #define AppPB_SysClock_size                      27
 #define AppPB_UserPhys_size                      42
+#define AppPB_WatchCfg_size                      108
 #define AppPB_WeatherDay_size                    14
 #define AppPB_Weather_size                       206
 #define AppPB_WorldClock_size                    137
