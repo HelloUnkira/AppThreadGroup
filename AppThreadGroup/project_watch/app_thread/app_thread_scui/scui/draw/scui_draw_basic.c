@@ -149,7 +149,7 @@ void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc)
     scui_color_wt_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     /* 在dst_surface.clip中的draw_area中填满pixel */
-    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip->y, dst_clip->x);
+    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip_v.y, dst_clip_v.x);
     scui_multi_t dis_line = draw_area.w * dst_surface->pbyte;
     
     if (src_alpha == scui_alpha_trans)

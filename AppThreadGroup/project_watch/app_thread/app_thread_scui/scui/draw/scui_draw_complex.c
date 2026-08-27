@@ -28,7 +28,7 @@ void scui_draw_ctx_area_dither(scui_draw_dsc_t *draw_dsc)
     draw_area.w = dst_clip_v.w;
     draw_area.h = dst_clip_v.h;
     
-    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip->y, dst_clip->x);
+    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip_v.y, dst_clip_v.x);
     scui_multi_t dis_line = draw_area.w * dst_surface->pbyte;
     
     #define DITHER_STATIC     0    /* 静态抖动 */
@@ -241,7 +241,7 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
     draw_area.w = dst_clip_v.w;
     draw_area.h = dst_clip_v.h;
     
-    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip->y, dst_clip->x);
+    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip_v.y, dst_clip_v.x);
     scui_multi_t dis_line = draw_area.w * dst_surface->pbyte;
     
     #define BLUR_IIR        1   // IIR双向滤波
@@ -630,7 +630,7 @@ void scui_draw_ctx_area_grad(scui_draw_dsc_t *draw_dsc)
     scui_pixel_by_color(dst_surface->format, &src_pixel_s, src_color.color_s);
     scui_pixel_by_color(dst_surface->format, &src_pixel_e, src_color.color_e);
     /* 在dst_surface.clip中的draw_area中填满pixel */
-    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip->y, dst_clip->x);
+    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip_v.y, dst_clip_v.x);
     scui_multi_t dis_line = draw_area.w * dst_surface->pbyte;
     
     if (src_alpha == scui_alpha_trans)
@@ -685,7 +685,7 @@ void scui_draw_ctx_area_grads(scui_draw_dsc_t *draw_dsc)
     draw_area.w = dst_clip_v.w;
     draw_area.h = dst_clip_v.h;
     
-    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip->y, dst_clip->x);
+    uint8_t *dst_addr = scui_surface_pixel_ofs(dst_surface, dst_clip_v.y, dst_clip_v.x);
     scui_multi_t dis_line = draw_area.w * dst_surface->pbyte;
     
     scui_color_wt_t  filter = 0;

@@ -437,9 +437,10 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
         scui_pixel_by_color(src_surface->format, &filter, src_color.color_f);
         
         for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
-            /* 扫描区不在src_clip_v中,跳过它 */
-            if (src_area.y + idx_line < src_clip_v.y ||
-                src_area.y + idx_line > src_clip_v.y + draw_area.h)
+            /* 扫描区不在dst_clip_v中,跳过它 */
+            scui_multi_t dst_line_y = dst_offset.y + src_area.y + idx_line;
+            if (dst_line_y < dst_clip_v.y ||
+                dst_line_y > dst_clip_v.y + draw_area.h)
                 continue;
             /* 原扫描行[0, draw_area.w],现在重新更新到新的限制扫描行 */
             scui_point_t draw_area_x  = scui_draw_ctx_ring_quadrant_1_draw_area(&src_area,
@@ -486,9 +487,10 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
         bool pixel_no_grad = grey_table[0] == grey_table[grey_len - 1];
         
         for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
-            /* 扫描区不在src_clip_v中,跳过它 */
-            if (src_area.y + idx_line < src_clip_v.y ||
-                src_area.y + idx_line > src_clip_v.y + draw_area.h)
+            /* 扫描区不在dst_clip_v中,跳过它 */
+            scui_multi_t dst_line_y = dst_offset.y + src_area.y + idx_line;
+            if (dst_line_y < dst_clip_v.y ||
+                dst_line_y > dst_clip_v.y + draw_area.h)
                 continue;
             /* 原扫描行[0, draw_area.w],现在重新更新到新的限制扫描行 */
             scui_point_t draw_area_x  = scui_draw_ctx_ring_quadrant_1_draw_area(&src_area,
