@@ -1,8 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_symbol
- *    用途: 测试 symbol 符号字符(从 scui_ui_1 挖取)
- *    构件: custom 画布全屏
- *    绘制: 所有 symbol 居中聚集排布
+ *    测试(widget symbol)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

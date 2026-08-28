@@ -243,6 +243,14 @@ static void scui_string_args_typo(scui_string_args_t *args)
                 line_w_list[line_n - 1] += word_w;
                 line_e_list[line_n - 1]  = word_e;
                 idx = word_e;
+                
+                /* 检测到约定的换行符,强制换行 */
+                if (word_e < args->number && args->unicode[word_e] == '\n') {
+                    SCUI_ASSERT(line_w_list[line_n - 1] <= src_clip_v.w);
+                    line_w_list[line_n - 1] -= args->gap_item;
+                    line_s_list[line_n + 0]  = word_e + 1;
+                    line_n++;
+                }
                 continue;
             }
             

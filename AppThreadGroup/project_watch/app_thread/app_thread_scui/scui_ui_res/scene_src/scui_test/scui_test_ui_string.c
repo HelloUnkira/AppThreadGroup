@@ -1,8 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_string
- *    用途: 测试 string 控件(从 scui_ui_test 挖取)
- *    构件: 4个渐变string(下划线/删除线/多行/滚动模式)
- *    交互: 编码器调整字号, 按键切换语言
+ *    测试(widget string)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

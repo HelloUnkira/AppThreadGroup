@@ -1,8 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_list
- *    构件: 静态 scroll(居中内切正方形) + 16个string条目
- *    条目: 垂直布局, 文本居中, 文本需函数动态设置
- *    交互: 点击条目跳转对应测试界面
+ *    测试(widget list)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
@@ -16,11 +13,15 @@
 void scui_test_ui_list_item_event_proc(scui_event_t *event)
 {
     static const char * const item_text[16] = {
-        "Test Multiply Scroll", "Test Multiply String", "Test Menial Object", "Test Symbol Char", "Test Automatic Icon",
-        "Test Draw Graph", "Test Code", "Test Ring", "Test Chart", "Test Roller",
-        "Test Button", "Test Misc", "12.Text", "13.Text", "14.Text", "15.Text",
+        "Test Sim Ptr",  "Test Sim Enc", "Test Sim Bar", "Test Sim Key", "Test Multiply Scroll",
+        "Test Multiply String", "Test Menial Object", "Test Symbol Char", "Test Automatic Icon", "Test Draw Graph",
+        "Test Code", "Test Ring", "Test Chart", "Test Roller", "Test Button", "Test Misc",
     };
     static const scui_handle_t item_scene[16] = {
+        SCUI_UI_SCENE_TEST_UI_INDEV_PTR,
+        SCUI_UI_SCENE_TEST_UI_INDEV_ENC,
+        SCUI_UI_SCENE_TEST_UI_INDEV_BAR,
+        SCUI_UI_SCENE_TEST_UI_INDEV_KEY,
         SCUI_UI_SCENE_TEST_UI_SCROLL,
         SCUI_UI_SCENE_TEST_UI_STRING,
         SCUI_UI_SCENE_TEST_UI_OBJECT,
@@ -33,10 +34,6 @@ void scui_test_ui_list_item_event_proc(scui_event_t *event)
         SCUI_UI_SCENE_TEST_UI_ROLLER,
         SCUI_UI_SCENE_TEST_UI_BUTTON,
         SCUI_UI_SCENE_TEST_UI_MISC,
-        SCUI_HANDLE_INVALID,
-        SCUI_HANDLE_INVALID,
-        SCUI_HANDLE_INVALID,
-        SCUI_HANDLE_INVALID,
     };
     
     switch (event->type) {

@@ -4,7 +4,6 @@
         {
             "annotation":              "测试入口主界面",
             "widget.type":              "scui_widget_type_window",
-            "widget.color.color.full":  "0xFF101010",
             "widget.myself":            "SCUI_UI_SCENE_TEST_UI_MAIN"
         },
         {

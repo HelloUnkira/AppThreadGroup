@@ -51,13 +51,15 @@ static bool scui_event_cb_check(scui_event_t *event)
     /* 系统事件中必须该表中事件才响应before和after */
     static const uint32_t event_table[] = {
         scui_event_ptr_hold,
-        scui_event_ptr_move,
         scui_event_ptr_click,
         scui_event_ptr_fling,
-        scui_event_key_hold,
-        scui_event_key_click,
+        scui_event_ptr_move,
+        scui_event_bar_fling,
+        scui_event_bar_move,
         scui_event_enc_fdir,
         scui_event_enc_bdir,
+        scui_event_key_hold,
+        scui_event_key_click,
         
         scui_event_focus_get,
         scui_event_focus_lost,

@@ -1,0 +1,48 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":               "indev_ptr模拟indev_enc测试窗口",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_INDEV_ENC",
+            "widget.event_cb":          "scui_test_ui_indev_enc_event_proc",
+            "widget.child_num":         "2"
+        },
+        {
+            "annotation":              "垂直长条检测区",
+            "widget.type":             "scui_widget_type_custom",
+            "widget.style.fully_bg":   "true",
+            "widget.style.indev_ptr":  "true",
+            "widget.style.indev_enc":  "true",
+            "widget.clip.x":           "SCUI_HOR_RES / 8",
+            "widget.clip.y":           "SCUI_VER_RES / 6",
+            "widget.clip.w":           "SCUI_HOR_RES / 8",
+            "widget.clip.h":           "SCUI_VER_RES * 2 / 3",
+            "widget.myself":           "SCUI_UI_SCENE_TEST_UI_INDEV_ENC_1",
+            "widget.parent":           "SCUI_UI_SCENE_TEST_UI_INDEV_ENC",
+            "widget.event_cb":         "scui_test_ui_indev_enc_strip_event_proc",
+            "widget.child_num":        "0",
+            "widget.color.color.full": "0xFF808080"
+        },
+        {
+            "annotation":              "事件打印多行文本框",
+            "widget.type":             "scui_widget_type_string",
+            "widget.style.fully_bg":   "true",
+            "widget.clip.x":           "SCUI_HOR_RES * 3 / 8",
+            "widget.clip.y":           "SCUI_VER_RES / 6",
+            "widget.clip.w":           "SCUI_HOR_RES * 4 / 8",
+            "widget.clip.h":           "SCUI_VER_RES * 2 / 3",
+            "widget.myself":           "SCUI_UI_SCENE_TEST_UI_INDEV_ENC_2",
+            "widget.parent":           "SCUI_UI_SCENE_TEST_UI_INDEV_ENC",
+            "widget.color.color.full": "0xFF404040",
+            "args.line_multi":         "true",
+            "args.size":               "24",
+            "args.color.filter":       "true",
+            "args.color.color_s.full": "0xFFFFFFFF",
+            "args.color.color_e.full": "0xFFFFFFFF",
+            "font_idx":                "SCUI_FONT_IDX_MZ"
+        }
+    ]
+}

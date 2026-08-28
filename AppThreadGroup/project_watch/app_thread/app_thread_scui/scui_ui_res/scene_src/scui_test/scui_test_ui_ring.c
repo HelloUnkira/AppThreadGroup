@@ -1,8 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_ring
- *    用途: 测试圆环绘制(从 scui_ui_float_3 挖取)
- *    构件: custom 画布全屏
- *    绘制: draw_ring 三色渐变圆环动画
+ *    测试(draw ring)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

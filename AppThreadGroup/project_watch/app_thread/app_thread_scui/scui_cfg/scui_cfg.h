@@ -97,7 +97,6 @@
 /* 输入设备:bar */
 #define SCUI_INDEV_BAR_FLING_RATE                   (448)   /* fling: 距离 * 系数 / 时间 == 速度 * 系数 */
 #define SCUI_INDEV_BAR_MOVE_CNT                     (6)     /* fling: 敏感度调整(允许掠过部分move) */
-#define SCUI_INDEV_BAR_MOVE_DELTA                   (1)     /* move:  移动消抖, 最小移动距离 */
 #define SCUI_INDEV_BAR_UNIT                         (16)    /* move:  位移映射单位(坐标位移/单位) */
 
 /* 输入设备:key */

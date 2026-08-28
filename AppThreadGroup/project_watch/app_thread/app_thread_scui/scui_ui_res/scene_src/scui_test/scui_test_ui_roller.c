@@ -1,8 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_roller
- *    用途: 测试滚轮(从 scui_ui_float_4 挖取)
- *    构件: roller spin + scale
- *    交互: 动画打印中心子控件文本
+ *    测试(widget roller)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

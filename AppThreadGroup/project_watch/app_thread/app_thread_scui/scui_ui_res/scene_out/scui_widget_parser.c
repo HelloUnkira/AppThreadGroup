@@ -68,6 +68,14 @@ static void scui_widget_parser_event_cb_empty(scui_event_t *event)
 #define scui_test_ui_graph_8_event_proc                        scui_widget_parser_event_cb_empty
 #define scui_test_ui_graph_9_event_proc                        scui_widget_parser_event_cb_empty
 #define scui_test_ui_icon_event_proc                           scui_widget_parser_event_cb_empty
+#define scui_test_ui_indev_bar_event_proc                      scui_widget_parser_event_cb_empty
+#define scui_test_ui_indev_bar_strip_event_proc                scui_widget_parser_event_cb_empty
+#define scui_test_ui_indev_enc_event_proc                      scui_widget_parser_event_cb_empty
+#define scui_test_ui_indev_enc_strip_event_proc                scui_widget_parser_event_cb_empty
+#define scui_test_ui_indev_key_event_proc                      scui_widget_parser_event_cb_empty
+#define scui_test_ui_indev_key_strip_event_proc                scui_widget_parser_event_cb_empty
+#define scui_test_ui_indev_ptr_event_proc                      scui_widget_parser_event_cb_empty
+#define scui_test_ui_indev_ptr_strip_event_proc                scui_widget_parser_event_cb_empty
 #define scui_test_ui_list_item_event_proc                      scui_widget_parser_event_cb_empty
 #define scui_test_ui_main_home_event_proc                      scui_widget_parser_event_cb_empty
 #define scui_test_ui_main_test_event_proc                      scui_widget_parser_event_cb_empty
@@ -148,6 +156,14 @@ extern void scui_test_ui_graph_7_event_proc(scui_event_t *event);
 extern void scui_test_ui_graph_8_event_proc(scui_event_t *event);
 extern void scui_test_ui_graph_9_event_proc(scui_event_t *event);
 extern void scui_test_ui_icon_event_proc(scui_event_t *event);
+extern void scui_test_ui_indev_bar_event_proc(scui_event_t *event);
+extern void scui_test_ui_indev_bar_strip_event_proc(scui_event_t *event);
+extern void scui_test_ui_indev_enc_event_proc(scui_event_t *event);
+extern void scui_test_ui_indev_enc_strip_event_proc(scui_event_t *event);
+extern void scui_test_ui_indev_key_event_proc(scui_event_t *event);
+extern void scui_test_ui_indev_key_strip_event_proc(scui_event_t *event);
+extern void scui_test_ui_indev_ptr_event_proc(scui_event_t *event);
+extern void scui_test_ui_indev_ptr_strip_event_proc(scui_event_t *event);
 extern void scui_test_ui_list_item_event_proc(scui_event_t *event);
 extern void scui_test_ui_main_home_event_proc(scui_event_t *event);
 extern void scui_test_ui_main_test_event_proc(scui_event_t *event);
@@ -238,6 +254,12 @@ static void scui_widget_json_widget_style_fully_bg(void *maker, void *field)
 {
 	scui_widget_maker_t *widget_maker = (scui_widget_maker_t *)maker;
 	widget_maker->style.fully_bg = ((scui_widget_json_val_t *)field)->sbitfd;
+}
+
+static void scui_widget_json_widget_style_indev_bar(void *maker, void *field)
+{
+	scui_widget_maker_t *widget_maker = (scui_widget_maker_t *)maker;
+	widget_maker->style.indev_bar = ((scui_widget_json_val_t *)field)->sbitfd;
 }
 
 static void scui_widget_json_widget_style_indev_enc(void *maker, void *field)
@@ -364,6 +386,18 @@ static void scui_widget_json_string_args_lang(void *maker, void *field)
 {
 	scui_string_maker_t *string_maker = (scui_string_maker_t *)maker;
 	string_maker->args.lang = ((scui_widget_json_val_t *)field)->handle;
+}
+
+static void scui_widget_json_string_args_line_multi(void *maker, void *field)
+{
+	scui_string_maker_t *string_maker = (scui_string_maker_t *)maker;
+	string_maker->args.line_multi = ((scui_widget_json_val_t *)field)->sbitfd;
+}
+
+static void scui_widget_json_string_args_size(void *maker, void *field)
+{
+	scui_string_maker_t *string_maker = (scui_string_maker_t *)maker;
+	string_maker->args.size = ((scui_widget_json_val_t *)field)->coord;
 }
 
 static void scui_widget_json_string_font_idx(void *maker, void *field)
@@ -3001,7 +3035,6 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_ICON_cfg[])(void *maker, v
 	scui_widget_json_widget_parent,
 	scui_widget_json_window_preload,
 	scui_widget_json_widget_child_num,
-	scui_widget_json_widget_color_color_full,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
 	scui_widget_json_widget_style_indev_ptr,
@@ -3013,7 +3046,6 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_ICON_val[]
 	{ .handle = SCUI_HANDLE_INVALID, },
 	{ .sbitfd = 0, },
 	{ .handle = 10, },
-	{ .color = 0xFF101010, },
 	{ .event = scui_test_ui_icon_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_ICON, },
 	{ .sbitfd = true, },
@@ -3026,11 +3058,456 @@ const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_ICON_key = {
 	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_ICON_cfg,
 };
 
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	scui_widget_json_window_preload,
+	scui_widget_json_widget_child_num,
+	scui_widget_json_widget_event_cb,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_indev_ptr,
+	scui_widget_json_widget_style_sched_anima,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_val[] = {
+	{ .handle = scui_widget_type_window, },
+	{ .handle = SCUI_HANDLE_INVALID, },
+	{ .sbitfd = 0, },
+	{ .handle = 2, },
+	{ .event = scui_test_ui_indev_bar_event_proc, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_BAR, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_1_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	NULL,
+	scui_widget_json_widget_child_num,
+	scui_widget_json_widget_clip_h,
+	scui_widget_json_widget_clip_w,
+	scui_widget_json_widget_clip_x,
+	scui_widget_json_widget_clip_y,
+	scui_widget_json_widget_color_color_full,
+	scui_widget_json_widget_event_cb,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_fully_bg,
+	scui_widget_json_widget_style_indev_bar,
+	scui_widget_json_widget_style_indev_ptr,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_1_val[] = {
+	{ .handle = scui_widget_type_custom, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_BAR, },
+	{ .handle = 0, },
+	{ .handle = 0, },
+	{ .coord = SCUI_VER_RES * 2 / 3, },
+	{ .coord = SCUI_HOR_RES / 8, },
+	{ .coord = SCUI_HOR_RES / 8, },
+	{ .coord = SCUI_VER_RES / 6, },
+	{ .color = 0xFF808080, },
+	{ .event = scui_test_ui_indev_bar_strip_event_proc, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_BAR_1, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_1_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_1_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_1_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_1_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_2_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	NULL,
+	scui_widget_json_string_args_color_color_e_full,
+	scui_widget_json_string_args_color_color_s_full,
+	scui_widget_json_string_args_color_filter,
+	scui_widget_json_string_args_line_multi,
+	scui_widget_json_string_args_size,
+	scui_widget_json_string_font_idx,
+	scui_widget_json_widget_clip_h,
+	scui_widget_json_widget_clip_w,
+	scui_widget_json_widget_clip_x,
+	scui_widget_json_widget_clip_y,
+	scui_widget_json_widget_color_color_full,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_fully_bg,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_2_val[] = {
+	{ .handle = scui_widget_type_string, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_BAR, },
+	{ .handle = 0, },
+	{ .color = 0xFFFFFFFF, },
+	{ .color = 0xFFFFFFFF, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+	{ .coord = 24, },
+	{ .handle = SCUI_FONT_IDX_MZ, },
+	{ .coord = SCUI_VER_RES * 2 / 3, },
+	{ .coord = SCUI_HOR_RES * 4 / 8, },
+	{ .coord = SCUI_HOR_RES * 3 / 8, },
+	{ .coord = SCUI_VER_RES / 6, },
+	{ .color = 0xFF404040, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_BAR_2, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_2_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_2_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_2_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_2_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	scui_widget_json_window_preload,
+	scui_widget_json_widget_child_num,
+	scui_widget_json_widget_event_cb,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_indev_ptr,
+	scui_widget_json_widget_style_sched_anima,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_val[] = {
+	{ .handle = scui_widget_type_window, },
+	{ .handle = SCUI_HANDLE_INVALID, },
+	{ .sbitfd = 0, },
+	{ .handle = 2, },
+	{ .event = scui_test_ui_indev_enc_event_proc, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_ENC, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_1_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	NULL,
+	scui_widget_json_widget_child_num,
+	scui_widget_json_widget_clip_h,
+	scui_widget_json_widget_clip_w,
+	scui_widget_json_widget_clip_x,
+	scui_widget_json_widget_clip_y,
+	scui_widget_json_widget_color_color_full,
+	scui_widget_json_widget_event_cb,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_fully_bg,
+	scui_widget_json_widget_style_indev_enc,
+	scui_widget_json_widget_style_indev_ptr,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_1_val[] = {
+	{ .handle = scui_widget_type_custom, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_ENC, },
+	{ .handle = 0, },
+	{ .handle = 0, },
+	{ .coord = SCUI_VER_RES * 2 / 3, },
+	{ .coord = SCUI_HOR_RES / 8, },
+	{ .coord = SCUI_HOR_RES / 8, },
+	{ .coord = SCUI_VER_RES / 6, },
+	{ .color = 0xFF808080, },
+	{ .event = scui_test_ui_indev_enc_strip_event_proc, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_ENC_1, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_1_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_1_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_1_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_1_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_2_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	NULL,
+	scui_widget_json_string_args_color_color_e_full,
+	scui_widget_json_string_args_color_color_s_full,
+	scui_widget_json_string_args_color_filter,
+	scui_widget_json_string_args_line_multi,
+	scui_widget_json_string_args_size,
+	scui_widget_json_string_font_idx,
+	scui_widget_json_widget_clip_h,
+	scui_widget_json_widget_clip_w,
+	scui_widget_json_widget_clip_x,
+	scui_widget_json_widget_clip_y,
+	scui_widget_json_widget_color_color_full,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_fully_bg,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_2_val[] = {
+	{ .handle = scui_widget_type_string, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_ENC, },
+	{ .handle = 0, },
+	{ .color = 0xFFFFFFFF, },
+	{ .color = 0xFFFFFFFF, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+	{ .coord = 24, },
+	{ .handle = SCUI_FONT_IDX_MZ, },
+	{ .coord = SCUI_VER_RES * 2 / 3, },
+	{ .coord = SCUI_HOR_RES * 4 / 8, },
+	{ .coord = SCUI_HOR_RES * 3 / 8, },
+	{ .coord = SCUI_VER_RES / 6, },
+	{ .color = 0xFF404040, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_ENC_2, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_2_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_2_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_2_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_2_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	scui_widget_json_window_preload,
+	scui_widget_json_widget_child_num,
+	scui_widget_json_widget_event_cb,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_indev_ptr,
+	scui_widget_json_widget_style_sched_anima,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_val[] = {
+	{ .handle = scui_widget_type_window, },
+	{ .handle = SCUI_HANDLE_INVALID, },
+	{ .sbitfd = 0, },
+	{ .handle = 2, },
+	{ .event = scui_test_ui_indev_key_event_proc, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_KEY, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_1_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	NULL,
+	scui_widget_json_widget_child_num,
+	scui_widget_json_widget_clip_h,
+	scui_widget_json_widget_clip_w,
+	scui_widget_json_widget_clip_x,
+	scui_widget_json_widget_clip_y,
+	scui_widget_json_widget_color_color_full,
+	scui_widget_json_widget_event_cb,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_fully_bg,
+	scui_widget_json_widget_style_indev_key,
+	scui_widget_json_widget_style_indev_ptr,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_1_val[] = {
+	{ .handle = scui_widget_type_custom, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_KEY, },
+	{ .handle = 0, },
+	{ .handle = 0, },
+	{ .coord = SCUI_VER_RES * 2 / 3, },
+	{ .coord = SCUI_HOR_RES / 8, },
+	{ .coord = SCUI_HOR_RES / 8, },
+	{ .coord = SCUI_VER_RES / 6, },
+	{ .color = 0xFF808080, },
+	{ .event = scui_test_ui_indev_key_strip_event_proc, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_KEY_1, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_1_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_1_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_1_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_1_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_2_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	NULL,
+	scui_widget_json_string_args_color_color_e_full,
+	scui_widget_json_string_args_color_color_s_full,
+	scui_widget_json_string_args_color_filter,
+	scui_widget_json_string_args_line_multi,
+	scui_widget_json_string_args_size,
+	scui_widget_json_string_font_idx,
+	scui_widget_json_widget_clip_h,
+	scui_widget_json_widget_clip_w,
+	scui_widget_json_widget_clip_x,
+	scui_widget_json_widget_clip_y,
+	scui_widget_json_widget_color_color_full,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_fully_bg,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_2_val[] = {
+	{ .handle = scui_widget_type_string, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_KEY, },
+	{ .handle = 0, },
+	{ .color = 0xFFFFFFFF, },
+	{ .color = 0xFFFFFFFF, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+	{ .coord = 24, },
+	{ .handle = SCUI_FONT_IDX_MZ, },
+	{ .coord = SCUI_VER_RES * 2 / 3, },
+	{ .coord = SCUI_HOR_RES * 4 / 8, },
+	{ .coord = SCUI_HOR_RES * 3 / 8, },
+	{ .coord = SCUI_VER_RES / 6, },
+	{ .color = 0xFF404040, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_KEY_2, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_2_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_2_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_2_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_2_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	scui_widget_json_window_preload,
+	scui_widget_json_widget_child_num,
+	scui_widget_json_widget_event_cb,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_indev_ptr,
+	scui_widget_json_widget_style_sched_anima,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_val[] = {
+	{ .handle = scui_widget_type_window, },
+	{ .handle = SCUI_HANDLE_INVALID, },
+	{ .sbitfd = 0, },
+	{ .handle = 2, },
+	{ .event = scui_test_ui_indev_ptr_event_proc, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_PTR, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_1_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	NULL,
+	scui_widget_json_widget_child_num,
+	scui_widget_json_widget_clip_h,
+	scui_widget_json_widget_clip_w,
+	scui_widget_json_widget_clip_x,
+	scui_widget_json_widget_clip_y,
+	scui_widget_json_widget_color_color_full,
+	scui_widget_json_widget_event_cb,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_fully_bg,
+	scui_widget_json_widget_style_indev_ptr,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_1_val[] = {
+	{ .handle = scui_widget_type_custom, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_PTR, },
+	{ .handle = 0, },
+	{ .handle = 0, },
+	{ .coord = SCUI_VER_RES * 2 / 3, },
+	{ .coord = SCUI_HOR_RES / 8, },
+	{ .coord = SCUI_HOR_RES / 8, },
+	{ .coord = SCUI_VER_RES / 6, },
+	{ .color = 0xFF808080, },
+	{ .event = scui_test_ui_indev_ptr_strip_event_proc, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_PTR_1, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_1_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_1_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_1_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_1_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_2_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	NULL,
+	scui_widget_json_string_args_color_color_e_full,
+	scui_widget_json_string_args_color_color_s_full,
+	scui_widget_json_string_args_color_filter,
+	scui_widget_json_string_args_line_multi,
+	scui_widget_json_string_args_size,
+	scui_widget_json_string_font_idx,
+	scui_widget_json_widget_clip_h,
+	scui_widget_json_widget_clip_w,
+	scui_widget_json_widget_clip_x,
+	scui_widget_json_widget_clip_y,
+	scui_widget_json_widget_color_color_full,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_fully_bg,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_2_val[] = {
+	{ .handle = scui_widget_type_string, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_PTR, },
+	{ .handle = 0, },
+	{ .color = 0xFFFFFFFF, },
+	{ .color = 0xFFFFFFFF, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+	{ .coord = 24, },
+	{ .handle = SCUI_FONT_IDX_MZ, },
+	{ .coord = SCUI_VER_RES * 2 / 3, },
+	{ .coord = SCUI_HOR_RES * 4 / 8, },
+	{ .coord = SCUI_HOR_RES * 3 / 8, },
+	{ .coord = SCUI_VER_RES / 6, },
+	{ .color = 0xFF404040, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_INDEV_PTR_2, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_2_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_2_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_2_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_2_cfg,
+};
+
 static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_LIST_cfg[])(void *maker, void *field) = {
 	scui_widget_json_widget_type,
 	scui_widget_json_widget_parent,
 	scui_widget_json_window_preload,
-	scui_widget_json_widget_color_color_full,
 	scui_widget_json_widget_myself,
 	scui_widget_json_widget_child_num,
 };
@@ -3039,7 +3516,6 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_LIST_val[]
 	{ .handle = scui_widget_type_window, },
 	{ .handle = SCUI_HANDLE_INVALID, },
 	{ .sbitfd = 0, },
-	{ .color = 0xFF101010, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_LIST, },
 	{ .handle = 1, },
 };
@@ -3842,7 +4318,6 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_MAIN_cfg[])(void *maker, v
 	scui_widget_json_widget_type,
 	scui_widget_json_widget_parent,
 	scui_widget_json_window_preload,
-	scui_widget_json_widget_color_color_full,
 	scui_widget_json_widget_myself,
 	scui_widget_json_widget_child_num,
 };
@@ -3851,7 +4326,6 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_MAIN_val[]
 	{ .handle = scui_widget_type_window, },
 	{ .handle = SCUI_HANDLE_INVALID, },
 	{ .sbitfd = 0, },
-	{ .color = 0xFF101010, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_MAIN, },
 	{ .handle = 2, },
 };
@@ -4223,7 +4697,6 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_SCROLL_cfg[])(void *maker,
 	scui_widget_json_widget_parent,
 	scui_widget_json_window_preload,
 	scui_widget_json_widget_child_num,
-	scui_widget_json_widget_color_color_full,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
 	scui_widget_json_widget_style_indev_key,
@@ -4234,7 +4707,6 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_SCROLL_val
 	{ .handle = SCUI_HANDLE_INVALID, },
 	{ .sbitfd = 0, },
 	{ .handle = 10, },
-	{ .color = 0xFF101010, },
 	{ .event = scui_test_ui_scroll_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_SCROLL, },
 	{ .sbitfd = true, },
@@ -4251,7 +4723,6 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_STRING_cfg[])(void *maker,
 	scui_widget_json_widget_parent,
 	scui_widget_json_window_preload,
 	scui_widget_json_widget_child_num,
-	scui_widget_json_widget_color_color_full,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
 	scui_widget_json_widget_style_indev_enc,
@@ -4264,7 +4735,6 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_STRING_val
 	{ .handle = SCUI_HANDLE_INVALID, },
 	{ .sbitfd = 0, },
 	{ .handle = 20, },
-	{ .color = 0xFF101010, },
 	{ .event = scui_test_ui_string_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_STRING, },
 	{ .sbitfd = true, },
@@ -4283,7 +4753,6 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_SYMBOL_cfg[])(void *maker,
 	scui_widget_json_widget_parent,
 	scui_widget_json_window_preload,
 	scui_widget_json_widget_child_num,
-	scui_widget_json_widget_color_color_full,
 	scui_widget_json_widget_myself,
 };
 
@@ -4292,7 +4761,6 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_SYMBOL_val
 	{ .handle = SCUI_HANDLE_INVALID, },
 	{ .sbitfd = 0, },
 	{ .handle = 10, },
-	{ .color = 0xFF101010, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_SYMBOL, },
 };
 
@@ -4442,7 +4910,7 @@ const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_STANDBY_key = {
 	.cfg = scui_widget_SCUI_UI_SCENE_STANDBY_cfg,
 };
 
-const void * const scui_widget_parser_table[118] = {
+const void * const scui_widget_parser_table[130] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE_key,
@@ -4523,6 +4991,18 @@ const void * const scui_widget_parser_table[118] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_GRAPH_8_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_GRAPH_9_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_ICON_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_1_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_BAR_2_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_1_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_ENC_2_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_1_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_KEY_2_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_1_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_INDEV_PTR_2_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_LIST_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_LIST_SCROLL_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_LIST_ITEM_1_key,

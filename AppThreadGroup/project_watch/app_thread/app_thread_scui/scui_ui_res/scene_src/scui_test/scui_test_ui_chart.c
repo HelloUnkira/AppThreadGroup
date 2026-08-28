@@ -1,7 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_chart
- *    用途: 测试图表(从 scui_ui_float_4 挖取, 驱逐 xchart 后改为 menial cht)
- *    构件: menial cht hist + line
+ *    测试(widget chart)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

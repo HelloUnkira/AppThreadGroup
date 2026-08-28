@@ -1,8 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_main
- *    测试入口主界面: 静态两个string条目, 水平居中垂直镜像对齐
- *    条目1: 进入主界面
- *    条目2: 进入测试列表
+ *    测试(widget main)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

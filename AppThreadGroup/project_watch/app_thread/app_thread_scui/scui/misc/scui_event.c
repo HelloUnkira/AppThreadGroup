@@ -249,6 +249,11 @@ void scui_event_cb_find(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_
             scui_event_type_enc(cb_node->event))
             cb_node_unmatch = false;
         
+        if (cb_node_unmatch)    /* 序列通配回调:bar */
+        if (cb_node_inner->event == scui_event_bar_all &&
+            scui_event_type_bar(cb_node->event))
+            cb_node_unmatch = false;
+        
         if (cb_node_unmatch)    /* 序列通配回调:key */
         if (cb_node_inner->event == scui_event_key_all &&
             scui_event_type_key(cb_node->event))

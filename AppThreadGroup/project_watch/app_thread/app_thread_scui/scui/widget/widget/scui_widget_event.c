@@ -662,6 +662,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 输入事件ptr,enc,key:回溯递归 */
     if (scui_event_type_ptr(event->type) ||
         scui_event_type_enc(event->type) ||
+        scui_event_type_bar(event->type) ||
         scui_event_type_key(event->type)) {
         event->style.suborder = true;
         event->style.preorder = false;

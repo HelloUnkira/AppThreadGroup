@@ -1,8 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_icon
- *    用途: 测试 xvedio 动态图标(从 scui_ui_test 挖取)
- *    构件: gif 灯泡 + lottie 音乐/确认
- *    交互: 长按返回
+ *    测试(widget icon)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

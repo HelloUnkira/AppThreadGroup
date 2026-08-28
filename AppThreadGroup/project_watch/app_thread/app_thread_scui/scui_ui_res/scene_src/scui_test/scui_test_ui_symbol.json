@@ -4,7 +4,6 @@
         {
             "annotation":              "符号字符测试窗口",
             "widget.type":              "scui_widget_type_window",
-            "widget.color.color.full":  "0xFF101010",
             "widget.myself":            "SCUI_UI_SCENE_TEST_UI_SYMBOL",
             "widget.child_num":          "10"
         },

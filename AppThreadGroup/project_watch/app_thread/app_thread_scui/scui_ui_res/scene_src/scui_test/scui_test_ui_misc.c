@@ -1,7 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_misc
- *    用途: 测试杂项控件(从 scui_ui_float_2 挖取)
- *    构件: slider/spinner/indicator/ring_edge + 渐变/dither/图片缩放
+ *    测试(widget misc)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

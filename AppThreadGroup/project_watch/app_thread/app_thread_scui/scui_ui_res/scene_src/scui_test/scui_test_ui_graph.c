@@ -1,14 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_graph
- *    用途: 测试基础图元绘制(从 scui_ui_6 挖取)
- *    构件: 9个custom 3x3网格
- *    graph_1: pixel_line X交叉
- *    graph_2: pixel_circle 实心
- *    graph_3: pixel_circle 描边x4
- *    graph_4: pixel_arc 实心(动画)
- *    graph_5: pixel_arc 描边(动画)
- *    graph_6/7/8: 纯色填充
- *    graph_9: 拖动
+ *    测试(draw graph)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

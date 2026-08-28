@@ -1,11 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_object
- *    用途: 测试 menial 菜单对象控件(从 scui_ui_1 挖取)
- *    构件: scroll + 3 page
- *    page_1: menial_btn×4/menial_arc×3/menial_bar×4
- *    page_2: menial_cht×2
- *    page_3: 空
- *    交互: 动画持续更新 arc/bar 数值
+ *    测试(widget object)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

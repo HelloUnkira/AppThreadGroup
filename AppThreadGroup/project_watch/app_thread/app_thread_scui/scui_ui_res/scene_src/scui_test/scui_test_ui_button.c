@@ -1,11 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_button
- *    用途: 测试按钮(驱逐 button 控件后改为 custom image_crect4 + menial btn)
- *    构件: custom image_crect4 x2 + menial btn x2
- *    custom: 静态四角图按钮(点击发 button_click)
- *    menial 倒数2: 点击缩放动画(动画用 menial 配置)
- *    menial 倒数1: 四类 part 同显(阴影/外部线/边框/背景)
- *    交互: 点击打印
+ *    测试(widget button)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

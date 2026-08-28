@@ -1,8 +1,5 @@
 /*实现目标:
- *    窗口:scui_test_ui_code
- *    用途: 测试 qrcode/barcode 码(从 scui_ui_float_1 挖取)
- *    构件: qrcode + barcode
- *    交互: 动画重绘
+ *    测试(widget code)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

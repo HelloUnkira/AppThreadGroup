@@ -2,11 +2,11 @@
     "type":   "scene",
     "widget": [
         {
-            "widget.type":     "scui_widget_type_window",
+            "widget.type":              "scui_widget_type_window",
             "widget.style.sched_anima": "true",
             "widget.style.indev_key":   "true",
-            "widget.myself":   "SCUI_UI_SCENE_TEST_UI_GRAPH",
-            "widget.event_cb": "scui_test_ui_graph_event_proc"
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_GRAPH",
+            "widget.event_cb":          "scui_test_ui_graph_event_proc"
         },
         {
             "annotation":              "graph_1: pixel_line",
@@ -49,31 +49,31 @@
         },
         {
             "annotation":              "graph_4: pixel_arc 实心(动画)",
-            "widget.type":             "scui_widget_type_custom",
-            "widget.style.fully_bg":   "true",
-            "widget.style.sched_anima":"true",
-            "widget.clip.x":           "SCUI_HOR_RES * 1 / 13",
-            "widget.clip.y":           "SCUI_VER_RES * 5 / 13",
-            "widget.clip.w":           "SCUI_HOR_RES * 3 / 13",
-            "widget.clip.h":           "SCUI_VER_RES * 3 / 13",
-            "widget.myself":           "SCUI_UI_SCENE_TEST_UI_GRAPH_4",
-            "widget.parent":           "SCUI_UI_SCENE_TEST_UI_GRAPH",
-            "widget.color.color.full": "0xFFFFFFFF",
-            "widget.event_cb":         "scui_test_ui_graph_4_event_proc"
+            "widget.type":              "scui_widget_type_custom",
+            "widget.style.fully_bg":    "true",
+            "widget.style.sched_anima": "true",
+            "widget.clip.x":            "SCUI_HOR_RES * 1 / 13",
+            "widget.clip.y":            "SCUI_VER_RES * 5 / 13",
+            "widget.clip.w":            "SCUI_HOR_RES * 3 / 13",
+            "widget.clip.h":            "SCUI_VER_RES * 3 / 13",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_GRAPH_4",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_GRAPH",
+            "widget.color.color.full":  "0xFFFFFFFF",
+            "widget.event_cb":          "scui_test_ui_graph_4_event_proc"
         },
         {
             "annotation":              "graph_5: pixel_arc 描边(动画)",
-            "widget.type":             "scui_widget_type_custom",
-            "widget.style.fully_bg":   "true",
-            "widget.style.sched_anima":"true",
-            "widget.clip.x":           "SCUI_HOR_RES * 5 / 13",
-            "widget.clip.y":           "SCUI_VER_RES * 5 / 13",
-            "widget.clip.w":           "SCUI_HOR_RES * 3 / 13",
-            "widget.clip.h":           "SCUI_VER_RES * 3 / 13",
-            "widget.myself":           "SCUI_UI_SCENE_TEST_UI_GRAPH_5",
-            "widget.parent":           "SCUI_UI_SCENE_TEST_UI_GRAPH",
-            "widget.color.color.full": "0xFFFFFFFF",
-            "widget.event_cb":         "scui_test_ui_graph_5_event_proc"
+            "widget.type":              "scui_widget_type_custom",
+            "widget.style.fully_bg":    "true",
+            "widget.style.sched_anima": "true",
+            "widget.clip.x":            "SCUI_HOR_RES * 5 / 13",
+            "widget.clip.y":            "SCUI_VER_RES * 5 / 13",
+            "widget.clip.w":            "SCUI_HOR_RES * 3 / 13",
+            "widget.clip.h":            "SCUI_VER_RES * 3 / 13",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_GRAPH_5",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_GRAPH",
+            "widget.color.color.full":  "0xFFFFFFFF",
+            "widget.event_cb":          "scui_test_ui_graph_5_event_proc"
         },
         {
             "annotation":              "graph_6",
