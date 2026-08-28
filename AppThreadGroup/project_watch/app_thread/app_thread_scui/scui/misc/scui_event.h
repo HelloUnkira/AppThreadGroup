@@ -45,34 +45,35 @@ typedef struct {
     union {
         /* 输入事件数据<ptr> */
         struct {
-            scui_point_t    ptr_c;
-            scui_coord_t    ptr_cnt;
-            scui_coord_t    ptr_tick;
+            scui_point_t    ptr_c;      /* down/click/hold/up */
+            scui_coord_t    ptr_cnt;    /* down/click/up */
+            scui_coord_t    ptr_tick;   /* down/hold/up */
+            scui_point_t    ptr_hit;    /* 系统内部使用 */
         };
         struct {
-            scui_point_t    ptr_s;
-            scui_point_t    ptr_e;
-            scui_multi_t    ptr_v;
-            scui_opt_dir_t  ptr_dir;
+            scui_point_t    ptr_s;      /* move/fling */
+            scui_point_t    ptr_e;      /* move/fling */
+            scui_multi_t    ptr_v;      /* move/fling */
+            scui_opt_dir_t  ptr_dir;    /* move/fling */
         };
         /* 输入事件数据<enc> */
         struct {
             /* 0:正转;1:反转; */
-            scui_sbitfd_t   enc_way:1;
-            scui_coord_t    enc_diff;
+            scui_sbitfd_t   enc_way:1;  /* enc event any */
+            scui_coord_t    enc_diff;   /* enc event any */
         };
         /* 输入事件数据<bar> */
         struct {
             /* 0:正向;1:反向; */
-            scui_sbitfd_t   bar_way:1;
-            scui_coord_t    bar_diff;
+            scui_sbitfd_t   bar_way:1;  /* bar event any */
+            scui_coord_t    bar_diff;   /* bar event any */
         };
         /* 输入事件数据<key> */
         struct {
-            scui_coord_t    key_id;
-            scui_coord_t    key_val;
-            scui_coord_t    key_cnt;
-            scui_coord_t    key_tick;
+            scui_coord_t    key_id;     /* key event any */
+            scui_coord_t    key_val;    /* key event any */
+            scui_coord_t    key_cnt;    /* click */
+            scui_coord_t    key_tick;   /* hold */
         };
         /* scui迟延调度事件信息: */
         struct {

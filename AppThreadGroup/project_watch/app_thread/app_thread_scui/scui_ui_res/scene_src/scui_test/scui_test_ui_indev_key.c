@@ -54,17 +54,12 @@ void scui_test_ui_indev_key_strip_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_ptr_click: {
-        if (!scui_widget_event_inside(event))
-             break;
         scui_ui_res_local->clicked = true;
         break;
     }
     case scui_event_ptr_down:
     case scui_event_ptr_hold:
     case scui_event_ptr_up: {
-        if (!scui_widget_event_inside(event))
-             break;
-        
         /* 组存坐标转条内相对坐标 */
         scui_point_t point = event->ptr_c;
         scui_widget_switch_point(event->object, &point);

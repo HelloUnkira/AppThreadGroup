@@ -53,9 +53,6 @@ void scui_test_ui_indev_ptr_strip_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_ptr_down: {
-        if (!scui_widget_event_inside(event))
-             break;
-        
         scui_ui_res_local->line_cnt = 0;
         char mark[SCUI_UI_INDEV_PTR_MARK_LEN];
         snprintf(mark, sizeof(mark), "down(x:%d,y:%d)",
@@ -66,9 +63,6 @@ void scui_test_ui_indev_ptr_strip_event_proc(scui_event_t *event)
     case scui_event_ptr_hold:
     case scui_event_ptr_click:
     case scui_event_ptr_up: {
-        if (!scui_widget_event_inside(event))
-             break;
-        
         const char *name = NULL;
         switch (event->type) {
         case scui_event_ptr_hold:  name = "hold";  break;

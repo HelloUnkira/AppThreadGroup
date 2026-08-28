@@ -55,9 +55,6 @@ void scui_test_ui_indev_bar_strip_event_proc(scui_event_t *event)
     case scui_event_ptr_down:
     case scui_event_ptr_hold:
     case scui_event_ptr_up: {
-        if (!scui_widget_event_inside(event))
-             break;
-        
         /* 输出原始坐标点与按下状态 */
         scui_indev_state_t state = scui_indev_state_press;
         if (event->type == scui_event_ptr_up)

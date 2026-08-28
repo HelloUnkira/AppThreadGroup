@@ -194,8 +194,6 @@ void scui_menial_bar_invoke(scui_event_t *event)
     case scui_event_ptr_click: {
         if (!menial->data.bar.ext_switch)
              break;
-        if (!scui_widget_event_inside(event))
-             break;
         
         scui_coord3_t value_c = menial->data.bar.value_cur;
         scui_coord3_t value_d = menial->data.bar.value_lim;
@@ -207,9 +205,6 @@ void scui_menial_bar_invoke(scui_event_t *event)
     }
     case scui_event_ptr_move: {
         if (!menial->data.bar.ext_slider)
-             break;
-        if (!scui_widget_event_inside(event) &&
-            !widget->state.indev_ptr_hold)
              break;
         
         scui_point_t ptr_c = event->ptr_e;

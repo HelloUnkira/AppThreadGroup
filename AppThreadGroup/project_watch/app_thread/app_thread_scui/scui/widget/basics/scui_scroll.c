@@ -1385,7 +1385,8 @@ void scui_scroll_invoke(scui_event_t *event)
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling: {
-        if (widget->state.indev_enc_hold ||
+        if (widget->state.indev_bar_hold ||
+            widget->state.indev_enc_hold ||
             widget->state.indev_key_hold)
             break;
         
@@ -1407,6 +1408,7 @@ void scui_scroll_invoke(scui_event_t *event)
             scroll->lock_move = true;
             scui_scroll_anima_tag(event->object, 0);
             widget->state.indev_ptr_hold = true;
+            widget->state.indev_bar_hold = false;
             widget->state.indev_enc_hold = false;
             widget->state.indev_key_hold = false;
             
@@ -1448,6 +1450,7 @@ void scui_scroll_invoke(scui_event_t *event)
             scroll->speed_move = 0;
             scui_scroll_anima_tag(event->object, -1);
             widget->state.indev_ptr_hold = false;
+            widget->state.indev_bar_hold = false;
             widget->state.indev_enc_hold = false;
             widget->state.indev_key_hold = false;
         }

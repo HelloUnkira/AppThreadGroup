@@ -183,9 +183,6 @@ void scui_menial_btn_invoke(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_down:{
-        if (!scui_widget_event_inside(event))
-             break;
-        
         scui_object_state_set(event->object, scui_object_state_pre);
         break;
     }

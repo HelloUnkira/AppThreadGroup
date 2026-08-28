@@ -312,12 +312,6 @@ void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node);
  */
 void scui_widget_event_shift(scui_event_t *event);
 
-/*@brief 控件事件包含检查
- *@param event 事件
- *@retval 包含不包含
- */
-bool scui_widget_event_inside(scui_event_t *event);
-
 /*@brief 控件画布图
  *@param handle 控件句柄
  *@retval 画布图句柄

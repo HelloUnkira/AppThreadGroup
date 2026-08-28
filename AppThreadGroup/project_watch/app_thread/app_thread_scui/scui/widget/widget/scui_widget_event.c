@@ -276,36 +276,6 @@ void scui_widget_event_shift(scui_event_t *event)
         widget_map->invoke(event);
 }
 
-/*@brief 控件事件包含检查
- *@param event 事件
- *@retval 包含不包含
- */
-bool scui_widget_event_inside(scui_event_t *event)
-{
-    scui_handle_t  handle_t = scui_widget_tree(event->object);
-    scui_widget_t *widget_t = scui_handle_source_check(handle_t);
-    scui_widget_t *widget   = scui_handle_source_check(event->object);
-    
-    if (scui_event_type_ptr(event->type)) {
-        scui_area_t clip_t = scui_widget_clip_tree(event->object);
-        if (widget   != widget_t) {
-            clip_t.x += widget_t->clip.x;
-            clip_t.y += widget_t->clip.y;
-        }
-        if (scui_area_point(&clip_t, &event->ptr_c))
-            return true;
-        if (scui_area_point(&clip_t, &event->ptr_s))
-            return true;
-        if (scui_area_point(&clip_t, &event->ptr_e))
-            return true;
-        
-        return false;
-    }
-    
-    /* 默认包含 */
-    return true;
-}
-
 /*@brief 控件默认事件处理回调
  *@param event 事件
  */
@@ -424,10 +394,12 @@ static void scui_widget_event_process(scui_event_t *event)
         
         break;
     }
+    case scui_event_ptr_down:
     case scui_event_ptr_click:
     case scui_event_ptr_fling:
     case scui_event_ptr_move:
-    case scui_event_ptr_hold: {
+    case scui_event_ptr_hold:
+    case scui_event_ptr_up: {
         /* 存在该控件持有当前敏感事件 */
         if (widget->state.indev_ptr_hold)
             break;
@@ -440,12 +412,21 @@ static void scui_widget_event_process(scui_event_t *event)
             SCUI_LOG_INFO("widget is hide");
             return;
         }
-        /* 控件点包含检查 */
-        if (!scui_widget_event_inside(event)) {
-            SCUI_LOG_DEBUG("widget unmatch");
-            return;
-        }
         
+        /* 控件点包含检查 */
+        scui_handle_t  handle_t = scui_widget_tree(event->object);
+        scui_widget_t *widget_t = scui_handle_source_check(handle_t);
+        scui_area_t clip_t = scui_widget_clip_tree(event->object);
+        if (widget   != widget_t) {
+            clip_t.x += widget_t->clip.x;
+            clip_t.y += widget_t->clip.y;
+        }
+        if (!scui_area_point(&clip_t, &event->ptr_s) &&
+            !scui_area_point(&clip_t, &event->ptr_e) &&
+            !scui_area_point(&clip_t, &event->ptr_hit)) {
+             SCUI_LOG_DEBUG("widget unmatch");
+             return;
+        }
         break;
     }
     case scui_event_enc_fdir:
@@ -462,8 +443,10 @@ static void scui_widget_event_process(scui_event_t *event)
             break;
         break;
     }
+    case scui_event_key_down:
     case scui_event_key_click:
-    case scui_event_key_hold: {
+    case scui_event_key_hold:
+    case scui_event_key_up: {
         /* 存在该控件持有当前敏感事件 */
         if (widget->state.indev_key_hold)
             break;

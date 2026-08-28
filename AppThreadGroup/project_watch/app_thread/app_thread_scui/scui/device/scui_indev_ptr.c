@@ -142,17 +142,19 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 scui_indev_ptr.ptr_cnt++;
                 
                 event.type    = scui_event_ptr_click;
-                event.ptr_cnt = scui_indev_ptr.ptr_cnt;
                 event.ptr_c   = point;
+                event.ptr_cnt = scui_indev_ptr.ptr_cnt;
+                event.ptr_hit = scui_indev_ptr.ptr_hit;
                 SCUI_LOG_INFO("scui_event_ptr_click:%d", event.ptr_cnt);
                 scui_indev_ptr_event_check(&event);
             } else
             /* 检查事件是否是fling */
             if (last_v >= SCUI_INDEV_PTR_FLING_RATE &&
                 scui_indev_ptr.move_cnt < SCUI_INDEV_PTR_MOVE_CNT) {
-                event.type  = scui_event_ptr_fling;
-                event.ptr_s = scui_indev_ptr.ptr_last;
-                event.ptr_e = point;
+                event.type    = scui_event_ptr_fling;
+                event.ptr_s   = scui_indev_ptr.ptr_last;
+                event.ptr_e   = point;
+                event.ptr_v   = last_v;
                 event.ptr_dir = scui_indev_ptr_event_dir(&event);
                 SCUI_LOG_INFO("scui_event_ptr_fling:(dist:%d, rate:%d)", last_r, last_v);
                 scui_indev_ptr_event_check(&event);
@@ -160,21 +162,23 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             /* 事件是move */
             if (scui_indev_ptr.ptr_last.x != point.x ||
                 scui_indev_ptr.ptr_last.y != point.y) {
-                event.type   = scui_event_ptr_move;
-                event.absorb = scui_event_ptr_move_absorb,
-                event.ptr_s  = scui_indev_ptr.ptr_last;
-                event.ptr_e  = point;
+                event.type    = scui_event_ptr_move;
+                event.absorb  = scui_event_ptr_move_absorb,
+                event.ptr_s   = scui_indev_ptr.ptr_last;
+                event.ptr_e   = point;
+                event.ptr_v   = last_v;
                 event.ptr_dir = scui_indev_ptr_event_dir(&event);
-                event.ptr_v  = last_v;
                 SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                 scui_indev_ptr_event_check(&event);
             }
             scui_indev_ptr.cnt_tick = scui_tick_cnt();
             /* 发送抬起事件 */
-            event.type    = scui_event_ptr_up;
-            event.ptr_cnt = scui_indev_ptr.ptr_cnt;
-            event.ptr_c   = point;
-            SCUI_LOG_INFO("scui_event_ptr_up:%d", event.ptr_cnt);
+            event.type     = scui_event_ptr_up;
+            event.ptr_c    = point;
+            event.ptr_cnt  = scui_indev_ptr.ptr_cnt;
+            event.ptr_tick = elapse;
+            event.ptr_hit  = scui_indev_ptr.ptr_hit;
+            SCUI_LOG_INFO("scui_event_ptr_up:%d,%d", event.ptr_cnt, event.ptr_tick);
             scui_indev_ptr_event_check(&event);
             return;
         }
@@ -184,6 +188,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
         /* 上一状态为release */
         if (scui_indev_ptr.state == scui_indev_state_release) {
             scui_indev_ptr.state  = data->state;
+            scui_indev_ptr.ptr_hit  = point;
             scui_indev_ptr.ptr_last = point;
             scui_indev_ptr.ptr_near = point;
             scui_indev_ptr.move_cnt = 0;
@@ -195,9 +200,11 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 scui_indev_ptr.ptr_cnt = 0;
             /* 发送按下事件 */
             event.type     = scui_event_ptr_down;
-            event.ptr_tick = scui_indev_ptr.cnt_tick - cnt_tick;
             event.ptr_c    = point;
-            SCUI_LOG_INFO("scui_event_ptr_down:%d", event.ptr_tick);
+            event.ptr_cnt  = scui_indev_ptr.ptr_cnt;
+            event.ptr_tick = scui_indev_ptr.cnt_tick - cnt_tick;
+            event.ptr_hit  = scui_indev_ptr.ptr_hit;
+            SCUI_LOG_INFO("scui_event_ptr_down:%d,%d", event.ptr_cnt, event.ptr_tick);
             scui_indev_ptr_event_check(&event);
             return;
         }
@@ -223,12 +230,12 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 
                 if (scui_indev_ptr.move_cnt >= SCUI_INDEV_PTR_MOVE_CNT)
                 if (last_r >= SCUI_INDEV_PTR_MOVE_DELTA) {
-                    event.type   = scui_event_ptr_move;
-                    event.absorb = scui_event_ptr_move_absorb,
-                    event.ptr_s  = scui_indev_ptr.ptr_last;
-                    event.ptr_e  = point;
+                    event.type    = scui_event_ptr_move;
+                    event.absorb  = scui_event_ptr_move_absorb,
+                    event.ptr_s   = scui_indev_ptr.ptr_last;
+                    event.ptr_e   = point;
+                    event.ptr_v   = last_v;
                     event.ptr_dir = scui_indev_ptr_event_dir(&event);
-                    event.ptr_v  = last_v;
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", near_v, near_v);
                     scui_indev_ptr_event_check(&event);
@@ -244,6 +251,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             event.absorb   = scui_event_ptr_hold_absorb;
             event.ptr_c    = point;
             event.ptr_tick = elapse;
+            event.ptr_hit  = scui_indev_ptr.ptr_hit;
             SCUI_LOG_INFO("scui_event_ptr_hold:%d", event.ptr_tick);
             scui_indev_ptr_event_check(&event);
             return;
