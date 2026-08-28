@@ -156,6 +156,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 event.ptr_e   = point;
                 event.ptr_v   = last_v;
                 event.ptr_dir = scui_indev_ptr_event_dir(&event);
+                event.ptr_hit = scui_indev_ptr.ptr_hit;
                 SCUI_LOG_INFO("scui_event_ptr_fling:(dist:%d, rate:%d)", last_r, last_v);
                 scui_indev_ptr_event_check(&event);
             } else
@@ -168,6 +169,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 event.ptr_e   = point;
                 event.ptr_v   = last_v;
                 event.ptr_dir = scui_indev_ptr_event_dir(&event);
+                event.ptr_hit = scui_indev_ptr.ptr_hit;
                 SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                 scui_indev_ptr_event_check(&event);
             }
@@ -236,6 +238,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                     event.ptr_e   = point;
                     event.ptr_v   = last_v;
                     event.ptr_dir = scui_indev_ptr_event_dir(&event);
+                    event.ptr_hit = scui_indev_ptr.ptr_hit;
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", near_v, near_v);
                     scui_indev_ptr_event_check(&event);

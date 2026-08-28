@@ -45,16 +45,20 @@ typedef struct {
     union {
         /* 输入事件数据<ptr> */
         struct {
+            scui_point_t    ptr_hit;    /* 内部使用 */
+        union {
+        struct {
             scui_point_t    ptr_c;      /* down/click/hold/up */
             scui_coord_t    ptr_cnt;    /* down/click/up */
             scui_coord_t    ptr_tick;   /* down/hold/up */
-            scui_point_t    ptr_hit;    /* 系统内部使用 */
         };
         struct {
             scui_point_t    ptr_s;      /* move/fling */
             scui_point_t    ptr_e;      /* move/fling */
             scui_multi_t    ptr_v;      /* move/fling */
             scui_opt_dir_t  ptr_dir;    /* move/fling */
+        };
+        };
         };
         /* 输入事件数据<enc> */
         struct {

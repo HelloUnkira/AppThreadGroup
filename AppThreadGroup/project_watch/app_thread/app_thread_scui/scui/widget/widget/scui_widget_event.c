@@ -400,20 +400,13 @@ static void scui_widget_event_process(scui_event_t *event)
     case scui_event_ptr_move:
     case scui_event_ptr_hold:
     case scui_event_ptr_up: {
-        /* 存在该控件持有当前敏感事件 */
-        if (widget->state.indev_ptr_hold)
-            break;
-        /* 是否允许根控件树无条件响应? */
-        if (widget->parent == SCUI_HANDLE_INVALID)
-            ; /* break; */
-        
         /* 事件不能被控件响应 */
         if (scui_widget_is_hide(widget->myself)) {
             SCUI_LOG_INFO("widget is hide");
             return;
         }
         
-        /* 控件点包含检查 */
+        /* 控件点包含检查: 动作链统一锚定真实按下点 */
         scui_handle_t  handle_t = scui_widget_tree(event->object);
         scui_widget_t *widget_t = scui_handle_source_check(handle_t);
         scui_area_t clip_t = scui_widget_clip_tree(event->object);
@@ -421,35 +414,10 @@ static void scui_widget_event_process(scui_event_t *event)
             clip_t.x += widget_t->clip.x;
             clip_t.y += widget_t->clip.y;
         }
-        if (!scui_area_point(&clip_t, &event->ptr_s) &&
-            !scui_area_point(&clip_t, &event->ptr_e) &&
-            !scui_area_point(&clip_t, &event->ptr_hit)) {
+        if (!scui_area_point(&clip_t, &event->ptr_hit)) {
              SCUI_LOG_DEBUG("widget unmatch");
              return;
         }
-        break;
-    }
-    case scui_event_enc_fdir:
-    case scui_event_enc_bdir: {
-        /* 存在该控件持有当前敏感事件 */
-        if (widget->state.indev_enc_hold)
-            break;
-        break;
-    }
-    case scui_event_bar_move:
-    case scui_event_bar_fling: {
-        /* 存在该控件持有当前敏感事件 */
-        if (widget->state.indev_bar_hold)
-            break;
-        break;
-    }
-    case scui_event_key_down:
-    case scui_event_key_click:
-    case scui_event_key_hold:
-    case scui_event_key_up: {
-        /* 存在该控件持有当前敏感事件 */
-        if (widget->state.indev_key_hold)
-            break;
         break;
     }
     

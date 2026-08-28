@@ -49,10 +49,7 @@ typedef struct {
  */
 typedef struct {
     scui_sbitfd_t view:1;               /* 控件隐藏:0;控件显示:1; */
-    scui_sbitfd_t indev_ptr_hold:1;     /* 输入事件响应维持:ptr */
-    scui_sbitfd_t indev_enc_hold:1;     /* 输入事件响应维持:enc */
-    scui_sbitfd_t indev_bar_hold:1;     /* 输入事件响应维持:bar */
-    scui_sbitfd_t indev_key_hold:1;     /* 输入事件响应维持:key */
+    scui_sbitfd_t indev_hold:1;         /* 输入事件持续占有(拒绝其他输入) */
 } scui_widget_state_t;
 
 /*@brief 控件动画

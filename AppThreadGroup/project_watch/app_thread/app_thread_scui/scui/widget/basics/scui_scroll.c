@@ -1380,15 +1380,11 @@ void scui_scroll_invoke(scui_event_t *event)
     case scui_event_ptr_down:
         break;
     case scui_event_ptr_hold:
-        if (widget->state.indev_ptr_hold)
+        if (widget->state.indev_hold)
             scui_event_mask_over(event);
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling: {
-        if (widget->state.indev_bar_hold ||
-            widget->state.indev_enc_hold ||
-            widget->state.indev_key_hold)
-            break;
         
         /* 忽略的方向不支持 */
         SCUI_LOG_INFO("dir:%u", event->ptr_dir);
@@ -1407,10 +1403,7 @@ void scui_scroll_invoke(scui_event_t *event)
             
             scroll->lock_move = true;
             scui_scroll_anima_tag(event->object, 0);
-            widget->state.indev_ptr_hold = true;
-            widget->state.indev_bar_hold = false;
-            widget->state.indev_enc_hold = false;
-            widget->state.indev_key_hold = false;
+            widget->state.indev_hold = true;
             
             if (scroll->anima == SCUI_HANDLE_INVALID) {
                 scui_scroll_notify_alone(event->object, 0x00);
@@ -1449,19 +1442,12 @@ void scui_scroll_invoke(scui_event_t *event)
             
             scroll->speed_move = 0;
             scui_scroll_anima_tag(event->object, -1);
-            widget->state.indev_ptr_hold = false;
-            widget->state.indev_bar_hold = false;
-            widget->state.indev_enc_hold = false;
-            widget->state.indev_key_hold = false;
+            widget->state.indev_hold = false;
         }
         break;
     case scui_event_bar_move:
     case scui_event_bar_fling: {
-        if (widget->state.indev_bar_hold)
-            scui_event_mask_over(event);
-        if (widget->state.indev_ptr_hold ||
-            widget->state.indev_enc_hold ||
-            widget->state.indev_key_hold)
+        if (widget->state.indev_hold)
             break;
         
         scui_coord_t way = 0;
@@ -1515,10 +1501,7 @@ void scui_scroll_invoke(scui_event_t *event)
     }
     case scui_event_enc_fdir:
     case scui_event_enc_bdir: {
-        if (widget->state.indev_enc_hold)
-            scui_event_mask_over(event);
-        if (widget->state.indev_ptr_hold ||
-            widget->state.indev_key_hold)
+        if (widget->state.indev_hold)
             break;
         
         scui_coord_t way = 0;
@@ -1567,14 +1550,11 @@ void scui_scroll_invoke(scui_event_t *event)
         break;
     }
     case scui_event_key_hold:
-        if (widget->state.indev_key_hold)
+        if (widget->state.indev_hold)
             scui_event_mask_over(event);
         break;
     case scui_event_key_click: {
-        if (widget->state.indev_key_hold)
-            scui_event_mask_over(event);
-        if (widget->state.indev_ptr_hold ||
-            widget->state.indev_enc_hold)
+        if (widget->state.indev_hold)
             break;
         
         if (event->key_id != scroll->keyid_fdir &&

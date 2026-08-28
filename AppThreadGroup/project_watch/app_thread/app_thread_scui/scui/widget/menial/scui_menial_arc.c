@@ -271,8 +271,6 @@ void scui_menial_arc_invoke(scui_event_t *event)
     case scui_event_ptr_move: {
         if (!menial->data.arc.ext_touch)
              break;
-        if (!widget->state.indev_ptr_hold)
-             break;
         
         scui_point_t point = event->ptr_e;
         scui_widget_switch_point(event->object, &point);
@@ -337,12 +335,10 @@ void scui_menial_arc_invoke(scui_event_t *event)
         scui_coord_t angle = (scui_atan2(x, y) - 90 + 360) % 360;
         menial->data.arc.angle_down = angle;
         
-        widget->state.indev_ptr_hold = true;
         scui_menial_arc_update_angle(event->object, angle, false);
         break;
     }
     case scui_event_ptr_up:
-        widget->state.indev_ptr_hold = false;
         break;
     case scui_event_draw_graph: {
         

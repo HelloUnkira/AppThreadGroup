@@ -210,7 +210,6 @@ void scui_menial_bar_invoke(scui_event_t *event)
         scui_point_t ptr_c = event->ptr_e;
         scui_area_t  dst_part = widget->clip;
         scui_area_m_to_s(&dst_part, &dst_part);
-        widget->state.indev_ptr_hold = true;
         
         scui_coord3_t value_c = 0.0f;
         scui_coord3_t value_d = menial->data.bar.value_lim;
@@ -227,10 +226,6 @@ void scui_menial_bar_invoke(scui_event_t *event)
         scui_event_mask_over(event);
         break;
     }
-    case scui_event_ptr_down:
-    case scui_event_ptr_up:
-        widget->state.indev_ptr_hold = false;
-        break;
     
     case scui_event_draw_graph: {
         
