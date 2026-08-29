@@ -38,16 +38,6 @@ static void scui_event_custom_system(scui_event_t *event)
         SCUI_LOG_WARN("ui start");
         ui_system_run = true;
         
-        /* 启用scui性能监控 */
-        #if SCUI_MONITOR_USE
-        scui_monitor_show(false);
-        #endif
-        
-        /* 启用monkey test */
-        #if SCUI_MONKEY_TEST
-        scui_monkey_test();
-        #endif
-        
         /* 开启超时模组 */
         #if SCUI_CHECK_TIME
         scui_check_time_ready();

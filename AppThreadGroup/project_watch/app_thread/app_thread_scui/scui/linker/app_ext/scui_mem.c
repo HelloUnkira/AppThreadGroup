@@ -174,6 +174,14 @@ static void scui_mem_sentry_check_invoke(void *ptr, bool used)
         uint32_t sentry_t = *(uint32_t *)((uint8_t *)ptr + size_raw + sizeof(uint32_t) * 2);
         if (sentry_s != sentry_h || sentry_s != sentry_t) {
             SCUI_LOG_ERROR("mem sentry catch:%p", ptr);
+            #if SCUI_MEM_RECORD_CHECK
+            #if SCUI_MEM_RECORD_STATISTIC
+            scui_mem_record_statistic(true);
+            #endif
+            #if SCUI_MEM_RECORD_ANALYSIS
+            scui_mem_record_analysis(true);
+            #endif
+            #endif
             SCUI_ASSERT(false);
         }
     }
@@ -331,16 +339,8 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
         return;
     
     #if SCUI_MEM_SENTRY_CHECK
-    /* [size][sentry][monitoring data][sentry] */
     ptr = (uint8_t *)ptr - sizeof(uint32_t) * 2;
-    uint32_t size_raw = *(uint32_t *)((uint8_t *)ptr + 0);
-    uint32_t sentry_s = scui_crc32((uint8_t *)&size_raw, sizeof(uint32_t));
-    uint32_t sentry_h = *(uint32_t *)((uint8_t *)ptr + 4);
-    uint32_t sentry_t = *(uint32_t *)((uint8_t *)ptr + size_raw + sizeof(uint32_t) * 2);
-    if (sentry_s != sentry_h || sentry_s != sentry_t) {
-        SCUI_LOG_ERROR("mem sentry catch:%p", ptr);
-        SCUI_ASSERT(false);
-    }
+    scui_mem_sentry_check_invoke(ptr, true);
     #endif
     
     scui_mutex_process(&scui_mem.mutex, scui_mutex_take);

@@ -8,6 +8,7 @@
 #include "scui.h"
 
 static struct {
+    scui_handle_t anima;
     scui_indev_type_t type;
     scui_indev_state_t state;
     
@@ -19,6 +20,10 @@ static struct {
     scui_opt_dir_t ptr_move_way;
     scui_coord_t ptr_move_step;
     bool ptr_move;
+    
+    scui_coord_t bar_pos;
+    scui_coord_t bar_step;
+    bool bar_move;
     
     scui_coord_t key_id;
     scui_coord_t key_val;
@@ -41,9 +46,11 @@ static void scui_monkey_anima_expire(void *instance)
     /* 在空闲态选择一个输入设备 */
     if (scui_ui_res_local->idle) {
         scui_ui_res_local->idle = false;
-        scui_ui_res_local->type = 1 + (scui_rand(9) < 7 ? 0 : scui_rand(9) < 5 ? 1 : 2);
+        scui_ui_res_local->type = 1 + (scui_rand(10) < 4 ? 0 :
+            scui_rand(10) < 4 ? 1 : scui_rand(10) < 4 ? 2 : 3);
     } else {
         scui_indev_data_t indev_data = {0};
+        indev_data.indev_test = true;
         indev_data.type = scui_ui_res_local->type;
         /* 根据输入设备类型, 伪造数据 */
         switch (scui_ui_res_local->type) {
@@ -107,6 +114,40 @@ static void scui_monkey_anima_expire(void *instance)
             scui_ui_res_local->state = scui_indev_state_release;
             break;
         }
+        case scui_indev_type_bar: {
+            
+            if (scui_ui_res_local->state == scui_indev_state_release) {
+                scui_ui_res_local->state  = scui_indev_state_press;
+                scui_ui_res_local->tick = scui_rand(10) + 2;
+                scui_ui_res_local->count = 0;
+                /* */
+                scui_ui_res_local->bar_pos  = scui_rand(SCUI_HOR_RES);
+                scui_ui_res_local->bar_step = scui_rand(10) + 5;
+                scui_ui_res_local->bar_move = scui_rand(2) != 0;
+                
+                indev_data.state = scui_ui_res_local->state;
+                indev_data.bar.bar_pos = scui_ui_res_local->bar_pos;
+            } else {
+                
+                scui_ui_res_local->count++;
+                scui_ui_res_local->bar_pos += scui_ui_res_local->bar_move ?
+                    scui_ui_res_local->bar_step : -scui_ui_res_local->bar_step;
+                /* 整理坐标范围 */
+                if (scui_ui_res_local->bar_pos < 0)
+                    scui_ui_res_local->bar_pos = 0;
+                if (scui_ui_res_local->bar_pos > SCUI_HOR_RES - 1)
+                    scui_ui_res_local->bar_pos = SCUI_HOR_RES - 1;
+                if (scui_ui_res_local->tick < scui_ui_res_local->count) {
+                    scui_ui_res_local->idle = true;
+                    scui_ui_res_local->state = scui_indev_state_release;
+                    scui_ui_res_local->count = 0;
+                }
+                
+                indev_data.state = scui_ui_res_local->state;
+                indev_data.bar.bar_pos = scui_ui_res_local->bar_pos;
+            }
+            break;
+        }
         case scui_indev_type_key: {
             
             if (scui_ui_res_local->state == scui_indev_state_release) {
@@ -154,22 +195,34 @@ static void scui_monkey_anima_finish(void *instance)
 {
     SCUI_LOG_INFO("");
 }
+
 /*@brief monkey test
+ *@param work 启动关闭
  */
-void scui_monkey_test(void)
+void scui_monkey_test(bool work)
 {
-    SCUI_ASSERT(scui_ui_res_local == NULL);
-    scui_ui_res_local = SCUI_MEM_ZALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
-    scui_ui_res_local->idle = true;
+    if (work == (scui_ui_res_local != NULL))
+        return;
     
-    scui_anima_t anima = {0};
-    anima.ready  = scui_monkey_anima_ready;
-    anima.expire = scui_monkey_anima_expire;
-    anima.finish = scui_monkey_anima_finish;
-    anima.reload = SCUI_ANIMA_INFINITE;
-    anima.period = SCUI_ANIMA_TICK;
+    scui_indev_test(work);
     
-    scui_handle_t scui_monkey_test_anima = SCUI_HANDLE_INVALID;
-    scui_anima_create(&anima, &scui_monkey_test_anima);
-    scui_anima_start(scui_monkey_test_anima);
+    if (scui_ui_res_local == NULL) {
+        scui_ui_res_local = SCUI_MEM_ZALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
+        scui_ui_res_local->idle = true;
+        
+        scui_anima_t anima = {0};
+        anima.ready  = scui_monkey_anima_ready;
+        anima.expire = scui_monkey_anima_expire;
+        anima.finish = scui_monkey_anima_finish;
+        anima.reload = SCUI_ANIMA_INFINITE;
+        anima.period = SCUI_ANIMA_TICK;
+        
+        scui_anima_create(&anima, &scui_ui_res_local->anima);
+        scui_anima_start(scui_ui_res_local->anima);
+    } else {
+        scui_anima_stop(scui_ui_res_local->anima);
+        scui_anima_destroy(scui_ui_res_local->anima);
+        scui_ui_res_local->anima = SCUI_HANDLE_INVALID;
+        SCUI_MEM_FREE(scui_ui_res_local);
+    }
 }

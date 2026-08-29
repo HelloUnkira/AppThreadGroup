@@ -28,7 +28,61 @@ void scui_test_ui_main_home_event_proc(scui_event_t *event)
     }
 }
 
-/*@brief 控件事件响应回调(条目2: 进入测试列表)
+/*@brief 控件事件响应回调(条目2: Monkey Test)
+ *@param event 事件
+ */
+void scui_test_ui_main_monkey_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_create:
+        scui_string_update_str(event->object, "Monkey Test");
+        break;
+    case scui_event_ptr_click: {
+        scui_event_mask_over(event);
+        static bool work = false; work = !work;
+        scui_monkey_test(work);
+        
+        scui_widget_color_set(event->object, SCUI_COLOR_MAKE32(false, 0x0,
+            work ? 0xFFFF0000 : 0xFF404040));
+        scui_widget_draw(event->object, NULL, false, 0);
+        
+        SCUI_LOG_WARN("test ui main Monkey Test click To Home");
+        scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
+            scui_event_ui_start, NULL);
+        scui_event_notify(&event_ui);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief 控件事件响应回调(条目3: Monitor Use)
+ *@param event 事件
+ */
+void scui_test_ui_main_monitor_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_create:
+        scui_string_update_str(event->object, "Monitor Use");
+        break;
+    case scui_event_ptr_click: {
+        scui_event_mask_over(event);
+        static bool use = false; use = !use;
+        if (use) scui_monitor_show(false);
+        else scui_monitor_hide();
+        
+        scui_widget_color_set(event->object, SCUI_COLOR_MAKE32(false, 0x0,
+            use ? 0xFFFF0000 : 0xFF404040));
+        scui_widget_draw(event->object, NULL, false, 0);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief 控件事件响应回调(条目4: 进入测试列表)
  *@param event 事件
  */
 void scui_test_ui_main_test_event_proc(scui_event_t *event)

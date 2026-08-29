@@ -440,7 +440,7 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
             /* 扫描区不在dst_clip_v中,跳过它 */
             scui_multi_t dst_line_y = dst_offset.y + src_area.y + idx_line;
             if (dst_line_y < dst_clip_v.y ||
-                dst_line_y > dst_clip_v.y + draw_area.h)
+                dst_line_y >= dst_clip_v.y + draw_area.h)
                 continue;
             /* 原扫描行[0, draw_area.w],现在重新更新到新的限制扫描行 */
             scui_point_t draw_area_x  = scui_draw_ctx_ring_quadrant_1_draw_area(&src_area,
@@ -448,6 +448,9 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
             /* 扫描区不在src_clip_v中,跳过它 */
             scui_multi_t draw_area_xl = scui_max(draw_area_x.x, src_clip_v.x - src_area.x);
             scui_multi_t draw_area_xr = scui_min(draw_area_x.y, src_clip_v.x - src_area.x + draw_area.w);
+            /* 扫描区不在dst_clip_v中,跳过它 */
+            draw_area_xl = scui_max(draw_area_xl, dst_clip_v.x - dst_offset.x - src_area.x);
+            draw_area_xr = scui_min(draw_area_xr, dst_clip_v.x + dst_clip_v.w - dst_offset.x - src_area.x);
             /* 更新原扫描行到新的限制扫描行即可 */
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
                 uint8_t *dst_ofs = dst_addr  + scui_surface_pbyte_ofs(dst_surface, src_area.y + idx_line, src_area.x + idx_item);
@@ -490,7 +493,7 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
             /* 扫描区不在dst_clip_v中,跳过它 */
             scui_multi_t dst_line_y = dst_offset.y + src_area.y + idx_line;
             if (dst_line_y < dst_clip_v.y ||
-                dst_line_y > dst_clip_v.y + draw_area.h)
+                dst_line_y >= dst_clip_v.y + draw_area.h)
                 continue;
             /* 原扫描行[0, draw_area.w],现在重新更新到新的限制扫描行 */
             scui_point_t draw_area_x  = scui_draw_ctx_ring_quadrant_1_draw_area(&src_area,
@@ -498,6 +501,9 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
             /* 扫描区不在src_clip_v中,跳过它 */
             scui_multi_t draw_area_xl = scui_max(draw_area_x.x, src_clip_v.x - src_area.x);
             scui_multi_t draw_area_xr = scui_min(draw_area_x.y, src_clip_v.x - src_area.x+ draw_area.w);
+            /* 扫描区不在dst_clip_v中,跳过它 */
+            draw_area_xl = scui_max(draw_area_xl, dst_clip_v.x - dst_offset.x - src_area.x);
+            draw_area_xr = scui_min(draw_area_xr, dst_clip_v.x + dst_clip_v.w - dst_offset.x - src_area.x);
             /* 更新原扫描行到新的限制扫描行即可 */
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
                 uint8_t *dst_ofs = dst_addr  + scui_surface_pbyte_ofs(dst_surface, src_area.y + idx_line, src_area.x + idx_item);

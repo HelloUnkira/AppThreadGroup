@@ -9,21 +9,6 @@
 
 static scui_window_stack_t scui_window_stack = {0};
 
-/*@brief 窗口栈记录
- *@param handle 窗口句柄
- */
-static void scui_window_stack_record(scui_handle_t handle)
-{
-    /* 仅有效切换记录才被使用 */
-    if (scui_window_stack.list_rcd[0] == handle)
-        return;
-    
-    for (scui_multi_t idx = SCUI_WINDOW_STACK_NEST - 1; idx - 1 >= 0; idx--)
-        scui_window_stack.list_rcd[idx] = scui_window_stack.list_rcd[idx - 1];
-    
-    scui_window_stack.list_rcd[0] = handle;
-}
-
 /*@brief 窗口栈检查
  */
 static void scui_window_stack_check(void)
@@ -37,8 +22,8 @@ static void scui_window_stack_check(void)
         stack_top += snprintf(stack_str + stack_top, sizeof(stack_str) - stack_top,
         "%u ", scui_window_stack.list[top]);
     
-    SCUI_LOG_WARN("window stack: %s", stack_str);
     /* 不打印历史窗口记录(有需要的时候才使用) */
+    SCUI_LOG_WARN("window stack: %s", stack_str);
     return;
     
     stack_top = 0;
@@ -47,6 +32,22 @@ static void scui_window_stack_check(void)
         "%u ", scui_window_stack.list_rcd[idx]);
     
     SCUI_LOG_WARN("window stack rcd: %s", stack_str);
+}
+
+/*@brief 窗口栈记录
+ *@param handle 窗口句柄
+ */
+static void scui_window_stack_record(scui_handle_t handle)
+{
+    /* 仅有效切换记录才被使用 */
+    if (scui_window_stack.list_rcd[0] == handle)
+        return;
+    
+    for (scui_multi_t idx = SCUI_WINDOW_STACK_NEST - 1; idx - 1 >= 0; idx--)
+        scui_window_stack.list_rcd[idx] = scui_window_stack.list_rcd[idx - 1];
+    
+    scui_window_stack.list_rcd[0] = handle;
+    scui_window_stack_check();
 }
 
 /*@brief 窗口栈更新栈顶窗口(内部接口)
@@ -58,7 +59,6 @@ void scui_window_stack_switch(scui_handle_t handle)
     SCUI_ASSERT(scui_window_stack.top > 0);
     scui_window_stack.list[scui_window_stack.top - 1] = handle;
     scui_window_stack_record(handle);
-    scui_window_stack_check();
 }
 
 /*@brief 窗口栈深度
@@ -127,8 +127,6 @@ static bool scui_window_stack_sync(scui_window_switch_type_t switch_type, scui_o
             scui_window_stack_record(node);
         }
         
-        /* 仅记录有效更新当作才输出(栈不一定变更) */
-        scui_window_stack_check();
         return true;
     } else {
         

@@ -9,6 +9,15 @@
 #include "app_thread_group.h"
 
 static scui_mutex_t scui_indev_mutex;
+static bool scui_indev_test_work = false;
+
+/*@brief 输入设备测试开关
+ *@param work 测试工作
+ */
+void scui_indev_test(bool work)
+{
+    scui_indev_test_work = work;
+}
 
 /*@brief 输入设备数据通报
  *@param data 数据
@@ -16,14 +25,20 @@ static scui_mutex_t scui_indev_mutex;
 void scui_indev_notify(scui_indev_data_t *data)
 {
     scui_mutex_process(&scui_indev_mutex, scui_mutex_take);
-    if (data->type == scui_indev_type_ptr)
-        scui_indev_ptr_notify(data);
-    if (data->type == scui_indev_type_enc)
-        scui_indev_enc_notify(data);
-    if (data->type == scui_indev_type_bar)
-        scui_indev_bar_notify(data);
-    if (data->type == scui_indev_type_key)
-        scui_indev_key_notify(data);
+    
+    /* 测试锁定时只放行测试数据 */
+    if (data->indev_test || !scui_indev_test_work) {
+        
+        if (data->type == scui_indev_type_ptr)
+            scui_indev_ptr_notify(data);
+        if (data->type == scui_indev_type_enc)
+            scui_indev_enc_notify(data);
+        if (data->type == scui_indev_type_bar)
+            scui_indev_bar_notify(data);
+        if (data->type == scui_indev_type_key)
+            scui_indev_key_notify(data);
+    }
+    
     scui_mutex_process(&scui_indev_mutex, scui_mutex_give);
 }
 

@@ -21,6 +21,7 @@ typedef enum {
 /*@brief 输入设备数据
  */
 typedef struct {
+    bool indev_test;            /* 测试数据 */
     scui_indev_type_t  type;    /* 设备类型 */
     scui_indev_state_t state;   /* 设备状态 */
     union {
@@ -43,6 +44,11 @@ typedef struct {
         } key;
     };
 } scui_indev_data_t;
+
+/*@brief 输入设备测试开关
+ *@param work 测试工作
+ */
+void scui_indev_test(bool work);
 
 /*@brief 输入设备数据通报
  *@param data 数据
