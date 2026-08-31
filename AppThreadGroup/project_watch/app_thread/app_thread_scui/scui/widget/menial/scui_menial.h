@@ -16,6 +16,7 @@ typedef union {
     struct {
         scui_sbitfd_t fixed:1;          /* 无点击动画 */
         scui_sbitfd_t check:1;          /* 选中标记 */
+        scui_sbitfd_t click:1;          /* 点击标记 */
     } btn;
     
     /* field(arc): */

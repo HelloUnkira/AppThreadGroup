@@ -182,6 +182,24 @@ void scui_menial_btn_invoke(scui_event_t *event)
     scui_menial_t *menial = (void *)widget;
     
     switch (event->type) {
+    case scui_event_anima_elapse: {
+        /* 动画完成才消费点击标记 */
+        if (!menial->data.btn.click) break;
+        
+        scui_object_type_t state = scui_object_type_none;
+        scui_object_state_get(event->object, &state);
+        if (state == scui_object_state_def ||
+            state == scui_object_state_chk) {
+            
+            /* 过渡动画未结束则不消费 */
+            if (!scui_object_tran_idle(event->object)) break;
+            
+            menial->data.btn.click = false;
+            scui_event_define(event, widget->myself, true, scui_event_button_click, NULL);
+            scui_event_notify(&event);
+        }
+        break;
+    }
     case scui_event_ptr_down:{
         scui_object_state_set(event->object, scui_object_state_pre);
         break;
@@ -214,10 +232,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
     }
     case scui_event_ptr_click: {
         scui_event_mask_over(event);
-        
-        /* 这里是直接响应的,要不要延迟到抬起? */
-        scui_event_define(event, widget->myself, true, scui_event_button_click, NULL);
-        scui_event_notify(&event);
+        menial->data.btn.click = true;
         break;
     }
     

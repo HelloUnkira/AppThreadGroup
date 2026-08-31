@@ -46,6 +46,12 @@ bool scui_object_tran_add_by(scui_handle_t handle, scui_object_tran_t *tran);
  */
 bool scui_object_tran_work(scui_handle_t handle, scui_object_tran_t *tran);
 
+/*@brief 对象控件过渡空闲
+ *@param handle 控件句柄
+ *@retval 过渡空闲
+ */
+bool scui_object_tran_idle(scui_handle_t handle);
+
 /*@brief 对象控件状态获取
  *@param handle 控件句柄
  *@param press  控件状态

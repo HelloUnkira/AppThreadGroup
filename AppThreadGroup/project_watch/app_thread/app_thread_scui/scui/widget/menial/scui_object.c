@@ -365,6 +365,33 @@ bool scui_object_tran_work(scui_handle_t handle, scui_object_tran_t *tran)
     return false;
 }
 
+/*@brief 对象控件过渡空闲
+ *@param handle 控件句柄
+ *@retval 过渡空闲
+ */
+bool scui_object_tran_idle(scui_handle_t handle)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_object_t *object = (void *)widget;
+    
+    /* 当前状态的任一过渡仍在播放,则非空闲 */
+    for (scui_coord_t idx = 0; idx < object->tran_num; idx++) {
+        scui_object_tran_t *local_tran = &object->tran_list[idx];
+        if (!local_tran->use) continue;
+        
+        /* 目标类型不匹配跳过 */
+        if (local_tran->state_n != object->state_c)
+            continue;
+        
+        /* 存在活跃的过度项 */
+        if (local_tran->tick_t <= local_tran->time)
+            return false;
+    }
+    
+    return true;
+}
+
 /*@brief 对象控件状态获取
  *@param handle 控件句柄
  *@param press  控件状态
@@ -464,6 +491,14 @@ void scui_object_state_set(scui_handle_t handle, scui_object_type_t state)
         
         if (tran->state_p == object->state_c &&
             tran->state_n == state) {
+            
+            scui_object_prop_t prop = {0};
+            prop.part  = tran->part;
+            prop.state = tran->state_p;
+            prop.style = tran->style;
+            /* 从当前值续播:以被打断tran残留值作起点 */
+            if (scui_object_prop_sync(handle, &prop))
+                tran->data_p = prop.data;
             
             tran->tick_d = 0;
             tran->tick_t = 0;
