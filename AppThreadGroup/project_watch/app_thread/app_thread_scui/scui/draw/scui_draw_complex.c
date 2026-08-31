@@ -274,7 +274,7 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
     /* 1. 垂直方向模糊: 从上到下 + 从下到上 */
     for (scui_coord_t x = draw_area.x; x < draw_area.x + draw_area.w; x += BLUR_SKIP) {
         x_ofs = (x - dst_clip_v.x) * dst_surface->pbyte;
-        dst_col = dst_addr + x_ofs + draw_area.y * dst_surface->stride;
+        dst_col = dst_addr + x_ofs + (draw_area.y - dst_clip_v.y) * dst_surface->stride;
         scui_color_wt_t sum[3] = {0}, s0 = 0, s1 = 0, s2 = 0;
         
         s0 = s1 = s2 = 0;   /* 初始化采样和 */
@@ -345,7 +345,7 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
         sum[2] = (s2 << SCUI_SCALE_OFS) / sample_len;
         
         /* 从下到上处理列 */
-        dst_cur = dst_addr + x_ofs + (draw_area.y + draw_area.h - BLUR_SKIP) * dst_surface->stride;
+        dst_cur = dst_addr + x_ofs + (draw_area.y + draw_area.h - BLUR_SKIP - dst_clip_v.y) * dst_surface->stride;
         for (scui_coord_t y = draw_area.y + draw_area.h - BLUR_SKIP; y >= draw_area.y; y -= BLUR_SKIP) {
             if (dst_surface->format == scui_pixel_cf_bmp565) {
                 scui_color565_t *color565_t = dst_cur;
@@ -373,7 +373,7 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
     /* 2. 水平方向模糊: 从左到右 + 从右到左 */
     for (scui_coord_t y = draw_area.y; y < draw_area.y + draw_area.h; y += BLUR_SKIP) {
         y_ofs = (y - dst_clip_v.y) * dst_surface->stride;
-        dst_row = dst_addr + y_ofs + draw_area.x * dst_surface->pbyte;
+        dst_row = dst_addr + y_ofs + (draw_area.x - dst_clip_v.x) * dst_surface->pbyte;
         scui_color_wt_t sum[3] = {0}, s0 = 0, s1 = 0, s2 = 0;
         
         s0 = s1 = s2 = 0;   /* 初始化采样和 */

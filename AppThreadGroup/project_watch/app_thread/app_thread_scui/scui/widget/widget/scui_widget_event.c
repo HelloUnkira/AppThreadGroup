@@ -284,9 +284,9 @@ static void scui_widget_event_process(scui_event_t *event)
     SCUI_LOG_DEBUG("event %u", event->type);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     
-    /* 可以在此处标记为访问 */
-    /* 未知事件不会流转此处 */
-    scui_event_mask_keep(event);
+    /* 系统事件统一标记为访问 */
+    if (scui_event_type_sys(event->type))
+        scui_event_mask_keep(event);
     
     /* 默认控件事件处理(ptr) */
     if (scui_event_type_ptr(event->type) && !widget->style.indev_ptr)

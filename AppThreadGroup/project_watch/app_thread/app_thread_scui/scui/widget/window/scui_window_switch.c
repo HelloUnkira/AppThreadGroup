@@ -255,7 +255,8 @@ static void scui_window_move_anima_state(uint8_t type)
             if (scui_window_switch.type == scui_window_switch_cover_out)
                 handle_t = scui_window_switch.list[1];
             
-            /* 背景窗口虚化 */
+            /* 背景窗口虚化(加全局剪切域) */
+            scui_widget_draw(handle_t, NULL, false, 0);
             scui_widget_draw_blur(handle_t, NULL);
             SCUI_LOG_INFO("");
         }

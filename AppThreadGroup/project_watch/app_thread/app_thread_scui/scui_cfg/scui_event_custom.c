@@ -214,6 +214,8 @@ void scui_event_custom_access(scui_event_t *event)
     scui_event_custom_check(event);
     scui_event_custom_vibrate(event);
     
+    /* 自定义事件统一标记为访问:偷懒!!! */
+    scui_event_mask_keep(event);
     
     
     /* 此处退出休眠 */
