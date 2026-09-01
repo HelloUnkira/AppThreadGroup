@@ -235,9 +235,9 @@ static void scui_test_ui_scroll_create_nest(void)
         scroll2_maker.widget.color.color.ch.g = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
         scroll2_maker.widget.color.color.ch.b = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
         scroll2_maker.dir          = scui_opt_dir_hor;
-        scroll2_maker.space        = 0;
+        scroll2_maker.space        = 10;
+        scroll2_maker.springback   = 70;
         scroll2_maker.pos          = scui_opt_pos_hor;      /* 边缘对齐(粘连效果) */
-        scroll2_maker.skip         = scui_opt_pos_all;
         scui_widget_create(&scroll2_maker, &scroll2_handle);
         
         /* 俩子控件: 宽度不一(全宽/半宽), 顺序随机, 颜色不一 */

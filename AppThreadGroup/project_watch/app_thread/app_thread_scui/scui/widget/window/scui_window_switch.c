@@ -200,6 +200,21 @@ static void scui_window_switch_jump_update(scui_window_switch_type_t type, scui_
  */
 static void scui_window_switch_anima(scui_anima_t *anima)
 {
+    /* 动画速度[ptr,enc,bar,key,auto,jump] */
+    scui_handle_t anima_type = scui_window_switch.anima_type;
+    scui_coord_t anima_speed[] = SCUI_WINDOW_SWITCH_MOVE_SPD;
+    anima->period = anima->period * 1000 / anima_speed[anima_type];
+    anima->path = scui_map_linear;
+    
+    switch (anima_type) {
+    case 0: anima->path = scui_map_linear;      break;
+    case 1: anima->path = scui_map_linear;      break;
+    case 2: anima->path = scui_map_linear;      break;
+    case 3: anima->path = scui_map_linear;      break;
+    case 4: anima->path = scui_map_ease_out;    break;
+    case 5: anima->path = scui_map_linear;      break;
+    }
+    
     switch (scui_window_switch.type) {
     case scui_window_switch_cube:
     case scui_window_switch_flip2:
@@ -211,7 +226,6 @@ static void scui_window_switch_anima(scui_anima_t *anima)
     case scui_window_switch_cover_out:
     case scui_window_switch_cover_in:
         anima->path = scui_map_ease_in_out;
-        anima->period = anima->period;
         break;
     case scui_window_switch_flip1:
     case scui_window_switch_zoom2:
@@ -226,7 +240,6 @@ static void scui_window_switch_anima(scui_anima_t *anima)
         break;
     default:
         anima->path = scui_map_linear;
-        anima->period = anima->period;
         break;
     }
 }
@@ -236,14 +249,12 @@ static void scui_window_switch_anima(scui_anima_t *anima)
  */
 static void scui_window_move_anima_state(uint8_t type)
 {
-    static bool over_switch = true;
-    
     switch (type) {
     case 0x00: {
         /* 上一次滚动已经结束才可产生下一次滚动开始事件 */
         /* 否则为滚动被打断,此时应该吸收中间的事件 */
-        if (!over_switch) break;
-        over_switch = false;
+        if (!scui_window_switch.over_scroll) break;
+        scui_window_switch.over_scroll = false;
         
         /* 背景窗口虚化 */
         if (scui_window_switch.type == scui_window_switch_cover_in ||
@@ -263,8 +274,8 @@ static void scui_window_move_anima_state(uint8_t type)
         break;
     }
     case 0x01: {
-        if (over_switch) break;
-        over_switch = true;
+        if (scui_window_switch.over_scroll) break;
+        scui_window_switch.over_scroll = true;
         
         if (scui_window_switch.type == scui_window_switch_cover_in ||
             scui_window_switch.type == scui_window_switch_cover_out) {
@@ -287,48 +298,6 @@ static void scui_window_move_anima_state(uint8_t type)
     default:
         break;
     }
-}
-
-/*@brief 窗口切换初始化
- */
-static void scui_window_move_anima_cfg(void)
-{
-    /* 动画轨迹, 动画速度 */
-    scui_map_cb_t anima_path[5] = {0};
-    scui_coord_t anima_speed[5] = SCUI_WINDOW_SWITCH_MOVE_SPD;
-    
-    anima_path[0] = scui_map_linear;
-    anima_path[1] = scui_map_linear;
-    anima_path[2] = scui_map_linear;
-    anima_path[3] = scui_map_ease_in_out;
-    anima_path[4] = scui_map_linear;
-    
-    for (scui_coord_t idx = 0; idx < 5; idx++) {
-        if (scui_window_switch.anima_path[idx]  == NULL)
-            scui_window_switch.anima_path[idx]   = anima_path[idx];
-        if (scui_window_switch.anima_speed[idx] == 0)
-            scui_window_switch.anima_speed[idx]  = anima_speed[idx];
-    }
-    
-    scui_anima_t anima_t = {.period = -1,};
-    scui_window_switch_anima(&anima_t);
-    scui_window_switch.anima_path[1] = anima_t.path;
-    scui_window_switch.anima_path[2] = anima_t.path;
-    scui_window_switch.anima_path[3] = anima_t.path;
-    scui_window_switch.anima_path[4] = anima_t.path;
-}
-
-/*@brief 窗口切换动画配置
- *@param anima_tag 切换类型
- */
-static void scui_window_move_anima_tag(scui_coord_t anima_tag)
-{
-    scui_window_switch.anima_tag  = 0;
-    scui_window_switch.anima_tag |= 1 << 3;
-    scui_coord_t idx = anima_tag;
-    
-    if (anima_tag >= 0 && anima_tag < 5)
-        scui_window_switch.anima_tag |= 1 << idx;
 }
 
 /*@brief 窗口移动动画回调
@@ -436,17 +405,8 @@ static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, int32_
     anima.value_e = value_e;
     anima.period  = period != 0 ? period : scui_abs(anima.value_e - anima.value_s);
     
-    /* 确定当前动画的路径 */
-    /* 计算当前动画的周期 */
-    scui_window_move_anima_cfg();
-    for (scui_multi_t idx = 0; idx < 5; idx++) {
-        if ((scui_window_switch.anima_tag & (1 << idx)) == 0)
-             continue;
-        
-        anima.path = scui_window_switch.anima_path[idx];
-        anima.period = anima.period * 1000 / scui_window_switch.anima_speed[idx];
-        break;
-    }
+    /* 确定当前动画的路径/周期 */
+    scui_window_switch_anima(&anima);
     
     SCUI_LOG_INFO("<%d, %d>", value_s, value_e);
     
@@ -499,13 +459,13 @@ static void scui_window_move_anima_inout(scui_handle_t handle, bool inout)
 }
 
 /*@brief 窗口切换事件处理回调
- *@param event     事件
- *@param widget    窗口控件实例
- *@param event_dir 事件方向
- *@param anima_tag 动画类型
+ *@param event      事件
+ *@param widget     窗口控件实例
+ *@param event_dir  事件方向
+ *@param anima_type 动画类型
  *@retval 成功失败
  */
-static bool scui_window_switch_event_catch(scui_event_t *event, scui_opt_dir_t event_dir, uint8_t anima_tag)
+static bool scui_window_switch_event_catch(scui_event_t *event, scui_opt_dir_t event_dir, scui_handle_t anima_type)
 {
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_window_t *window = (void *)widget;
@@ -553,13 +513,13 @@ static bool scui_window_switch_event_catch(scui_event_t *event, scui_opt_dir_t e
     if (target != SCUI_HANDLE_INVALID && event_dir != scui_opt_dir_none) {
         /* 全局滚动锁定 */
         scui_widget_scroll_state(0x00);
-        scui_window_move_anima_tag(anima_tag);
         scui_window_switch.dir = event_dir;
         scui_window_switch.pos = event_dir;
         scui_window_switch.pct = 0;
         scui_window_switch.list[0] = widget->myself;
         scui_window_switch.list[1] = target;
-        /* 更新交互方向 */
+        /* 更新动画类型,交互方向 */
+        scui_window_switch.anima_type = anima_type;
         scui_window_switch_move_update(switch_type, event_dir);
         /* 就绪窗口资源 */
         scui_window_switch_ready();
@@ -671,7 +631,7 @@ void scui_window_switch_event(scui_event_t *event)
     case scui_event_ptr_up: {
         if (scui_window_switch.lock_move) {
             scui_window_switch.lock_move = false;
-            scui_window_move_anima_tag(-1);
+            scui_window_switch.anima_type = 4;
             
             if (scui_window_switch.mask_fling) {
                 scui_window_switch.mask_fling = false;
@@ -691,44 +651,6 @@ void scui_window_switch_event(scui_event_t *event)
             scui_multi_t area_t = (scui_multi_t)1 * SCUI_HOR_RES * SCUI_VER_RES / 2;
             scui_window_move_anima_inout(scui_window_switch.list[0], area_s >= area_t);
         }
-        break;
-    }
-    case scui_event_bar_move:
-    case scui_event_bar_fling: {
-        
-        scui_opt_dir_t event_dir = scui_opt_dir_none;
-        SCUI_LOG_INFO("bar_way:%u", event->bar_way);
-        /* 方向检测与条件加载 */
-        if (event->bar_way == 0) {
-            
-            if (window->switch_enc_way == scui_opt_dir_hor) {
-                if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
-                if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_ltr;
-            }
-            if (window->switch_enc_way == scui_opt_dir_ver) {
-                if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_ltr;
-                if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
-            }
-        }
-        if (event->bar_way == 1) {
-            
-            if (window->switch_enc_way == scui_opt_dir_hor) {
-                if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;
-                if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_rtl;
-            }
-            if (window->switch_enc_way == scui_opt_dir_ver) {
-                if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_rtl;
-                if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;
-            }
-        }
-        
-        /* 给定方向进行窗口切换 */
-        scui_window_switch.pos = scui_opt_pos_all;
-        if (scui_window_switch_event_catch(event, event_dir, 1)) {
-            scui_window_move_anima_inout(scui_window_switch.list[0], false);
-            scui_event_mask_over(event);
-        }
-        
         break;
     }
     case scui_event_enc_fdir:
@@ -769,6 +691,44 @@ void scui_window_switch_event(scui_event_t *event)
         
         break;
     }
+    case scui_event_bar_move:
+    case scui_event_bar_fling: {
+        
+        scui_opt_dir_t event_dir = scui_opt_dir_none;
+        SCUI_LOG_INFO("bar_way:%u", event->bar_way);
+        /* 方向检测与条件加载 */
+        if (event->bar_way == 0) {
+            
+            if (window->switch_enc_way == scui_opt_dir_hor) {
+                if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
+                if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_ltr;
+            }
+            if (window->switch_enc_way == scui_opt_dir_ver) {
+                if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_ltr;
+                if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
+            }
+        }
+        if (event->bar_way == 1) {
+            
+            if (window->switch_enc_way == scui_opt_dir_hor) {
+                if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;
+                if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_rtl;
+            }
+            if (window->switch_enc_way == scui_opt_dir_ver) {
+                if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_rtl;
+                if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;
+            }
+        }
+        
+        /* 给定方向进行窗口切换 */
+        scui_window_switch.pos = scui_opt_pos_all;
+        if (scui_window_switch_event_catch(event, event_dir, 2)) {
+            scui_window_move_anima_inout(scui_window_switch.list[0], false);
+            scui_event_mask_over(event);
+        }
+        
+        break;
+    }
     case scui_event_key_click: {
         
         scui_opt_dir_t event_dir = scui_opt_dir_none;
@@ -781,7 +741,7 @@ void scui_window_switch_event(scui_event_t *event)
         
         /* 给定方向进行窗口切换 */
         scui_window_switch.pos = scui_opt_pos_all;
-        if (scui_window_switch_event_catch(event, event_dir, 2)) {
+        if (scui_window_switch_event_catch(event, event_dir, 3)) {
             scui_window_move_anima_inout(scui_window_switch.list[0], false);
             scui_event_mask_over(event);
         }
@@ -886,17 +846,17 @@ bool scui_window_switch_jump(scui_handle_t handle, scui_window_switch_type_t typ
     
     /* 全局滚动锁定 */
     scui_widget_scroll_state(0x00);
-    scui_point_t point = scui_window_switch.point;
-    
-    scui_window_move_anima_tag(4);
     scui_window_switch.dir = scui_window_switch.dir;
     scui_window_switch.pos = scui_window_switch.dir;
     scui_window_switch.pct = 0;
     scui_window_switch.list[0] = handle_a;
     scui_window_switch.list[1] = handle;
+    /* 更新动画类型 */
+    scui_window_switch.anima_type = 5;
     /* 就绪窗口资源 */
     scui_window_switch_ready();
     /* 额外做一次校正 */
+    scui_point_t point = scui_window_switch.point;
     scui_widget_move_pos(scui_window_switch.list[1], &point);
     scui_window_switch.point = point = (scui_point_t){0};
     scui_widget_move_pos(scui_window_switch.list[0], &point);

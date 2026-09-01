@@ -60,26 +60,8 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     /* 偏移点记录 */
     
-    /* 设置动画轨迹, 动画速度 */
-    scui_map_cb_t anima_path[4] = {0};
-    scui_coord_t anima_speed[4] = SCUI_WIDGET_SCROLL_SPD_ANIM;
-    
-    /* 怪怪的感觉，有区别又没有区别 */
-    anima_path[0] = scui_map_ease_in_out;
-    anima_path[1] = scui_map_ease_in_out;
-    anima_path[2] = scui_map_ease_in_out;
-    anima_path[3] = scui_map_ease_in_out;
-    
-    /* 动画轨迹, 动画速度 */
-    scroll->anima_tag = 0;
-    for (scui_multi_t idx = 0; idx < 4; idx++) {
-        scroll->anima_path[idx]  = scroll_maker->anima_path[idx];
-        scroll->anima_speed[idx] = scroll_maker->anima_speed[idx];
-        if (scroll->anima_path[idx]  == NULL)
-            scroll->anima_path[idx]   = anima_path[idx];
-        if (scroll->anima_speed[idx] == 0)
-            scroll->anima_speed[idx]  = anima_speed[idx];
-    }
+    /* 动画类型初始化 */
+    scroll->anima_type = 0;
     
     /* 默认保持一个翻页 */
     if (scroll->route_enc == 0) {
@@ -142,22 +124,6 @@ void scui_scroll_burn(scui_handle_t handle)
     
     /* 析构基础控件实例 */
     scui_widget_burn(widget);
-}
-
-/*@brief 滚动控件动画标记
- *@param handle 滚动控件句柄
- *@param tag    标记索引
- */
-static void scui_scroll_anima_tag(scui_handle_t handle, uint8_t tag)
-{
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_scroll_t *scroll = (void *)widget;
-    
-    scroll->anima_tag = 0;
-    
-    if (tag < 4)
-        scroll->anima_tag |= 1 << tag;
-        scroll->anima_tag |= 1 << 3;
 }
 
 /*@brief 滚动控件获取偏移量百分比(自动布局)
@@ -368,7 +334,7 @@ void scui_scroll_center(scui_handle_t handle, scui_handle_t target, bool anima)
         .y = center_w.y - center_t.y,
     };
     SCUI_LOG_INFO("offset:<%d, %d>", offset.x, offset.y);
-    scui_scroll_anima_tag(handle, 0);
+    ((scui_scroll_t *)widget)->anima_type = 0;
     scui_scroll_offset(handle, &offset, anima);
 }
 
@@ -834,12 +800,17 @@ static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_
     
     /* 确定当前动画的路径 */
     /* 计算当前动画的周期 */
-    for (scui_multi_t idx = 0; idx < 4; idx++)
-        if (scroll->anima_tag & (1 << idx)) {
-            anima.path = scroll->anima_path[idx];
-            anima.period = anima.period * 1000 / scroll->anima_speed[idx];
-            break;
-        }
+    scui_coord_t anima_speed[] = SCUI_WIDGET_SCROLL_SPD_ANIM;
+    anima.period = anima.period * 1000 / anima_speed[scroll->anima_type];
+    anima.path = scui_map_linear;
+    
+    switch (scroll->anima_type){
+    case 0: anima.path = scui_map_linear;   break;
+    case 1: anima.path = scui_map_linear;   break;
+    case 2: anima.path = scui_map_linear;   break;
+    case 3: anima.path = scui_map_linear;   break;
+    case 4: anima.path = scui_map_ease_out; break;
+    }
     
     if (scroll->anima != SCUI_HANDLE_INVALID) {
         scui_anima_stop(scroll->anima);
@@ -1402,7 +1373,7 @@ void scui_scroll_invoke(scui_event_t *event)
                 break;
             
             scroll->lock_move = true;
-            scui_scroll_anima_tag(event->object, 0);
+            scroll->anima_type = 0;
             widget->state.indev_hold = true;
             
             if (scroll->anima == SCUI_HANDLE_INVALID) {
@@ -1423,7 +1394,7 @@ void scui_scroll_invoke(scui_event_t *event)
         scui_event_mask_over(event);
         break;
     }
-    case scui_event_ptr_up:
+    case scui_event_ptr_up: {
         
         if (scroll->lock_move) {
             scroll->lock_move = false;
@@ -1441,10 +1412,61 @@ void scui_scroll_invoke(scui_event_t *event)
             scui_scroll_event_auto(event, type);
             
             scroll->speed_move = 0;
-            scui_scroll_anima_tag(event->object, -1);
+            scroll->anima_type = 4;
             widget->state.indev_hold = false;
         }
         break;
+    }
+    case scui_event_enc_fdir:
+    case scui_event_enc_bdir: {
+        if (widget->state.indev_hold)
+            break;
+        
+        scui_coord_t way = 0;
+        scui_opt_dir_t dir = scui_opt_dir_none;
+        if (event->type == scui_event_enc_fdir) {
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_ltr;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_utd;
+            way = +1;
+        }
+        if (event->type == scui_event_enc_bdir) {
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_rtl;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_dtu;
+            way = -1;
+        }
+        
+        /* 忽略的方向不支持 */
+        if (scui_scroll_edge_skip(event->object, dir))
+            break;
+        
+        if (scroll->dir != scui_opt_dir_hor &&
+            scroll->dir != scui_opt_dir_ver) {
+            // SCUI_LOG_ERROR("scroll way is unsupport");
+            break;
+        }
+        if (scroll->route_enc == 0) {
+            SCUI_LOG_ERROR("route encode is zero");
+            break;
+        }
+        
+        scui_point_t offset = {0};
+        if (scroll->dir == scui_opt_dir_hor)
+            offset.x = way * scroll->route_enc * event->enc_diff;
+        if (scroll->dir == scui_opt_dir_ver)
+            offset.y = way * scroll->route_enc * event->enc_diff;
+        
+        if (scroll->anima != SCUI_HANDLE_INVALID) {
+            scui_anima_stop(scroll->anima);
+            scui_anima_destroy(scroll->anima);
+            scroll->anima = SCUI_HANDLE_INVALID;
+            
+            scui_widget_scroll_state(0x01);
+        }
+        scroll->anima_type = 1;
+        scui_scroll_offset(event->object, &offset, true);
+        scui_event_mask_over(event);
+        break;
+    }
     case scui_event_bar_move:
     case scui_event_bar_fling: {
         if (widget->state.indev_hold)
@@ -1494,57 +1516,7 @@ void scui_scroll_invoke(scui_event_t *event)
             
             scui_widget_scroll_state(0x01);
         }
-        scui_scroll_anima_tag(event->object, 1);
-        scui_scroll_offset(event->object, &offset, true);
-        scui_event_mask_over(event);
-        break;
-    }
-    case scui_event_enc_fdir:
-    case scui_event_enc_bdir: {
-        if (widget->state.indev_hold)
-            break;
-        
-        scui_coord_t way = 0;
-        scui_opt_dir_t dir = scui_opt_dir_none;
-        if (event->type == scui_event_enc_fdir) {
-            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_ltr;
-            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_utd;
-            way = +1;
-        }
-        if (event->type == scui_event_enc_bdir) {
-            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_rtl;
-            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_dtu;
-            way = -1;
-        }
-        
-        /* 忽略的方向不支持 */
-        if (scui_scroll_edge_skip(event->object, dir))
-            break;
-        
-        if (scroll->dir != scui_opt_dir_hor &&
-            scroll->dir != scui_opt_dir_ver) {
-            // SCUI_LOG_ERROR("scroll way is unsupport");
-            break;
-        }
-        if (scroll->route_enc == 0) {
-            SCUI_LOG_ERROR("route encode is zero");
-            break;
-        }
-        
-        scui_point_t offset = {0};
-        if (scroll->dir == scui_opt_dir_hor)
-            offset.x = way * scroll->route_enc * event->enc_diff;
-        if (scroll->dir == scui_opt_dir_ver)
-            offset.y = way * scroll->route_enc * event->enc_diff;
-        
-        if (scroll->anima != SCUI_HANDLE_INVALID) {
-            scui_anima_stop(scroll->anima);
-            scui_anima_destroy(scroll->anima);
-            scroll->anima = SCUI_HANDLE_INVALID;
-            
-            scui_widget_scroll_state(0x01);
-        }
-        scui_scroll_anima_tag(event->object, 1);
+        scroll->anima_type = 2;
         scui_scroll_offset(event->object, &offset, true);
         scui_event_mask_over(event);
         break;
@@ -1601,7 +1573,7 @@ void scui_scroll_invoke(scui_event_t *event)
             
             scui_widget_scroll_state(0x01);
         }
-        scui_scroll_anima_tag(event->object, 2);
+        scroll->anima_type = 3;
         scui_scroll_offset(event->object, &offset, true);
         scui_event_mask_over(event);
         break;

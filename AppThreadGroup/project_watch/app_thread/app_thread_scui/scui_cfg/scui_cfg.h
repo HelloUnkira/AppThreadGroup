@@ -187,11 +187,11 @@
 #define SCUI_WIDGET_IMAGE_DIRECT_LIMIT              (SCUI_HOR_RES * SCUI_VER_RES / 3)
 
 /* 窗口管理器参数配置 */
-/* 窗口切换动画速度[ptr, enc, key, auto, jump] */
+/* 窗口切换动画速度[ptr,enc,bar,key,auto,jump](像素点/1s) */
 #define SCUI_WINDOW_LIST_LIMIT                      (10)
 #define SCUI_WINDOW_STACK_NEST                      (20)
 #define SCUI_WINDOW_SWITCH_MODE                     (1 && !SCUI_FRAME_BUFFER_SEG)
-#define SCUI_WINDOW_SWITCH_MOVE_SPD                 {2000, 1700, 1700, 1000, 300}
+#define SCUI_WINDOW_SWITCH_MOVE_SPD                 {1500, 1700, 1700, 1700, 800, 1000}
 #define SCUI_WINDOW_PRELOAD_USE                     (0)
 
 /* 控件布局标记(为控件添加随机颜色轮廓) */
@@ -204,8 +204,8 @@
 
 /* custom:文本绘制的最大缓存条目 */
 #define SCUI_CUSTOM_STR_ITEM_LIMIT                  (32)
-/* scroll:按键, 动画速度[ptr, enc, key, auto] */
-#define SCUI_WIDGET_SCROLL_SPD_ANIM                 {1200, 900, 900, 900}
+/* scroll:按键, 动画速度[ptr,enc,bar,key,auto](像素点/1s) */
+#define SCUI_WIDGET_SCROLL_SPD_ANIM                 {1500, 1700, 1700, 1700, 800}
 #define SCUI_WIDGET_SCROLL_KEY_FDIR                 (scui_event_key_val_down)
 #define SCUI_WIDGET_SCROLL_KEY_BDIR                 (scui_event_key_val_up)
 /* string:行间距,字间距,空字符宽度 */
@@ -218,8 +218,6 @@
 /* string:文本滚动空余间隙 */
 #define SCUI_WIDGET_STRING_SCROLL_ITEM              (75)
 #define SCUI_WIDGET_STRING_SCROLL_LINE              (50)
-/* roller:按键, 动画速度[ptr, enc, key, auto] */
-#define SCUI_WIDGET_ROLLER_SPD_ANIM                 {1000, 75, 75, 75}
 
 /* object:属性和过渡扩充步进, 主体样式 */
 #define SCUI_WIDGET_OBJECT_PROP_STEP                (3)

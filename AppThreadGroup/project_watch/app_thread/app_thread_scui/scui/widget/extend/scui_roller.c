@@ -25,15 +25,6 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_roller_maker_t *roller_maker = widget_maker;
     
     /* 使用滚轮的默认滚动 */
-    if (scroll_maker->anima_path[3] == NULL)
-        scroll_maker->anima_path[3]  = scui_map_bounce;
-    
-    /* 使用滚轮的默认滚动速度 */
-    scui_coord_t anima_speed[4] = SCUI_WIDGET_ROLLER_SPD_ANIM;
-    for (scui_multi_t idx = 0; idx < 4; idx++) {
-        if (scroll_maker->anima_speed[idx] == 0)
-            scroll_maker->anima_speed[idx]  = anima_speed[idx];
-    }
     
     /* 构造派生控件实例 */
     scui_scroll_make(scroll, scroll_maker, handle);

@@ -18,8 +18,6 @@ typedef struct {
     scui_point_t    edge;               /* 滚动边距(自由布局) */
     scui_coord_t    space;              /* 控件间隙(自动布局) */
     scui_coord_t    fling_page;         /* 翻页数量 */
-    scui_map_cb_t   anima_path[4];      /* 动画轨迹[ptr,enc,key,auto] */
-    scui_coord_t    anima_speed[4];     /* 动画速度[ptr,enc,key,auto](像素点/1s) */
     scui_coord_t    route_enc;          /* 旋钮行程 */
     scui_coord_t    route_bar;          /* 滑条行程 */
     scui_coord_t    route_key;          /* 按键行程 */
@@ -30,11 +28,11 @@ typedef struct {
     scui_sbitfd_t   loop:1;             /* 滚动循环(自动布局,与回弹效果互斥) */
     /* 内部域: */
     scui_handle_t   anima;              /* 移动动画 */
+    scui_handle_t   anima_type;         /* 动画类型[ptr,enc,bar,key,auto] */
     scui_point_t   *point_rcd;          /* 子控件移动记录 */
     scui_point_t    point_cur;          /* 移动动画当前 */
     scui_point_t    point_ofs;          /* 移动动画总计 */
     scui_multi_t    speed_move;         /* 末段移动速度(带方向, ptr事件) */
-    scui_sbitfd_t   anima_tag:4;        /* 动画标记[ptr,enc,key,auto] */
     scui_sbitfd_t   layout:1;           /* 布局更新标记 */
     scui_sbitfd_t   lock_move:1;        /* 滚动长留锁 */
     scui_sbitfd_t   over_scroll:1;      /* 滚动迭代状态 */
@@ -70,8 +68,6 @@ typedef struct {
     scui_point_t    edge;               /* 滚动边距(自由布局) */
     scui_coord_t    space;              /* 控件间隙(自动布局) */
     scui_coord_t    fling_page;         /* 翻页数量 */
-    scui_map_cb_t   anima_path[4];      /* 动画轨迹[ptr,enc,key,auto] */
-    scui_coord_t    anima_speed[4];     /* 动画速度[ptr,enc,key,auto](像素点/1s) */
     scui_coord_t    route_enc;          /* 旋钮行程 */
     scui_coord_t    route_bar;          /* 滑条行程 */
     scui_coord_t    route_key;          /* 按键行程 */

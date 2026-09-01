@@ -102,12 +102,11 @@ typedef struct {
     scui_coord_t   pct;             /* 窗口切换进度(百分比) */
     scui_coord_t   ofs;             /* 窗口切换偏移(像素点) */
     scui_handle_t  anima;           /* 窗口切换动画 */
-    scui_coord_t   anima_speed[5];  /* 窗口切换动画速度[ptr,enc,key,auto,jump](像素点/1s) */
-    scui_map_cb_t  anima_path[5];   /* 窗口切换动画轨迹[ptr,enc,key,auto,jump] */
-    scui_sbitfd_t  anima_tag:5;     /* 窗口切换动画标记[ptr,enc,key,auto,jump] */
+    scui_handle_t  anima_type;      /* 窗口切换动画类型 */
     scui_sbitfd_t  lock_jump:1;     /* 窗口切换锁 */
     scui_sbitfd_t  lock_move:1;     /* 窗口切换锁 */
     scui_sbitfd_t  mask_fling:1;    /* 窗口切换锁 */
+    scui_sbitfd_t  over_scroll:1;   /* 窗口切换中 */
 } scui_window_switch_t;
 
 typedef struct {
