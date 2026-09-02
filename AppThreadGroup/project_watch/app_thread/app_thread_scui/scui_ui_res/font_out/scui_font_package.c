@@ -9,6 +9,10 @@ static const scui_font_t font_ascii_8_bin = {
 	.font_size	 = 8,
 	.data_bin	 = 0x0,
 	.size_bin	 = 0xef4,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_12_bin = {
@@ -17,6 +21,10 @@ static const scui_font_t font_ascii_12_bin = {
 	.font_size	 = 12,
 	.data_bin	 = 0xef4,
 	.size_bin	 = 0x1954,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_16_bin = {
@@ -25,6 +33,10 @@ static const scui_font_t font_ascii_16_bin = {
 	.font_size	 = 16,
 	.data_bin	 = 0x2848,
 	.size_bin	 = 0x26f4,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_20_bin = {
@@ -33,6 +45,10 @@ static const scui_font_t font_ascii_20_bin = {
 	.font_size	 = 20,
 	.data_bin	 = 0x4f3c,
 	.size_bin	 = 0x3514,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_24_bin = {
@@ -41,6 +57,10 @@ static const scui_font_t font_ascii_24_bin = {
 	.font_size	 = 24,
 	.data_bin	 = 0x8450,
 	.size_bin	 = 0x49e8,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_32_bin = {
@@ -49,6 +69,10 @@ static const scui_font_t font_ascii_32_bin = {
 	.font_size	 = 32,
 	.data_bin	 = 0xce38,
 	.size_bin	 = 0x6cf0,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_40_bin = {
@@ -57,6 +81,10 @@ static const scui_font_t font_ascii_40_bin = {
 	.font_size	 = 40,
 	.data_bin	 = 0x13b28,
 	.size_bin	 = 0x9a64,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_48_bin = {
@@ -65,6 +93,10 @@ static const scui_font_t font_ascii_48_bin = {
 	.font_size	 = 48,
 	.data_bin	 = 0x1d58c,
 	.size_bin	 = 0xc1cc,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_56_bin = {
@@ -73,6 +105,10 @@ static const scui_font_t font_ascii_56_bin = {
 	.font_size	 = 56,
 	.data_bin	 = 0x29758,
 	.size_bin	 = 0xf078,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_64_bin = {
@@ -81,6 +117,10 @@ static const scui_font_t font_ascii_64_bin = {
 	.font_size	 = 64,
 	.data_bin	 = 0x387d0,
 	.size_bin	 = 0x11b70,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_72_bin = {
@@ -89,6 +129,10 @@ static const scui_font_t font_ascii_72_bin = {
 	.font_size	 = 72,
 	.data_bin	 = 0x4a340,
 	.size_bin	 = 0x14ce8,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_80_bin = {
@@ -97,6 +141,10 @@ static const scui_font_t font_ascii_80_bin = {
 	.font_size	 = 80,
 	.data_bin	 = 0x5f028,
 	.size_bin	 = 0x1783c,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_ascii_88_bin = {
@@ -105,6 +153,10 @@ static const scui_font_t font_ascii_88_bin = {
 	.font_size	 = 88,
 	.data_bin	 = 0x76864,
 	.size_bin	 = 0x1ab6c,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_8_bin = {
@@ -113,6 +165,10 @@ static const scui_font_t font_symbol_8_bin = {
 	.font_size	 = 8,
 	.data_bin	 = 0x913d0,
 	.size_bin	 = 0xd8c,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_12_bin = {
@@ -121,6 +177,10 @@ static const scui_font_t font_symbol_12_bin = {
 	.font_size	 = 12,
 	.data_bin	 = 0x9215c,
 	.size_bin	 = 0x1808,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_16_bin = {
@@ -129,6 +189,10 @@ static const scui_font_t font_symbol_16_bin = {
 	.font_size	 = 16,
 	.data_bin	 = 0x93964,
 	.size_bin	 = 0x2040,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_20_bin = {
@@ -137,6 +201,10 @@ static const scui_font_t font_symbol_20_bin = {
 	.font_size	 = 20,
 	.data_bin	 = 0x959a4,
 	.size_bin	 = 0x2e20,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_24_bin = {
@@ -145,6 +213,10 @@ static const scui_font_t font_symbol_24_bin = {
 	.font_size	 = 24,
 	.data_bin	 = 0x987c4,
 	.size_bin	 = 0x386c,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_32_bin = {
@@ -153,6 +225,10 @@ static const scui_font_t font_symbol_32_bin = {
 	.font_size	 = 32,
 	.data_bin	 = 0x9c030,
 	.size_bin	 = 0x4af8,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_40_bin = {
@@ -161,6 +237,10 @@ static const scui_font_t font_symbol_40_bin = {
 	.font_size	 = 40,
 	.data_bin	 = 0xa0b28,
 	.size_bin	 = 0x661c,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_48_bin = {
@@ -169,6 +249,10 @@ static const scui_font_t font_symbol_48_bin = {
 	.font_size	 = 48,
 	.data_bin	 = 0xa7144,
 	.size_bin	 = 0x7a98,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_56_bin = {
@@ -177,6 +261,10 @@ static const scui_font_t font_symbol_56_bin = {
 	.font_size	 = 56,
 	.data_bin	 = 0xaebdc,
 	.size_bin	 = 0x9554,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_64_bin = {
@@ -185,6 +273,10 @@ static const scui_font_t font_symbol_64_bin = {
 	.font_size	 = 64,
 	.data_bin	 = 0xb8130,
 	.size_bin	 = 0xa8e4,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_72_bin = {
@@ -193,6 +285,10 @@ static const scui_font_t font_symbol_72_bin = {
 	.font_size	 = 72,
 	.data_bin	 = 0xc2a14,
 	.size_bin	 = 0xc884,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_80_bin = {
@@ -201,6 +297,10 @@ static const scui_font_t font_symbol_80_bin = {
 	.font_size	 = 80,
 	.data_bin	 = 0xcf298,
 	.size_bin	 = 0xe0d0,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_symbol_88_bin = {
@@ -209,6 +309,10 @@ static const scui_font_t font_symbol_88_bin = {
 	.font_size	 = 88,
 	.data_bin	 = 0xdd368,
 	.size_bin	 = 0x10104,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_en_32_bin = {
@@ -241,6 +345,10 @@ static const scui_font_t font_eu_32_bin = {
 	.font_size	 = 32,
 	.data_bin	 = 0xfbe3c,
 	.size_bin	 = 0x40c0,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_eu_36_bin = {
@@ -249,6 +357,10 @@ static const scui_font_t font_eu_36_bin = {
 	.font_size	 = 36,
 	.data_bin	 = 0xffefc,
 	.size_bin	 = 0x4a84,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_cjk_32_bin = {
@@ -257,6 +369,10 @@ static const scui_font_t font_cjk_32_bin = {
 	.font_size	 = 32,
 	.data_bin	 = 0x104980,
 	.size_bin	 = 0x351bb8,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_cjk_36_bin = {
@@ -265,6 +381,10 @@ static const scui_font_t font_cjk_36_bin = {
 	.font_size	 = 36,
 	.data_bin	 = 0x456538,
 	.size_bin	 = 0x3fa5b8,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 static const scui_font_t font_tinyTTF_ttf = {
@@ -273,6 +393,10 @@ static const scui_font_t font_tinyTTF_ttf = {
 	.font_size	 = 0,
 	.data_bin	 = 0x850af0,
 	.size_bin	 = 0xc256c4,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
 };
 
 const void * const scui_font_package_table[33] = {

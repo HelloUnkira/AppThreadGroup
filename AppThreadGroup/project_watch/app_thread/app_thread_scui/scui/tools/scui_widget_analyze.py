@@ -59,8 +59,9 @@ def scui_widget_analyze_prefixes():
 
 # 解析字段枚举(scui_widget_json_field_t)
 # 返回 [(scope, field_path)]: scope为'base'(widget基域)或控件前缀(如window)
-def scui_widget_analyze_first_fields(prefixes):
-    src = os.path.normpath(os.path.join(os.path.dirname(__file__), SCUI_WIDGET_JSON_FIELD_SOURCE))
+def scui_widget_analyze_first_fields(prefixes, src=None):
+    if src is None:
+        src = os.path.normpath(os.path.join(os.path.dirname(__file__), SCUI_WIDGET_JSON_FIELD_SOURCE))
     with open(src, 'r', encoding='utf-8') as fp:
         text = fp.read()
     m = re.search(r'typedef enum \{(.*?)\} scui_widget_json_field_t;', text, re.S)
@@ -248,19 +249,28 @@ def scui_widget_analyze_path_slots(types, aliases):
     return result
 
 
-# 生成分析结果到 tmp
-def scui_widget_analyze(out_path):
+# 纯内存分析(direct import 用, 不写 tmp; base 为 tools 目录, 打包环境由装入方传入)
+def scui_widget_analyze_result(base):
     prefixes = scui_widget_analyze_prefixes()
-    first_fields = scui_widget_analyze_first_fields(prefixes)
-    root = os.path.normpath(os.path.join(os.path.dirname(__file__), SCUI_WIDGET_SOURCE_ROOT))
+    src = os.path.normpath(os.path.join(base, SCUI_WIDGET_JSON_FIELD_SOURCE))
+    first_fields = scui_widget_analyze_first_fields(prefixes, src)
+    root = os.path.normpath(os.path.join(base, SCUI_WIDGET_SOURCE_ROOT))
     types, aliases = scui_widget_analyze_collect_types(root)
     path_slots = scui_widget_analyze_path_slots(types, aliases)
-    result = {
+    return {
         'prefixes':     prefixes,
         'first_fields': first_fields,
         'path_slots':   path_slots,
         'class_maker':  SCUI_WIDGET_CLASS_MAKER,
     }
+
+
+# 生成分析结果到 tmp
+def scui_widget_analyze(out_path):
+    base = os.path.dirname(__file__)
+    result = scui_widget_analyze_result(base)
+    prefixes = result['prefixes']
+    path_slots = result['path_slots']
     with open(out_path, 'w', encoding='utf-8') as fp:
         json.dump(result, fp, ensure_ascii=False, indent=1)
     print('[analyze] tmp: %s' % os.path.basename(out_path))

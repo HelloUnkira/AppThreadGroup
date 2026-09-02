@@ -12,7 +12,21 @@
     "info": [
         {
             "lang": "ascii",
-            "size": [8,12,16,20,24,32,40,48,56,64,72,80,88],
+            "size": [
+                8,
+                12,
+                16,
+                20,
+                24,
+                32,
+                40,
+                48,
+                56,
+                64,
+                72,
+                80,
+                88
+            ],
             "name": [
                 "font_ascii_8.bin",
                 "font_ascii_12.bin",
@@ -27,10 +41,79 @@
                 "font_ascii_72.bin",
                 "font_ascii_80.bin",
                 "font_ascii_88.bin"
+            ],
+            "ext": [
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                }
             ]
-        },{
+        },
+        {
             "lang": "symbol",
-            "size": [8,12,16,20,24,32,40,48,56,64,72,80,88],
+            "size": [
+                8,
+                12,
+                16,
+                20,
+                24,
+                32,
+                40,
+                48,
+                56,
+                64,
+                72,
+                80,
+                88
+            ],
             "name": [
                 "font_symbol_8.bin",
                 "font_symbol_12.bin",
@@ -45,11 +128,68 @@
                 "font_symbol_72.bin",
                 "font_symbol_80.bin",
                 "font_symbol_88.bin"
+            ],
+            "ext": [
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                }
             ]
         },
         {
             "lang": "en",
-            "size": [32, 36],
+            "size": [
+                32,
+                36
+            ],
             "name": [
                 "font_en_32.bin",
                 "font_en_36.bin"
@@ -67,25 +207,59 @@
         },
         {
             "lang": "eu",
-            "size": [32, 36],
+            "size": [
+                32,
+                36
+            ],
             "name": [
                 "font_eu_32.bin",
                 "font_eu_36.bin"
+            ],
+            "ext": [
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                }
             ]
         },
         {
             "lang": "cjk",
-            "size": [32, 36],
+            "size": [
+                32,
+                36
+            ],
             "name": [
                 "font_cjk_32.bin",
                 "font_cjk_36.bin"
+            ],
+            "ext": [
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                }
             ]
         },
         {
             "lang": "multi",
-            "size": [0],
+            "size": [
+                0
+            ],
             "name": [
                 "font_tinyTTF.ttf"
+            ],
+            "ext": [
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                }
             ]
         }
     ]

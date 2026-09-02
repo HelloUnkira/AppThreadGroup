@@ -20,27 +20,21 @@ SCUI_WIDGET_PARSER_PREFIXES = []
 SCUI_WIDGET_PARSER_FIRST_FIELDS = []
 SCUI_WIDGET_PARSER_PATH_SLOTS = {}
 SCUI_WIDGET_PARSER_CLASS_MAKER = {}
+# tools 目录基准: 打包(exe)环境下由装入方注入真实路径; 源码运行默认取 __file__
+SCUI_WIDGET_TOOLS = None
 
 
-# 启动准备: 调用分析脚本生成动态参数表并加载
+# 启动准备: 直接 import 分析脚本生成动态参数表(内存, 不走子进程/不写 tmp)
 def scui_widget_parser_ready():
     global SCUI_WIDGET_PARSER_PREFIXES, SCUI_WIDGET_PARSER_FIRST_FIELDS, SCUI_WIDGET_PARSER_PATH_SLOTS, SCUI_WIDGET_PARSER_CLASS_MAKER
     try:
-        import subprocess
-        subprocess.check_call([sys.executable, '-B', SCUI_WIDGET_ANALYZE_PY, SCUI_WIDGET_ANALYZE_TMP])
-        with open(SCUI_WIDGET_ANALYZE_TMP, 'r', encoding='utf-8') as fp:
-            result = json.load(fp)
+        import scui_widget_analyze as an
+        base = SCUI_WIDGET_TOOLS or os.path.dirname(__file__)
+        result = an.scui_widget_analyze_result(base)
         SCUI_WIDGET_PARSER_PREFIXES = result['prefixes']
         SCUI_WIDGET_PARSER_FIRST_FIELDS = [tuple(x) for x in result['first_fields']]
         SCUI_WIDGET_PARSER_PATH_SLOTS = result['path_slots']
         SCUI_WIDGET_PARSER_CLASS_MAKER = result.get('class_maker', {})
-        try:
-            os.remove(SCUI_WIDGET_ANALYZE_TMP)
-        except Exception:
-            pass
-        # 顺手清理 analyze 模块编译缓存(与tmp同目录的__pycache__)
-        import shutil
-        shutil.rmtree(os.path.join(os.path.dirname(SCUI_WIDGET_ANALYZE_PY), '__pycache__'), ignore_errors=True)
         return True
     except Exception as e:
         print('[cfg ready] failed: %s' % e)

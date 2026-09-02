@@ -1,5 +1,5 @@
-src path: ..\font_bin
-dst path: .
+src path: D:\_GitSource_\GitHub\AppThreadGroup\AppThreadGroup\project_watch\app_thread\app_thread_scui\scui_ui_res\font_bin
+dst path: D:\_GitSource_\GitHub\AppThreadGroup\AppThreadGroup\project_watch\app_thread\app_thread_scui\scui_ui_res\font_out
 font:font_ascii_8_bin
 font:font_ascii_12_bin
 font:font_ascii_16_bin
@@ -33,5 +33,9 @@ font:font_eu_36_bin
 font:font_cjk_32_bin
 font:font_cjk_36_bin
 font:font_tinyTTF_ttf
-scui font parser finish
-请按任意键退出...
+==== scui_font_package.out ====
+
+==== scui_font_package.err ====
+
+
+[pack] font 执行完成: OK

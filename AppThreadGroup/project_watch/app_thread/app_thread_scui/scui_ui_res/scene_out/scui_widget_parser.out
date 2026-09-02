@@ -1,5 +1,5 @@
-src path: ..\scene_src
-dst path: .
+src path: D:\_GitSource_\GitHub\AppThreadGroup\AppThreadGroup\project_watch\app_thread\app_thread_scui\scui_ui_res\scene_src
+dst path: D:\_GitSource_\GitHub\AppThreadGroup\AppThreadGroup\project_watch\app_thread\app_thread_scui\scui_ui_res\scene_out
 SCUI_UI_SCENE_BUTTERFLY
 SCUI_UI_SCENE_BUTTERFLY_CUSTOM
 
@@ -173,5 +173,9 @@ SCUI_UI_SCENE_QUICK_CARD
 SCUI_UI_SCENE_STANDBY
 
 
-scui widget parser finish
-请按任意键退出...
+==== scui_widget_parser.out ====
+
+==== scui_widget_parser.err ====
+
+
+[pack] widget 执行完成: OK

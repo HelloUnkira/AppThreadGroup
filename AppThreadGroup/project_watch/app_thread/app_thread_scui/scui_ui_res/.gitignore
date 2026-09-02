@@ -6,3 +6,6 @@ image_src_tar\image_src
 image_src_tar\image_src_0
 image_src_tar\image_src_1
 image_src_tar\image_src_s
+
+__pycache__
+.pyc
