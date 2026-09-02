@@ -4,7 +4,7 @@ __pycache__
 *.toc
 *.zip
 
-# 打包工具运行时中间/日志/临时产物(与提交无关)
+# 打包工具运行时中间/日志/临时产物(与提交无关), 统一忽略
 *.tmp
 *.out
 *.err
@@ -12,3 +12,9 @@ __pycache__
 build/
 dist/
 *.spec
+# cwf 打包过程临时文件(相对启动目录生成)
+*.tmp.json.bin
+*.tmp.image_info.bin
+*.tmp.image_data.bin
+*.src_tmp/
+__pack_tmp__/

@@ -2,7 +2,7 @@
 #define SCUI_CWF_JSON_PARSER_H
 
 /*约定(小端序, 1字节对齐): 
- *    本文件需要与 scui_cwf_json_parser.json 文件同步一致
+ *    本文件需要与 scui_pack_cwf.json 文件同步一致
  *    固件必须与json中版本号一并对应, 版本不匹配的云表盘不支持使用
  */
 
