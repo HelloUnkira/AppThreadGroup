@@ -9,3 +9,13 @@ image_src_tar\image_src_s
 
 __pycache__
 .pyc
+
+# 打包工具运行时中间/日志/临时产物(与提交无关)
+*.pyo
+*.tmp
+*.out
+*.err
+*.log
+build/
+dist/
+*.spec

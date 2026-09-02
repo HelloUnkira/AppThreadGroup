@@ -20,6 +20,7 @@ py -3 -m PyInstaller --noconsole --onefile --name scui_pack_tools ^
     --hidden-import scui_widget_analyze ^
     --hidden-import scui_cwf_json_parser ^
     --hidden-import py7zr ^
+    --hidden-import openpyxl ^
     "%~dp0scui_pack_tools.py"
 
 if exist "%~dp0dist\scui_pack_tools.exe" (

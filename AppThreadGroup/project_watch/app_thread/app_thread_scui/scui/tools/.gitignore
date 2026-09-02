@@ -1,2 +1,14 @@
 __pycache__
-.pyc
+*.pyc
+*.pyo
+*.toc
+*.zip
+
+# 打包工具运行时中间/日志/临时产物(与提交无关)
+*.tmp
+*.out
+*.err
+*.log
+build/
+dist/
+*.spec

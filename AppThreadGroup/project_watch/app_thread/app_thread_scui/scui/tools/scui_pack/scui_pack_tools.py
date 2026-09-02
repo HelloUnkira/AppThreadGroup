@@ -133,8 +133,9 @@ def _do_task(name, ui, src, dst, proj):
             return 1
         argv = [src, dst, proj or 'scui']
     elif name == 'widget':
-        # widget: src dst default_json(scene_out 下的 maker 默认配置)
         argv = [src, dst, os.path.join(dst, 'scui_ui_maker.json')]
+    elif name == 'cwf':
+        return _do_cwf_task(ui, src, dst)
     else:
         argv = [src, dst]
 
@@ -152,6 +153,118 @@ def _do_task(name, ui, src, dst, proj):
     print()
     print('[pack] %s 执行完成: %s' % (name, 'OK' if ret == 0 else 'FAIL'))
     return ret
+
+#============================================================
+# cwf 多步打包(解压7z -> image parser -> cwf parser -> 清理)
+#============================================================
+def _do_cwf_task(ui, src, dst):
+    ui_dir, app, scui, tools, plugs = _dirs(ui)
+    img_task = _TASK['image']
+    cwf_task = _TASK['cwf']
+    if not os.path.isdir(src):
+        print('[pack] cwf src not exist: %s' % src)
+        return 1
+    if not os.path.isdir(dst):
+        os.makedirs(dst, exist_ok=True)
+
+    # 收集所有 cwf 目录(有 image.7z + 同名 .json)
+    cwf_list = []
+    for name in sorted(os.listdir(src)):
+        d = os.path.join(src, name)
+        if not os.path.isdir(d):
+            continue
+        if os.path.exists(os.path.join(d, 'image.7z')) and \
+           os.path.exists(os.path.join(d, name + '.json')):
+            cwf_list.append(name)
+
+    if not cwf_list:
+        print('[pack] cwf: 未找到有效的 cwf 目录(需含 image.7z + 同名 .json)')
+        return 1
+
+    print('[pack] cwf list: %s' % ', '.join(cwf_list))
+    print()
+
+    # 确保工具路径在 sys.path
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
+    if plugs not in sys.path:
+        sys.path.insert(0, plugs)
+
+    failed = []
+    for wf in cwf_list:
+        wf_dir = os.path.join(src, wf)
+        print('=========== [%s] start ============' % wf)
+        # step1: 解压 image.7z -> cwf 目录(7z 内含 image/ 子目录, 不能再嵌套)
+        img_dir = os.path.join(wf_dir, 'image')
+        shutil.rmtree(img_dir, ignore_errors=True)
+        try:
+            import py7zr
+            with py7zr.SevenZipFile(os.path.join(wf_dir, 'image.7z'), 'r') as z:
+                z.extractall(wf_dir)                    # 解压到 cwf 目录, 7z 自带 image/
+            print('[%s] unzip image.7z -> OK' % wf)
+        except Exception as e:
+            print('[%s] unzip fail: %r' % (wf, e))
+            failed.append(wf)
+            continue
+
+        # step2: image parser (image/ -> .)
+        print('[%s] step1 image parser...' % wf)
+        argv_old = sys.argv
+        so_old, se_old = sys.stdout, sys.stderr           # image parser 会重定向, 需保存恢复
+        sys.argv = ['scui_image_parser.py', img_dir, wf_dir, 'cwf']
+        try:
+            mod = importlib.import_module(img_task['module'])
+            mod.scui_image_parser()
+        except Exception as e:
+            print('[%s] image parser fail: %r' % (wf, e))
+            failed.append(wf)
+        finally:
+            sys.argv = argv_old
+            sys.stdout, sys.stderr = so_old, se_old       # 恢复回 _TabLog
+        _collect_logs(wf_dir, 'image')
+
+        # step3: cwf json parser (. -> bin/)
+        print('[%s] step2 cwf json parser...' % wf)
+        sys.argv = ['scui_cwf_json_parser.py', wf_dir, dst]
+        try:
+            mod = importlib.import_module(cwf_task['module'])
+            mod.scui_cwf_json_parser()
+        except Exception as e:
+            print('[%s] cwf parser fail: %r' % (wf, e))
+            failed.append(wf)
+        finally:
+            sys.argv = argv_old
+        _collect_logs(dst, 'cwf')
+
+        # step4: 清理临时文件
+        shutil.rmtree(img_dir, ignore_errors=True)
+        shutil.rmtree(os.path.join(wf_dir, 'image_array'), ignore_errors=True)
+        for f in ('scui_image_parser.h', 'scui_image_parser.c',
+                  'scui_image_parser.bin', 'scui_image_parser.out',
+                  'scui_image_parser.err'):
+            p = os.path.join(wf_dir, f)
+            if os.path.exists(p):
+                os.remove(p)
+        # cwf parser 临时文件(相对 CWD)
+        for f in ('scui_cwf_json_parser.tmp.json.bin',
+                  'scui_cwf_json_parser.tmp.image_info.bin',
+                  'scui_cwf_json_parser.tmp.image_data.bin'):
+            if os.path.isfile(f):
+                os.remove(f)
+        prog = os.path.join(dst, wf + '_json.prog')
+        if os.path.exists(prog):
+            os.remove(prog)
+        # 清理 __pycache__
+        shutil.rmtree(os.path.join(tools, '__pycache__'), ignore_errors=True)
+        shutil.rmtree(os.path.join(plugs, '__pycache__'), ignore_errors=True)
+        print('=========== [%s] finish ============' % wf)
+        print()
+
+    if failed:
+        print('[pack] cwf FAILED: %s' % ', '.join(failed))
+        return 1
+    print('[pack] cwf 执行完成: OK')
+    return 0
 
 #============================================================
 # 图像信息探测(对齐 scui_image_t 结构体字段)
@@ -220,7 +333,7 @@ class PackApp(object):
             self.out_abs[k] = os.path.join(ui, so)
 
         self.root = tk.Tk()
-        self.root.title('scui 打包工具')
+        self.root.title('scui资源工具 - 正在开发中...')
         self.root.geometry('980x720')
         self.root.minsize(860, 620)
 
@@ -253,6 +366,14 @@ class PackApp(object):
 
     #--------------- 路径设置子弹窗(显示所有路径, 前两项只读, 其余可改) ---------------
     def _open_paths(self):
+        import tkinter as tk
+        from tkinter import ttk, messagebox
+        try:
+            self._open_paths_dialog()
+        except Exception as e:
+            messagebox.showwarning('路径设置', '打开路径设置失败:\n%r' % e, parent=self.root)
+
+    def _open_paths_dialog(self):
         import tkinter as tk
         from tkinter import ttk, filedialog
         top = tk.Toplevel(self.root)
@@ -321,13 +442,895 @@ class PackApp(object):
         self.nb = ttk.Notebook(self.root)
         self.nb.pack(fill='both', expand=True, padx=12, pady=(0, 12))
         self.tabs = {}
-        self._build_pack_tab('widget')   # widget: 简单打包(第一条)
+        self._build_widget_tab()         # widget: 完整(左文件/中册子/右编辑)
         self._build_image_tab()          # image: 完整
         self._build_font_tab()           # font: 完整
-        self._build_pack_tab('lang')     # lang: 简单打包
-        self._placeholder_tab('cwf')     # cwf: 建设中(占位)
+        self._build_lang_tab()           # lang: 预览为主
+        self._build_cwf_tab()            # cwf: 参考 widget
         self.nb.bind('<<NotebookTabChanged>>', self._on_tab)
         self.current_log = self.logs.get('image')
+
+    #--------------- widget 子界面(左: src文件 | 中: analyze字段册 | 右: 编辑副本+log) ---------------
+    def _build_widget_tab(self):
+        import tkinter as tk
+        from tkinter import ttk, scrolledtext
+        f = ttk.Frame(self.nb, padding=8)
+        self.tabs['widget'] = f
+        # 编辑状态(副本): path/分支/条目索引
+        self.widget_path  = None        # 当前编辑文件(绝对)
+        self.widget_data  = None        # json 副本对象
+        self.widget_maker = False       # False=scene; True=maker(默认配置)
+        self.widget_edit  = None        # 当前条目索引
+        self._w_base     = None         # 加载时的基快照(用于未保存修改检测)
+
+        # 顶部工具条: 操作按钮(左) + 执行打包(右) + 状态(左)
+        top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
+        ttk.Button(top, text='加载 maker json', command=self._wid_load_maker).pack(side='left')
+        ttk.Button(top, text='预览 json', command=self._wid_preview_json).pack(side='left', padx=(6, 0))
+        ttk.Button(top, text='保存 json', command=self._wid_save).pack(side='left', padx=(6, 0))
+        ttk.Button(top, text='执行 widget 打包', command=lambda: self._run('widget')).pack(side='right')
+        self.widget_status = ttk.Label(top, text='未选择文件', foreground='#777')
+        self.widget_status.pack(side='left', padx=(12, 0))
+
+        # 主体: 垂直(上: 左中右三栏 | 下: LOG 整条, 可上下拖)
+        vp = ttk.Panedwindow(f, orient='vertical'); vp.pack(fill='both', expand=True, pady=(6, 0))
+        hpan = ttk.Panedwindow(vp, orient='horizontal'); vp.add(hpan, weight=6)
+
+        # 左: analyze 可配置字段册(类型窗格: window/custom/scroll...)
+        lf = ttk.LabelFrame(hpan, text=' analyze 可配置字段 ', padding=(4, 4)); hpan.add(lf, weight=3)
+        self.wbook = ttk.Treeview(lf, columns=('slot',), show='tree headings', selectmode='browse')
+        self.wbook.heading('#0', text='字段路径'); self.wbook.heading('slot', text='值槽')
+        self.wbook.column('slot', width=56, anchor='e', stretch=False)
+        bvs = ttk.Scrollbar(lf, orient='vertical', command=self.wbook.yview)
+        self.wbook.configure(yscrollcommand=bvs.set)
+        self.wbook.pack(side='left', fill='both', expand=True); bvs.pack(side='right', fill='y')
+        self.wbook.bind('<<TreeviewSelect>>', self._wid_book_copy)
+
+        # 中: src 文件树(.json / .c)
+        mf = ttk.LabelFrame(hpan, text=' src 文件(scene) ', padding=(4, 4)); hpan.add(mf, weight=3)
+        self.wtree = ttk.Treeview(mf, show='tree', selectmode='browse')
+        wvs = ttk.Scrollbar(mf, orient='vertical', command=self.wtree.yview)
+        self.wtree.configure(yscrollcommand=wvs.set)
+        self.wtree.pack(side='left', fill='both', expand=True); wvs.pack(side='right', fill='y')
+        self.wtree.bind('<<TreeviewSelect>>', self._wid_pick_file)
+
+        # 右: 预览/编辑(json: 键|值两列就地编辑; c: 只读文本)
+        rf = ttk.LabelFrame(hpan, text=' 预览 / 编辑(json 就地, .c 只读) ', padding=(4, 4)); hpan.add(rf, weight=4)
+        erow = ttk.Frame(rf); erow.pack(fill='x')
+        for t, c in (('添加控件', self._wid_add_control), ('删除控件', self._wid_del_control),
+                     ('添加字段', self._wid_add_field), ('删除字段', self._wid_del_field)):
+            ttk.Button(erow, text=t, command=c).pack(side='left', padx=(0, 6))
+        self.widget_sub = tk.StringVar(value='json: 每行 key|value 直接点击修改; 点 .c 只读; 增删用按钮; 光标所在即操作对象')
+        ttk.Label(rf, textvariable=self.widget_sub, foreground='#777').pack(anchor='w', padx=(2, 2))
+        # 键值编辑(json): 滚动行列表, 每行 key|value 常驻输入框(自由编辑)
+        self.wcanv = tk.Canvas(rf, highlightthickness=0)
+        wsb = ttk.Scrollbar(rf, orient='vertical', command=self.wcanv.yview)
+        self.wcanv.configure(yscrollcommand=wsb.set)
+        self._wbox = ttk.Frame(self.wcanv)
+        self._wbox_id = self.wcanv.create_window((0, 0), window=self._wbox, anchor='nw')
+        self._wbox.bind('<Configure>', lambda e: self.wcanv.configure(scrollregion=self.wcanv.bbox('all')))
+        self.wcanv.bind('<Configure>', lambda e: (self.wcanv.itemconfigure(self._wbox_id, width=e.width),
+                                                  self.wcanv.configure(scrollregion=self.wcanv.bbox('all'))))
+        self.wcanv.pack(side='left', fill='both', expand=True)
+        wsb.pack(side='right', fill='y')
+        self.wcanv.bind('<Enter>', lambda e: self.wcanv.bind_all('<MouseWheel>', self._wid_wheel))
+        self.wcanv.bind('<Leave>', lambda e: self.wcanv.unbind_all('<MouseWheel>'))
+        self._w_rows = []
+        # 文本预览(c): 只读
+        self.wctext = scrolledtext.ScrolledText(rf, wrap='char', font=('Consolas', 9), state='disabled')
+        self._wid_switch(True)
+
+        # 下方 LOG 整条
+        ln = ttk.LabelFrame(vp, text=' LOG 输出 ', padding=(6, 4)); vp.add(ln, weight=4)
+        self.logs['widget'] = self._make_log(ln)
+
+        self.nb.add(f, text='widget  ')
+        self._wid_analyze()
+        self._wid_load_tree()
+        self._wid_load_maker(_silent=True)   # 打开默认加载 maker json
+
+    # 右侧主体切换: True=json 行编辑; False=c 只读文本
+    def _wid_switch(self, edit):
+        if edit:
+            self.wcanv.pack(side='left', fill='both', expand=True)
+            self.wctext.pack_forget()
+        else:
+            self.wcanv.pack_forget()
+            self.wctext.pack(fill='both', expand=True)
+
+    # canvas 鼠标滚轮
+    def _wid_wheel(self, e):
+        self.wcanv.yview_scroll(-1 * (e.delta // 120), 'units')
+
+    # 记录光标所在对象: (item, field序号|None)
+    def _wid_active(self, i, f):
+        self._w_active = (i, f)
+
+    def _wid_analyze(self):
+        # 生成左窗格字段册(analyze 结果; tools 加入 sys.path 以便 import)
+        tools = self.tools
+        if tools not in sys.path:
+            sys.path.insert(0, tools)
+        try:
+            import scui_widget_analyze as an
+            book = an.scui_widget_analyze_result(tools)
+        except Exception as e:
+            self._wlog('analyze 失败: %r' % e)
+            return
+        self.wbook.delete(*self.wbook.get_children())
+        for wtype, maker in book.get('class_maker', {}).items():
+            prefix = maker
+            if prefix.startswith('scui_'):
+                prefix = prefix[5:]
+            if prefix.endswith('_maker_t'):
+                prefix = prefix[:-len('_maker_t')]
+            slots = book.get('path_slots', {}).get(maker, {})
+            top = self.wbook.insert('', 'end', text=prefix, open=False, values=('',))
+            # 按字段路径逐点分层折叠(widget.style.buffer -> widget/style/buffer), 默认折叠
+            node_items = {}
+            for path, slot in slots.items():
+                segs = path.split('.')
+                d = node_items
+                for s in segs[:-1]:
+                    n = d.get(s)
+                    if n is None:
+                        n = {'slot': None, 'kids': {}}
+                        d[s] = n
+                    d = n['kids']
+                leaf = d.get(segs[-1])
+                if leaf is None:
+                    d[segs[-1]] = {'slot': slot, 'kids': {}}
+                else:
+                    leaf['slot'] = slot
+            def _rend(parent, items):
+                for text, node in items.items():
+                    if node['kids']:
+                        nid = self.wbook.insert(parent, 'end', text=text, open=False, values=('',))
+                        _rend(nid, node['kids'])
+                    else:
+                        self.wbook.insert(parent, 'end', text=text, values=(node['slot'],))
+            _rend(top, node_items)
+
+    # 左窗格点选字段 -> 复制路径到剪贴板(粘贴到右侧 key 用)
+    def _wid_book_copy(self, _ev=None):
+        sel = self.wbook.selection()
+        if not sel:
+            return
+        path = self.wbook.item(sel[0], 'text')
+        if not path:
+            return
+        try:
+            self.root.clipboard_clear()
+            self.root.clipboard_append(path)
+        except Exception as e:
+            return
+        self.widget_status.config(text='已复制字段: %s(可粘贴到右侧 key)' % path)
+
+    def _wlog(self, s):
+        self._append_log('widget', s + '\n')
+
+    # 左: src 文件树(递归展开全部, .json/.c 可点)
+    def _wid_load_tree(self):
+        self.wtree.delete(*self.wtree.get_children())
+        root = self.in_abs['widget']
+        if not os.path.isdir(root):
+            root = self.ui
+        rnode = self.wtree.insert('', 'end', text=os.path.basename(root) or root, open=True, iid='rdir')
+        self._wid_scan_dir(rnode, root)
+
+    def _wid_scan_dir(self, parent, path):
+        try:
+            entries = sorted(os.listdir(path),
+                             key=lambda x: (not os.path.isdir(os.path.join(path, x)), x.lower()))
+        except OSError:
+            return
+        for e in entries:
+            full = os.path.join(path, e)
+            if os.path.isdir(full):
+                node = self.wtree.insert(parent, 'end', text=e, iid=full, open=True)
+                self._wid_scan_dir(node, full)
+            elif e.lower().endswith(('.json', '.c')):
+                self.wtree.insert(parent, 'end', text=e, iid=full)
+
+    # 中: 点选文件
+    def _wid_pick_file(self, _ev=None):
+        sel = self.wtree.selection()
+        if not sel:
+            return
+        path = sel[0]
+        if not (os.path.isfile(path) and path.lower().endswith(('.json', '.c'))):
+            return
+        if not self._wid_confirm_discard():      # 切走前, 未保存修改需确认丢弃
+            return
+        self.widget_edit = None
+        if path.lower().endswith('.c'):
+            self.widget_path = path; self.widget_data = None; self.widget_maker = False
+            self.widget_status.config(text='%s (只读)' % os.path.basename(path))
+            self.widget_sub.set('%s: 文件文本预览(只读, 不可修改)' % os.path.basename(path))
+            self.wctext.configure(state='normal')
+            self.wctext.delete('1.0', 'end')
+            try:
+                with open(path, 'r', encoding='utf-8', errors='replace') as fp:
+                    self.wctext.insert('1.0', fp.read())
+            except Exception as e:
+                self.wctext.insert('1.0', '读取失败: %r' % e)
+            self.wctext.configure(state='disabled')
+            self._wid_switch(False)
+            return
+        try:
+            with open(path, 'r', encoding='utf-8') as fp:
+                self.widget_data = json.load(fp)
+            self.widget_path = path; self.widget_maker = False
+            self._w_base = json.loads(json.dumps(self.widget_data))   # 记录基快照
+            self.widget_status.config(text='已加载: %s' % os.path.basename(path))
+            self.widget_sub.set('%s: 每行 key/value 直接修改, 光标所在可增删' % os.path.basename(path))
+            self._wid_switch(True)
+            self._wid_render_json()
+        except Exception as e:
+            self.widget_status.config(text='加载失败: %r' % e)
+
+    # 平铺渲染: 每个条目 = 标题Label + 每字段一行 [key输入框][value输入框], 之间空行
+    def _wid_render_json(self):
+        import tkinter as tk
+        from tkinter import ttk
+        for w in self._wbox.winfo_children():
+            w.destroy()
+        self._w_rows = []
+        if self.widget_data is None:
+            return
+        items = self.widget_data.get('widget', [])
+        for i, it in enumerate(items):
+            if self.widget_maker:
+                title = '#%d  %s' % (i, it.get('class', '?'))
+                fields = it.setdefault('default', {})
+            else:
+                title = '#%d  %s' % (i, it.get('widget.myself') or it.get('widget.type', ''))
+                fields = it
+            tl = ttk.Label(self._wbox, text=title, foreground='#2266cc', font=('Consolas', 9, 'bold'))
+            tl.pack(fill='x', anchor='w', pady=(6, 2))
+            tl.bind('<Button-1>', lambda e, i=i: self._wid_active(i, None))
+            for f, (k, v) in enumerate(fields.items()):
+                kvar = tk.StringVar(value=str(k))
+                vvar = tk.StringVar(value=str(v))
+                row = ttk.Frame(self._wbox); row.pack(fill='x', padx=(2, 2))
+                ke = ttk.Entry(row, textvariable=kvar, font=('Consolas', 9))
+                ve = ttk.Entry(row, textvariable=vvar, font=('Consolas', 9))
+                ke.pack(side='left', fill='x', expand=True, padx=(0, 8))
+                ve.pack(side='left', fill='x', expand=True)
+                ke.bind('<FocusIn>', lambda e, i=i, f=f: self._wid_active(i, f))
+                ve.bind('<FocusIn>', lambda e, i=i, f=f: self._wid_active(i, f))
+                self._w_rows.append([i, f, kvar, vvar])
+            ttk.Label(self._wbox, text='').pack()
+
+    # 取某条目的字段 dict
+    def _wid_fields_of(self, item):
+        it = self.widget_data['widget'][item]
+        if self.widget_maker:
+            return it.setdefault('default', {})
+        return it
+
+    # 把当前输入框文本回填到副本(改 key 重建保序; 空 key 行视为未定义跳过)
+    def _wid_sync_back(self):
+        if not self.widget_data:
+            return
+        groups = {}
+        for i, f, ke, ve in self._w_rows:
+            groups.setdefault(i, []).append((ke.get(), ve.get()))
+        for i, pairs in groups.items():
+            if i >= len(self.widget_data['widget']):
+                continue
+            d = {}
+            for k, v in pairs:
+                if k:
+                    d[k] = v
+            if self.widget_maker:
+                self.widget_data['widget'][i]['default'] = d
+            else:
+                self.widget_data['widget'][i] = d
+
+    # 操作位置定位(返回光标所在条目索引, 无则 None)
+    def _wid_where(self):
+        act = getattr(self, '_w_active', None)
+        if act is None:
+            return None
+        return act[0]
+
+    # 写某条目字段 dict
+    def _wid_set_fields(self, it, newd):
+        if self.widget_maker:
+            self.widget_data['widget'][it]['default'] = newd
+        else:
+            self.widget_data['widget'][it] = newd
+
+    # 新控件默认字段
+    def _wid_new_control(self):
+        b = {'widget.type': 'scui_widget_type_window', 'widget.clip.w': 'SCUI_HOR_RES',
+             'widget.clip.h': 'SCUI_VER_RES', 'widget.myself': 'SCUI_UI_SCENE_'}
+        return {'class': 'scui_widget_type_window', 'default': b} if self.widget_maker else b
+
+    # 未保存修改检测(先把输入框回填再与基快照比对)
+    def _wid_dirty(self):
+        if self.widget_data is None or self._w_base is None:
+            return False
+        self._wid_sync_back()
+        a = json.dumps(self.widget_data, ensure_ascii=False, sort_keys=True)
+        b = json.dumps(self._w_base, ensure_ascii=False, sort_keys=True)
+        return a != b
+
+    # 切换前确认丢弃修改(是->继续; 否->取消本次切换)
+    def _wid_confirm_discard(self):
+        if not self._wid_dirty():
+            return True
+        from tkinter import messagebox
+        return messagebox.askyesno('未保存的修改', '当前 json 有未保存的修改，确定丢弃吗？', parent=self.root)
+
+    # 添加控件: 光标所在条目之后插一个新控件(默认字段)
+    def _wid_add_control(self):
+        from tkinter import messagebox
+        if not (self.widget_data is not None and self.widget_path):
+            messagebox.showwarning('widget', '请先在中间选择一个 .json 文件')
+            return
+        self._wid_sync_back()
+        pos = self._wid_where()
+        if pos is None:
+            self._wlog('[widget] 请定位操作位置(点一下标题或某输入框)')
+            return
+        items = self.widget_data.setdefault('widget', [])
+        if pos >= len(items):
+            return
+        items.insert(pos + 1, self._wid_new_control())
+        self._wid_render_json()
+        self._wlog('已添加控件(默认字段, 未保存)')
+
+    # 删除控件: 光标所在条目整个删除
+    def _wid_del_control(self):
+        from tkinter import messagebox
+        if not (self.widget_data is not None and self.widget_path):
+            messagebox.showwarning('widget', '请先在中间选择一个 .json 文件')
+            return
+        self._wid_sync_back()
+        pos = self._wid_where()
+        if pos is None:
+            self._wlog('[widget] 请定位操作位置(点一下标题或某输入框)')
+            return
+        items = self.widget_data.get('widget', [])
+        if pos >= len(items):
+            return
+        del items[pos]
+        self._wid_render_json()
+        self._wlog('已删除控件(未保存)')
+
+    # 添加字段: 光标所在条目补一个空字段行
+    def _wid_add_field(self):
+        from tkinter import messagebox
+        if not (self.widget_data is not None and self.widget_path):
+            messagebox.showwarning('widget', '请先在中间选择一个 .json 文件')
+            return
+        self._wid_sync_back()
+        pos = self._wid_where()
+        if pos is None:
+            self._wlog('[widget] 请定位操作位置(点一下标题或某输入框)')
+            return
+        items = self.widget_data.get('widget', [])
+        if pos >= len(items):
+            return
+        f = getattr(self, '_w_active', [None, None])[1]
+        fields = self._wid_fields_of(pos)
+        newd = {}
+        for j, (k, v) in enumerate(fields.items()):
+            newd[k] = v
+            if f is not None and j == f:
+                newd[''] = ''
+        if f is None:
+            newd[''] = ''
+        self._wid_set_fields(pos, newd)
+        self._wid_render_json()
+        self._wlog('已添加字段(空行, 在输入框填名与值, 未保存)')
+
+    # 删除字段: 光标所在字段行删除
+    def _wid_del_field(self):
+        from tkinter import messagebox
+        if not (self.widget_data is not None and self.widget_path):
+            messagebox.showwarning('widget', '请先在中间选择一个 .json 文件')
+            return
+        self._wid_sync_back()
+        act = getattr(self, '_w_active', None)
+        if act is None or act[0] is None or act[1] is None:
+            self._wlog('[widget] 请定位操作位置(点一下要删除的 key/value 输入框)')
+            return
+        pos, f = act
+        items = self.widget_data.get('widget', [])
+        if pos >= len(items):
+            return
+        fields = self._wid_fields_of(pos)
+        ks = list(fields.keys())
+        if f >= len(ks):
+            return
+        kdel = ks[f]
+        newd = {k: v for k, v in fields.items() if k != kdel}
+        if not newd:                                   # 删空了 -> 删除控件本身, 避免空控件
+            del items[pos]
+            self._wlog('已删除字段 %s, 控件已空故删除整个控件(未保存)' % kdel)
+        else:
+            self._wid_set_fields(pos, newd)
+            self._wlog('已删除字段 %s(未保存)' % kdel)
+        self._wid_render_json()
+
+    # 预览 json: 弹窗显示修改后的完整 json
+    def _wid_preview_json(self):
+        import tkinter as tk
+        from tkinter import scrolledtext
+        self._wid_sync_back()
+        top = tk.Toplevel(self.root)
+        top.title('json 预览(修改后) - %s' % (os.path.basename(self.widget_path) if self.widget_path else '未命名'))
+        top.geometry('680x560')
+        t = scrolledtext.ScrolledText(top, wrap='none', font=('Consolas', 9), state='normal')
+        t.pack(fill='both', expand=True, padx=8, pady=8)
+        try:
+            s = json.dumps(self.widget_data, ensure_ascii=False, indent=4)
+        except Exception as e:
+            s = '%r' % e
+        t.insert('1.0', s)
+        t.configure(state='disabled')
+
+    # maker json 加载(out 下默认配置, 可编辑保存; _silent=自动加载时不弹窗)
+    def _wid_load_maker(self, _silent=False):
+        from tkinter import messagebox
+        path = os.path.join(self.out_abs['widget'], 'scui_ui_maker.json')
+        if not os.path.exists(path):
+            if not _silent:
+                messagebox.showwarning('widget', '未找到 maker 默认配置:\n%s' % path)
+            return
+        try:
+            if not _silent and not self._wid_confirm_discard():   # 手动加载前, 未保存修改需确认
+                return
+            with open(path, 'r', encoding='utf-8') as fp:
+                self.widget_data = json.load(fp)
+            self.widget_path = path; self.widget_maker = True
+            self._w_base = json.loads(json.dumps(self.widget_data))   # 记录基快照
+            self.widget_status.config(text='已加载 maker json(默认配置): %s' % os.path.basename(path))
+            self.widget_sub.set('maker json: key/value 直接修改')
+            self._wid_switch(True)
+            self._wid_render_json()
+        except Exception as e:
+            self.widget_status.config(text='加载失败: %r' % e)
+
+    # 保存(json 可写; 先回填输入框, 保存才写文件)
+    def _wid_save(self):
+        if self.widget_data is None or not self.widget_path:
+            self._wlog('[save] 无待保存内容')
+            return
+        if self.widget_path.lower().endswith('.c'):
+            self._wlog('[save] .c 只读, 不允许修改写入')
+            return
+        try:
+            self._wid_sync_back()
+            with open(self.widget_path, 'w', encoding='utf-8') as fp:
+                json.dump(self.widget_data, fp, ensure_ascii=False, indent=4)
+            self._w_base = json.loads(json.dumps(self.widget_data))   # 保存后重置基快照
+            self.widget_status.config(text='已保存: %s' % os.path.basename(self.widget_path))
+            self._wlog('[save] 已写入: %s' % self.widget_path)
+        except Exception as e:
+            self.widget_status.config(text='保存失败: %r' % e)
+            self._wlog('[save] 失败: %r' % e)
+
+#--------------- lang 子界面(左:语言列 | 中:句柄行列表 | 右:行详情) ---------------
+    def _build_lang_tab(self):
+        import tkinter as tk
+        from tkinter import ttk, scrolledtext
+        f = ttk.Frame(self.nb, padding=8)
+        self.tabs['lang'] = f
+        self.lang_data = None     # (languages, rows)
+        self.lang_sel = None
+
+        # 顶部
+        top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
+        ttk.Button(top, text='执行 lang 打包', command=lambda: self._run('lang')).pack(side='right')
+
+        # 主体: 上(三栏) | 下(LOG)
+        vp = ttk.Panedwindow(f, orient='vertical'); vp.pack(fill='both', expand=True, pady=(6, 0))
+        hp = ttk.Panedwindow(vp, orient='horizontal'); vp.add(hp, weight=6)
+
+        # 左: 语言列表
+        lf = ttk.LabelFrame(hp, text=' language ', padding=(4, 4)); hp.add(lf, weight=1)
+        self.ltree = ttk.Treeview(lf, show='tree', selectmode='browse')
+        lvs = ttk.Scrollbar(lf, orient='vertical', command=self.ltree.yview)
+        self.ltree.configure(yscrollcommand=lvs.set)
+        self.ltree.pack(side='left', fill='both', expand=True); lvs.pack(side='right', fill='y')
+
+        # 中: 句柄行列表(zh 提示, 带省略号)
+        mf = ttk.LabelFrame(hp, text=' 句柄行(zh 预览) ', padding=(4, 4)); hp.add(mf, weight=3)
+        self.mtree = ttk.Treeview(mf, columns=('idx',), show='tree headings', selectmode='browse')
+        self.mtree.heading('#0', text='句柄行'); self.mtree.heading('idx', text='#')
+        self.mtree.column('idx', width=40, anchor='e', stretch=False)
+        mvs = ttk.Scrollbar(mf, orient='vertical', command=self.mtree.yview)
+        self.mtree.configure(yscrollcommand=mvs.set)
+        self.mtree.pack(side='left', fill='both', expand=True); mvs.pack(side='right', fill='y')
+        self.mtree.bind('<<TreeviewSelect>>', self._lang_pick)
+
+        # 右: 行详情(各语言内容)
+        rf = ttk.LabelFrame(hp, text=' 行详情 ', padding=(4, 4)); hp.add(rf, weight=3)
+        self.rtext = scrolledtext.ScrolledText(rf, wrap='word', font=('Consolas', 9), state='disabled')
+        self.rtext.pack(fill='both', expand=True)
+
+        # LOG
+        ln = ttk.LabelFrame(vp, text=' LOG 输出 ', padding=(6, 4)); vp.add(ln, weight=2)
+        self.logs['lang'] = self._make_log(ln)
+
+        self.nb.add(f, text='lang  ')
+        self._lang_load()
+
+    def _lang_load(self):
+        self.ltree.delete(*self.ltree.get_children())
+        self.mtree.delete(*self.mtree.get_children())
+        self.rtext.configure(state='normal'); self.rtext.delete('1.0', 'end'); self.rtext.configure(state='disabled')
+        self.lang_data = None; self.lang_sel = None
+
+        src = self.in_abs['lang']
+        cfg = os.path.join(src, 'scui_lang_parser.json')
+        if not os.path.exists(cfg):
+            self._append_log('lang', '未找到配置: %s\n' % cfg)
+            return
+        try:
+            with open(cfg, 'r', encoding='utf-8') as fp:
+                j = json.load(fp)
+            langs = j.get('language', [])
+            xlsx_path = os.path.join(src, j.get('xlsx', ''))
+            sheet_name = j.get('sheet', '')
+            if not os.path.exists(xlsx_path):
+                self._append_log('lang', '未找到 xlsx: %s\n' % xlsx_path)
+                return
+            import openpyxl
+            wb = openpyxl.load_workbook(xlsx_path, read_only=True, data_only=True)
+            ws = wb[sheet_name] if sheet_name in wb.sheetnames else wb[wb.sheetnames[0]]
+            rows = []
+            for row in ws.iter_rows(values_only=True):
+                rows.append([str(c) if c is not None else '' for c in row])
+            wb.close()
+            self.lang_data = (langs, rows)
+            # 左: 语言列表
+            for i, l in enumerate(langs):
+                self.ltree.insert('', 'end', text=l, iid='lang%d' % i)
+            # 中: 句柄行(第 0 列为 zh, 带省略号)
+            for i, row in enumerate(rows):
+                zh = row[0] if row else ''
+                show = zh if len(zh) <= 24 else zh[:22] + '…'
+                self.mtree.insert('', 'end', iid='r%d' % i, text=show, values=(i,))
+            self._append_log('lang', '已加载 %d 行, %d 语言\n' % (len(rows), len(langs)))
+        except Exception as e:
+            self._append_log('lang', '加载失败: %r\n' % e)
+
+    def _lang_pick(self, _ev=None):
+        sel = self.mtree.selection()
+        if not sel or self.lang_data is None:
+            return
+        idx = int(sel[0][1:])
+        langs, rows = self.lang_data
+        if idx >= len(rows):
+            return
+        row = rows[idx]
+        self.rtext.configure(state='normal')
+        self.rtext.delete('1.0', 'end')
+        self.rtext.insert('end', '句柄号: SCUI_LANG_0X%04x\n' % idx)
+        self.rtext.insert('end', '-' * 40 + '\n')
+        for ci, lang in enumerate(langs):
+            val = row[ci] if ci < len(row) else ''
+            self.rtext.insert('end', '%s: %s\n' % (lang, val))
+        self.rtext.configure(state='disabled')
+
+    #--------------- cwf 子界面(左:协议类型+注释 | 中:cwf浏览 | 右:json编辑) ---------------
+    def _build_cwf_tab(self):
+        import tkinter as tk
+        from tkinter import ttk, scrolledtext
+        f = ttk.Frame(self.nb, padding=8)
+        self.tabs['cwf'] = f
+        self.cwf_data = None
+        self.cwf_path = None
+        self.cwf_edit = None
+        self._cwf_base = None
+        self._cwf_rows = []
+        self._cwf_active = None
+
+        # 顶部工具条
+        top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
+        ttk.Button(top, text='预览 json', command=self._cwf_preview).pack(side='left')
+        ttk.Button(top, text='保存 json', command=self._cwf_save).pack(side='left', padx=(6, 0))
+        ttk.Button(top, text='执行 cwf 打包', command=lambda: self._run('cwf')).pack(side='right')
+        self.cwf_status = ttk.Label(top, text='未选择', foreground='#777')
+        self.cwf_status.pack(side='left', padx=(12, 0))
+
+        # 主体: 上(三栏) | 下(LOG)
+        vp = ttk.Panedwindow(f, orient='vertical'); vp.pack(fill='both', expand=True, pady=(6, 0))
+        hp = ttk.Panedwindow(vp, orient='horizontal'); vp.add(hp, weight=6)
+
+        # 左: 协议类型 + 注释
+        lf = ttk.LabelFrame(hp, text=' cwf 协议类型 ', padding=(4, 4)); hp.add(lf, weight=3)
+        self.cbook = ttk.Treeview(lf, columns=('anno',), show='tree headings', selectmode='browse')
+        self.cbook.heading('#0', text='type'); self.cbook.heading('anno', text='annotation')
+        self.cbook.column('anno', width=120, stretch=False)
+        cvs = ttk.Scrollbar(lf, orient='vertical', command=self.cbook.yview)
+        self.cbook.configure(yscrollcommand=cvs.set)
+        self.cbook.pack(side='left', fill='both', expand=True); cvs.pack(side='right', fill='y')
+
+        # 中: cwf 浏览(满足: 有 image.7z + 同名 .json)
+        mf = ttk.LabelFrame(hp, text=' cwf 列表 ', padding=(4, 4)); hp.add(mf, weight=3)
+        self.ctree = ttk.Treeview(mf, show='tree', selectmode='browse')
+        ctvs = ttk.Scrollbar(mf, orient='vertical', command=self.ctree.yview)
+        self.ctree.configure(yscrollcommand=ctvs.set)
+        self.ctree.pack(side='left', fill='both', expand=True); ctvs.pack(side='right', fill='y')
+        self.ctree.bind('<<TreeviewSelect>>', self._cwf_pick)
+
+        # 右: json 编辑(layout 行列表, 每行 key|value 常驻输入框)
+        rf = ttk.LabelFrame(hp, text=' 编辑(json 就地) ', padding=(4, 4)); hp.add(rf, weight=4)
+        erow = ttk.Frame(rf); erow.pack(fill='x')
+        for t, c in (('添加类型', self._cwf_add_type), ('删除类型', self._cwf_del_type),
+                     ('添加字段', self._cwf_add_field), ('删除字段', self._cwf_del_field)):
+            ttk.Button(erow, text=t, command=c).pack(side='left', padx=(0, 6))
+        self.cwf_sub = tk.StringVar(value='中间选择一个 cwf: 各 layout 行 key|value 直接修改')
+        ttk.Label(rf, textvariable=self.cwf_sub, foreground='#777').pack(anchor='w', padx=(2, 2))
+        self.ccanv = tk.Canvas(rf, highlightthickness=0)
+        csb = ttk.Scrollbar(rf, orient='vertical', command=self.ccanv.yview)
+        self.ccanv.configure(yscrollcommand=csb.set)
+        self._cbox = ttk.Frame(self.ccanv)
+        self._cbox_id = self.ccanv.create_window((0, 0), window=self._cbox, anchor='nw')
+        self._cbox.bind('<Configure>', lambda e: self.ccanv.configure(scrollregion=self.ccanv.bbox('all')))
+        self.ccanv.bind('<Configure>', lambda e: (self.ccanv.itemconfigure(self._cbox_id, width=e.width),
+                                                   self.ccanv.configure(scrollregion=self.ccanv.bbox('all'))))
+        self.ccanv.pack(side='left', fill='both', expand=True); csb.pack(side='right', fill='y')
+        self.ccanv.bind('<Enter>', lambda e: self.ccanv.bind_all('<MouseWheel>', self._cwf_wheel))
+        self.ccanv.bind('<Leave>', lambda e: self.ccanv.unbind_all('<MouseWheel>'))
+
+        # LOG
+        ln = ttk.LabelFrame(vp, text=' LOG 输出 ', padding=(6, 4)); vp.add(ln, weight=2)
+        self.logs['cwf'] = self._make_log(ln)
+
+        self.nb.add(f, text='cwf  ')
+        self._cwf_load_proto()
+        self._cwf_load_list()
+
+    def _cwf_wheel(self, e):
+        self.ccanv.yview_scroll(-1 * (e.delta // 120), 'units')
+
+    # 加载协议 json(类型 + 注释)
+    def _cwf_load_proto(self):
+        self.cbook.delete(*self.cbook.get_children())
+        proto = os.path.join(self.plugs, 'scui_cwf_json_parser.json')
+        if not os.path.exists(proto):
+            self._append_log('cwf', '未找到协议: %s\n' % proto)
+            return
+        try:
+            with open(proto, 'r', encoding='utf-8') as fp:
+                j = json.load(fp)
+            for item in j.get('scui_cwf_json_type', []):
+                key = item.get('key', '?')
+                annos = [v for k, v in item.items() if k == 'annotation']
+                anno = ' ; '.join(annos) if annos else ''
+                self.cbook.insert('', 'end', text=key, values=(anno,))
+        except Exception as e:
+            self._append_log('cwf', '协议加载失败: %r\n' % e)
+
+    # 加载 cwf 列表(满足: 有 image.7z + 同名 .json)
+    def _cwf_load_list(self):
+        self.ctree.delete(*self.ctree.get_children())
+        root = self.in_abs['cwf']
+        if not os.path.isdir(root):
+            self._append_log('cwf', 'cwf 路径不存在: %s\n' % root)
+            return
+        for name in sorted(os.listdir(root)):
+            d = os.path.join(root, name)
+            if not os.path.isdir(d):
+                continue
+            has_7z = os.path.exists(os.path.join(d, 'image.7z'))
+            has_json = os.path.exists(os.path.join(d, name + '.json'))
+            if has_7z and has_json:
+                self.ctree.insert('', 'end', text=name, iid=d)
+
+    # 选中 cwf -> 加载 json
+    def _cwf_pick(self, _ev=None):
+        sel = self.ctree.selection()
+        if not sel:
+            return
+        path = sel[0]
+        if not os.path.isdir(path):
+            return
+        name = os.path.basename(path)
+        json_path = os.path.join(path, name + '.json')
+        if not os.path.exists(json_path):
+            return
+        if not self._cwf_confirm_discard():
+            return
+        try:
+            with open(json_path, 'r', encoding='utf-8') as fp:
+                self.cwf_data = json.load(fp)
+            self.cwf_path = json_path
+            self._cwf_base = json.loads(json.dumps(self.cwf_data))
+            self.cwf_status.config(text='已加载: %s' % name)
+            self._cwf_render()
+        except Exception as e:
+            self.cwf_status.config(text='加载失败: %r' % e)
+
+    # 渲染 layout 行(每个条目 = 标题 + key|value 行)
+    def _cwf_render(self):
+        import tkinter as tk
+        from tkinter import ttk
+        for w in self._cbox.winfo_children():
+            w.destroy()
+        self._cwf_rows = []
+        if self.cwf_data is None:
+            return
+        items = self.cwf_data.get('layout', [])
+        for i, it in enumerate(items):
+            title = '#%d  %s' % (i, it.get('type', '?'))
+            tl = ttk.Label(self._cbox, text=title, foreground='#2266cc', font=('Consolas', 9, 'bold'))
+            tl.pack(fill='x', anchor='w', pady=(6, 2))
+            tl.bind('<Button-1>', lambda e, i=i: self._cwf_active_set(i, None))
+            for f, (k, v) in enumerate(it.items()):
+                kvar = tk.StringVar(value=str(k))
+                vvar = tk.StringVar(value=str(v))
+                row = ttk.Frame(self._cbox); row.pack(fill='x', padx=(2, 2))
+                ke = ttk.Entry(row, textvariable=kvar, font=('Consolas', 9))
+                ve = ttk.Entry(row, textvariable=vvar, font=('Consolas', 9))
+                ke.pack(side='left', fill='x', expand=True, padx=(0, 8))
+                ve.pack(side='left', fill='x', expand=True)
+                ke.bind('<FocusIn>', lambda e, i=i, f=f: self._cwf_active_set(i, f))
+                ve.bind('<FocusIn>', lambda e, i=i, f=f: self._cwf_active_set(i, f))
+                self._cwf_rows.append([i, f, kvar, vvar])
+            ttk.Label(self._cbox, text='').pack()
+
+    def _cwf_active_set(self, i, f):
+        self._cwf_active = (i, f)
+
+    def _cwf_fields_of(self, item):
+        return self.cwf_data['layout'][item]
+
+    def _cwf_sync_back(self):
+        if not self.cwf_data:
+            return
+        groups = {}
+        for i, f, ke, ve in self._cwf_rows:
+            groups.setdefault(i, []).append((ke.get(), ve.get()))
+        for i, pairs in groups.items():
+            if i >= len(self.cwf_data['layout']):
+                continue
+            d = {}
+            for k, v in pairs:
+                if k:
+                    d[k] = v
+            self.cwf_data['layout'][i] = d
+
+    def _cwf_dirty(self):
+        if self.cwf_data is None or self._cwf_base is None:
+            return False
+        self._cwf_sync_back()
+        a = json.dumps(self.cwf_data, ensure_ascii=False, sort_keys=True)
+        b = json.dumps(self._cwf_base, ensure_ascii=False, sort_keys=True)
+        return a != b
+
+    def _cwf_confirm_discard(self):
+        if not self._cwf_dirty():
+            return True
+        from tkinter import messagebox
+        return messagebox.askyesno('未保存的修改', '当前 cwf json 有未保存的修改，确定丢弃吗？', parent=self.root)
+
+    def _cwf_new_type(self):
+        return {'type': 'scui_cwf_json_type_img_simple', 'x': 0, 'y': 0, 'image_src': []}
+
+    def _cwf_add_type(self):
+        from tkinter import messagebox
+        if self.cwf_data is None:
+            messagebox.showwarning('cwf', '请先在中间选择一个 cwf')
+            return
+        self._cwf_sync_back()
+        items = self.cwf_data.setdefault('layout', [])
+        pos = self._cwf_active[0] if self._cwf_active else None
+        if pos is None:
+            self._append_log('cwf', '请定位操作位置\n')
+            return
+        items.insert(pos + 1, self._cwf_new_type())
+        self._cwf_render()
+        self._append_log('cwf', '已添加类型(未保存)\n')
+
+    def _cwf_del_type(self):
+        from tkinter import messagebox
+        if self.cwf_data is None:
+            messagebox.showwarning('cwf', '请先在中间选择一个 cwf')
+            return
+        self._cwf_sync_back()
+        pos = self._cwf_active[0] if self._cwf_active else None
+        if pos is None:
+            self._append_log('cwf', '请定位操作位置\n')
+            return
+        items = self.cwf_data.get('layout', [])
+        if pos < len(items):
+            del items[pos]
+            self._cwf_render()
+            self._append_log('cwf', '已删除类型(未保存)\n')
+
+    def _cwf_add_field(self):
+        from tkinter import messagebox
+        if self.cwf_data is None:
+            messagebox.showwarning('cwf', '请先在中间选择一个 cwf')
+            return
+        self._cwf_sync_back()
+        act = self._cwf_active
+        pos = act[0] if act else None
+        if pos is None:
+            self._append_log('cwf', '请定位操作位置\n')
+            return
+        items = self.cwf_data.get('layout', [])
+        if pos >= len(items):
+            return
+        f = act[1] if act else None
+        fields = self._cwf_fields_of(pos)
+        newd = {}
+        for j, (k, v) in enumerate(fields.items()):
+            newd[k] = v
+            if f is not None and j == f:
+                newd[''] = ''
+        if f is None:
+            newd[''] = ''
+        self.cwf_data['layout'][pos] = newd
+        self._cwf_render()
+        self._append_log('cwf', '已添加字段(未保存)\n')
+
+    def _cwf_del_field(self):
+        from tkinter import messagebox
+        if self.cwf_data is None:
+            messagebox.showwarning('cwf', '请先在中间选择一个 cwf')
+            return
+        self._cwf_sync_back()
+        act = self._cwf_active
+        if act is None or act[0] is None or act[1] is None:
+            self._append_log('cwf', '请定位操作位置(点 key/value 输入框)\n')
+            return
+        pos, f = act
+        items = self.cwf_data.get('layout', [])
+        if pos >= len(items):
+            return
+        fields = self._cwf_fields_of(pos)
+        ks = list(fields.keys())
+        if f >= len(ks):
+            return
+        kdel = ks[f]
+        newd = {k: v for k, v in fields.items() if k != kdel}
+        if not newd:
+            del items[pos]
+            self._append_log('cwf', '已删除字段 %s, 类型已空故删除(未保存)\n' % kdel)
+        else:
+            self.cwf_data['layout'][pos] = newd
+            self._append_log('cwf', '已删除字段 %s(未保存)\n' % kdel)
+        self._cwf_render()
+
+    def _cwf_preview(self):
+        import tkinter as tk
+        from tkinter import scrolledtext
+        self._cwf_sync_back()
+        top = tk.Toplevel(self.root)
+        top.title('cwf json 预览 - %s' % (os.path.basename(self.cwf_path) if self.cwf_path else '未命名'))
+        top.geometry('680x560')
+        t = scrolledtext.ScrolledText(top, wrap='none', font=('Consolas', 9), state='normal')
+        t.pack(fill='both', expand=True, padx=8, pady=8)
+        try:
+            s = json.dumps(self.cwf_data, ensure_ascii=False, indent=4)
+        except Exception as e:
+            s = '%r' % e
+        t.insert('1.0', s)
+        t.configure(state='disabled')
+
+    def _cwf_save(self):
+        if self.cwf_data is None or not self.cwf_path:
+            self._append_log('cwf', '[save] 无待保存内容\n')
+            return
+        try:
+            self._cwf_sync_back()
+            with open(self.cwf_path, 'w', encoding='utf-8') as fp:
+                json.dump(self.cwf_data, fp, ensure_ascii=False, indent=4)
+            self._cwf_base = json.loads(json.dumps(self.cwf_data))
+            self.cwf_status.config(text='已保存: %s' % os.path.basename(self.cwf_path))
+            self._append_log('cwf', '[save] 已写入: %s\n' % self.cwf_path)
+        except Exception as e:
+            self.cwf_status.config(text='保存失败: %r' % e)
+            self._append_log('cwf', '[save] 失败: %r\n' % e)
 
     #--------------- 简单打包子界面(widget/lang 共用: 按钮 + 路径 + log) ---------------
     def _build_pack_tab(self, name):
@@ -338,7 +1341,7 @@ class PackApp(object):
 
         # 顶部: 打包按钮 + 输入/输出相对路径
         bar = ttk.Frame(f); bar.pack(fill='x', pady=(2, 4))
-        ttk.Button(bar, text='执行 %s 打包' % name, command=lambda: self._run(name)).pack(side='left')
+        ttk.Button(bar, text='执行 %s 打包' % name, command=lambda: self._run(name)).pack(side='right')
         self._pv[(name, 'in')]  = tk.StringVar(value='输入: %s' % self._rel(self.in_abs[name]))
         self._pv[(name, 'out')] = tk.StringVar(value='输出: %s' % self._rel(self.out_abs[name]))
         ttk.Label(f, textvariable=self._pv[(name, 'in')],  foreground='#888').pack(anchor='w', padx=(2, 0))
@@ -810,7 +1813,7 @@ class PackApp(object):
 
     def _make_log(self, parent):
         from tkinter.scrolledtext import ScrolledText
-        t = ScrolledText(parent, state='disabled', wrap='none',
+        t = ScrolledText(parent, state='disabled', wrap='word',
                          font=('Consolas', 9), height=8)
         t.pack(fill='both', expand=True)
         return t
@@ -823,12 +1826,12 @@ class PackApp(object):
         self.tabs['image'] = f
 
         # row0: 顶部固定(项目名 + 执行)
-        top = ttk.Frame(f); top.pack(fill='x')
+        top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
         pr = ttk.Frame(top); pr.pack(fill='x')
         ttk.Label(pr, text='image 项目名称:').pack(side='left')
         self.proj_var = tk.StringVar(value='scui')
         ttk.Entry(pr, textvariable=self.proj_var, width=16).pack(side='left', padx=(6, 10))
-        ttk.Button(pr, text='执行 image 打包', command=lambda: self._run('image')).pack(side='left')
+        ttk.Button(pr, text='执行 image 打包', command=lambda: self._run('image')).pack(side='right')
 
         # 主体: 垂直 Panedwindow(上: 树|详情, 下: log) -> 可上下拖拽
         vpane = ttk.Panedwindow(f, orient='vertical')
@@ -1073,7 +2076,13 @@ class PackApp(object):
         dst = self.out_abs[name]
         proj = getattr(self, 'proj_var', None)
         proj = proj.get() if proj else 'scui'
-        self._append_log(name, '\n\n==== start: %s ====\n' % name)
+        # 打包前清空本 log, 本次运行的全部 print(含错误)重新写入
+        log = self.logs.get(name)
+        if log is not None:
+            log.configure(state='normal')
+            log.delete('1.0', 'end')
+            log.configure(state='disabled')
+        self._append_log(name, '==== start: %s ====\n' % name)
 
         self._logq = queue.Queue()
         wire = _TabLog(self._logq)
@@ -1123,7 +2132,7 @@ class PackApp(object):
         self.root.after(120, self._poll)
 
     def _status(self, s):
-        self.root.title('scui 打包工具 - %s' % s)
+        self.root.title('scui资源工具 - 正在开发中... - %s' % s)
 
     def _on_tab(self, ev):
         idx = self.nb.index(self.nb.select())
@@ -1132,9 +2141,12 @@ class PackApp(object):
 
     def _about(self):
         from tkinter import messagebox
-        messagebox.showinfo('scui 打包工具',
-            'scui 资源打包统一前端\n\n类型: image / font / lang / cwf\n'
-            '依赖: image需要 pillow/lz4; image.7z解压需要 py7zr\n来源: scui/tools 与 scui/plugs')
+        messagebox.showinfo('scui资源工具',
+            '作者：Agent\n'
+            '版本：Ver 0.0.1\n'
+            '状态：持续开发中...\n'
+            '类型：widget/image/font/lang/cwf\n'
+            '来源：scui/tools & scui/plugs')
 
     # 工具内打开 out/err 日志浏览(左 out 右 err, 可滚动)
     def _open_logs(self):
