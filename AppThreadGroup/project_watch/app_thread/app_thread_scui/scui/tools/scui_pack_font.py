@@ -8,6 +8,39 @@ import json
 # 句柄表偏移:字库描述
 scui_font_offset_name = 'SCUI_HANDLE_OFFSET_FONT'
 scui_font_offset_value = '0x4000 - 1'
+# ui(scui_ui_res) 基准: GUI 注入, 日志路径相对化显示
+SCUI_UI_ROOT = None
+# tools 基准: GUI 注入(读句柄偏移配置)
+SCUI_TOOLS = None
+
+
+# 句柄偏移: 前端"设置句柄"写入的 json 覆盖, 无则用头部默认
+def _handle_offset(tag, name, value):
+    try:
+        cfg = os.path.join(SCUI_TOOLS or os.path.dirname(__file__), 'scui_pack_handle.json')
+        if os.path.isfile(cfg):
+            j = json.load(open(cfg, encoding='utf-8'))
+            item = j.get(tag, {})
+            if item.get('name'):
+                name = item['name']
+            if item.get('value'):
+                value = item['value']
+    except Exception:
+        pass
+    return name, value
+
+
+# 日志路径显示: 相对 ui(scui_ui_res) 打印, 命令行(GUI未注入)保持绝对
+def _rel_ui(p):
+    if not SCUI_UI_ROOT:
+        return p
+    try:
+        r = os.path.relpath(p, SCUI_UI_ROOT).replace('\\', '/')
+        if r.startswith('..'):
+            return p
+        return 'scui_ui_res => %s' % r
+    except Exception:
+        return p
 
 
 # 流式处理所有font文件
@@ -169,6 +202,10 @@ class ScuiRedirectPrint(object):
 
 # 主流程
 def scui_font_package():
+    # 句柄偏移: 前端"设置句柄"json 覆盖头部默认
+    global scui_font_offset_name, scui_font_offset_value
+    scui_font_offset_name, scui_font_offset_value = \
+        _handle_offset('font', scui_font_offset_name, scui_font_offset_value)
     # 参数列表:src相对路径 dst相对路径 项目名称
     if len(sys.argv) != 3:
         print('argv list not match')
@@ -183,8 +220,8 @@ def scui_font_package():
     if not os.path.exists(dst_path):
         print('dst path is not exist')
         return
-    print('src path:', src_path)
-    print('dst path:', dst_path)
+    print('src path:', _rel_ui(src_path))
+    print('dst path:', _rel_ui(dst_path))
     # json转Python字符串并转标准字典
     parser_path = os.path.join(dst_path, 'scui_font_package.json')
     json_file = open(parser_path, 'r', encoding='utf-8')

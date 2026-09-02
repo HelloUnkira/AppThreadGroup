@@ -31,6 +31,46 @@ def _dirs(ui):
 def _ui_root(ui):
     return os.path.normpath(ui or os.getcwd())
 
+# 日志路径显示: 相对 ui(scui_ui_res) 打印, 便于辨识(src/dst 均以其为基准)
+def _rel_ui(p, ui):
+    try:
+        r = os.path.relpath(p, ui).replace('\\', '/')
+        if r.startswith('..'):
+            return p
+        return r
+    except Exception:
+        return p
+
+#============================================================
+# 句柄偏移默认值(与各打包脚本头部常量一致; 弹窗修改后写入 scui_pack_handle.json)
+#============================================================
+_HANDLE_DEFAULT = {
+    'widget': ('SCUI_HANDLE_OFFSET_WIDGET', '0x1000 - 1'),
+    'image' : ('SCUI_HANDLE_OFFSET_IMAGE',  '0x2000 - 1'),
+    'font'  : ('SCUI_HANDLE_OFFSET_FONT',   '0x4000 - 1'),
+    'lang'  : ('SCUI_HANDLE_OFFSET_LANG',   '0x5000 - 1'),
+}
+
+# 图形配置默认(image 图形配置面板; 与 scui_pack_image.py 头部常量一致)
+_IMAGE_CFG_DEFAULT = {
+    'use_lz4':    True,
+    'use_jpg':    True,
+    'use_png':    True,
+    'workers':    6,
+    'alpha_bits': 4,
+    'index_bits': 8,
+    'endian':     False,
+}
+_IMG_CFG_DEFS = [      # (键, bool/int, 标签, 选项)
+    ('use_lz4',    'bool', '启用 LZ4 压缩',   None),
+    ('use_jpg',    'bool', '启用 JPG 打包',   None),
+    ('use_png',    'bool', '启用 PNG 打包',   None),
+    ('workers',    'combo', '并行线程数(1-6)', ('1', '2', '3', '4', '5', '6')),
+    ('alpha_bits', 'combo', 'alpha 位宽(1/2/4/8)', ('1', '2', '4', '8')),
+    ('index_bits', 'combo', 'index 位宽(1/2/4/8)', ('1', '2', '4', '8')),
+    ('endian',     'bool', '大端字节序(整体)', None),
+]
+
 #============================================================
 # 任务定义
 #============================================================
@@ -69,6 +109,8 @@ def _run_module(task, argv, ui):
     sys.argv = [task['as_main'][0]] + argv
     try:
         mod   = importlib.import_module(task['module'])
+        mod.SCUI_UI_ROOT = ui     # 注入 ui(scui_ui_res) 基准, 后端日志路径相对化
+        mod.SCUI_TOOLS  = tools   # 注入真实 tools 目录(读句柄偏移配置)
         if task['module'] == 'scui_pack_widget':
             mod.SCUI_WIDGET_TOOLS = tools     # 注入真实 tools 目录(打包环境下 __file__ 指向临时解包目录)
         entry = getattr(mod, task['entry'])
@@ -109,8 +151,8 @@ def _do_task(name, ui, src, dst, proj):
 
     print()
     print('[pack] type : %s' % name)
-    print('[pack] src  : %s' % src)
-    print('[pack] dst  : %s' % dst)
+    print('[pack] src  : scui_ui_res => %s' % _rel_ui(src, ui))
+    print('[pack] dst  : scui_ui_res => %s' % _rel_ui(dst, ui))
 
     tmp = None
     if name == 'image':
@@ -126,12 +168,12 @@ def _do_task(name, ui, src, dst, proj):
         argv = [src, dst]
 
     if not os.path.exists(src):
-        print('[pack] src not exist: %s' % src)
+        print('[pack] src not exist: %s' % _rel_ui(src, ui))
         return 1
     if not os.path.isdir(dst):
         os.makedirs(dst, exist_ok=True)
 
-    print('[pack] argv : %s' % argv)
+    print('[pack] argv : %s' % [_rel_ui(a, ui) if os.path.isabs(a) else a for a in argv])
     ret = _run_module(task, argv, ui)
     if tmp:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -147,7 +189,7 @@ def _do_cwf_task(ui, src, dst):
     img_task = _TASK['image']
     cwf_task = _TASK['cwf']
     if not os.path.isdir(src):
-        print('[pack] cwf src not exist: %s' % src)
+        print('[pack] cwf src not exist: %s' % _rel_ui(src, ui))
         return 1
     if not os.path.isdir(dst):
         os.makedirs(dst, exist_ok=True)
@@ -196,6 +238,8 @@ def _do_cwf_task(ui, src, dst):
         sys.argv = [img_task['as_main'][0], img_dir, wf_dir, 'cwf']
         try:
             mod = importlib.import_module(img_task['module'])
+            mod.SCUI_UI_ROOT = ui     # 注入 ui(scui_ui_res) 基准, 后端日志路径相对化
+            mod.SCUI_TOOLS  = tools   # 注入真实 tools 目录(读句柄偏移配置)
             mod.scui_image_parser()
         except Exception as e:
             print('[%s] image parser fail: %r' % (wf, e))
@@ -208,6 +252,8 @@ def _do_cwf_task(ui, src, dst):
         sys.argv = [cwf_task['as_main'][0], wf_dir, dst]
         try:
             mod = importlib.import_module(cwf_task['module'])
+            mod.SCUI_UI_ROOT = ui     # 注入 ui(scui_ui_res) 基准, 后端日志路径相对化
+            mod.SCUI_TOOLS  = tools   # 注入真实 tools 目录(读句柄偏移配置)
             mod.SCUI_CWF_TOOLS = tools    # 注入真实 tools 目录
             mod.SCUI_CWF_PLUGS = plugs    # 注入真实 plugs 目录(写 scui_cwf_json_proto.h)
             mod.scui_cwf_json_parser()
@@ -253,6 +299,26 @@ def _img_type_of(path):
     if lo.endswith(('.jpg', '.jpeg')):return 'scui_image_type_jpg'
     if lo.endswith('.png'):           return 'scui_image_type_png'
     return 'scui_image_type_bmp'
+
+# 图片定制标记解析/组装(# 前缀排除 + .dit/.idx 尾缀, 缀于扩展名前)
+def _img_mkbar_split(name):
+    n0, ext = os.path.splitext(name)
+    exc  = n0.startswith('#')
+    stem = n0[1:] if exc else n0
+    low  = stem.lower()
+    idx  = low.endswith('.idx')
+    dit  = low.endswith('.dit')
+    if idx: stem = stem[:-4]
+    if dit: stem = stem[:-4]
+    return stem, ext, exc, idx, dit
+
+def _img_mkbar_join(stem, ext, exc, idx, dit):
+    out = stem
+    if idx: out += '.idx'
+    elif dit: out += '.dit'
+    if exc: out = '#' + out
+    return out + ext
+
 
 def _image_probe(path):
     info = {'path': path, 'name': os.path.basename(path)}
@@ -316,6 +382,7 @@ class PackApp(object):
         menubar = tk.Menu(self.root)
         m_set = tk.Menu(menubar, tearoff=0)
         m_set.add_command(label='路径…', command=self._open_paths)
+        m_set.add_command(label='句柄偏移…', command=self._open_handles)
         menubar.add_cascade(label='设置', menu=m_set)
         m_log = tk.Menu(menubar, tearoff=0)
         m_log.add_command(label='打开 out/err 浏览…', command=self._open_logs)
@@ -388,6 +455,75 @@ class PackApp(object):
             var.trace_add('write', lambda *a, s=side, n=name, v=var: self._apply_path(s, n, v))
         top.protocol('WM_DELETE_WINDOW', top.destroy)
 
+    #--------------- 句柄偏移设置子弹窗(widget/image/font/lang 各一组: 偏移名/偏移值) ---------------
+    def _open_handles(self):
+        import tkinter as tk
+        from tkinter import ttk, messagebox
+        try:
+            self._open_handles_dialog()
+        except Exception as e:
+            messagebox.showwarning('句柄偏移设置', '打开句柄偏移设置失败:\n%r' % e, parent=self.root)
+
+    def _handle_json(self):
+        return os.path.join(self.tools, 'scui_pack_handle.json')
+
+    def _open_handles_dialog(self):
+        import tkinter as tk
+        from tkinter import ttk, messagebox
+        top = tk.Toplevel(self.root)
+        top.title('句柄偏移设置')
+        top.geometry('580x340')
+        top.transient(self.root)
+        f = ttk.Frame(top, padding=(12, 10)); f.pack(fill='both', expand=True)
+        # 读取已保存配置(无则用默认值)
+        cur = {}
+        cfg = self._handle_json()
+        if os.path.isfile(cfg):
+            try:
+                cur = json.load(open(cfg, encoding='utf-8'))
+            except Exception:
+                cur = {}
+        vars = {}
+        grid = ttk.Frame(f); grid.pack(fill='x')
+        ttk.Label(grid, text='子类型', width=10, anchor='w').grid(row=0, column=0, padx=(0, 8), pady=3)
+        ttk.Label(grid, text='偏移名(name)', width=30, anchor='w').grid(row=0, column=1, padx=(0, 8))
+        ttk.Label(grid, text='偏移值(value)', width=16, anchor='w').grid(row=0, column=2)
+        for r, name in enumerate(('widget', 'image', 'font', 'lang'), start=1):
+            dname, dvalue = _HANDLE_DEFAULT[name]
+            item = cur.get(name, {})
+            nv = tk.StringVar(value=item.get('name') or dname)
+            vv = tk.StringVar(value=item.get('value') or dvalue)
+            ttk.Label(grid, text=name, width=10, anchor='w').grid(row=r, column=0, padx=(0, 8), pady=4)
+            ttk.Entry(grid, textvariable=nv, font=('Consolas', 9)).grid(row=r, column=1, sticky='ew', padx=(0, 8))
+            ttk.Entry(grid, textvariable=vv, font=('Consolas', 9)).grid(row=r, column=2, sticky='ew')
+            vars[name] = (nv, vv)
+        grid.columnconfigure(1, weight=2)
+        grid.columnconfigure(2, weight=1)
+
+        def _save():
+            data = {}
+            for name, (nv, vv) in vars.items():
+                data[name] = {'name': nv.get().strip(), 'value': vv.get().strip()}
+            try:
+                with open(cfg, 'w', encoding='utf-8') as fp:
+                    json.dump(data, fp, ensure_ascii=False, indent=4)
+                messagebox.showinfo('句柄偏移设置', '已保存: %s' % self._rel_log(cfg), parent=top)
+            except Exception as e:
+                messagebox.showwarning('句柄偏移设置', '保存失败:\n%r' % e, parent=top)
+
+        def _reset():
+            for name, (nv, vv) in vars.items():
+                dname, dvalue = _HANDLE_DEFAULT[name]
+                nv.set(dname); vv.set(dvalue)
+
+        bar = ttk.Frame(f); bar.pack(fill='x', pady=(10, 0))
+        ttk.Button(bar, text='保存', command=_save).pack(side='left')
+        ttk.Button(bar, text='恢复默认', command=_reset).pack(side='left', padx=(8, 0))
+        ttk.Button(bar, text='关闭', command=top.destroy).pack(side='right')
+        ttk.Label(bar, text='打包时写入生成的头文件, 作为各子类型句柄枚举起始偏移.',
+                  foreground='#888').pack(side='left', padx=(12, 0))
+        top.protocol('WM_DELETE_WINDOW', top.destroy)
+
     def _apply_path(self, side, name, var):
         val = var.get().strip()
         if not val:
@@ -410,6 +546,10 @@ class PackApp(object):
             return os.path.relpath(p, self.ui).replace('\\', '/')
         except Exception:
             return p
+
+    def _rel_log(self, p):
+        # 日志路径显示: scui_ui_res => 相对路径
+        return 'scui_ui_res => %s' % self._rel(p)
 
     #--------------- 四个子界面(tab) ---------------
     def _build_notebook(self):
@@ -440,41 +580,70 @@ class PackApp(object):
 
         # 顶部工具条: 操作按钮(左) + 执行打包(右) + 状态(左)
         top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
-        ttk.Button(top, text='加载 maker json', command=self._wid_load_maker).pack(side='left')
+        ttk.Button(top, text='新建场景', command=self._wid_new_scene).pack(side='left')
+        ttk.Button(top, text='加载 maker json', command=self._wid_load_maker).pack(side='left', padx=(6, 0))
         ttk.Button(top, text='预览 json', command=self._wid_preview_json).pack(side='left', padx=(6, 0))
         ttk.Button(top, text='保存 json', command=self._wid_save).pack(side='left', padx=(6, 0))
         ttk.Button(top, text='执行 widget 打包', command=lambda: self._run('widget')).pack(side='right')
         self.widget_status = ttk.Label(top, text='未选择文件', foreground='#777')
         self.widget_status.pack(side='left', padx=(12, 0))
 
-        # 主体: 左中右三栏(占满, 不再内嵌 LOG)
+        # 主体: 左(scene) | 中(上 analyze 下 模板) | 右(编辑)
         hpan = ttk.Panedwindow(f, orient='horizontal'); hpan.pack(fill='both', expand=True, pady=(6, 0))
 
-        # 左: analyze 可配置字段册(类型窗格: window/custom/scroll...)
-        lf = ttk.LabelFrame(hpan, text=' analyze 可配置字段 ', padding=(4, 4)); hpan.add(lf, weight=3)
-        self.wbook = ttk.Treeview(lf, columns=('slot',), show='tree headings', selectmode='browse')
+        # 左: scene 文件树(虚拟化 Canvas, 只绘可见行, 支持折叠)
+        lf = ttk.LabelFrame(hpan, text=' scene布局集合 ', padding=(4, 4)); hpan.add(lf, weight=3)
+        self.wcanv_tree = tk.Canvas(lf, highlightthickness=0, bg='#ffffff')
+        self._wt_vsb = ttk.Scrollbar(lf, orient='vertical', command=self._wid_scroll_cmd)
+        self.wcanv_tree.configure(yscrollcommand=self._wt_vsb.set)
+        self.wcanv_tree.pack(side='left', fill='both', expand=True)
+        self._wt_vsb.pack(side='right', fill='y')
+        self.wcanv_tree.bind('<Configure>', lambda e: self._wid_draw())
+        self.wcanv_tree.bind('<Enter>', lambda e: self.wcanv_tree.bind_all('<MouseWheel>', self._wid_tree_wheel))
+        self.wcanv_tree.bind('<Leave>', lambda e: self.wcanv_tree.unbind_all('<MouseWheel>'))
+        self.wcanv_tree.bind('<Button-1>', self._wid_tree_click)
+        self._wdisp  = []              # 折叠后可见行([depth,name,path,kind,opened])
+        self._wrowH  = 24              # 每行像素高
+        self._wt_tree = []             # 缓存目录节点树
+        self._wt_exp  = set()          # 已展开的目录
+
+        # 中: 上 analyze 下 模板(垂直分栏)
+        mf = ttk.Frame(hpan); hpan.add(mf, weight=3)
+        vpan = ttk.Panedwindow(mf, orient='vertical'); vpan.pack(fill='both', expand=True)
+        # 上: analyze 可配置字段册
+        ab = ttk.LabelFrame(vpan, text=' analyze 可配置字段 ', padding=(4, 4)); vpan.add(ab, weight=3)
+        self.wbook = ttk.Treeview(ab, columns=('slot',), show='tree headings', selectmode='browse')
         self.wbook.heading('#0', text='字段路径'); self.wbook.heading('slot', text='值槽')
         self.wbook.column('slot', width=56, anchor='e', stretch=False)
-        bvs = ttk.Scrollbar(lf, orient='vertical', command=self.wbook.yview)
+        bvs = ttk.Scrollbar(ab, orient='vertical', command=self.wbook.yview)
         self.wbook.configure(yscrollcommand=bvs.set)
         self.wbook.pack(side='left', fill='both', expand=True); bvs.pack(side='right', fill='y')
         self.wbook.bind('<<TreeviewSelect>>', self._wid_book_copy)
-
-        # 中: src 文件树(.json / .c)
-        mf = ttk.LabelFrame(hpan, text=' src 文件(scene) ', padding=(4, 4)); hpan.add(mf, weight=3)
-        self.wtree = ttk.Treeview(mf, show='tree', selectmode='browse')
-        wvs = ttk.Scrollbar(mf, orient='vertical', command=self.wtree.yview)
-        self.wtree.configure(yscrollcommand=wvs.set)
-        self.wtree.pack(side='left', fill='both', expand=True); wvs.pack(side='right', fill='y')
-        self.wtree.bind('<<TreeviewSelect>>', self._wid_pick_file)
+        # 下: 模板面板(T 按钮触发渲染)
+        tb = ttk.LabelFrame(vpan, text=' 模板(T) ', padding=(4, 4)); vpan.add(tb, weight=2)
+        self._tpl_canv = tk.Canvas(tb, highlightthickness=0)
+        tplvs = ttk.Scrollbar(tb, orient='vertical', command=self._tpl_canv.yview)
+        self._tpl_canv.configure(yscrollcommand=tplvs.set)
+        self._tpl_box = ttk.Frame(self._tpl_canv)
+        self._tpl_box_id = self._tpl_canv.create_window((0, 0), window=self._tpl_box, anchor='nw')
+        self._tpl_box.bind('<Configure>',
+            lambda e: self._tpl_canv.configure(scrollregion=self._tpl_canv.bbox('all')))
+        self._tpl_canv.bind('<Configure>',
+            lambda e: (self._tpl_canv.itemconfigure(self._tpl_box_id, width=e.width),
+                       self._tpl_canv.configure(scrollregion=self._tpl_canv.bbox('all'))))
+        self._tpl_canv.pack(side='left', fill='both', expand=True)
+        tplvs.pack(side='right', fill='y')
+        self._tpl_canv.bind('<Enter>', lambda e: self._tpl_canv.bind_all('<MouseWheel>', self._wid_tpl_wheel))
+        self._tpl_canv.bind('<Leave>', lambda e: self._tpl_canv.unbind_all('<MouseWheel>'))
+        self._tpl_hint = ttk.Label(self._tpl_box, text='点击 T 查看可用模板',
+                                   foreground='#888', anchor='w')
+        self._tpl_hint.pack(fill='x', padx=(2, 2), pady=(4, 2))
+        self._w_templates = {}
+        self._w_tpl_state  = {}
 
         # 右: 预览/编辑(json: 键|值两列就地编辑; c: 只读文本)
         rf = ttk.LabelFrame(hpan, text=' 预览 / 编辑(json 就地, .c 只读) ', padding=(4, 4)); hpan.add(rf, weight=4)
-        erow = ttk.Frame(rf); erow.pack(fill='x')
-        for t, c in (('添加控件', self._wid_add_control), ('删除控件', self._wid_del_control),
-                     ('添加字段', self._wid_add_field), ('删除字段', self._wid_del_field)):
-            ttk.Button(erow, text=t, command=c).pack(side='left', padx=(0, 6))
-        self.widget_sub = tk.StringVar(value='json: 每行 key|value 直接点击修改; 点 .c 只读; 增删用按钮; 光标所在即操作对象')
+        self.widget_sub = tk.StringVar(value='json: 每行 key|value 直接修改; 标题行左侧按钮操作整个控件; 行尾按钮操作所在字段; 点 .c 只读')
         ttk.Label(rf, textvariable=self.widget_sub, foreground='#777').pack(anchor='w', padx=(2, 2))
         # 键值编辑(json): 滚动行列表, 每行 key|value 常驻输入框(自由编辑)
         self.wcanv = tk.Canvas(rf, highlightthickness=0)
@@ -490,6 +659,7 @@ class PackApp(object):
         self.wcanv.bind('<Enter>', lambda e: self.wcanv.bind_all('<MouseWheel>', self._wid_wheel))
         self.wcanv.bind('<Leave>', lambda e: self.wcanv.unbind_all('<MouseWheel>'))
         self._w_rows = []
+        self._w_vars = []          # 保存StringVar引用防GC
         # 文本预览(c): 只读
         self.wctext = scrolledtext.ScrolledText(rf, wrap='char', font=('Consolas', 9), state='disabled')
         self._wid_switch(True)
@@ -497,6 +667,7 @@ class PackApp(object):
         self.nb.add(f, text='widget  ')
         self._wid_analyze()
         self._wid_load_tree()
+        self._wid_maker_guard()
         self._wid_load_maker(_silent=True)   # 打开默认加载 maker json
 
     # 右侧主体切换: True=json 行编辑; False=c 只读文本
@@ -508,13 +679,23 @@ class PackApp(object):
             self.wcanv.pack_forget()
             self.wctext.pack(fill='both', expand=True)
 
+    # maker mode 守卫: 控件级 +-上下 按钮在渲染时按 widget_maker 条件省略(maker 满足唯一完备, 不可增减/移动控件)
+    def _wid_maker_guard(self):
+        pass
+
     # canvas 鼠标滚轮
     def _wid_wheel(self, e):
         self.wcanv.yview_scroll(-1 * (e.delta // 120), 'units')
 
-    # 记录光标所在对象: (item, field序号|None)
-    def _wid_active(self, i, f):
-        self._w_active = (i, f)
+    # 按钮回调统一安全包裹: 异常写入日志窗口(否则 --noconsole 静默吞掉, 界面直接空白)
+    def _wid_guard(self, fn, *a):
+        try:
+            fn(*a)
+        except Exception as e:
+            import traceback
+            msg = '[widget] 操作异常: %r\n%s' % (e, traceback.format_exc())
+            self._wlog(msg)
+            self.widget_status.config(text='操作异常, 详见日志窗口')
 
     def _wid_analyze(self):
         # 生成左窗格字段册(analyze 结果; tools 加入 sys.path 以便 import)
@@ -528,6 +709,8 @@ class PackApp(object):
             self._wlog('analyze 失败: %r' % e)
             return
         self.wbook.delete(*self.wbook.get_children())
+        # analyze 全量控件类型(scui_xxx_maker_t), 供 maker json 加载时补齐缺失 class
+        self._wid_class_types = list(book.get('class_maker', {}).keys())
         for wtype, maker in book.get('class_maker', {}).items():
             prefix = maker
             if prefix.startswith('scui_'):
@@ -579,35 +762,145 @@ class PackApp(object):
     def _wlog(self, s):
         self._append_log('widget', s + '\n')
 
-    # 左: src 文件树(递归展开全部, .json/.c 可点)
+    # 左: scene 文件树(虚拟化 Canvas + 折叠)
     def _wid_load_tree(self):
-        self.wtree.delete(*self.wtree.get_children())
+        self.wcanv_tree.delete('all')
         root = self.in_abs['widget']
         if not os.path.isdir(root):
             root = self.ui
-        rnode = self.wtree.insert('', 'end', text=os.path.basename(root) or root, open=True, iid='rdir')
-        self._wid_scan_dir(rnode, root)
+        self._wt_root = root
+        self._wt_tree = self._wid_tree_scan(root)
+        self._wt_exp  = set()            # 子目录默认折叠(最外围根不显示)
+        self._wid_reflatten()
+        self._wid_load_templates()       # 文件树刷新即刷新模板缓存
 
-    def _wid_scan_dir(self, parent, path):
+    def _wid_tree_scan(self, path):
+        """brief: 扫描目录成嵌套节点
+        @param path 目录绝对路径
+        @retval 节点列表[{name,path,kind,children}]
+        """
+        nodes = []
         try:
-            entries = sorted(os.listdir(path),
-                             key=lambda x: (not os.path.isdir(os.path.join(path, x)), x.lower()))
+            items = sorted(os.listdir(path),
+                key=lambda x: (not os.path.isdir(os.path.join(path, x)), x.lower()))
         except OSError:
-            return
-        for e in entries:
+            return nodes
+        for e in items:
             full = os.path.join(path, e)
             if os.path.isdir(full):
-                node = self.wtree.insert(parent, 'end', text=e, iid=full, open=True)
-                self._wid_scan_dir(node, full)
-            elif e.lower().endswith(('.json', '.c')):
-                self.wtree.insert(parent, 'end', text=e, iid=full)
+                nodes.append({'name': e, 'path': full, 'kind': 'dir',
+                              'children': self._wid_tree_scan(full)})
+            elif e.lower().endswith('.json'):
+                nodes.append({'name': e, 'path': full, 'kind': 'json', 'children': []})
+            elif e.lower().endswith('.c'):
+                nodes.append({'name': e, 'path': full, 'kind': 'c', 'children': []})
+        return nodes
 
-    # 中: 点选文件
-    def _wid_pick_file(self, _ev=None):
-        sel = self.wtree.selection()
-        if not sel:
+    def _wid_toggle_dir(self, path):
+        if path in self._wt_exp:
+            self._wt_exp.discard(path)
+        else:
+            self._wt_exp.add(path)
+        self._wid_reflatten()
+
+    def _wid_reflatten(self):
+        disp = []
+        self._wid_tree_flatten(self._wt_tree, 0, disp)   # 最外围根路径不显示
+        self._wdisp = disp
+        self.wcanv_tree.configure(scrollregion=(0, 0, 0, len(disp) * self._wrowH))
+        self.wcanv_tree.yview_moveto(0)                  # 内容刷新后顶吸附
+        self._wid_draw()
+
+    def _wid_tree_flatten(self, nodes, depth, disp):
+        for nd in nodes:
+            opened = (nd['kind'] == 'dir' and nd['path'] in self._wt_exp)
+            disp.append([depth, nd['name'], nd['path'], nd['kind'], opened])
+            if opened:
+                self._wid_tree_flatten(nd['children'], depth + 1, disp)
+
+    # 滚动条 command: 先滚动后重绘(虚拟化无持久 item, 必须重绘)
+    def _wid_scroll_cmd(self, *args):
+        self.wcanv_tree.yview(*args)
+        self._wid_draw()
+
+    def _wid_tree_wheel(self, e):
+        self.wcanv_tree.yview_scroll(-1 * (e.delta // 120), 'units')
+        self._wid_draw()
+
+    def _wid_draw(self):
+        c = self.wcanv_tree
+        # 滚动条可见性 + 内容不足一屏顶对齐不可滚动
+        vh = c.winfo_height() or 200
+        self._wid_needs_scroll = (len(self._wdisp) * self._wrowH > vh)
+        if self._wid_needs_scroll:
+            if not self._wt_vsb.winfo_ismapped():
+                self._wt_vsb.pack(side='right', fill='y')
+        else:
+            if self._wt_vsb.winfo_ismapped():
+                self._wt_vsb.pack_forget()
+            c.yview_moveto(0)
+        c.delete('all')
+        n = len(self._wdisp)
+        if n == 0:
             return
-        path = sel[0]
+        v0, v1 = c.yview()
+        i0 = max(0, int(v0 * n) - 2)
+        i1 = min(n, int(v1 * n) + 2)
+        cw = max(c.winfo_width(), 120)
+        for idx in range(i0, i1):
+            depth, name, path, kind, opened = self._wdisp[idx]
+            y = idx * self._wrowH
+            x = depth * 14
+            # 左"-"柱: json 可点删除; dir/c 灰占位
+            if kind == 'json':
+                c.create_text(x + 7, y + self._wrowH // 2, text='−',
+                              font=('Segoe UI Symbol', 10), fill='#333')
+            else:
+                c.create_text(x + 7, y + self._wrowH // 2, text='−',
+                              font=('Segoe UI Symbol', 10), fill='#ccc')
+            if kind == 'dir':
+                c.create_text(x + 20, y + self._wrowH // 2,
+                              text='▼' if opened else '▶', font=('Segoe UI Symbol', 8),
+                              fill='#555')
+            c.create_text(x + 36, y + self._wrowH // 2,
+                          text='📁' if kind == 'dir' else '📄', font=('Segoe UI Emoji', 9))
+            fg = '#2266cc' if kind == 'json' else ('#666' if kind == 'c' else '#333')
+            c.create_text(x + 54, y + self._wrowH // 2, text=name,
+                          font=('Consolas', 9, 'bold') if kind == 'dir' else ('Consolas', 9),
+                          fill=fg, anchor='w')
+            if kind == 'dir':                        # 右侧小"+" 新建场景
+                c.create_rectangle(cw - 30, y + 3, cw - 2, y + self._wrowH - 3,
+                                   outline='#cfcfcf', fill='#eeeeee')
+                c.create_text(cw - 16, y + self._wrowH // 2, text='+',
+                              font=('Segoe UI Symbol', 9))
+
+    def _wid_tree_click(self, e):
+        cy = self.wcanv_tree.canvasy(e.y)
+        idx = int(cy // self._wrowH)
+        if not (0 <= idx < len(self._wdisp)):
+            return
+        depth, name, path, kind, opened = self._wdisp[idx]
+        cx = self.wcanv_tree.canvasx(e.x)
+        cw = self.wcanv_tree.winfo_width() or 400
+        x = depth * 14
+        if cx >= cw - 34:                             # 右按钮区: 目录新建场景
+            if kind == 'dir':
+                self._wid_guard(self._wid_tree_new, path)
+            return
+        if x <= cx < x + 16:                          # 左"-"柱: json 删除
+            if kind == 'json':
+                self._wid_guard(self._wid_tree_del, path)
+            return
+        if kind == 'dir':                             # 主区: 目录折叠
+            self._wid_toggle_dir(path)
+        else:                                          # 文件: 打开
+            self._wid_pick_file_path(path)
+
+    # 点选文件加载(.json 可编辑, .c 只读)
+    def _wid_pick_file_path(self, path):
+        """brief: 点选文件加载
+        @param path 文件绝对路径
+        """
         if not (os.path.isfile(path) and path.lower().endswith(('.json', '.c'))):
             return
         if not self._wid_confirm_discard():      # 切走前, 未保存修改需确认丢弃
@@ -635,18 +928,210 @@ class PackApp(object):
             self.widget_status.config(text='已加载: %s' % os.path.basename(path))
             self.widget_sub.set('%s: 每行 key/value 直接修改, 光标所在可增删' % os.path.basename(path))
             self._wid_switch(True)
-            self._wid_render_json()
+            self._wid_maker_guard()
+            self._wid_render_json(_top=True)
         except Exception as e:
             self.widget_status.config(text='加载失败: %r' % e)
 
-    # 平铺渲染: 每个条目 = 标题Label + 每字段一行 [key输入框][value输入框], 之间空行
-    def _wid_render_json(self):
+    # 新建空场景: 从 json 起步, 生成 scui_ui_<name>.json + scui_ui_<name>.c 模板
+    def _wid_new_scene(self):
+        import tkinter as tk
+        from tkinter import ttk, messagebox
+        root = self.in_abs['widget']
+        cats = []
+        if os.path.isdir(root):
+            cats = sorted(d for d in os.listdir(root) if os.path.isdir(os.path.join(root, d)))
+        top = tk.Toplevel(self.root)
+        top.title('新建空场景')
+        top.geometry('440x210')
+        top.transient(self.root)
+        f = ttk.Frame(top, padding=(12, 10)); f.pack(fill='both', expand=True)
+        ttk.Label(f, text='分类目录(scene 下)').pack(anchor='w')
+        catvar = tk.StringVar(value=cats[0] if cats else '')
+        ttk.Combobox(f, textvariable=catvar, values=cats, width=40).pack(fill='x', pady=(2, 8))
+        ttk.Label(f, text='场景名(小写蛇形, 如 test_ui)').pack(anchor='w')
+        namevar = tk.StringVar()
+        ttk.Entry(f, textvariable=namevar, width=40).pack(fill='x', pady=(2, 8))
+        note = ttk.Label(f, text='将生成 .json(空 window) 与 .c(事件模板), 作为新场景起点.',
+                         foreground='#888')
+        note.pack(anchor='w')
+        bar = ttk.Frame(f); bar.pack(fill='x', pady=(10, 0))
+        ttk.Button(bar, text='创建', command=lambda: self._do_new_scene(top, catvar, namevar)).pack(side='left')
+        ttk.Button(bar, text='取消', command=top.destroy).pack(side='right')
+        namevar.trace_add('write', lambda *a: note.after(1, lambda: self._wid_new_preview(note, catvar, namevar, root)))
+        top.protocol('WM_DELETE_WINDOW', top.destroy)
+
+    def _wid_new_preview(self, note, catvar, namevar, root):
+        name = namevar.get().strip() if namevar.get() else ''
+        if not re.match(r'^[A-Za-z0-9_]+$', name):
+            note.configure(text='将生成 .json(空 window) 与 .c(事件模板), 作为新场景起点.')
+            return
+        cat = catvar.get().strip()
+        base = os.path.join(root, cat, 'scui_ui_%s' % name.lower()) if cat else os.path.join(root, 'scui_ui_%s' % name.lower())
+        note.configure(text='将生成: %s\n           %s' % (self._rel(base + '.json'), self._rel(base + '.c')))
+
+    def _do_new_scene(self, top, catvar, namevar, dir_override=None):
+        """brief: 生成场景模板文件
+        @param top          对话框
+        @param catvar       分类(可 None)
+        @param namevar      场景名
+        @param dir_override 目标目录(优先)
+        """
+        from tkinter import messagebox
+        name = namevar.get().strip()
+        if not re.match(r'^[A-Za-z0-9_]+$', name):
+            messagebox.showwarning('新建场景', '场景名仅允许字母/数字/下划线', parent=top)
+            return
+        root = self.in_abs['widget']
+        if dir_override is not None:
+            cat_dir = dir_override
+        else:
+            cat = catvar.get().strip() if catvar else ''
+            cat_dir = os.path.join(root, cat) if cat else root
+        os.makedirs(cat_dir, exist_ok=True)
+        name_l = name.lower()
+        name_u = name.upper()
+        jpath = os.path.join(cat_dir, 'scui_ui_%s.json' % name_l)
+        cpath = os.path.join(cat_dir, 'scui_ui_%s.c' % name_l)
+        if os.path.exists(jpath) or os.path.exists(cpath):
+            if not messagebox.askyesno('新建场景', '已存在同名场景, 覆盖写?\n%s' % self._rel_log(jpath), parent=top):
+                return
+        scene = {
+            'type': 'scene',
+            'widget': [{
+                'widget.type':              'scui_widget_type_window',
+                'widget.style.sched_anima': 'true',
+                'widget.style.indev_ptr':   'true',
+                'widget.style.indev_key':   'true',
+                'widget.style.indev_enc':   'true',
+                'widget.clip.x':            '0',
+                'widget.clip.y':            '0',
+                'widget.clip.w':            '466',
+                'widget.clip.h':            '466',
+                'widget.myself':            'SCUI_UI_SCENE_' + name_u,
+                'widget.event_cb':          'scui_ui_scene_%s_event_proc' % name_l,
+                'widget.child_num':         '0',
+                'widget.format':            'SCUI_PIXEL_CF_DEF_A',
+            }],
+        }
+        crlf = lambda s: s.replace('\n', '\r\n')
+        with open(jpath, 'w', encoding='utf-8', newline='') as fp:
+            fp.write(crlf(json.dumps(scene, ensure_ascii=False, indent=4)))
+        c_tmpl = (
+            '/*实现目标:\n'
+            ' *    窗口:%s\n'
+            ' */\n'
+            '\n'
+            '#define SCUI_LOG_LOCAL_STATUS       1\n'
+            '#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */\n'
+            '\n'
+            '#include "scui.h"\n'
+            '\n'
+            '/*@brief 控件事件响应回调\n'
+            ' *@param event 事件\n'
+            ' */\n'
+            'void scui_ui_scene_%s_event_proc(scui_event_t *event)\n'
+            '{\n'
+            '    switch (event->type) {\n'
+            '    case scui_event_create:\n'
+            '        break;\n'
+            '    case scui_event_destroy:\n'
+            '        break;\n'
+            '    case scui_event_focus_get:\n'
+            '        break;\n'
+            '    case scui_event_focus_lost:\n'
+            '        break;\n'
+            '    default:\n'
+            '        break;\n'
+            '    }\n'
+            '}\n') % (name_l, name_l)
+        with open(cpath, 'w', encoding='utf-8', newline='') as fp:
+            fp.write(crlf(c_tmpl))
+        top.destroy()
+        self._wid_load_tree()                      # 刷新 src 树
+        self.widget_data = scene
+        self.widget_path = jpath; self.widget_maker = False
+        self._w_base = json.loads(json.dumps(scene))
+        self.widget_status.config(text='已新建: %s' % os.path.basename(jpath))
+        self.widget_sub.set('%s: 每行 key/value 直接修改, 光标所在可增删' % os.path.basename(jpath))
+        self._wid_switch(True)
+        self._wid_maker_guard()
+        self._wid_render_json(_top=True)
+        self._append_log('widget', '[new] 已新建场景: %s\n' % self._rel_log(jpath))
+
+    # 目录 + 按钮: 该目录下新建场景(轻量对话框, 仅输入名称)
+    def _wid_tree_new(self, dir_path):
+        """brief: 目录内新建场景
+        @param dir_path 目标目录
+        """
         import tkinter as tk
         from tkinter import ttk
+        top = tk.Toplevel(self.root)
+        top.title('新建场景于: %s' % os.path.basename(dir_path))
+        top.geometry('420x180'); top.transient(self.root)
+        f = ttk.Frame(top, padding=(12, 10)); f.pack(fill='both', expand=True)
+        ttk.Label(f, text='场景名(小写蛇形, 如 test_ui)').pack(anchor='w')
+        namevar = tk.StringVar()
+        ttk.Entry(f, textvariable=namevar, width=40).pack(fill='x', pady=(2, 8))
+        ttk.Label(f, text='将生成 .json(空 window) 与 .c(事件模板)',
+                  foreground='#888').pack(anchor='w')
+        bar = ttk.Frame(f); bar.pack(fill='x', pady=(10, 0))
+        ttk.Button(bar, text='创建',
+            command=lambda: self._do_new_scene(top, None, namevar,
+                                               dir_override=dir_path))\
+            .pack(side='left')
+        ttk.Button(bar, text='取消', command=top.destroy).pack(side='right')
+        top.protocol('WM_DELETE_WINDOW', top.destroy)
+
+    # json − 按钮: 删除 .json + 同名 .c
+    def _wid_tree_del(self, json_path):
+        """brief: 删除场景 json+同名 c
+        @param json_path json 绝对路径
+        """
+        from tkinter import messagebox
+        if not os.path.isfile(json_path):
+            return
+        c_path = json_path[:-5] + '.c'              # .json -> .c
+        files = [json_path]
+        if os.path.isfile(c_path):
+            files.append(c_path)
+        msg_lines = '\n'.join(self._rel(p) for p in files)
+        if not messagebox.askyesno('删除场景',
+                '将删除:\n%s\n确认?' % msg_lines, parent=self.root):
+            return
+        if self.widget_path in files:               # 当前编辑文件正属删除范围, 先清空
+            self.widget_path  = None
+            self.widget_data  = None
+            self.widget_maker = False
+            self._w_base      = None
+            self.widget_status.config(text='未选择文件')
+            for w in self._wbox.winfo_children():
+                w.destroy()
+        for p in files:
+            try:
+                os.remove(p)
+                self._wlog('[del] 已删除: %s' % self._rel_log(p))
+            except OSError as e:
+                self._wlog('[del] 失败 %s: %r' % (self._rel_log(p), e))
+        self._wid_load_tree()                       # 刷新文件树 + 模板缓存
+
+    # 平铺渲染: 每个条目 = 标题Label + 每字段一行 [key输入框][value], 之间空行
+    # _top=True 强制滚动回顶部(加载/新建); 否则保留当前可视滚动位置(局部增删字段不跳动)
+    def _wid_render_json(self, _top=False):
+        import tkinter as tk
+        from tkinter import ttk
+        try:
+            frac = 0.0 if _top else self.wcanv.yview()[0]
+        except Exception:
+            frac = 0.0
         for w in self._wbox.winfo_children():
             w.destroy()
         self._w_rows = []
+        self._w_vars = []          # 保存StringVar引用防GC(否则Entry内容被清空)
+        self._w_titles = {}          # 条目索引 -> 标题 Label(供整条高亮)
+        self._w_entry_rows = {}      # 条目索引 -> 该条目所有行 Frame
         if self.widget_data is None:
+            self.wcanv.yview_moveto(0)
             return
         items = self.widget_data.get('widget', [])
         for i, it in enumerate(items):
@@ -656,21 +1141,83 @@ class PackApp(object):
             else:
                 title = '#%d  %s' % (i, it.get('widget.myself') or it.get('widget.type', ''))
                 fields = it
-            tl = ttk.Label(self._wbox, text=title, foreground='#2266cc', font=('Consolas', 9, 'bold'))
-            tl.pack(fill='x', anchor='w', pady=(6, 2))
-            tl.bind('<Button-1>', lambda e, i=i: self._wid_active(i, None))
-            for f, (k, v) in enumerate(fields.items()):
+            head = tk.Frame(self._wbox, bg='#ffffff')
+            head.pack(fill='x', pady=(6, 2))
+            # 右侧: +(加字段, 最右) -> T(查模板, 紧贴其左)
+            ttk.Button(head, text='+', width=1, command=lambda i=i: self._wid_guard(self._wid_add_field, i))\
+                .pack(side='right', padx=(2, 0))
+            ttk.Button(head, text='T', width=1, command=lambda i=i: self._wid_guard(self._wid_show_templates, i))\
+                .pack(side='right', padx=(0, 1))
+            if not self.widget_maker:               # 控件级小按钮(标题左侧, 仅 scene): +加/ -删/ ▲▼移动
+                for txt, cb in (('+', lambda i=i: self._wid_guard(self._wid_add_ctl, i)),
+                                ('-', lambda i=i: self._wid_guard(self._wid_del_ctl, i)),
+                                ('▲', lambda i=i: self._wid_guard(self._wid_ctl_up, i)),
+                                ('▼', lambda i=i: self._wid_guard(self._wid_ctl_dn, i))):
+                    ttk.Button(head, text=txt, width=1, command=cb).pack(side='left', padx=(0, 1))
+            tl = tk.Label(head, text=title, foreground='#2266cc', background='#ffffff',
+                          font=('Consolas', 9, 'bold'), anchor='w')
+            tl.pack(side='left', fill='x', expand=True, padx=(4, 0))
+            tl.bind('<Button-1>', lambda e, i=i: self._wid_focus(i, None, None))
+            head.bind('<Button-1>', lambda e, i=i: self._wid_focus(i, None, None))
+            self._w_titles[i] = tl
+            self._w_entry_rows[i] = []
+            for k, v in fields.items():
                 kvar = tk.StringVar(value=str(k))
                 vvar = tk.StringVar(value=str(v))
-                row = ttk.Frame(self._wbox); row.pack(fill='x', padx=(2, 2))
-                ke = ttk.Entry(row, textvariable=kvar, font=('Consolas', 9))
-                ve = ttk.Entry(row, textvariable=vvar, font=('Consolas', 9))
+                self._w_vars.extend([kvar, vvar])    # 保存引用防GC
+                row = tk.Frame(self._wbox, bg='#ffffff'); row.pack(fill='x', padx=(2, 2))
+                # maker下widget.type灰显锁定(与class绑定, 不可改不可删)
+                locked = self.widget_maker and k == 'widget.type'
+                st = 'disabled' if locked else 'normal'
+                # 右侧按钮先pack(从右取位), 确保不被key/val挤压
+                del_btn = ttk.Button(row, text='-', width=1, command=lambda i=i, k=k: self._wid_guard(self._wid_del_field_k, i, k))
+                del_btn.pack(side='right', padx=(1, 0))
+                ttk.Button(row, text='▼', width=1, command=lambda i=i, k=k: self._wid_guard(self._wid_field_move, i, k, 1))\
+                    .pack(side='right', padx=(1, 0))
+                ttk.Button(row, text='▲', width=1, command=lambda i=i, k=k: self._wid_guard(self._wid_field_move, i, k, -1))\
+                    .pack(side='right', padx=(1, 0))
+                if locked:
+                    del_btn.configure(state='disabled')
+                ke = ttk.Entry(row, textvariable=kvar, font=('Consolas', 9), state=st)
+                ve = ttk.Entry(row, textvariable=vvar, font=('Consolas', 9), state=st)
                 ke.pack(side='left', fill='x', expand=True, padx=(0, 8))
                 ve.pack(side='left', fill='x', expand=True)
-                ke.bind('<FocusIn>', lambda e, i=i, f=f: self._wid_active(i, f))
-                ve.bind('<FocusIn>', lambda e, i=i, f=f: self._wid_active(i, f))
-                self._w_rows.append([i, f, kvar, vvar])
+                ke.bind('<FocusIn>', lambda e, i=i, k=k, row=row: self._wid_focus(i, k, row))
+                ve.bind('<FocusIn>', lambda e, i=i, k=k, row=row: self._wid_focus(i, k, row))
+                row.bind('<Button-1>', lambda e, i=i, k=k, row=row: self._wid_focus(i, k, row))
+                self._w_rows.append([i, k, ke, ve, row])      # [条目, 字段key, key框, value框, 行框]
+                self._w_entry_rows[i].append(row)
             ttk.Label(self._wbox, text='').pack()
+        self.wcanv.yview_moveto(frac)                 # 恢复滚动位置(加载新文件已置 0)
+
+    # 光标定位 + 高亮: 点字段行高亮该行; 点标题整条高亮(空条目也可选中). 状态栏提示正在编辑对象
+    def _wid_focus(self, i, key, row):
+        self._w_active = (i, key)
+        # 清除全部高亮(字段行 + 标题)
+        for rows in getattr(self, '_w_entry_rows', {}).values():
+            for _row in rows:
+                if _row is not None:
+                    _row.configure(bg='#ffffff')
+        for _t in getattr(self, '_w_titles', {}).values():
+            if _t is not None:
+                _t.configure(bg='#ffffff')
+        if row is not None:                          # 命中的具体字段行
+            row.configure(bg='#fff3a3')
+        elif i is not None:                          # 点标题: 整条高亮(含空条目)
+            tl = getattr(self, '_w_titles', {}).get(i)
+            if tl is not None:
+                tl.configure(bg='#fff3a3')
+            for _row in getattr(self, '_w_entry_rows', {}).get(i, []):
+                if _row is not None:
+                    _row.configure(bg='#fff3a3')
+        # 状态栏: 提示当前操作对象
+        if i is not None and self.widget_data and 0 <= i < len(self.widget_data.get('widget', [])):
+            if key is not None:
+                self.widget_status.config(text='正在编辑 条目#%d · 字段 %s' % (i, key))
+            elif getattr(self, '_w_entry_rows', {}).get(i):
+                self.widget_status.config(text='正在编辑 条目#%d(整条)' % i)
+            else:
+                self.widget_status.config(text='正在编辑 条目#%d(空条目, 可「添加字段」)' % i)
 
     # 取某条目的字段 dict
     def _wid_fields_of(self, item):
@@ -679,31 +1226,31 @@ class PackApp(object):
             return it.setdefault('default', {})
         return it
 
-    # 把当前输入框文本回填到副本(改 key 重建保序; 空 key 行视为未定义跳过)
+    # 把当前输入框文本回填到副本(改 key 重建保序; 空 key 行保留, 预览/保存时统一去重)
     def _wid_sync_back(self):
         if not self.widget_data:
             return
         groups = {}
-        for i, f, ke, ve in self._w_rows:
+        for i, k, ke, ve, row in self._w_rows:
             groups.setdefault(i, []).append((ke.get(), ve.get()))
         for i, pairs in groups.items():
             if i >= len(self.widget_data['widget']):
                 continue
             d = {}
             for k, v in pairs:
-                if k:
-                    d[k] = v
+                d[k] = v
             if self.widget_maker:
                 self.widget_data['widget'][i]['default'] = d
             else:
                 self.widget_data['widget'][i] = d
 
-    # 操作位置定位(返回光标所在条目索引, 无则 None)
-    def _wid_where(self):
-        act = getattr(self, '_w_active', None)
-        if act is None:
-            return None
-        return act[0]
+    # 递归删除空 key 占位行, 返回清理后的新结构(不改动当前副本; 预览/保存时去重)
+    def _wid_clean_copy(self, obj):
+        if isinstance(obj, dict):
+            return {k: self._wid_clean_copy(v) for k, v in obj.items() if k != ''}
+        if isinstance(obj, list):
+            return [self._wid_clean_copy(x) for x in obj]
+        return obj
 
     # 写某条目字段 dict
     def _wid_set_fields(self, it, newd):
@@ -734,97 +1281,274 @@ class PackApp(object):
         from tkinter import messagebox
         return messagebox.askyesno('未保存的修改', '当前 json 有未保存的修改，确定丢弃吗？', parent=self.root)
 
-    # 添加控件: 光标所在条目之后插一个新控件(默认字段)
-    def _wid_add_control(self):
+    # 控件级 + : 当前控件 i 下面加一个新控件, 焦点到达新控件
+    def _wid_add_ctl(self, i):
         from tkinter import messagebox
         if not (self.widget_data is not None and self.widget_path):
             messagebox.showwarning('widget', '请先在中间选择一个 .json 文件')
             return
+        if self.widget_maker:
+            return
         self._wid_sync_back()
-        pos = self._wid_where()
-        if pos is None:
-            self._wlog('[widget] 请定位操作位置(点一下标题或某输入框)')
-            return
         items = self.widget_data.setdefault('widget', [])
-        if pos >= len(items):
-            return
-        items.insert(pos + 1, self._wid_new_control())
+        items.insert(i + 1, self._wid_new_control())
         self._wid_render_json()
+        self._wid_focus(i + 1, None, None)
         self._wlog('已添加控件(默认字段, 未保存)')
 
-    # 删除控件: 光标所在条目整个删除
-    def _wid_del_control(self):
+    # 控件级 - : 移除当前控件, 焦点到达附近(先上后下)
+    def _wid_del_ctl(self, i):
         from tkinter import messagebox
         if not (self.widget_data is not None and self.widget_path):
             messagebox.showwarning('widget', '请先在中间选择一个 .json 文件')
             return
+        if self.widget_maker:
+            return
         self._wid_sync_back()
-        pos = self._wid_where()
-        if pos is None:
-            self._wlog('[widget] 请定位操作位置(点一下标题或某输入框)')
-            return
         items = self.widget_data.get('widget', [])
-        if pos >= len(items):
+        if i >= len(items):
             return
-        del items[pos]
+        del items[i]
         self._wid_render_json()
+        if items:                                   # 聚焦附近: 优先上面 i-1, 否则下面(原 i 处)
+            tgt = (i - 1) if i > 0 else 0
+            self._wid_focus(tgt, None, None)
+        else:
+            self._w_active = None
         self._wlog('已删除控件(未保存)')
 
-    # 添加字段: 光标所在条目补一个空字段行
-    def _wid_add_field(self):
-        from tkinter import messagebox
-        if not (self.widget_data is not None and self.widget_path):
-            messagebox.showwarning('widget', '请先在中间选择一个 .json 文件')
+    # 控件上移 / 下移
+    def _wid_ctl_move(self, i, delta):
+        if self.widget_maker:
             return
         self._wid_sync_back()
-        pos = self._wid_where()
-        if pos is None:
-            self._wlog('[widget] 请定位操作位置(点一下标题或某输入框)')
-            return
         items = self.widget_data.get('widget', [])
-        if pos >= len(items):
+        j = i + delta
+        if i < 0 or i >= len(items) or j < 0 or j >= len(items):
             return
-        f = getattr(self, '_w_active', [None, None])[1]
-        fields = self._wid_fields_of(pos)
-        newd = {}
-        for j, (k, v) in enumerate(fields.items()):
-            newd[k] = v
-            if f is not None and j == f:
-                newd[''] = ''
-        if f is None:
-            newd[''] = ''
-        self._wid_set_fields(pos, newd)
+        items[i], items[j] = items[j], items[i]
         self._wid_render_json()
-        self._wlog('已添加字段(空行, 在输入框填名与值, 未保存)')
+        self._wid_focus(j, None, None)
 
-    # 删除字段: 光标所在字段行删除
-    def _wid_del_field(self):
+    def _wid_ctl_up(self, i):
+        self._wid_ctl_move(i, -1)
+
+    def _wid_ctl_dn(self, i):
+        self._wid_ctl_move(i, 1)
+
+    # 字段级 + (标题最右): 该控件末尾追加一个空白字段, 焦点落到该空白行
+    def _wid_add_field(self, i):
         from tkinter import messagebox
         if not (self.widget_data is not None and self.widget_path):
             messagebox.showwarning('widget', '请先在中间选择一个 .json 文件')
             return
         self._wid_sync_back()
-        act = getattr(self, '_w_active', None)
-        if act is None or act[0] is None or act[1] is None:
-            self._wlog('[widget] 请定位操作位置(点一下要删除的 key/value 输入框)')
+        if i >= len(self.widget_data.get('widget', [])):
             return
-        pos, f = act
-        items = self.widget_data.get('widget', [])
-        if pos >= len(items):
-            return
-        fields = self._wid_fields_of(pos)
-        ks = list(fields.keys())
-        if f >= len(ks):
-            return
-        kdel = ks[f]
-        newd = {k: v for k, v in fields.items() if k != kdel}
-        if not newd:                                   # 删空了 -> 删除控件本身, 避免空控件
-            del items[pos]
-            self._wlog('已删除字段 %s, 控件已空故删除整个控件(未保存)' % kdel)
-        else:
-            self._wid_set_fields(pos, newd)
-            self._wlog('已删除字段 %s(未保存)' % kdel)
+        fields = self._wid_fields_of(i)
+        newd = dict(fields)
+        newd[''] = ''                               # 追加到末尾空白字段
+        self._wid_set_fields(i, newd)
         self._wid_render_json()
+        row = next((_row for _i, _k, _ke, _ve, _row in self._w_rows if _i == i and _k == ''), None)
+        self._wid_focus(i, '', row)
+        self._wlog('已添加字段到控件末尾(空行, 未保存)')
+
+    # 字段级 - : 去除当前字段(maker 下 widget.type 不可删); 删空则保留空控件
+    def _wid_del_field_k(self, i, fkey):
+        from tkinter import messagebox
+        if not (self.widget_data is not None and self.widget_path):
+            messagebox.showwarning('widget', '请先在中间选择一个 .json 文件')
+            return
+        self._wid_sync_back()
+        if i >= len(self.widget_data.get('widget', [])):
+            return
+        fields = self._wid_fields_of(i)
+        if fkey not in fields:
+            return
+        if self.widget_maker and fkey == 'widget.type':
+            self._wlog('maker json 的 widget.type 与 class 绑定, 不可删除(保留占位)')
+            return
+        newd = {k: v for k, v in fields.items() if k != fkey}
+        self._wid_set_fields(i, newd)
+        self._wid_render_json()
+        self._wid_focus(i, None, None)              # 聚焦到该控件
+        self._wlog('已删除字段 %s(未保存)' % fkey)
+
+    # 字段上移 / 下移(按字段 key 定位并重排保序)
+    def _wid_field_move(self, i, fkey, delta):
+        if not (self.widget_data is not None and self.widget_path):
+            return
+        self._wid_sync_back()
+        if i >= len(self.widget_data.get('widget', [])):
+            return
+        fields = self._wid_fields_of(i)
+        ks = list(fields.keys())
+        if fkey not in ks:
+            return
+        j = ks.index(fkey)
+        nj = j + delta
+        if nj < 0 or nj >= len(ks):
+            return
+        ks[j], ks[nj] = ks[nj], ks[j]
+        newd = {k: fields[k] for k in ks}
+        self._wid_set_fields(i, newd)
+        self._wid_render_json()
+        row = next((_row for _i, _k, _ke, _ve, _row in self._w_rows if _i == i and _k == fkey), None)
+        self._wid_focus(i, fkey, row)
+
+    #--------------- 控件模板 ---------------
+
+    def _wid_load_templates(self):
+        """brief: 扫描 scene json 抽取模板(内存缓存)
+        @retval 无
+        """
+        root = self.in_abs['widget']
+        if not os.path.isdir(root):
+            self._w_templates = {}
+            return
+        templates = {}
+        for dp, dns, fns in os.walk(root):
+            for fn in fns:
+                if not fn.lower().endswith('.json'):
+                    continue
+                full = os.path.join(dp, fn)
+                try:
+                    with open(full, 'r', encoding='utf-8') as fp:
+                        data = json.load(fp)
+                except Exception:
+                    continue
+                if not isinstance(data, dict) or data.get('type') != 'scene':
+                    continue
+                for w in data.get('widget', []):
+                    if not isinstance(w, dict):
+                        continue
+                    wt = w.get('widget.type')
+                    name = w.get('widget.myself')
+                    if not wt or not name:
+                        continue
+                    fields = {k: v for k, v in w.items()
+                              if k not in ('widget.type', 'widget.myself')}
+                    templates.setdefault(wt, []).append(
+                        {'name': name, 'fields': fields})
+        self._w_templates = {wt: sorted(items, key=lambda x: x['name'])
+                             for wt, items in sorted(templates.items())}
+
+    def _wid_tpl_wheel(self, e):
+        self._tpl_canv.yview_scroll(-1 * (e.delta // 120), 'units')
+
+    def _wid_show_templates(self, i):
+        """brief: 显示控件可用模板
+        @param i 控件索引
+        """
+        self._wid_render_templates(i)
+        self.widget_status.config(text='模板已加载到下方面板(点 T 应用)')
+
+    def _wid_render_templates(self, control_idx):
+        """brief: 渲染模板面板
+        @param control_idx 控件索引
+        """
+        import tkinter as tk
+        from tkinter import ttk
+        for w in self._tpl_box.winfo_children():
+            w.destroy()
+        self._w_tpl_state = {'control_idx': control_idx, 'expanded': set()}
+        if not self.widget_data or control_idx is None:
+            ttk.Label(self._tpl_box, text='请先选择一个控件',
+                      foreground='#888').pack(anchor='w', padx=(2, 2))
+            return
+        items = self.widget_data.get('widget', [])
+        if control_idx >= len(items):
+            return
+        it = items[control_idx]
+        wt = it.get('class') if self.widget_maker else it.get('widget.type')
+        if not wt:
+            ttk.Label(self._tpl_box, text='当前控件无 widget.type',
+                      foreground='#888').pack(anchor='w', padx=(2, 2))
+            return
+        tlist = self._w_templates.get(wt, [])
+        if not tlist:
+            ttk.Label(self._tpl_box, text='尚不支持(%s)' % wt,
+                      foreground='#888').pack(anchor='w', padx=(2, 2))
+            return
+        for t in tlist:
+            name = t['name']
+            row = tk.Frame(self._tpl_box, bg='#ffffff')
+            row.pack(fill='x', padx=(2, 2), pady=(1, 1))
+            ttk.Button(row, text='T', width=1,
+                command=lambda n=name, i=control_idx:
+                    self._wid_guard(self._wid_apply_template, i, n))\
+                .pack(side='left', padx=(0, 2))
+            btn = ttk.Button(row, text='+', width=1,
+                command=lambda n=name: self._wid_guard(self._wid_tpl_toggle, n))
+            btn.pack(side='right', padx=(2, 0))
+            tk.Label(row, text=name, bg='#ffffff', anchor='w',
+                     font=('Consolas', 9)).pack(side='left',
+                        fill='x', expand=True, padx=(2, 4))
+            detail = tk.Frame(self._tpl_box, bg='#f6f6f6')
+            for k, v in t['fields'].items():
+                dr = tk.Frame(detail, bg='#f6f6f6'); dr.pack(fill='x',
+                                                           padx=(14, 2))
+                tk.Label(dr, text=k, bg='#f6f6f6', font=('Consolas', 9),
+                         foreground='#666').pack(side='left')
+                tk.Label(dr, text=str(v), bg='#f6f6f6',
+                         font=('Consolas', 9)).pack(side='left', padx=(6, 0))
+            self._w_tpl_state['row_'    + name] = row
+            self._w_tpl_state['btn_'    + name] = btn
+            self._w_tpl_state['detail_' + name] = detail
+
+    def _wid_tpl_toggle(self, name):
+        """brief: 展开/折叠模板详情
+        @param name 模板名
+        """
+        st = self._w_tpl_state
+        detail = st.get('detail_' + name)
+        btn    = st.get('btn_'    + name)
+        row    = st.get('row_'    + name)
+        if detail is None or btn is None or row is None:
+            return
+        if detail.winfo_ismapped():
+            detail.pack_forget()
+            btn.configure(text='+')
+            st['expanded'].discard(name)
+        else:
+            detail.pack(in_=self._tpl_box, after=row, fill='x',
+                        padx=(14, 2), pady=(0, 2))
+            btn.configure(text='-')
+            st['expanded'].add(name)
+
+    def _wid_apply_template(self, control_idx, tpl_name):
+        """brief: 应用模板到控件
+        @param control_idx 控件索引
+        @param tpl_name    模板名
+        """
+        if not self.widget_data:
+            return
+        items = self.widget_data.get('widget', [])
+        if control_idx >= len(items):
+            return
+        it = items[control_idx]
+        wt = it.get('class') if self.widget_maker else it.get('widget.type')
+        tlist = self._w_templates.get(wt, [])
+        tpl = next((t for t in tlist if t['name'] == tpl_name), None)
+        if tpl is None:
+            self._wlog('[tpl] 未找到模板 %s' % tpl_name)
+            return
+        new_fields = dict(tpl['fields'])          # 保留 type/myself, 其余覆盖
+        if self.widget_maker:
+            old_def = it.get('default', {})
+            new_fields['widget.type'] = old_def.get('widget.type', wt)
+            if 'widget.myself' in old_def:
+                new_fields['widget.myself'] = old_def['widget.myself']
+            it['default'] = new_fields
+        else:
+            new_fields['widget.type'] = it.get('widget.type', wt)
+            if 'widget.myself' in it:
+                new_fields['widget.myself'] = it['widget.myself']
+            items[control_idx] = new_fields
+        self._wid_render_json()
+        self._wid_focus(control_idx, None, None)
+        self._wlog('[tpl] 已应用模板: %s (未保存)' % tpl_name)
 
     # 预览 json: 弹窗显示修改后的完整 json
     def _wid_preview_json(self):
@@ -837,7 +1561,8 @@ class PackApp(object):
         t = scrolledtext.ScrolledText(top, wrap='none', font=('Consolas', 9), state='normal')
         t.pack(fill='both', expand=True, padx=8, pady=8)
         try:
-            s = json.dumps(self.widget_data, ensure_ascii=False, indent=4)
+            # 预览清除空白占位行(不改动当前编辑副本, 编辑时仍保留空行自由编辑)
+            s = json.dumps(self._wid_clean_copy(self.widget_data), ensure_ascii=False, indent=4)
         except Exception as e:
             s = '%r' % e
         t.insert('1.0', s)
@@ -856,12 +1581,26 @@ class PackApp(object):
                 return
             with open(path, 'r', encoding='utf-8') as fp:
                 self.widget_data = json.load(fp)
+            # 补齐缺失 class: 以 analyze 全量类型为准, class 唯一且完备
+            types = getattr(self, '_wid_class_types', None)
+            if types:
+                by_class = {}
+                for w in self.widget_data.get('widget', []):
+                    by_class.setdefault(w.get('class'), w)
+                full = []
+                for wt in types:
+                    if wt in by_class:
+                        full.append(by_class[wt])          # 保留已有条目的完整 default
+                    else:
+                        full.append({'class': wt, 'default': {'widget.type': wt}})
+                self.widget_data['widget'] = full
             self.widget_path = path; self.widget_maker = True
             self._w_base = json.loads(json.dumps(self.widget_data))   # 记录基快照
             self.widget_status.config(text='已加载 maker json(默认配置): %s' % os.path.basename(path))
             self.widget_sub.set('maker json: key/value 直接修改')
             self._wid_switch(True)
-            self._wid_render_json()
+            self._wid_maker_guard()
+            self._wid_render_json(_top=True)
         except Exception as e:
             self.widget_status.config(text='加载失败: %r' % e)
 
@@ -875,11 +1614,14 @@ class PackApp(object):
             return
         try:
             self._wid_sync_back()
+            # 保存时清除空白占位行(编辑时保留空行自由编辑, 落盘前统一去重)
+            self.widget_data = self._wid_clean_copy(self.widget_data)
             with open(self.widget_path, 'w', encoding='utf-8') as fp:
                 json.dump(self.widget_data, fp, ensure_ascii=False, indent=4)
             self._w_base = json.loads(json.dumps(self.widget_data))   # 保存后重置基快照
+            self._wid_render_json()                     # 按清理后数据重绘(空行消失)
             self.widget_status.config(text='已保存: %s' % os.path.basename(self.widget_path))
-            self._wlog('[save] 已写入: %s' % self.widget_path)
+            self._wlog('[save] 已写入: %s' % self._rel_log(self.widget_path))
         except Exception as e:
             self.widget_status.config(text='保存失败: %r' % e)
             self._wlog('[save] 失败: %r' % e)
@@ -934,7 +1676,7 @@ class PackApp(object):
         src = self.in_abs['lang']
         cfg = os.path.join(src, 'scui_lang_parser.json')
         if not os.path.exists(cfg):
-            self._append_log('lang', '未找到配置: %s\n' % cfg)
+            self._append_log('lang', '未找到配置: %s\n' % self._rel_log(cfg))
             return
         try:
             with open(cfg, 'r', encoding='utf-8') as fp:
@@ -943,7 +1685,7 @@ class PackApp(object):
             xlsx_path = os.path.join(src, j.get('xlsx', ''))
             sheet_name = j.get('sheet', '')
             if not os.path.exists(xlsx_path):
-                self._append_log('lang', '未找到 xlsx: %s\n' % xlsx_path)
+                self._append_log('lang', '未找到 xlsx: %s\n' % self._rel_log(xlsx_path))
                 return
             import openpyxl
             wb = openpyxl.load_workbook(xlsx_path, read_only=True, data_only=True)
@@ -1056,7 +1798,7 @@ class PackApp(object):
         self.cbook.delete(*self.cbook.get_children())
         proto = os.path.join(self.tools, 'scui_pack_cwf.json')
         if not os.path.exists(proto):
-            self._append_log('cwf', '未找到协议: %s\n' % proto)
+            self._append_log('cwf', '未找到协议: %s\n' % self._rel_log(proto))
             return
         try:
             with open(proto, 'r', encoding='utf-8') as fp:
@@ -1074,7 +1816,7 @@ class PackApp(object):
         self.ctree.delete(*self.ctree.get_children())
         root = self.in_abs['cwf']
         if not os.path.isdir(root):
-            self._append_log('cwf', 'cwf 路径不存在: %s\n' % root)
+            self._append_log('cwf', 'cwf 路径不存在: %s\n' % self._rel_log(root))
             return
         for name in sorted(os.listdir(root)):
             d = os.path.join(root, name)
@@ -1287,7 +2029,7 @@ class PackApp(object):
                 json.dump(self.cwf_data, fp, ensure_ascii=False, indent=4)
             self._cwf_base = json.loads(json.dumps(self.cwf_data))
             self.cwf_status.config(text='已保存: %s' % os.path.basename(self.cwf_path))
-            self._append_log('cwf', '[save] 已写入: %s\n' % self.cwf_path)
+            self._append_log('cwf', '[save] 已写入: %s\n' % self._rel_log(self.cwf_path))
         except Exception as e:
             self.cwf_status.config(text='保存失败: %r' % e)
             self._append_log('cwf', '[save] 失败: %r\n' % e)
@@ -1739,38 +2481,73 @@ class PackApp(object):
         ttk.Entry(pr, textvariable=self.proj_var, width=16).pack(side='left', padx=(6, 10))
         ttk.Button(pr, text='执行 image 打包', command=lambda: self._run('image')).pack(side='right')
 
-        # 主体: 水平 Panedwindow(树 | 详情[图|文 水平]) -> 可左右拖拽
-        mid = ttk.Panedwindow(f, orient='horizontal')
-        mid.pack(fill='both', expand=True, pady=(4, 0))
+        # 主体: 水平分栏(左|右); 每列垂直分栏(上配置 下资源/详情)
+        imh = ttk.Panedwindow(f, orient='horizontal'); imh.pack(fill='both', expand=True, pady=(4, 0))
+        lv = ttk.Panedwindow(imh, orient='vertical'); imh.add(lv, weight=4)
+        rv = ttk.Panedwindow(imh, orient='vertical'); imh.add(rv, weight=3)
 
-        lf = ttk.LabelFrame(mid, text=' 图片资源 ', padding=(4, 4))
-        mid.add(lf, weight=3)
-        self.tree = ttk.Treeview(lf, columns=('size',), show='tree headings',
-                                 selectmode='browse')
-        self.tree.heading('#0', text='路径/文件')
-        self.tree.heading('size', text='大小')
-        self.tree.column('size', width=80, anchor='e', stretch=False)
-        vs = ttk.Scrollbar(lf, orient='vertical', command=self.tree.yview)
-        self.tree.configure(yscrollcommand=vs.set)
-        self.tree.pack(side='left', fill='both', expand=True)
-        vs.pack(side='right', fill='y')
+        # 左上: 图形配置(全局参数, 持久到 scui_pack_tools.json)
+        gf = ttk.LabelFrame(lv, text=' 图形配置 ', padding=(6, 4)); lv.add(gf, weight=2)
+        self._img_cfg_vars = {}
+        gcfg, _ = self._img_cfg_load()
+        ggrid = ttk.Frame(gf); ggrid.pack(fill='both', expand=True)
+        for r, (key, typ, lab, opts) in enumerate(_IMG_CFG_DEFS):
+            if typ == 'bool':
+                var = tk.BooleanVar(value=bool(gcfg.get(key)))
+                ttk.Checkbutton(ggrid, text=lab, variable=var)\
+                    .grid(row=r, column=0, sticky='w', padx=(2, 0), pady=2)
+            else:
+                ttk.Label(ggrid, text=lab).grid(row=r, column=0, sticky='w', padx=(2, 0), pady=2)
+                var = tk.StringVar(value=str(gcfg.get(key)))
+                ttk.Combobox(ggrid, textvariable=var, values=opts, width=6, state='readonly')\
+                    .grid(row=r, column=1, sticky='e', padx=(8, 2), pady=2)
+            self._img_cfg_vars[key] = var
+        gbar = ttk.Frame(gf); gbar.pack(fill='x')
+        ttk.Button(gbar, text='保存', command=self._img_cfg_save_cb).pack(side='left')
+        ttk.Button(gbar, text='恢复默认', command=self._img_cfg_reset).pack(side='left', padx=(8, 0))
+        ttk.Label(gbar, text='保存后下次打包生效(scui_pack_tools.json)',
+                  foreground='#888').pack(side='left', padx=(10, 0))
 
-        root_src = self.in_abs['image'] if os.path.isdir(self.in_abs['image']) else self.ui
-        self._tree_root_path = root_src
-        try:
-            root_show = os.path.relpath(root_src, self.in_abs['image'] or root_src)
-        except Exception:
-            root_show = root_src
-        self._tree_root = self.tree.insert('', 'end', iid='root', text=root_show, open=True)
-        self._vid_map = {}
-        self._vid_count = 0
-        self._load_dir(self._tree_root, root_src)
-        self.tree.bind('<<TreeviewOpen>>', self._on_tree_open)
-        self.tree.bind('<<TreeviewSelect>>', self._on_tree_sel)
+        # 左下: 图片资源(虚拟化 Canvas, 只绘可见行, 目录/文件 # 启用/禁用按钮)
+        lf = ttk.LabelFrame(lv, text=' 图片资源 ', padding=(4, 4)); lv.add(lf, weight=5)
+        self.it_canv = tk.Canvas(lf, highlightthickness=0, bg='#ffffff')
+        self._img_vsb = ttk.Scrollbar(lf, orient='vertical', command=self._img_scroll_cmd)
+        self.it_canv.configure(yscrollcommand=self._img_vsb.set)
+        self.it_canv.pack(side='left', fill='both', expand=True)
+        self._img_vsb.pack(side='right', fill='y')
+        self._i_sel  = None          # 当前选中图片(绝对路径, 高亮)
+        self._disp   = []            # 折叠后可见行([depth,name,path,kind,opened])
+        self._img_root = None        # 图片源根目录
+        self._img_exp = set()        # 已展开的目录(绝对路径)
+        self._i_rowH = 22            # 每行像素高(虚拟化绘制)
+        self.it_canv.bind('<Configure>', lambda e: self._img_draw())
+        self.it_canv.bind('<Enter>', lambda e: self.it_canv.bind_all('<MouseWheel>', self._img_wheel))
+        self.it_canv.bind('<Leave>', lambda e: self.it_canv.unbind_all('<MouseWheel>'))
+        self.it_canv.bind('<Button-1>', self._img_canvas_click)
+        # 延迟到主循环后再填充(大资源集不阻塞首帧窗口)
+        self.root.after(80, self._img_reload)
 
-        rf = ttk.LabelFrame(mid, text=' 详情(scui_image) ', padding=(6, 4))
-        mid.add(rf, weight=2)
-        dbody = ttk.Frame(rf); dbody.pack(fill='both', expand=True)
+        # 右上: 图片配置(选中图片: 不参与编译/dither/index; 更新配置=重命名)
+        icf = ttk.LabelFrame(rv, text=' 图片配置 ', padding=(6, 4)); rv.add(icf, weight=2)
+        self._i_sel_path = None
+        self.i_sel_label = ttk.Label(icf, text='未选择图片(选中左侧图片生效)', foreground='#888')
+        self.i_sel_label.pack(anchor='w', padx=(2, 0))
+        self._i_exc = tk.BooleanVar(value=False)
+        self._i_dit = tk.BooleanVar(value=False)
+        self._i_idx = tk.BooleanVar(value=False)
+        ttk.Checkbutton(icf, text='不参与编译(# 前缀)', variable=self._i_exc)\
+            .pack(anchor='w', padx=(2, 0), pady=(4, 0))
+        ttk.Checkbutton(icf, text='dither(.dit 尾缀)', variable=self._i_dit,
+                        command=self._img_dit_on).pack(anchor='w', padx=(2, 0))
+        ttk.Checkbutton(icf, text='index(.idx 尾缀)', variable=self._i_idx,
+                        command=self._img_idx_on).pack(anchor='w', padx=(2, 0))
+        ibar = ttk.Frame(icf); ibar.pack(fill='x', pady=(8, 0))
+        ttk.Button(ibar, text='更新配置', command=self._img_iic_apply).pack(side='left')
+        ttk.Label(ibar, text='更新配置≈重命名该图片文件', foreground='#888').pack(side='left', padx=(8, 0))
+
+        # 右下: 图片详情(预览 + 解析字段)
+        df = ttk.LabelFrame(rv, text=' 图片详情 ', padding=(6, 4)); rv.add(df, weight=3)
+        dbody = ttk.Frame(df); dbody.pack(fill='both', expand=True)
         self.preview = ttk.Label(dbody, text='选择左侧图片查看预览', anchor='center',
                                  width=26, relief='groove')
         self.preview.pack(side='left', fill='y', padx=(0, 6))
@@ -1779,68 +2556,255 @@ class PackApp(object):
 
         self.nb.add(f, text='image  ')
 
-    def _load_dir(self, parent, path):
-        """懒加载: 只填一级目录 + 图片文件."""
-        import tkinter as tk
-        from PIL import Image, ImageTk
+    #--------------- 图形配置持久化(scui_pack_tools.json) ---------------
+    def _cfg_json(self):
+        return os.path.join(self.tools, 'scui_pack_tools.json')
+
+    def _img_cfg_load(self):
+        g = dict(_IMAGE_CFG_DEFAULT)
         try:
-            entries = sorted(os.listdir(path),
-                             key=lambda x: (not os.path.isdir(os.path.join(path, x)), x.lower()))
+            j = json.load(open(self._cfg_json(), encoding='utf-8')) if os.path.isfile(self._cfg_json()) else {}
+        except Exception:
+            j = {}
+        g.update(j.get('image_config', {}))
+        return g, j
+
+    def _img_cfg_save(self, g):
+        cfg = self._cfg_json()
+        try:
+            j = json.load(open(cfg, encoding='utf-8')) if os.path.isfile(cfg) else {}
+        except Exception:
+            j = {}
+        j['image_config'] = g
+        with open(cfg, 'w', encoding='utf-8', newline='') as fp:
+            fp.write(json.dumps(j, ensure_ascii=False, indent=4).replace('\n', '\r\n'))
+
+    def _img_cfg_save_cb(self):
+        g = {}
+        for key, typ, lab, opts in _IMG_CFG_DEFS:
+            v = self._img_cfg_vars[key].get()
+            g[key] = bool(v) if typ == 'bool' else int(v or _IMAGE_CFG_DEFAULT[key])
+        try:
+            self._img_cfg_save(g)
+            self._append_log('image', '[cfg] 图形配置已保存: %s\n' % self._rel_log(self._cfg_json()))
+        except Exception as e:
+            self._wlog('[cfg] 保存图形配置失败: %r' % e)
+
+    def _img_cfg_reset(self):
+        for key, typ, lab, opts in _IMG_CFG_DEFS:
+            v = _IMAGE_CFG_DEFAULT[key]
+            if typ == 'bool':
+                self._img_cfg_vars[key].set(bool(v))
+            else:
+                self._img_cfg_vars[key].set(str(v))
+
+    #--------------- 图片资源(Canvas 行列表) ---------------
+    def _img_wheel(self, e):
+        self.it_canv.yview_scroll(-1 * (e.delta // 120), 'units')
+        self._img_draw()
+
+    # 滚动条 command: 先滚动后重绘(虚拟化没有持久 item, 必须重绘才刷新)
+    def _img_scroll_cmd(self, *args):
+        self.it_canv.yview(*args)
+        self._img_draw()
+
+    def _img_reload(self):
+        self.it_canv.delete('all')
+        self._img_root = self.in_abs['image'] if os.path.isdir(self.in_abs['image']) else self.ui
+        self._img_tree = self._img_scan_nodes(self._img_root)
+        self._img_exp  = {self._img_root}  # 默认仅根展开, 子目录折叠
+        self._img_reflatten()
+        # 若选中图片已不存在(被重命名/删除), 清空配置
+        if self._i_sel and not os.path.exists(self._i_sel):
+            self._i_sel = None
+            self._img_clear_config()
+
+    def _img_scan_nodes(self, path):
+        """brief: 扫描目录成嵌套节点
+        @param path 目录绝对路径
+        @retval 节点列表[{name,path,kind,children}]
+        """
+        nodes = []
+        try:
+            items = sorted(os.listdir(path),
+                key=lambda x: (not os.path.isdir(os.path.join(path, x)), x.lower()))
         except OSError:
-            return
-        for e in entries:
+            return nodes
+        for e in items:
             full = os.path.join(path, e)
             if os.path.isdir(full):
-                node = self.tree.insert(parent, 'end', text=e, values=(u'[目录]',), open=False)
-                self.tree.insert(node, 'end', text='…', values=('',))
+                nodes.append({'name': e, 'path': full, 'kind': 'dir',
+                              'children': self._img_scan_nodes(full)})
             elif e.lower().endswith(_IMG_EXT):
-                try:
-                    im = Image.open(full); im.thumbnail((18, 18))
-                    ph = ImageTk.PhotoImage(im); self._imgs.append(ph)
-                except Exception:
-                    ph = None
-                size = self._fsize(full)
-                self.tree.insert(parent, 'end', text=e, image=ph, values=(size,),
-                                 tags=('img',),
-                                 iid='v%d' % self._vid_count)
-                self._vid_map[self._vid_count] = full
-                self._vid_count += 1
+                nodes.append({'name': e, 'path': full, 'kind': 'img', 'children': []})
+        return nodes
 
-    def _fsize(self, p):
-        try:
-            n = os.path.getsize(p)
-            if n >= 1024 * 1024:
-                return '%.2fM' % (n / 1024 / 1024)
-            return '%dK' % (n / 1024)
-        except OSError:
-            return ''
+    def _img_reflatten(self):
+        """依据展开状态生成显示序列(虚拟化 + 支持折叠)"""
+        disp = []
+        self._img_flatten(self._img_tree, 0, disp)
+        self._disp = disp
+        self.it_canv.configure(scrollregion=(0, 0, 0, len(disp) * self._i_rowH))
+        self.it_canv.yview_moveto(0)             # 内容刷新后顶吸附(避免越界留白)
+        self._img_draw()
 
-    def _on_tree_open(self, ev):
-        node = ev.widget.focus()
-        kids = self.tree.get_children(node)
-        if len(kids) == 1:
-            txt = self.tree.item(kids[0], 'text')
-            if txt == '…':
-                self.tree.delete(kids[0])
-                path = self._node_path(node)
-                self._load_dir(node, path)
+    def _img_flatten(self, nodes, depth, disp):
+        for nd in nodes:
+            opened = (nd['kind'] == 'dir' and nd['path'] in self._img_exp)
+            disp.append([depth, nd['name'], nd['path'], nd['kind'], opened])
+            if opened:
+                self._img_flatten(nd['children'], depth + 1, disp)
 
-    def _node_path(self, node):
-        parts = []
-        cur = node
-        while cur:
-            parts.insert(0, self.tree.item(cur, 'text'))
-            cur = self.tree.parent(cur)
-        return os.path.join(self._tree_root_path, *parts[1:])
+    def _img_toggle_dir(self, path):
+        if path in self._img_exp:
+            self._img_exp.discard(path)
+        else:
+            self._img_exp.add(path)
+        self._img_reflatten()
 
-    def _on_tree_sel(self, ev):
-        sel = self.tree.selection()
-        if not sel:
+    # 虚拟化绘制: 只画可见区间行, 大资源集不一次性建全部控件
+    def _img_draw(self):
+        c = self.it_canv
+        # 滚动条可见性 + 内容不足一屏顶对齐不可滚动
+        vh = c.winfo_height() or 200
+        self._img_needs_scroll = (len(self._disp) * self._i_rowH > vh)
+        if self._img_needs_scroll:
+            if not self._img_vsb.winfo_ismapped():
+                self._img_vsb.pack(side='right', fill='y')
+        else:
+            if self._img_vsb.winfo_ismapped():
+                self._img_vsb.pack_forget()
+            c.yview_moveto(0)
+        c.delete('all')
+        n = len(self._disp)
+        if n == 0:
             return
-        iid = sel[0]
-        if iid.startswith('v'):
-            path = self._vid_map[int(iid[1:])]
-            self._show_img(path)
+        v0, v1 = c.yview()
+        i0 = max(0, int(v0 * n) - 2)
+        i1 = min(n, int(v1 * n) + 2)
+        cw = max(c.winfo_width(), 120)
+        sel = self._i_sel
+        btn_x0 = cw - 42
+        for idx in range(i0, i1):
+            depth, name, path, kind, opened = self._disp[idx]
+            y = idx * self._i_rowH
+            x = depth * 14
+            exc = name.startswith('#')
+            if path == sel:
+                c.create_rectangle(0, y, cw, y + self._i_rowH, fill='#ffffcc', outline='')
+            if kind == 'dir':
+                c.create_text(x + 4, y + self._i_rowH // 2,
+                              text='▼' if opened else '▶', font=('Segoe UI Symbol', 8),
+                              fill='#555')
+            fg = '#999' if exc else ('#2266cc' if kind == 'img' else '#333')
+            c.create_text(x + 30, y + self._i_rowH // 2,
+                          text='📁' if kind == 'dir' else '🖼',
+                          font=('Segoe UI Emoji', 9))
+            c.create_text(x + 50, y + self._i_rowH // 2, text=name,
+                          font=('Consolas', 9, 'bold') if kind == 'dir' else ('Consolas', 9),
+                          fill=fg, anchor='w')
+            # 右侧小"启用/禁用"按钮
+            c.create_rectangle(btn_x0, y + 3, cw - 2, y + self._i_rowH - 3,
+                               outline='#cfcfcf', fill='#eeeeee')
+            c.create_text(btn_x0 + (cw - 2 - btn_x0) // 2, y + self._i_rowH // 2,
+                          text='启用' if exc else '禁用', font=('Microsoft YaHei UI', 8))
+
+    # Canvas 点击: 命中右侧按钮区则 启用/禁用; 目录则折叠; 图片则选中
+    def _img_canvas_click(self, e):
+        cy = self.it_canv.canvasy(e.y)     # 转画布逻辑坐标(滚动偏移)
+        idx = int(cy // self._i_rowH)
+        if not (0 <= idx < len(self._disp)):
+            return
+        depth, name, path, kind, opened = self._disp[idx]
+        cx = self.it_canv.canvasx(e.x)
+        in_btn = cx >= (self.it_canv.winfo_width() or 400) - 46
+        if in_btn:
+            self._img_toggle_exclude(path)
+        elif kind == 'dir':
+            self._img_toggle_dir(path)
+        elif kind == 'img':
+            self._img_pick(path)
+
+    # 目录/图片 # 前缀 启用/禁用(=重命名)
+    def _img_toggle_exclude(self, path):
+        from tkinter import messagebox
+        base = os.path.basename(path)
+        new = ('#' + base) if not base.startswith('#') else base[1:]
+        np_ = os.path.join(os.path.dirname(path), new)
+        if np_ != path:
+            if os.path.exists(np_):
+                messagebox.showwarning('启用/禁用', '目标已存在: %s' % new, parent=self.root); return
+            try:
+                os.rename(path, np_)
+                self._wlog('[img] %s -> %s' % (base, new))
+            except OSError as e:
+                messagebox.showwarning('启用/禁用', '重命名失败: %r' % e, parent=self.root); return
+        self._img_reload()
+        # 所选图片整体失效则清空配置
+        if self._i_sel and not os.path.exists(self._i_sel):
+            self._i_sel = None
+            self._img_clear_config()
+
+    # 点图: 高亮 + 载入图片配置 + 详情
+    def _img_pick(self, path):
+        self._i_sel = path
+        self._img_draw()
+        self._img_iic_load(path)
+        self._show_img(path)
+
+    #--------------- 图片配置(选中图片) ---------------
+    def _img_dit_on(self):
+        if self._i_dit.get():
+            self._i_idx.set(False)
+
+    def _img_idx_on(self):
+        if self._i_idx.get():
+            self._i_dit.set(False)
+
+    def _img_iic_load(self, path):
+        stem, ext, exc, idx, dit = _img_mkbar_split(os.path.basename(path))
+        self._i_sel_path = path
+        self._i_exc.set(exc)
+        self._i_idx.set(idx)
+        self._i_dit.set(dit)
+        self.i_sel_label.config(text='已选图片: %s' % os.path.basename(path))
+
+    def _img_iic_apply(self):
+        from tkinter import messagebox
+        if not (self._i_sel_path and os.path.isfile(self._i_sel_path)):
+            messagebox.showinfo('更新配置', '请先在左侧选择一张图片', parent=self.root); return
+        d = os.path.dirname(self._i_sel_path)
+        base = os.path.basename(self._i_sel_path)
+        stem, ext, exc, idx, dit = _img_mkbar_split(base)
+        newexc = self._i_exc.get()
+        newidx = self._i_idx.get()
+        newdit = self._i_dit.get()
+        if newidx and newdit:          # 互斥: index 优先
+            newdit = False
+            self._i_dit.set(False)
+        newname = _img_mkbar_join(stem, ext, newexc, newidx, newdit)
+        if newname == base:
+            messagebox.showinfo('更新配置', '配置无变化', parent=self.root); return
+        np_ = os.path.join(d, newname)
+        if os.path.exists(np_):
+            messagebox.showwarning('更新配置', '目标文件已存在: %s' % newname, parent=self.root); return
+        try:
+            os.rename(self._i_sel_path, np_)
+        except OSError as e:
+            messagebox.showwarning('更新配置', '重命名失败: %r' % e, parent=self.root); return
+        self._wlog('[img] %s -> %s' % (base, newname))
+        self._i_sel = np_
+        self._img_reload()
+        self._img_iic_load(np_)
+        self._show_img(np_)
+
+    def _img_clear_config(self):
+        self._i_sel_path = None
+        self.i_sel_label.config(text='未选择图片(选中左侧图片生效)')
+        self.preview.configure(image='', text='')
+        self.field_text.configure(state='normal')
+        self.field_text.delete('1.0', 'end')
+        self.field_text.configure(state='disabled')
 
     def _show_img(self, path):
         import tkinter as tk
@@ -2052,20 +3016,42 @@ class PackApp(object):
 
     def _poll(self):
         if self._logq is not None:
-            # 每帧限流, 避免海量日志一次性插入拖慢主线程
+            # 每帧限流 + 整批合并: 只做一次 insert + 一次 see,
+            # 避免海量日志逐条刷新(每条 see/重布局)拖垮主线程导致卡顿
+            chunks = []
             n = 0
-            while n < 500:
+            while n < 4000:
                 try:
                     txt = self._logq.get_nowait()
                 except queue.Empty:
                     break
                 n += 1
                 if txt == '__DONE__':
+                    self._flush_log(chunks)
+                    chunks = []
                     self._busy = False
                     self._status('完成')
                     continue
-                self._append_log(self._current_name, txt)
+                chunks.append(txt)
+            self._flush_log(chunks)
         self.root.after(120, self._poll)
+
+    def _flush_log(self, chunks):
+        # 批量写入全局日志缓冲, 并一次性刷新日志窗口(running in main thread)
+        if not chunks:
+            return
+        joined = ''.join(chunks)
+        self._log_text += joined
+        t = getattr(self._log_win, '_text', None) if self._log_win is not None else None
+        if t is None:
+            return
+        try:
+            t.configure(state='normal')
+            t.insert('end', joined)
+            t.see('end')
+            t.configure(state='disabled')
+        except Exception:
+            pass
 
     def _status(self, s):
         self.root.title('scui资源工具 - 正在开发中... - %s' % s)
@@ -2114,6 +3100,21 @@ class _NoStdin(object):
 #============================================================
 # 入口
 #============================================================
+def _single_instance():
+    """brief: GUI 单实例锁(命名互斥体), 已存在实例返回 False
+    @retval True=可启动, False=已有实例
+    """
+    try:
+        import ctypes
+        from ctypes import wintypes
+        k32 = ctypes.WinDLL('kernel32', use_last_error=True)
+        k32.CreateMutexW.restype = wintypes.HANDLE
+        k32.CreateMutexW.argtypes = [wintypes.LPVOID, wintypes.BOOL, wintypes.LPCWSTR]
+        k32.CreateMutexW(None, False, 'Global\\scui_pack_tools_singleinstance')
+        return ctypes.get_last_error() != 183      # ERROR_ALREADY_EXISTS
+    except Exception:
+        return True                                # 非 Windows/异常则放行
+
 def main():
     # 无控制台(exe)下 stdout/stderr 为 None, 替换为 devnull 避免意外崩溃
     if sys.stdout is None:
@@ -2154,6 +3155,15 @@ def main():
         src = src or os.path.join(ui_root, sdef)
         dst = dst or os.path.join(ui_root, ddef)
         return _do_task(typ, ui_root, src, dst, proj)
+    # GUI 单实例: 已有实例运行则提示并退出
+    if not _single_instance():
+        try:
+            import ctypes
+            ctypes.windll.user32.MessageBoxW(
+                None, 'scui_pack_tools 已在运行，仅允许一个实例。', '提示', 0x40)
+        except Exception:
+            pass
+        return 0
     return _launch_gui(ui_root)
 
 if __name__ == '__main__':

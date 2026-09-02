@@ -5,6 +5,41 @@ import openpyxl
 # -- coding: utf-8 --**
 
 
+# ui(scui_ui_res) 基准: GUI 注入, 日志路径相对化显示
+SCUI_UI_ROOT = None
+# tools 基准: GUI 注入(读句柄偏移配置)
+SCUI_TOOLS = None
+
+
+# 句柄偏移: 前端"设置句柄"写入的 json 覆盖, 无则用配置默认
+def _handle_offset(tag, name, value):
+    try:
+        cfg = os.path.join(SCUI_TOOLS or os.path.dirname(__file__), 'scui_pack_handle.json')
+        if os.path.isfile(cfg):
+            j = json.load(open(cfg, encoding='utf-8'))
+            item = j.get(tag, {})
+            if item.get('name'):
+                name = item['name']
+            if item.get('value'):
+                value = item['value']
+    except Exception:
+        pass
+    return name, value
+
+
+# 日志路径显示: 相对 ui(scui_ui_res) 打印, 命令行(GUI未注入)保持绝对
+def _rel_ui(p):
+    if not SCUI_UI_ROOT:
+        return p
+    try:
+        r = os.path.relpath(p, SCUI_UI_ROOT).replace('\\', '/')
+        if r.startswith('..'):
+            return p
+        return 'scui_ui_res => %s' % r
+    except Exception:
+        return p
+
+
 # for row in xlsx_sheet.rows: # 获取每一行的数据
 #     for data in row:        # 获取每一行中单元格的数据
 #         print(data.value)  # 打印单元格的值
@@ -197,12 +232,15 @@ def encode_scui_lang_parser():
     if not os.path.exists(dst_path):
         print('dst path is not exist')
         return
-    print('src path:', src_path)
-    print('dst path:', dst_path)
+    print('src path:', _rel_ui(src_path))
+    print('dst path:', _rel_ui(dst_path))
     # json转Python字符串并转标准字典
     json_file = open(os.path.join(src_path, 'scui_lang_parser.json'), 'r', encoding='utf-8')
     json_dict = json.loads(json_file.read())
     json_file.close()
+    # 句柄偏移: 前端"设置句柄"json 覆盖配置默认
+    json_dict['offset_name'], json_dict['offset_value'] = \
+        _handle_offset('lang', json_dict['offset_name'], json_dict['offset_value'])
     # 仅支持批量化字符串表管理
     if json_dict['type'] != 'scui lang parser':
         return

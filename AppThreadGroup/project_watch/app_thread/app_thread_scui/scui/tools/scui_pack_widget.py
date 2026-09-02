@@ -19,12 +19,49 @@ SCUI_WIDGET_PARSER_PATH_SLOTS = {}
 SCUI_WIDGET_PARSER_CLASS_MAKER = {}
 # tools 目录基准: 打包(exe)环境下由装入方注入真实路径; 源码运行默认取 __file__
 SCUI_WIDGET_TOOLS = None
+# ui(scui_ui_res) 基准: GUI 注入, 日志路径相对化显示
+SCUI_UI_ROOT = None
+# tools 基准: GUI 注入(读句柄偏移配置)
+SCUI_TOOLS = None
+
+
+# 句柄偏移: 前端"设置句柄"写入的 json 覆盖, 无则用头部默认
+def _handle_offset(tag, name, value):
+    try:
+        cfg = os.path.join(SCUI_TOOLS or SCUI_WIDGET_TOOLS or os.path.dirname(__file__),
+                           'scui_pack_handle.json')
+        if os.path.isfile(cfg):
+            j = json.load(open(cfg, encoding='utf-8'))
+            item = j.get(tag, {})
+            if item.get('name'):
+                name = item['name']
+            if item.get('value'):
+                value = item['value']
+    except Exception:
+        pass
+    return name, value
+
+
+# 日志路径显示: 相对 ui(scui_ui_res) 打印, 命令行(GUI未注入)保持绝对
+def _rel_ui(p):
+    if not SCUI_UI_ROOT:
+        return p
+    try:
+        r = os.path.relpath(p, SCUI_UI_ROOT).replace('\\', '/')
+        if r.startswith('..'):
+            return p
+        return 'scui_ui_res => %s' % r
+    except Exception:
+        return p
 
 
 # 启动准备: 生成动态参数表(内存, 不写 tmp)
 def scui_widget_parser_ready():
     global SCUI_WIDGET_PARSER_PREFIXES, SCUI_WIDGET_PARSER_FIRST_FIELDS, SCUI_WIDGET_PARSER_PATH_SLOTS, SCUI_WIDGET_PARSER_CLASS_MAKER
+    global SCUI_WIDGET_PARSER_OFFSET_NAME, SCUI_WIDGET_PARSER_OFFSET_VALUE
     try:
+        SCUI_WIDGET_PARSER_OFFSET_NAME, SCUI_WIDGET_PARSER_OFFSET_VALUE = \
+            _handle_offset('widget', SCUI_WIDGET_PARSER_OFFSET_NAME, SCUI_WIDGET_PARSER_OFFSET_VALUE)
         base = SCUI_WIDGET_TOOLS or os.path.dirname(__file__)
         result = scui_widget_analyze_result(base)
         SCUI_WIDGET_PARSER_PREFIXES = result['prefixes']
@@ -891,8 +928,8 @@ def scui_widget_parser():
         scui_widget_parser_json_cleanup(src_path, os.path.basename(def_path), defaults_map)
         scui_widget_parser_json_realign(src_path, os.path.basename(def_path))
 
-    print('src path:', src_path)
-    print('dst path:', dst_path)
+    print('src path:', _rel_ui(src_path))
+    print('dst path:', _rel_ui(dst_path))
     # 遍历整个文件夹,获取指定扩展名的文件
     file_path_list = []
     scui_widget_parser_collect(file_path_list, src_path, os.path.basename(def_path))
