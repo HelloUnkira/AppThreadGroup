@@ -1,4 +1,4 @@
-# 资源打包统一前端(GUI + 命令行)
+﻿# 资源打包统一前端(GUI + 命令行)
 # 位于 scui/tools/scui_pack/; 引用相对父路径 scui/tools 取用其它打包工具
 # 支持: image / font / lang / cwf 四类
 # 无参       -> 启动图形界面(顶部固定信息 + 四个子界面)
@@ -17,7 +17,7 @@ import threading
 #============================================================
 # 路径定位(基于 ui 路径推导, 兼容 dev 与 PyInstaller 单文件 exe)
 #   ui 目录(scui_ui_res)的父级为 app_thread_scui
-#   -> scui/tools(打包脚本)  scui_plugs(cwf 脚本)
+#   -> scui/tools(打包脚本)  scui/plugs(cwf 脚本)
 #   注意: 不能用 __file__ 推导(exe 运行时指向临时解包目录)
 #============================================================
 def _dirs(ui):
@@ -25,7 +25,7 @@ def _dirs(ui):
     app  = os.path.dirname(ui)                      # app_thread_scui
     scui = os.path.join(app, 'scui')
     tools= os.path.join(scui, 'tools')
-    plugs= os.path.join(app, 'scui_plugs')
+    plugs= os.path.join(scui, 'plugs')
     return ui, app, scui, tools, plugs
 
 def _ui_root(ui):
@@ -87,19 +87,6 @@ def _run_module(task, argv, ui):
         shutil.rmtree(os.path.join(tools, '__pycache__'), ignore_errors=True)
         shutil.rmtree(os.path.join(plugs, '__pycache__'), ignore_errors=True)
 
-def _collect_logs(dst, name):
-    base = os.path.splitext(_TASK[name]['as_main'][0])[0]  # 如 scui_image_parser
-    for tag in ('.out', '.err'):
-        p = os.path.join(dst, base + tag)
-        if not os.path.exists(p):
-            continue
-        try:
-            with open(p, 'r', encoding='utf-8', errors='replace') as f:
-                print('==== %s ====' % os.path.basename(p))
-                print(f.read().rstrip())
-        except OSError:
-            pass
-
 def _image_src_unpack(src, tag):
     if os.path.isdir(src):
         return src, None
@@ -131,7 +118,7 @@ def _do_task(name, ui, src, dst, proj):
         src, tmp = _image_src_unpack(src, 'image')
         if src is None:
             return 1
-        argv = [src, dst, proj or 'scui']
+        argv = [src, dst, proj or 'prj']
     elif name == 'widget':
         argv = [src, dst, os.path.join(dst, 'scui_ui_maker.json')]
     elif name == 'cwf':
@@ -147,7 +134,6 @@ def _do_task(name, ui, src, dst, proj):
 
     print('[pack] argv : %s' % argv)
     ret = _run_module(task, argv, ui)
-    _collect_logs(dst, name)
     if tmp:
         shutil.rmtree(tmp, ignore_errors=True)
     print()
@@ -210,7 +196,6 @@ def _do_cwf_task(ui, src, dst):
         # step2: image parser (image/ -> .)
         print('[%s] step1 image parser...' % wf)
         argv_old = sys.argv
-        so_old, se_old = sys.stdout, sys.stderr           # image parser 会重定向, 需保存恢复
         sys.argv = ['scui_image_parser.py', img_dir, wf_dir, 'cwf']
         try:
             mod = importlib.import_module(img_task['module'])
@@ -220,8 +205,6 @@ def _do_cwf_task(ui, src, dst):
             failed.append(wf)
         finally:
             sys.argv = argv_old
-            sys.stdout, sys.stderr = so_old, se_old       # 恢复回 _TabLog
-        _collect_logs(wf_dir, 'image')
 
         # step3: cwf json parser (. -> bin/)
         print('[%s] step2 cwf json parser...' % wf)
@@ -234,14 +217,12 @@ def _do_cwf_task(ui, src, dst):
             failed.append(wf)
         finally:
             sys.argv = argv_old
-        _collect_logs(dst, 'cwf')
 
         # step4: 清理临时文件
         shutil.rmtree(img_dir, ignore_errors=True)
         shutil.rmtree(os.path.join(wf_dir, 'image_array'), ignore_errors=True)
         for f in ('scui_image_parser.h', 'scui_image_parser.c',
-                  'scui_image_parser.bin', 'scui_image_parser.out',
-                  'scui_image_parser.err'):
+                  'scui_image_parser.bin'):
             p = os.path.join(wf_dir, f)
             if os.path.exists(p):
                 os.remove(p)
@@ -321,11 +302,11 @@ class PackApp(object):
         self.ui  = ui
         self.ui, self.app, self.scui, self.tools, self.plugs = _dirs(ui)
         self._imgs = []          # 保持 PhotoImage 引用
-        self.logs = {}           # name -> ScrolledText
         self._pv  = {}           # (name,side) -> StringVar
         self._current_name = 'image'
-        self.current_log = None
         self._logq = None
+        self._log_win = None    # 全局共享日志窗口(Toplevel)
+        self._log_text = ''     # 日志内存缓冲(所有子界面共用)
 
         self.in_abs = {}; self.out_abs = {}
         for k, (si, so) in _DEFAULT.items():
@@ -448,7 +429,6 @@ class PackApp(object):
         self._build_lang_tab()           # lang: 预览为主
         self._build_cwf_tab()            # cwf: 参考 widget
         self.nb.bind('<<NotebookTabChanged>>', self._on_tab)
-        self.current_log = self.logs.get('image')
 
     #--------------- widget 子界面(左: src文件 | 中: analyze字段册 | 右: 编辑副本+log) ---------------
     def _build_widget_tab(self):
@@ -472,9 +452,8 @@ class PackApp(object):
         self.widget_status = ttk.Label(top, text='未选择文件', foreground='#777')
         self.widget_status.pack(side='left', padx=(12, 0))
 
-        # 主体: 垂直(上: 左中右三栏 | 下: LOG 整条, 可上下拖)
-        vp = ttk.Panedwindow(f, orient='vertical'); vp.pack(fill='both', expand=True, pady=(6, 0))
-        hpan = ttk.Panedwindow(vp, orient='horizontal'); vp.add(hpan, weight=6)
+        # 主体: 左中右三栏(占满, 不再内嵌 LOG)
+        hpan = ttk.Panedwindow(f, orient='horizontal'); hpan.pack(fill='both', expand=True, pady=(6, 0))
 
         # 左: analyze 可配置字段册(类型窗格: window/custom/scroll...)
         lf = ttk.LabelFrame(hpan, text=' analyze 可配置字段 ', padding=(4, 4)); hpan.add(lf, weight=3)
@@ -519,10 +498,6 @@ class PackApp(object):
         # 文本预览(c): 只读
         self.wctext = scrolledtext.ScrolledText(rf, wrap='char', font=('Consolas', 9), state='disabled')
         self._wid_switch(True)
-
-        # 下方 LOG 整条
-        ln = ttk.LabelFrame(vp, text=' LOG 输出 ', padding=(6, 4)); vp.add(ln, weight=4)
-        self.logs['widget'] = self._make_log(ln)
 
         self.nb.add(f, text='widget  ')
         self._wid_analyze()
@@ -927,9 +902,8 @@ class PackApp(object):
         top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
         ttk.Button(top, text='执行 lang 打包', command=lambda: self._run('lang')).pack(side='right')
 
-        # 主体: 上(三栏) | 下(LOG)
-        vp = ttk.Panedwindow(f, orient='vertical'); vp.pack(fill='both', expand=True, pady=(6, 0))
-        hp = ttk.Panedwindow(vp, orient='horizontal'); vp.add(hp, weight=6)
+        # 主体: 三栏(占满, 不再内嵌 LOG)
+        hp = ttk.Panedwindow(f, orient='horizontal'); hp.pack(fill='both', expand=True, pady=(6, 0))
 
         # 左: 语言列表
         lf = ttk.LabelFrame(hp, text=' language ', padding=(4, 4)); hp.add(lf, weight=1)
@@ -952,10 +926,6 @@ class PackApp(object):
         rf = ttk.LabelFrame(hp, text=' 行详情 ', padding=(4, 4)); hp.add(rf, weight=3)
         self.rtext = scrolledtext.ScrolledText(rf, wrap='word', font=('Consolas', 9), state='disabled')
         self.rtext.pack(fill='both', expand=True)
-
-        # LOG
-        ln = ttk.LabelFrame(vp, text=' LOG 输出 ', padding=(6, 4)); vp.add(ln, weight=2)
-        self.logs['lang'] = self._make_log(ln)
 
         self.nb.add(f, text='lang  ')
         self._lang_load()
@@ -1039,9 +1009,8 @@ class PackApp(object):
         self.cwf_status = ttk.Label(top, text='未选择', foreground='#777')
         self.cwf_status.pack(side='left', padx=(12, 0))
 
-        # 主体: 上(三栏) | 下(LOG)
-        vp = ttk.Panedwindow(f, orient='vertical'); vp.pack(fill='both', expand=True, pady=(6, 0))
-        hp = ttk.Panedwindow(vp, orient='horizontal'); vp.add(hp, weight=6)
+        # 主体: 三栏(占满, 不再内嵌 LOG)
+        hp = ttk.Panedwindow(f, orient='horizontal'); hp.pack(fill='both', expand=True, pady=(6, 0))
 
         # 左: 协议类型 + 注释
         lf = ttk.LabelFrame(hp, text=' cwf 协议类型 ', padding=(4, 4)); hp.add(lf, weight=3)
@@ -1079,10 +1048,6 @@ class PackApp(object):
         self.ccanv.pack(side='left', fill='both', expand=True); csb.pack(side='right', fill='y')
         self.ccanv.bind('<Enter>', lambda e: self.ccanv.bind_all('<MouseWheel>', self._cwf_wheel))
         self.ccanv.bind('<Leave>', lambda e: self.ccanv.unbind_all('<MouseWheel>'))
-
-        # LOG
-        ln = ttk.LabelFrame(vp, text=' LOG 输出 ', padding=(6, 4)); vp.add(ln, weight=2)
-        self.logs['cwf'] = self._make_log(ln)
 
         self.nb.add(f, text='cwf  ')
         self._cwf_load_proto()
@@ -1332,38 +1297,6 @@ class PackApp(object):
             self.cwf_status.config(text='保存失败: %r' % e)
             self._append_log('cwf', '[save] 失败: %r\n' % e)
 
-    #--------------- 简单打包子界面(widget/lang 共用: 按钮 + 路径 + log) ---------------
-    def _build_pack_tab(self, name):
-        import tkinter as tk
-        from tkinter import ttk
-        f = ttk.Frame(self.nb, padding=8)
-        self.tabs[name] = f
-
-        # 顶部: 打包按钮 + 输入/输出相对路径
-        bar = ttk.Frame(f); bar.pack(fill='x', pady=(2, 4))
-        ttk.Button(bar, text='执行 %s 打包' % name, command=lambda: self._run(name)).pack(side='right')
-        self._pv[(name, 'in')]  = tk.StringVar(value='输入: %s' % self._rel(self.in_abs[name]))
-        self._pv[(name, 'out')] = tk.StringVar(value='输出: %s' % self._rel(self.out_abs[name]))
-        ttk.Label(f, textvariable=self._pv[(name, 'in')],  foreground='#888').pack(anchor='w', padx=(2, 0))
-        ttk.Label(f, textvariable=self._pv[(name, 'out')], foreground='#888').pack(anchor='w', padx=(2, 0))
-
-        # LOG
-        ln = ttk.LabelFrame(f, text=' LOG 输出 ', padding=(6, 4))
-        ln.pack(fill='both', expand=True, pady=(6, 0))
-        self.logs[name] = self._make_log(ln)
-
-        self.nb.add(f, text=name + '  ')
-
-    def _placeholder_tab(self, name):
-        from tkinter import ttk
-        f = ttk.Frame(self.nb, padding=12)
-        f.pack(fill='both', expand=True)
-        ttk.Label(f, text='子界面[%s] 建设中…' % name).pack(anchor='w', pady=(4, 0))
-        ln = ttk.LabelFrame(f, text=' LOG 输出 ', padding=(6, 4))
-        ln.pack(fill='both', expand=True, pady=(12, 0))
-        self.logs[name] = self._make_log(ln)
-        self.nb.add(f, text=name + '  ')
-
     def _build_font_tab(self):
         import tkinter as tk
         from tkinter import ttk
@@ -1382,10 +1315,9 @@ class PackApp(object):
         ttk.Label(f, text='font.bin 来源于 lv_font_conv 工具，见 font_src/lv_font_conv txt & py',
                   foreground='#888').pack(anchor='w', padx=(2, 0))
 
-        # 主体: 垂直可调(上部 树/编辑 | 下部 LOG, 保证 LOG 空间)
-        vp = ttk.Panedwindow(f, orient='vertical'); vp.pack(fill='both', expand=True, pady=(6, 0))
-        mid = ttk.Panedwindow(vp, orient='horizontal'); vp.add(mid, weight=6)
-        lf = ttk.LabelFrame(mid, text=' 字库(json) ', padding=(4, 4)); mid.add(lf, weight=1)
+        # 主体: 水平可调(树 | 编辑, 占满)
+        hp = ttk.Panedwindow(f, orient='horizontal'); hp.pack(fill='both', expand=True, pady=(6, 0))
+        lf = ttk.LabelFrame(hp, text=' 字库(json) ', padding=(4, 4)); hp.add(lf, weight=1)
         self.ftree = ttk.Treeview(lf, columns=('size',), show='tree headings', selectmode='browse')
         self.ftree.heading('#0', text='字库条目'); self.ftree.heading('size', text='字号')
         self.ftree.column('size', width=60, anchor='e', stretch=False)
@@ -1395,7 +1327,7 @@ class PackApp(object):
         self.ftree.bind('<<TreeviewSelect>>', self._on_font_sel)
 
         # 右: 六个操作按钮 与 编辑表单 水平并排
-        rf = ttk.Frame(mid); mid.add(rf, weight=2)
+        rf = ttk.Frame(hp); hp.add(rf, weight=2)
         self.font_json = None
         self.font_sel = None       # (lang_idx, item_idx)
         ops = ttk.LabelFrame(rf, text='语言 / 字库'); ops.pack(side='left', fill='y', padx=(0, 8))
@@ -1405,10 +1337,6 @@ class PackApp(object):
             ttk.Button(ops, text=t, command=c).pack(fill='x', pady=2)
         ef = ttk.LabelFrame(rf, text=' 编辑(json 特性) '); ef.pack(side='left', fill='both', expand=True)
         self._build_font_editor(ef)
-
-        # 下部 LOG
-        ln = ttk.LabelFrame(vp, text=' LOG 输出 ', padding=(6, 4)); vp.add(ln, weight=4)
-        self.logs['font'] = self._make_log(ln)
 
         self.nb.add(f, text='font  ')
         self._font_load(False)
@@ -1801,23 +1729,6 @@ class PackApp(object):
         t.insert('1.0', s)
         t.configure(state='disabled')
 
-    def _placeholder_tab(self, name):
-        from tkinter import ttk
-        f = ttk.Frame(self.nb, padding=12)
-        f.pack(fill='both', expand=True)
-        ttk.Label(f, text='子界面[%s] 建设中…' % name).pack(anchor='w', pady=(4, 0))
-        ln = ttk.LabelFrame(f, text=' LOG 输出 ', padding=(6, 4))
-        ln.pack(fill='both', expand=True, pady=(12, 0))
-        self.logs[name] = self._make_log(ln)
-        self.nb.add(f, text=name + '  ')
-
-    def _make_log(self, parent):
-        from tkinter.scrolledtext import ScrolledText
-        t = ScrolledText(parent, state='disabled', wrap='word',
-                         font=('Consolas', 9), height=8)
-        t.pack(fill='both', expand=True)
-        return t
-
     #--------------- image 子界面 ---------------
     def _build_image_tab(self):
         import tkinter as tk
@@ -1829,17 +1740,13 @@ class PackApp(object):
         top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
         pr = ttk.Frame(top); pr.pack(fill='x')
         ttk.Label(pr, text='image 项目名称:').pack(side='left')
-        self.proj_var = tk.StringVar(value='scui')
+        self.proj_var = tk.StringVar(value='prj')
         ttk.Entry(pr, textvariable=self.proj_var, width=16).pack(side='left', padx=(6, 10))
         ttk.Button(pr, text='执行 image 打包', command=lambda: self._run('image')).pack(side='right')
 
-        # 主体: 垂直 Panedwindow(上: 树|详情, 下: log) -> 可上下拖拽
-        vpane = ttk.Panedwindow(f, orient='vertical')
-        vpane.pack(fill='both', expand=True, pady=(4, 0))
-
-        # 上部: 水平 Panedwindow(树 | 详情[图|文 水平]) -> 可左右拖拽
-        mid = ttk.Panedwindow(vpane, orient='horizontal')
-        vpane.add(mid, weight=1)
+        # 主体: 水平 Panedwindow(树 | 详情[图|文 水平]) -> 可左右拖拽
+        mid = ttk.Panedwindow(f, orient='horizontal')
+        mid.pack(fill='both', expand=True, pady=(4, 0))
 
         lf = ttk.LabelFrame(mid, text=' 图片资源 ', padding=(4, 4))
         mid.add(lf, weight=3)
@@ -1874,11 +1781,6 @@ class PackApp(object):
         self.preview.pack(side='left', fill='y', padx=(0, 6))
         self.field_text = tk.Text(dbody, font=('Consolas', 9), state='disabled', wrap='none')
         self.field_text.pack(side='left', fill='both', expand=True)
-
-        # 下部: LOG(默认与上部各占一半, 可上下拖动)
-        ln = ttk.LabelFrame(vpane, text=' LOG 输出 ', padding=(6, 4))
-        vpane.add(ln, weight=1)
-        self.logs['image'] = self._make_log(ln)
 
         self.nb.add(f, text='image  ')
 
@@ -2075,13 +1977,19 @@ class PackApp(object):
         src = self.in_abs[name]
         dst = self.out_abs[name]
         proj = getattr(self, 'proj_var', None)
-        proj = proj.get() if proj else 'scui'
-        # 打包前清空本 log, 本次运行的全部 print(含错误)重新写入
-        log = self.logs.get(name)
-        if log is not None:
-            log.configure(state='normal')
-            log.delete('1.0', 'end')
-            log.configure(state='disabled')
+        proj = proj.get() if proj else 'prj'
+        # 打包前清空全局日志缓冲, 并弹出共享日志窗口
+        self._log_text = ''
+        if self._log_win is not None:
+            t = getattr(self._log_win, '_text', None)
+            if t is not None:
+                try:
+                    t.configure(state='normal')
+                    t.delete('1.0', 'end')
+                    t.configure(state='disabled')
+                except Exception:
+                    pass
+        self._log_show()
         self._append_log(name, '==== start: %s ====\n' % name)
 
         self._logq = queue.Queue()
@@ -2102,17 +2010,50 @@ class PackApp(object):
         threading.Thread(target=worker, daemon=True).start()
 
     def _append_log(self, name, txt):
-        log = self.logs.get(name)
-        if log is None:
-            return
-        log.configure(state='normal')
-        log.insert('end', txt)
-        log.see('end')
-        log.configure(state='disabled')
+        # 所有子界面日志共用一份全局内存缓冲 + 全局日志窗口
+        del name
+        self._log_text += txt
+        if self._log_win is not None:
+            t = getattr(self._log_win, '_text', None)
+            if t is not None:
+                try:
+                    t.configure(state='normal')
+                    t.insert('end', txt)
+                    t.see('end')
+                    t.configure(state='disabled')
+                except Exception:
+                    pass
+
+    def _log_show(self):
+        # 打开/聚焦全局日志窗口(与菜单「日志」共用一个窗口)
+        import tkinter as tk
+        if self._log_win is not None:
+            try:
+                self._log_win.deiconify()
+                self._log_win.lift()
+                return
+            except Exception:
+                self._log_win = None
+        self._log_win = tk.Toplevel(self.root)
+        self._log_win.title('运行日志(全局共享)')
+        self._log_win.geometry('820x560')
+        from tkinter import scrolledtext
+        t = scrolledtext.ScrolledText(self._log_win, wrap='word', font=('Consolas', 9), state='disabled')
+        t.pack(fill='both', expand=True, padx=8, pady=8)
+        self._log_win._text = t
+        static = self._log_text if self._log_text.strip() else '(暂无日志, 请先在任意子界面执行打包)'
+        t.configure(state='normal')
+        t.insert('1.0', static)
+        t.see('end')
+        t.configure(state='disabled')
+        self._log_win.protocol('WM_DELETE_WINDOW', self._log_hide)
+
+    def _log_hide(self):
+        if self._log_win is not None:
+            self._log_win.withdraw()
 
     def _poll(self):
         if self._logq is not None:
-            log = self.logs.get(self._current_name) or self.logs.get('image')
             # 每帧限流, 避免海量日志一次性插入拖慢主线程
             n = 0
             while n < 500:
@@ -2125,10 +2066,7 @@ class PackApp(object):
                     self._busy = False
                     self._status('完成')
                     continue
-                log.configure(state='normal')
-                log.insert('end', txt)
-                log.see('end')
-                log.configure(state='disabled')
+                self._append_log(self._current_name, txt)
         self.root.after(120, self._poll)
 
     def _status(self, s):
@@ -2148,33 +2086,9 @@ class PackApp(object):
             '类型：widget/image/font/lang/cwf\n'
             '来源：scui/tools & scui/plugs')
 
-    # 工具内打开 out/err 日志浏览(左 out 右 err, 可滚动)
+    # 工具「日志」菜单 -> 打开/聚焦全局共享日志窗口
     def _open_logs(self):
-        import tkinter as tk
-        from tkinter import ttk, scrolledtext
-        name = self._current_name
-        base = os.path.splitext(_TASK[name]['as_main'][0])[0]
-        dst  = self.out_abs[name]
-        top = tk.Toplevel(self.root)
-        top.title('日志浏览 - %s' % name)
-        top.geometry('880x540')
-        pan = ttk.Panedwindow(top, orient='horizontal')
-        pan.pack(fill='both', expand=True, padx=8, pady=8)
-        for side, ext in (('out', '.out'), ('err', '.err')):
-            fr = ttk.LabelFrame(pan, text='  %s  ' % ext, padding=(4, 4))
-            pan.add(fr, weight=1)
-            t = scrolledtext.ScrolledText(fr, wrap='none', font=('Consolas', 9))
-            t.pack(fill='both', expand=True)
-            path = os.path.join(dst, base + ext)
-            if os.path.exists(path):
-                try:
-                    with open(path, 'r', encoding='utf-8', errors='replace') as fh:
-                        t.insert('1.0', fh.read())
-                except Exception as e:
-                    t.insert('1.0', '读取失败: %r' % e)
-            else:
-                t.insert('1.0', '(未找到: %s)' % os.path.basename(path))
-            t.configure(state='disabled')
+        self._log_show()
 
 class _TabLog(object):
     """把 print 写入的文本重定向进指定队列(保留换行), 由 GUI 日志泵写日志区."""

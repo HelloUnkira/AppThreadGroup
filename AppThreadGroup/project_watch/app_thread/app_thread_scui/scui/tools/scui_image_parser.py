@@ -561,9 +561,6 @@ def scui_image_parser():
     if not os.path.exists(dst_path):
         print('dst path is not exist')
         return
-    # print重定向
-    sys.stdout = ScuiRedirectPrint(sys.stdout, file=os.path.join(dst_path, 'scui_image_parser.out'))   # redirect print
-    sys.stderr = ScuiRedirectPrint(sys.stderr, file=os.path.join(dst_path, 'scui_image_parser.err'))  # redirect print
     print('path:', src_path)
     print('path:', dst_path)
     # 遍历整个文件夹,获取指定扩展名的文件

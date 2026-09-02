@@ -646,9 +646,6 @@ def scui_widget_parser():
         scui_widget_parser_json_cleanup(src_path, os.path.basename(def_path), defaults_map)
         scui_widget_parser_json_realign(src_path, os.path.basename(def_path))
 
-    # print重定向
-    sys.stdout = ScuiRedirectPrint(sys.stdout, file=os.path.join(dst_path, 'scui_widget_parser.out'))   # redirect print
-    sys.stderr = ScuiRedirectPrint(sys.stderr, file=os.path.join(dst_path, 'scui_widget_parser.err'))   # redirect print
     print('src path:', src_path)
     print('dst path:', dst_path)
     # 遍历整个文件夹,获取指定扩展名的文件

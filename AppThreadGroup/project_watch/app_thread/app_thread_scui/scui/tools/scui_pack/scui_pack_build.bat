@@ -8,11 +8,11 @@ rem 前置依赖
 py -3 -m pip install --upgrade pip
 py -3 -m pip install pyinstaller py7zr
 
-rem 打单文件 exe; 引用父目录 tools 与 scui_plugs 的打包脚本作为模块打进
+rem 打单文件 exe; 引用父目录 tools 与 scui/plugs 的打包脚本作为模块打进
 py -3 -m PyInstaller --noconsole --onefile --name scui_pack_tools ^
     --paths "%~dp0." ^
     --paths "%~dp0.." ^
-    --paths "%~dp0..\..\scui_plugs" ^
+    --paths "%~dp0..\..\plugs" ^
     --hidden-import scui_image_parser ^
     --hidden-import scui_font_package ^
     --hidden-import scui_lang_parser ^

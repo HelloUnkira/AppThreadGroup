@@ -183,9 +183,6 @@ def scui_font_package():
     if not os.path.exists(dst_path):
         print('dst path is not exist')
         return
-    # print重定向
-    sys.stdout = ScuiRedirectPrint(sys.stdout, file=os.path.join(dst_path, 'scui_font_package.out'))   # redirect print
-    sys.stderr = ScuiRedirectPrint(sys.stderr, file=os.path.join(dst_path, 'scui_font_package.err'))   # redirect print
     print('src path:', src_path)
     print('dst path:', dst_path)
     # json转Python字符串并转标准字典
