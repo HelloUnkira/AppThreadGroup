@@ -46,7 +46,7 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
         scui_widget_draw_image(event->object, &image_clip, image_icon, NULL, SCUI_COLOR_UNUSED);
         
         image_clip = scui_widget_area(event->object);
-        image_icon = scui_image_prj_repeat_arrow_06_backbmp;
+        image_icon = scui_image_prj_repeat_arrow_06_back;
         image_clip.x = image_clip.w - scui_image_w(image_icon) - 10;
         image_clip.w = scui_image_w(image_icon);
         image_clip.y += (image_clip.h - scui_image_h(image_icon)) / 2;
@@ -91,10 +91,10 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
         scui_area_t   btn_clip = scui_widget_area(event->object);
         scui_color_t  btn_color = {.color.full = 0xFF282828,};
         scui_handle_t btn_image[4] = {
-            scui_image_prj_repeat_card_04_r36_1jpg,
-            scui_image_prj_repeat_card_05_r36_2jpg,
-            scui_image_prj_repeat_card_06_r36_3jpg,
-            scui_image_prj_repeat_card_07_r36_4jpg,
+            scui_image_prj_repeat_card_04_r36_1,
+            scui_image_prj_repeat_card_05_r36_2,
+            scui_image_prj_repeat_card_06_r36_3,
+            scui_image_prj_repeat_card_07_r36_4,
         };
         
         scui_point_t img_scale = {0};

@@ -91,9 +91,9 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
     }
     case scui_event_draw_graph: {
         
-        scui_handle_t image_bg   = scui_image_prj_act_ring_big_max_01_bjjpg;
-        scui_handle_t image_edge = scui_image_prj_act_ring_big_max_02_bj_00bmp;
-        scui_handle_t image_ring = scui_image_prj_act_ring_big_max_03_bj_01bmp;
+        scui_handle_t image_bg   = scui_image_prj_act_ring_big_max_01_bj;
+        scui_handle_t image_edge = scui_image_prj_act_ring_big_max_02_bj_00;
+        scui_handle_t image_ring = scui_image_prj_act_ring_big_max_03_bj_01;
         
         scui_widget_draw_image(event->object, NULL, image_bg, NULL, SCUI_COLOR_UNUSED);
         
@@ -116,9 +116,9 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         scui_widget_draw_ring(event->object, &clip, image_ring, NULL, +39, color_g, +141, pct_g, image_edge);
         scui_widget_draw_ring(event->object, &clip, image_ring, NULL, +158, color_b, +262, pct_b, image_edge);
         
-        scui_handle_t image_pic_kcal = scui_image_prj_act_04_icon_kcalpng;
-        scui_handle_t image_pic_step = scui_image_prj_act_06_icon_stepspng;
-        scui_handle_t image_pic_dist = scui_image_prj_act_02_icon_dispng;
+        scui_handle_t image_pic_kcal = scui_image_prj_act_04_icon_kcal;
+        scui_handle_t image_pic_step = scui_image_prj_act_06_icon_steps;
+        scui_handle_t image_pic_dist = scui_image_prj_act_02_icon_dis;
         
         scui_area_t clip1 = {
             .x = 242, .y =  10,
@@ -213,7 +213,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
             
             /* 红色小圆圈绘制 */
             if (idx == week_idx) {
-                scui_handle_t image = scui_image_prj_act_01_dotjpg;
+                scui_handle_t image = scui_image_prj_act_01_dot;
                 scui_area_t clip_image = {
                     .x = 36 + idx * (44 + 12),
                     .y = 113 - 90,
@@ -276,11 +276,11 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
             pct_step = 9;scui_clamp(pct_step / 10, 0, 9);
             pct_dist = 9;scui_clamp(pct_dist / 10, 0, 9);
             /* 先画背景 */
-            scui_handle_t image = scui_image_prj_act_ring_small_min_01_bjjpg;
+            scui_handle_t image = scui_image_prj_act_ring_small_min_01_bj;
             scui_widget_draw_image(event->object, &clip_icon, image, NULL, SCUI_COLOR_UNUSED);
             /* 画三个环 */
             if (pct_kcal != 0) {
-                scui_handle_t  image = scui_image_prj_act_ring_small_min_calories_01_01png;
+                scui_handle_t  image = scui_image_prj_act_ring_small_min_calories_01_01;
                 scui_area_t clip_min = {
                     .x = clip_icon.x + 14 + (clip_icon.w - scui_image_w(image)) / 2,
                     .y = clip_icon.y - 8 + (clip_icon.h - scui_image_h(image)) / 2,
@@ -290,7 +290,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
                 scui_widget_draw_image(event->object, &clip_min, image + pct_kcal, NULL, SCUI_COLOR_UNUSED);
             }
             if (pct_step != 0) {
-                scui_handle_t  image = scui_image_prj_act_ring_small_min_steps_01_01png;
+                scui_handle_t  image = scui_image_prj_act_ring_small_min_steps_01_01;
                 scui_area_t clip_min = {
                     .x = clip_icon.x + (clip_icon.w - scui_image_w(image)) / 2,
                     .y = clip_icon.y + 16 + (clip_icon.h - scui_image_h(image)) / 2,
@@ -300,7 +300,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
                 scui_widget_draw_image(event->object, &clip_min, image + pct_step, NULL, SCUI_COLOR_UNUSED);
             }
             if (pct_dist != 0) {
-                scui_handle_t  image = scui_image_prj_act_ring_small_min_dist_01_01png;
+                scui_handle_t  image = scui_image_prj_act_ring_small_min_dist_01_01;
                 scui_area_t clip_min = {
                     .x = clip_icon.x - 14 + (clip_icon.w - scui_image_w(image)) / 2,
                     .y = clip_icon.y - 8 + (clip_icon.h - scui_image_h(image)) / 2,
@@ -405,7 +405,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         args.clip.h = 40; args.clip.y += 25 - 16;
         scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000a);
         
-        scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03png;
+        scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
         uint8_t char_digit[10] = {0};
         scui_coord_t digit_num = snprintf(char_digit, sizeof(char_digit), "%d", scui_presenter.get_kcal_cur());
         scui_area_t clip_digit = {
@@ -479,7 +479,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
                 scui_custom_draw_text(event->object, &args, SCUI_HANDLE_INVALID);
             }
 
-            scui_handle_t  image = scui_image_prj_act_bar_02_dot_caloriesjpg;
+            scui_handle_t  image = scui_image_prj_act_bar_02_dot_calories;
             scui_area_t clip_dot = {
                 .x = 42 + idx * (12 + 4),
                 .y = 187 - 12,
@@ -581,7 +581,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         args.clip.h = 40; args.clip.y += 25 - 16;
         scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000c);
         
-        scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03png;
+        scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
         uint8_t char_digit[10] = {0};
         scui_coord_t digit_num = snprintf(char_digit, sizeof(char_digit), "%d", scui_presenter.get_kcal_cur());
         scui_area_t clip_digit = {
@@ -655,7 +655,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
                 scui_custom_draw_text(event->object, &args, SCUI_HANDLE_INVALID);
             }
 
-            scui_handle_t  image = scui_image_prj_act_bar_04_dot_stepsjpg;
+            scui_handle_t  image = scui_image_prj_act_bar_04_dot_steps;
             scui_area_t clip_dot = {
                 .x = 42 + idx * (12 + 4),
                 .y = 187 - 12,
@@ -758,7 +758,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         args.clip.h = 40; args.clip.y += 25 - 16;
         scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000b);
         
-        scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03png;
+        scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
         uint8_t char_digit[10] = {0};
         scui_coord_t digit_num = snprintf(char_digit, sizeof(char_digit), "%d", scui_presenter.get_kcal_cur());
         scui_area_t clip_digit = {
@@ -832,7 +832,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
                 scui_custom_draw_text(event->object, &args, SCUI_HANDLE_INVALID);
             }
 
-            scui_handle_t  image = scui_image_prj_act_bar_03_dot_distjpg;
+            scui_handle_t  image = scui_image_prj_act_bar_03_dot_dist;
             scui_area_t clip_dot = {
                 .x = 42 + idx * (12 + 4),
                 .y = 187 - 12,

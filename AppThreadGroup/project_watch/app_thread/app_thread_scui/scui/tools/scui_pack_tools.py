@@ -291,6 +291,20 @@ def _do_cwf_task(ui, src, dst):
 #============================================================
 # 图像信息探测(对齐 scui_image_t 结构体字段)
 #============================================================
+# 与后端一致的无尾缀句柄: 去扩展名/去.idx/.dit标记/去点, 保留路径层级
+def _img_handle_tag(file, src):
+    rel = os.path.relpath(file, src)
+    d, base = os.path.split(rel)
+    stem, _ext = os.path.splitext(base)
+    low = stem.lower()
+    if low.endswith('.dit'):
+        stem = stem[:-4]
+    elif low.endswith('.idx'):
+        stem = stem[:-4]
+    clean = (d + '/' + stem) if d else stem
+    return ('prj_' + clean).replace('.', '').replace('\\', '_').replace('/', '_').replace(' ', '_')
+
+
 def _img_type_of(path):
     lo = path.lower()
     if lo.endswith('.gif'):           return 'scui_image_type_gif'
@@ -2822,12 +2836,8 @@ class PackApp(object):
             preview_err = '%r' % e
             self.preview.configure(image='', text=os.path.basename(path))
 
-        # 构造 file_tag(与打包脚本同规则: 去点/去斜杠/去空格 -> 下划线)
-        try:
-            rel = os.path.relpath(path, self.in_abs['image'])
-        except Exception:
-            rel = os.path.basename(path)
-        file_tag = rel.replace('.', '').replace('\\', '_').replace('/', '_').replace(' ', '_')
+        # 构造 file_tag(与打包后端一致的无尾缀句柄: 去扩展名/去.idx/.dit/去点)
+        file_tag = _img_handle_tag(path, self.in_abs['image'])
 
         lines = []
         if preview_err:

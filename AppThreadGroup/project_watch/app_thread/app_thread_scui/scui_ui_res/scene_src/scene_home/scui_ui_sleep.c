@@ -43,7 +43,7 @@ void scui_ui_scene_sleep_body_event_proc(scui_event_t *event)
         clip.x = clip.y = 0;
         
         /* 睡眠图标 */
-        scui_handle_t image_sleep = scui_image_prj_sleep_recordpng;
+        scui_handle_t image_sleep = scui_image_prj_sleep_record;
         scui_area_t clip_sleep = {
             .x = (SCUI_HOR_RES - scui_image_w(image_sleep)) / 2,
             .y = 90,

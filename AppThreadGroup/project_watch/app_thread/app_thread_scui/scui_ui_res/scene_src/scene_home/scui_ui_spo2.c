@@ -62,7 +62,7 @@ void scui_ui_scene_spo2_body_event_proc(scui_event_t *event)
         clip.x = clip.y = 0;
         
         /* 血氧大图标(动态) */
-        scui_handle_t image_spo2 = scui_image_prj_spo2_gif_00jpg + spo2_frame_idx;
+        scui_handle_t image_spo2 = scui_image_prj_spo2_gif_00 + spo2_frame_idx;
         scui_area_t clip_spo2 = {
             .x = (SCUI_HOR_RES - scui_image_w(image_spo2)) / 2,
             .y = 40,

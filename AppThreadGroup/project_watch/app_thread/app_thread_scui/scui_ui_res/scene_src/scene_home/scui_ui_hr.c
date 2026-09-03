@@ -77,7 +77,7 @@ void scui_ui_scene_hr_body_event_proc(scui_event_t *event)
         clip.x = clip.y = 0;
         
         /* 大心脏跳动(主视觉) */
-        scui_handle_t image_heart = scui_image_prj_hr_main_gif_big_00jpg + hr_frame_idx;
+        scui_handle_t image_heart = scui_image_prj_hr_main_gif_big_00 + hr_frame_idx;
         scui_area_t clip_heart = {
             .x = (SCUI_HOR_RES - scui_image_w(image_heart)) / 2,
             .y = 80,

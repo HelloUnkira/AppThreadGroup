@@ -52,7 +52,7 @@ void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, SCUI_UI_HONEYCOMB_
 #define SCUI_UI_THEMEWHEEL_OFS_MAX              (5)     // 图标尺寸偏移
 #define SCUI_UI_THEMEWHEEL_ANGLE_UNIT           (24)    // 一圈数量 == 360 / angle_unit
 #define SCUI_UI_THEMEWHEEL_ANGLE_CELL           (6)     // 动画颗粒度,一般不改
-#define SCUI_UI_THEMEWHEEL_IMAGE_ARROW          (scui_image_prj_repeat_arrow_05_backjpg)
+#define SCUI_UI_THEMEWHEEL_IMAGE_ARROW          (scui_image_prj_repeat_arrow_05_back)
 /*****************************************************************************/
 /* 主题:扩散(所有图标为正方形图标) */
 #define SCUI_UI_SPREAD_OFS_MIN                  (0)     // 图标尺寸偏移

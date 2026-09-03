@@ -40,16 +40,16 @@ void scui_test_ui_button_event_proc(scui_event_t *event)
         /* custom image_crect4 x2 (替代 button image 类型, 静态) */
         static const scui_handle_t btn_images[2][4] = {
             {
-                scui_image_prj_repeat_card_04_r36_1jpg,
-                scui_image_prj_repeat_card_05_r36_2jpg,
-                scui_image_prj_repeat_card_06_r36_3jpg,
-                scui_image_prj_repeat_card_07_r36_4jpg,
+                scui_image_prj_repeat_card_04_r36_1,
+                scui_image_prj_repeat_card_05_r36_2,
+                scui_image_prj_repeat_card_06_r36_3,
+                scui_image_prj_repeat_card_07_r36_4,
             },
             {
-                scui_image_prj_repeat_box_sleep_breathe_02_left_upjpg,
-                scui_image_prj_repeat_box_sleep_breathe_04_right_upjpg,
-                scui_image_prj_repeat_box_sleep_breathe_01_left_downjpg,
-                scui_image_prj_repeat_box_sleep_breathe_03_right_downjpg,
+                scui_image_prj_repeat_box_sleep_breathe_02_left_up,
+                scui_image_prj_repeat_box_sleep_breathe_04_right_up,
+                scui_image_prj_repeat_box_sleep_breathe_01_left_down,
+                scui_image_prj_repeat_box_sleep_breathe_03_right_down,
             },
         };
         static const scui_coord_t btn_hgt[2] = {72, 92};

@@ -121,8 +121,8 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         #if 1
         custom_maker.type = scui_custom_type_slider;
         custom_maker.data = custom_data_zero;
-        custom_maker.data.slider.bar  = scui_image_prj_repeat_03_barbmp;
-        custom_maker.data.slider.edge = scui_image_prj_repeat_05_dotbmp;
+        custom_maker.data.slider.bar  = scui_image_prj_repeat_03_bar;
+        custom_maker.data.slider.edge = scui_image_prj_repeat_05_dot;
         custom_maker.data.slider.color_bar.color.full  = 0xFF4F4F4F;
         custom_maker.data.slider.color_edge.color.full = 0xFFFFFFFF;
         custom_maker.data.slider.vmin = 0;
@@ -144,8 +144,8 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         custom_maker.widget.clip.h = SCUI_VER_RES * 5 / 13 - 10 * 2;
         custom_maker.type = scui_custom_type_spinner;
         custom_maker.data = custom_data_zero;
-        custom_maker.data.spinner.spinner = scui_image_prj_wgt_act_05_ringbmp;
-        custom_maker.data.spinner.edge = scui_image_prj_wgt_act_04_dotbmp;
+        custom_maker.data.spinner.spinner = scui_image_prj_wgt_act_05_ring;
+        custom_maker.data.spinner.edge = scui_image_prj_wgt_act_04_dot;
         custom_maker.data.spinner.color.color_l.full = 0xFFFFFFFF;
         custom_maker.data.spinner.color.color_d.full = 0xFF404040;
         custom_maker.data.spinner.color.filter = true;
@@ -163,8 +163,8 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         #if 1
         custom_maker.type = scui_custom_type_indicator;
         custom_maker.data = custom_data_zero;
-        custom_maker.data.indicator.wait = scui_image_prj_repeat_dot_01_greyjpg;
-        custom_maker.data.indicator.focus = scui_image_prj_repeat_dot_02_whitejpg;
+        custom_maker.data.indicator.wait = scui_image_prj_repeat_dot_01_grey;
+        custom_maker.data.indicator.focus = scui_image_prj_repeat_dot_02_white;
         custom_maker.data.indicator.count = 5;
         custom_maker.data.indicator.span = 6;
         custom_maker.widget.event_cb = scui_test_ui_misc_indicator_event_proc;
@@ -196,7 +196,7 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         custom_maker.widget.event_cb = scui_test_ui_misc_ring_edge_event_proc;
         custom_maker.type = scui_custom_type_ring_edge;
         custom_maker.data = custom_data_zero;
-        custom_maker.data.ring_edge.image = scui_image_prj_repeat_dot_02_whitejpg;
+        custom_maker.data.ring_edge.image = scui_image_prj_repeat_dot_02_white;
         custom_maker.data.ring_edge.color.color.full = 0xFF00FF00;
         custom_maker.data.ring_edge.center.x = custom_maker.widget.clip.w / 2;
         custom_maker.data.ring_edge.center.y = custom_maker.widget.clip.h / 2;
@@ -282,7 +282,7 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         clip.h = SCUI_VER_RES * 3 / 13 - 10 * 2;
         scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
         
-        scui_handle_t image_handle = scui_image_prj_repeat_btn_22_retry_heartjpg;
+        scui_handle_t image_handle = scui_image_prj_repeat_btn_22_retry_heart;
         scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, image_scale, scui_opt_pos_c);
         #endif
         

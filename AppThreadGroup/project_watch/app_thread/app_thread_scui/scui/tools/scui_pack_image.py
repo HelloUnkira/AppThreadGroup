@@ -312,6 +312,20 @@ def scui_image_width_even(file):
         return False
 
 
+# 构造无尾缀句柄: 去扩展名/去.idx/.dit标记/去点, 保留路径层级
+def _scui_image_clean_tag(project, file, src_path):
+    rel = os.path.relpath(file, src_path)
+    d, base = os.path.split(rel)
+    stem, _ext = os.path.splitext(base)
+    low = stem.lower()
+    if low.endswith('.dit'):
+        stem = stem[:-4]
+    elif low.endswith('.idx'):
+        stem = stem[:-4]
+    clean = (d + '/' + stem) if d else stem
+    return (project + '_' + clean).replace('.', '').replace('\\', '_').replace('/', '_').replace(' ', '_')
+
+
 # 单图编码(并行worker, 纯内存, 不写共享文件): 返回本帧打包数据, 失败返回None
 def _scui_image_encode(file, src_path, project_name):
     # 定制尾缀激活(非子文件夹): foo.idx / foo.dit 缀于扩展名前
@@ -319,9 +333,10 @@ def _scui_image_encode(file, src_path, project_name):
     scui_image_tag_index  = os.path.splitext(os.path.basename(file))[0].lower().endswith('.idx')
     scui_image_tag_frame = False
     scui_image_pkg_over = False
-    # 去除src根目录段(image_src/), 保留实际资源子路径, 缩短枚举长度
-    file_short = os.path.relpath(file, src_path).replace('\\', '/')
-    scui_image_tag = (project_name + '_' + file_short).replace('.', '').replace('\\', '_').replace('/', '_').replace(' ', '_')
+    # 无尾缀句柄(去扩展名/去标记/去点)
+    scui_image_tag = _scui_image_clean_tag(project_name, file, src_path)
+    # 默认按 index 量化视为带 alpha 通道(索引调色板含 alpha)
+    scui_image_has_alpha = bool(scui_image_tag_index)
     scui_image_byte = 0
     scui_image_type = 'scui_image_type_bmp'
     scui_pixel_cf = 'scui_pixel_cf_bmp565'
@@ -366,6 +381,8 @@ def _scui_image_encode(file, src_path, project_name):
         try:
             image_raw = PIL.Image.open(file)
             image_std = PIL.Image.open(file).convert('RGBA')
+            if image_raw.mode in ('RGBA', 'LA', 'P'):
+                scui_image_has_alpha = True
         except Exception as e:
             print('image parse fail :', e)
             return None
@@ -473,16 +490,17 @@ def _scui_image_encode(file, src_path, project_name):
     if image_std is not None:
         image_std.close()
     return {
-        'tag':      scui_image_tag,
-        'cf':       scui_pixel_cf,
-        'type':     scui_image_type,
-        'width':    scui_image_pixel_width,
-        'height':   scui_image_pixel_height,
-        'bin':      scui_image_byte,
-        'size_bin': len(scui_image_byte),
-        'size_raw': pixel_raw_len,
-        'sub_name': scui_image_tag.replace('/', '_'),
-        'sub_body': sub_body,
+        'tag':       scui_image_tag,
+        'has_alpha': scui_image_has_alpha,
+        'cf':        scui_pixel_cf,
+        'type':      scui_image_type,
+        'width':     scui_image_pixel_width,
+        'height':    scui_image_pixel_height,
+        'bin':       scui_image_byte,
+        'size_bin':  len(scui_image_byte),
+        'size_raw':  pixel_raw_len,
+        'sub_name':  scui_image_tag,
+        'sub_body':  sub_body,
     }
 
 
@@ -507,38 +525,47 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name, 
     # 填充数据表
     offset_name = scui_image_offset_name
     offset_value = scui_image_offset_value
-    scui_image_parser_h.write('typedef enum {\n')
-    scui_image_parser_h.write('\t%s = %s,\n' % (offset_name, offset_value))
-    scui_image_num = 0
-    for file in file_path_list:
-        scui_image_num += 1
-        # 去除src根目录段(image_src/), 保留实际资源子路径, 缩短枚举长度
-        file_short = os.path.relpath(file, src_path).replace('\\', '/')
-        scui_image_tag = (project_name + '_' + file_short).replace('.', '').replace('\\', '_').replace('/', '_').replace(' ', '_')
-        scui_image_ofs = hex(eval(offset_value) + scui_image_num)
-        scui_image_parser_h.write('\tscui_image_%s, // %s\n' % (scui_image_tag, scui_image_ofs))
-    scui_image_parser_h.write('} scui_image_parser_handle_t;\n\n')
-    scui_image_parser_h.write('extern const void * const scui_image_parser_table[%d];\n\n' % len(file_path_list))
-    scui_image_parser_h.write('//<%6s,%6s,%6s,%6s,%2s> handle\n' % ('w', 'h', 'size_raw', 'size_mem', 'com_pct'))
-    # 并行编码各子部分, 保持和 file_path_list 的顺序一一对应
+    # 并行编码各子部分
     workers = max(1, min(scui_image_pkg_workers, os.cpu_count() or 1))
     print('image pack threads:%d' % workers)
-    results = [None] * len(file_path_list)
+    raw = [None] * len(file_path_list)
     if workers > 1 and len(file_path_list) > 1:
         with ThreadPoolExecutor(max_workers=workers) as executor:
             futures = [executor.submit(_scui_image_encode, f, src_path, project_name) for f in file_path_list]
             for i, fut in enumerate(futures):
-                results[i] = fut.result()
+                raw[i] = fut.result()
     else:
         for i, f in enumerate(file_path_list):
-            results[i] = _scui_image_encode(f, src_path, project_name)
+            raw[i] = _scui_image_encode(f, src_path, project_name)
+    # 冲突合并去重: 同名句柄保留其一(保首次出现顺序), 优先带 alpha 通道
+    keep = []
+    seen = {}
+    for r in raw:
+        if r is None:
+            continue
+        tag = r['tag']
+        if tag in seen:
+            exist_idx = seen[tag]
+            if r['has_alpha'] and not keep[exist_idx]['has_alpha']:
+                keep[exist_idx] = r          # 用带 alpha 的替换
+            continue                         # 其余丢弃
+        seen[tag] = len(keep)
+        keep.append(r)
+    scui_image_num = 0
+    scui_image_parser_h.write('typedef enum {\n')
+    scui_image_parser_h.write('\t%s = %s,\n' % (offset_name, offset_value))
+    for r in keep:
+        scui_image_num += 1
+        scui_image_ofs = hex(eval(offset_value) + scui_image_num)
+        scui_image_parser_h.write('\tscui_image_%s, // %s\n' % (r['tag'], scui_image_ofs))
+    scui_image_parser_h.write('} scui_image_parser_handle_t;\n\n')
+    scui_image_parser_h.write('extern const void * const scui_image_parser_table[%d];\n\n' % len(keep))
+    scui_image_parser_h.write('//<%6s,%6s,%6s,%6s,%2s> handle\n' % ('w', 'h', 'size_raw', 'size_mem', 'com_pct'))
     # 顺序装订(h/c/bin/sub): 偏移按顺序累加, 与单线程逐图输出一致
     pixel_bin_ofs = 0
     pixel_bin_all = 0
     pixel_raw_all = 0
-    for r in results:
-        if r is None:
-            continue
+    for r in keep:
         scui_image_struct = ''
         scui_image_struct += 'static const scui_image_t %s = {\n' % r['tag']
         scui_image_struct += '\t.format\t\t\t\t = %s,\n' % r['cf']
@@ -565,12 +592,9 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name, 
     scui_image_parser_h.write('\n//static pct:%2.2f\n' % (float(pixel_bin_all) / float(pixel_raw_all)))
     scui_image_parser_h.write('\n#endif\n')
     # 填充数据表
-    scui_image_parser_c.write('const void * const scui_image_parser_table[%d] = {\n' % len(file_path_list))
-    for file in file_path_list:
-        # 去除src根目录段(image_src/), 保留实际资源子路径, 缩短枚举长度
-        file_short = os.path.relpath(file, src_path).replace('\\', '/')
-        scui_image_tag = (project_name + '_' + file_short).replace('.', '').replace('\\', '_').replace('/', '_').replace(' ', '_')
-        scui_image_parser_c.write('\t(void *)&%s,\n' % scui_image_tag)
+    scui_image_parser_c.write('const void * const scui_image_parser_table[%d] = {\n' % len(keep))
+    for r in keep:
+        scui_image_parser_c.write('\t(void *)&%s,\n' % r['tag'])
     scui_image_parser_c.write('};\n')
 
 

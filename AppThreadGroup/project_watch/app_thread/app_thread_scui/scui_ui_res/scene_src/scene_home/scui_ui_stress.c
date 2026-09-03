@@ -77,7 +77,7 @@ void scui_ui_scene_stress_body_event_proc(scui_event_t *event)
         clip.x = clip.y = 0;
         
         /* 压力动画(主视觉) */
-        scui_handle_t image_stress = scui_image_prj_stress_1_gif_00jpg + stress_frame_idx;
+        scui_handle_t image_stress = scui_image_prj_stress_1_gif_00 + stress_frame_idx;
         scui_area_t clip_stress = {
             .x = (SCUI_HOR_RES - scui_image_w(image_stress)) / 2,
             .y = 90,

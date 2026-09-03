@@ -53,9 +53,9 @@ void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event)
         scui_area_t   clip = {0};
         scui_color_t  color_black = {0};
         scui_color_t  color_white = {.filter = true,.color_s.full = 0xFFFFFFFF,.color_e.full = 0xFFFFFFFF,};
-        scui_handle_t image_bg   = scui_image_prj_repeat_slider_04_bgpng;     // 44 * 236
-        scui_handle_t image_ring = scui_image_prj_repeat_slider_03_ringbmp;
-        scui_handle_t image_edge = scui_image_prj_repeat_slider_02_dotbmp;
+        scui_handle_t image_bg   = scui_image_prj_repeat_slider_04_bg;     // 44 * 236
+        scui_handle_t image_ring = scui_image_prj_repeat_slider_03_ring;
+        scui_handle_t image_edge = scui_image_prj_repeat_slider_02_dot;
         
         clip.x = (SCUI_HOR_RES - 44);
         clip.y = (SCUI_VER_RES - 236) / 2;

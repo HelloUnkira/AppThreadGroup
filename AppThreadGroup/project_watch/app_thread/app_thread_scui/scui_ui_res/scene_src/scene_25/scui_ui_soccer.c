@@ -44,14 +44,14 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
         scui_ui_res_local->angle_56 = 142.623f - 90.0f;
         scui_ui_res_local->angle_66 = 138.190f - 90.0f - (180.0f - 142.623f);
         
-        scui_ui_res_local->image_bg = scui_image_prj_3d_Soccer_boardpng;
+        scui_ui_res_local->image_bg = scui_image_prj_3d_Soccer_board;
         for (uint8_t idx_j = 0; idx_j < 4; idx_j++)
         for (uint8_t idx_i = 0; idx_i < 5; idx_i++) {
             scui_handle_t image_fg_0 = scui_ui_res_local->image_bg - 3;
             scui_ui_res_local->image_fg[idx_j][idx_i] = image_fg_0 + idx_j * 5 + idx_i;
-            if ((idx_j * 5 + idx_i) >= scui_image_prj_3d_Soccer_starpng - 2 - image_fg_0)
+            if ((idx_j * 5 + idx_i) >= scui_image_prj_3d_Soccer_star - 2 - image_fg_0)
                 scui_ui_res_local->image_fg[idx_j][idx_i] += 1;
-            if ((idx_j * 5 + idx_i) >= scui_image_prj_3d_Soccer_bgpng - image_fg_0)
+            if ((idx_j * 5 + idx_i) >= scui_image_prj_3d_Soccer_bg - image_fg_0)
                 scui_ui_res_local->image_fg[idx_j][idx_i] += 2;
         }
         

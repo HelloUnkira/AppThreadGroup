@@ -317,7 +317,7 @@ static uint32_t scui_ui_func_local_get_temp_type(void)
  */
 static uint32_t scui_ui_func_local_get_temp_icon(void)
 {
-    return scui_image_prj_weather_weather_small_01_00_sunpng;
+    return scui_image_prj_weather_weather_small_01_00_sun;
 }
 
 /*@brief scui ui数据交互回调
@@ -480,7 +480,7 @@ static uint32_t scui_ui_func_local_sport_record_type(void)
  */
 static uint32_t scui_ui_func_local_sport_record_icon(void)
 {
-    return scui_image_prj_sport_01_list_big_01_000_outdoor_runpng;
+    return scui_image_prj_sport_01_list_big_01_000_outdoor_run;
 }
 
 /*@brief scui ui数据交互回调
@@ -515,7 +515,7 @@ static uint32_t scui_ui_func_local_women_health_type(void)
  */
 static uint32_t scui_ui_func_local_women_health_icon(void)
 {
-    return scui_image_prj_wgt_period_01_fertilejpg;
+    return scui_image_prj_wgt_period_01_fertile;
 }
 
 /*@brief scui ui数据交互回调

@@ -76,7 +76,7 @@ void scui_ui_scene_notify_event_proc(scui_event_t *event)
         scui_area_t clip = scui_widget_clip(event->object);
         scui_area_t draw = {.x = 4, .y = 4, .w = clip.w, .h = clip.h};
         scui_widget_draw_image(event->object, &draw,
-            scui_image_prj_act_ring_big_max_03_bj_01bmp,
+            scui_image_prj_act_ring_big_max_03_bj_01,
             NULL, SCUI_COLOR_MAKE32(true, 0xFF000000, 0xFF404040));
         
         break;
