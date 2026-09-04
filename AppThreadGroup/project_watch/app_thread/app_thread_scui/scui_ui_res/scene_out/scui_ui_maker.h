@@ -1,8 +1,7 @@
 #ifndef SCUI_UI_MAKER_H
 #define SCUI_UI_MAKER_H
 
-/*一个通过scui_widget_parser脚本生成的widget动态构造器配置
- */
+/* 本文件由 scui_pack_tools.exe 生成 */
 
 /*@brief 控件构造器默认初始化
  *@param maker 控件构造器实例指针

@@ -1,9 +1,7 @@
 #ifndef SCUI_LANG_PARSER_H
 #define SCUI_LANG_PARSER_H
 
-/*本地静态的字符串表
- *通过scui_lang_parser.py生成
- */
+/* 本文件由 scui_pack_tools.exe 生成 */
 
 typedef enum {
 	SCUI_HANDLE_OFFSET_LANG = 0x5000 - 1,

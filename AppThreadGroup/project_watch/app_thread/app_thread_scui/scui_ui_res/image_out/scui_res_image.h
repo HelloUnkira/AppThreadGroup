@@ -1,8 +1,7 @@
 #ifndef SCUI_IMAGE_PARSER_H
 #define SCUI_IMAGE_PARSER_H
 
-/*一个通过scui_image_parser脚本生成的image表
- */
+/* 本文件由 scui_pack_tools.exe 生成 */
 
 typedef enum {
 	SCUI_HANDLE_OFFSET_IMAGE = 0x2000 - 1,

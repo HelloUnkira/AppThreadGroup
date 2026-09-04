@@ -55,8 +55,8 @@ def scui_font_package_all(file_path_list, scui_font_package_list, scui_font_json
     # 头文件添加前缀, 源文件添加前缀
     scui_font_package_h.write('#ifndef SCUI_FONT_PACKAGE_H\n')
     scui_font_package_h.write('#define SCUI_FONT_PACKAGE_H\n\n')
-    scui_font_package_h.write('/*一个通过scui_font_package脚本生成的font表\n */\n\n')
-    scui_font_package_c.write('/*一个通过scui_font_package脚本生成的font表\n */\n\n')
+    scui_font_package_h.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
+    scui_font_package_c.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
     scui_font_package_c.write('#include \"scui.h\"\n\n')
     # 头文件添加类型
     scui_font_lang = scui_font_json['lang']
@@ -223,7 +223,7 @@ def scui_font_package():
     print('src path:', _rel_ui(src_path))
     print('dst path:', _rel_ui(dst_path))
     # json转Python字符串并转标准字典
-    parser_path = os.path.join(dst_path, 'scui_font_package.json')
+    parser_path = os.path.join(dst_path, 'scui_res_font.json')
     json_file = open(parser_path, 'r', encoding='utf-8')
     json_dict = json.loads(json_file.read())
     json_file.close()
@@ -240,9 +240,9 @@ def scui_font_package():
     # for item in file_path_list:
     #     print(item)
     # 核查文件支持
-    scui_font_package_h = open(os.path.join(dst_path, 'scui_font_package.h'), mode='w', encoding='utf-8')
-    scui_font_package_c = open(os.path.join(dst_path, 'scui_font_package.c'), mode='w', encoding='utf-8')
-    scui_font_package_bin = open(os.path.join(dst_path, 'scui_font_package.bin'), mode='wb')
+    scui_font_package_h = open(os.path.join(dst_path, 'scui_res_font.h'), mode='w', encoding='utf-8')
+    scui_font_package_c = open(os.path.join(dst_path, 'scui_res_font.c'), mode='w', encoding='utf-8')
+    scui_font_package_bin = open(os.path.join(dst_path, 'scui_res_font.bin'), mode='wb')
     scui_font_package_sub = os.path.join(dst_path, 'font_array')   # 子文件单独生成到子路径
     scui_font_package_list = [
         scui_font_package_h,

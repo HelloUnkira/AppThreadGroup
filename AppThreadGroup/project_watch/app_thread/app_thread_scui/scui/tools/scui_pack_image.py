@@ -519,8 +519,8 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name, 
     # 头文件添加前缀, 源文件添加前缀
     scui_image_parser_h.write('#ifndef SCUI_IMAGE_PARSER_H\n')
     scui_image_parser_h.write('#define SCUI_IMAGE_PARSER_H\n\n')
-    scui_image_parser_h.write('/*一个通过scui_image_parser脚本生成的image表\n */\n\n')
-    scui_image_parser_c.write('/*一个通过scui_image_parser脚本生成的image表\n */\n\n')
+    scui_image_parser_h.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
+    scui_image_parser_c.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
     scui_image_parser_c.write('#include \"scui.h\"\n\n')
     # 填充数据表
     offset_name = scui_image_offset_name
@@ -664,9 +664,9 @@ def scui_image_parser():
     # for item in file_path_list:
     #     print(item)
     # 核查文件支持
-    scui_image_parser_h = open(os.path.join(dst_path, 'scui_image_parser.h'), mode='w', encoding='utf-8')
-    scui_image_parser_c = open(os.path.join(dst_path, 'scui_image_parser.c'), mode='w', encoding='utf-8')
-    scui_image_parser_bin = open(os.path.join(dst_path, 'scui_image_parser.bin'), mode='wb')
+    scui_image_parser_h = open(os.path.join(dst_path, 'scui_res_image.h'), mode='w', encoding='utf-8')
+    scui_image_parser_c = open(os.path.join(dst_path, 'scui_res_image.c'), mode='w', encoding='utf-8')
+    scui_image_parser_bin = open(os.path.join(dst_path, 'scui_res_image.bin'), mode='wb')
     scui_image_parser_sub = os.path.join(dst_path, "image_array")   # 子文件单独生成到子路径
     scui_image_parser_list = [
         scui_image_parser_h,

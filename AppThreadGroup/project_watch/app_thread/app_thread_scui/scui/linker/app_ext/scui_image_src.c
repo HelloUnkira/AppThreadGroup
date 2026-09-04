@@ -158,7 +158,7 @@ int scui_tjpgd_out_func_cb(JDEC *jd, void *bitmap, JRECT *rect)
 void scui_image_src_read(scui_image_t *image, void *data)
 {
     /* 使用image生成==>data */
-    const char *image_bin = "scui_image_parser.bin";
+    const char *image_bin = "scui_res_image.bin";
     const char *image_src = image_bin;
     if (image->from != SCUI_HANDLE_INVALID)
         image_src = scui_handle_source(image->from);

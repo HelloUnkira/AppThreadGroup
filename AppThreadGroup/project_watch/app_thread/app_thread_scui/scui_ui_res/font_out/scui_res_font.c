@@ -1,5 +1,4 @@
-/*一个通过scui_font_package脚本生成的font表
- */
+/* 本文件由 scui_pack_tools.exe 生成 */
 
 #include "scui.h"
 

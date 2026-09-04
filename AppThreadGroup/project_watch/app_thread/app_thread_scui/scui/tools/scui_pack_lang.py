@@ -69,9 +69,7 @@ def encode_scui_lang_parser_bin(file, xlsx_sheet, sheet_row, sheet_col, args_lis
 
 # 编写集成化源文件
 def encode_scui_lang_parser_c(file, xlsx_sheet, sheet_row, sheet_col, args_list):
-    # 写点简要的说明
-    file.write('/*本地静态的字符串表\n')
-    file.write(' *通过scui_lang_parser.py生成\n */\n\n')
+    file.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
     file.write('#include "scui.h"\n\n')
     # 如果使用外源载入, 需要对应宏控制
     file.write('#if SCUI_LANG_PARSER_BIN_USE\n')
@@ -155,9 +153,7 @@ def encode_scui_lang_parser_c(file, xlsx_sheet, sheet_row, sheet_col, args_list)
 def encode_scui_lang_parser_h(file, xlsx_sheet, sheet_row, sheet_col, args_list):
     file.write('#ifndef SCUI_LANG_PARSER_H\n')
     file.write('#define SCUI_LANG_PARSER_H\n\n')
-    # 写点简要的说明
-    file.write('/*本地静态的字符串表\n')
-    file.write(' *通过scui_lang_parser.py生成\n */\n\n')
+    file.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
     # 编写头部索引
     file.write('typedef enum {\n')
     file.write('\t%s = %s,\n' % (args_list[2], args_list[3]))
@@ -235,7 +231,7 @@ def encode_scui_lang_parser():
     print('src path:', _rel_ui(src_path))
     print('dst path:', _rel_ui(dst_path))
     # json转Python字符串并转标准字典
-    json_file = open(os.path.join(src_path, 'scui_lang_parser.json'), 'r', encoding='utf-8')
+    json_file = open(os.path.join(src_path, 'scui_res_lang.json'), 'r', encoding='utf-8')
     json_dict = json.loads(json_file.read())
     json_file.close()
     # 句柄偏移: 前端"设置句柄"json 覆盖配置默认
@@ -255,10 +251,10 @@ def encode_scui_lang_parser():
         print('args list not match')
         return
     # 开启四个文件
-    scui_lang_parser_h = open(os.path.join(dst_path, 'scui_lang_parser.h'), mode='w', encoding='utf-8')
-    scui_lang_parser_c = open(os.path.join(dst_path, 'scui_lang_parser.c'), mode='w', encoding='utf-8')
-    scui_lang_parser_bin = open(os.path.join(dst_path, 'scui_lang_parser.bin'), mode='wb')
-    scui_lang_parser_txt = open(os.path.join(dst_path, 'scui_lang_parser.txt'), mode='w', encoding='utf-8')
+    scui_lang_parser_h = open(os.path.join(dst_path, 'scui_res_lang.h'), mode='w', encoding='utf-8')
+    scui_lang_parser_c = open(os.path.join(dst_path, 'scui_res_lang.c'), mode='w', encoding='utf-8')
+    scui_lang_parser_bin = open(os.path.join(dst_path, 'scui_res_lang.bin'), mode='wb')
+    scui_lang_parser_txt = open(os.path.join(dst_path, 'scui_res_lang.txt'), mode='w', encoding='utf-8')
     # 解析
     encode_scui_lang_parser_h(scui_lang_parser_h, xlsx_sheet, sheet_row, sheet_col, args_list)
     encode_scui_lang_parser_c(scui_lang_parser_c, xlsx_sheet, sheet_row, sheet_col, args_list)

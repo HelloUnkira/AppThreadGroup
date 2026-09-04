@@ -1,6 +1,4 @@
-/*本地静态的字符串表
- *通过scui_lang_parser.py生成
- */
+/* 本文件由 scui_pack_tools.exe 生成 */
 
 #include "scui.h"
 

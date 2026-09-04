@@ -1,5 +1,4 @@
-/*一个通过scui_image_parser脚本生成的image表
- */
+/* 本文件由 scui_pack_tools.exe 生成 */
 
 #include "scui.h"
 

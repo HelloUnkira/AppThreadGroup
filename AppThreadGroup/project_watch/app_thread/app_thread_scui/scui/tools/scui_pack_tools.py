@@ -273,8 +273,8 @@ def _do_cwf_task(ui, src, dst):
         # step4: 清理临时文件
         shutil.rmtree(img_dir, ignore_errors=True)
         shutil.rmtree(os.path.join(wf_dir, 'image_array'), ignore_errors=True)
-        for f in ('scui_image_parser.h', 'scui_image_parser.c',
-                  'scui_image_parser.bin'):
+        for f in ('scui_res_image.h', 'scui_res_image.c',
+                  'scui_res_image.bin'):
             p = os.path.join(wf_dir, f)
             if os.path.exists(p):
                 os.remove(p)
@@ -1687,6 +1687,8 @@ class PackApp(object):
         # 顶部
         top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
         ttk.Button(top, text='执行 lang 打包', command=lambda: self._run('lang')).pack(side='right')
+        ttk.Label(top, text='建议让 Agent 进行本任务开发，此界面用于浏览为主',
+                  foreground='#c55').pack(side='left')
 
         # 主体: 三栏(占满, 不再内嵌 LOG)
         hp = ttk.Panedwindow(f, orient='horizontal'); hp.pack(fill='both', expand=True, pady=(6, 0))
@@ -1723,7 +1725,7 @@ class PackApp(object):
         self.lang_data = None; self.lang_sel = None
 
         src = self.in_abs['lang']
-        cfg = os.path.join(src, 'scui_lang_parser.json')
+        cfg = os.path.join(src, 'scui_res_lang.json')
         if not os.path.exists(cfg):
             self._append_log('lang', '未找到配置: %s\n' % self._rel_log(cfg))
             return
@@ -1789,6 +1791,8 @@ class PackApp(object):
 
         # 顶部工具条
         top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
+        ttk.Label(top, text='建议让 Agent 进行本任务开发，此界面用于浏览为主',
+                  foreground='#c55').pack(side='left')
         ttk.Button(top, text='预览 json', command=self._cwf_preview).pack(side='left')
         ttk.Button(top, text='保存 json', command=self._cwf_save).pack(side='left', padx=(6, 0))
         ttk.Button(top, text='执行 cwf 打包', command=lambda: self._run('cwf')).pack(side='right')
@@ -2131,7 +2135,9 @@ class PackApp(object):
         self._build_font_editor(ef)
         # range 辅助列(bin 整合右侧, 空间大; 单行输出 + 多行输入)
         rast_fr = ttk.LabelFrame(hp, text=' range 辅助 ', padding=(4, 4)); hp.add(rast_fr, weight=1)
-        ttk.Label(rast_fr, text='输出(单行)').pack(anchor='w')
+        aux_top = ttk.Frame(rast_fr); aux_top.pack(fill='x')
+        ttk.Label(aux_top, text='输出(单行)').pack(side='left')
+        ttk.Button(aux_top, text='转换', command=self._font_aux_gen).pack(side='right')
         self._aux_out_var = tk.StringVar()
         self._aux_out = ttk.Entry(rast_fr, textvariable=self._aux_out_var, state='readonly',
                                   font=('Consolas', 9))
@@ -2140,8 +2146,6 @@ class PackApp(object):
         ttk.Label(rast_fr, text='输入(多行: 字符 / 0x.. / 十进制 / 区间); 输出框双击复制').pack(anchor='w')
         self._aux_in = tk.Text(rast_fr, font=('Consolas', 9), height=10)
         self._aux_in.pack(fill='both', expand=True)
-        ab = ttk.Frame(rast_fr); ab.pack(fill='x', pady=(2, 0))
-        ttk.Button(ab, text='生成 range', command=self._font_aux_gen).pack(side='left')
 
         # ---------- 下半: bin 生成 font_src->font_bin (外源 lv_font_conv) ----------
         bot_fr = ttk.LabelFrame(f, text=' bin 生成 (font_src → font_bin, 外源 lv_font_conv) ',
@@ -2480,7 +2484,7 @@ class PackApp(object):
         grid.columnconfigure(1, weight=1)
 
     def _font_json_path(self):
-        return os.path.join(self.out_abs['font'], 'scui_font_package.json')
+        return os.path.join(self.out_abs['font'], 'scui_res_font.json')
 
     def _font_rebuild(self):
         """从内存副本重建左树(保留已展开的语言分组, 保证 iid 与数组下标同步)."""
@@ -3222,7 +3226,7 @@ class PackApp(object):
         # 匹配 .h 句柄信息
         h_info = self._image_from_h(file_tag)
         if h_info:
-            lines.append('【句柄信息（scui_image_parser.h）】')
+            lines.append('【句柄信息（scui_res_image.h）】')
             lines.append('    %-18s = %s;' % ('handle_name', h_info['name']))
             lines.append('    %-18s = %s;' % ('handle_value', h_info['value']))
             lines.append('    %-18s = %s;' % ('pixel.width', h_info['width']))
@@ -3234,7 +3238,7 @@ class PackApp(object):
         # 匹配 .c 结构体信息
         c_info = self._image_from_c(file_tag)
         if c_info:
-            lines.append('【资源信息（scui_image_parser.c）】')
+            lines.append('【资源信息（scui_res_image.c）】')
             for k, v in c_info.items():
                 lines.append('    %-18s = %s;' % (k, v))
             lines.append('')
@@ -3249,8 +3253,8 @@ class PackApp(object):
         self.field_text.configure(state='disabled')
 
     def _image_from_h(self, file_tag):
-        """从 scui_image_parser.h 匹配句柄信息(file_tag 为去点后的相对路径)."""
-        out_h = os.path.join(self.out_abs.get('image', ''), 'scui_image_parser.h')
+        """从 scui_res_image.h 匹配句柄信息(file_tag 为去点后的相对路径)."""
+        out_h = os.path.join(self.out_abs.get('image', ''), 'scui_res_image.h')
         if not os.path.exists(out_h):
             return None
         try:
@@ -3287,8 +3291,8 @@ class PackApp(object):
             return None
 
     def _image_from_c(self, file_tag):
-        """从 scui_image_parser.c 匹配 scui_image_t 结构体."""
-        out_c = os.path.join(self.out_abs.get('image', ''), 'scui_image_parser.c')
+        """从 scui_res_image.c 匹配 scui_image_t 结构体."""
+        out_c = os.path.join(self.out_abs.get('image', ''), 'scui_res_image.c')
         if not os.path.exists(out_c):
             return None
         try:

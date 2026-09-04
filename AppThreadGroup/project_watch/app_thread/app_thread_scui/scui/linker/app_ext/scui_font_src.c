@@ -15,7 +15,7 @@ void scui_font_src_open(scui_font_src_t *src, const char *name)
 {
     /* 字库文件共用一个文件夹 */
     const char *font_path = ".";
-    const char *font_name = "scui_font_package.bin";
+    const char *font_name = "scui_res_font.bin";
     /* 如果是多文件字库管理, 则只需使用name */
     
     char path_name[128] = {0};
@@ -63,7 +63,7 @@ void scui_lang_src_read(void *buf, uintptr_t ofs, uintptr_t size)
 {
     /* 字库文件共用一个文件夹 */
     const char *lang_path = ".";
-    const char *lang_name = "scui_lang_parser.bin";
+    const char *lang_name = "scui_res_lang.bin";
     /* 如果是多文件字库管理, 则只需使用name */
     
     char path_name[128] = {0};

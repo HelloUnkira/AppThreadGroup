@@ -130,8 +130,8 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, defaults_
     # 头文件添加前缀, 源文件添加前缀
     parser_h.write('#ifndef SCUI_WIDGET_PARSER_H\n')
     parser_h.write('#define SCUI_WIDGET_PARSER_H\n\n')
-    parser_h.write('/*一个通过scui_widget_parser脚本生成的widget表\n */\n\n')
-    parser_c.write('/*一个通过scui_widget_parser脚本生成的widget表\n */\n\n')
+    parser_h.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
+    parser_c.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
     parser_c.write('#include "scui.h"\n\n')
     # 填充句柄枚举
     offset_name = SCUI_WIDGET_PARSER_OFFSET_NAME
@@ -395,7 +395,7 @@ def scui_widget_maker_generate(dst_path, def_path, defaults_map):
     guard = base_name.upper() + '_H'
     scui_widget_maker_h.write('#ifndef %s\n' % guard)
     scui_widget_maker_h.write('#define %s\n\n' % guard)
-    scui_widget_maker_h.write('/*一个通过scui_widget_parser脚本生成的widget动态构造器配置\n */\n\n')
+    scui_widget_maker_h.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
     scui_widget_maker_h.write('/*@brief 控件构造器默认初始化\n')
     scui_widget_maker_h.write(' *@param maker 控件构造器实例指针\n')
     scui_widget_maker_h.write(' *@param type  控件类型(scui_widget_type_t)\n')
@@ -406,7 +406,7 @@ def scui_widget_maker_generate(dst_path, def_path, defaults_map):
 
     class_to_maker = scui_widget_parser_class_maker()
 
-    scui_widget_maker_c.write('/*一个通过scui_widget_parser脚本生成的widget动态构造器配置\n */\n\n')
+    scui_widget_maker_c.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
     scui_widget_maker_c.write('#include "scui.h"\n\n')
     scui_widget_maker_c.write('/*@brief 控件构造器默认初始化\n')
     scui_widget_maker_c.write(' *@param maker 控件构造器实例指针\n')
@@ -952,8 +952,8 @@ def scui_widget_parser():
     scene_list = json_dict_list
     # print(json_dict_list)
     # 核查文件支持
-    scui_widget_parser_h = open(os.path.join(dst_path, 'scui_widget_parser.h'), mode='w', encoding='utf-8')
-    scui_widget_parser_c = open(os.path.join(dst_path, 'scui_widget_parser.c'), mode='w', encoding='utf-8')
+    scui_widget_parser_h = open(os.path.join(dst_path, 'scui_res_widget.h'), mode='w', encoding='utf-8')
+    scui_widget_parser_c = open(os.path.join(dst_path, 'scui_res_widget.c'), mode='w', encoding='utf-8')
     scui_widget_parser_list = [scui_widget_parser_h, scui_widget_parser_c]
     scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, defaults_map)
     scui_widget_parser_h.close()
