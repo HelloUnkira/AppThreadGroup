@@ -27,7 +27,7 @@ static bool scui_event_bar_move_absorb(void *evt_old, void *evt_new)
  */
 static void scui_indev_bar_event_check(scui_event_t *event)
 {
-    #if SCUI_INDEV_EVENT_MERGE
+    #if SCUI_INDEV_BAR_EVENT_MERGE
     #endif
     scui_event_notify(event);
 }
@@ -36,7 +36,7 @@ static void scui_indev_bar_event_check(scui_event_t *event)
  */
 void scui_indev_bar_event_merge(void)
 {
-    #if SCUI_INDEV_EVENT_MERGE
+    #if SCUI_INDEV_BAR_EVENT_MERGE
     #endif
 }
 

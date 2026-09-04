@@ -70,7 +70,7 @@ void scui_indev_ready(void)
     scui_anima_t anima = {0};
     anima.expire = scui_indev_anima_expire;
     anima.reload = SCUI_ANIMA_INFINITE;
-    anima.period = SCUI_ANIMA_TICK * 2;
+    anima.period = SCUI_INDEV_ANIMA_MERGE;
     
     #if SCUI_INDEV_EVENT_MERGE
     scui_handle_t scui_indev_anima = SCUI_HANDLE_INVALID;

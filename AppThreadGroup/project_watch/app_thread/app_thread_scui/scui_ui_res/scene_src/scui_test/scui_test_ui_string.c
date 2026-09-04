@@ -144,24 +144,22 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         scui_event_mask_over(event);
         break;
     }
-    case scui_event_enc_fdir: {
-        const uint16_t font_size_max = 40;
-        const uint16_t font_size_gap = 2;
-        if (scui_ui_res_local->font_size + font_size_gap <= font_size_max)
-            scui_ui_res_local->font_size += font_size_gap;
-        for (uint8_t idx = 0; idx < scui_arr_len(scui_ui_res_local->string); idx++)
-            scui_string_adjust_size(scui_ui_res_local->string[idx], scui_ui_res_local->font_size);
+    case scui_event_enc_tick: {
         scui_event_mask_over(event);
-        break;
-    }
-    case scui_event_enc_bdir: {
+        const uint16_t font_size_max = 40;
         const uint16_t font_size_min = 10;
         const uint16_t font_size_gap = 2;
-        if (scui_ui_res_local->font_size - font_size_gap >= font_size_min)
-            scui_ui_res_local->font_size -= font_size_gap;
+        
+        if (event->enc_way == 0) scui_ui_res_local->font_size += font_size_gap;
+        if (event->enc_way == 1) scui_ui_res_local->font_size -= font_size_gap;
+        
+        if (scui_ui_res_local->font_size < font_size_min)
+            scui_ui_res_local->font_size = font_size_min;
+        if (scui_ui_res_local->font_size > font_size_max)
+            scui_ui_res_local->font_size = font_size_max;
+        
         for (uint8_t idx = 0; idx < scui_arr_len(scui_ui_res_local->string); idx++)
             scui_string_adjust_size(scui_ui_res_local->string[idx], scui_ui_res_local->font_size);
-        scui_event_mask_over(event);
         break;
     }
     default:

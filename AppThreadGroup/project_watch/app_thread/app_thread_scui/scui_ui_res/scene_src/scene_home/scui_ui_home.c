@@ -117,23 +117,19 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         break;
     
     #if 1
-    case scui_event_enc_fdir: {
+    case scui_event_enc_tick: {
         scui_event_mask_over(event);
         
-        scui_ui_res_local->cwf_json_idx += 1;
+        if (event->enc_way == 0) {
+            scui_ui_res_local->cwf_json_idx += 1;
         if (scui_ui_res_local->cwf_json_idx >= scui_arr_len(cwf_json_bin))
             scui_ui_res_local->cwf_json_idx  = 0;
-        
-        scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
-        scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
-        break;
-    }
-    case scui_event_enc_bdir: {
-        scui_event_mask_over(event);
-        
-        scui_ui_res_local->cwf_json_idx -= 1;
+        }
+        if (event->enc_way == 1) {
+            scui_ui_res_local->cwf_json_idx -= 1;
         if (scui_ui_res_local->cwf_json_idx >= scui_arr_len(cwf_json_bin))
             scui_ui_res_local->cwf_json_idx  = scui_arr_len(cwf_json_bin) - 1;
+        }
         
         scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
         scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);

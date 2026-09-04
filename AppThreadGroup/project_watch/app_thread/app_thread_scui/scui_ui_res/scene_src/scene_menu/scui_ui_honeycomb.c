@@ -313,28 +313,27 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_lost:
         break;
-    case scui_event_enc_fdir:
-    case scui_event_enc_bdir: {
+    case scui_event_enc_tick: {
         
         bool relayout = false;
         #if SCUI_UI_HONEYCOMB_SCALE_MODE
-        if (event->type == scui_event_enc_fdir &&
+        if (event->enc_way == 0 &&
             scui_ui_res_local->scale_ofs <  SCUI_UI_HONEYCOMB_SCALE_MAX) {
             scui_ui_res_local->scale_ofs += SCUI_UI_HONEYCOMB_SCALE_SPAN;
             relayout = true;
         }
-        if (event->type == scui_event_enc_bdir &&
+        if (event->enc_way == 1 &&
             scui_ui_res_local->scale_ofs >  SCUI_UI_HONEYCOMB_SCALE_MIN) {
             scui_ui_res_local->scale_ofs -= SCUI_UI_HONEYCOMB_SCALE_SPAN;
             relayout = true;
         }
         #else
-        if (event->type == scui_event_enc_fdir &&
+        if (event->enc_way == 0 &&
             scui_ui_res_local->scale_ofs < SCUI_UI_HONEYCOMB_OFS_MAX) {
             scui_ui_res_local->scale_ofs++;
             relayout = true;
         }
-        if (event->type == scui_event_enc_bdir &&
+        if (event->enc_way == 1 &&
             scui_ui_res_local->scale_ofs > SCUI_UI_HONEYCOMB_OFS_MIN) {
             scui_ui_res_local->scale_ofs--;
             relayout = true;

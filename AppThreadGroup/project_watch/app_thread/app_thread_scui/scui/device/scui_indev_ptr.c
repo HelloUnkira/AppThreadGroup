@@ -39,7 +39,7 @@ static bool scui_event_ptr_move_absorb(void *evt_old, void *evt_new)
  */
 static void scui_indev_ptr_event_check(scui_event_t *event)
 {
-    #if SCUI_INDEV_EVENT_MERGE
+    #if SCUI_INDEV_PTR_EVENT_MERGE
     switch (event->type) {
     case scui_event_ptr_click:
         scui_coord_t ptr_cnt = scui_indev_ptr.event_click.ptr_cnt;
@@ -89,7 +89,7 @@ static scui_opt_dir_t scui_indev_ptr_event_dir(scui_event_t *event)
  */
 void scui_indev_ptr_event_merge(void)
 {
-    #if SCUI_INDEV_EVENT_MERGE
+    #if SCUI_INDEV_PTR_EVENT_MERGE
     uint64_t click_tick = scui_indev_ptr.event_click_tick;
     if (click_tick != 0 && scui_tick_cnt() - click_tick > SCUI_INDEV_PTR_CLICK_SPAN) {
         scui_event_notify(&scui_indev_ptr.event_click);

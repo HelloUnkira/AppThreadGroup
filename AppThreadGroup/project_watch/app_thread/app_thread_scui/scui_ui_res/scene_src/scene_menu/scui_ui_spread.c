@@ -257,7 +257,7 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
         
         break;
     }
-    case scui_event_enc_fdir: {
+    case scui_event_enc_tick: {
         scui_event_mask_over(event);
         
         /* 补完上次没跑完的位移 */
@@ -272,38 +272,22 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
                 scui_ui_res_local->skew %  scui_ui_res_local->route;
         }
         
-        /* 多次旋转,跳过前面的动画直接加进去,动画拨正只跑最后一帧 */
-        for (scui_coord_t idx = 0; idx < event->enc_diff - 1; idx++)
-            scui_ui_res_local->skew += scui_ui_res_local->route;
-        
-        scui_ui_res_local->skew += 1;
-        scui_ui_res_local->way  = +1;
-        
-        if (scui_ui_res_local->skew  % scui_ui_res_local->route != 0)
-            scui_ui_res_local->anima = true;
-        break;
-    }
-    case scui_event_enc_bdir: {
-        scui_event_mask_over(event);
-        
-        /* 补完上次没跑完的位移 */
-        if (scui_ui_res_local->skew % scui_ui_res_local->route != 0) {
+        if (event->enc_way == 0) {
+            /* 多次旋转,跳过前面的动画直接加进去,动画拨正只跑最后一帧 */
+            for (scui_coord_t idx = 0; idx < event->enc_diff - 1; idx++)
+                scui_ui_res_local->skew += scui_ui_res_local->route;
             
-            if (scui_ui_res_local->way == +1)
-                scui_ui_res_local->skew += scui_ui_res_local->route -
-                scui_ui_res_local->skew %  scui_ui_res_local->route;
-            
-            if (scui_ui_res_local->way == -1)
-                scui_ui_res_local->skew -= scui_ui_res_local->route -
-                scui_ui_res_local->skew %  scui_ui_res_local->route;
+            scui_ui_res_local->skew += 1;
+            scui_ui_res_local->way  = +1;
         }
-        
-        /* 多次旋转,跳过前面的动画直接加进去,动画拨正只跑最后一帧 */
-        for (scui_coord_t idx = 0; idx < event->enc_diff - 1; idx++)
-            scui_ui_res_local->skew -= scui_ui_res_local->route;
-        
-        scui_ui_res_local->skew -= 1;
-        scui_ui_res_local->way  = -1;
+        if (event->enc_way == 1) {
+            /* 多次旋转,跳过前面的动画直接加进去,动画拨正只跑最后一帧 */
+            for (scui_coord_t idx = 0; idx < event->enc_diff - 1; idx++)
+                scui_ui_res_local->skew -= scui_ui_res_local->route;
+            
+            scui_ui_res_local->skew -= 1;
+            scui_ui_res_local->way  = -1;
+        }
         
         if (scui_ui_res_local->skew  % scui_ui_res_local->route != 0)
             scui_ui_res_local->anima = true;

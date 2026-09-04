@@ -82,8 +82,13 @@
 /*************************************************************************************************/
 /* indev: */
 
-/* 事件合并:多次点击等等 */
-#define SCUI_INDEV_EVENT_MERGE                      (0)
+/* 事件合并: */
+#define SCUI_INDEV_EVENT_MERGE                      (1)
+#define SCUI_INDEV_ANIMA_MERGE                      (SCUI_ANIMA_TICK * 2)
+#define SCUI_INDEV_PTR_EVENT_MERGE                  (0)
+#define SCUI_INDEV_ENC_EVENT_MERGE                  (1)
+#define SCUI_INDEV_BAR_EVENT_MERGE                  (0)
+#define SCUI_INDEV_KEY_EVENT_MERGE                  (0)
 
 /* 输入设备:ptr */
 #define SCUI_INDEV_PTR_CLICK_TIME                   (200)   /* click: 点击时间 */
@@ -93,6 +98,9 @@
 #define SCUI_INDEV_PTR_MOVE_CNT                     (6)     /* fling: 敏感度调整(允许掠过部分move) */
 #define SCUI_INDEV_PTR_MOVE_DELTA                   (1)     /* move:  移动消抖, 最小移动距离 */
 #define SCUI_INDEV_PTR_INERTIA                      (512)   /* move:  惯性系数(速度*系数/SCALE_COF=惯性距离) */
+
+/* 输入设备:enc */
+#define SCUI_INDEV_ENC_MERGE_SPAN                   (50)    /* merge: 合并窗口(去抖/限流) */
 
 /* 输入设备:bar */
 #define SCUI_INDEV_BAR_FLING_RATE                   (448)   /* fling: 距离 * 系数 / 时间 == 速度 * 系数 */

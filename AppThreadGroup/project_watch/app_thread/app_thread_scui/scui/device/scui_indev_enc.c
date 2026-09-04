@@ -7,6 +7,8 @@
 
 #include "scui.h"
 
+static scui_indev_enc_t scui_indev_enc = {0};
+
 /*@brief 旋钮事件吸收回调
  */
 static bool scui_event_enc_absorb(void *evt_old, void *evt_new)
@@ -14,8 +16,15 @@ static bool scui_event_enc_absorb(void *evt_old, void *evt_new)
     scui_event_t *event_old = evt_old;
     scui_event_t *event_new = evt_new;
     
-    /* 将enc值转移到它上面: */
-    event_old->enc_diff += event_new->enc_diff;
+    scui_coord_t diff_old = event_old->enc_diff;
+    scui_coord_t diff_new = event_new->enc_diff;
+    if (event_old->enc_way == 1) diff_old = -diff_old;
+    if (event_new->enc_way == 1) diff_new = -diff_new;
+    scui_coord_t diff_sum = diff_old + diff_new;
+    
+    /* 将enc差分转移到它上面(同向累加/反向对消): */
+    event_old->enc_way  = diff_sum >= 0 ? 0 : 1;
+    event_old->enc_diff = scui_abs(diff_sum);
     return true;
 }
 
@@ -24,8 +33,26 @@ static bool scui_event_enc_absorb(void *evt_old, void *evt_new)
  */
 static void scui_indev_enc_event_check(scui_event_t *event)
 {
-    #if SCUI_INDEV_EVENT_MERGE
-    scui_event_notify(event);
+    #if SCUI_INDEV_ENC_EVENT_MERGE
+    scui_event_t event_diff = *event;
+    event_diff.enc_way  = scui_indev_enc.event_diff.enc_way;
+    event_diff.enc_diff = scui_indev_enc.event_diff.enc_diff;
+    
+    scui_event_t *event_old = &event_diff;
+    scui_event_t *event_new = event;
+    
+    scui_coord_t diff_old = event_old->enc_diff;
+    scui_coord_t diff_new = event_new->enc_diff;
+    if (event_old->enc_way == 1) diff_old = -diff_old;
+    if (event_new->enc_way == 1) diff_new = -diff_new;
+    scui_coord_t diff_sum = diff_old + diff_new;
+    
+    /* 将enc差分转移到它上面(同向累加/反向对消): */
+    event_old->enc_way  = diff_sum >= 0 ? 0 : 1;
+    event_old->enc_diff = scui_abs(diff_sum);
+    
+    scui_indev_enc.event_diff = event_diff;
+    scui_indev_enc.event_diff_tick = scui_tick_cnt();
     #else
     scui_event_notify(event);
     #endif
@@ -35,7 +62,13 @@ static void scui_indev_enc_event_check(scui_event_t *event)
  */
 void scui_indev_enc_event_merge(void)
 {
-    #if SCUI_INDEV_EVENT_MERGE
+    #if SCUI_INDEV_ENC_EVENT_MERGE
+    uint64_t diff_tick = scui_indev_enc.event_diff_tick;
+    if (diff_tick != 0 && scui_tick_cnt() - diff_tick > SCUI_INDEV_ENC_MERGE_SPAN) {
+        scui_event_notify(&scui_indev_enc.event_diff);
+        scui_indev_enc.event_diff.enc_diff = 0;
+        scui_indev_enc.event_diff_tick = 0;
+    }
     #endif
 }
 
@@ -46,21 +79,15 @@ void scui_indev_enc_notify(scui_indev_data_t *data)
 {
     if (data->enc.enc_diff == 0)
         return;
-    scui_event_sys_t type = scui_event_invalid;
-    /* 旋钮类型事件无需额外复杂处理 */
-    if (data->enc.enc_diff > 0) {
-        type = scui_event_enc_fdir;
-        SCUI_LOG_INFO("scui_event_enc_fdir:%d", scui_abs(data->enc.enc_diff));
-    }
-    if (data->enc.enc_diff < 0) {
-        type = scui_event_enc_bdir;
-        SCUI_LOG_INFO("scui_event_enc_bdir:%d", scui_abs(data->enc.enc_diff));
-    }
-    /* 直接作为系统事件发送给管理器即可 */
-    scui_event_define(event, SCUI_HANDLE_SYSTEM, false, type, scui_event_enc_absorb);
-    if (type == scui_event_enc_fdir) event.enc_way = 0;
-    if (type == scui_event_enc_bdir) event.enc_way = 1;
-    event.enc_diff = scui_abs(data->enc.enc_diff);
+    
+    scui_event_t event = {
+        .object   = SCUI_HANDLE_SYSTEM,
+        .type     = scui_event_enc_tick,
+        .absorb   = scui_event_enc_absorb,
+        .enc_way  = data->enc.enc_diff > 0 ? 0 : 1,
+        .enc_diff = scui_abs(data->enc.enc_diff),
+    };
+    SCUI_LOG_INFO("scui_event_enc_tick:%d", event.enc_diff);
     scui_indev_enc_event_check(&event);
 }
 

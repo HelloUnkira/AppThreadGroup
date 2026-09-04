@@ -1417,19 +1417,18 @@ void scui_scroll_invoke(scui_event_t *event)
         }
         break;
     }
-    case scui_event_enc_fdir:
-    case scui_event_enc_bdir: {
+    case scui_event_enc_tick: {
         if (widget->state.indev_hold)
             break;
         
         scui_coord_t way = 0;
         scui_opt_dir_t dir = scui_opt_dir_none;
-        if (event->type == scui_event_enc_fdir) {
+        if (event->enc_way == 0) {
             if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_ltr;
             if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_utd;
             way = +1;
         }
-        if (event->type == scui_event_enc_bdir) {
+        if (event->enc_way == 1) {
             if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_rtl;
             if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_dtu;
             way = -1;

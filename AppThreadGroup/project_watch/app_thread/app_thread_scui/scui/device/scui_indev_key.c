@@ -26,7 +26,7 @@ static bool scui_event_key_hold_absorb(void *evt_old, void *evt_new)
  */
 static void scui_indev_key_event_check(scui_event_t *event)
 {
-    #if SCUI_INDEV_EVENT_MERGE
+    #if SCUI_INDEV_KEY_EVENT_MERGE
     switch (event->type) {
     case scui_event_key_click:
         for (scui_coord_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
@@ -54,7 +54,7 @@ static void scui_indev_key_event_check(scui_event_t *event)
  */
 void scui_indev_key_event_merge(void)
 {
-    #if SCUI_INDEV_EVENT_MERGE
+    #if SCUI_INDEV_KEY_EVENT_MERGE
     for (scui_coord_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++) {
         
         uint64_t click_tick = scui_indev_key.item[idx].event_click_tick;

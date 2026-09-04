@@ -56,8 +56,7 @@ static bool scui_event_cb_check(scui_event_t *event)
         scui_event_ptr_move,
         scui_event_bar_fling,
         scui_event_bar_move,
-        scui_event_enc_fdir,
-        scui_event_enc_bdir,
+        scui_event_enc_tick,
         scui_event_key_hold,
         scui_event_key_click,
         
@@ -151,8 +150,7 @@ static bool scui_event_bubble_filter(scui_event_t *event)
     case scui_event_ptr_move:
     case scui_event_ptr_fling:
         return true;
-    case scui_event_enc_fdir:
-    case scui_event_enc_bdir:
+    case scui_event_enc_tick:
         return true;
     case scui_event_bar_move:
     case scui_event_bar_fling:

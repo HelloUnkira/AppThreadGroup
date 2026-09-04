@@ -50,7 +50,7 @@ typedef enum {
     /* 输入设备事件<ptr,s>: */
     scui_event_ptr_s,
     scui_event_ptr_all,
-    scui_event_ptr_cover,   /* 覆盖事件<> */
+    scui_event_ptr_cover,   /* 覆盖事件<未知> */
     scui_event_ptr_down,    /* 按下事件<point> */
     scui_event_ptr_hold,    /* 持续事件<point>:持续时间 */
     scui_event_ptr_click,   /* 点击事件<point>:点击次数 */
@@ -63,8 +63,7 @@ typedef enum {
     /* 输入设备事件<enc,s> */
     scui_event_enc_s,
     scui_event_enc_all,
-    scui_event_enc_fdir,    /* 正转事件<coord> */
-    scui_event_enc_bdir,    /* 反转事件<coord> */
+    scui_event_enc_tick,    /* 旋转事件<方向,次数> */
     scui_event_enc_e,
     /* 输入设备事件<enc,e> */
     

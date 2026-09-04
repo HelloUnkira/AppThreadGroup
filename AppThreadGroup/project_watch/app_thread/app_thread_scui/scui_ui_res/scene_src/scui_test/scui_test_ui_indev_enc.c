@@ -65,13 +65,11 @@ void scui_test_ui_indev_enc_strip_event_proc(scui_event_t *event)
         scui_indev_notify(&indev_data);
         break;
     }
-    case scui_event_enc_fdir:
-    case scui_event_enc_bdir: {
+    case scui_event_enc_tick: {
         const char *name = NULL;
-        switch (event->type) {
-        case scui_event_enc_fdir:  name = "fdir";  break;
-        case scui_event_enc_bdir:  name = "bdir";  break;
-        }
+        if (event->enc_way == 0) name = "fdir";
+        if (event->enc_way == 1) name = "bdir";
+        
         char mark[SCUI_UI_INDEV_ENC_MARK_LEN];
         snprintf(mark, sizeof(mark), "%s(way:%d,diff:%d)",
             name, event->enc_way, event->enc_diff);

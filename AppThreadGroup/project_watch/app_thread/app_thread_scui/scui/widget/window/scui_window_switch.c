@@ -653,13 +653,12 @@ void scui_window_switch_event(scui_event_t *event)
         }
         break;
     }
-    case scui_event_enc_fdir:
-    case scui_event_enc_bdir: {
+    case scui_event_enc_tick: {
         
         scui_opt_dir_t event_dir = scui_opt_dir_none;
-        SCUI_LOG_INFO("enc_type:%u", event->type);
+        SCUI_LOG_INFO("enc_way:%u", event->enc_way);
         /* 方向检测与条件加载 */
-        if (event->type == scui_event_enc_fdir) {
+        if (event->enc_way == 0) {
             
             if (window->switch_enc_way == scui_opt_dir_hor) {
                 if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
@@ -670,7 +669,7 @@ void scui_window_switch_event(scui_event_t *event)
                 if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
             }
         }
-        if (event->type == scui_event_enc_bdir) {
+        if (event->enc_way == 1) {
             
             if (window->switch_enc_way == scui_opt_dir_hor) {
                 if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;

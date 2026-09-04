@@ -134,8 +134,7 @@ static void scui_event_custom_active(scui_event_t *event)
     switch (event->type) {
     case scui_event_ptr_hold:
     case scui_event_key_hold:
-    case scui_event_enc_fdir:
-    case scui_event_enc_bdir:
+    case scui_event_enc_tick:
     case scui_event_scroll_start:
     case scui_event_scroll_over:
     case scui_event_scroll_keep:
