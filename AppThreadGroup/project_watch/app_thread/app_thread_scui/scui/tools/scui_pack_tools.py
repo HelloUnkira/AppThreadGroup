@@ -71,6 +71,13 @@ _IMG_CFG_DEFS = [      # (键, bool/int, 标签, 选项)
     ('endian',     'bool', '大端字节序(整体)', None),
 ]
 
+# 外源 lv_font_conv 命令模板(前置: cmd 中 lv_font_conv 可用)
+_FONT_SYMBOL_RANGE = '61441,61448,61451,61452,61452,61453,61457,61459,61461,61465,61468,61473,61478,61479,61480,61502,61507,61512,61515,61516,61517,61521,61522,61523,61524,61543,61544,61550,61552,61553,61556,61559,61560,61561,61563,61587,61589,61636,61637,61639,61641,61664,61671,61674,61683,61724,61732,61787,61931,62016,62017,62018,62019,62020,62087,62099,62212,62189,62810,63426,63650'
+_FONT_EU_RANGE  = '-r 0x00-0x7F -r 0x80-0xFF -r 0x100-0x17F -r 0x180-0x24F -r 0x2B0-0x2FF'
+_FONT_CJK_RANGE = '-r 0x00-0x7F -r 0x3000-0x303F -r 0x3040-0x309F -r 0x30A0-0x30FF -r 0x4E00-0x9FFF'
+_FONT_CMD_ORD   = 'lv_font_conv --font "{}" {} --size {} --format bin --bpp {} -o "{}" --force-fast-kern-format'
+_FONT_CMD_DIY   = 'lv_font_conv --font "{}" {} --size {} --format bin --bpp {} -o "{}" --no-kerning'
+
 #============================================================
 # 任务定义
 #============================================================
@@ -389,7 +396,7 @@ class PackApp(object):
             self.out_abs[k] = os.path.join(ui, so)
 
         self.root = tk.Tk()
-        self.root.title('scui资源工具 - 正在开发中...')
+        self.root.title('scui资源工具')
         self.root.geometry('980x720')
         self.root.minsize(860, 620)
 
@@ -449,9 +456,20 @@ class PackApp(object):
                 entryvar.set(self._rel(abs_p))     # 显示为相对
         r = 0
         for name in ('widget', 'image', 'font', 'lang', 'cwf'):
+            if name == 'font':                          # font 输入拆: font 源输入(font_src)
+                fv = tk.StringVar(value=self._rel(self.font_src_dir))
+                ttk.Label(grid, text='font 源输入:', width=14, anchor='e')\
+                    .grid(row=r, column=0, padx=(0, 8), pady=3)
+                ttk.Entry(grid, textvariable=fv, font=('Consolas', 9))\
+                    .grid(row=r, column=1, sticky='ew', pady=3)
+                ttk.Button(grid, text='浏览…', width=7, command=lambda v=fv: _browse(v))\
+                    .grid(row=r, column=2, padx=(8, 0))
+                varman[('in', 'font_src')] = fv
+                r += 1
             for side, lab in (('in', '输入'), ('out', '输出')):
                 cur = self.in_abs[name] if side == 'in' else self.out_abs[name]
-                ttk.Label(grid, text='%s %s:' % (name, lab), width=14, anchor='e')\
+                labt = 'font bin 输入:' if (name == 'font' and side == 'in') else '%s %s:' % (name, lab)
+                ttk.Label(grid, text=labt, width=14, anchor='e')\
                     .grid(row=r, column=0, padx=(0, 8), pady=3)
                 var = tk.StringVar(value=self._rel(cur))   # 子类型显示相对路径
                 e = ttk.Entry(grid, textvariable=var, font=('Consolas', 9))
@@ -545,6 +563,11 @@ class PackApp(object):
         # 相对路径 -> 转绝对(相对 scui_ui)
         if not os.path.isabs(val):
             val = os.path.normpath(os.path.join(self.ui, val))
+        if name == 'font_src':
+            self.font_src_dir = val                      # font 源输入(独立于 in_abs)
+            if hasattr(self, '_font_src_refresh'):
+                self._font_src_refresh()
+            return
         if side == 'in':
             self.in_abs[name] = val
         else:
@@ -779,12 +802,14 @@ class PackApp(object):
     # 左: scene 文件树(虚拟化 Canvas + 折叠)
     def _wid_load_tree(self):
         self.wcanv_tree.delete('all')
+        old_exp = getattr(self, '_wt_exp', set())
         root = self.in_abs['widget']
         if not os.path.isdir(root):
             root = self.ui
         self._wt_root = root
         self._wt_tree = self._wid_tree_scan(root)
-        self._wt_exp  = set()            # 子目录默认折叠(最外围根不显示)
+        # 保留仍存在的展开目录(删除/新建后折叠状态不丢)
+        self._wt_exp = {p for p in old_exp if os.path.isdir(p)}
         self._wid_reflatten()
         self._wid_load_templates()       # 文件树刷新即刷新模板缓存
 
@@ -818,11 +843,21 @@ class PackApp(object):
         self._wid_reflatten()
 
     def _wid_reflatten(self):
+        # 保存当前可见首行索引, 展开/折叠后保持滚动位置
+        old_n = len(self._wdisp)
+        try:
+            v0, _ = self.wcanv_tree.yview()
+        except Exception:
+            v0 = 0.0
+        idx_top = int(v0 * old_n) if old_n else 0
         disp = []
         self._wid_tree_flatten(self._wt_tree, 0, disp)   # 最外围根路径不显示
         self._wdisp = disp
-        self.wcanv_tree.configure(scrollregion=(0, 0, 0, len(disp) * self._wrowH))
-        self.wcanv_tree.yview_moveto(0)                  # 内容刷新后顶吸附
+        n = len(disp)
+        self.wcanv_tree.configure(scrollregion=(0, 0, 0, n * self._wrowH))
+        if n:
+            # 恢复滚动位置(按首行索引, 超界 clamp; 不满一屏自动归顶)
+            self.wcanv_tree.yview_moveto(min(1.0, idx_top / n))
         self._wid_draw()
 
     def _wid_tree_flatten(self, nodes, depth, disp):
@@ -1493,7 +1528,7 @@ class PackApp(object):
                 command=lambda n=name, i=control_idx:
                     self._wid_guard(self._wid_apply_template, i, n))\
                 .pack(side='left', padx=(0, 2))
-            btn = ttk.Button(row, text='+', width=1,
+            btn = ttk.Button(row, text='?', width=1,
                 command=lambda n=name: self._wid_guard(self._wid_tpl_toggle, n))
             btn.pack(side='right', padx=(2, 0))
             tk.Label(row, text=name, bg='#ffffff', anchor='w',
@@ -1523,7 +1558,7 @@ class PackApp(object):
             return
         if detail.winfo_ismapped():
             detail.pack_forget()
-            btn.configure(text='+')
+            btn.configure(text='?')
             st['expanded'].discard(name)
         else:
             detail.pack(in_=self._tpl_box, after=row, fill='x',
@@ -2055,20 +2090,28 @@ class PackApp(object):
         self.tabs['font'] = f
         self.font_status = tk.StringVar(value='未加载')
 
-        # 顶部工具条: json 三键 + 执行打包(同一列)
+        # 顶部工具条: json 三键 + 执行打包(走 font_bin->font_out)
         bar = ttk.Frame(f); bar.pack(fill='x', pady=(2, 4))
         for t, c in (('加载 json', lambda: self._font_load(False)),
                      ('预览 json', self._font_preview),
                      ('保存 json', self._font_save)):
             ttk.Button(bar, text=t, command=c).pack(side='left')
         ttk.Button(bar, text='执行 font 打包', command=lambda: self._run('font')).pack(side='right')
+        ttk.Button(bar, text='刷新 font 源', command=self._font_src_refresh).pack(side='right')
+        ttk.Button(bar, text='lv_font_conv 简介', command=self._font_conv_info).pack(side='right')
+        self._font_conv_lbl = ttk.Label(bar, text='检测 lv_font_conv…', foreground='#888')
+        self._font_conv_lbl.pack(side='right', padx=(4, 0))
         ttk.Label(bar, textvariable=self.font_status, foreground='#777').pack(side='left', padx=(12, 0))
-        ttk.Label(f, text='font.bin 来源于 lv_font_conv 工具，见 font_src/lv_font_conv txt & py',
-                  foreground='#888').pack(anchor='w', padx=(2, 0))
 
-        # 主体: 水平可调(树 | 编辑, 占满)
-        hp = ttk.Panedwindow(f, orient='horizontal'); hp.pack(fill='both', expand=True, pady=(6, 0))
-        lf = ttk.LabelFrame(hp, text=' 字库(json) ', padding=(4, 4)); hp.add(lf, weight=1)
+        # 主体: 上 = bin 整合(固定, 保证"语言/字库"按钮列显示) / 下 = bin 生成(占剩余)
+        # ---------- 上半: bin 整合 font_bin->font_out ----------
+        top_fr = ttk.LabelFrame(f, text=' bin 整合 (font_bin → font_out) ',
+                                padding=(4, 4))
+        top_fr.configure(height=245)          # 固定高度: 刚好完全显示"语言/字库"六按钮, 不挤压下半
+        top_fr.pack_propagate(False)
+        top_fr.pack(side='top', fill='x', pady=(4, 0))
+        hp = ttk.Panedwindow(top_fr, orient='horizontal'); hp.pack(fill='both', expand=True, pady=(2, 0))
+        lf = ttk.LabelFrame(hp, text=' 字库(json) ', padding=(4, 4)); hp.add(lf, weight=1)   # 三列各 1/3
         self.ftree = ttk.Treeview(lf, columns=('size',), show='tree headings', selectmode='browse')
         self.ftree.heading('#0', text='字库条目'); self.ftree.heading('size', text='字号')
         self.ftree.column('size', width=60, anchor='e', stretch=False)
@@ -2076,9 +2119,7 @@ class PackApp(object):
         self.ftree.configure(yscrollcommand=fvs.set)
         self.ftree.pack(side='left', fill='both', expand=True); fvs.pack(side='right', fill='y')
         self.ftree.bind('<<TreeviewSelect>>', self._on_font_sel)
-
-        # 右: 六个操作按钮 与 编辑表单 水平并排
-        rf = ttk.Frame(hp); hp.add(rf, weight=2)
+        rf = ttk.Frame(hp); hp.add(rf, weight=1)
         self.font_json = None
         self.font_sel = None       # (lang_idx, item_idx)
         ops = ttk.LabelFrame(rf, text='语言 / 字库'); ops.pack(side='left', fill='y', padx=(0, 8))
@@ -2088,9 +2129,333 @@ class PackApp(object):
             ttk.Button(ops, text=t, command=c).pack(fill='x', pady=2)
         ef = ttk.LabelFrame(rf, text=' 编辑(json 特性) '); ef.pack(side='left', fill='both', expand=True)
         self._build_font_editor(ef)
+        # range 辅助列(bin 整合右侧, 空间大; 单行输出 + 多行输入)
+        rast_fr = ttk.LabelFrame(hp, text=' range 辅助 ', padding=(4, 4)); hp.add(rast_fr, weight=1)
+        ttk.Label(rast_fr, text='输出(单行)').pack(anchor='w')
+        self._aux_out_var = tk.StringVar()
+        self._aux_out = ttk.Entry(rast_fr, textvariable=self._aux_out_var, state='readonly',
+                                  font=('Consolas', 9))
+        self._aux_out.pack(fill='x', pady=(1, 4))
+        self._aux_out.bind('<Double-Button-1>', lambda e: self._font_aux_copy())
+        ttk.Label(rast_fr, text='输入(多行: 字符 / 0x.. / 十进制 / 区间); 输出框双击复制').pack(anchor='w')
+        self._aux_in = tk.Text(rast_fr, font=('Consolas', 9), height=10)
+        self._aux_in.pack(fill='both', expand=True)
+        ab = ttk.Frame(rast_fr); ab.pack(fill='x', pady=(2, 0))
+        ttk.Button(ab, text='生成 range', command=self._font_aux_gen).pack(side='left')
+
+        # ---------- 下半: bin 生成 font_src->font_bin (外源 lv_font_conv) ----------
+        bot_fr = ttk.LabelFrame(f, text=' bin 生成 (font_src → font_bin, 外源 lv_font_conv) ',
+                                padding=(4, 4)); bot_fr.pack(side='bottom', fill='both', expand=True, pady=(0, 4))
+        htop = ttk.Panedwindow(bot_fr, orient='horizontal'); htop.pack(fill='both', expand=True)
+        # 列1: font 源(字库源文件)
+        fsrc_fr = ttk.LabelFrame(htop, text=' font 源 ', padding=(4, 4)); htop.add(fsrc_fr, weight=1)
+        self.font_src_dir = os.path.join(self.ui, 'font_src')
+        self._font_src_files = []
+        self.ftsrc = ttk.Treeview(fsrc_fr, columns=('kb',), show='tree headings', selectmode='browse')
+        self.ftsrc.heading('#0', text='文件'); self.ftsrc.heading('kb', text='大小')
+        self.ftsrc.column('kb', width=64, anchor='e', stretch=False)
+        fsv = ttk.Scrollbar(fsrc_fr, orient='vertical', command=self.ftsrc.yview)
+        self.ftsrc.configure(yscrollcommand=fsv.set)
+        self.ftsrc.pack(side='left', fill='both', expand=True); fsv.pack(side='right', fill='y')
+        # 列2: font.bin 任务
+        tf_fr = ttk.LabelFrame(htop, text=' font.bin 任务 ', padding=(4, 4)); htop.add(tf_fr, weight=2)
+        row0 = ttk.Frame(tf_fr); row0.pack(fill='x')
+        self._font_area = ttk.Frame(tf_fr); self._font_area.pack(fill='both', expand=True, pady=(2, 0))
+        self._font_tasks = self._font_task_default()
+        self._font_task_build(self._font_area)
+        tbar = ttk.Frame(tf_fr); tbar.pack(fill='x', pady=(2, 0))
+        ttk.Button(tbar, text='添加', command=self._font_task_add).pack(side='left')
+        ttk.Button(tbar, text='删除末项', command=self._font_task_del).pack(side='left', padx=(4, 0))
+        ttk.Button(tbar, text='检测 lv_font_conv', command=self._font_conv_check).pack(side='left', padx=(4, 0))
+        self._font_conv_btn = ttk.Button(tbar, text='批量生成 bin', command=self._font_conv_batch)
+        self._font_conv_btn.pack(side='right')
 
         self.nb.add(f, text='font  ')
         self._font_load(False)
+        self._font_src_refresh()
+        self._font_conv_check()
+
+    #--------------- font 前半段: font_src -> font_bin (外源 lv_font_conv) ---------------
+    def _font_tf_wheel(self, e):
+        # 内容不满一屏时不滚动, 避免滚出顶部留白
+        vh = self._tf_canv.winfo_height() or 200
+        bh = self._tf_canv.bbox('all')[3]
+        if bh <= vh:
+            self._tf_canv.yview_moveto(0)
+            return
+        self._tf_canv.yview_scroll(-1 * (e.delta // 120), 'units')
+
+    def _font_src_refresh(self):
+        """扫描 font_src 下发字库源(ttf/woff), 填左树 + 刷新任务表字体下拉"""
+        self.ftsrc.delete(*self.ftsrc.get_children())
+        self._font_src_files = []
+        if not os.path.isdir(self.font_src_dir):
+            return
+        for e in sorted(os.listdir(self.font_src_dir)):
+            if not e.lower().endswith(('.ttf', '.woff', '.woff2', '.otf')):
+                continue
+            full = os.path.join(self.font_src_dir, e)
+            try:
+                kb = (os.path.getsize(full) + 1023) // 1024
+            except OSError:
+                kb = 0
+            self.ftsrc.insert('', 'end', text=e, values=('%dK' % kb,))
+            self._font_src_files.append(e)
+        if hasattr(self, '_font_area'):
+            self._font_task_build(self._font_area)   # 刷新任务行字体下拉选项
+
+    def _font_task_default(self):
+        """默认任务批次(对齐 font_src/lv_font_conv.py 实际执行, 可编辑/增删)"""
+        sz = '8,12,16,20,24,32,40,48,56,64,72,80,88'
+        t = [
+            # 类型: conv(生成) / copy(拷贝字库); bin 填前缀, size 逗号分隔生成多条 _size.bin
+            {'t': 'conv', 'font': 'font_zh_en.ttf',   'range': '-r 0x20-0x7f',              'size': sz, 'bpp': '8', 'bin': 'font_ascii',  'mode': 'diy'},
+            {'t': 'conv', 'font': 'font_symbol.woff', 'range': '-r ' + _FONT_SYMBOL_RANGE, 'size': sz, 'bpp': '8', 'bin': 'font_symbol', 'mode': 'ord'},
+            {'t': 'conv', 'font': 'font_en_2.ttf',    'range': '-r 0x00-0x7f',              'size': '32,36', 'bpp': '8', 'bin': 'font_en',  'mode': 'ord'},
+            {'t': 'conv', 'font': 'font_zh_2.ttf',    'range': _FONT_EU_RANGE,              'size': '32,36', 'bpp': '4', 'bin': 'font_eu',  'mode': 'diy'},
+            {'t': 'conv', 'font': 'font_zh_1.ttf',    'range': _FONT_CJK_RANGE,             'size': '32,36', 'bpp': '2', 'bin': 'font_cjk', 'mode': 'diy'},
+            {'t': 'copy', 'font': 'font_tinyTTF.ttf', 'range': '', 'size': '', 'bpp': '',   'bin': 'font_tinyTTF.ttf', 'mode': 'copy'},
+        ]
+        return t
+
+    def _font_task_build(self, area):
+        """重建任务区: 始终显示任务表, 不可用时整表置灰禁用"""
+        import tkinter as tk
+        from tkinter import ttk
+        for w in area.winfo_children():
+            w.destroy()
+        self._font_w = []
+        ok = self._font_conv_effective()
+        cols = (('字体', 12), ('range', 24), ('size', 8), ('bpp', 6), ('bin前缀', 12), ('模式', 6))
+        # 表头固定(Label 可读); 字体/模式为下拉列需加宽补偿箭头, Entry 列 +1 补偿内边距
+        head = ttk.Frame(area); head.pack(fill='x', padx=(2, 2), pady=(1, 1))
+        for i, (txt, w) in enumerate(cols):
+            w = w + 4 if i in (0, 5) else w + 1
+            ttk.Label(head, text=txt, foreground='#333' if ok else '#b0b0b0', width=w, anchor='w')\
+                .pack(side='left', padx=(0, 2))
+        ttk.Label(head, text='', width=7).pack(side='right')
+        # 滚动任务表(只有任务行, 不含表头)
+        ttc = ttk.Frame(area); ttc.pack(fill='both', expand=True)
+        self._tf_canv = tk.Canvas(ttc, highlightthickness=0, bg='#ffffff')
+        tvs = ttk.Scrollbar(ttc, orient='vertical', command=self._tf_canv.yview)
+        self._tf_canv.configure(yscrollcommand=tvs.set)
+        self._tf_box = ttk.Frame(self._tf_canv)
+        self._tf_id = self._tf_canv.create_window((0, 0), window=self._tf_box, anchor='nw')
+        def _tf_reconfigure(e):
+            # 滚动区域调整 + 滚动条可见性判断
+            self._tf_canv.configure(scrollregion=self._tf_canv.bbox('all'))
+            vh = self._tf_canv.winfo_height() or 200
+            bh = self._tf_canv.bbox('all')[3]
+            needs_scroll = bh > vh
+            if needs_scroll:
+                if not tvs.winfo_ismapped():
+                    tvs.pack(side='right', fill='y')
+            else:
+                if tvs.winfo_ismapped():
+                    tvs.pack_forget()
+                self._tf_canv.yview_moveto(0)
+        self._tf_box.bind('<Configure>', _tf_reconfigure)
+        self._tf_canv.bind('<Configure>',
+            lambda e: (self._tf_canv.itemconfigure(self._tf_id, width=e.width),
+                       _tf_reconfigure(e)))
+        self._tf_canv.pack(side='left', fill='both', expand=True); tvs.pack(side='right', fill='y')
+        self._tf_canv.bind('<Enter>', lambda e: self._tf_canv.bind_all('<MouseWheel>', self._font_tf_wheel))
+        self._tf_canv.bind('<Leave>', lambda e: self._tf_canv.unbind_all('<MouseWheel>'))
+        srcs = self._font_src_files or ['font_zh_en.ttf', 'font_symbol.woff',
+                                        'font_en_2.ttf', 'font_zh_1.ttf', 'font_zh_2.ttf', 'font_tinyTTF.ttf']
+        st = 'normal' if ok else 'disabled'
+        stro = 'normal' if ok else 'disabled'
+        for rows in self._font_tasks:
+            row = tk.Frame(self._tf_box, bg='#ffffff'); row.pack(fill='x', padx=(2, 2), pady=1)
+            fvar = tk.StringVar(value=rows['font'])
+            rvar = tk.StringVar(value=rows['range'])
+            svar = tk.StringVar(value=rows['size'])
+            bvar = tk.StringVar(value=rows['bpp'])
+            nvar = tk.StringVar(value=rows['bin'])
+            mvar = tk.StringVar(value=rows['mode'])
+            ttk.Combobox(row, textvariable=fvar, values=srcs, width=12,
+                         state='readonly' if (not ok or rows['t'] == 'copy') else 'normal')\
+                .pack(side='left', padx=(0, 2))
+            ttk.Entry(row, textvariable=rvar, state=st, width=24).pack(side='left', padx=(0, 2))
+            ttk.Entry(row, textvariable=svar, state=st, width=8).pack(side='left', padx=(0, 2))
+            ttk.Entry(row, textvariable=bvar, state=st, width=6).pack(side='left', padx=(0, 2))
+            ttk.Entry(row, textvariable=nvar, state=st, width=12).pack(side='left', padx=(0, 2))
+            ttk.Combobox(row, textvariable=mvar, values=('ord', 'diy', 'copy'),
+                         width=6, state='readonly' if ok else 'disabled').pack(side='left', padx=(0, 4))
+            ttk.Button(row, text='▶生成', width=6, state=stro,
+                       command=lambda i=len(self._font_w): self._font_conv_one(i)).pack(side='right')
+            self._font_w.append([fvar, rvar, svar, bvar, nvar, mvar])
+
+    def _font_task_add(self):
+        # 默认追加一份复制当前首批? 追加一个空 conv 任务(字体取首个源)
+        src = self._font_src_files[0] if self._font_src_files else 'font_zh_en.ttf'
+        self._font_tasks.append({'t': 'conv', 'font': src, 'range': '-r 0x20-0x7f',
+                                 'size': '16', 'bpp': '8', 'bin': 'font_new_%d' % len(self._font_tasks),
+                                 'mode': 'diy'})
+        self._font_task_build(self._font_area)
+
+    def _font_task_del(self):
+        if self._font_tasks:
+            self._font_tasks.pop()
+        self._font_task_build(self._font_area)
+
+    def _font_task_row_read(self, i):
+        """读取任务行 vars -> dict"""
+        if not (0 <= i < len(self._font_w)):
+            return None
+        fvar, rvar, svar, bvar, nvar, mvar = self._font_w[i]
+        return {'font': fvar.get().strip(), 'range': rvar.get().strip(),
+                'size': svar.get().strip(), 'bpp': bvar.get().strip(),
+                'bin': nvar.get().strip(), 'mode': mvar.get().strip()}
+
+    def _font_aux_gen(self):
+        """range 辅助: 输入字符/码点/范围 -> 合并去重 -r 表达式"""
+        import re
+        text = self._aux_in.get('1.0', 'end').strip()
+        if not text:
+            return
+        slots = set()
+        for token in re.split(r'[\s,;，；]+', text):
+            token = token.strip()
+            if not token:
+                continue
+            # 区间: 0x..-0x.. / X-X / 字符-字符
+            m = re.match(r'^(0x[0-9a-fA-F]+|\d+)\s*[-–]\s*(0x[0-9a-fA-F]+|\d+)$', token)
+            if m:
+                lo = int(m.group(1), 16) if m.group(1).startswith('0x') else int(m.group(1))
+                hi = int(m.group(2), 16) if m.group(2).startswith('0x') else int(m.group(2))
+                slots.update(range(lo, hi + 1))
+                continue
+            # 单点 0x 或 十进制
+            if token.startswith('0x'):
+                slots.add(int(token, 16))
+            elif token.isdigit():
+                slots.add(int(token))
+            else:
+                # 多字符每个
+                for ch in token:
+                    slots.add(ord(ch))
+        if not slots:
+            return
+        sorted_ = sorted(slots)
+        # 合并连续区间
+        parts = []
+        lo = sorted_[0]
+        hi = sorted_[0]
+        for cp in sorted_[1:]:
+            if cp == hi + 1:
+                hi = cp
+            else:
+                parts.append('0x%X' % lo if lo == hi else '0x%X-0x%X' % (lo, hi))
+                lo = hi = cp
+        parts.append('0x%X' % lo if lo == hi else '0x%X-0x%X' % (lo, hi))
+        expr = ' '.join('-r ' + p for p in parts)
+        self._aux_out_var.set(expr)
+        self._aux_copy.configure(state='normal')
+
+    def _font_aux_copy(self):
+        """复制 range 到剪贴板"""
+        txt = self._aux_out_var.get().strip()
+        if txt:
+            self.root.clipboard_clear()
+            self.root.clipboard_append(txt)
+            self._append_log('font', '[range] 已复制到剪贴板\n')
+
+    def _font_conv_effective(self):
+        """可用状态: 按真实检测结果 lv_font_conv 是否可用"""
+        return getattr(self, '_font_conv_ok', False)
+
+    def _font_conv_check(self):
+        """cmd 检测 lv_font_conv 是否可用(用 shell=True 适配 Windows)"""
+        import subprocess, tempfile
+        ok = True
+        try:
+            r = subprocess.run('lv_font_conv -h', shell=True, capture_output=True, timeout=5)
+            ok = (r.returncode == 0)
+        except Exception:
+            ok = False
+        self._font_conv_ok = ok
+        if ok:
+            self._font_conv_lbl.config(text='lv_font_conv 可用 ✓', foreground='#0a0')
+            self._font_conv_btn.configure(state='normal')
+        else:
+            self._font_conv_lbl.config(text='lv_font_conv 未安装/不可用', foreground='#c00')
+            self._font_conv_btn.configure(state='disabled')
+        if hasattr(self, '_font_area'):
+            self._font_task_build(self._font_area)   # 切换显示任务表/提示
+
+    def _font_conv_info(self):
+        """lv_font_conv 简介弹窗: 任务表使用说明 + lv_font_conv.txt 安装构建指引"""
+        import tkinter as tk
+        from tkinter import scrolledtext
+        top = tk.Toplevel(self.root); top.title('lv_font_conv 简介'); top.geometry('680x460')
+        top.transient(self.root)
+        txt = scrolledtext.ScrolledText(top, wrap='word', font=('Consolas', 9), state='disabled')
+        txt.pack(fill='both', expand=True, padx=6, pady=6)
+        txt.configure(state='normal')
+        # 固定显示 lv_font_conv.txt 前 80 行
+        p = os.path.join(self.font_src_dir, 'lv_font_conv.txt')
+        if os.path.isfile(p):
+            try:
+                buf = ''.join(open(p, encoding='utf-8').readlines()[:80])
+            except Exception:
+                buf = '(lv_font_conv.txt 读取失败)'
+        else:
+            buf = '(lv_font_conv.txt 不存在)'
+        txt.insert('1.0', buf)
+        txt.configure(state='disabled')
+        top.grab_set()
+
+    def _font_conv_batch(self):
+        for i in range(len(self._font_w)):
+            self._font_conv_one(i)
+
+    def _font_conv_one(self, i):
+        """执行第 i 个任务: 走 lv_font_conv(subprocess) 或拷贝字库.
+        size 逗号分隔生成多条; bin 填前缀自动拼 _size.bin.
+        """
+        import shutil, subprocess
+        t = self._font_task_row_read(i)
+        if not t or not t['font'] or not t['bin']:
+            self._append_log('font', '[font] 任务%d 缺 字体/bin 名, 跳过\n' % i)
+            return
+        bin_dir = self.in_abs['font']                     # font_bin
+        os.makedirs(bin_dir, exist_ok=True)
+        src_font = os.path.join(self.font_src_dir, t['font'])
+        is_copy = (t['mode'] == 'copy') or (not t['size'] and not t['range'])
+        if is_copy:
+            # 拷贝: bin 列是完整文件名(如 font_tinyTTF.ttf)或补 .bin
+            out = t['bin'] if '.' in os.path.basename(t['bin']) else t['bin'] + '.bin'
+            out_path = os.path.join(bin_dir, out)
+            try:
+                shutil.copy2(src_font, out_path)
+                self._append_log('font', '[font] copy: %s -> %s\n' % (_rel_log(src_font), out_path))
+            except OSError as e:
+                self._append_log('font', '[font] copy 失败 %s: %r\n' % (t['font'], e))
+            return
+        if not self._font_conv_effective():
+            self._append_log('font', '[font] lv_font_conv 不可用, 跳过 %s\n' % t['bin'])
+            return
+        sizes = [s.strip() for s in t['size'].split(',') if s.strip()]
+        if not sizes:
+            self._append_log('font', '[font] 任务%d 无 size, 跳过\n' % i)
+            return
+        mode = t['mode'] if t['mode'] in ('ord', 'diy') else 'diy'
+        for sz in sizes:
+            out = '%s_%s.bin' % (t['bin'], sz)            # bin 前缀自动拼 _size.bin
+            out_path = os.path.join(bin_dir, out)
+            cmd = (_FONT_CMD_ORD if mode == 'ord' else _FONT_CMD_DIY).format(
+                t['font'], t['range'], sz, t['bpp'], out_path)
+            self._append_log('font', '[font] $ %s\n' % cmd)
+            try:
+                r = subprocess.run(cmd, shell=True, cwd=self.font_src_dir,
+                                   capture_output=True, timeout=600)
+                err = r.stderr.decode('utf-8', 'replace') if r.stderr else ''
+                if err:
+                    self._append_log('font', '[font] %s\n' % err)
+                self._append_log('font', '[font] 完成(%d): %s\n' % (r.returncode, out))
+            except Exception as e:
+                self._append_log('font', '[font] 执行异常: %r\n' % e)
 
     def _build_font_editor(self, rf):
         import tkinter as tk
@@ -2112,8 +2477,6 @@ class PackApp(object):
         ttk.Label(grid, text='line_height_ext').grid(row=4, column=0, sticky='w', padx=(0, 8), pady=3)
         self._fe['line'] = ttk.Entry(grid, width=10)
         self._fe['line'].grid(row=4, column=1, sticky='w', pady=3)
-        ttk.Label(rf, text='提示: 左树选中条目 → 在右侧表单就地编辑 → 点「修改字库」立即生效；点「保存 json」写文件',
-                  foreground='#888', wraplength=340).pack(anchor='w', pady=(6, 0))
         grid.columnconfigure(1, weight=1)
 
     def _font_json_path(self):
@@ -2495,16 +2858,19 @@ class PackApp(object):
         ttk.Entry(pr, textvariable=self.proj_var, width=16).pack(side='left', padx=(6, 10))
         ttk.Button(pr, text='执行 image 打包', command=lambda: self._run('image')).pack(side='right')
 
-        # 主体: 水平分栏(左|右); 每列垂直分栏(上配置 下资源/详情)
+        # 主体: 水平分栏(左|右)
         imh = ttk.Panedwindow(f, orient='horizontal'); imh.pack(fill='both', expand=True, pady=(4, 0))
-        lv = ttk.Panedwindow(imh, orient='vertical'); imh.add(lv, weight=4)
+        lv = ttk.Frame(imh); imh.add(lv, weight=4)
         rv = ttk.Panedwindow(imh, orient='vertical'); imh.add(rv, weight=3)
 
-        # 左上: 图形配置(全局参数, 持久到 scui_pack_tools.json)
-        gf = ttk.LabelFrame(lv, text=' 图形配置 ', padding=(6, 4)); lv.add(gf, weight=2)
+        # 左上: 图形配置(固定顶部自然高, 不被下方挤压)
+        gf = ttk.LabelFrame(lv, text=' 图形配置 ', padding=(6, 4)); gf.pack(side='top', fill='x')
         self._img_cfg_vars = {}
         gcfg, _ = self._img_cfg_load()
-        ggrid = ttk.Frame(gf); ggrid.pack(fill='both', expand=True)
+        # 提示语置顶(首复选框上方)
+        ttk.Label(gf, text='保存后下次打包生效(scui_pack_tools.json)',
+                  foreground='#888').pack(anchor='w', padx=(2, 0), pady=(0, 2))
+        ggrid = ttk.Frame(gf); ggrid.pack(fill='x')
         for r, (key, typ, lab, opts) in enumerate(_IMG_CFG_DEFS):
             if typ == 'bool':
                 var = tk.BooleanVar(value=bool(gcfg.get(key)))
@@ -2519,11 +2885,9 @@ class PackApp(object):
         gbar = ttk.Frame(gf); gbar.pack(fill='x')
         ttk.Button(gbar, text='保存', command=self._img_cfg_save_cb).pack(side='left')
         ttk.Button(gbar, text='恢复默认', command=self._img_cfg_reset).pack(side='left', padx=(8, 0))
-        ttk.Label(gbar, text='保存后下次打包生效(scui_pack_tools.json)',
-                  foreground='#888').pack(side='left', padx=(10, 0))
 
-        # 左下: 图片资源(虚拟化 Canvas, 只绘可见行, 目录/文件 # 启用/禁用按钮)
-        lf = ttk.LabelFrame(lv, text=' 图片资源 ', padding=(4, 4)); lv.add(lf, weight=5)
+        # 左下: 图片资源(占剩余空间, 不去挤图形配置)
+        lf = ttk.LabelFrame(lv, text=' 图片资源 ', padding=(4, 4)); lf.pack(side='bottom', fill='both', expand=True)
         self.it_canv = tk.Canvas(lf, highlightthickness=0, bg='#ffffff')
         self._img_vsb = ttk.Scrollbar(lf, orient='vertical', command=self._img_scroll_cmd)
         self.it_canv.configure(yscrollcommand=self._img_vsb.set)
@@ -2624,9 +2988,11 @@ class PackApp(object):
 
     def _img_reload(self):
         self.it_canv.delete('all')
+        old_exp = getattr(self, '_img_exp', set())
         self._img_root = self.in_abs['image'] if os.path.isdir(self.in_abs['image']) else self.ui
         self._img_tree = self._img_scan_nodes(self._img_root)
-        self._img_exp  = {self._img_root}  # 默认仅根展开, 子目录折叠
+        # 保留仍存在的展开目录(重命名/增删后折叠状态不丢)
+        self._img_exp = {p for p in old_exp if os.path.isdir(p)} | {self._img_root}
         self._img_reflatten()
         # 若选中图片已不存在(被重命名/删除), 清空配置
         if self._i_sel and not os.path.exists(self._i_sel):
@@ -2655,11 +3021,21 @@ class PackApp(object):
 
     def _img_reflatten(self):
         """依据展开状态生成显示序列(虚拟化 + 支持折叠)"""
+        # 保存当前可见首行索引, 展开/折叠后保持滚动位置
+        old_n = len(self._disp)
+        try:
+            v0, _ = self.it_canv.yview()
+        except Exception:
+            v0 = 0.0
+        idx_top = int(v0 * old_n) if old_n else 0
         disp = []
         self._img_flatten(self._img_tree, 0, disp)
         self._disp = disp
-        self.it_canv.configure(scrollregion=(0, 0, 0, len(disp) * self._i_rowH))
-        self.it_canv.yview_moveto(0)             # 内容刷新后顶吸附(避免越界留白)
+        n = len(disp)
+        self.it_canv.configure(scrollregion=(0, 0, 0, n * self._i_rowH))
+        if n:
+            # 恢复滚动位置(按首行索引, 超界 clamp; 不满一屏自动归顶)
+            self.it_canv.yview_moveto(min(1.0, idx_top / n))
         self._img_draw()
 
     def _img_flatten(self, nodes, depth, disp):
@@ -3064,7 +3440,7 @@ class PackApp(object):
             pass
 
     def _status(self, s):
-        self.root.title('scui资源工具 - 正在开发中... - %s' % s)
+        self.root.title('scui资源工具 - %s' % s)
 
     def _on_tab(self, ev):
         idx = self.nb.index(self.nb.select())
