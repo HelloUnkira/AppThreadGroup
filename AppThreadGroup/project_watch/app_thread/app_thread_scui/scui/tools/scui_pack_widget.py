@@ -643,17 +643,30 @@ def scui_widget_parser_c_cleanup(c_root, defaults_map):
 # 供 scui_widget_parser_ready / 前端(GUI) 直接调用
 # ============================================================
 # 控件类型 → maker 类型映射(前缀从maker名推导)
-SCUI_WIDGET_CLASS_MAKER = {
-    'scui_widget_type_window':  'scui_window_maker_t',
-    'scui_widget_type_custom':  'scui_custom_maker_t',
-    'scui_widget_type_scroll':  'scui_scroll_maker_t',
-    'scui_widget_type_string':  'scui_string_maker_t',
-    'scui_widget_type_roller':  'scui_roller_maker_t',
-    'scui_widget_type_xvedio':  'scui_xvedio_maker_t',
-    'scui_widget_type_xwatch':  'scui_xwatch_maker_t',
-    'scui_widget_type_object':  'scui_object_maker_t',
-    'scui_widget_type_menial':  'scui_menial_maker_t',
-}
+# 由 scui_widget_parser_class_maker_scan() 扫描控件枚举动态填充, 不硬编码具体类型
+SCUI_WIDGET_CLASS_MAKER = {}
+
+
+# 扫描控件类型枚举(scui_widget.h), 动态生成 类型→maker 表
+# 枚举: scui_widget_type_xxx → maker: scui_xxx_maker_t(命名规则一致)
+def scui_widget_parser_class_maker_scan(base=None):
+    scui_widget_non_maker = {'unknown', 'num'}      # 非控件枚举(占位/计数)
+    maker = {}
+    src = os.path.normpath(os.path.join(base or os.path.dirname(__file__), SCUI_WIDGET_JSON_FIELD_SOURCE))
+    try:
+        with open(src, encoding='utf-8') as f:
+            text = f.read()
+        m = re.search(r'typedef enum \{(.*?)\} scui_widget_type_t;', text, re.S)
+        if m:
+            for name in re.findall(r'scui_widget_type_(\w+)', m.group(1)):
+                if name in scui_widget_non_maker:
+                    continue
+                maker['scui_widget_type_' + name] = 'scui_' + name + '_maker_t'
+    except Exception as e:
+        print('[class_maker scan] failed: %s' % e)
+    return maker
+
+
 # 字段枚举定义源 / 控件源码根(相对 scui/tools)
 SCUI_WIDGET_JSON_FIELD_SOURCE = '../widget/widget/scui_widget.h'
 SCUI_WIDGET_SOURCE_ROOT = '..'
@@ -872,6 +885,8 @@ def scui_widget_analyze_path_slots(types, aliases):
 
 # 纯内存分析(不写 tmp; base 为 tools 目录, 打包环境由装入方传入)
 def scui_widget_analyze_result(base):
+    global SCUI_WIDGET_CLASS_MAKER
+    SCUI_WIDGET_CLASS_MAKER = scui_widget_parser_class_maker_scan(base)
     prefixes = scui_widget_analyze_prefixes()
     src = os.path.normpath(os.path.join(base, SCUI_WIDGET_JSON_FIELD_SOURCE))
     first_fields = scui_widget_analyze_first_fields(prefixes, src)

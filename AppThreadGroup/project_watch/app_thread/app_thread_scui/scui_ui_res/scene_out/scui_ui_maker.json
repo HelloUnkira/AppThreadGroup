@@ -4,40 +4,40 @@
         {
             "class": "scui_widget_type_window",
             "default": {
-                "widget.type":              "scui_widget_type_window",
-                "widget.style.buffer": 	    "true",
-                "widget.style.fully_bg":    "true",
-                "widget.clip.w":            "SCUI_HOR_RES",
-                "widget.clip.h":            "SCUI_VER_RES",
-                "level":                    "0",
-                "switch_enc":               "scui_opt_pos_all",
-                "switch_key":               "scui_opt_pos_all",
-                "switch_enc_way":           "scui_opt_dir_ver",
-                "switch_key_id[0]":         "scui_event_key_val_down",
-                "switch_key_id[1]":         "scui_event_key_val_up",
-                "switch_key_id[2]":         "scui_event_key_val_right",
-                "switch_key_id[3]":         "scui_event_key_val_left"
+                "widget.type": "scui_widget_type_window",
+                "widget.style.buffer": "true",
+                "widget.style.fully_bg": "true",
+                "widget.clip.w": "SCUI_HOR_RES",
+                "widget.clip.h": "SCUI_VER_RES",
+                "level": "0",
+                "switch_enc": "scui_opt_pos_all",
+                "switch_key": "scui_opt_pos_all",
+                "switch_enc_way": "scui_opt_dir_ver",
+                "switch_key_id[0]": "scui_event_key_val_down",
+                "switch_key_id[1]": "scui_event_key_val_up",
+                "switch_key_id[2]": "scui_event_key_val_right",
+                "switch_key_id[3]": "scui_event_key_val_left"
             }
         },
         {
             "class": "scui_widget_type_custom",
             "default": {
-                "widget.type":              "scui_widget_type_custom",
+                "widget.type": "scui_widget_type_custom",
                 "widget.style.sched_anima": "true"
             }
         },
         {
             "class": "scui_widget_type_scroll",
             "default": {
-                "widget.type":              "scui_widget_type_scroll",
-                "widget.clip.w":            "SCUI_HOR_RES",
-                "widget.clip.h":            "SCUI_VER_RES",
-                "widget.style.indev_enc":   "true",
-                "widget.style.indev_key":   "true",
-                "keyid_fdir":               "SCUI_WIDGET_SCROLL_KEY_FDIR",
-                "keyid_bdir":               "SCUI_WIDGET_SCROLL_KEY_BDIR",
-                "pos":                      "scui_opt_pos_c",
-                "dir":                      "scui_opt_dir_ver"
+                "widget.type": "scui_widget_type_scroll",
+                "widget.clip.w": "SCUI_HOR_RES",
+                "widget.clip.h": "SCUI_VER_RES",
+                "widget.style.indev_enc": "true",
+                "widget.style.indev_key": "true",
+                "keyid_fdir": "SCUI_WIDGET_SCROLL_KEY_FDIR",
+                "keyid_bdir": "SCUI_WIDGET_SCROLL_KEY_BDIR",
+                "pos": "scui_opt_pos_c",
+                "dir": "scui_opt_dir_ver"
             }
         },
         {
@@ -53,15 +53,21 @@
             }
         },
         {
-            "class": "scui_widget_type_xvedio",
+            "class": "scui_widget_type_ximage",
             "default": {
-                "widget.type": "scui_widget_type_xvedio"
+                "widget.type": "scui_widget_type_ximage"
             }
         },
         {
             "class": "scui_widget_type_xwatch",
             "default": {
                 "widget.type": "scui_widget_type_xwatch"
+            }
+        },
+        {
+            "class": "scui_widget_type_object",
+            "default": {
+                "widget.type": "scui_widget_type_object"
             }
         },
         {

@@ -203,7 +203,7 @@ void scui_widget_create(void *maker, scui_handle_t *handle);
 #define scui_scroll_maker_define(name)  scui_widget_maker_define(name, scroll)
 #define scui_string_maker_define(name)  scui_widget_maker_define(name, string)
 #define scui_roller_maker_define(name)  scui_widget_maker_define(name, roller)
-#define scui_xvedio_maker_define(name)  scui_widget_maker_define(name, xvedio)
+#define scui_ximage_maker_define(name)  scui_widget_maker_define(name, ximage)
 #define scui_xwatch_maker_define(name)  scui_widget_maker_define(name, xwatch)
 #define scui_object_maker_define(name)  scui_widget_maker_define(name, object)
 #define scui_menial_maker_define(name)  scui_widget_maker_define(name, menial)

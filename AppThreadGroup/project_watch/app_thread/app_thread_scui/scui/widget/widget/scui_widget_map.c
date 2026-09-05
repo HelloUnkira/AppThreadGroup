@@ -130,15 +130,15 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .inherit = true,
             .name    = "roller",
         },
-        [scui_widget_type_xvedio] = {
-            .size    = sizeof(scui_xvedio_t),
-            .maker   = sizeof(scui_xvedio_maker_t),
-            .base    = scui_widget_type_xvedio,
-            .make    = scui_xvedio_make,
-            .burn    = scui_xvedio_burn,
-            .invoke  = scui_xvedio_invoke,
+        [scui_widget_type_ximage] = {
+            .size    = sizeof(scui_ximage_t),
+            .maker   = sizeof(scui_ximage_maker_t),
+            .base    = scui_widget_type_ximage,
+            .make    = scui_ximage_make,
+            .burn    = scui_ximage_burn,
+            .invoke  = scui_ximage_invoke,
             .inherit = false,
-            .name    = "xvedio",
+            .name    = "ximage",
         },
         [scui_widget_type_xwatch] = {
             .size    = sizeof(scui_xwatch_t),

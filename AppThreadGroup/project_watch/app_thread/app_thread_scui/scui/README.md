@@ -52,13 +52,23 @@
     
     尝试，给切表盘加画布动画效果
     
+    scui_ximage:
+        qrcode
+        barcode
     
-    1.去除ring_edge，使用常规的基础旋转即可
-    2.
+    
+    scui_ximage_qrcode(handle, data, size)
+    scui_ximage_barcode(handle, data, size)
+    
+    scui_ximage_vedio_res(handle, image, loop)
+    scui_ximage_vedio_play(handle)
+    scui_ximage_vedio_abort(handle)
     
     
     
 猜想点:
+    json不支持有条件的动态构建
+    
     bar类型要作为单项ptr类型处理，
     而不是enc类型??? 待定中，有事件合并好像没必要？
     

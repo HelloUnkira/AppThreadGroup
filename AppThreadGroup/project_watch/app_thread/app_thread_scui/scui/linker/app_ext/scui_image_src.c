@@ -330,7 +330,7 @@ void scui_image_bin_read(const char *name, uintptr_t offset, uintptr_t size, uin
  *@param data  url字符串
  *@param size  url字符串长度
  */
-void scui_image_qrcode(scui_image_t *image, uint8_t *data, uint32_t size)
+void scui_image_qrcode(scui_image_t *image, uint8_t *data, uint32_t size, scui_multi_t scale)
 {
     /* 不需要渐变灰度,只需要0-1灰度 */
     SCUI_ASSERT(image->format == scui_pixel_cf_alpha1);
@@ -353,9 +353,9 @@ void scui_image_qrcode(scui_image_t *image, uint8_t *data, uint32_t size)
     scui_multi_t qr_size    = qrcodegen_version2size(qr_version);
     SCUI_ASSERT(qr_version > 0 || qr_size > 0);
     
-    scui_multi_t scale  = dst_clip.w / qr_size;
-    scui_multi_t remain = dst_clip.w % qr_size;
-    scui_multi_t extend = remain / (scale << 2);
+    scui_multi_t scale_px = dst_clip.w / qr_size;
+    scui_multi_t remain   = dst_clip.w % qr_size;
+    scui_multi_t extend   = remain / (scale_px << 2);
     if (extend != 0 && qr_version < qrcodegen_VERSION_MAX)
         qr_version = scui_min(qr_version + extend, qrcodegen_VERSION_MAX);
     
@@ -373,8 +373,15 @@ void scui_image_qrcode(scui_image_t *image, uint8_t *data, uint32_t size)
     }
     
     qr_size = qrcodegen_getSize(qrcode);
-    scale   = dst_clip.w / qr_size;
-    scui_multi_t scaled = (qr_size * scale);
+    /* 应用缩放系数(SCUI_SCALE_COF为原尺寸) */
+    scale_px = scale_px * scale / SCUI_SCALE_COF;
+    if (scale_px < 1) scale_px = 1;
+    scui_multi_t scaled = (qr_size * scale_px);
+    if (scaled > dst_clip.w) {
+        scaled   = dst_clip.w;
+        scale_px = scaled / qr_size;
+        if (scale_px < 1) scale_px = 1;
+    }
     scui_multi_t margin = (dst_clip.w - scaled) / 2;
     scui_area_t draw_area = {
         .x = margin, .w = scaled,
@@ -392,7 +399,7 @@ void scui_image_qrcode(scui_image_t *image, uint8_t *data, uint32_t size)
         uint8_t *dst_ofs = dst_addr  + idx_ofs / 8;
         uint32_t pos_ofs = 7 - idx_ofs % 8;
         
-        bool bit = qrcodegen_getModule(qrcode, idx_item / scale, idx_line / scale);
+        bool bit = qrcodegen_getModule(qrcode, idx_item / scale_px, idx_line / scale_px);
         if (bit) scui_bit_ext_set(dst_ofs, pos_ofs, 8);
         else scui_bit_ext_rst(dst_ofs, pos_ofs, 8);
     }
@@ -407,7 +414,7 @@ void scui_image_qrcode(scui_image_t *image, uint8_t *data, uint32_t size)
  *@param data  url字符串
  *@param size  url字符串长度
  */
-void scui_image_barcode(scui_image_t *image, uint8_t *data, uint32_t size)
+void scui_image_barcode(scui_image_t *image, uint8_t *data, uint32_t size, scui_multi_t scale)
 {
     /* 不需要渐变灰度,只需要0-1灰度 */
     SCUI_ASSERT(image->format == scui_pixel_cf_alpha1);
@@ -430,7 +437,10 @@ void scui_image_barcode(scui_image_t *image, uint8_t *data, uint32_t size)
     size_t barcode_w = code128_encode_gs1(data, out_buf, len);
     // SCUI_ASSERT(barcode_w <= dst_clip.w);
     
-    scui_multi_t scaled = (barcode_w * (dst_clip.w / barcode_w));
+    scui_multi_t block = dst_clip.w / barcode_w;   /* 每单元像素 */
+    scui_multi_t scaled = (barcode_w * block) * scale / SCUI_SCALE_COF;
+    if (scaled > dst_clip.w)
+        scaled = dst_clip.w;
     scui_multi_t margin = (dst_clip.w - scaled) / 2;
     if (barcode_w >= dst_clip.w) {
         scaled = dst_clip.w;

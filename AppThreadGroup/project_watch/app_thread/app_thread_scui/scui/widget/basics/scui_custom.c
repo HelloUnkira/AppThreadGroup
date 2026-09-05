@@ -42,30 +42,7 @@ void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle)
     if (custom->type != scui_custom_type_none) {
         custom->data  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_custom_data_t));
         memcpy(custom->data, &custom_maker->data, sizeof(scui_custom_data_t));
-        
-        /* 可能所需的自定义参数集资源 */
-        switch (custom->type) {
-        case scui_custom_type_barcode:
-            custom->data->barcode.image_src = (scui_image_t){0};
-            custom->data->barcode.image_src.format = scui_pixel_cf_alpha1;
-            scui_image_make(&custom->data->barcode.image_src, &widget->clip);
-            
-            custom->data->barcode.image = scui_handle_find();
-            scui_handle_linker(custom->data->barcode.image,
-                &custom->data->barcode.image_src);
-            break;
-        case scui_custom_type_qrcode:
-            custom->data->qrcode.image_src = (scui_image_t){0};
-            custom->data->qrcode.image_src.format = scui_pixel_cf_alpha1;
-            scui_image_make(&custom->data->qrcode.image_src, &widget->clip);
-            
-            custom->data->qrcode.image = scui_handle_find();
-            scui_handle_linker(custom->data->qrcode.image,
-                &custom->data->qrcode.image_src);
-            break;
-        }
     }
-    
 }
 
 /*@brief 控件析构
@@ -80,17 +57,6 @@ void scui_custom_burn(scui_handle_t handle)
     /* 回收可能因为文本绘制而存留在控件内的资源 */
     scui_custom_text_recycle(handle);
     
-    /* 回收可能存在的自定义参数集资源 */
-    switch (custom->type) {
-    case scui_custom_type_barcode:
-        scui_image_burn(&custom->data->barcode.image_src);
-        scui_handle_clear(custom->data->barcode.image);
-        break;
-    case scui_custom_type_qrcode:
-        scui_image_burn(&custom->data->qrcode.image_src);
-        scui_handle_clear(custom->data->qrcode.image);
-        break;
-    }
     /* 回收可能存在的自定义参数集实例 */
     SCUI_MEM_FREE(custom->data);
     
@@ -124,18 +90,6 @@ void scui_custom_invoke(scui_event_t *event)
     }
     case scui_event_draw_graph: {
         switch (custom->type) {
-        case scui_custom_type_barcode: {
-            scui_handle_t image = custom->data->barcode.image;
-            scui_color_t  color = custom->data->barcode.color;
-            scui_widget_draw_image(widget->myself, NULL, image, NULL, color);
-            break;
-        }
-        case scui_custom_type_qrcode: {
-            scui_handle_t image = custom->data->qrcode.image;
-            scui_color_t  color = custom->data->qrcode.color;
-            scui_widget_draw_image(widget->myself, NULL, image, NULL, color);
-            break;
-        }
         default: {
             /* 简单打个表整理一下:不是ctx */
             static const void (*scui_custom_draw_cb[scui_custom_type_num])
@@ -274,40 +228,6 @@ void scui_custom_data_inst(scui_handle_t handle, scui_custom_data_t **data)
     scui_custom_t *custom = (void *)widget;
     
     *data = custom->data;
-}
-
-/*@brief 自定义控件条形码更新
- *@param handle 控件句柄
- *@param data   url字符串
- *@param size   url字符串长度
- */
-void scui_custom_update_barcode(scui_handle_t handle)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_custom_t *custom = (void *)widget;
-    
-    SCUI_ASSERT(custom->type == scui_custom_type_barcode);
-    scui_image_barcode(&custom->data->barcode.image_src,
-        custom->data->barcode.data,
-        custom->data->barcode.size);
-}
-
-/*@brief 自定义控件二维码更新
- *@param handle 控件句柄
- *@param data   url字符串
- *@param size   url字符串长度
- */
-void scui_custom_update_qrcode(scui_handle_t handle)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_custom_t *custom = (void *)widget;
-    
-    SCUI_ASSERT(custom->type == scui_custom_type_qrcode);
-    scui_image_qrcode(&custom->data->qrcode.image_src,
-        custom->data->qrcode.data,
-        custom->data->qrcode.size);
 }
 
 /*@brief 自定义控件:插件:进度条,滚动条

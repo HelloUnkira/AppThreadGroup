@@ -18,43 +18,50 @@ void scui_test_ui_icon_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         #if 1
-        scui_xvedio_maker_define(xvedio_maker);
-        scui_handle_t xvedio_handle = SCUI_HANDLE_INVALID;
+        scui_ximage_maker_define(ximage_maker);
+        scui_handle_t ximage_handle = SCUI_HANDLE_INVALID;
         
         /* 垂直居中, 水平居中靠摆一排 */
-        scui_coord_t xvedio_gap  = 15;
-        scui_coord_t xvedio_w[3] = {80, 100, 100};
-        scui_coord_t xvedio_total = 0;
-        for (uint8_t idx = 0; idx < 3; idx++)
-            xvedio_total += xvedio_w[idx] + xvedio_gap;
-        xvedio_total -= xvedio_gap;
+        scui_coord_t ximage_gap  = 15;
+        scui_coord_t ximage_w[4] = {80, 100, 80, 100};
+        scui_coord_t ximage_total = 0;
+        for (uint8_t idx = 0; idx < 4; idx++)
+            ximage_total += ximage_w[idx] + ximage_gap;
+        ximage_total -= ximage_gap;
         
-        xvedio_maker.widget.parent  = event->object;
+        ximage_maker.widget.parent  = event->object;
         
-        xvedio_maker.widget.clip.x   = (SCUI_HOR_RES - xvedio_total) / 2;
-        xvedio_maker.widget.clip.y   = SCUI_VER_RES / 2 - 80 / 2;
-        xvedio_maker.widget.clip.w   = 80;
-        xvedio_maker.widget.clip.h   = 80;
-        xvedio_maker.iframe.type     = scui_image_type_gif;
-        xvedio_maker.iframe.handle   = scui_image_prj_vedio_bulb;
-        xvedio_maker.iframe.gif.loop = 100;
-        scui_widget_create(&xvedio_maker, &xvedio_handle);
+        /* gif:x1 无限 */
+        ximage_maker.widget.clip.x   = (SCUI_HOR_RES - ximage_total) / 2;
+        ximage_maker.widget.clip.y   = SCUI_VER_RES / 2 - 80 / 2;
+        ximage_maker.widget.clip.w   = 80;
+        ximage_maker.widget.clip.h   = 80;
+        scui_widget_create(&ximage_maker, &ximage_handle);
+        scui_ximage_vedio_play(ximage_handle, scui_image_prj_vedio_bulb, SCUI_SCALE_COF, -1);
         
-        xvedio_maker.widget.clip.x  += 80 + xvedio_gap;
-        xvedio_maker.widget.clip.y   = SCUI_VER_RES / 2 - 100 / 2;
-        xvedio_maker.widget.clip.w   = 100;
-        xvedio_maker.widget.clip.h   = 100;
-        xvedio_maker.iframe.type     = scui_image_type_lottie;
-        xvedio_maker.iframe.handle   = scui_image_prj_vedio_musiclottie;
-        scui_widget_create(&xvedio_maker, &xvedio_handle);
+        /* lottie:x1 无限 */
+        ximage_maker.widget.clip.x  += 80 + ximage_gap;
+        ximage_maker.widget.clip.y   = SCUI_VER_RES / 2 - 100 / 2;
+        ximage_maker.widget.clip.w   = 100;
+        ximage_maker.widget.clip.h   = 100;
+        scui_widget_create(&ximage_maker, &ximage_handle);
+        scui_ximage_vedio_play(ximage_handle, scui_image_prj_vedio_musiclottie, SCUI_SCALE_COF, -1);
         
-        xvedio_maker.widget.clip.x  += 100 + xvedio_gap;
-        xvedio_maker.widget.clip.y   = SCUI_VER_RES / 2 - 100 / 2;
-        xvedio_maker.widget.clip.w   = 100;
-        xvedio_maker.widget.clip.h   = 100;
-        xvedio_maker.iframe.type     = scui_image_type_lottie;
-        xvedio_maker.iframe.handle   = scui_image_prj_vedio_comfirmlottie;
-        scui_widget_create(&xvedio_maker, &xvedio_handle);
+        /* gif:x2 3次 */
+        ximage_maker.widget.clip.x  += 100 + ximage_gap;
+        ximage_maker.widget.clip.y   = SCUI_VER_RES / 2 - 80 / 2;
+        ximage_maker.widget.clip.w   = 80;
+        ximage_maker.widget.clip.h   = 80;
+        scui_widget_create(&ximage_maker, &ximage_handle);
+        scui_ximage_vedio_play(ximage_handle, scui_image_prj_vedio_bulb, SCUI_SCALE_COF, 3);
+        
+        /* lottie:x2 5次 */
+        ximage_maker.widget.clip.x  += 80 + ximage_gap;
+        ximage_maker.widget.clip.y   = SCUI_VER_RES / 2 - 100 / 2;
+        ximage_maker.widget.clip.w   = 100;
+        ximage_maker.widget.clip.h   = 100;
+        scui_widget_create(&ximage_maker, &ximage_handle);
+        scui_ximage_vedio_play(ximage_handle, scui_image_prj_vedio_comfirmlottie, SCUI_SCALE_COF, 5);
         #endif
         
         break;

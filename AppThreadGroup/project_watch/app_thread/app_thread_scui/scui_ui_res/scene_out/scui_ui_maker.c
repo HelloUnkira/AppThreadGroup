@@ -60,16 +60,22 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		roller_maker->widget.type  = scui_widget_type_roller;
 		break;
 	}
-	case scui_widget_type_xvedio: {
-		scui_xvedio_maker_t *xvedio_maker = (scui_xvedio_maker_t *)maker;
+	case scui_widget_type_ximage: {
+		scui_ximage_maker_t *ximage_maker = (scui_ximage_maker_t *)maker;
 		
-		xvedio_maker->widget.type  = scui_widget_type_xvedio;
+		ximage_maker->widget.type  = scui_widget_type_ximage;
 		break;
 	}
 	case scui_widget_type_xwatch: {
 		scui_xwatch_maker_t *xwatch_maker = (scui_xwatch_maker_t *)maker;
 		
 		xwatch_maker->widget.type  = scui_widget_type_xwatch;
+		break;
+	}
+	case scui_widget_type_object: {
+		scui_object_maker_t *object_maker = (scui_object_maker_t *)maker;
+		
+		object_maker->widget.type  = scui_widget_type_object;
 		break;
 	}
 	case scui_widget_type_menial: {

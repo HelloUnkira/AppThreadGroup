@@ -20,13 +20,13 @@ void scui_image_bin_read(const char *name, uintptr_t offset, uintptr_t size, uin
  *@param data  url字符串
  *@param size  url字符串长度
  */
-void scui_image_qrcode(scui_image_t *image, uint8_t *data, uint32_t size);
+void scui_image_qrcode(scui_image_t *image, uint8_t *data, uint32_t size, scui_multi_t scale);
 
 /*@brief 生成图片
  *@param image 图片资源信息
  *@param data  url字符串
  *@param size  url字符串长度
  */
-void scui_image_barcode(scui_image_t *image, uint8_t *data, uint32_t size);
+void scui_image_barcode(scui_image_t *image, uint8_t *data, uint32_t size, scui_multi_t scale);
 
 #endif

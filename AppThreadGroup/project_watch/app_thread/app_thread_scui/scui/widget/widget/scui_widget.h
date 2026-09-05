@@ -11,7 +11,7 @@ typedef enum {
     scui_widget_type_string,    /* 字符串控件 */
     /* 扩展控件 */
     scui_widget_type_roller,    /* 滚动控件 */
-    scui_widget_type_xvedio,    /* 图帧控件 */
+    scui_widget_type_ximage,    /* 图像控件 */
     scui_widget_type_xwatch,    /* 指针控件 */
     /* 可选控件 */
     scui_widget_type_object,    /* 对象控件 */

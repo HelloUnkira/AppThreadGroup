@@ -35,9 +35,9 @@
 #include "scui_cache_font.h"        /* 字库缓存 */
 #include "scui_cache_glyph.h"       /* 文字缓存 */
 /* linker */
-#include "scui_image_frame.h"       /* 图像帧资源加载卸载 */
 #include "scui_image_src.h"         /* 图像资源加载卸载 */
 #include "scui_font_src.h"          /* 字体资源获取 */
+#include "scui_vedio.h"             /* 视频资源管理 */
 /* device */
 #include "scui_engine.h"            /* 引擎 */
 #include "scui_indev.h"             /* 输入设备 */
@@ -65,10 +65,10 @@
 /* widget(extend): */
 #include "scui_roller.h"            /* 控件(滚轮) */
 #include "scui_roller_inf.h"        /* 控件(滚轮)API */
-#include "scui_xvedio.h"            /* 控件(图帧) */
-#include "scui_xvedio_inf.h"        /* 控件(图帧)API */
 #include "scui_xwatch.h"            /* 控件(指针) */
 #include "scui_xwatch_inf.h"        /* 控件(指针)API */
+#include "scui_ximage.h"            /* 控件(图像) */
+#include "scui_ximage_inf.h"        /* 控件(图像)API */
 /* widget(custom): */
 #include "scui_object.h"            /* 控件(对象) */
 #include "scui_object_inf.h"        /* 控件(对象)API */
