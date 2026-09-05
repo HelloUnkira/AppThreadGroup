@@ -52,17 +52,6 @@
     
     尝试，给切表盘加画布动画效果
     
-    scui_ximage:
-        qrcode
-        barcode
-    
-    
-    scui_ximage_qrcode(handle, data, size)
-    scui_ximage_barcode(handle, data, size)
-    
-    scui_ximage_vedio_res(handle, image, loop)
-    scui_ximage_vedio_play(handle)
-    scui_ximage_vedio_abort(handle)
     
     
     

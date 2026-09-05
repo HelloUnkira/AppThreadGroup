@@ -41,6 +41,20 @@ void scui_test_ui_ximage_item_event_proc(scui_event_t *event)
         case 5: /* vedio:lottie:x2 5次 */
             scui_ximage_vedio_play(handle, scui_image_prj_vedio_comfirmlottie, SCUI_SCALE_COF, 5);
             break;
+        case 6: { /* replace:6个index 1秒循环 */
+            static const scui_handle_t index_list[] = {
+                scui_image_prj_weather_arrow_up,
+                scui_image_prj_weather_arrow_down,
+                scui_image_prj_weather_up,
+                scui_image_prj_weather_down,
+                scui_image_prj_weather_uv,
+                scui_image_prj_weather_ring_uv,
+            };
+            scui_coord_t index_num = sizeof(index_list) / sizeof(index_list[0]);
+            scui_multi_t index_speed = SCUI_SCALE_COF * 1000 / ((scui_multi_t)index_num * SCUI_ANIMA_TICK);
+            scui_ximage_replace_play(handle, (scui_handle_t *)index_list, index_num, index_speed, -1);
+            break;
+        }
         default:
             break;
         }
@@ -56,34 +70,8 @@ void scui_test_ui_ximage_item_event_proc(scui_event_t *event)
  */
 void scui_test_ui_ximage_event_proc(scui_event_t *event)
 {
+    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     switch (event->type) {
-    case scui_event_draw_graph: {
-        /* 直接 draw 一排 index 图标(不建控件, 保持间隔) */
-        scui_coord_t gap  = 14;
-        scui_coord_t size = 60;
-        scui_handle_t index_img[] = {
-            scui_image_prj_weather_arrow_up,
-            scui_image_prj_weather_arrow_down,
-            scui_image_prj_weather_up,
-            scui_image_prj_weather_down,
-            scui_image_prj_weather_uv,
-            scui_image_prj_weather_ring_uv,
-        };
-        uint8_t num = sizeof(index_img) / sizeof(index_img[0]);
-        scui_coord_t total = num * size + (num - 1) * gap;
-        scui_coord_t pos_y = SCUI_VER_RES * 3 / 4;
-        scui_coord_t pos_x = (SCUI_HOR_RES - total) / 2;
-        for (uint8_t i = 0; i < num; i++) {
-            scui_area_t area = {
-                .x = pos_x + i * (size + gap),
-                .y = pos_y,
-                .w = size,
-                .h = size,
-            };
-            scui_widget_draw_image(event->object, &area, index_img[i], NULL, SCUI_COLOR_UNUSED);
-        }
-        break;
-    }
     default:
         break;
     }

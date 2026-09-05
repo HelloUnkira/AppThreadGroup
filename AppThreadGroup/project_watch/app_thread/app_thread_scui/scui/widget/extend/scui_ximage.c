@@ -17,12 +17,18 @@ static void scui_ximage_reset(scui_ximage_t *ximage)
         scui_vedio_burn(&ximage->data.vedio.frame);
         break;
     case scui_ximage_type_qrcode:
-        scui_handle_clear(ximage->data.qrcode.image);
-        scui_image_burn(&ximage->data.qrcode.image_src);
+        scui_handle_clear(ximage->data.qrcode.graph);
+        scui_image_burn(&ximage->data.qrcode.image);
         break;
     case scui_ximage_type_barcode:
-        scui_handle_clear(ximage->data.barcode.image);
-        scui_image_burn(&ximage->data.barcode.image_src);
+        scui_handle_clear(ximage->data.barcode.graph);
+        scui_image_burn(&ximage->data.barcode.image);
+        break;
+    case scui_ximage_type_sequence:
+        SCUI_MEM_FREE(ximage->data.sequence.list);
+        break;
+    case scui_ximage_type_replace:
+        SCUI_MEM_FREE(ximage->data.replace.list);
         break;
     default:
         break;
@@ -147,16 +153,16 @@ void scui_ximage_qrcode(scui_handle_t handle, uint8_t *data, uint32_t size,
     ximage->data.qrcode.data  = data;
     ximage->data.qrcode.size  = size;
     
-    ximage->data.qrcode.image_src = (scui_image_t){0};
-    ximage->data.qrcode.image_src.format = scui_pixel_cf_alpha1;
-    scui_image_make(&ximage->data.qrcode.image_src, &widget->clip);
+    ximage->data.qrcode.image = (scui_image_t){0};
+    ximage->data.qrcode.image.format = scui_pixel_cf_alpha1;
+    scui_image_make(&ximage->data.qrcode.image, &widget->clip);
     
-    ximage->data.qrcode.image = scui_handle_find();
-    scui_handle_linker(ximage->data.qrcode.image,
-        &ximage->data.qrcode.image_src);
+    ximage->data.qrcode.graph = scui_handle_find();
+    scui_handle_linker(ximage->data.qrcode.graph,
+        &ximage->data.qrcode.image);
     
     /* 注入即生成 */
-    scui_image_qrcode(&ximage->data.qrcode.image_src, data, size, scale);
+    scui_image_qrcode(&ximage->data.qrcode.image, data, size, scale);
     scui_widget_draw(handle, NULL, false, 0);
 }
 
@@ -181,16 +187,16 @@ void scui_ximage_barcode(scui_handle_t handle, uint8_t *data, uint32_t size,
     ximage->data.barcode.data  = data;
     ximage->data.barcode.size  = size;
     
-    ximage->data.barcode.image_src = (scui_image_t){0};
-    ximage->data.barcode.image_src.format = scui_pixel_cf_alpha1;
-    scui_image_make(&ximage->data.barcode.image_src, &widget->clip);
+    ximage->data.barcode.image = (scui_image_t){0};
+    ximage->data.barcode.image.format = scui_pixel_cf_alpha1;
+    scui_image_make(&ximage->data.barcode.image, &widget->clip);
     
-    ximage->data.barcode.image = scui_handle_find();
-    scui_handle_linker(ximage->data.barcode.image,
-        &ximage->data.barcode.image_src);
+    ximage->data.barcode.graph = scui_handle_find();
+    scui_handle_linker(ximage->data.barcode.graph,
+        &ximage->data.barcode.image);
     
     /* 注入即生成 */
-    scui_image_barcode(&ximage->data.barcode.image_src, data, size, scale);
+    scui_image_barcode(&ximage->data.barcode.image, data, size, scale);
     scui_widget_draw(handle, NULL, false, 0);
 }
 
@@ -210,8 +216,13 @@ void scui_ximage_sequence(scui_handle_t handle, scui_handle_t *list,
     
     scui_ximage_reset(ximage);
     
+    SCUI_ASSERT(num > 0);
+    scui_handle_t *image_list = NULL;
+    image_list = SCUI_MEM_ALLOC(scui_mem_type_mix, num * sizeof(scui_handle_t));
+    memcpy(image_list, list, num * sizeof(scui_handle_t));
+    
     ximage->type = scui_ximage_type_sequence;
-    ximage->data.sequence.image = list;
+    ximage->data.sequence.list  = image_list;
     ximage->data.sequence.num   = num;
     ximage->data.sequence.span  = span;
     ximage->data.sequence.way   = way;
@@ -235,8 +246,13 @@ void scui_ximage_replace_play(scui_handle_t handle, scui_handle_t *list,
     
     scui_ximage_reset(ximage);
     
+    SCUI_ASSERT(num > 0);
+    scui_handle_t *image_list = NULL;
+    image_list = SCUI_MEM_ALLOC(scui_mem_type_mix, num * sizeof(scui_handle_t));
+    memcpy(image_list, list, num * sizeof(scui_handle_t));
+    
     ximage->type = scui_ximage_type_replace;
-    ximage->data.replace.image = list;
+    ximage->data.replace.list  = image_list;
     ximage->data.replace.num   = num;
     ximage->data.replace.curr  = 0;
     ximage->data.replace.speed = speed;
@@ -334,19 +350,19 @@ void scui_ximage_invoke(scui_event_t *event)
             break;
         }
         case scui_ximage_type_qrcode: {
-            scui_handle_t image = ximage->data.qrcode.image;
+            scui_handle_t image = ximage->data.qrcode.graph;
             scui_color_t  color = ximage->data.qrcode.color;
             scui_widget_draw_image(widget->myself, NULL, image, NULL, color);
             break;
         }
         case scui_ximage_type_barcode: {
-            scui_handle_t image = ximage->data.barcode.image;
+            scui_handle_t image = ximage->data.barcode.graph;
             scui_color_t  color = ximage->data.barcode.color;
             scui_widget_draw_image(widget->myself, NULL, image, NULL, color);
             break;
         }
         case scui_ximage_type_sequence: {
-            scui_handle_t *image_list = ximage->data.sequence.image;
+            scui_handle_t *image_list = ximage->data.sequence.list;
             scui_color_t   color      = SCUI_COLOR_FILTER_TRANS;
             scui_coord_t   span       = ximage->data.sequence.span;
             scui_coord_t   num        = ximage->data.sequence.num;
@@ -370,7 +386,7 @@ void scui_ximage_invoke(scui_event_t *event)
             break;
         }
         case scui_ximage_type_replace: {
-            scui_handle_t *image_list = ximage->data.replace.image;
+            scui_handle_t *image_list = ximage->data.replace.list;
             scui_coord_t   curr       = ximage->data.replace.curr;
             SCUI_ASSERT(curr < ximage->data.replace.num);
             if (image_list[curr] != SCUI_HANDLE_INVALID)

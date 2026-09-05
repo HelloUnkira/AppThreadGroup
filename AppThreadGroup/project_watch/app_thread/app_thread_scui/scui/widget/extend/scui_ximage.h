@@ -20,28 +20,28 @@ typedef union {
         scui_sbitfd_t  work:1;          /* 播放/停止 */
     } vedio;
     struct {
-        scui_handle_t  image;           /* 生成图像句柄 */
-        scui_image_t   image_src;       /* 生成图像源 */
+        scui_handle_t  graph;           /* 生成图像句柄 */
+        scui_image_t   image;           /* 生成图像源 */
         scui_color_t   color;           /* 图像颜色 */
         uint8_t       *data;            /* url字符串 */
         uint32_t       size;            /* url字符串长度 */
     } qrcode;
     struct {
-        scui_handle_t  image;           /* 生成图像句柄 */
-        scui_image_t   image_src;       /* 生成图像源 */
+        scui_handle_t  graph;           /* 生成图像句柄 */
+        scui_image_t   image;           /* 生成图像源 */
         scui_color_t   color;           /* 图像颜色 */
         uint8_t       *data;            /* url字符串 */
         uint32_t       size;            /* url字符串长度 */
     } barcode;
     struct {
-        scui_handle_t *image;           /* 图像句柄列表 */
+        scui_handle_t *list;            /* 图像句柄列表 */
         scui_color_t   color;           /* 图像源色调(alpha图使用) */
         scui_coord_t   span;            /* 图像间隙 */
         scui_coord_t   num;             /* 图像数量 */
         bool           way;             /* 方向(0:水平方向;1:垂直方向) */
     } sequence;
     struct {
-        scui_handle_t *image;           /* 播放图像句柄列表 */
+        scui_handle_t *list;            /* 播放图像句柄列表 */
         scui_coord_t   num;             /* 播放图像数量 */
         scui_coord_t   curr;            /* 当前帧索引 */
         scui_multi_t   speed;           /* 播放速度 */
