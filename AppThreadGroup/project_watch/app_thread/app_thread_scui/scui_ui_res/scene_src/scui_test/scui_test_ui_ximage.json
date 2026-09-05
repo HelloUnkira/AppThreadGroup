@@ -1,0 +1,81 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":              "图像控件测试窗口",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
+            "widget.child_num":         "10",
+            "widget.event_cb":          "scui_test_ui_ximage_event_proc"
+        },
+        {
+            "annotation":              "barcode(顶部居中留白)",
+            "widget.type":              "scui_widget_type_ximage",
+            "widget.style.fully_bg":    "true",
+            "widget.clip.x":            "(SCUI_HOR_RES - SCUI_HOR_RES * 3 / 4) / 2",
+            "widget.clip.y":            "15",
+            "widget.clip.w":            "SCUI_HOR_RES * 3 / 4",
+            "widget.clip.h":            "SCUI_VER_RES * 1 / 6",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_BARCODE",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
+            "widget.event_cb":          "scui_test_ui_ximage_item_event_proc"
+        },
+        {
+            "annotation":              "qrcode(barcode下左对齐)",
+            "widget.type":              "scui_widget_type_ximage",
+            "widget.style.fully_bg":    "true",
+            "widget.clip.x":            "SCUI_HOR_RES * 1 / 8",
+            "widget.clip.y":            "SCUI_VER_RES * 1 / 5 + 15",
+            "widget.clip.w":            "SCUI_HOR_RES * 2 / 5",
+            "widget.clip.h":            "SCUI_VER_RES * 2 / 5",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_QRCODE",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
+            "widget.event_cb":          "scui_test_ui_ximage_item_event_proc"
+        },
+        {
+            "annotation":              "vedio:gif:x1 无限",
+            "widget.type":              "scui_widget_type_ximage",
+            "widget.clip.x":            "SCUI_HOR_RES * 1 / 2 + 17",
+            "widget.clip.y":            "SCUI_VER_RES * 1 / 5 + 15",
+            "widget.clip.w":            "80",
+            "widget.clip.h":            "80",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_V1",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
+            "widget.event_cb":          "scui_test_ui_ximage_item_event_proc"
+        },
+        {
+            "annotation":              "vedio:lottie:x1 无限",
+            "widget.type":              "scui_widget_type_ximage",
+            "widget.clip.x":            "SCUI_HOR_RES * 1 / 2 + 103",
+            "widget.clip.y":            "SCUI_VER_RES * 1 / 5 + 15",
+            "widget.clip.w":            "100",
+            "widget.clip.h":            "100",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_V2",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
+            "widget.event_cb":          "scui_test_ui_ximage_item_event_proc"
+        },
+        {
+            "annotation":              "vedio:gif:x2 3次",
+            "widget.type":              "scui_widget_type_ximage",
+            "widget.clip.x":            "SCUI_HOR_RES * 1 / 2 + 17",
+            "widget.clip.y":            "SCUI_VER_RES * 2 / 5 + 15",
+            "widget.clip.w":            "80",
+            "widget.clip.h":            "80",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_V3",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
+            "widget.event_cb":          "scui_test_ui_ximage_item_event_proc"
+        },
+        {
+            "annotation":              "vedio:lottie:x2 5次",
+            "widget.type":              "scui_widget_type_ximage",
+            "widget.clip.x":            "SCUI_HOR_RES * 1 / 2 + 103",
+            "widget.clip.y":            "SCUI_VER_RES * 2 / 5 + 15",
+            "widget.clip.w":            "100",
+            "widget.clip.h":            "100",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_V4",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
+            "widget.event_cb":          "scui_test_ui_ximage_item_event_proc"
+        }
+    ]
+}
