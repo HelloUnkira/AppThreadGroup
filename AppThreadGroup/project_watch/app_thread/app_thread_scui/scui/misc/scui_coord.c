@@ -550,3 +550,32 @@ scui_multi_t scui_area_size(scui_area_t *area)
     SCUI_ASSERT(area->w >= 0 && area->h >= 0);
     return (scui_multi_t)area->w * (scui_multi_t)area->h;
 }
+
+/*@brief 区域相对区域对齐偏移(area_t参考area对齐)
+ *@param area   区域
+ *@param area_t 区域
+ *@param align  对齐方向
+ *@retval 对齐偏移值
+ */
+scui_point_t scui_area_align(scui_area_t *area, scui_area_t *area_t, scui_align_t align)
+{
+    scui_area_t clip_t = *area;    /* 参照区域 */
+    scui_area_t clip_w = *area_t;  /* 被摆放区域 */
+    scui_point_t offset = {0};
+    
+    /* 水平轴: */
+    if (scui_opt_bits_equal(align, scui_align_mask_ixl)) ;
+    else if (scui_opt_bits_equal(align, scui_align_mask_ixm)) offset.x = +(clip_t.w - clip_w.w) / 2;
+    else if (scui_opt_bits_equal(align, scui_align_mask_ixr)) offset.x = +(clip_t.w - clip_w.w);
+    else if (scui_opt_bits_equal(align, scui_align_mask_oxl)) offset.x = -(clip_w.w);
+    else if (scui_opt_bits_equal(align, scui_align_mask_oxr)) offset.x = +(clip_t.w);
+    
+    /* 垂直轴: */
+    if (scui_opt_bits_equal(align, scui_align_mask_iyt)) ;
+    else if (scui_opt_bits_equal(align, scui_align_mask_iym)) offset.y = +(clip_t.h - clip_w.h) / 2;
+    else if (scui_opt_bits_equal(align, scui_align_mask_iyb)) offset.y = +(clip_t.h - clip_w.h);
+    else if (scui_opt_bits_equal(align, scui_align_mask_oyt)) offset.y = -(clip_w.h);
+    else if (scui_opt_bits_equal(align, scui_align_mask_oyb)) offset.y = +(clip_t.h);
+    
+    return offset;
+}

@@ -36,9 +36,10 @@ typedef union {
     struct {
         scui_handle_t *list;            /* 图像句柄列表 */
         scui_color_t   color;           /* 图像源色调(alpha图使用) */
+        scui_align_t   align;           /* 图像对齐 */
         scui_coord_t   span;            /* 图像间隙 */
         scui_coord_t   num;             /* 图像数量 */
-        bool           way;             /* 方向(0:水平方向;1:垂直方向) */
+        scui_sbitfd_t  way:1;           /* 方向(0:水平方向;1:垂直方向) */
     } sequence;
     struct {
         scui_handle_t *list;            /* 播放图像句柄列表 */

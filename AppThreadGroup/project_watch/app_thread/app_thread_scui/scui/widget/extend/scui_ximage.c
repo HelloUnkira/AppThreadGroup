@@ -204,11 +204,12 @@ void scui_ximage_barcode(scui_handle_t handle, uint8_t *data, uint32_t size,
  *@param handle 图像控件句柄
  *@param list   图像句柄列表
  *@param num    图像数量
+ *@param align  图像对齐
  *@param span   图像间隙
  *@param way    方向(0:水平方向;1:垂直方向)
  */
 void scui_ximage_sequence(scui_handle_t handle, scui_handle_t *list,
-    scui_coord_t num, scui_coord_t span, bool way)
+    scui_coord_t num, scui_align_t align, scui_coord_t span, bool way)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_ximage));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -224,6 +225,7 @@ void scui_ximage_sequence(scui_handle_t handle, scui_handle_t *list,
     ximage->type = scui_ximage_type_sequence;
     ximage->data.sequence.list  = image_list;
     ximage->data.sequence.num   = num;
+    ximage->data.sequence.align = align;
     ximage->data.sequence.span  = span;
     ximage->data.sequence.way   = way;
     
@@ -362,26 +364,69 @@ void scui_ximage_invoke(scui_event_t *event)
             break;
         }
         case scui_ximage_type_sequence: {
-            scui_handle_t *image_list = ximage->data.sequence.list;
-            scui_color_t   color      = SCUI_COLOR_FILTER_TRANS;
-            scui_coord_t   span       = ximage->data.sequence.span;
-            scui_coord_t   num        = ximage->data.sequence.num;
-            bool           way        = ximage->data.sequence.way;
+            scui_area_t    widget_clip = scui_widget_area(widget->myself);
+            scui_handle_t *image_list  = ximage->data.sequence.list;
+            scui_align_t   align       = ximage->data.sequence.align;
+            scui_coord_t   span        = ximage->data.sequence.span;
+            scui_coord_t   num         = ximage->data.sequence.num;
+            bool           way         = ximage->data.sequence.way;
             
-            scui_area_t widget_clip = scui_widget_clip(widget->myself);
-            widget_clip.x = widget_clip.y = 0;
-            
-            scui_point_t offset = {0};
+            /* 布局整体尺寸 */
+            scui_coord_t total = 0, single = 0;
             for (scui_coord_t idx = 0; idx < num; idx++) {
                 if (image_list[idx] == SCUI_HANDLE_INVALID)
                     continue;
                 
-                scui_area_t dst_clip = widget_clip;
-                if (scui_area_limit_offset(&dst_clip, &offset))
-                    scui_widget_draw_image(widget->myself, &dst_clip, image_list[idx], NULL, color);
+                scui_coord_t w = scui_image_w(image_list[idx]);
+                scui_coord_t h = scui_image_h(image_list[idx]);
+                if (way == 1) total += h;
+                if (way == 0) total += w;
+                total += span;
                 
-                if (way) offset.y += span + scui_image_h(image_list[idx]);
-                else offset.x += span + scui_image_w(image_list[idx]);
+                if (way == 1) single = w > single ? w : single;
+                if (way == 0) single = h > single ? h : single;
+            }
+            total -= span;
+            
+            /* 区域对齐 */
+            scui_point_t offset  = {0};
+            scui_coord_t total_x = way ? single : total;
+            scui_coord_t total_y = way ? total : single;
+            if (scui_opt_bits_equal(align, scui_align_mask_ixl)) ;
+            else if (scui_opt_bits_equal(align, scui_align_mask_ixm)) offset.x = (widget_clip.w - total_x) / 2;
+            else if (scui_opt_bits_equal(align, scui_align_mask_ixr)) offset.x = (widget_clip.w - total_x);
+            if (scui_opt_bits_equal(align, scui_align_mask_iyt)) ;
+            else if (scui_opt_bits_equal(align, scui_align_mask_iym)) offset.y = (widget_clip.h - total_y) / 2;
+            else if (scui_opt_bits_equal(align, scui_align_mask_iyb)) offset.y = (widget_clip.h - total_y);
+            
+            for (scui_coord_t idx = 0; idx < num; idx++) {
+                if (image_list[idx] == SCUI_HANDLE_INVALID)
+                    continue;
+                
+                scui_coord_t w = scui_image_w(image_list[idx]);
+                scui_coord_t h = scui_image_h(image_list[idx]);
+                
+                /* 主方向推进点(整体对齐后起点) */
+                scui_point_t point = offset;
+                if (way == 1) { /* 纵排: 副轴=x, 槽内再做水平对齐 */
+                    if (scui_opt_bits_equal(align, scui_align_mask_ixl));
+                    else if (scui_opt_bits_equal(align, scui_align_mask_ixm)) point.x += (single - w) / 2;
+                    else if (scui_opt_bits_equal(align, scui_align_mask_ixr)) point.x += (single - w);
+                }
+                if (way == 0) { /* 横排: 副轴=y, 槽内再做垂直对齐 */
+                    if (scui_opt_bits_equal(align, scui_align_mask_iyt));
+                    else if (scui_opt_bits_equal(align, scui_align_mask_iym)) point.y += (single - h) / 2;
+                    else if (scui_opt_bits_equal(align, scui_align_mask_iyb)) point.y += (single - h);
+                }
+                
+                scui_area_t dst_clip = widget_clip;
+                if (scui_area_limit_offset(&dst_clip, &point))
+                    scui_widget_draw_image(widget->myself, &dst_clip,
+                        image_list[idx], NULL, SCUI_COLOR_UNUSED);
+                
+                /* 主方向推进 */
+                if (way == 1) offset.y += span + scui_image_h(image_list[idx]);
+                if (way == 0) offset.x += span + scui_image_w(image_list[idx]);
             }
             break;
         }
@@ -390,7 +435,8 @@ void scui_ximage_invoke(scui_event_t *event)
             scui_coord_t   curr       = ximage->data.replace.curr;
             SCUI_ASSERT(curr < ximage->data.replace.num);
             if (image_list[curr] != SCUI_HANDLE_INVALID)
-                scui_widget_draw_image(widget->myself, NULL, image_list[curr], NULL, SCUI_COLOR_FILTER_TRANS);
+                scui_widget_draw_image(widget->myself, NULL,
+                    image_list[curr], NULL, SCUI_COLOR_UNUSED);
             break;
         }
         default:

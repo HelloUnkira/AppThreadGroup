@@ -60,7 +60,7 @@ void scui_ui_scene_notify_event_proc(scui_event_t *event)
         custom_maker.widget.event_cb            = scui_ui_scene_notify_none_event;
         scui_widget_create(&custom_maker, &custom_handle);
         
-        scui_widget_align_pos(custom_handle, event->object, scui_opt_align_icc, NULL);
+        scui_widget_align_pos(custom_handle, event->object, scui_align_icc, NULL);
         
         break;
     }

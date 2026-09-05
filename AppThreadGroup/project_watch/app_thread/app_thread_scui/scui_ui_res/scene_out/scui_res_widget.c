@@ -4745,7 +4745,7 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_val
 	{ .handle = scui_widget_type_window, },
 	{ .handle = SCUI_HANDLE_INVALID, },
 	{ .sbitfd = 0, },
-	{ .handle = 10, },
+	{ .handle = 8, },
 	{ .event = scui_test_ui_ximage_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_XIMAGE, },
 	{ .sbitfd = true, },
@@ -4973,6 +4973,42 @@ const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_REPLACE_ke
 	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_REPLACE_cfg,
 };
 
+static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	NULL,
+	scui_widget_json_widget_clip_h,
+	scui_widget_json_widget_clip_w,
+	scui_widget_json_widget_clip_x,
+	scui_widget_json_widget_clip_y,
+	scui_widget_json_widget_color_color_full,
+	scui_widget_json_widget_event_cb,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_fully_bg,
+	scui_widget_json_widget_style_sched_anima,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE_val[] = {
+	{ .handle = scui_widget_type_ximage, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_XIMAGE, },
+	{ .handle = 0, },
+	{ .coord = SCUI_VER_RES * 2 / 23, },
+	{ .coord = SCUI_HOR_RES * 9 / 14, },
+	{ .coord = SCUI_HOR_RES * 1 / 8 + 70, },
+	{ .coord = SCUI_VER_RES * 3 / 5 + 30, },
+	{ .color = 0xFF87CEEB, },
+	{ .event = scui_test_ui_ximage_item_event_proc, },
+	{ .handle = SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE_cfg,
+};
+
 static void (*const scui_widget_SCUI_UI_SCENE_NONE_cfg[])(void *maker, void *field) = {
 	scui_widget_json_widget_type,
 	scui_widget_json_widget_parent,
@@ -5083,7 +5119,7 @@ const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_STANDBY_key = {
 	.cfg = scui_widget_SCUI_UI_SCENE_STANDBY_cfg,
 };
 
-const void * const scui_widget_parser_table[135] = {
+const void * const scui_widget_parser_table[136] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE_key,
@@ -5215,6 +5251,7 @@ const void * const scui_widget_parser_table[135] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_V3_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_V4_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_REPLACE_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_NONE_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_NOTIFY_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_QUICK_CARD_key,

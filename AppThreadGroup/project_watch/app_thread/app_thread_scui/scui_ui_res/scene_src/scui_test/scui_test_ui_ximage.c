@@ -7,6 +7,26 @@
 
 #include "scui.h"
 
+/* sequence测试: 0~9数字序列 */
+static const scui_handle_t scui_seq_num_list[] = {
+    scui_image_prj_num_22_white_12x18_00,
+    scui_image_prj_num_22_white_12x18_01,
+    scui_image_prj_num_22_white_12x18_02,
+    scui_image_prj_num_22_white_12x18_03,
+    scui_image_prj_num_22_white_12x18_04,
+    scui_image_prj_num_22_white_12x18_05,
+    scui_image_prj_num_22_white_12x18_06,
+    scui_image_prj_num_22_white_12x18_07,
+    scui_image_prj_num_22_white_12x18_08,
+    scui_image_prj_num_22_white_12x18_09,
+};
+
+/* sequence测试: 内部align循环轮换 */
+static const scui_align_t scui_seq_align_list[] = {
+    scui_align_itl, scui_align_itm, scui_align_itr, scui_align_ilm,
+    scui_align_icc, scui_align_irm, scui_align_ibl, scui_align_ibm, scui_align_ibr,
+};
+
 /*@brief 图像子控件事件回调(布局在json, 参数在此注入)
  *@param event 事件
  */
@@ -50,13 +70,34 @@ void scui_test_ui_ximage_item_event_proc(scui_event_t *event)
                 scui_image_prj_weather_uv,
                 scui_image_prj_weather_ring_uv,
             };
-            scui_coord_t index_num = sizeof(index_list) / sizeof(index_list[0]);
+            scui_coord_t index_num = scui_arr_len(index_list);
             scui_multi_t index_speed = SCUI_SCALE_COF * 1000 / ((scui_multi_t)index_num * SCUI_ANIMA_TICK);
             scui_ximage_replace_play(handle, (scui_handle_t *)index_list, index_num, index_speed, -1);
             break;
         }
+        case 7: /* sequence:0-9数字 初始内部align */
+            scui_ximage_sequence(handle, (scui_handle_t *)scui_seq_num_list,
+                scui_arr_len(scui_seq_num_list),
+                scui_align_itl, 2, false);
+            break;
         default:
             break;
+        }
+        break;
+    }
+    case scui_event_anima_elapse: {  /* sequence: 1s轮换内部align */
+        scui_coord_t index = scui_widget_child_to_index(event->object);
+        if (index != 7) break;
+        static scui_multi_t seq_tick   = 0;
+        static scui_coord_t seq_idx    = 0;
+        seq_tick += SCUI_SCALE_COF;
+        /* ~1s(SCUI_ANIMA_TICK ms/帧) */
+        if (seq_tick >= SCUI_SCALE_COF * 1000 / SCUI_ANIMA_TICK) {
+            seq_tick = 0;
+            seq_idx  = (seq_idx + 1) % scui_arr_len(scui_seq_align_list);
+            scui_ximage_sequence(event->object, (scui_handle_t *)scui_seq_num_list,
+                scui_arr_len(scui_seq_num_list),
+                scui_seq_align_list[seq_idx], 2, false);
         }
         break;
     }

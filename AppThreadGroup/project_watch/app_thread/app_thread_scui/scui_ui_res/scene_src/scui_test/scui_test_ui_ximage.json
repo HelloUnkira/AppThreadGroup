@@ -6,7 +6,7 @@
             "widget.type":              "scui_widget_type_window",
             "widget.style.sched_anima": "true",
             "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
-            "widget.child_num":         "10",
+            "widget.child_num":         "8",
             "widget.event_cb":          "scui_test_ui_ximage_event_proc"
         },
         {
@@ -86,6 +86,20 @@
             "widget.clip.w":            "60",
             "widget.clip.h":            "60",
             "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_REPLACE",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
+            "widget.event_cb":          "scui_test_ui_ximage_item_event_proc"
+        },
+        {
+            "annotation":              "sequence:0-9数字 天蓝背景 内部align循环测试",
+            "widget.type":              "scui_widget_type_ximage",
+            "widget.style.fully_bg":    "true",
+            "widget.style.sched_anima": "true",
+            "widget.color.color.full":  "0xFF87CEEB",
+            "widget.clip.x":            "SCUI_HOR_RES * 1 / 8 + 70",
+            "widget.clip.y":            "SCUI_VER_RES * 3 / 5 + 30",
+            "widget.clip.w":            "SCUI_HOR_RES * 9 / 14",
+            "widget.clip.h":            "SCUI_VER_RES * 2 / 23",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE",
             "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
             "widget.event_cb":          "scui_test_ui_ximage_item_event_proc"
         }

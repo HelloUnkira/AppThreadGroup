@@ -237,7 +237,7 @@ void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset);
  *@param align   对齐方向
  *@param offset  偏移量
  */
-void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_align_t align, scui_point_t *offset);
+void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_align_t align, scui_point_t *offset);
 
 /*@brief 子控件坐标镜像
  *@param handle  控件句柄

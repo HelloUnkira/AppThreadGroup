@@ -119,39 +119,25 @@ void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset)
  *@param align   对齐方向
  *@param offset  偏移量
  */
-void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_align_t align, scui_point_t *offset)
+void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_align_t align, scui_point_t *offset)
 {
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    
-    /* 需要找到有效的对齐目标 */
-    if (target == SCUI_HANDLE_INVALID && widget->parent == SCUI_HANDLE_INVALID) return;
+    scui_widget_t *widget   = scui_handle_source_check(handle);
     scui_handle_t  handle_t = target != SCUI_HANDLE_INVALID ? target : widget->parent;
     scui_widget_t *widget_t = scui_handle_source_check(handle_t);
+    if (handle_t == SCUI_HANDLE_INVALID) return;
+    /* 需要找到有效的对齐目标 */
     
-    scui_area_t clip_t = widget_t->clip;
-    scui_area_t clip_w = widget->clip;
-    scui_point_t point = {0};
-    point.x = clip_t.x;
-    point.y = clip_t.y;
-    
-    if (0) ;
-    else if (scui_opt_bits_equal(align, scui_opt_align_mask_ixl)) ;
-    else if (scui_opt_bits_equal(align, scui_opt_align_mask_ixm)) point.x += (clip_t.w - clip_w.w) / 2;
-    else if (scui_opt_bits_equal(align, scui_opt_align_mask_ixr)) point.x += (clip_t.w - clip_w.w);
-    else if (scui_opt_bits_equal(align, scui_opt_align_mask_oxl)) point.x -= (clip_w.w);
-    else if (scui_opt_bits_equal(align, scui_opt_align_mask_oxr)) point.x += (clip_t.w);
-    
-    if (0) ;
-    else if (scui_opt_bits_equal(align, scui_opt_align_mask_iyt)) ;
-    else if (scui_opt_bits_equal(align, scui_opt_align_mask_iym)) point.y += (clip_t.h - clip_w.h) / 2;
-    else if (scui_opt_bits_equal(align, scui_opt_align_mask_iyb)) point.y += (clip_t.h - clip_w.h);
-    else if (scui_opt_bits_equal(align, scui_opt_align_mask_oyt)) point.y -= (clip_w.h);
-    else if (scui_opt_bits_equal(align, scui_opt_align_mask_oyb)) point.y += (clip_t.h);
-    
+    /* 取区域对齐偏移(下沉层双轴), 再叠加外部偏移修正 */
+    scui_point_t ofs = scui_area_align(&widget_t->clip, &widget->clip, align);
     if (offset != NULL) {
-        point.x += offset->x;
-        point.y += offset->y;
+        ofs.x += offset->x;
+        ofs.y += offset->y;
     }
+    
+    scui_point_t point = {
+        .x = widget_t->clip.x + ofs.x,
+        .y = widget_t->clip.y + ofs.y,
+    };
     scui_widget_move_pos(handle, &point);
 }
 
