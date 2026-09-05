@@ -79,11 +79,11 @@ void scui_ximage_burn(scui_handle_t handle)
 /*@brief 图像控件图像帧播放
  *@param handle 图像控件句柄
  *@param image  图像帧句柄(gif/lottie)
- *@param speed  播放速度(SCUI_SCALE_COF:正常速度)
+ *@param time   播放帧间隔(ms)
  *@param loop   播放次数(-1:无限)
  */
 void scui_ximage_vedio_play(scui_handle_t handle, scui_handle_t image,
-    scui_multi_t speed, scui_multi_t loop)
+    scui_multi_t time, scui_multi_t loop)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_ximage));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -92,11 +92,12 @@ void scui_ximage_vedio_play(scui_handle_t handle, scui_handle_t image,
     scui_ximage_reset(ximage);
     
     ximage->type = scui_ximage_type_vedio;
-    ximage->data.vedio.frame     = (scui_vedio_t){0};
-    ximage->data.vedio.speed     = speed;
-    ximage->data.vedio.tick      = 0;
-    ximage->data.vedio.loop      = loop;
-    ximage->data.vedio.work      = true;
+    ximage->data.vedio.frame = (scui_vedio_t){0};
+    ximage->data.vedio.time  = time;
+    ximage->data.vedio.loop  = loop;
+    
+    ximage->data.vedio.tick  = 0;
+    ximage->data.vedio.work  = true;
     
     scui_image_t *image_src = scui_handle_source_check(image);
     scui_vedio_t *frame = &ximage->data.vedio.frame;
@@ -236,11 +237,11 @@ void scui_ximage_sequence(scui_handle_t handle, scui_handle_t *list,
  *@param handle 图像控件句柄
  *@param list   图像句柄列表
  *@param num    图像数量
- *@param speed  播放速度(SCUI_SCALE_COF:正常速度)
+ *@param time   播放帧间隔(ms)
  *@param loop   播放次数(-1:无限)
  */
 void scui_ximage_replace_play(scui_handle_t handle, scui_handle_t *list,
-    scui_coord_t num, scui_multi_t speed, scui_multi_t loop)
+    scui_coord_t num, scui_multi_t time, scui_multi_t loop)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_ximage));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -254,13 +255,14 @@ void scui_ximage_replace_play(scui_handle_t handle, scui_handle_t *list,
     memcpy(image_list, list, num * sizeof(scui_handle_t));
     
     ximage->type = scui_ximage_type_replace;
-    ximage->data.replace.list  = image_list;
-    ximage->data.replace.num   = num;
-    ximage->data.replace.curr  = 0;
-    ximage->data.replace.speed = speed;
-    ximage->data.replace.tick  = 0;
-    ximage->data.replace.loop  = loop;
-    ximage->data.replace.work  = true;
+    ximage->data.replace.list = image_list;
+    ximage->data.replace.num  = num;
+    ximage->data.replace.time = time;
+    ximage->data.replace.loop = loop;
+    
+    ximage->data.replace.work = true;
+    ximage->data.replace.tick = 0;
+    ximage->data.replace.curr = 0;
     
     scui_widget_draw(handle, NULL, false, 0);
 }
@@ -277,6 +279,7 @@ void scui_ximage_replace_work(scui_handle_t handle, bool work)
     
     SCUI_ASSERT(ximage->type == scui_ximage_type_replace);
     ximage->data.replace.work = work;
+    ximage->data.replace.tick = 0;
     ximage->data.replace.curr = 0;
 }
 
@@ -296,10 +299,10 @@ void scui_ximage_invoke(scui_event_t *event)
             if (!ximage->data.vedio.work)
                  break;
             
-            /* 播放速度节流 */
-            ximage->data.vedio.tick += SCUI_SCALE_COF;
-            if (ximage->data.vedio.tick < ximage->data.vedio.speed) break;
-            ximage->data.vedio.tick -= ximage->data.vedio.speed;
+            /* 播放帧间隔节流(ms时间累积) */
+            ximage->data.vedio.tick += event->tick;
+            if (ximage->data.vedio.tick < ximage->data.vedio.time) break;
+            ximage->data.vedio.tick -= ximage->data.vedio.time;
             
             /* 固定接口一步步向后切 */
             scui_widget_draw(widget->myself, NULL, false, 0);
@@ -316,10 +319,10 @@ void scui_ximage_invoke(scui_event_t *event)
             if (!ximage->data.replace.work)
                  break;
             
-            /* 播放速度节流: 按speed累积步进 */
-            ximage->data.replace.tick += SCUI_SCALE_COF;
-            if (ximage->data.replace.tick < ximage->data.replace.speed) break;
-            ximage->data.replace.tick -= ximage->data.replace.speed;
+            /* 播放帧间隔节流(ms时间累积) */
+            ximage->data.replace.tick += event->tick;
+            if (ximage->data.replace.tick < ximage->data.replace.time) break;
+            ximage->data.replace.tick -= ximage->data.replace.time;
             
             /* 固定接口一步步向后切 */
             scui_coord_t curr = ximage->data.replace.curr + 1;

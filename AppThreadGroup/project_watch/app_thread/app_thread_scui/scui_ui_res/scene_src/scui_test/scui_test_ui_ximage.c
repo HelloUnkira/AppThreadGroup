@@ -49,17 +49,17 @@ void scui_test_ui_ximage_item_event_proc(scui_event_t *event)
                 SCUI_COLOR_MAKE32_LD(false, 0x0, 0xFF00FF00, 0xFF0000FF),
                 SCUI_SCALE_COF);
             break;
-        case 2: /* vedio:gif:x1 无限 */
-            scui_ximage_vedio_play(handle, scui_image_prj_vedio_bulb, SCUI_SCALE_COF, -1);
+        case 2: /* vedio:gif 无限 */
+            scui_ximage_vedio_play(handle, scui_image_prj_vedio_bulb, SCUI_ANIMA_TICK, -1);
             break;
-        case 3: /* vedio:lottie:x1 无限 */
-            scui_ximage_vedio_play(handle, scui_image_prj_vedio_musiclottie, SCUI_SCALE_COF, -1);
+        case 3: /* vedio:lottie 无限 */
+            scui_ximage_vedio_play(handle, scui_image_prj_vedio_musiclottie, SCUI_ANIMA_TICK, -1);
             break;
-        case 4: /* vedio:gif:x2 3次 */
-            scui_ximage_vedio_play(handle, scui_image_prj_vedio_bulb, SCUI_SCALE_COF, 3);
+        case 4: /* vedio:gif 3次 */
+            scui_ximage_vedio_play(handle, scui_image_prj_vedio_bulb, SCUI_ANIMA_TICK, 3);
             break;
-        case 5: /* vedio:lottie:x2 5次 */
-            scui_ximage_vedio_play(handle, scui_image_prj_vedio_comfirmlottie, SCUI_SCALE_COF, 5);
+        case 5: /* vedio:lottie 5次 */
+            scui_ximage_vedio_play(handle, scui_image_prj_vedio_comfirmlottie, SCUI_ANIMA_TICK, 5);
             break;
         case 6: { /* replace:6个index 1秒循环 */
             static const scui_handle_t index_list[] = {
@@ -71,8 +71,8 @@ void scui_test_ui_ximage_item_event_proc(scui_event_t *event)
                 scui_image_prj_weather_ring_uv,
             };
             scui_coord_t index_num = scui_arr_len(index_list);
-            scui_multi_t index_speed = SCUI_SCALE_COF * 1000 / ((scui_multi_t)index_num * SCUI_ANIMA_TICK);
-            scui_ximage_replace_play(handle, (scui_handle_t *)index_list, index_num, index_speed, -1);
+            scui_multi_t index_time = 1000 / index_num;
+            scui_ximage_replace_play(handle, (scui_handle_t *)index_list, index_num, index_time, -1);
             break;
         }
         case 7: /* sequence:0-9数字 初始内部align */

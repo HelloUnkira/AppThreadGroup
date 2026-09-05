@@ -14,7 +14,7 @@ typedef enum {
 typedef union {
     struct {
         scui_vedio_t   frame;           /* 图像帧资源 */
-        scui_multi_t   speed;           /* 播放速度 */
+        scui_multi_t   time;            /* 播放帧间隔(ms) */
         scui_multi_t   tick;            /* 播放步进累积 */
         scui_multi_t   loop;            /* 播放次数(-1:infinite) */
         scui_sbitfd_t  work:1;          /* 播放/停止 */
@@ -44,10 +44,10 @@ typedef union {
     struct {
         scui_handle_t *list;            /* 播放图像句柄列表 */
         scui_coord_t   num;             /* 播放图像数量 */
-        scui_coord_t   curr;            /* 当前帧索引 */
-        scui_multi_t   speed;           /* 播放速度 */
+        scui_multi_t   time;            /* 播放帧间隔(ms) */
         scui_multi_t   tick;            /* 播放步进累积 */
         scui_multi_t   loop;            /* 播放次数(-1:infinite) */
+        scui_coord_t   curr;            /* 当前帧索引 */
         scui_sbitfd_t  work:1;          /* 播放/停止 */
     } replace;
     /* keep adding */

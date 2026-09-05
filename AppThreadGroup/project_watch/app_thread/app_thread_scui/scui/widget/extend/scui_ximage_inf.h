@@ -4,11 +4,11 @@
 /*@brief 图像控件图像帧播放
  *@param handle 图像控件句柄
  *@param image  图像帧句柄(gif/lottie)
- *@param speed  播放速度(SCUI_SCALE_COF:正常速度)
+ *@param time   播放帧间隔(ms)
  *@param loop   播放次数(-1:无限)
  */
 void scui_ximage_vedio_play(scui_handle_t handle, scui_handle_t image,
-    scui_multi_t speed, scui_multi_t loop);
+    scui_multi_t time, scui_multi_t loop);
 
 /*@brief 图像控件图像帧播放控制
  *@param handle 图像控件句柄
@@ -51,11 +51,11 @@ void scui_ximage_sequence(scui_handle_t handle, scui_handle_t *list,
  *@param handle 图像控件句柄
  *@param list   图像句柄列表
  *@param num    图像数量
- *@param speed  播放速度(SCUI_SCALE_COF:正常速度)
+ *@param time   播放帧间隔(ms)
  *@param loop   播放次数(-1:无限)
  */
 void scui_ximage_replace_play(scui_handle_t handle, scui_handle_t *list,
-    scui_coord_t num, scui_multi_t speed, scui_multi_t loop);
+    scui_coord_t num, scui_multi_t time, scui_multi_t loop);
 
 /*@brief 图像控件图像帧替换播放控制
  *@param handle 图像控件句柄
