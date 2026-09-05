@@ -45,7 +45,6 @@ void scui_custom_update_qrcode(scui_handle_t handle);
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_slider);
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_spinner);
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_indicator);
-SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_ring_edge);
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_image_text);
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_image_crect4);
 /*****************************************************************************/
@@ -115,17 +114,6 @@ do {                                                                        \
     (custom_data_v)->indicator.index       = index_v;                       \
     (custom_data_v)->indicator.span        = span_v;                        \
     (custom_data_v)->indicator.way         = way_v;                         \
-} while (0)                                                                 \
-
-/* scui_custom_data_t->ring_edge */
-#define scui_custom_data_config_ring_edge(custom_data_v,                    \
-    center_v, image_v, color_v, radius_v, angle_v)                          \
-do {                                                                        \
-    (custom_data_v)->ring_edge.image    = image_v;                          \
-    (custom_data_v)->ring_edge.color    = color_v;                          \
-    (custom_data_v)->ring_edge.center   = center_v;                         \
-    (custom_data_v)->ring_edge.radius   = radius_v;                         \
-    (custom_data_v)->ring_edge.angle    = angle_v;                          \
 } while (0)                                                                 \
 
 /* scui_custom_data_t->image_text */

@@ -143,7 +143,6 @@ void scui_custom_invoke(scui_event_t *event)
                 [scui_custom_type_slider]       = scui_custom_draw_slider,
                 [scui_custom_type_spinner]      = scui_custom_draw_spinner,
                 [scui_custom_type_indicator]    = scui_custom_draw_indicator,
-                [scui_custom_type_ring_edge]    = scui_custom_draw_ring_edge,
                 [scui_custom_type_image_text]   = scui_custom_draw_image_text,
                 [scui_custom_type_image_crect4] = scui_custom_draw_image_crect4,
             };
@@ -500,35 +499,6 @@ void scui_custom_draw_indicator(scui_handle_t handle, scui_area_t *clip, scui_cu
             else offset.x += scui_image_w(wait) + span;
         }
     }
-}
-
-/*@brief 自定义控件:插件:绕圆旋转图像
- *@param handle 自定义控件句柄
- *@param clip   绘制区域
- *@param data   自定义参数集
- */
-void scui_custom_draw_ring_edge(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data)
-{
-    /* draw data<s> */
-    scui_handle_t image         = data->ring_edge.image;
-    scui_color_t  color         = data->ring_edge.color;
-    scui_point_t  center        = data->ring_edge.center;
-    scui_coord_t  radius        = data->ring_edge.radius;
-    scui_multi_t  angle         = data->ring_edge.angle;
-    /* draw data<e> */
-    SCUI_LOG_DEBUG("");
-    
-    scui_coord3_t angle_3 = (scui_coord3_t)angle / SCUI_SCALE_COF;
-    scui_multi_t  point_x = radius * scui_cos(angle_3);
-    scui_multi_t  point_y = radius * scui_sin(angle_3);
-    
-    scui_area_t clip_edge = {
-        .x = center.x + point_x - scui_image_w(image) / 2,
-        .y = center.y + point_y - scui_image_h(image) / 2,
-        .w = scui_image_w(image),
-        .h = scui_image_h(image),
-    };
-    scui_widget_draw_image(handle, &clip_edge, image, NULL, color);
 }
 
 /*@brief 自定义控件:插件:图像连续绘制

@@ -74,27 +74,11 @@ void scui_test_ui_misc_indicator_event_proc(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_test_ui_misc_ring_edge_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse: {
-        scui_custom_data_t *data = NULL;
-        scui_custom_data_inst(event->object, &data);
-        
-        data->ring_edge.angle += SCUI_SCALE_COF * 1 / 6 / 3;
-        scui_widget_draw(event->object, NULL, false, 0);
-        break;
-    }
-    }
-}
-
-/*@brief 窗口事件响应回调
- *@param event 事件
- */
 void scui_test_ui_misc_event_proc(scui_event_t *event)
 {
     static scui_multi_t image_pct = 0;
     static scui_point_t image_scale = {.x = 1024,.y = 1024,};
+    static scui_multi_t rot_angle = 0;
     
     switch (event->type) {
     case scui_event_anima_elapse: {
@@ -105,6 +89,16 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         
         image_scale.x = scui_map(image_pct, 0, 100, 512, 1536);
         image_scale.y = scui_map(image_pct, 0, 100, 512, 1536);
+        
+        /* 1 秒转一圈(360度): 按时间增量累加, 与帧率无关 */
+        static uint64_t rot_tick_last = 0;
+        uint64_t rot_tick_now = scui_tick_cnt();
+        if (rot_tick_last == 0)
+            rot_tick_last = rot_tick_now;
+        rot_angle += (scui_multi_t)(rot_tick_now - rot_tick_last) * 360 * SCUI_SCALE_COF / 1000;
+        rot_angle %= 360 * SCUI_SCALE_COF;
+        rot_tick_last = rot_tick_now;
+        
         scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
@@ -188,22 +182,6 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         scui_widget_create(&custom_maker, &custom_handle);
         #endif
         
-        #if 1
-        custom_maker.widget.clip.x = SCUI_HOR_RES * 9 / 13 + 10;
-        custom_maker.widget.clip.y = SCUI_VER_RES * 1 / 13 + 10;
-        custom_maker.widget.clip.w = SCUI_HOR_RES * 3 / 13 - 10 * 2;
-        custom_maker.widget.clip.h = SCUI_VER_RES * 3 / 13 - 10 * 2;
-        custom_maker.widget.event_cb = scui_test_ui_misc_ring_edge_event_proc;
-        custom_maker.type = scui_custom_type_ring_edge;
-        custom_maker.data = custom_data_zero;
-        custom_maker.data.ring_edge.image = scui_image_prj_repeat_dot_02_white;
-        custom_maker.data.ring_edge.color.color.full = 0xFF00FF00;
-        custom_maker.data.ring_edge.center.x = custom_maker.widget.clip.w / 2;
-        custom_maker.data.ring_edge.center.y = custom_maker.widget.clip.h / 2;
-        custom_maker.data.ring_edge.radius = custom_maker.widget.clip.w / 2 - 20;
-        scui_widget_create(&custom_maker, &custom_handle);
-        #endif
-        
         break;
     }
     case scui_event_destroy:
@@ -284,6 +262,28 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         
         scui_handle_t image_handle = scui_image_prj_repeat_btn_22_retry_heart;
         scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, image_scale, scui_opt_pos_c);
+        #endif
+        
+        #if 1
+        /* 基础旋转: 图像绕区域中心旋转(常规绘制, 原 ring_edge 场景) */
+        clip.x = SCUI_HOR_RES * 9 / 13 + 10;
+        clip.y = SCUI_VER_RES * 1 / 13 + 10;
+        clip.w = SCUI_HOR_RES * 3 / 13 - 10 * 2;
+        clip.h = SCUI_VER_RES * 3 / 13 - 10 * 2;
+        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
+        
+        scui_handle_t   rot_image  = scui_image_prj_repeat_dot_02_white;
+        scui_area_t     widget_clip = scui_widget_clip(event->object);
+        scui_point_t    rot_anchor = {
+            .x = widget_clip.x + clip.x + clip.w / 2,
+            .y = widget_clip.y + clip.y + clip.h / 2,
+        };
+        scui_point_t    rot_center = {
+            .x = scui_image_w(rot_image) / 2,
+            .y = scui_image_h(rot_image) / 2 + (clip.w / 2 - 20),
+        };
+        scui_widget_draw_image_rotate(event->object, NULL, rot_image, NULL,
+            rot_anchor, rot_center, rot_angle);
         #endif
         
         break;
