@@ -32,6 +32,10 @@ static struct {
     scui_handle_t data_altimeter_info1;
     scui_handle_t data_altimeter_info2;
     scui_handle_t data_stopwatch;
+    scui_handle_t data_digit_kcal;
+    scui_handle_t data_digit_step;
+    scui_handle_t data_digit_dist;
+    scui_handle_t data_digit_time;
     scui_handle_t data_countdown[4];
     scui_handle_t data_world_time1_time;
     scui_handle_t data_world_time1_unit;
@@ -155,7 +159,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             scui_widget_draw_image(event->object, &clip_icon_step, image_icon_step, NULL, SCUI_COLOR_FILTER_TRANS);
             scui_widget_draw_image(event->object, &clip_icon_dist, image_icon_dist, NULL, SCUI_COLOR_FILTER_TRANS);
             
-            // 绘制数字图标
+            // 数字改ximage序列(注入)
             scui_handle_t image_digit_kcal = scui_image_prj_wgt_act_num_pink_04_03;
             scui_handle_t image_digit_step = scui_image_prj_wgt_act_num_yellow_04_03;
             scui_handle_t image_digit_dist = scui_image_prj_wgt_act_num_blue_04_03;
@@ -163,14 +167,8 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             uint8_t char_digit_step[10] = {0};
             uint8_t char_digit_dist[10] = {0};
             scui_coord_t digit_kcal_num = snprintf(char_digit_kcal, sizeof(char_digit_kcal), "%d", scui_presenter.get_kcal_cur());
-            scui_coord_t digit_step_num = snprintf(char_digit_step, sizeof(char_digit_step), "%d", scui_presenter.get_kcal_cur());
-            scui_coord_t digit_dist_num = snprintf(char_digit_dist, sizeof(char_digit_dist), "%d", scui_presenter.get_kcal_cur());
-            scui_area_t clip_digit_kcal = clip_icon_kcal; clip_digit_kcal.x += scui_image_w(image_icon_kcal) + 10;
-            scui_area_t clip_digit_step = clip_icon_step; clip_digit_step.x += scui_image_w(image_icon_step) + 10;
-            scui_area_t clip_digit_dist = clip_icon_dist; clip_digit_dist.x += scui_image_w(image_icon_dist) + 10;
-            clip_digit_kcal.w = (scui_image_w(image_icon_kcal) + 10) * 5;
-            clip_digit_step.w = (scui_image_w(image_icon_step) + 10) * 5;
-            clip_digit_dist.w = (scui_image_w(image_icon_dist) + 10) * 5;
+            scui_coord_t digit_step_num = snprintf(char_digit_step, sizeof(char_digit_step), "%d", scui_presenter.get_step_cur());
+            scui_coord_t digit_dist_num = snprintf(char_digit_dist, sizeof(char_digit_dist), "%d", scui_presenter.get_dist_cur());
             scui_handle_t image_digit_kcal_list[10] = {0};
             scui_handle_t image_digit_step_list[10] = {0};
             scui_handle_t image_digit_dist_list[10] = {0};
@@ -180,15 +178,12 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
                 image_digit_step_list[idx] = image_digit_step + (char_digit_step[idx] - '0') * 2;
             for (scui_coord_t idx = 0; idx < digit_dist_num; idx++)
                 image_digit_dist_list[idx] = image_digit_dist + (char_digit_dist[idx] - '0') * 2;
-            scui_custom_data_t custom_data_kcal;
-            scui_custom_data_config_image_text(&custom_data_kcal, image_digit_kcal_list, SCUI_COLOR_FILTER_TRANS, 3, digit_kcal_num, 0);
-            scui_custom_draw_image_text(event->object, &clip_digit_kcal, &custom_data_kcal);
-            scui_custom_data_t custom_data_step;
-            scui_custom_data_config_image_text(&custom_data_step, image_digit_step_list, SCUI_COLOR_FILTER_TRANS, 3, digit_step_num, 0);
-            scui_custom_draw_image_text(event->object, &clip_digit_step, &custom_data_step);
-            scui_custom_data_t custom_data_dist;
-            scui_custom_data_config_image_text(&custom_data_dist, image_digit_dist_list, SCUI_COLOR_FILTER_TRANS, 3, digit_dist_num, 0);
-            scui_custom_draw_image_text(event->object, &clip_digit_dist, &custom_data_dist);
+            scui_ximage_sequence(scui_ui_res_local->data_digit_kcal, image_digit_kcal_list,
+                digit_kcal_num, SCUI_COLOR_FILTER_TRANS, scui_align_itl, 3, false);
+            scui_ximage_sequence(scui_ui_res_local->data_digit_step, image_digit_step_list,
+                digit_step_num, SCUI_COLOR_FILTER_TRANS, scui_align_itl, 3, false);
+            scui_ximage_sequence(scui_ui_res_local->data_digit_dist, image_digit_dist_list,
+                digit_dist_num, SCUI_COLOR_FILTER_TRANS, scui_align_itl, 3, false);
             
             break;
         }
@@ -632,7 +627,6 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             
             uint8_t char_digit[50] = {0};
             scui_coord_t digit_num = snprintf(char_digit, sizeof(char_digit), "%02d:%02d.%02d", 0, 0, 0);
-            scui_area_t clip_digit = clip; clip_digit.x += 24; clip_digit.y += 69;
             scui_handle_t image_digit_list[10] = {0};
             for (scui_coord_t idx = 0; idx < digit_num; idx++) {
                 if (char_digit[idx] >= '0' && char_digit[idx] <= '9')
@@ -642,9 +636,8 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
                 if (char_digit[idx] == '.')
                     image_digit_list[idx] = image_digit - 2;
             }
-            scui_custom_data_t custom_data;
-            scui_custom_data_config_image_text(&custom_data, image_digit_list, SCUI_COLOR_FILTER_TRANS, 3, digit_num, 0);
-            scui_custom_draw_image_text(event->object, &clip_digit, &custom_data);
+            scui_ximage_sequence(scui_ui_res_local->data_digit_time, image_digit_list,
+                digit_num, SCUI_COLOR_FILTER_TRANS, scui_align_itl, 3, false);
             
             scui_handle_t image = scui_image_prj_wgt_02_paused;
             scui_area_t image_clip = {.x = 298, .y = 66,};
@@ -977,6 +970,45 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
             string_maker.font_idx          = SCUI_FONT_IDX_32;
             
             switch (type) {
+            case scui_ui_scene_mini_card_type_daily_exercise: {
+                
+                /* 数字改ximage序列(创建子控件) */
+                scui_ximage_maker_define(ximage_maker);
+                scui_handle_t ximage_handle = SCUI_HANDLE_INVALID;
+                
+                ximage_maker.widget.parent = item_handle;
+                
+                /* kcal数字 */
+                scui_handle_t image_icon_kcal  = scui_image_prj_wgt_act_02_calories;
+                scui_handle_t image_digit_kcal = scui_image_prj_wgt_act_num_pink_04_03;
+                ximage_maker.widget.clip.x = 25 + scui_image_w(image_icon_kcal) + 10;
+                ximage_maker.widget.clip.y = 23;
+                ximage_maker.widget.clip.w = (scui_image_w(image_icon_kcal) + 10) * 5;
+                ximage_maker.widget.clip.h = scui_image_h(image_digit_kcal);
+                scui_widget_create(&ximage_maker, &ximage_handle);
+                scui_ui_res_local->data_digit_kcal = ximage_handle;
+                
+                /* step数字 */
+                scui_handle_t image_icon_step  = scui_image_prj_wgt_act_08_steps;
+                scui_handle_t image_digit_step = scui_image_prj_wgt_act_num_yellow_04_03;
+                ximage_maker.widget.clip.x = 25 + scui_image_w(image_icon_step) + 10;
+                ximage_maker.widget.clip.y = 73;
+                ximage_maker.widget.clip.w = (scui_image_w(image_icon_step) + 10) * 5;
+                ximage_maker.widget.clip.h = scui_image_h(image_digit_step);
+                scui_widget_create(&ximage_maker, &ximage_handle);
+                scui_ui_res_local->data_digit_step = ximage_handle;
+                
+                /* dist数字 */
+                scui_handle_t image_icon_dist  = scui_image_prj_wgt_act_03_dist;
+                scui_handle_t image_digit_dist = scui_image_prj_wgt_act_num_blue_04_03;
+                ximage_maker.widget.clip.x = 25 + scui_image_w(image_icon_dist) + 10;
+                ximage_maker.widget.clip.y = 123;
+                ximage_maker.widget.clip.w = (scui_image_w(image_icon_dist) + 10) * 5;
+                ximage_maker.widget.clip.h = scui_image_h(image_digit_dist);
+                scui_widget_create(&ximage_maker, &ximage_handle);
+                scui_ui_res_local->data_digit_dist = ximage_handle;
+                break;
+            }
             case scui_ui_scene_mini_card_type_music_control: {
                 
                 scui_string_maker_t string_t_maker = string_maker;
@@ -1369,8 +1401,18 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 
                 scui_widget_create(&string_t_maker, &string_handle);
                 
+                /* 时间数字改ximage序列(创建子控件) */
+                scui_ximage_maker_define(ximage_maker);
+                scui_handle_t ximage_handle = SCUI_HANDLE_INVALID;
+                scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
                 
-                
+                ximage_maker.widget.parent = item_handle;
+                ximage_maker.widget.clip.x = 24;
+                ximage_maker.widget.clip.y = 69;
+                ximage_maker.widget.clip.w = (scui_image_w(image_digit) + 3) * 8;
+                ximage_maker.widget.clip.h = scui_image_h(image_digit);
+                scui_widget_create(&ximage_maker, &ximage_handle);
+                scui_ui_res_local->data_digit_time = ximage_handle;
                 break;
             }
             case scui_ui_scene_mini_card_type_countdown : {

@@ -205,12 +205,13 @@ void scui_ximage_barcode(scui_handle_t handle, uint8_t *data, uint32_t size,
  *@param handle 图像控件句柄
  *@param list   图像句柄列表
  *@param num    图像数量
+ *@param color  图像色调
  *@param align  图像对齐
  *@param span   图像间隙
- *@param way    方向(0:水平方向;1:垂直方向)
+ *@param way    方向(0:水平;1:垂直)
  */
 void scui_ximage_sequence(scui_handle_t handle, scui_handle_t *list,
-    scui_coord_t num, scui_align_t align, scui_coord_t span, bool way)
+    scui_coord_t num, scui_color_t color, scui_align_t align, scui_coord_t span, bool way)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_ximage));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -226,6 +227,7 @@ void scui_ximage_sequence(scui_handle_t handle, scui_handle_t *list,
     ximage->type = scui_ximage_type_sequence;
     ximage->data.sequence.list  = image_list;
     ximage->data.sequence.num   = num;
+    ximage->data.sequence.color = color;
     ximage->data.sequence.align = align;
     ximage->data.sequence.span  = span;
     ximage->data.sequence.way   = way;
@@ -294,6 +296,7 @@ void scui_ximage_invoke(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse: {
+        bool redraw = false;
         switch (ximage->type) {
         case scui_ximage_type_vedio: {
             if (!ximage->data.vedio.work)
@@ -306,12 +309,13 @@ void scui_ximage_invoke(scui_event_t *event)
             
             /* 固定接口一步步向后切 */
             scui_widget_draw(widget->myself, NULL, false, 0);
+            redraw = true;
             if (scui_vedio_data(&ximage->data.vedio.frame)) {
                 if (ximage->data.vedio.loop > 0)
                     ximage->data.vedio.loop--;
                 if (ximage->data.vedio.loop == 0)
                     ximage->data.vedio.work  = false;
-                    break;
+                break;
             }
             break;
         }
@@ -323,6 +327,9 @@ void scui_ximage_invoke(scui_event_t *event)
             ximage->data.replace.tick += event->tick;
             if (ximage->data.replace.tick < ximage->data.replace.time) break;
             ximage->data.replace.tick -= ximage->data.replace.time;
+            
+            /* 切帧重绘 */
+            redraw = true;
             
             /* 固定接口一步步向后切 */
             scui_coord_t curr = ximage->data.replace.curr + 1;
@@ -343,7 +350,9 @@ void scui_ximage_invoke(scui_event_t *event)
             break;
         }
         
-        scui_widget_draw(event->object, NULL, false, 0);
+        /* 仅播放类型切帧重绘 */
+        if (redraw)
+            scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
     case scui_event_draw_graph: {
@@ -425,7 +434,7 @@ void scui_ximage_invoke(scui_event_t *event)
                 scui_area_t dst_clip = widget_clip;
                 if (scui_area_limit_offset(&dst_clip, &point))
                     scui_widget_draw_image(widget->myself, &dst_clip,
-                        image_list[idx], NULL, SCUI_COLOR_UNUSED);
+                        image_list[idx], NULL, ximage->data.sequence.color);
                 
                 /* 主方向推进 */
                 if (way == 1) offset.y += span + scui_image_h(image_list[idx]);

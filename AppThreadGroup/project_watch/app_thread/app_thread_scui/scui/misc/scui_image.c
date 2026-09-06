@@ -230,22 +230,53 @@ uintptr_t scui_image_size(scui_image_t *image)
     return image->pixel.size_mem;
 }
 
-/*@brief 统计图像列表排列尺寸
- *       统计图像按水平或垂直排列时的宽度或高度
- *@param handle 图像列表
- *@param num    图像列表数量
- *@param dist   尺寸
- *@param way    方向(0:水平方向;1:垂直方向)
+/*@brief 统计图像列表排列宽高
+ *@param list 图像列表
+ *@param num  图像列表数量
+ *@param way  方向(0:水平;1:垂直)
+ *@retval 尺寸
  */
-void scui_image_list_calc(scui_handle_t *handle, scui_coord_t num, scui_coord_t *dist, bool way)
+scui_coord_t scui_image_list_calc(scui_handle_t *list, scui_coord_t num, bool way)
 {
-    SCUI_ASSERT(dist != NULL);
-    
+    scui_coord_t distance = 0;
     for (scui_coord_t idx = 0; idx < num; idx++) {
-        if (handle[idx] == SCUI_HANDLE_INVALID)
-            continue;
-        scui_image_t *image = scui_handle_source_check(handle[idx]);
-        if (way) *dist += image->pixel.height;
-        else *dist += image->pixel.width;
+        if (list[idx] == SCUI_HANDLE_INVALID) continue;
+        scui_image_t *image = scui_handle_source_check(list[idx]);
+        if (way == 1) distance += image->pixel.height;
+        if (way == 0) distance += image->pixel.width;
     }
+    
+    return distance;
+}
+
+/*@brief 图像映射[map:16][0~9-+%/:*](缺位映射到'-')
+ *@param list 输出句柄表
+ *@param num  输出表长度
+ *@param map  映射表(16)
+ *@param str  字符串
+ *@retval 填充数量
+ */
+scui_coord_t scui_image_list_remap(scui_handle_t *list, scui_coord_t num, scui_handle_t map[16], char *str)
+{
+    SCUI_ASSERT(list != NULL);
+    SCUI_ASSERT(map  != NULL);
+    SCUI_ASSERT(str  != NULL);
+    
+    /* 约定字符集(0~9-+%/:*) */
+    static const char set[] = "0123456789-+%/:*";
+    
+    scui_coord_t count = 0;
+    while (str[count] != '\0' && count < num) {
+        /* 查约定索引(缺位映射到'-') */
+        scui_coord_t idx = 10;
+        for (scui_coord_t i = 0; i < 16; i++) {
+            if (set[i] == str[count]) {
+                idx = i;
+                break;
+            }
+        }
+        list[count] = map[idx];
+        count++;
+    }
+    return count;
 }

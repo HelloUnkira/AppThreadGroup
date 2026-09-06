@@ -31,7 +31,6 @@ void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text)
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_slider);
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_spinner);
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_indicator);
-SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_image_text);
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_image_crect4);
 /*****************************************************************************/
 
@@ -82,17 +81,6 @@ do {                                                                        \
     (custom_data_v)->indicator.index       = index_v;                       \
     (custom_data_v)->indicator.span        = span_v;                        \
     (custom_data_v)->indicator.way         = way_v;                         \
-} while (0)                                                                 \
-
-/* scui_custom_data_t->image_text */
-#define scui_custom_data_config_image_text(custom_data_v,                   \
-    image_v, color_v, span_v, num_v, way_v)                                 \
-do {                                                                        \
-    (custom_data_v)->image_text.image    = image_v;                         \
-    (custom_data_v)->image_text.color    = color_v;                         \
-    (custom_data_v)->image_text.span     = span_v;                          \
-    (custom_data_v)->image_text.way      = way_v;                           \
-    (custom_data_v)->image_text.num      = num_v;                           \
 } while (0)                                                                 \
 
 /* scui_custom_data_t->image_crect4 */

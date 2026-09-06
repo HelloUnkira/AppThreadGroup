@@ -40,12 +40,13 @@ void scui_ximage_barcode(scui_handle_t handle, uint8_t *data, uint32_t size,
  *@param handle 图像控件句柄
  *@param list   图像句柄列表
  *@param num    图像数量
+ *@param color  图像色调
  *@param align  图像对齐
  *@param span   图像间隙
- *@param way    方向(0:水平方向;1:垂直方向)
+ *@param way    方向(0:水平;1:垂直)
  */
 void scui_ximage_sequence(scui_handle_t handle, scui_handle_t *list,
-    scui_coord_t num, scui_align_t align, scui_coord_t span, bool way);
+    scui_coord_t num, scui_color_t color, scui_align_t align, scui_coord_t span, bool way);
 
 /*@brief 图像控件图像帧替换播放
  *@param handle 图像控件句柄

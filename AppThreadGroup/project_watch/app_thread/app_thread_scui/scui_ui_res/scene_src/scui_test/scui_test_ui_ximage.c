@@ -78,7 +78,7 @@ void scui_test_ui_ximage_item_event_proc(scui_event_t *event)
         case 7: /* sequence:0-9数字 初始内部align */
             scui_ximage_sequence(handle, (scui_handle_t *)scui_seq_num_list,
                 scui_arr_len(scui_seq_num_list),
-                scui_align_itl, 2, false);
+                SCUI_COLOR_FILTER_TRANS, scui_align_itl, 2, false);
             break;
         default:
             break;
@@ -97,7 +97,7 @@ void scui_test_ui_ximage_item_event_proc(scui_event_t *event)
             seq_idx  = (seq_idx + 1) % scui_arr_len(scui_seq_align_list);
             scui_ximage_sequence(event->object, (scui_handle_t *)scui_seq_num_list,
                 scui_arr_len(scui_seq_num_list),
-                scui_seq_align_list[seq_idx], 2, false);
+                SCUI_COLOR_FILTER_TRANS, scui_seq_align_list[seq_idx], 2, false);
         }
         break;
     }

@@ -97,7 +97,6 @@ void scui_custom_invoke(scui_event_t *event)
                 [scui_custom_type_slider]       = scui_custom_draw_slider,
                 [scui_custom_type_spinner]      = scui_custom_draw_spinner,
                 [scui_custom_type_indicator]    = scui_custom_draw_indicator,
-                [scui_custom_type_image_text]   = scui_custom_draw_image_text,
                 [scui_custom_type_image_crect4] = scui_custom_draw_image_crect4,
             };
             
@@ -418,39 +417,6 @@ void scui_custom_draw_indicator(scui_handle_t handle, scui_area_t *clip, scui_cu
             if (way) offset.y += scui_image_h(wait) + span;
             else offset.x += scui_image_w(wait) + span;
         }
-    }
-}
-
-/*@brief 自定义控件:插件:图像连续绘制
- *       一般主要用于绘制连续数字符号图片
- *@param handle 自定义控件句柄
- *@param clip   绘制区域
- *@param data   自定义参数集
- */
-void scui_custom_draw_image_text(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data)
-{
-    /* draw data<s> */
-    scui_handle_t *image        = data->image_text.image;
-    scui_color_t   color        = data->image_text.color;
-    scui_coord_t   span         = data->image_text.span;
-    scui_coord_t   num          = data->image_text.num;
-    bool           way          = data->image_text.way;
-    /* draw data<e> */
-    SCUI_LOG_DEBUG("");
-    SCUI_ASSERT(clip != NULL);
-    SCUI_ASSERT(image != NULL);
-    
-    scui_point_t offset = {0};
-    for (scui_multi_t idx = 0; idx < num; idx++) {
-        if (image[idx] == SCUI_HANDLE_INVALID)
-            continue;
-        
-        scui_area_t dst_clip = *clip;
-        if (scui_area_limit_offset(&dst_clip, &offset))
-            scui_widget_draw_image(handle, &dst_clip, image[idx], NULL, color);
-        
-        if (way) offset.y += span + scui_image_h(image[idx]);
-        else offset.x += span + scui_image_w(image[idx]);
     }
 }
 

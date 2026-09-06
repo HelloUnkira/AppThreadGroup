@@ -6,7 +6,6 @@ typedef enum {
     scui_custom_type_slider,
     scui_custom_type_spinner,
     scui_custom_type_indicator,
-    scui_custom_type_image_text,
     scui_custom_type_image_crect4,
     scui_custom_type_num,
 } scui_custom_type_t;
@@ -43,13 +42,6 @@ typedef union {
         scui_handle_t span;         /* 间隙 */
         bool          way;          /* 方向(0:水平方向;1:垂直方向) */
     } indicator;
-    struct {
-        scui_handle_t *image;       /* 图像句柄 */
-        scui_color_t   color;       /* 图像源色调(alpha图使用) */
-        scui_coord_t   span;        /* 图像间隙 */
-        scui_coord_t   num;         /* 图像数量 */
-        bool           way;         /* 方向(0:水平方向;1:垂直方向) */
-    } image_text;
     struct {
         scui_handle_t image[4];     /* 图像句柄(左上角,右上角,左下角,右下角) */
         scui_color_t  color;        /* 图像源色调(alpha图使用) */

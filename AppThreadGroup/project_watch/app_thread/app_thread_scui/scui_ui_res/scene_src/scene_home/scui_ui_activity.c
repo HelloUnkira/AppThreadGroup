@@ -9,6 +9,9 @@
 
 static struct {
     scui_ui_bar_arc_t bar_arc;
+    scui_handle_t     data_digit_kcal;
+    scui_handle_t     data_digit_step;
+    scui_handle_t     data_digit_dist;
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -381,6 +384,19 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_kcal_min(), scui_presenter.get_kcal_max(), 0, 100);
         }
         scui_menial_cht_hist_data(menial_handle, vlist_min, vlist_max);
+        
+        /* 数字改ximage序列(创建子控件) */
+        scui_ximage_maker_define(ximage_maker);
+        scui_handle_t ximage_handle = SCUI_HANDLE_INVALID;
+        scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
+        
+        ximage_maker.widget.parent = event->object;
+        ximage_maker.widget.clip.x = 40;
+        ximage_maker.widget.clip.y = 52;
+        ximage_maker.widget.clip.w = SCUI_HOR_RES - 40 * 2;
+        ximage_maker.widget.clip.h = scui_image_h(image_digit);
+        scui_widget_create(&ximage_maker, &ximage_handle);
+        scui_ui_res_local->data_digit_kcal = ximage_handle;
         break;
     }
     case scui_event_draw_graph: {
@@ -408,16 +424,11 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
         uint8_t char_digit[10] = {0};
         scui_coord_t digit_num = snprintf(char_digit, sizeof(char_digit), "%d", scui_presenter.get_kcal_cur());
-        scui_area_t clip_digit = {
-            .x = 40,.w = clip.w,
-            .y = 52,.h = clip.h,
-        };
         scui_handle_t image_digit_list[10] = {0};
         for (scui_coord_t idx = 0; idx < digit_num; idx++)
             image_digit_list[idx] = image_digit + char_digit[idx] - '0';
-        scui_custom_data_t custom_data;
-        scui_custom_data_config_image_text(&custom_data, image_digit_list, SCUI_COLOR_FILTER_TRANS, 3, digit_num, 0);
-        scui_custom_draw_image_text(event->object, &clip_digit, &custom_data);
+        scui_ximage_sequence(scui_ui_res_local->data_digit_kcal, image_digit_list,
+            digit_num, SCUI_COLOR_FILTER_TRANS, scui_align_itl, 3, false);
 
         args.color.color_s.full = 0XFFFFFFFF;
         args.color.color_e.full = 0XFFFFFFFF;
@@ -557,6 +568,19 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_step_min(), scui_presenter.get_step_max(), 0, 100);
         }
         scui_menial_cht_hist_data(menial_handle, vlist_min, vlist_max);
+        
+        /* 数字改ximage序列(创建子控件) */
+        scui_ximage_maker_define(ximage_maker);
+        scui_handle_t ximage_handle = SCUI_HANDLE_INVALID;
+        scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
+        
+        ximage_maker.widget.parent = event->object;
+        ximage_maker.widget.clip.x = 40;
+        ximage_maker.widget.clip.y = 52;
+        ximage_maker.widget.clip.w = SCUI_HOR_RES - 40 * 2;
+        ximage_maker.widget.clip.h = scui_image_h(image_digit);
+        scui_widget_create(&ximage_maker, &ximage_handle);
+        scui_ui_res_local->data_digit_step = ximage_handle;
         break;
     }
     case scui_event_draw_graph: {
@@ -583,17 +607,12 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         
         scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
         uint8_t char_digit[10] = {0};
-        scui_coord_t digit_num = snprintf(char_digit, sizeof(char_digit), "%d", scui_presenter.get_kcal_cur());
-        scui_area_t clip_digit = {
-            .x = 40,.w = clip.w,
-            .y = 52,.h = clip.h,
-        };
+        scui_coord_t digit_num = snprintf(char_digit, sizeof(char_digit), "%d", scui_presenter.get_step_cur());
         scui_handle_t image_digit_list[10] = {0};
         for (scui_coord_t idx = 0; idx < digit_num; idx++)
             image_digit_list[idx] = image_digit + char_digit[idx] - '0';
-        scui_custom_data_t custom_data;
-        scui_custom_data_config_image_text(&custom_data, image_digit_list, SCUI_COLOR_FILTER_TRANS, 3, digit_num, 0);
-        scui_custom_draw_image_text(event->object, &clip_digit, &custom_data);
+        scui_ximage_sequence(scui_ui_res_local->data_digit_step, image_digit_list,
+            digit_num, SCUI_COLOR_FILTER_TRANS, scui_align_itl, 3, false);
 
         args.color.color_s.full = 0XFFFFFFFF;
         args.color.color_e.full = 0XFFFFFFFF;
@@ -734,6 +753,19 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_dist_min(), scui_presenter.get_dist_max(), 0, 100);
         }
         scui_menial_cht_hist_data(menial_handle, vlist_min, vlist_max);
+        
+        /* 数字改ximage序列(创建子控件) */
+        scui_ximage_maker_define(ximage_maker);
+        scui_handle_t ximage_handle = SCUI_HANDLE_INVALID;
+        scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
+        
+        ximage_maker.widget.parent = event->object;
+        ximage_maker.widget.clip.x = 40;
+        ximage_maker.widget.clip.y = 52;
+        ximage_maker.widget.clip.w = SCUI_HOR_RES - 40 * 2;
+        ximage_maker.widget.clip.h = scui_image_h(image_digit);
+        scui_widget_create(&ximage_maker, &ximage_handle);
+        scui_ui_res_local->data_digit_dist = ximage_handle;
         break;
     }
     case scui_event_draw_graph: {
@@ -760,17 +792,12 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         
         scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
         uint8_t char_digit[10] = {0};
-        scui_coord_t digit_num = snprintf(char_digit, sizeof(char_digit), "%d", scui_presenter.get_kcal_cur());
-        scui_area_t clip_digit = {
-            .x = 40,.w = clip.w,
-            .y = 52,.h = clip.h,
-        };
+        scui_coord_t digit_num = snprintf(char_digit, sizeof(char_digit), "%d", scui_presenter.get_dist_cur());
         scui_handle_t image_digit_list[10] = {0};
         for (scui_coord_t idx = 0; idx < digit_num; idx++)
             image_digit_list[idx] = image_digit + char_digit[idx] - '0';
-        scui_custom_data_t custom_data;
-        scui_custom_data_config_image_text(&custom_data, image_digit_list, SCUI_COLOR_FILTER_TRANS, 3, digit_num, 0);
-        scui_custom_draw_image_text(event->object, &clip_digit, &custom_data);
+        scui_ximage_sequence(scui_ui_res_local->data_digit_dist, image_digit_list,
+            digit_num, SCUI_COLOR_FILTER_TRANS, scui_align_itl, 3, false);
 
         args.color.color_s.full = 0XFFFFFFFF;
         args.color.color_e.full = 0XFFFFFFFF;

@@ -70,7 +70,7 @@
             "widget.clip.h":    "250",
             "widget.myself":    "SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_KCAL",
             "widget.parent":    "SCUI_UI_SCENE_ACTIVITY_SCROLL",
-            "widget.child_num": "1",
+            "widget.child_num": "2",
             "widget.event_cb":  "scui_ui_scene_activity_scroll_ditail_kcal_event_proc"
         },
         {
@@ -80,7 +80,7 @@
             "widget.clip.h":    "250",
             "widget.myself":    "SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_STEP",
             "widget.parent":    "SCUI_UI_SCENE_ACTIVITY_SCROLL",
-            "widget.child_num": "1",
+            "widget.child_num": "2",
             "widget.event_cb":  "scui_ui_scene_activity_scroll_ditail_step_event_proc"
         },
         {
@@ -90,7 +90,7 @@
             "widget.clip.h":    "250",
             "widget.myself":    "SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_DIST",
             "widget.parent":    "SCUI_UI_SCENE_ACTIVITY_SCROLL",
-            "widget.child_num": "1",
+            "widget.child_num": "2",
             "widget.event_cb":  "scui_ui_scene_activity_scroll_ditail_dist_event_proc"
         },
         {
