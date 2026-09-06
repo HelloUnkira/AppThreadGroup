@@ -88,16 +88,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .inherit = false,
             .name    = "window",
         },
-        [scui_widget_type_custom] = {
-            .size    = sizeof(scui_custom_t),
-            .maker   = sizeof(scui_custom_maker_t),
-            .base    = scui_widget_type_custom,
-            .make    = scui_custom_make,
-            .burn    = scui_custom_burn,
-            .invoke  = scui_custom_invoke,
-            .inherit = true,
-            .name    = "custom",
-        },
         [scui_widget_type_scroll] = {
             .size    = sizeof(scui_scroll_t),
             .maker   = sizeof(scui_scroll_maker_t),
@@ -108,6 +98,16 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .inherit = true,
             .name    = "scroll",
         },
+        [scui_widget_type_custom] = {
+            .size    = sizeof(scui_custom_t),
+            .maker   = sizeof(scui_custom_maker_t),
+            .base    = scui_widget_type_custom,
+            .make    = scui_custom_make,
+            .burn    = scui_custom_burn,
+            .invoke  = scui_custom_invoke,
+            .inherit = true,
+            .name    = "custom",
+        },
         [scui_widget_type_string] = {
             .size    = sizeof(scui_string_t),
             .maker   = sizeof(scui_string_maker_t),
@@ -117,6 +117,16 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .invoke  = scui_string_invoke,
             .inherit = false,
             .name    = "string",
+        },
+        [scui_widget_type_symbol] = {
+            .size    = sizeof(scui_symbol_t),
+            .maker   = sizeof(scui_symbol_maker_t),
+            .base    = scui_widget_type_symbol,
+            .make    = scui_symbol_make,
+            .burn    = scui_symbol_burn,
+            .invoke  = scui_symbol_invoke,
+            .inherit = false,
+            .name    = "symbol",
         },
         
         /* 扩展控件 */

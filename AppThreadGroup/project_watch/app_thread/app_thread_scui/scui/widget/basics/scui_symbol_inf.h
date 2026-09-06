@@ -13,21 +13,6 @@
 */
 
 /*****************************************************************************/
-
-/*@brief 符号字符编码
- *@param symbol 符号字符串
- *@retval 符号字符编码
- */
-uint32_t scui_symbol_code(uint8_t *symbol);
-
-/*@brief 符号字符区域
- *@param font_name 符号字库名字句柄
- *@param symbol    符号字符编码
- *@retval 符号字符区域
- */
-scui_area_t scui_symbol_area(scui_handle_t font_name, uint32_t symbol);
-
-/*****************************************************************************/
 
 #define SCUI_SYMBOL_STR_AUDIO                   "\xEF\x80\x81" /*61441, 0xF001*/
 #define SCUI_SYMBOL_STR_VIDEO                   "\xEF\x80\x88" /*61448, 0xF008*/
@@ -92,6 +77,15 @@ scui_area_t scui_symbol_area(scui_handle_t font_name, uint32_t symbol);
 
 #define SCUI_SYMBOL_STR_BULLET                  "\xE2\x80\xA2" /*20042, 0x2022*/
 #define SCUI_SYMBOL_STR_DUMMY                   "\xEF\xA3\xBF" /*63743,.0xF8FF */
+
+/*****************************************************************************/
+
+/*@brief 符号控件注入(字体/符号)
+ *@param handle   控件句柄
+ *@param font_idx 字库索引
+ *@param code     符号字符
+ */
+void scui_symbol_update(scui_handle_t handle, scui_handle_t font_idx, const uint8_t *code);
 
 /*****************************************************************************/
 

@@ -1628,6 +1628,9 @@ class PackApp(object):
         try:
             if not _silent and not self._wid_confirm_discard():   # 手动加载前, 未保存修改需确认
                 return
+            if not _silent:
+                # 重新扫描控件类型, 保证补全新控件(如 symbol)
+                self._wid_analyze()
             with open(path, 'r', encoding='utf-8') as fp:
                 self.widget_data = json.load(fp)
             # 补齐缺失 class: 以 analyze 全量类型为准, class 唯一且完备

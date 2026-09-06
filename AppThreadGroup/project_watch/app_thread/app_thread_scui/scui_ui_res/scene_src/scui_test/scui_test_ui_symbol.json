@@ -10,6 +10,7 @@
         {
             "annotation":              "符号绘制画布",
             "widget.type":              "scui_widget_type_custom",
+            "widget.child_num":          "64",
             "widget.clip.x":            "0",
             "widget.clip.y":            "0",
             "widget.clip.w":            "SCUI_HOR_RES",

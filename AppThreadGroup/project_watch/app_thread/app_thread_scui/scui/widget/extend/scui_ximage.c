@@ -50,6 +50,7 @@ void scui_ximage_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_widget_maker_t *widget_maker = inst_maker;
     /* 本类对象 */
     scui_ximage_t *ximage = widget;
+    scui_ximage_maker_t *ximage_maker = widget_maker;
     
     /* 必须标记anima事件 */
     widget_maker->style.sched_anima = true;

@@ -55,20 +55,21 @@
 #include "scui_window.h"            /* 控件(窗口) */
 #include "scui_window_inf.h"        /* 控件(窗口)API */
 /* widget(base): */
+#include "scui_scroll.h"            /* 控件(滚动) */
+#include "scui_scroll_inf.h"        /* 控件(滚动)API */
 #include "scui_custom.h"            /* 控件(自定义) */
 #include "scui_custom_inf.h"        /* 控件(自定义)API */
 #include "scui_string.h"            /* 控件(字符串) */
 #include "scui_string_inf.h"        /* 控件(字符串)API */
-#include "scui_symbol_inf.h"        /* 控件(字符串)API */
-#include "scui_scroll.h"            /* 控件(滚动) */
-#include "scui_scroll_inf.h"        /* 控件(滚动)API */
+#include "scui_symbol.h"            /* 控件(符号) */
+#include "scui_symbol_inf.h"        /* 控件(符号)API */
 /* widget(extend): */
 #include "scui_roller.h"            /* 控件(滚轮) */
 #include "scui_roller_inf.h"        /* 控件(滚轮)API */
-#include "scui_xwatch.h"            /* 控件(指针) */
-#include "scui_xwatch_inf.h"        /* 控件(指针)API */
 #include "scui_ximage.h"            /* 控件(图像) */
 #include "scui_ximage_inf.h"        /* 控件(图像)API */
+#include "scui_xwatch.h"            /* 控件(指针) */
+#include "scui_xwatch_inf.h"        /* 控件(指针)API */
 /* widget(custom): */
 #include "scui_object.h"            /* 控件(对象) */
 #include "scui_object_inf.h"        /* 控件(对象)API */

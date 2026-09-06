@@ -199,9 +199,10 @@ void scui_widget_create(void *maker, scui_handle_t *handle);
 /*@brief 构造器实例定义
  */
 #define scui_window_maker_define(name)  scui_widget_maker_define(name, window)
-#define scui_custom_maker_define(name)  scui_widget_maker_define(name, custom)
 #define scui_scroll_maker_define(name)  scui_widget_maker_define(name, scroll)
+#define scui_custom_maker_define(name)  scui_widget_maker_define(name, custom)
 #define scui_string_maker_define(name)  scui_widget_maker_define(name, string)
+#define scui_symbol_maker_define(name)  scui_widget_maker_define(name, symbol)
 #define scui_roller_maker_define(name)  scui_widget_maker_define(name, roller)
 #define scui_ximage_maker_define(name)  scui_widget_maker_define(name, ximage)
 #define scui_xwatch_maker_define(name)  scui_widget_maker_define(name, xwatch)

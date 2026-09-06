@@ -20,13 +20,6 @@
             }
         },
         {
-            "class": "scui_widget_type_custom",
-            "default": {
-                "widget.type": "scui_widget_type_custom",
-                "widget.style.sched_anima": "true"
-            }
-        },
-        {
             "class": "scui_widget_type_scroll",
             "default": {
                 "widget.type": "scui_widget_type_scroll",
@@ -41,9 +34,22 @@
             }
         },
         {
+            "class": "scui_widget_type_custom",
+            "default": {
+                "widget.type": "scui_widget_type_custom",
+                "widget.style.sched_anima": "true"
+            }
+        },
+        {
             "class": "scui_widget_type_string",
             "default": {
                 "widget.type": "scui_widget_type_string"
+            }
+        },
+        {
+            "class": "scui_widget_type_symbol",
+            "default": {
+                "widget.type": "scui_widget_type_symbol"
             }
         },
         {

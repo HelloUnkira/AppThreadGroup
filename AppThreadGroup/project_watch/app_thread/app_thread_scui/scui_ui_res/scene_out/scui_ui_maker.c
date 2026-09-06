@@ -27,13 +27,6 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		window_maker->switch_key_id[3]       = scui_event_key_val_left;
 		break;
 	}
-	case scui_widget_type_custom: {
-		scui_custom_maker_t *custom_maker = (scui_custom_maker_t *)maker;
-		
-		custom_maker->widget.type               = scui_widget_type_custom;
-		custom_maker->widget.style.sched_anima  = true;
-		break;
-	}
 	case scui_widget_type_scroll: {
 		scui_scroll_maker_t *scroll_maker = (scui_scroll_maker_t *)maker;
 		
@@ -48,10 +41,23 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		scroll_maker->dir                     = scui_opt_dir_ver;
 		break;
 	}
+	case scui_widget_type_custom: {
+		scui_custom_maker_t *custom_maker = (scui_custom_maker_t *)maker;
+		
+		custom_maker->widget.type               = scui_widget_type_custom;
+		custom_maker->widget.style.sched_anima  = true;
+		break;
+	}
 	case scui_widget_type_string: {
 		scui_string_maker_t *string_maker = (scui_string_maker_t *)maker;
 		
 		string_maker->widget.type  = scui_widget_type_string;
+		break;
+	}
+	case scui_widget_type_symbol: {
+		scui_symbol_maker_t *symbol_maker = (scui_symbol_maker_t *)maker;
+		
+		symbol_maker->widget.type  = scui_widget_type_symbol;
 		break;
 	}
 	case scui_widget_type_roller: {

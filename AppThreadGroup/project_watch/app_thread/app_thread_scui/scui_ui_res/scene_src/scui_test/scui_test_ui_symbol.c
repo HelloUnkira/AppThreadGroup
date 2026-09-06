@@ -86,19 +86,16 @@ typedef struct {
 void scui_test_ui_symbol_canvas_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_draw_graph: {
+    case scui_event_create: {
         
+        scui_widget_t *widget = scui_handle_source_check(event->object);
         scui_handle_t font = scui_font_symbol_24bin;
         scui_coord_t  gap  = 8;
         scui_coord_t  row_gap = 8;
         
-        scui_area_t widget_clip = {
-            .x = 0,
-            .y = 0,
-            .w = scui_widget_clip(event->object).w,
-            .h = scui_widget_clip(event->object).h,
-        };
-        scui_coord_t draw_w = widget_clip.w / 2;   /* 中间 1/2 宽度绘制区 */
+        scui_coord_t widget_w = widget->clip.w;
+        scui_coord_t widget_h = widget->clip.h;
+        scui_coord_t draw_w = widget_w / 2;   /* 中间 1/2 宽度绘制区 */
         
         /* 第一遍: 按行分组, 计算每行宽度/行高 */
         scui_symbol_row_t row[scui_arr_len(symbol_table)] = {{0}};
@@ -126,26 +123,31 @@ void scui_test_ui_symbol_canvas_event_proc(scui_event_t *event)
             if (row_idx < row_num - 1)
                 total_h += row_gap;
         }
-        scui_coord_t cur_y = (widget_clip.h - total_h) / 2;
+        scui_coord_t cur_y = (widget_h - total_h) / 2;
         
-        /* 第二遍: 逐行绘制, 每行在绘制区水平居中 */
+        /* 第二遍: 逐行构建symbol控件, 每行在绘制区水平居中 */
         row_idx = 0;
         scui_coord_t idx = 0;
         for (row_idx = 0; row_idx < row_num; row_idx++) {
             scui_coord_t row_w = row[row_idx].width + (row[row_idx].count - 1) * gap;
-            scui_coord_t cur_x = widget_clip.w / 4 + (draw_w - row_w) / 2;
+            scui_coord_t cur_x = widget_w / 4 + (draw_w - row_w) / 2;
             
             for (scui_coord_t sub = 0; sub < row[row_idx].count; sub++) {
                 uint32_t    symbol = scui_symbol_code((uint8_t *)symbol_table[idx]);
                 scui_area_t area   = scui_symbol_area(font, symbol);
                 
-                scui_area_t target = {
-                    .x = cur_x,
-                    .y = cur_y + (row[row_idx].height - area.h) / 2,
-                    .w = area.w,
-                    .h = area.h,
-                };
-                scui_widget_draw_symbol(event->object, &target, NULL, SCUI_COLOR_WHITE, font, symbol);
+                scui_symbol_maker_define(symbol_maker);
+                scui_handle_t symbol_handle = SCUI_HANDLE_INVALID;
+                
+                symbol_maker.widget.parent = event->object;
+                symbol_maker.widget.clip.x = cur_x;
+                symbol_maker.widget.clip.y = cur_y + (row[row_idx].height - area.h) / 2;
+                symbol_maker.widget.clip.w = area.w;
+                symbol_maker.widget.clip.h = area.h;
+                symbol_maker.color = SCUI_COLOR_WHITE;
+                scui_widget_create(&symbol_maker, &symbol_handle);
+                
+                scui_symbol_update(symbol_handle, SCUI_FONT_IDX_X24, symbol_table[idx]);
                 
                 cur_x += area.w + gap;
                 idx++;
