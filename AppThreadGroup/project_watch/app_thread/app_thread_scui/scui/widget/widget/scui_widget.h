@@ -42,8 +42,8 @@ typedef struct {
     scui_sbitfd_t sched_anima:1;        /* 控件帧动画标记 */
     scui_sbitfd_t sched_widget:1;       /* 控件专属事件标记 */
     scui_sbitfd_t event_override:1;     /* 事件响应重载(0:默认;1:自定义;) */
-    scui_sbitfd_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
     scui_sbitfd_t fully_clip:1;         /* 控件绘制区域(0:局部;1:完整;) */
+    scui_sbitfd_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
     scui_sbitfd_t fixed:1;              /* 控件移动禁止(悬浮) */
 } scui_widget_style_t;
 
@@ -51,7 +51,9 @@ typedef struct {
  */
 typedef struct {
     scui_sbitfd_t view:1;               /* 控件隐藏:0;控件显示:1; */
-    scui_sbitfd_t layout:1;             /* 控件布局更新标记(响应布局事件) */
+    scui_sbitfd_t layout:1;             /* 控件布局更新标记 */
+    scui_sbitfd_t layout_w:1;           /* 布局自动计算控件宽 */
+    scui_sbitfd_t layout_h:1;           /* 布局自动计算控件高 */
     scui_sbitfd_t indev_hold:1;         /* 输入事件持续占有(拒绝其他输入) */
 } scui_widget_state_t;
 

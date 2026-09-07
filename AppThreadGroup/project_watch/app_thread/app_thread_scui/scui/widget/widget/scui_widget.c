@@ -41,10 +41,13 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     widget->parent = widget_maker->parent;
     widget->myself = *handle;
     
-    /* 控件初始默认为隐藏 */
+    /* 控件初始默认隐藏 */
     widget->state.view = false;
+    /* 控件初始默认布局更新 */
     widget->state.layout = true;
-    /* 控件初始默认为布局更新 */
+    /* 自动计算控件宽度高度 */
+    widget->state.layout_w = widget->clip.w == SCUI_WIDGET_AUTO_W;
+    widget->state.layout_h = widget->clip.h == SCUI_WIDGET_AUTO_H;
     
     /* 构建孩子列表 */
     widget->child_now  = 0;

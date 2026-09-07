@@ -12,7 +12,7 @@ static struct {
     scui_ui_bar_arc_t bar_arc;
 } * scui_ui_res_local = NULL;
 
-/*@brief 控件事件响应回调
+/*@brief 条目点击事件响应(附加到layout控件, 不影响布局)
  *@param event 事件
  */
 static void scui_ui_scene_item_arc_event_proc(scui_event_t *event)
@@ -59,7 +59,7 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
         item_maker.widget.clip.w      = SCUI_HOR_RES;
         item_maker.widget.parent      = event->object;
         item_maker.widget.child_num   = 1;
-        scui_coord_t icon_h = scui_image_h(scui_ui_scene_list_image[0] + 4);
+        scui_coord_t icon_h = scui_image_h(scui_ui_scene_list_image[0] + 4) + 30;
         
         item_maker.widget.clip.h = SCUI_VER_RES / 2 - (icon_h + 10) / 2;
         scui_widget_create(&item_maker, &item_handle);
@@ -69,12 +69,12 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
         for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
             scui_widget_create(&item_maker, &item_handle);
             
-            scui_custom_maker_define(group_maker);
+            scui_layout_maker_define(group_maker);
             scui_handle_t group_handle = SCUI_HANDLE_INVALID;
             
             group_maker.widget.style.indev_ptr   = true;
-            group_maker.widget.clip.w            = item_maker.widget.clip.w;
-            group_maker.widget.clip.h            = item_maker.widget.clip.h;
+            group_maker.widget.clip.w            = SCUI_WIDGET_AUTO_W;
+            group_maker.widget.clip.h            = SCUI_WIDGET_AUTO_H;
             group_maker.widget.parent            = item_handle;
             group_maker.widget.child_num         = 2;
             group_maker.widget.event_cb          = scui_ui_scene_item_arc_event_proc;
@@ -86,12 +86,12 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             icon_maker.widget.style.fully_bg    = true;
             icon_maker.widget.image             = scui_ui_scene_list_image[idx] + 4;
             icon_maker.widget.clip.w            = scui_image_w(icon_maker.widget.image);
-            icon_maker.widget.clip.h            = group_maker.widget.clip.h;
+            icon_maker.widget.clip.h            = scui_image_h(icon_maker.widget.image);
             icon_maker.widget.parent            = group_handle;
             scui_widget_create(&icon_maker, &icon_handle);
             
             // 去一个就行了, image的size是固定一样的
-            scui_ui_res_local->string_width = group_maker.widget.clip.w - (icon_maker.widget.clip.w + 8 * 2);
+            scui_ui_res_local->string_width = SCUI_HOR_RES - (icon_maker.widget.clip.w + 8 * 2);
             
             scui_string_maker_define(string_maker);
             scui_handle_t string_handle = SCUI_HANDLE_INVALID;
@@ -100,15 +100,18 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             string_maker.args.color.color_s.full    = 0xFFFFFFFF;
             string_maker.args.color.color_e.full    = 0xFFFFFFFF;
             string_maker.args.color.filter          = true;
-            string_maker.widget.clip.x              = icon_maker.widget.clip.w + 8;
             string_maker.widget.clip.w              = scui_ui_res_local->string_width;
-            string_maker.widget.clip.h              = group_maker.widget.clip.h;
+            string_maker.widget.clip.h              = SCUI_WIDGET_AUTO_H;
             string_maker.args.align_hor             = 0;
             string_maker.args.align_ver             = 2;
             // string_maker.draw_cache                 = 1;
             string_maker.text                       = scui_ui_scene_list_text[idx];
             string_maker.font_idx                   = SCUI_FONT_IDX_36;
             scui_widget_create(&string_maker, &string_handle);
+            
+            /* layout登记: icon父内左中; string相对icon右外中 */
+            scui_layout_align(group_handle, SCUI_HANDLE_INVALID, icon_handle, scui_align_ilm, NULL);
+            scui_layout_align(group_handle, icon_handle, string_handle, scui_align_orm, NULL);
         }
         
         item_maker.widget.clip.h = SCUI_VER_RES / 2 - (icon_h + 10) / 2;

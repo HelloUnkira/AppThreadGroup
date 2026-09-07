@@ -211,7 +211,7 @@
 #define SCUI_STRING_SPACE_CHAR                      " \n"
 
 /* custom:文本绘制的最大缓存条目 */
-#define SCUI_CUSTOM_STR_ITEM_LIMIT                  (32)
+#define SCUI_WIDGET_CUSTOM_STR_NUM                  (32)
 /* scroll:按键, 动画速度[ptr,enc,bar,key,auto](像素点/1s) */
 #define SCUI_WIDGET_SCROLL_SPD_ANIM                 {1500, 1700, 1700, 1700, 800}
 #define SCUI_WIDGET_SCROLL_KEY_FDIR                 (scui_event_key_val_down)

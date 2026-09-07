@@ -559,7 +559,7 @@ void scui_string_invoke(scui_event_t *event)
         break;
     }
     case scui_event_layout: {
-        /* 字库行高保底(单行至少可显示) */
+        /* 自动尺寸或单行至少可显示 */
         scui_cache_font_unit_t font_unit = {0};
         font_unit.name = string->args.name;
         font_unit.size = string->args.size;
@@ -567,11 +567,15 @@ void scui_string_invoke(scui_event_t *event)
         scui_coord_t line_height = scui_font_line_height(font_unit.font);
         scui_cache_font_unload(&font_unit);
         
-        if (line_height > widget->clip.h)
-            scui_widget_adjust_size(event->object, widget->clip.w, line_height);
+        /* clip.h匹配自动标记或不足行高时, 高度取行高 */
+        scui_coord_t height = widget->clip.h;
+        if (widget->clip.h == SCUI_WIDGET_AUTO_H) height = line_height;
+        if (line_height > widget->clip.h) height = line_height;
+        
+        scui_widget_adjust_size(event->object, widget->clip.w, height);
         break;
     }
-    case scui_event_size_adjust: {
+    case scui_event_self_size: {
         string->args.update = true;
         scui_widget_draw(widget->myself, NULL, false, 0);
         

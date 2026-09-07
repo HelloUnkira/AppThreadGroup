@@ -303,7 +303,29 @@ static void scui_widget_event_process(scui_event_t *event)
         
         break;
     }
+    case scui_event_layout:{
+        /* 布局事件不能被控件响应 */
+        if (scui_widget_is_hide(widget->myself)) {
+            SCUI_LOG_INFO("widget is hide");
+            return;
+        }
+        
+        /* 布局事件无需被控件响应 */
+        if (!scui_widget_layout_need(widget->myself)) {
+            SCUI_LOG_INFO("widget layout over");
+            return;
+        }
+        break;
+    }
     case scui_event_draw_ready: {
+        /* 本类型控件不支持自动宽高计算 */
+        SCUI_ASSERT(widget->clip.w != SCUI_WIDGET_AUTO_W);
+        SCUI_ASSERT(widget->clip.h != SCUI_WIDGET_AUTO_H);
+        
+        /* 判断控件宽高值是否正常 */
+        SCUI_ASSERT(widget->clip.w > 0);
+        SCUI_ASSERT(widget->clip.h > 0);
+        
         if (widget->style.buffer && widget->style.buffer_d) {
             /* 绘制事件没有剪切域(无需创建) */
             if (scui_area_empty(&widget->clip_set_p->clip))
@@ -387,20 +409,6 @@ static void scui_widget_event_process(scui_event_t *event)
         
         break;
     }
-    case scui_event_layout:{
-        /* 布局事件不能被控件响应 */
-        if (scui_widget_is_hide(widget->myself)) {
-            SCUI_LOG_INFO("widget is hide");
-            return;
-        }
-        
-        /* 布局事件无需被控件响应 */
-        if (!scui_widget_layout_need(widget->myself)) {
-            SCUI_LOG_INFO("widget layout over");
-            return;
-        }
-        break;
-    }
     
     case scui_event_ptr_down:
     case scui_event_ptr_click:
@@ -434,10 +442,11 @@ static void scui_widget_event_process(scui_event_t *event)
     case scui_event_destroy:
     case scui_event_show:
     case scui_event_hide:
+    case scui_event_self_pos:
+    case scui_event_self_size:
     case scui_event_child_num:
     case scui_event_child_pos:
     case scui_event_child_size:
-    case scui_event_size_adjust:
         scui_widget_layout_refr(widget->myself);
         break;
     default:
@@ -802,7 +811,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     case scui_event_child_pos:
     case scui_event_child_num:
     case scui_event_child_size:
-    case scui_event_size_adjust: {
+    case scui_event_self_size: {
         scui_widget_event_process(event);
         scui_event_mask_over(event);
         return;

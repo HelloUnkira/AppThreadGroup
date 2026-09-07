@@ -98,11 +98,12 @@ static void scui_event_adjust_prior(scui_event_t *event)
         [scui_event_create]         = scui_event_prior_high,
         [scui_event_destroy]        = scui_event_prior_high,
         
+        [scui_event_self_pos]       = scui_event_prior_above,
+        [scui_event_self_size]      = scui_event_prior_above,
         [scui_event_child_num]      = scui_event_prior_above,
         [scui_event_child_pos]      = scui_event_prior_above,
         [scui_event_child_size]     = scui_event_prior_above,
         
-        [scui_event_size_adjust]    = scui_event_prior_above,
         [scui_event_lang_change]    = scui_event_prior_above,
     };
     

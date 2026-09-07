@@ -109,7 +109,7 @@ void scui_custom_invoke(scui_event_t *event)
         }
         break;
     }
-    case scui_event_size_adjust:
+    case scui_event_self_size:
     case scui_event_lang_change:
         /* 回收可能因为文本绘制而存留在控件内的资源 */
         scui_custom_text_recycle(widget->myself);
@@ -132,7 +132,7 @@ void scui_custom_text_recycle(scui_handle_t handle)
     /* 回收可能因为文本绘制而存留在控件内的资源 */
     if (custom->str_args != NULL) {
         
-        for (scui_coord_t idx = 0; idx < SCUI_CUSTOM_STR_ITEM_LIMIT; idx++) {
+        for (scui_coord_t idx = 0; idx < SCUI_WIDGET_CUSTOM_STR_NUM; idx++) {
             scui_string_args_t *str_args = custom->str_args[idx];
             if (str_args == NULL)
                 continue;
@@ -169,16 +169,16 @@ void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text)
     /* 在custom申请全局实例空间 */
     /* 以扩充其绘制资源的生命周期 */
     if (custom->str_args == NULL) {
-        scui_multi_t str_args_size = sizeof(void *) * SCUI_CUSTOM_STR_ITEM_LIMIT;
+        scui_multi_t str_args_size = sizeof(void *) * SCUI_WIDGET_CUSTOM_STR_NUM;
         custom->str_args = SCUI_MEM_ZALLOC(scui_mem_type_mix, str_args_size);
     }
     if (custom->str_utf8 == NULL) {
-        scui_multi_t str_utf8_size = sizeof(void *) * SCUI_CUSTOM_STR_ITEM_LIMIT;
+        scui_multi_t str_utf8_size = sizeof(void *) * SCUI_WIDGET_CUSTOM_STR_NUM;
         custom->str_utf8 = SCUI_MEM_ZALLOC(scui_mem_type_mix, str_utf8_size);
     }
     
     /* 找到一个空闲的位置, 存放本地资源 */
-    for (scui_coord_t idx = 0; idx < SCUI_CUSTOM_STR_ITEM_LIMIT; idx++) {
+    for (scui_coord_t idx = 0; idx < SCUI_WIDGET_CUSTOM_STR_NUM; idx++) {
         scui_string_args_t *str_args = custom->str_args[idx];
         if (str_args != NULL)
             continue;

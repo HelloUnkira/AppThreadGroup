@@ -191,6 +191,16 @@ void scui_widget_create(void *maker, scui_handle_t *handle);
 /*************************************************************************************************/
 /*************************************************************************************************/
 
+/*@brief 自动尺寸标记
+ * clip.w == SCUI_WIDGET_AUTO_W -->由内容自动计算
+ * clip.h == SCUI_WIDGET_AUTO_H -->由内容自动计算
+ * 有限度支持:
+ * 当前:layout-> 自动宽度自动高度
+ * 当前:string-> 单行模式自动高度
+ */
+#define SCUI_WIDGET_AUTO_W      ((scui_coord_t)(-1))
+#define SCUI_WIDGET_AUTO_H      ((scui_coord_t)(-1))
+
 /*@brief 控件构造器实例定义
  */
 #define scui_widget_maker_define(name, type) \
@@ -221,6 +231,14 @@ void scui_widget_create(void *maker, scui_handle_t *handle);
  */
 bool scui_widget_switch_point(scui_handle_t handle, scui_point_t *point);
 
+/*@brief 子控件坐标对齐
+ *@param handle  控件句柄
+ *@param handle  控件句柄(目标控件,不存在则相对父控件)
+ *@param align   对齐方向
+ *@param offset  偏移量
+ */
+void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_align_t align, scui_point_t *offset);
+
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点
@@ -232,14 +250,6 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point);
  *@param offset 偏移量
  */
 void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset);
-
-/*@brief 子控件坐标对齐
- *@param handle  控件句柄
- *@param handle  控件句柄(目标控件,不存在则相对父控件)
- *@param align   对齐方向
- *@param offset  偏移量
- */
-void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_align_t align, scui_point_t *offset);
 
 /*@brief 子控件坐标镜像
  *@param handle  控件句柄

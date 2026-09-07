@@ -33,6 +33,34 @@ bool scui_widget_switch_point(scui_handle_t handle, scui_point_t *point)
     return false;
 }
 
+/*@brief 子控件坐标对齐
+ *@param handle  控件句柄
+ *@param handle  控件句柄(目标控件,不存在则相对父控件)
+ *@param align   对齐方向
+ *@param offset  偏移量
+ */
+void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_align_t align, scui_point_t *offset)
+{
+    scui_widget_t *widget   = scui_handle_source_check(handle);
+    scui_handle_t  handle_t = target != SCUI_HANDLE_INVALID ? target : widget->parent;
+    scui_widget_t *widget_t = scui_handle_source_check(handle_t);
+    if (handle_t == SCUI_HANDLE_INVALID) return;
+    /* 需要找到有效的对齐目标 */
+    
+    /* 取区域对齐偏移(下沉层双轴), 再叠加外部偏移修正 */
+    scui_point_t ofs = scui_area_align(&widget_t->clip, &widget->clip, align);
+    if (offset != NULL) {
+        ofs.x += offset->x;
+        ofs.y += offset->y;
+    }
+    
+    scui_point_t point = {
+        .x = widget_t->clip.x + ofs.x,
+        .y = widget_t->clip.y + ofs.y,
+    };
+    scui_widget_move_pos(handle, &point);
+}
+
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点
@@ -88,11 +116,11 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
         scui_widget_draw(widget->parent, NULL, false, 0);
     }
     
-    /* 父控件信息更新 */
-    if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_event_define(event, widget->parent, false, scui_event_child_pos, scui_event_absorb_none);
-        scui_event_notify(&event);
-    }
+    /* 子控件更新, 父控件更新 */
+    scui_event_define(event_c, widget->myself, true, scui_event_self_pos,  scui_event_absorb_none);
+    scui_event_define(event_p, widget->parent, true, scui_event_child_pos, scui_event_absorb_none);
+    scui_event_notify(&event_c); if (widget->parent == SCUI_HANDLE_INVALID) return;
+    scui_event_notify(&event_p);
 }
 
 /*@brief 控件移动
@@ -110,34 +138,6 @@ void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset)
     scui_point_t point = {0};
     point.x = widget->clip.x + offset->x;
     point.y = widget->clip.y + offset->y;
-    scui_widget_move_pos(handle, &point);
-}
-
-/*@brief 子控件坐标对齐
- *@param handle  控件句柄
- *@param handle  控件句柄(目标控件,不存在则相对父控件)
- *@param align   对齐方向
- *@param offset  偏移量
- */
-void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_align_t align, scui_point_t *offset)
-{
-    scui_widget_t *widget   = scui_handle_source_check(handle);
-    scui_handle_t  handle_t = target != SCUI_HANDLE_INVALID ? target : widget->parent;
-    scui_widget_t *widget_t = scui_handle_source_check(handle_t);
-    if (handle_t == SCUI_HANDLE_INVALID) return;
-    /* 需要找到有效的对齐目标 */
-    
-    /* 取区域对齐偏移(下沉层双轴), 再叠加外部偏移修正 */
-    scui_point_t ofs = scui_area_align(&widget_t->clip, &widget->clip, align);
-    if (offset != NULL) {
-        ofs.x += offset->x;
-        ofs.y += offset->y;
-    }
-    
-    scui_point_t point = {
-        .x = widget_t->clip.x + ofs.x,
-        .y = widget_t->clip.y + ofs.y,
-    };
     scui_widget_move_pos(handle, &point);
 }
 
@@ -191,10 +191,8 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
         widget->clip.h == height)
         return;
     
-    /* 因为会影响到画布资源 */
-    /* 禁止独立画布控件修改自己尺寸 */
-    if (widget->style.buffer ||
-        widget->parent == SCUI_HANDLE_INVALID) {
+    /* 因为会影响到画布资源, 暂定于, 禁止独立画布控件修改自己尺寸 */
+    if (widget->style.buffer || widget->parent == SCUI_HANDLE_INVALID) {
         SCUI_LOG_ERROR("unsupport");
         return;
     }
@@ -210,8 +208,8 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     scui_widget_draw(widget->parent, NULL, false, 0);
     
     /* 子控件更新, 父控件更新 */
-    scui_event_define(event_c, widget->myself, false, scui_event_size_adjust, scui_event_absorb_none);
-    scui_event_define(event_p, widget->parent, false, scui_event_child_size,  scui_event_absorb_none);
+    scui_event_define(event_c, widget->myself, true, scui_event_self_size,  scui_event_absorb_none);
+    scui_event_define(event_p, widget->parent, true, scui_event_child_size, scui_event_absorb_none);
     scui_event_notify(&event_c);
     scui_event_notify(&event_p);
 }

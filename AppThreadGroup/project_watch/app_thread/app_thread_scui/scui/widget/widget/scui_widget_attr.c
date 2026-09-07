@@ -66,7 +66,7 @@ void scui_widget_child_add(scui_widget_t *widget, scui_handle_t handle_c)
         widget->child_now++;
         
         /* 子控件列表更新通知 */
-        scui_event_define(event, widget->myself, false, scui_event_child_num, scui_event_absorb_none);
+        scui_event_define(event, widget->myself, true, scui_event_child_num, scui_event_absorb_none);
         scui_event_notify(&event);
         return;
     }
@@ -92,7 +92,7 @@ void scui_widget_child_del(scui_widget_t *widget, scui_handle_t handle_c)
             widget->child_list[idx] = SCUI_HANDLE_INVALID;
         
         /* 子控件列表更新通知 */
-        scui_event_define(event, widget->myself, false, scui_event_child_num, scui_event_absorb_none);
+        scui_event_define(event, widget->myself, true, scui_event_child_num, scui_event_absorb_none);
         scui_event_notify(&event);
         return;
     }
