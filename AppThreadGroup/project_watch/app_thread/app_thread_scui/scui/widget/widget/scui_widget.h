@@ -6,6 +6,7 @@
 typedef enum {
     scui_widget_type_unknown,   /* 未知控件 */
     scui_widget_type_window,    /* 窗口控件(根控件) */
+    scui_widget_type_layout,    /* 布局控件 */
     scui_widget_type_scroll,    /* 滚动控件 */
     scui_widget_type_custom,    /* 自定义控件 */
     scui_widget_type_string,    /* 字符串控件 */
@@ -50,6 +51,7 @@ typedef struct {
  */
 typedef struct {
     scui_sbitfd_t view:1;               /* 控件隐藏:0;控件显示:1; */
+    scui_sbitfd_t layout:1;             /* 控件布局更新标记(响应布局事件) */
     scui_sbitfd_t indev_hold:1;         /* 输入事件持续占有(拒绝其他输入) */
 } scui_widget_state_t;
 
@@ -304,6 +306,22 @@ bool scui_widget_surface_only(scui_widget_t *widget);
  *@param recurse 递归处理
  */
 void scui_widget_state_view(scui_handle_t handle, bool view, bool recurse);
+
+/*@brief 控件布局状态获取
+ *@param handle 控件句柄
+ *@retval 是否更新布局
+ */
+bool scui_widget_layout_need(scui_handle_t handle);
+
+/*@brief 控件布局更新
+ *@param handle 控件句柄
+ */
+void scui_widget_layout_refr(scui_handle_t handle);
+
+/*@brief 控件布局状态清除
+ *@param handle 控件句柄
+ */
+void scui_widget_layout_clear(scui_handle_t handle);
 
 /*@brief 控件透明度设置撤销
  *@param handle  控件句柄

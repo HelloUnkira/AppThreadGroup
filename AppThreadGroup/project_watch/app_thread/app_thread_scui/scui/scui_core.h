@@ -55,6 +55,8 @@
 #include "scui_window.h"            /* 控件(窗口) */
 #include "scui_window_inf.h"        /* 控件(窗口)API */
 /* widget(base): */
+#include "scui_layout.h"            /* 控件(布局) */
+#include "scui_layout_inf.h"        /* 控件(布局)API */
 #include "scui_scroll.h"            /* 控件(滚动) */
 #include "scui_scroll_inf.h"        /* 控件(滚动)API */
 #include "scui_custom.h"            /* 控件(自定义) */

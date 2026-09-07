@@ -88,6 +88,16 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .inherit = false,
             .name    = "window",
         },
+        [scui_widget_type_layout] = {
+            .size    = sizeof(scui_layout_t),
+            .maker   = sizeof(scui_layout_maker_t),
+            .base    = scui_widget_type_layout,
+            .make    = scui_layout_make,
+            .burn    = scui_layout_burn,
+            .invoke  = scui_layout_invoke,
+            .inherit = true,
+            .name    = "layout",
+        },
         [scui_widget_type_scroll] = {
             .size    = sizeof(scui_scroll_t),
             .maker   = sizeof(scui_scroll_maker_t),

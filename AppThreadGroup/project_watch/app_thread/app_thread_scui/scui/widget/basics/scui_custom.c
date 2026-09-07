@@ -109,7 +109,6 @@ void scui_custom_invoke(scui_event_t *event)
         }
         break;
     }
-    case scui_event_size_auto:
     case scui_event_size_adjust:
     case scui_event_lang_change:
         /* 回收可能因为文本绘制而存留在控件内的资源 */

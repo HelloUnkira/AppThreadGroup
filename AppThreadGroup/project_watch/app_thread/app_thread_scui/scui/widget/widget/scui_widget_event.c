@@ -136,13 +136,6 @@ static void scui_widget_show_sched(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_LOG_INFO("widget :%u", handle);
     
-    /* 根控件手动布局一次 */
-    if (widget->parent == SCUI_HANDLE_INVALID) {
-        scui_event_define(event, handle, true, scui_event_layout, NULL);
-        event.style.bubble = true;
-        scui_event_notify(&event);
-    }
-    
     /* 将该显示窗口加入到窗口管理器中 */
     if (widget->type == scui_widget_type_window)
         scui_window_list_add(widget->myself);
@@ -394,6 +387,21 @@ static void scui_widget_event_process(scui_event_t *event)
         
         break;
     }
+    case scui_event_layout:{
+        /* 布局事件不能被控件响应 */
+        if (scui_widget_is_hide(widget->myself)) {
+            SCUI_LOG_INFO("widget is hide");
+            return;
+        }
+        
+        /* 布局事件无需被控件响应 */
+        if (!scui_widget_layout_need(widget->myself)) {
+            SCUI_LOG_INFO("widget layout over");
+            return;
+        }
+        break;
+    }
+    
     case scui_event_ptr_down:
     case scui_event_ptr_click:
     case scui_event_ptr_fling:
@@ -429,11 +437,9 @@ static void scui_widget_event_process(scui_event_t *event)
     case scui_event_child_num:
     case scui_event_child_pos:
     case scui_event_child_size:
-    case scui_event_size_auto:
-    case scui_event_size_adjust: {
-        scui_event_define(event, widget->myself, false, scui_event_layout, scui_event_absorb_none);
-        scui_event_notify(&event);
-    }
+    case scui_event_size_adjust:
+        scui_widget_layout_refr(widget->myself);
+        break;
     default:
         break;
     }
@@ -645,6 +651,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
             
             /* 启用集成事件冒泡流程 */
             scui_event_type_t event_list[] = {
+                /* 全局布局更新在子调度之前 */
+                scui_event_layout,
+                
                 scui_event_draw_ready,
                 scui_event_draw_graph,
                 scui_event_draw_finish,
@@ -653,6 +662,20 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_event_define(event, widget->myself, true, event_list[idx], NULL);
                 scui_event_notify(&event);
             }
+        }
+        return;
+    }
+    case scui_event_layout: {
+        /* layout事件无条件生成 */
+        event->style.suborder = false;
+        event->style.preorder = false;
+        scui_widget_event_bubble(event);
+        
+        scui_widget_t *widget = scui_handle_source_check(event->object);
+        if (widget->parent == SCUI_HANDLE_INVALID) {
+            
+            /* 布局结束后清空布局参数 */
+            scui_widget_layout_clear(widget->myself);
         }
         return;
     }
@@ -779,24 +802,11 @@ void scui_widget_event_dispatch(scui_event_t *event)
     case scui_event_child_pos:
     case scui_event_child_num:
     case scui_event_child_size:
-    case scui_event_size_auto:
     case scui_event_size_adjust: {
         scui_widget_event_process(event);
         scui_event_mask_over(event);
         return;
     }
-    case scui_event_layout:
-        if (event->style.bubble) {
-            event->style.suborder = false;
-            event->style.preorder = false;
-            scui_widget_event_bubble(event);
-            scui_event_mask_over(event);
-            return;
-        }
-        
-        scui_widget_event_process(event);
-        scui_event_mask_over(event);
-        return;
     case scui_event_lang_change:
         event->style.suborder = false;
         event->style.preorder = false;

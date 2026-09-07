@@ -260,6 +260,46 @@ bool scui_widget_is_hide(scui_handle_t handle)
     return !scui_widget_is_show(handle);
 }
 
+/*@brief 控件布局状态获取
+ *@param handle 控件句柄
+ *@retval 是否更新布局
+ */
+bool scui_widget_layout_need(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    if (widget->state.layout) return true;
+    scui_widget_child_list_btra(widget, idx)
+    if (scui_widget_layout_need(widget->child_list[idx]))
+        return true;
+    
+    return false;
+}
+
+/*@brief 控件布局更新
+ *@param handle 控件句柄
+ */
+void scui_widget_layout_refr(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    widget->state.layout = true;
+    if (widget->parent != SCUI_HANDLE_INVALID)
+    scui_widget_layout_refr(widget->parent);
+}
+
+/*@brief 控件布局状态清除
+ *@param handle 控件句柄
+ */
+void scui_widget_layout_clear(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    widget->state.layout = false;
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_layout_clear(widget->child_list[idx]);
+}
+
 /*@brief 用户资源获取
  *@param handle    控件句柄
  *@param user_data 用户资源

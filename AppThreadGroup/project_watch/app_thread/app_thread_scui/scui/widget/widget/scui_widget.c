@@ -43,6 +43,8 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     
     /* 控件初始默认为隐藏 */
     widget->state.view = false;
+    widget->state.layout = true;
+    /* 控件初始默认为布局更新 */
     
     /* 构建孩子列表 */
     widget->child_now  = 0;

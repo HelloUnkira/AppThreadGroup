@@ -20,6 +20,12 @@
             }
         },
         {
+            "class": "scui_widget_type_layout",
+            "default": {
+                "widget.type": "scui_widget_type_layout"
+            }
+        },
+        {
             "class": "scui_widget_type_scroll",
             "default": {
                 "widget.type": "scui_widget_type_scroll",

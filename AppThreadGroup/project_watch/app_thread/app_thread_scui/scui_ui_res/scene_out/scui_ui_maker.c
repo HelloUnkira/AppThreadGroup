@@ -27,6 +27,12 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		window_maker->switch_key_id[3]       = scui_event_key_val_left;
 		break;
 	}
+	case scui_widget_type_layout: {
+		scui_layout_maker_t *layout_maker = (scui_layout_maker_t *)maker;
+		
+		layout_maker->widget.type  = scui_widget_type_layout;
+		break;
+	}
 	case scui_widget_type_scroll: {
 		scui_scroll_maker_t *scroll_maker = (scui_scroll_maker_t *)maker;
 		

@@ -177,14 +177,11 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
-        
-        /* 自动调整一下行高到完全可显示 */
-        scui_event_define(event, handle, true, scui_event_size_auto, NULL);
-        scui_event_notify(&event);
     }
     
     string->args.utf8   = string->str_utf8;
     string->args.update = true;
+    scui_widget_layout_refr(handle);
     scui_widget_draw(handle, NULL, false, 0);
 }
 
@@ -214,14 +211,11 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
-        
-        /* 自动调整一下行高到完全可显示 */
-        scui_event_define(event, handle, true, scui_event_size_auto, NULL);
-        scui_event_notify(&event);
     }
     
     string->args.utf8   = string->str_utf8;
     string->args.update = true;
+    scui_widget_layout_refr(handle);
     scui_widget_draw(handle, NULL, false, 0);
 }
 
@@ -357,8 +351,7 @@ void scui_string_adjust_size(scui_handle_t handle, scui_coord_t size)
         return;
     
     string->args.size = scui_font_size_match(string->font_idx, size);
-    scui_event_define(event, handle, true, scui_event_size_auto, NULL);
-    scui_event_notify(&event);
+    scui_widget_layout_refr(handle);
     
     /* 清扫一遍cache以让旧资源快速回收 */
     scui_cache_font_rectify();
@@ -565,8 +558,8 @@ void scui_string_invoke(scui_event_t *event)
         }
         break;
     }
-    case scui_event_size_auto: {
-        /* 从字库中提取一些信息 */
+    case scui_event_layout: {
+        /* 字库行高保底(单行至少可显示) */
         scui_cache_font_unit_t font_unit = {0};
         font_unit.name = string->args.name;
         font_unit.size = string->args.size;

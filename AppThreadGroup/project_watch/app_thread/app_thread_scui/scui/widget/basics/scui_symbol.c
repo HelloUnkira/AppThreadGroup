@@ -35,9 +35,8 @@ void scui_symbol_make(void *inst, void *inst_maker, scui_handle_t *handle)
     if (symbol->lang == SCUI_HANDLE_INVALID)
         symbol->lang  = scui_lang_type_symbol;
     
-    /* 令控件尺寸自适应符号 */
-    scui_event_define(event, *handle, true, scui_event_size_auto, NULL);
-    scui_event_notify(&event);
+    /* 尝试初始更新符号字符信息 */
+    scui_symbol_update(*handle, symbol->font_idx, symbol->code);
 }
 
 /*@brief 控件析构
@@ -67,10 +66,7 @@ void scui_symbol_update(scui_handle_t handle, scui_handle_t font_idx, const uint
     symbol->font_idx = font_idx;
     symbol->code     = code;
     
-    /* 令控件尺寸自适应符号 */
-    scui_event_define(event, handle, true, scui_event_size_auto, NULL);
-    scui_event_notify(&event);
-    
+    scui_widget_layout_refr(handle);
     scui_widget_draw(handle, NULL, false, 0);
 }
 
@@ -84,7 +80,15 @@ void scui_symbol_invoke(scui_event_t *event)
     scui_symbol_t *symbol = (void *)widget;
     
     switch (event->type) {
-    case scui_event_size_auto: {
+    case scui_event_draw_graph: {
+        scui_handle_t font = scui_font_name_match(symbol->font_idx, symbol->lang);
+        uint32_t  sym_code = scui_symbol_code((uint8_t *)symbol->code);
+        
+        scui_widget_draw_symbol(event->object, NULL, NULL,
+            symbol->color, font, sym_code);
+        break;
+    }
+    case scui_event_layout: {
         if (symbol->font_idx == SCUI_HANDLE_INVALID) break;
         if (symbol->code == NULL) break;
         
@@ -94,14 +98,6 @@ void scui_symbol_invoke(scui_event_t *event)
         scui_area_t area = scui_symbol_area(font, sym_code);
         if (area.w > widget->clip.w || area.h > widget->clip.h)
             scui_widget_adjust_size(event->object, area.w, area.h);
-        break;
-    }
-    case scui_event_draw_graph: {
-        scui_handle_t font = scui_font_name_match(symbol->font_idx, symbol->lang);
-        uint32_t  sym_code = scui_symbol_code((uint8_t *)symbol->code);
-        
-        scui_widget_draw_symbol(event->object, NULL, NULL,
-            symbol->color, font, sym_code);
         break;
     }
     default:
