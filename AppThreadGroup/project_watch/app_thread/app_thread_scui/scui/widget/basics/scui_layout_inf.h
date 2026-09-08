@@ -8,7 +8,7 @@
  *@param align    对齐
  *@param offset   偏移
  */
-void scui_layout_align(scui_handle_t handle, scui_handle_t handle_t,
+void scui_layout_item_align(scui_handle_t handle, scui_handle_t handle_t,
     scui_handle_t handle_c, scui_align_t align, scui_point_t *offset);
 
 #endif

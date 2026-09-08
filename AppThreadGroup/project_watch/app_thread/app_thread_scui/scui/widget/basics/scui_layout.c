@@ -12,13 +12,13 @@
  *@param handle 子控件句柄
  *@retval 登记项
  */
-static scui_layout_node_t *scui_layout_node_claim(scui_layout_t *layout, scui_handle_t handle)
+static scui_layout_item_node_t *scui_layout_item_claim(scui_layout_t *layout, scui_handle_t handle)
 {
-    if (layout->list == NULL)
+    if (layout->item.list == NULL)
         return NULL;
     
-    for (scui_handle_t idx = 0; idx < layout->num; idx++) {
-        scui_layout_node_t *node = &layout->list[idx];
+    for (scui_handle_t idx = 0; idx < layout->item.num; idx++) {
+        scui_layout_item_node_t *node = &layout->item.list[idx];
         if (node->use && node->handle == handle) return node;
         if (node->use) continue;
         
@@ -35,13 +35,13 @@ static scui_layout_node_t *scui_layout_node_claim(scui_layout_t *layout, scui_ha
  *@param handle 子控件句柄
  *@retval 登记项
  */
-static scui_layout_node_t *scui_layout_node_find(scui_layout_t *layout, scui_handle_t handle)
+static scui_layout_item_node_t *scui_layout_item_find(scui_layout_t *layout, scui_handle_t handle)
 {
-    if (layout->list == NULL)
+    if (layout->item.list == NULL)
         return NULL;
     
-    for (scui_handle_t idx = 0; idx < layout->num; idx++) {
-        scui_layout_node_t *node = &layout->list[idx];
+    for (scui_handle_t idx = 0; idx < layout->item.num; idx++) {
+        scui_layout_item_node_t *node = &layout->item.list[idx];
         if (node->use && node->handle == handle)
             return node;
     }
@@ -52,7 +52,7 @@ static scui_layout_node_t *scui_layout_node_find(scui_layout_t *layout, scui_han
 /*@brief auto布局执行
  *@param layout 布局控件实例
  */
-static void scui_layout_auto_exec(scui_layout_t *layout)
+static void scui_layout_item_exec(scui_layout_t *layout)
 {
     scui_widget_t *widget = &layout->widget;
     scui_handle_t  handle =  widget->myself;
@@ -63,7 +63,7 @@ static void scui_layout_auto_exec(scui_layout_t *layout)
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t   handle_c = widget->child_list[idx];
         scui_widget_t  *widget_c = scui_handle_source_check(handle_c);
-        scui_layout_node_t *node = scui_layout_node_find(layout, handle_c);
+        scui_layout_item_node_t *node = scui_layout_item_find(layout, handle_c);
         
         scui_coord_t wide_c = widget_c->clip.w;
         scui_coord_t tall_c = widget_c->clip.h;
@@ -85,11 +85,46 @@ static void scui_layout_auto_exec(scui_layout_t *layout)
     /* 阶段3: 父尺寸已确定, 再执行登记node对齐 */
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle_c = widget->child_list[idx];
-        scui_layout_node_t *node = scui_layout_node_find(layout, handle_c);
+        scui_layout_item_node_t *node = scui_layout_item_find(layout, handle_c);
         if (node == NULL) continue;
         
         scui_widget_align_pos(handle_c, node->handle_t, node->align, &node->offset);
     }
+}
+
+/*@brief 布局控件子控件对齐
+ *@param handle   布局控件句柄
+ *@param handle_t 对齐目标控件(为空相对父)
+ *@param handle_c 子控件句柄
+ *@param align    对齐
+ *@param offset   偏移
+ */
+void scui_layout_item_align(scui_handle_t handle, scui_handle_t handle_t,
+    scui_handle_t handle_c, scui_align_t align, scui_point_t *offset)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_layout));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_layout_t *layout = (void *)widget;
+    
+    if (layout->type != scui_layout_type_item) {
+        SCUI_LOG_WARN("unmatch type");
+        return;
+    }
+    
+    /* 对齐目标为空则相对父 */
+    if (handle_t == SCUI_HANDLE_INVALID) handle_t = handle;
+    SCUI_ASSERT(handle_t == handle || scui_widget_parent(handle_t) == handle);
+    SCUI_ASSERT(scui_widget_parent(handle_c) == handle);
+    
+    scui_layout_item_node_t *node = scui_layout_item_claim(layout, handle_c);
+    if (node == NULL) return;
+    
+    node->handle_t = handle_t;
+    node->align    = align;
+    if (offset != NULL) node->offset = *offset;
+    
+    /* 标记布局更新 */
+    scui_widget_layout_refr(handle);
 }
 
 /*@brief 控件构造
@@ -112,11 +147,19 @@ void scui_layout_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     layout->type = layout_maker->type;
-    layout->num  = widget->child_num;
-    
-    if (layout->num > 0) {
-        scui_multi_t size = layout->num * sizeof(scui_layout_node_t);
-        layout->list = SCUI_MEM_ZALLOC(scui_mem_type_mix, size);
+    switch (layout->type) {
+    case scui_layout_type_item: {
+        layout->item.num  = widget->child_num;
+        
+        if (layout->item.num > 0) {
+            scui_multi_t size = layout->item.num * sizeof(scui_layout_item_node_t);
+            layout->item.list = SCUI_MEM_ZALLOC(scui_mem_type_mix, size);
+        }
+        break;
+    }
+    default:
+        SCUI_ASSERT(false);
+        break;
     }
 }
 
@@ -129,41 +172,19 @@ void scui_layout_burn(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_layout_t *layout = (void *)widget;
     
-    /* 回收布局资源 */
-    SCUI_MEM_FREE(layout->list);
+    switch (layout->type) {
+    case scui_layout_type_item: {
+        /* 回收布局资源 */
+        SCUI_MEM_FREE(layout->item.list);
+        break;
+    }
+    default:
+        SCUI_ASSERT(false);
+        break;
+    }
     
     /* 析构基础控件实例 */
     scui_widget_burn(widget);
-}
-
-/*@brief 布局控件子控件对齐
- *@param handle   布局控件句柄
- *@param handle_t 对齐目标控件(为空相对父)
- *@param handle_c 子控件句柄
- *@param align    对齐
- *@param offset   偏移
- */
-void scui_layout_align(scui_handle_t handle, scui_handle_t handle_t,
-    scui_handle_t handle_c, scui_align_t align, scui_point_t *offset)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_layout));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_layout_t *layout = (void *)widget;
-    
-    /* 对齐目标为空则相对父 */
-    if (handle_t == SCUI_HANDLE_INVALID) handle_t = handle;
-    SCUI_ASSERT(handle_t == handle || scui_widget_parent(handle_t) == handle);
-    SCUI_ASSERT(scui_widget_parent(handle_c) == handle);
-    
-    scui_layout_node_t *node = scui_layout_node_claim(layout, handle_c);
-    if (node == NULL) return;
-    
-    node->handle_t = handle_t;
-    node->align    = align;
-    if (offset != NULL) node->offset = *offset;
-    
-    /* 标记布局更新 */
-    scui_widget_layout_refr(handle);
 }
 
 /*@brief 事件处理回调
@@ -181,8 +202,14 @@ void scui_layout_invoke(scui_event_t *event)
         if (widget->child_num == 0)
             return;
         
-        /* 当前仅auto布局 */
-        scui_layout_auto_exec(layout);
+        switch (layout->type) {
+        case scui_layout_type_item:
+            scui_layout_item_exec(layout);
+            break;
+        default:
+            SCUI_ASSERT(false);
+            break;
+        }
         break;
     }
     default:

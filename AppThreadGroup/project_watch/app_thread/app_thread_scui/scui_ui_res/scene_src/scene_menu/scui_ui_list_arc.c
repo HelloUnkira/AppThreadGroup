@@ -110,8 +110,8 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             scui_widget_create(&string_maker, &string_handle);
             
             /* layout登记: icon父内左中; string相对icon右外中 */
-            scui_layout_align(group_handle, SCUI_HANDLE_INVALID, icon_handle, scui_align_ilm, NULL);
-            scui_layout_align(group_handle, icon_handle, string_handle, scui_align_orm, NULL);
+            scui_layout_item_align(group_handle, SCUI_HANDLE_INVALID, icon_handle, scui_align_ilm, NULL);
+            scui_layout_item_align(group_handle, icon_handle, string_handle, scui_align_orm, NULL);
         }
         
         item_maker.widget.clip.h = SCUI_VER_RES / 2 - (icon_h + 10) / 2;
