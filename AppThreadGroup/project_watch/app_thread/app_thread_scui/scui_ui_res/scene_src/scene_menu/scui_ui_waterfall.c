@@ -156,8 +156,8 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_coord_t scroll_w = scui_widget_clip(event->object).w;
-        scui_coord_t scroll_h = scui_widget_clip(event->object).w;
+        scui_coord_t scroll_w = scui_widget_area(event->object).w;
+        scui_coord_t scroll_h = scui_widget_area(event->object).w;
         
         // 取一张图(随便, 反正所有图都一样)
         scui_handle_t icon = scui_ui_scene_list_image[0];

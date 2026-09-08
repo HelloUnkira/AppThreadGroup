@@ -78,9 +78,7 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
     /* 更新一次字符串绘制参数 */
     string->args.update = true;
     string->args.utf8   = string->str_utf8;
-    string->args.clip   = widget->clip;
-    string->args.clip.x = 0;
-    string->args.clip.y = 0;
+    string->args.clip   = scui_widget_area(widget->myself);
     scui_string_args_proc(&string->args);
 }
 
@@ -577,6 +575,7 @@ void scui_string_invoke(scui_event_t *event)
     }
     case scui_event_self_size: {
         string->args.update = true;
+        string->args.clip   = scui_widget_area(widget->myself);
         scui_widget_draw(widget->myself, NULL, false, 0);
         
         /* 回收绘制缓存块 */

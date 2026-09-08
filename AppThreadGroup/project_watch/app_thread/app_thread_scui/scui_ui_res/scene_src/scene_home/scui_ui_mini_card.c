@@ -802,8 +802,8 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
         scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[index];
         scui_area_t clip = scui_widget_clip_tree(event->object);
         scui_point_t point_click = event->ptr_c;
-        point_click.x -= clip.x + (clip.w - scui_widget_clip(event->object).w) / 2;
-        point_click.y -= clip.y + (clip.h - scui_widget_clip(event->object).h) / 2;
+        point_click.x -= clip.x + (clip.w - scui_widget_area(event->object).w) / 2;
+        point_click.y -= clip.y + (clip.h - scui_widget_area(event->object).h) / 2;
         
         switch (type) {
         case scui_ui_scene_mini_card_type_music_control: {

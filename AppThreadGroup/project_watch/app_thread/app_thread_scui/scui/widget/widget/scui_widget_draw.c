@@ -818,18 +818,19 @@ void scui_widget_draw_ctx_graph(scui_handle_t handle, scui_area_t *target, scui_
     
     /* 偏移坐标转换 */
     if (!widget->style.buffer) {
-        draw_dsc_i->graph.dst_part.x    += widget->clip.x;
-        draw_dsc_i->graph.dst_part.y    += widget->clip.y;
-        draw_dsc_i->graph.src_center.x  += widget->clip.x;
-        draw_dsc_i->graph.src_center.y  += widget->clip.y;
-        draw_dsc_i->graph.src_pos_1.x   += widget->clip.x;
-        draw_dsc_i->graph.src_pos_1.y   += widget->clip.y;
-        draw_dsc_i->graph.src_pos_2.x   += widget->clip.x;
-        draw_dsc_i->graph.src_pos_2.y   += widget->clip.y;
+        scui_area_t clip = scui_widget_clip_root(widget->myself);
+        draw_dsc_i->graph.dst_part.x    += clip.x;
+        draw_dsc_i->graph.dst_part.y    += clip.y;
+        draw_dsc_i->graph.src_center.x  += clip.x;
+        draw_dsc_i->graph.src_center.y  += clip.y;
+        draw_dsc_i->graph.src_pos_1.x   += clip.x;
+        draw_dsc_i->graph.src_pos_1.y   += clip.y;
+        draw_dsc_i->graph.src_pos_2.x   += clip.x;
+        draw_dsc_i->graph.src_pos_2.y   += clip.y;
         if (draw_dsc_i->graph.src_vpos  != NULL) {
         for (scui_coord_t idx = 0; idx < draw_dsc_i->graph.src_vpos_c; idx++) {
-            draw_dsc_i->graph.src_vpos[idx].x += widget->clip.x;
-            draw_dsc_i->graph.src_vpos[idx].y += widget->clip.y;
+            draw_dsc_i->graph.src_vpos[idx].x += clip.x;
+            draw_dsc_i->graph.src_vpos[idx].y += clip.y;
         }
         }
     }

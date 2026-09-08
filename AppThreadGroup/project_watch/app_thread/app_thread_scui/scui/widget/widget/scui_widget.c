@@ -41,6 +41,11 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     widget->parent = widget_maker->parent;
     widget->myself = *handle;
     
+    /* 控件检查区域(调试) */
+    #if SCUI_WIDGET_CHECK_CLIP
+    widget->style.check_clip = true;
+    #endif
+    
     /* 控件初始默认隐藏 */
     widget->state.view = false;
     /* 控件初始默认布局更新 */

@@ -170,7 +170,7 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
         string_maker.widget.parent              = event->object;
         string_maker.widget.clip.w              = SCUI_HOR_RES;
         string_maker.widget.clip.h              = 40;
-        string_maker.widget.clip.y              = (scui_widget_clip(event->object).h - string_maker.widget.clip.h) / 2;
+        string_maker.widget.clip.y              = (scui_widget_area(event->object).h - string_maker.widget.clip.h) / 2;
         string_maker.args.align_hor             = 2;
         string_maker.args.align_ver             = 2;
         string_maker.args.mode_scroll           = 1;
@@ -314,7 +314,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
             }
         }
         //分割线
-        scui_area_t clip_line = scui_widget_clip(event->object);
+        scui_area_t clip_line = scui_widget_area(event->object);
         clip_line.w = 394; clip_line.x += 36;
         clip_line.h =   2; clip_line.y += 243 - 90;
         scui_area_m_to_s(&clip_line, &clip_line);
@@ -401,7 +401,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
     }
     case scui_event_draw_graph: {
         
-        scui_area_t clip = scui_widget_clip(event->object);
+        scui_area_t clip = scui_widget_area(event->object);
         clip.x = clip.y = 0;
         
         /* 文本 */
@@ -450,7 +450,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
             // 在0, 6, 12, 18, 24点前面画线
             if (idx % 6 == 0)
             {
-                scui_area_t clip_line = scui_widget_clip(event->object);
+                scui_area_t clip_line = scui_widget_area(event->object);
                 clip_line.w =   1; clip_line.x += 42 + idx * (12 + 4) - 2;
                 clip_line.h = 110; clip_line.y += 113;
                 scui_area_m_to_s(&clip_line, &clip_line);
@@ -499,7 +499,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         }
         
         //分割线
-        scui_area_t clip_line = scui_widget_clip(event->object);
+        scui_area_t clip_line = scui_widget_area(event->object);
         clip_line.w = 394; clip_line.x += 36;
         clip_line.h =   2; clip_line.y += 248;
         scui_area_m_to_s(&clip_line, &clip_line);
@@ -585,7 +585,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
     }
     case scui_event_draw_graph: {
         
-        scui_area_t clip = scui_widget_clip(event->object);
+        scui_area_t clip = scui_widget_area(event->object);
         clip.x = clip.y = 0;
         
         /* 文本 */
@@ -634,7 +634,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
             // 在0, 6, 12, 18, 24点前面画线
             if (idx % 6 == 0)
             {
-                scui_area_t clip_line = scui_widget_clip(event->object);
+                scui_area_t clip_line = scui_widget_area(event->object);
                 clip_line.w =   1; clip_line.x += 42 + idx * (12 + 4) - 2;
                 clip_line.h = 110; clip_line.y += 113;
                 scui_area_m_to_s(&clip_line, &clip_line);
@@ -683,7 +683,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         }
         
         //分割线
-        scui_area_t clip_line = scui_widget_clip(event->object);
+        scui_area_t clip_line = scui_widget_area(event->object);
         clip_line.w = 394; clip_line.x += 36;
         clip_line.h =   2; clip_line.y += 248;
         scui_area_m_to_s(&clip_line, &clip_line);
@@ -770,7 +770,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
     }
     case scui_event_draw_graph: {
         
-        scui_area_t clip = scui_widget_clip(event->object);
+        scui_area_t clip = scui_widget_area(event->object);
         clip.x = clip.y = 0;
         
         /* 文本 */
@@ -819,7 +819,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
             // 在0, 6, 12, 18, 24点前面画线
             if (idx % 6 == 0)
             {
-                scui_area_t clip_line = scui_widget_clip(event->object);
+                scui_area_t clip_line = scui_widget_area(event->object);
                 clip_line.w =   1; clip_line.x += 42 + idx * (12 + 4) - 2;
                 clip_line.h = 110; clip_line.y += 113;
                 scui_area_m_to_s(&clip_line, &clip_line);
@@ -868,7 +868,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         }
         
         //分割线
-        scui_area_t clip_line = scui_widget_clip(event->object);
+        scui_area_t clip_line = scui_widget_area(event->object);
         clip_line.w = 394; clip_line.x += 36;
         clip_line.h =   2; clip_line.y += 248;
         scui_area_m_to_s(&clip_line, &clip_line);

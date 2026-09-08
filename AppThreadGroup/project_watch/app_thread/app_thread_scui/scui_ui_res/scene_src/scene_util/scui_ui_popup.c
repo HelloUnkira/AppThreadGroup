@@ -173,8 +173,8 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
         scui_string_scroll_abort(popup_string, true);
         
         scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_trans, true);
-        scale_tar_w = scui_widget_clip(SCUI_UI_SCENE_POPUP_SCALE).w;
-        scale_tar_h = scui_widget_clip(SCUI_UI_SCENE_POPUP_SCALE).h;
+        scale_tar_w = scui_widget_area(SCUI_UI_SCENE_POPUP_SCALE).w;
+        scale_tar_h = scui_widget_area(SCUI_UI_SCENE_POPUP_SCALE).h;
         
         // 启动工步1:
         scale_way   = +1;

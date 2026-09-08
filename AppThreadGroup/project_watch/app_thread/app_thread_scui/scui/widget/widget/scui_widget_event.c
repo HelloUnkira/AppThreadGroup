@@ -484,12 +484,13 @@ static void scui_widget_event_process(scui_event_t *event)
     switch (event->type) {
     case scui_event_draw_graph: {
         
-        #if SCUI_WIDGET_BORDER_TAG
-        {
+        if (widget->style.check_clip) {
             scui_draw_dsc_t draw_dsc = {0};
             draw_dsc.type = scui_draw_type_pixel_line;
             draw_dsc.graph.src_stroke = 1;
-            scui_alpha_t alpha = widget->alpha;
+            
+            /* 随机颜色轮廓:默认不透明 */
+            scui_alpha_t alpha = scui_alpha_cover;
             scui_color_t color = {
                 .color.ch.a = 0xFF,
                 .color.ch.r = scui_rand(0xFF),
@@ -497,30 +498,26 @@ static void scui_widget_event_process(scui_event_t *event)
                 .color.ch.b = scui_rand(0xFF),
             };
             
-            scui_area_t clip = widget->clip;
+            scui_area_t clip = scui_widget_area(widget->myself);
             scui_area_m_to_s(&clip, &clip);
+            scui_point_t point[4] = {
+                {clip.x1, clip.y1,}, {clip.x2, clip.y1,},
+                {clip.x1, clip.y2,}, {clip.x2, clip.y2,},
+            };
             
-            draw_dsc.graph.src_pos_1.x = clip.x1;
-            draw_dsc.graph.src_pos_2.x = clip.x2;
-            
-            draw_dsc.graph.src_pos_1.y = clip.y1;
-            draw_dsc.graph.src_pos_2.y = clip.y1;
+            draw_dsc.graph.src_pos_1 = point[0];
+            draw_dsc.graph.src_pos_2 = point[1];
             scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
-            draw_dsc.graph.src_pos_1.y = clip.y2;
-            draw_dsc.graph.src_pos_2.y = clip.y2;
+            draw_dsc.graph.src_pos_1 = point[0];
+            draw_dsc.graph.src_pos_2 = point[2];
             scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
-            
-            draw_dsc.graph.src_pos_1.y = clip.y1;
-            draw_dsc.graph.src_pos_2.y = clip.y2;
-            
-            draw_dsc.graph.src_pos_1.x = clip.x1;
-            draw_dsc.graph.src_pos_2.x = clip.x1;
+            draw_dsc.graph.src_pos_1 = point[1];
+            draw_dsc.graph.src_pos_2 = point[3];
             scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
-            draw_dsc.graph.src_pos_1.x = clip.x2;
-            draw_dsc.graph.src_pos_2.x = clip.x2;
+            draw_dsc.graph.src_pos_1 = point[2];
+            draw_dsc.graph.src_pos_2 = point[3];
             scui_widget_draw_graph(event->object, NULL, alpha, color, &draw_dsc);
         }
-        #endif
     }
     default:
         break;

@@ -58,8 +58,7 @@ void scui_ui_scene_spo2_body_event_proc(scui_event_t *event)
     }
     case scui_event_draw_graph: {
         
-        scui_area_t clip = scui_widget_clip(event->object);
-        clip.x = clip.y = 0;
+        scui_area_t clip = scui_widget_area(event->object);
         
         /* 血氧大图标(动态) */
         scui_handle_t image_spo2 = scui_image_prj_spo2_gif_00 + spo2_frame_idx;

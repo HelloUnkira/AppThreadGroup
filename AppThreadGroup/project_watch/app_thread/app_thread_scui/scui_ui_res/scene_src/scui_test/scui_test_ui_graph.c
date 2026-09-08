@@ -37,8 +37,8 @@ void scui_test_ui_graph_1_event_proc(scui_event_t *event)
         scui_area_t  clip = {
             .x = 10,
             .y = 10,
-            .w = scui_widget_clip(event->object).w - 10 * 2,
-            .h = scui_widget_clip(event->object).h - 10 * 2,
+            .w = scui_widget_area(event->object).w - 10 * 2,
+            .h = scui_widget_area(event->object).h - 10 * 2,
         };
         scui_widget_draw_color(event->object, &clip, color_black);
         
@@ -136,8 +136,8 @@ void scui_test_ui_graph_2_event_proc(scui_event_t *event)
         scui_area_t  clip = {
             .x = 10,
             .y = 10,
-            .w = scui_widget_clip(event->object).w - 10 * 2,
-            .h = scui_widget_clip(event->object).h - 10 * 2,
+            .w = scui_widget_area(event->object).w - 10 * 2,
+            .h = scui_widget_area(event->object).h - 10 * 2,
         };
         scui_widget_draw_color(event->object, &clip, color_black);
         
@@ -175,8 +175,8 @@ void scui_test_ui_graph_3_event_proc(scui_event_t *event)
         scui_area_t  clip = {
             .x = 10,
             .y = 10,
-            .w = scui_widget_clip(event->object).w - 10 * 2,
-            .h = scui_widget_clip(event->object).h - 10 * 2,
+            .w = scui_widget_area(event->object).w - 10 * 2,
+            .h = scui_widget_area(event->object).h - 10 * 2,
         };
         scui_widget_draw_color(event->object, &clip, color_black);
         
@@ -269,8 +269,8 @@ void scui_test_ui_graph_4_event_proc(scui_event_t *event)
         scui_area_t  clip = {
             .x = 10,
             .y = 10,
-            .w = scui_widget_clip(event->object).w - 10 * 2,
-            .h = scui_widget_clip(event->object).h - 10 * 2,
+            .w = scui_widget_area(event->object).w - 10 * 2,
+            .h = scui_widget_area(event->object).h - 10 * 2,
         };
         scui_widget_draw_color(event->object, &clip, color_black);
         
@@ -335,8 +335,8 @@ void scui_test_ui_graph_5_event_proc(scui_event_t *event)
         scui_area_t  clip = {
             .x = 10,
             .y = 10,
-            .w = scui_widget_clip(event->object).w - 10 * 2,
-            .h = scui_widget_clip(event->object).h - 10 * 2,
+            .w = scui_widget_area(event->object).w - 10 * 2,
+            .h = scui_widget_area(event->object).h - 10 * 2,
         };
         scui_widget_draw_color(event->object, &clip, color_black);
         
@@ -375,8 +375,8 @@ void scui_test_ui_graph_6_event_proc(scui_event_t *event)
         scui_area_t  clip = {
             .x = 10,
             .y = 10,
-            .w = scui_widget_clip(event->object).w - 10 * 2,
-            .h = scui_widget_clip(event->object).h - 10 * 2,
+            .w = scui_widget_area(event->object).w - 10 * 2,
+            .h = scui_widget_area(event->object).h - 10 * 2,
         };
         scui_widget_draw_color(event->object, &clip, color_black);
         
@@ -399,8 +399,8 @@ void scui_test_ui_graph_7_event_proc(scui_event_t *event)
         scui_area_t  clip = {
             .x = 10,
             .y = 10,
-            .w = scui_widget_clip(event->object).w - 10 * 2,
-            .h = scui_widget_clip(event->object).h - 10 * 2,
+            .w = scui_widget_area(event->object).w - 10 * 2,
+            .h = scui_widget_area(event->object).h - 10 * 2,
         };
         scui_widget_draw_color(event->object, &clip, color_black);
         
@@ -423,8 +423,8 @@ void scui_test_ui_graph_8_event_proc(scui_event_t *event)
         scui_area_t  clip = {
             .x = 10,
             .y = 10,
-            .w = scui_widget_clip(event->object).w - 10 * 2,
-            .h = scui_widget_clip(event->object).h - 10 * 2,
+            .w = scui_widget_area(event->object).w - 10 * 2,
+            .h = scui_widget_area(event->object).h - 10 * 2,
         };
         scui_widget_draw_color(event->object, &clip, color_black);
         
@@ -447,8 +447,8 @@ void scui_test_ui_graph_9_event_proc(scui_event_t *event)
         scui_area_t  clip = {
             .x = 10,
             .y = 10,
-            .w = scui_widget_clip(event->object).w - 10 * 2,
-            .h = scui_widget_clip(event->object).h - 10 * 2,
+            .w = scui_widget_area(event->object).w - 10 * 2,
+            .h = scui_widget_area(event->object).h - 10 * 2,
         };
         scui_widget_draw_color(event->object, &clip, color_black);
         

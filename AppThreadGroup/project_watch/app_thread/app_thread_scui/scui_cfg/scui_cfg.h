@@ -202,8 +202,8 @@
 #define SCUI_WINDOW_SWITCH_MOVE_SPD                 {1500, 1700, 1700, 1700, 800, 1000}
 #define SCUI_WINDOW_PRELOAD_USE                     (0)
 
-/* 控件布局标记(为控件添加随机颜色轮廓) */
-#define SCUI_WIDGET_BORDER_TAG                      (0)
+/* 控件区域检查(调试:随机色轮廓) */
+#define SCUI_WIDGET_CHECK_CLIP                      (0)
 
 /* 文字多行排版限制,可被分隔的字符 */
 #define SCUI_STRING_LIMIT_LINE                      (64)

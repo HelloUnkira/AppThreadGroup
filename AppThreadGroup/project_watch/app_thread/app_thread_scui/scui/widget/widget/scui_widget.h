@@ -30,6 +30,7 @@ typedef enum {
 /*@brief 控件状态风格
  */
 typedef struct {
+    /* 基础支持: */
     scui_sbitfd_t buffer:1;             /* 控件独立画布标记 */
     scui_sbitfd_t buffer_d:1;           /* 控件独立画布标记(动态构建) */
     scui_sbitfd_t fully_bg:1;           /* 背景覆盖:1;背景透明:0; */
@@ -41,10 +42,13 @@ typedef struct {
     scui_sbitfd_t indev_key:1;          /* 输入事件响应标记:key */
     scui_sbitfd_t sched_anima:1;        /* 控件帧动画标记 */
     scui_sbitfd_t sched_widget:1;       /* 控件专属事件标记 */
-    scui_sbitfd_t event_override:1;     /* 事件响应重载(0:默认;1:自定义;) */
-    scui_sbitfd_t fully_clip:1;         /* 控件绘制区域(0:局部;1:完整;) */
-    scui_sbitfd_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
+    /* 扩充支持: */
     scui_sbitfd_t fixed:1;              /* 控件移动禁止(悬浮) */
+    scui_sbitfd_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
+    scui_sbitfd_t check_clip:1;         /* 控件检查区域(0:无效;1:检查;) */
+    /* 扩充可选: */
+    scui_sbitfd_t fully_clip:1;         /* 控件绘制区域(0:局部;1:完整;) */
+    scui_sbitfd_t event_override:1;     /* 事件响应重载(0:默认;1:自定义;) */
 } scui_widget_style_t;
 
 /*@brief 控件状态

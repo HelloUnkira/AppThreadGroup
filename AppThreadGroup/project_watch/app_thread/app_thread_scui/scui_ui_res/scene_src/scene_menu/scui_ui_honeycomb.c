@@ -246,8 +246,8 @@ void scui_ui_scene_honeycomb_scroll_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_ui_res_local->scroll_width  = scui_widget_clip(event->object).w;
-        scui_ui_res_local->scroll_height = scui_widget_clip(event->object).h;
+        scui_ui_res_local->scroll_width  = scui_widget_area(event->object).w;
+        scui_ui_res_local->scroll_height = scui_widget_area(event->object).h;
         
         #if SCUI_UI_HONEYCOMB_SCALE_MODE
         scui_handle_t icon = scui_ui_scene_list_image[0];

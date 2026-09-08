@@ -33,34 +33,6 @@ bool scui_widget_switch_point(scui_handle_t handle, scui_point_t *point)
     return false;
 }
 
-/*@brief 子控件坐标对齐
- *@param handle  控件句柄
- *@param handle  控件句柄(目标控件,不存在则相对父控件)
- *@param align   对齐方向
- *@param offset  偏移量
- */
-void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_align_t align, scui_point_t *offset)
-{
-    scui_widget_t *widget   = scui_handle_source_check(handle);
-    scui_handle_t  handle_t = target != SCUI_HANDLE_INVALID ? target : widget->parent;
-    scui_widget_t *widget_t = scui_handle_source_check(handle_t);
-    if (handle_t == SCUI_HANDLE_INVALID) return;
-    /* 需要找到有效的对齐目标 */
-    
-    /* 取区域对齐偏移(下沉层双轴), 再叠加外部偏移修正 */
-    scui_point_t ofs = scui_area_align(&widget_t->clip, &widget->clip, align);
-    if (offset != NULL) {
-        ofs.x += offset->x;
-        ofs.y += offset->y;
-    }
-    
-    scui_point_t point = {
-        .x = widget_t->clip.x + ofs.x,
-        .y = widget_t->clip.y + ofs.y,
-    };
-    scui_widget_move_pos(handle, &point);
-}
-
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点
@@ -141,6 +113,34 @@ void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset)
     scui_widget_move_pos(handle, &point);
 }
 
+/*@brief 子控件坐标对齐
+ *@param handle  控件句柄
+ *@param handle  控件句柄(目标控件,不存在则相对父控件)
+ *@param align   对齐方向
+ *@param offset  偏移量
+ */
+void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_align_t align, scui_point_t *offset)
+{
+    scui_widget_t *widget   = scui_handle_source_check(handle);
+    scui_handle_t  handle_t = target != SCUI_HANDLE_INVALID ? target : widget->parent;
+    scui_widget_t *widget_t = scui_handle_source_check(handle_t);
+    if (handle_t == SCUI_HANDLE_INVALID) return;
+    /* 需要找到有效的对齐目标 */
+    
+    /* 取区域对齐偏移(下沉层双轴), 再叠加外部偏移修正 */
+    scui_point_t ofs = scui_area_align(&widget_t->clip, &widget->clip, align);
+    if (offset != NULL) {
+        ofs.x += offset->x;
+        ofs.y += offset->y;
+    }
+    
+    scui_point_t point = {
+        .x = widget_t->clip.x + ofs.x,
+        .y = widget_t->clip.y + ofs.y,
+    };
+    scui_widget_move_pos(handle, &point);
+}
+
 /*@brief 子控件坐标镜像
  *@param handle  控件句柄
  *@param child   控件子控件句柄(为空则镜像所有子控件)
@@ -205,7 +205,7 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     widget->clip.w = width;
     widget->clip.h = height;
     scui_widget_surface_refr(widget, false);
-    scui_widget_draw(widget->parent, NULL, false, 0);
+    scui_widget_draw(widget->myself, NULL, false, 0);
     
     /* 子控件更新, 父控件更新 */
     scui_event_define(event_c, widget->myself, true, scui_event_self_size,  scui_event_absorb_none);
