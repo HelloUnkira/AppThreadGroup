@@ -37,7 +37,7 @@ void scui_test_ui_button_event_proc(scui_event_t *event)
         scui_coord_t cur_y = (SCUI_VER_RES - total_h) / 2;
         
         #if 1
-        /* custom image_crect4 x2 (替代 button image 类型, 静态) */
+        /* custom button x2 (替代 button image 类型, 静态) */
         static const scui_handle_t btn_images[2][4] = {
             {
                 scui_image_prj_repeat_card_04_r36_1,
@@ -66,13 +66,13 @@ void scui_test_ui_button_event_proc(scui_event_t *event)
             custom_maker.widget.clip.h   = btn_hgt[idx];
             custom_maker.widget.clip.x   = SCUI_HOR_RES / 2 - custom_maker.widget.clip.w / 2;
             custom_maker.widget.clip.y   = cur_y;
-            custom_maker.type = scui_custom_type_image_crect4;
-            custom_maker.data.image_crect4.image[0] = btn_images[idx][0];
-            custom_maker.data.image_crect4.image[1] = btn_images[idx][1];
-            custom_maker.data.image_crect4.image[2] = btn_images[idx][2];
-            custom_maker.data.image_crect4.image[3] = btn_images[idx][3];
-            custom_maker.data.image_crect4.color = SCUI_COLOR_MAKE32(false, 0x0, 0xFF282828);
-            custom_maker.data.image_crect4.delta = btn_delta[idx];
+            custom_maker.type = scui_custom_type_button;
+            custom_maker.data.button.image[0] = btn_images[idx][0];
+            custom_maker.data.button.image[1] = btn_images[idx][1];
+            custom_maker.data.button.image[2] = btn_images[idx][2];
+            custom_maker.data.button.image[3] = btn_images[idx][3];
+            custom_maker.data.button.color = SCUI_COLOR_MAKE32(false, 0x0, 0xFF282828);
+            custom_maker.data.button.delta = btn_delta[idx];
             scui_widget_create(&custom_maker, &custom_handle);
             
             cur_y += custom_maker.widget.clip.h + btn_gap;

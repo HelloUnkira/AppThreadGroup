@@ -6,7 +6,7 @@
             "widget.type":              "scui_widget_type_window",
             "widget.style.sched_anima": "true",
             "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
-            "widget.child_num":         "8",
+            "widget.child_num":         "10",
             "widget.event_cb":          "scui_test_ui_ximage_event_proc"
         },
         {
@@ -102,6 +102,30 @@
             "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE",
             "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
             "widget.event_cb":          "scui_test_ui_ximage_item_event_proc"
+        },
+        {
+            "annotation":              "indicator垂直(sequence右底对齐, 5点)",
+            "widget.type":              "scui_widget_type_ximage",
+            "widget.style.sched_anima": "true",
+            "widget.clip.x":            "SCUI_HOR_RES * 1 / 8 + 70 + SCUI_HOR_RES * 9 / 14 + 8",
+            "widget.clip.y":            "SCUI_VER_RES * 3 / 5 + 30 + SCUI_VER_RES * 2 / 23 - 84",
+            "widget.clip.w":            "12",
+            "widget.clip.h":            "84",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_INDV",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
+            "widget.event_cb":          "scui_test_ui_ximage_indicator_event_proc"
+        },
+        {
+            "annotation":              "indicator水平(sequence下右对齐, 5点)",
+            "widget.type":              "scui_widget_type_ximage",
+            "widget.style.sched_anima": "true",
+            "widget.clip.x":            "SCUI_HOR_RES * 1 / 8 + 70 + SCUI_HOR_RES * 9 / 14 - 84",
+            "widget.clip.y":            "SCUI_VER_RES * 3 / 5 + 30 + SCUI_VER_RES * 2 / 23 + 8",
+            "widget.clip.w":            "84",
+            "widget.clip.h":            "12",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_XIMAGE_INDH",
+            "widget.parent":            "SCUI_UI_SCENE_TEST_UI_XIMAGE",
+            "widget.event_cb":          "scui_test_ui_ximage_indicator_event_proc"
         }
     ]
 }

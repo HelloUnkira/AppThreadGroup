@@ -39,8 +39,8 @@ static void scui_ui_scene_quick_card_item_event(scui_event_t *event)
             scui_image_prj_repeat_card_07_r36_4,
         };
         scui_custom_data_t custom_data;
-        scui_custom_data_config_image_crect4(&custom_data, image, color, -1);
-        scui_custom_draw_image_crect4(event->object, &clip, &custom_data);
+        scui_custom_data_config_button(&custom_data, image, color, -1);
+        scui_custom_draw_button(event->object, &clip, &custom_data);
         
         
         

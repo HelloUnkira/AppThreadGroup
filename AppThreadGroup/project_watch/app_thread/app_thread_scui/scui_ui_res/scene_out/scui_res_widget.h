@@ -137,13 +137,15 @@ typedef enum {
 	SCUI_UI_SCENE_TEST_UI_XIMAGE_V4, // 4225, 0x1081
 	SCUI_UI_SCENE_TEST_UI_XIMAGE_REPLACE, // 4226, 0x1082
 	SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE, // 4227, 0x1083
-	SCUI_UI_SCENE_NONE, // 4228, 0x1084
-	SCUI_UI_SCENE_NOTIFY, // 4229, 0x1085
-	SCUI_UI_SCENE_QUICK_CARD, // 4230, 0x1086
-	SCUI_UI_SCENE_STANDBY, // 4231, 0x1087
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_INDV, // 4228, 0x1084
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_INDH, // 4229, 0x1085
+	SCUI_UI_SCENE_NONE, // 4230, 0x1086
+	SCUI_UI_SCENE_NOTIFY, // 4231, 0x1087
+	SCUI_UI_SCENE_QUICK_CARD, // 4232, 0x1088
+	SCUI_UI_SCENE_STANDBY, // 4233, 0x1089
 } scui_widget_parser_handle_t;
 
-extern const void * const scui_widget_parser_table[136];
+extern const void * const scui_widget_parser_table[138];
 
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM_key;
@@ -277,6 +279,8 @@ extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_V3_
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_V4_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_REPLACE_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_INDV_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_XIMAGE_INDH_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_NONE_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_NOTIFY_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_QUICK_CARD_key;

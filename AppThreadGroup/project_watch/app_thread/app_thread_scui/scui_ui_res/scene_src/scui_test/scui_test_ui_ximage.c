@@ -30,6 +30,67 @@ static const scui_align_t scui_seq_align_list[] = {
 /*@brief 图像子控件事件回调(布局在json, 参数在此注入)
  *@param event 事件
  */
+void scui_test_ui_ximage_indicator_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_create: {
+        scui_handle_t handle = event->object;
+        scui_coord_t  idx    = scui_widget_child_to_index(handle);
+        bool          way    = (idx == 8);   /* 8:垂直; 9:水平 */
+        /* indicator形态: 未选中wait灰点 + 选中focus白点 */
+        scui_handle_t wait_ = scui_image_prj_repeat_dot_01_grey;
+        scui_handle_t focus = scui_image_prj_repeat_dot_02_white;
+        scui_coord_t count = 5;
+        scui_coord_t span  = 6;
+        
+        /* 相对sequence: 垂直=右外侧底对齐; 水平=下外侧右对齐 */
+        scui_handle_t seq = scui_widget_child_by_index(scui_widget_parent(handle), 4);
+        scui_point_t ofs = {.x = way ? 8 : 0, .y = way ? 0 : 8,};
+        scui_widget_align_pos(handle, seq, way ? scui_align_orb : scui_align_obr, &ofs);
+        
+        /* 注入初始(首点选中) */
+        scui_handle_t list[8];
+        for (scui_coord_t k = 0; k < count; k++)
+            list[k] = (k == 0) ? focus : wait_;
+        scui_ximage_sequence(handle, list, count,
+            SCUI_COLOR_FILTER_TRANS, scui_align_itl, span, way);
+        break;
+    }
+    case scui_event_anima_elapse: {
+        scui_handle_t handle = event->object;
+        scui_coord_t  idx    = scui_widget_child_to_index(handle);
+        bool          way    = (idx == 8);
+        scui_coord_t  bi     = idx - 8;
+        static const scui_handle_t wait_ = scui_image_prj_repeat_dot_01_grey;
+        static const scui_handle_t focus = scui_image_prj_repeat_dot_02_white;
+        scui_coord_t count = 5;
+        scui_coord_t span  = 6;
+        
+        /* ~0.7s轮换高亮位置 */
+        static scui_multi_t ind_tick[2] = {0};
+        static scui_coord_t ind_focus[2] = {0};
+        ind_tick[bi] += event->tick;
+        if (ind_tick[bi] < 700)
+             break;
+        ind_tick[bi] = 0;
+        ind_focus[bi] = (ind_focus[bi] + 1) % count;
+        
+        /* 重建list: 选中位focus, 其余wait */
+        scui_handle_t list[8];
+        for (scui_coord_t k = 0; k < count; k++)
+            list[k] = (k == ind_focus[bi]) ? focus : wait_;
+        scui_ximage_sequence(handle, list, count,
+            SCUI_COLOR_FILTER_TRANS, scui_align_itl, span, way);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief 图像子控件事件回调(布局在json, 参数在此注入)
+ *@param event 事件
+ */
 void scui_test_ui_ximage_item_event_proc(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
@@ -75,11 +136,12 @@ void scui_test_ui_ximage_item_event_proc(scui_event_t *event)
             scui_ximage_replace_play(handle, (scui_handle_t *)index_list, index_num, index_time, -1);
             break;
         }
-        case 7: /* sequence:0-9数字 初始内部align */
+        case 7: {/* sequence:0-9数字 初始内部align */
             scui_ximage_sequence(handle, (scui_handle_t *)scui_seq_num_list,
                 scui_arr_len(scui_seq_num_list),
                 SCUI_COLOR_FILTER_TRANS, scui_align_itl, 2, false);
             break;
+        }
         default:
             break;
         }

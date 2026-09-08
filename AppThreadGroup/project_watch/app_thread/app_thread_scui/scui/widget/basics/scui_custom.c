@@ -27,7 +27,7 @@ void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle)
         widget_maker->style.sched_anima = true;
     
     /* 可选标记ptr,widget事件 */
-    if (custom_maker->type == scui_custom_type_image_crect4) {
+    if (custom_maker->type == scui_custom_type_button) {
         widget_maker->style.indev_ptr    = true;
         widget_maker->style.sched_widget = true;
     }
@@ -82,7 +82,7 @@ void scui_custom_invoke(scui_event_t *event)
     }
     case scui_event_ptr_click: {
         /* 仅按钮类子类型支持点击事件(四角图) */
-        if (custom->type != scui_custom_type_image_crect4) {
+        if (custom->type != scui_custom_type_button) {
             scui_event_define(event, widget->myself, true, scui_event_button_click, NULL);
             scui_event_notify(&event);
         }
@@ -94,10 +94,9 @@ void scui_custom_invoke(scui_event_t *event)
             /* 简单打个表整理一下:不是ctx */
             static const void (*scui_custom_draw_cb[scui_custom_type_num])
             (scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data) = {
-                [scui_custom_type_slider]       = scui_custom_draw_slider,
-                [scui_custom_type_spinner]      = scui_custom_draw_spinner,
-                [scui_custom_type_indicator]    = scui_custom_draw_indicator,
-                [scui_custom_type_image_crect4] = scui_custom_draw_image_crect4,
+                [scui_custom_type_slider]  = scui_custom_draw_slider,
+                [scui_custom_type_spinner] = scui_custom_draw_spinner,
+                [scui_custom_type_button]  = scui_custom_draw_button,
             };
             
             scui_area_t widget_clip = widget->clip;
@@ -379,57 +378,17 @@ void scui_custom_draw_spinner(scui_handle_t handle, scui_area_t *clip, scui_cust
     scui_widget_draw_ring(handle, clip, spinner, NULL, adj_s, color_fg, adj_e, 100, edge);
 }
 
-/*@brief 自定义控件:插件:导航点
- *@param handle 自定义控件句柄
- *@param clip   绘制区域
- *@param data   自定义参数集
- */
-void scui_custom_draw_indicator(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data)
-{
-    /* draw data<s> */
-    scui_handle_t wait          = data->indicator.wait;
-    scui_handle_t focus         = data->indicator.focus;
-    scui_color_t  color_wait    = data->indicator.color_wait;
-    scui_color_t  color_focus   = data->indicator.color_focus;
-    scui_handle_t count         = data->indicator.count;
-    scui_handle_t index         = data->indicator.index;
-    scui_handle_t span          = data->indicator.span;
-    bool          way           = data->indicator.way;
-    /* draw data<e> */
-    SCUI_LOG_DEBUG("");
-    SCUI_ASSERT(clip != NULL);
-    
-    scui_point_t offset = {0};
-    for (scui_multi_t idx = 0; idx < count; idx++) {
-        if (idx == index) {
-            scui_area_t dst_clip = *clip;
-            if (scui_area_limit_offset(&dst_clip, &offset))
-                scui_widget_draw_image(handle, &dst_clip, focus, NULL, color_focus);
-            
-            if (way) offset.y += scui_image_h(focus) + span;
-            else offset.x += scui_image_w(focus) + span;
-        } else {
-            scui_area_t dst_clip = *clip;
-            if (scui_area_limit_offset(&dst_clip, &offset))
-                scui_widget_draw_image(handle, &dst_clip, wait, NULL, color_wait);
-            
-            if (way) offset.y += scui_image_h(wait) + span;
-            else offset.x += scui_image_w(wait) + span;
-        }
-    }
-}
-
 /*@brief 按钮控件绘制(四个角使用图像绘制)
  *@param handle 自定义控件句柄
  *@param clip   绘制区域
  *@param data   自定义参数集
  */
-void scui_custom_draw_image_crect4(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data)
+void scui_custom_draw_button(scui_handle_t handle, scui_area_t *clip, scui_custom_data_t *data)
 {
     /* draw data<s> */
-    scui_handle_t *image        = data->image_crect4.image;
-    scui_color_t   color        = data->image_crect4.color;
-    scui_coord_t   delta        = data->image_crect4.delta;
+    scui_handle_t *image        = data->button.image;
+    scui_color_t   color        = data->button.color;
+    scui_coord_t   delta        = data->button.delta;
     /* draw data<e> */
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);

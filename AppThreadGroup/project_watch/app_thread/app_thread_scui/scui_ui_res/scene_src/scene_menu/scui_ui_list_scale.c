@@ -105,8 +105,8 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
         btn_clip.x += btn_scale_x / 2;
         btn_clip.w -= btn_scale_x;
         scui_custom_data_t custom_data;
-        scui_custom_data_config_image_crect4(&custom_data, btn_image, btn_color, -1);
-        scui_custom_draw_image_crect4(event->object, &btn_clip, &custom_data);
+        scui_custom_data_config_button(&custom_data, btn_image, btn_color, -1);
+        scui_custom_draw_button(event->object, &btn_clip, &custom_data);
         
         scui_handle_t surface_image = scui_widget_surface_image(event->object);
         scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL, img_scale, img_pos);

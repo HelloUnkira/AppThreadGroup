@@ -5,8 +5,7 @@ typedef enum {
     scui_custom_type_none = 0,
     scui_custom_type_slider,
     scui_custom_type_spinner,
-    scui_custom_type_indicator,
-    scui_custom_type_image_crect4,
+    scui_custom_type_button,
     scui_custom_type_num,
 } scui_custom_type_t;
 
@@ -33,23 +32,13 @@ typedef union {
         scui_coord_t  way;          /* 旋转方向(顺时针:+1;逆时针:-1;) */
     } spinner;
     struct {
-        scui_handle_t wait;         /* 图像句柄(未选中) */
-        scui_handle_t focus;        /* 图像句柄(选中) */
-        scui_color_t  color_wait;   /* 图像源色调(alpha图使用) */
-        scui_color_t  color_focus;  /* 图像源色调(alpha图使用) */
-        scui_handle_t count;        /* 导航点数量 */
-        scui_handle_t index;        /* 目标索引(选中) */
-        scui_handle_t span;         /* 间隙 */
-        bool          way;          /* 方向(0:水平方向;1:垂直方向) */
-    } indicator;
-    struct {
         scui_handle_t image[4];     /* 图像句柄(左上角,右上角,左下角,右下角) */
         scui_color_t  color;        /* 图像源色调(alpha图使用) */
         scui_coord_t  delta;        /* 边界填充线: */
                                     /*   0:忽略(复杂图像集成) */
                                     /*  -1:完全填充(全填充圆角矩形) */
                                     /*  其他:边界填充(空心圆角矩形) */
-    } image_crect4;
+    } button;
     
     /* keep add... */
 } scui_custom_data_t;

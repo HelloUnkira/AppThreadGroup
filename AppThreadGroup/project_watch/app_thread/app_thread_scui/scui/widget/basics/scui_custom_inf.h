@@ -30,8 +30,7 @@ void scui_custom_draw_text(scui_handle_t handle, void *args, scui_handle_t text)
 /*****************************************************************************/
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_slider);
 SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_spinner);
-SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_indicator);
-SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_image_crect4);
+SCUI_CUSTOM_DRAW_INF_DECLARE(scui_custom_draw_button);
 /*****************************************************************************/
 
 
@@ -57,7 +56,7 @@ do {                                                                        \
 
 /* scui_custom_data_t->spinner */
 #define scui_custom_data_config_spinner(custom_data_v,                      \
-    spinner_v, color_v, edge_v, percent_v, angle_s_v, angle_l_v, way_v)    \
+    spinner_v, color_v, edge_v, percent_v, angle_s_v, angle_l_v, way_v)     \
 do {                                                                        \
     (custom_data_v)->spinner.spinner  = spinner_v;                          \
     (custom_data_v)->spinner.edge     = edge_v;                             \
@@ -68,31 +67,16 @@ do {                                                                        \
     (custom_data_v)->spinner.way      = way_v;                              \
 } while (0)                                                                 \
 
-/* scui_custom_data_t->indicator */
-#define scui_custom_data_config_indicator(custom_data_v,                    \
-    wait_v, color_wait_v, focus_v, color_focus_v,                           \
-    count_v, index_v, span_v, way_v)                                        \
-do {                                                                        \
-    (custom_data_v)->indicator.wait        = wait_v;                        \
-    (custom_data_v)->indicator.focus       = focus_v;                       \
-    (custom_data_v)->indicator.color_wait  = color_wait_v;                  \
-    (custom_data_v)->indicator.color_focus = color_focus_v;                 \
-    (custom_data_v)->indicator.count       = count_v;                       \
-    (custom_data_v)->indicator.index       = index_v;                       \
-    (custom_data_v)->indicator.span        = span_v;                        \
-    (custom_data_v)->indicator.way         = way_v;                         \
-} while (0)                                                                 \
-
-/* scui_custom_data_t->image_crect4 */
-#define scui_custom_data_config_image_crect4(custom_data_v,                 \
+/* scui_custom_data_t->button */
+#define scui_custom_data_config_button(custom_data_v,                       \
     image_v, color_v, delta_v)                                              \
 do {                                                                        \
-    (custom_data_v)->image_crect4.image[0] = image_v[0];                    \
-    (custom_data_v)->image_crect4.image[1] = image_v[1];                    \
-    (custom_data_v)->image_crect4.image[2] = image_v[2];                    \
-    (custom_data_v)->image_crect4.image[3] = image_v[3];                    \
-    (custom_data_v)->image_crect4.color    = color_v;                       \
-    (custom_data_v)->image_crect4.delta    = delta_v;                       \
+    (custom_data_v)->button.image[0] = image_v[0];                          \
+    (custom_data_v)->button.image[1] = image_v[1];                          \
+    (custom_data_v)->button.image[2] = image_v[2];                          \
+    (custom_data_v)->button.image[3] = image_v[3];                          \
+    (custom_data_v)->button.color    = color_v;                             \
+    (custom_data_v)->button.delta    = delta_v;                             \
 } while (0)                                                                 \
 
 

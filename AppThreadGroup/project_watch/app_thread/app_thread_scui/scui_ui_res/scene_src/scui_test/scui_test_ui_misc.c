@@ -51,29 +51,6 @@ void scui_test_ui_misc_spinner_event_proc(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_test_ui_misc_indicator_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse: {
-        scui_custom_data_t *data = NULL;
-        scui_custom_data_inst(event->object, &data);
-        
-        static uint8_t cnt = 0; cnt++;
-        
-        if (cnt % 10 == 0 || cnt % 11 == 0) {
-            data->indicator.index++;
-            if (data->indicator.index >= 5)
-                data->indicator.index  = 0;
-            scui_widget_draw(event->object, NULL, false, 0);
-        }
-        break;
-    }
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
 void scui_test_ui_misc_event_proc(scui_event_t *event)
 {
     static scui_multi_t image_pct = 0;
@@ -154,34 +131,6 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         scui_widget_create(&custom_maker, &custom_handle);
         #endif
         
-        #if 1
-        custom_maker.type = scui_custom_type_indicator;
-        custom_maker.data = custom_data_zero;
-        custom_maker.data.indicator.wait = scui_image_prj_repeat_dot_01_grey;
-        custom_maker.data.indicator.focus = scui_image_prj_repeat_dot_02_white;
-        custom_maker.data.indicator.count = 5;
-        custom_maker.data.indicator.span = 6;
-        custom_maker.widget.event_cb = scui_test_ui_misc_indicator_event_proc;
-        
-        custom_maker.data.indicator.way = 0;
-        custom_maker.widget.clip.x  = 15;
-        custom_maker.widget.clip.y  = SCUI_VER_RES - 30;
-        custom_maker.widget.clip.w  = scui_image_w(custom_maker.data.indicator.wait);
-        custom_maker.widget.clip.w += custom_maker.data.indicator.span;
-        custom_maker.widget.clip.w *= custom_maker.data.indicator.count;
-        custom_maker.widget.clip.h  = scui_image_h(custom_maker.data.indicator.wait);
-        scui_widget_create(&custom_maker, &custom_handle);
-        
-        custom_maker.data.indicator.way = 1;
-        custom_maker.widget.clip.x  = 15;
-        custom_maker.widget.clip.y  = SCUI_VER_RES - 150;
-        custom_maker.widget.clip.w  = scui_image_w(custom_maker.data.indicator.wait);
-        custom_maker.widget.clip.h  = scui_image_h(custom_maker.data.indicator.wait);
-        custom_maker.widget.clip.h += custom_maker.data.indicator.span;
-        custom_maker.widget.clip.h *= custom_maker.data.indicator.count;
-        scui_widget_create(&custom_maker, &custom_handle);
-        #endif
-        
         break;
     }
     case scui_event_destroy:
@@ -213,11 +162,6 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         clip.y = SCUI_VER_RES * 5 / 13;
         clip.w = SCUI_HOR_RES * 5 / 13;
         clip.h = SCUI_VER_RES * 5 / 13;
-        scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
-        clip.x = SCUI_HOR_RES * 7 / 13;
-        clip.y = SCUI_VER_RES * 5 / 13;
-        clip.w = SCUI_HOR_RES * 5 / 13;
-        clip.h = SCUI_VER_RES * 7 / 13;
         scui_widget_draw_color(event->object, &clip, SCUI_COLOR_WHITE);
         #endif
         
