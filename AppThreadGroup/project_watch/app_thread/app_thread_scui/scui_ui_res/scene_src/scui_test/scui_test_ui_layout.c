@@ -35,11 +35,89 @@ static scui_custom_maker_t scui_test_ui_layout_custom_base(scui_handle_t parent)
     return custom_maker;
 }
 
+/*@brief grid布局构建(按子索引切换展示)
+ *  core: 固定列/行模板 + cell落位(pos/span) + cell内对齐/拉伸
+ */
+static void scui_test_ui_layout_grid_create(uint8_t idx)
+{
+    scui_handle_t layout_handle = SCUI_HANDLE_INVALID;
+    scui_layout_maker_define(layout_maker);
+    
+    layout_maker.widget.style.sched_widget = true;
+    layout_maker.widget.style.fully_bg     = true;
+    layout_maker.widget.clip.x = (SCUI_HOR_RES - SCUI_HOR_RES * 707 / 1000) / 2;
+    layout_maker.widget.clip.y = (SCUI_VER_RES - SCUI_VER_RES * 707 / 1000) / 2;
+    layout_maker.widget.clip.w = SCUI_HOR_RES * 707 / 1000;
+    layout_maker.widget.clip.h = SCUI_VER_RES * 707 / 1000;
+    layout_maker.widget.parent    = SCUI_UI_SCENE_TEST_UI_LAYOUT;
+    layout_maker.widget.child_num = 6;
+    layout_maker.widget.color.color.full = 0xFF6F6F6F;  /* 亮灰 */
+    layout_maker.type  = scui_layout_type_grid;
+    layout_maker.align = scui_align_itl;    /* 相对父左上 */
+    layout_maker.offset = (scui_point_t){0};
+    
+    scui_widget_create(&layout_maker, &layout_handle);
+    scui_ui_res_local->layout = layout_handle;
+    
+    /* 列/行轨道模板(定值) */
+    const scui_coord_t col_size[] = {SCUI_HOR_RES / 5, SCUI_HOR_RES / 5, SCUI_HOR_RES / 5};
+    const scui_coord_t row_size[] = {SCUI_HOR_RES / 8, SCUI_HOR_RES / 8, SCUI_HOR_RES / 8};
+    scui_layout_grid_way(layout_handle, false, col_size, 3, 8);
+    scui_layout_grid_way(layout_handle, true,  row_size, 3, 8);
+    
+    /* 6个cell: 由idx决定落位/跨格/对齐/拉伸 */
+    for (uint8_t k = 0; k < 6; k++) {
+        scui_custom_maker_t custom_maker = scui_test_ui_layout_custom_base(layout_handle);
+        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
+        custom_maker.widget.clip.w = SCUI_HOR_RES / 10;
+        custom_maker.widget.clip.h = SCUI_HOR_RES / 10;
+        scui_widget_create(&custom_maker, &custom_handle);
+        
+        scui_coord_t  col = 0, row = 0, cspan = 1, rspan = 1;
+        scui_opt_pos_t align = 0;
+        scui_opt_dir_t stretch = 0;
+        switch (idx) {
+        case 0: /* 基础: 每个格子左/上对齐 */
+            col = k % 3; row = k / 3;
+            break;
+        case 1: /* 含跨列 + cell内对齐 */
+            if (k == 0) {col = 0; row = 0; cspan = 3;}
+            else if (k == 1) {col = 0; row = 1; align = scui_opt_pos_l | scui_opt_pos_ver;}
+            else if (k == 2) {col = 1; row = 1; align = scui_opt_pos_r | scui_opt_pos_ver;}
+            else if (k == 3) {col = 0; row = 2; align = scui_opt_pos_hor | scui_opt_pos_ver;}
+            else if (k == 4) {col = 1; row = 2; align = scui_opt_pos_l | scui_opt_pos_d;}
+            else             {col = 2; row = 1;}
+            break;
+        case 2: /* 含拉伸 + 右下对齐 */
+            if (k == 0) {col = 0; row = 0; stretch = scui_opt_dir_ver;}
+            else if (k == 1) {col = 1; row = 0; align = scui_opt_pos_hor | scui_opt_pos_ver;}
+            else if (k == 2) {col = 2; row = 0; align = scui_opt_pos_r | scui_opt_pos_d;}
+            else if (k == 3) {col = 0; row = 1; stretch = scui_opt_dir_hor; align = scui_opt_pos_ver;}
+            else if (k == 4) {col = 1; row = 1; cspan = 2; align = scui_opt_pos_l | scui_opt_pos_u;}
+            else             {col = 2; row = 2;}
+            break;
+        default:
+            break;
+        }
+        scui_point_t span = {cspan, rspan};
+        scui_layout_grid_cell(layout_handle, custom_handle,
+            col, row, span, align, stretch);
+    }
+    
+    SCUI_LOG_WARN("layout build grid cfg: %u", idx);
+}
+
 /*@brief 构建配置: 索引0为 item(手排/auto) 布局
  *  后续索引为 flex 布局参数(方向 x 间距 x 对齐 x 分组轨道)
  */
 static void scui_test_ui_layout_create(uint8_t cfg)
 {
+    /* grid 布局: 固定轨道模板 + cell落位(空位在flex之后, 为后续扩展) */
+    if (cfg >= 11) {
+        scui_test_ui_layout_grid_create(cfg - 11);
+        return;
+    }
+    
     /* item 布局: 子控件手工xy摆放, 部分登记相对对齐 */
     if (cfg == 0) {
         scui_handle_t  layout_handle = SCUI_HANDLE_INVALID;
@@ -205,8 +283,8 @@ void scui_test_ui_layout_event_proc(scui_event_t *event)
         
         /* 接口不支持运行时变更参数, 销毁重建更替构建配置 */
         scui_widget_destroy(scui_ui_res_local->layout);
-        /* total: 1(item) + 10(flex) = 11 configurations */
-        scui_ui_res_local->build_idx = (scui_ui_res_local->build_idx + 1) % 11;
+        /* total: 1(item) + 10(flex) + 3(grid) = 14 configurations */
+        scui_ui_res_local->build_idx = (scui_ui_res_local->build_idx + 1) % 14;
         scui_test_ui_layout_create(scui_ui_res_local->build_idx);
         
         scui_widget_draw(event->object, NULL, false, 0);

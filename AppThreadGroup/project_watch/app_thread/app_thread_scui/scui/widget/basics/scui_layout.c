@@ -426,6 +426,196 @@ void scui_layout_flex_group(scui_handle_t handle, scui_handle_t handle_c, scui_c
     scui_widget_layout_refr(handle);
 }
 
+/*@brief 布局控件grid子控件分组登记项定位
+ *@param layout 布局控件实例
+ *@param handle 子控件句柄
+ *@retval 登记项
+ */
+static scui_layout_grid_node_t *scui_layout_grid_claim(scui_layout_t *layout, scui_handle_t handle)
+{
+    if (layout->grid.list == NULL) return NULL;
+    
+    for (scui_handle_t idx = 0; idx < layout->grid.num; idx++) {
+        scui_layout_grid_node_t *node = &layout->grid.list[idx];
+        if (node->use && node->handle == handle) return node;
+        if (node->use) continue;
+        
+        node->use    = true;
+        node->handle = handle;
+        return node;
+    }
+    return NULL;
+}
+
+/*@brief 布局控件grid轨道(列/行模板)
+ *@param handle 布局控件句柄
+ *@param way    false:列模板; true:行模板
+ *@param size   轨道尺寸数组(定值)
+ *@param num    轨道数量
+ *@param gap    轨道间距
+ */
+void scui_layout_grid_way(scui_handle_t handle, bool way,
+    const scui_coord_t *size, scui_coord_t num, scui_coord_t gap)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_layout));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_layout_t *layout = (void *)widget;
+    
+    if (layout->type != scui_layout_type_grid) {
+        SCUI_LOG_WARN("unmatch type");
+        return;
+    }
+    
+    scui_coord_t **tar = way ? &layout->grid.row_size : &layout->grid.col_size;
+    scui_coord_t  *cnt = way ? &layout->grid.row_num : &layout->grid.col_num;
+    scui_coord_t  *gzz = way ? &layout->grid.row_gap : &layout->grid.col_gap;
+    
+    /* 回收旧轨道并拷贝定值模板 */
+    SCUI_MEM_FREE(*tar);
+    *cnt = 0;
+    *gzz = gap;
+    if (num > 0 && size != NULL) {
+        scui_multi_t sz = num * sizeof(scui_coord_t);
+        scui_coord_t *mem = SCUI_MEM_ALLOC(scui_mem_type_mix, sz);
+        for (scui_coord_t i = 0; i < num; i++) mem[i] = size[i];
+        *tar = mem;
+        *cnt = num;
+    }
+    
+    scui_widget_layout_refr(handle);
+}
+
+/*@brief 布局控件grid子控件落位
+ *@param handle   布局控件句柄
+ *@param handle_c 子控件句柄
+ *@param col      起始列
+ *@param row      起始行
+ *@param span     跨度(x=跨列; y=跨行)
+ *@param align    cell内对齐(水平|垂直)
+ *@param stretch  拉伸方向(scui_opt_dir_hor|ver)
+ */
+void scui_layout_grid_cell(scui_handle_t handle, scui_handle_t handle_c,
+    scui_coord_t col, scui_coord_t row, scui_point_t span,
+    scui_opt_pos_t align, scui_opt_dir_t stretch)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_layout));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_layout_t *layout = (void *)widget;
+    
+    if (layout->type != scui_layout_type_grid) {
+        SCUI_LOG_WARN("unmatch type");
+        return;
+    }
+    
+    SCUI_ASSERT(scui_widget_parent(handle_c) == handle);
+    scui_layout_grid_node_t *node = scui_layout_grid_claim(layout, handle_c);
+    if (node == NULL) return;
+    
+    node->col      = col;
+    node->row      = row;
+    node->col_span = span.x > 0 ? span.x : 1;
+    node->row_span = span.y > 0 ? span.y : 1;
+    node->align    = align;
+    node->st_x     = scui_opt_bits_equal(stretch, scui_opt_dir_hor);
+    node->st_y     = scui_opt_bits_equal(stretch, scui_opt_dir_ver);
+    
+    scui_widget_layout_refr(handle);
+}
+
+/*@brief grid布局执行(固定列/行轨道 + cell落位 + cell内对齐/拉伸)
+ *@param layout 布局控件实例
+ */
+static void scui_layout_grid_exec(scui_layout_t *layout)
+{
+    scui_widget_t *widget = &layout->widget;
+    scui_handle_t  handle =  widget->myself;
+    
+    if (layout->grid.col_num == 0 || layout->grid.row_num == 0) return;
+    if (layout->grid.num == 0) return;
+    
+    scui_coord_t *col_ofs = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * (layout->grid.col_num + 1));
+    scui_coord_t *row_ofs = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * (layout->grid.row_num + 1));
+    
+    /* 轨道累计偏移 */
+    scui_coord_t acc = 0;
+    for (scui_coord_t c = 0; c < layout->grid.col_num; c++) {
+        col_ofs[c] = acc;
+        acc += layout->grid.col_size[c] + layout->grid.col_gap;
+    }
+    col_ofs[layout->grid.col_num] = acc;
+    
+    acc = 0;
+    for (scui_coord_t r = 0; r < layout->grid.row_num; r++) {
+        row_ofs[r] = acc;
+        acc += layout->grid.row_size[r] + layout->grid.row_gap;
+    }
+    row_ofs[layout->grid.row_num] = acc;
+    
+    /* auto尺寸 */
+    scui_coord_t width  = widget->state.layout_w ? col_ofs[layout->grid.col_num] : widget->clip.w;
+    scui_coord_t height = widget->state.layout_h ? row_ofs[layout->grid.row_num] : widget->clip.h;
+    if (width != widget->clip.w || height != widget->clip.h)
+        scui_widget_adjust_size(handle, width, height);
+    
+    for (scui_handle_t i = 0; i < layout->grid.num; i++) {
+        scui_layout_grid_node_t *node = &layout->grid.list[i];
+        if (!node->use) continue;
+        
+        scui_handle_t  handle_c = node->handle;
+        scui_widget_t *widget_c = scui_handle_source_check(handle_c);
+        
+        /* 网格区域(跨列/跨行, 越界夹取) */
+        scui_coord_t c0 = node->col; if (c0 < 0) c0 = 0; if (c0 >= layout->grid.col_num) c0 = layout->grid.col_num - 1;
+        scui_coord_t c1 = c0 + node->col_span; if (c1 <= c0) c1 = c0 + 1; if (c1 > layout->grid.col_num) c1 = layout->grid.col_num;
+        scui_coord_t r0 = node->row; if (r0 < 0) r0 = 0; if (r0 >= layout->grid.row_num) r0 = layout->grid.row_num - 1;
+        scui_coord_t r1 = r0 + node->row_span; if (r1 <= r0) r1 = r0 + 1; if (r1 > layout->grid.row_num) r1 = layout->grid.row_num;
+        
+        scui_coord_t area_l = col_ofs[c0];
+        scui_coord_t area_w = col_ofs[c1] - col_ofs[c0];
+        scui_coord_t area_t = row_ofs[r0];
+        scui_coord_t area_h = row_ofs[r1] - row_ofs[r0];
+        
+        /* 拉伸轴: 接管尺寸 */
+        scui_coord_t cw = widget_c->clip.w;
+        scui_coord_t ch = widget_c->clip.h;
+        if (node->st_x && cw != area_w) scui_widget_adjust_size(handle_c, area_w, ch);
+        if (node->st_y && ch != area_h) scui_widget_adjust_size(handle_c, cw, area_h);
+        cw = widget_c->clip.w;
+        ch = widget_c->clip.h;
+        
+        /* 未拉伸轴按 cell内对齐定位置 */
+        scui_coord_t x;
+        if (node->st_x) {
+            x = area_l;
+        } else {
+            scui_coord_t free = area_w - cw; if (free < 0) free = 0;
+            switch (node->align & scui_opt_pos_hor) {
+            case scui_opt_pos_r:   x = area_l + free; break;
+            case scui_opt_pos_hor: x = area_l + free / 2; break;
+            default:               x = area_l; break;   /* l / 无 */
+            }
+        }
+        scui_coord_t y;
+        if (node->st_y) {
+            y = area_t;
+        } else {
+            scui_coord_t free = area_h - ch; if (free < 0) free = 0;
+            switch (node->align & scui_opt_pos_ver) {
+            case scui_opt_pos_d:   y = area_t + free; break;
+            case scui_opt_pos_ver: y = area_t + free / 2; break;
+            default:               y = area_t; break;   /* u / 无 */
+            }
+        }
+        
+        /* 经 align_pos(内左上+偏移) 换算成画布绝对坐标摆放 */
+        scui_point_t off = {x, y};
+        scui_widget_align_pos(handle_c, handle, scui_align_itl, &off);
+    }
+    
+    SCUI_MEM_FREE(col_ofs);
+    SCUI_MEM_FREE(row_ofs);
+}
+
 /*@brief 控件构造
  *@param inst       控件实例
  *@param inst_maker 控件实例构造器
@@ -469,6 +659,15 @@ void scui_layout_make(void *inst, void *inst_maker, scui_handle_t *handle)
         }
         break;
     }
+    case scui_layout_type_grid: {
+        layout->grid.num  = widget->child_num;
+        
+        if (layout->grid.num > 0) {
+            scui_multi_t size = layout->grid.num * sizeof(scui_layout_grid_node_t);
+            layout->grid.list = SCUI_MEM_ZALLOC(scui_mem_type_mix, size);
+        }
+        break;
+    }
     default:
         SCUI_ASSERT(false);
         break;
@@ -493,6 +692,13 @@ void scui_layout_burn(scui_handle_t handle)
     case scui_layout_type_flex: {
         /* 回收分组登记资源 */
         SCUI_MEM_FREE(layout->flex.list);
+        break;
+    }
+    case scui_layout_type_grid: {
+        /* 回收单元格登记与轨道模板资源 */
+        SCUI_MEM_FREE(layout->grid.list);
+        SCUI_MEM_FREE(layout->grid.col_size);
+        SCUI_MEM_FREE(layout->grid.row_size);
         break;
     }
     default:
@@ -523,6 +729,9 @@ void scui_layout_invoke(scui_event_t *event)
                 break;
             case scui_layout_type_flex:
                 scui_layout_flex_exec(layout);
+                break;
+            case scui_layout_type_grid:
+                scui_layout_grid_exec(layout);
                 break;
             default:
                 SCUI_ASSERT(false);

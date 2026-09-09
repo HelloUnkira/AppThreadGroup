@@ -22,6 +22,18 @@ typedef struct {
 } scui_layout_flex_node_t;
 
 typedef struct {
+    scui_sbitfd_t use:1;            /* 已登记单元格 */
+    scui_sbitfd_t st_x:1;           /* cell水平拉伸 */
+    scui_sbitfd_t st_y:1;           /* cell垂直拉伸 */
+    scui_handle_t handle;           /* 子控件句柄 */
+    scui_coord_t  col;              /* 起始列 */
+    scui_coord_t  row;              /* 起始行 */
+    scui_coord_t  col_span;         /* 跨列数 */
+    scui_coord_t  row_span;         /* 跨行数 */
+    scui_opt_pos_t align;           /* cell内对齐(水平l/r/hor | 垂直u/d/ver) */
+} scui_layout_grid_node_t;
+
+typedef struct {
     /* 继承域: */
     SCUI_EXTEND_FIELD_S
     scui_widget_t widget;
@@ -46,7 +58,15 @@ typedef struct {
         scui_point_t    span;       /* 间距(水平/垂直) */
     } flex;
     struct {
-       void *occupy;
+       scui_handle_t num;
+       scui_layout_grid_node_t *list;
+       
+       scui_coord_t    col_num;        /* 列轨道数 */
+       scui_coord_t   *col_size;       /* 列轨道尺寸(定值) */
+       scui_coord_t    col_gap;        /* 列距 */
+       scui_coord_t    row_num;        /* 行轨道数 */
+       scui_coord_t   *row_size;       /* 行轨道尺寸(定值) */
+       scui_coord_t    row_gap;        /* 行距 */
     } grid;
     };
 } scui_layout_t;
