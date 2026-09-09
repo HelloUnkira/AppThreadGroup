@@ -444,10 +444,13 @@ static void scui_widget_event_process(scui_event_t *event)
     case scui_event_hide:
     case scui_event_self_pos:
     case scui_event_self_size:
-    case scui_event_child_num:
     case scui_event_child_pos:
     case scui_event_child_size:
         scui_widget_layout_refr(widget->myself);
+        break;
+    case scui_event_child_num:
+        scui_widget_layout_refr(widget->myself);
+        scui_widget_draw(widget->myself, NULL, false, 0);
         break;
     default:
         break;

@@ -8,27 +8,42 @@ typedef enum {
 } scui_layout_type_t;
 
 typedef struct {
-    scui_sbitfd_t use:1;        /* 已登记对齐 */
-    scui_handle_t handle;       /* 子控件句柄 */
-    scui_handle_t handle_t;     /* 对齐目标 */
-    scui_align_t  align;        /* 对齐 */
-    scui_point_t  offset;       /* 偏移 */
+    scui_sbitfd_t use:1;            /* 已登记对齐 */
+    scui_handle_t handle;           /* 子控件句柄 */
+    scui_handle_t handle_t;         /* 对齐目标 */
+    scui_align_t  align;            /* 对齐 */
+    scui_point_t  offset;           /* 偏移 */
 } scui_layout_item_node_t;
+
+typedef struct {
+    scui_sbitfd_t use:1;            /* 已登记分组 */
+    scui_handle_t handle;           /* 子控件句柄 */
+    scui_coord_t  group;            /* 组编号 */
+} scui_layout_flex_node_t;
 
 typedef struct {
     /* 继承域: */
     SCUI_EXTEND_FIELD_S
     scui_widget_t widget;
     SCUI_EXTEND_FIELD_E
+    /* 外部域: */
+    scui_layout_type_t  type;
+    scui_sbitfd_t       use:1;      /* 对齐 */
+    scui_align_t        align;      /* 对齐 */
+    scui_point_t        offset;     /* 偏移 */
     /* 内部域: */
-    scui_layout_type_t type;
     union {
     struct {
         scui_handle_t num;
         scui_layout_item_node_t *list;
     } item;
     struct {
-       void *occupy;
+        scui_handle_t num;
+        scui_layout_flex_node_t *list;
+        
+        scui_opt_pos_t  align;      /* 对齐(水平/垂直) */
+        scui_sbitfd_t   way:1;      /* 方向(0:水平;1:垂直) */
+        scui_point_t    span;       /* 间距(水平/垂直) */
     } flex;
     struct {
        void *occupy;
@@ -44,6 +59,9 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_layout_type_t  type;
+    scui_sbitfd_t       use:1;      /* 对齐 */
+    scui_align_t        align;      /* 对齐 */
+    scui_point_t        offset;     /* 偏移 */
 } scui_layout_maker_t;
 #pragma pack(pop)
 

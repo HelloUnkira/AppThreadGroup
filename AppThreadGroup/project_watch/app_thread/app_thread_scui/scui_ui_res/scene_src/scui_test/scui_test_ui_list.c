@@ -12,17 +12,19 @@
  */
 void scui_test_ui_list_item_event_proc(scui_event_t *event)
 {
-    static const char * const item_text[15] = {
+    static const char * const item_text[16] = {
         "Test Sim Ptr", "Test Sim Enc", "Test Sim Bar", "Test Sim Key", "Test Multiply Scroll",
-        "Test Multiply String", "Test Menial Object", "Test Multiply Ximage", "Test Symbol Char",
-        "Test Draw Graph", "Test Ring", "Test Chart", "Test Roller", "Test Button", "Test Misc",
+        "Test Multiply Layout", "Test Multiply String", "Test Menial Object", "Test Multiply Ximage",
+        "Test Symbol Char", "Test Draw Graph", "Test Ring", "Test Chart", "Test Roller",
+        "Test Button", "Test Misc",
     };
-    static const scui_handle_t item_scene[15] = {
+    static const scui_handle_t item_scene[16] = {
         SCUI_UI_SCENE_TEST_UI_INDEV_PTR,
         SCUI_UI_SCENE_TEST_UI_INDEV_ENC,
         SCUI_UI_SCENE_TEST_UI_INDEV_BAR,
         SCUI_UI_SCENE_TEST_UI_INDEV_KEY,
         SCUI_UI_SCENE_TEST_UI_SCROLL,
+        SCUI_UI_SCENE_TEST_UI_LAYOUT,
         SCUI_UI_SCENE_TEST_UI_STRING,
         SCUI_UI_SCENE_TEST_UI_OBJECT,
         SCUI_UI_SCENE_TEST_UI_XIMAGE,
