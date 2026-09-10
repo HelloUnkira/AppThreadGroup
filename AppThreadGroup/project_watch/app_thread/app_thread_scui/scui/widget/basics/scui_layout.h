@@ -8,29 +8,27 @@ typedef enum {
 } scui_layout_type_t;
 
 typedef struct {
-    scui_sbitfd_t use:1;            /* 已登记对齐 */
-    scui_handle_t handle;           /* 子控件句柄 */
-    scui_handle_t handle_t;         /* 对齐目标 */
-    scui_align_t  align;            /* 对齐 */
-    scui_point_t  offset;           /* 偏移 */
+    scui_sbitfd_t  use:1;           /* 已登记对齐 */
+    scui_handle_t  handle;          /* 子控件句柄 */
+    scui_handle_t  handle_t;        /* 对齐目标 */
+    scui_align_t   align;           /* 对齐 */
+    scui_point_t   offset;          /* 偏移 */
 } scui_layout_item_node_t;
 
 typedef struct {
-    scui_sbitfd_t use:1;            /* 已登记分组 */
-    scui_handle_t handle;           /* 子控件句柄 */
-    scui_coord_t  group;            /* 组编号 */
+    scui_sbitfd_t  use:1;           /* 已登记分组 */
+    scui_handle_t  handle;          /* 子控件句柄 */
+    scui_coord_t   group;           /* 组编号 */
 } scui_layout_flex_node_t;
 
 typedef struct {
-    scui_sbitfd_t use:1;            /* 已登记单元格 */
-    scui_sbitfd_t st_x:1;           /* cell水平拉伸 */
-    scui_sbitfd_t st_y:1;           /* cell垂直拉伸 */
-    scui_handle_t handle;           /* 子控件句柄 */
-    scui_coord_t  col;              /* 起始列 */
-    scui_coord_t  row;              /* 起始行 */
-    scui_coord_t  col_span;         /* 跨列数 */
-    scui_coord_t  row_span;         /* 跨行数 */
-    scui_opt_pos_t align;           /* cell内对齐(水平l/r/hor | 垂直u/d/ver) */
+    scui_sbitfd_t  use:1;           /* 已登记单元格 */
+    scui_sbitfd_t  st_x:1;          /* cell水平拉伸 */
+    scui_sbitfd_t  st_y:1;          /* cell垂直拉伸 */
+    scui_handle_t  handle;          /* 子控件句柄 */
+    scui_point_t   pos;             /* x列;y行 */
+    scui_point_t   span;            /* 跨度(x列;y行) */
+    scui_opt_pos_t align;           /* 对齐(cell内) */
 } scui_layout_grid_node_t;
 
 typedef struct {
@@ -52,21 +50,26 @@ typedef struct {
     struct {
         scui_handle_t num;
         scui_layout_flex_node_t *list;
+        /* 让agent去维护内部实现细节! */
+        /* scui_layout_flex_exec */
         
-        scui_opt_pos_t  align;      /* 对齐(水平/垂直) */
-        scui_sbitfd_t   way:1;      /* 方向(0:水平;1:垂直) */
+        scui_opt_pos_t  align_o;    /* 轨道间对齐 */
+        scui_opt_pos_t  align_i;    /* 轨道内对齐 */
+        scui_sbitfd_t   way:1;      /* 轨道方向(0:水平;1:垂直) */
         scui_point_t    span;       /* 间距(水平/垂直) */
     } flex;
     struct {
        scui_handle_t num;
        scui_layout_grid_node_t *list;
+        /* 让agent去维护内部实现细节! */
+        /* scui_layout_grid_exec */
        
-       scui_coord_t    col_num;        /* 列轨道数 */
-       scui_coord_t   *col_size;       /* 列轨道尺寸(定值) */
-       scui_coord_t    col_gap;        /* 列距 */
-       scui_coord_t    row_num;        /* 行轨道数 */
-       scui_coord_t   *row_size;       /* 行轨道尺寸(定值) */
-       scui_coord_t    row_gap;        /* 行距 */
+       scui_coord_t     row_num;    /* 行轨道数 */
+       scui_coord_t     col_num;    /* 列轨道数 */
+       scui_coord_t    *row_size;   /* 行轨道尺寸(定值) */
+       scui_coord_t    *col_size;   /* 列轨道尺寸(定值) */
+       scui_coord_t     row_gap;    /* 行距 */
+       scui_coord_t     col_gap;    /* 列距 */
     } grid;
     };
 } scui_layout_t;
