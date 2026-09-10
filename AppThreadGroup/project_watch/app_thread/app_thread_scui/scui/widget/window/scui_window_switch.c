@@ -334,7 +334,7 @@ static void scui_window_move_anima_expire(void *instance)
     SCUI_LOG_DEBUG("point:<%d,%d>", point.x, point.y);
     
     /* 更新point */
-    scui_widget_move_pos(scui_window_switch.list[0], &point);
+    scui_widget_move_pos(scui_window_switch.list[0], &point, true);
     if (scui_window_switch.dir == scui_opt_dir_dtu)
         point.y += scui_widget_clip(scui_window_switch.list[0]).h;
     if (scui_window_switch.dir == scui_opt_dir_utd)
@@ -343,7 +343,7 @@ static void scui_window_move_anima_expire(void *instance)
         point.x += scui_widget_clip(scui_window_switch.list[0]).w;
     if (scui_window_switch.dir == scui_opt_dir_ltr)
         point.x -= scui_widget_clip(scui_window_switch.list[1]).w;
-    scui_widget_move_pos(scui_window_switch.list[1], &point);
+    scui_widget_move_pos(scui_window_switch.list[1], &point, true);
     
     /* 有自己的独立buffer,直接refr */
     widget = scui_handle_source_check(scui_window_switch.list[0]);
@@ -524,9 +524,9 @@ static bool scui_window_switch_event_catch(scui_event_t *event, scui_opt_dir_t e
         /* 就绪窗口资源 */
         scui_window_switch_ready();
         /* 额外做一次校正 */
-        scui_widget_move_pos(scui_window_switch.list[1], &point);
+        scui_widget_move_pos(scui_window_switch.list[1], &point, true);
         scui_window_switch.point = point = (scui_point_t){0};
-        scui_widget_move_pos(scui_window_switch.list[0], &point);
+        scui_widget_move_pos(scui_window_switch.list[0], &point, true);
         
         SCUI_LOG_DEBUG("");
         return true;
@@ -856,9 +856,9 @@ bool scui_window_switch_jump(scui_handle_t handle, scui_window_switch_type_t typ
     scui_window_switch_ready();
     /* 额外做一次校正 */
     scui_point_t point = scui_window_switch.point;
-    scui_widget_move_pos(scui_window_switch.list[1], &point);
+    scui_widget_move_pos(scui_window_switch.list[1], &point, true);
     scui_window_switch.point = point = (scui_point_t){0};
-    scui_widget_move_pos(scui_window_switch.list[0], &point);
+    scui_widget_move_pos(scui_window_switch.list[0], &point, true);
     /* 初始默认启动一次,等待动画被打断 */
     scui_window_move_anima_inout(scui_window_switch.list[0], false);
     SCUI_LOG_DEBUG("");

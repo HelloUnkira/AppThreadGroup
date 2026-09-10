@@ -236,8 +236,9 @@ bool scui_widget_switch_point(scui_handle_t handle, scui_point_t *point);
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点
+ *@param abs    坐标基准(0:默认; 1:原始点)
  */
-void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point);
+void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool abs);
 
 /*@brief 控件移动
  *@param handle 控件句柄

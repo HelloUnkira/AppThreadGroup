@@ -63,26 +63,21 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
             
             if (popup_anima <= SCUI_UI_POPUP_ANIM_TIME) {
                 scui_coord_t pct = scui_map(popup_anima, 0, SCUI_UI_POPUP_ANIM_TIME, pct_s, pct_e);
-                scui_area_t clip = scui_widget_clip(event->object);
-                
-                #if SCUI_MEM_FEAT_MINI == 0
-                // 备注:如果是独立画布,此处的clip为<0,0>
-                clip.x = clip.y = 0;
-                #endif
-                
                 scui_alpha_t scale_alpha = map_cb(pct, 0, 100, scui_alpha_pct0, scui_alpha_pct100);
                 scui_coord_t scale_cur_w = map_cb(pct, 0, 100, 0, scale_tar_w);
                 scui_coord_t scale_cur_h = map_cb(pct, 0, 100, 0, scale_tar_h);
                 scale_cur_w = scui_clamp(scale_cur_w, 10, scale_tar_w);
                 scale_cur_h = scui_clamp(scale_cur_h, 10, scale_tar_h);
-                scui_coord_t scale_cur_x = clip.x + (scale_tar_w - scale_cur_w) / 2;
-                scui_coord_t scale_cur_y = clip.y + (scale_tar_h - scale_cur_h) / 2;
-                
+
+                /* 相对父控件(POPUP窗口)坐标居中 */
+                scui_coord_t scale_cur_x = (scale_tar_w - scale_cur_w) / 2;
+                scui_coord_t scale_cur_y = (scale_tar_h - scale_cur_h) / 2;
+
                 SCUI_LOG_INFO("popup scale:alpha:%d, pct:%d", scale_alpha, pct);
                 scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scale_alpha, true);
                 scui_widget_adjust_size(SCUI_UI_SCENE_POPUP_SCALE, scale_cur_w, scale_cur_h);
-                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_SCALE, &(scui_point_t){.x = scale_cur_x, .y = scale_cur_y});
-                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_BG, &(scui_point_t){.x = clip.x, .y = clip.y});
+                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_SCALE, &(scui_point_t){.x = scale_cur_x, .y = scale_cur_y}, false);
+                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_BG, &(scui_point_t){.x = 0, .y = 0}, false);
                 
                 scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false, 0);
                 

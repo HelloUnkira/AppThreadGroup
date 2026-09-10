@@ -264,7 +264,7 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     case scui_window_switch_cover_in: {
         widget_cur = list[0];
         widget_tar = list[1];
-        scui_widget_move_pos(widget_cur->myself, &point);
+        scui_widget_move_pos(widget_cur->myself, &point, true);
         /* alpha_cur = scui_alpha_pct(100 - scui_window_switch_pct()); */
         /* alpha_tar = scui_alpha_pct(scui_window_switch_pct()); */
         /* scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true); */
@@ -274,7 +274,7 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     case scui_window_switch_cover_out: {
         widget_cur = list[1];
         widget_tar = list[0];
-        scui_widget_move_pos(widget_tar->myself, &point);
+        scui_widget_move_pos(widget_tar->myself, &point, true);
         /* alpha_cur = scui_alpha_pct(100 - scui_window_switch_pct()); */
         /* alpha_tar = scui_alpha_pct(scui_window_switch_pct()); */
         /* scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true); */

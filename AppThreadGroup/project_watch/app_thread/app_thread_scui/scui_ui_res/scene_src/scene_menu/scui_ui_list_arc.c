@@ -137,15 +137,16 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
                 continue;
             
             scui_handle_t group = scui_widget_child_by_index(child, 0);
-            
+
+            scui_area_t   child_c = scui_widget_clip(child);
             scui_area_t   group_c  = scui_widget_clip(group);
             scui_coord_t  group_cx = group_c.x + group_c.w / 2;
             scui_coord_t  group_cy = group_c.y + group_c.h / 2;
             
             if ((group_cy < scroll_cy && scui_dist(group_c.y + group_c.h, scroll_cy) > scroll_cy) ||
                 (group_cy > scroll_cy && scui_dist(group_c.y,             scroll_cy) > scroll_cy)) {
-                 scui_point_t point = {.x = scroll_cx,.y = group_c.y,};
-                 scui_widget_move_pos(group, &point);
+                 scui_point_t point = {.x = scroll_cx - child_c.x,.y = group_c.y - child_c.y};
+                 scui_widget_move_pos(group, &point, false);
                  scui_widget_alpha_set(group, scui_alpha_trans, true);
                  continue;
             }
@@ -164,7 +165,7 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             scui_multi_t dist_x = (1024 - cos_ia) * (rad_rr) / 1024;
             SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
             
-            scui_point_t point = {.x = dist_x,.y = group_c.y,};
+            scui_point_t point = {.x = dist_x - child_c.x,.y = group_c.y - child_c.y};
             scui_alpha_t alpha = scui_map(dist_y, 0, rad_rr, scui_alpha_pct100, scui_alpha_pct0);
             
             scui_handle_t string = scui_widget_child_by_index(group, 1);
@@ -173,7 +174,7 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             scui_coord_t width  = scui_ui_res_local->string_width - dist_x * 2;
             scui_widget_adjust_size(string, width, height);
             
-            scui_widget_move_pos(group, &point);
+            scui_widget_move_pos(group, &point, false);
             scui_widget_alpha_set(group, alpha, true);
         }
         scui_widget_draw(scroll, NULL, false, 0);

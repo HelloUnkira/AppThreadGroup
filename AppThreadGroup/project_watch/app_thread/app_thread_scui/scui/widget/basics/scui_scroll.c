@@ -486,7 +486,7 @@ static void scui_scroll_point_record(scui_handle_t handle, bool record)
                 .x = widget->clip.x + scroll->point_rcd[idx].x,
                 .y = widget->clip.y + scroll->point_rcd[idx].y,
             };
-            scui_widget_move_pos(handle_c, &point_c);
+            scui_widget_move_pos(handle_c, &point_c, true);
         }
     }
 }
@@ -1264,7 +1264,7 @@ static void scui_scroll_event_layout(scui_event_t *event)
         if (scroll->dir == scui_opt_dir_ver)
             scui_widget_adjust_size(handle_c, widget->clip.w, widget_c->clip.h);
         /* 更新子控件位置 */
-        scui_widget_move_pos(handle_c, &pos);
+        scui_widget_move_pos(handle_c, &pos, true);
         /* 迭代到下一子控件 */
         if (scroll->dir == scui_opt_dir_hor)
             pos.x += widget_c->clip.w + scroll->space;

@@ -36,10 +36,22 @@ bool scui_widget_switch_point(scui_handle_t handle, scui_point_t *point)
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点
+ *@param abs    坐标基准(0:默认; 1:原始点)
  */
-void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
+void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool abs)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_point_t  point_c = *point;
+    
+    /* 父相对坐标换算为独立画布绝对坐标 */
+    /* 根控件(无父)或父即本控件的独立画布(root)时, 偏置为0 */
+    if (!abs && widget->parent != SCUI_HANDLE_INVALID &&
+        scui_widget_root(handle) != widget->parent) {
+        scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
+        point_c.x += widget_p->clip.x;
+        point_c.y += widget_p->clip.y;
+    }
+    point = &point_c;
     
     if (widget->clip.x == point->x &&
         widget->clip.y == point->y)
@@ -82,7 +94,7 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
             scui_point_t    point_c = {0};
             point_c.x = offset.x + widget_c->clip.x;
             point_c.y = offset.y + widget_c->clip.y;
-            scui_widget_move_pos(handle_c, &point_c);
+            scui_widget_move_pos(handle_c, &point_c, true);
         }
         
         scui_widget_draw(widget->parent, NULL, false, 0);
@@ -110,7 +122,7 @@ void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset)
     scui_point_t point = {0};
     point.x = widget->clip.x + offset->x;
     point.y = widget->clip.y + offset->y;
-    scui_widget_move_pos(handle, &point);
+    scui_widget_move_pos(handle, &point, true);
 }
 
 /*@brief 子控件坐标对齐
@@ -138,7 +150,7 @@ void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_alig
         .x = widget_t->clip.x + ofs.x,
         .y = widget_t->clip.y + ofs.y,
     };
-    scui_widget_move_pos(handle, &point);
+    scui_widget_move_pos(handle, &point, true);
 }
 
 /*@brief 子控件坐标镜像
@@ -168,7 +180,7 @@ void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_opt_
         if (scui_opt_bits_equal(dir, scui_opt_dir_ver))
             point_c.y = widget->clip.h - widget_c->clip.h - widget_c->clip.y;
         
-        scui_widget_move_pos(handle_c, &point_c);
+        scui_widget_move_pos(handle_c, &point_c, true);
         
         if (!recurse)
              continue;
@@ -232,7 +244,7 @@ void scui_widget_clist_move_ofs(scui_handle_t handle, scui_point_t *offset)
         scui_point_t    point_c = {0};
         point_c.x = widget_c->clip.x + offset->x;
         point_c.y = widget_c->clip.y + offset->y;
-        scui_widget_move_pos(handle_c, &point_c);
+        scui_widget_move_pos(handle_c, &point_c, true);
     }
 }
 
@@ -260,7 +272,7 @@ void scui_widget_clist_move_ofs_loop(scui_handle_t handle, scui_point_t *offset,
         
         /* 计算是否与父控件存在交集 */
         if (scui_area_inter(&clip_inter, &widget->clip, &clip_c)) {
-            scui_widget_move_pos(handle_c, &clip_c.pos);
+            scui_widget_move_pos(handle_c, &clip_c.pos, true);
             continue;
         }
         
@@ -268,7 +280,7 @@ void scui_widget_clist_move_ofs_loop(scui_handle_t handle, scui_point_t *offset,
         clip_c.x -= range->x;
         clip_c.y -= range->y;
         if (scui_area_inter(&clip_inter, &widget->clip, &clip_c)) {
-            scui_widget_move_pos(handle_c, &clip_c.pos);
+            scui_widget_move_pos(handle_c, &clip_c.pos, true);
             continue;
         }
         clip_c.x += range->x;
@@ -278,14 +290,14 @@ void scui_widget_clist_move_ofs_loop(scui_handle_t handle, scui_point_t *offset,
         clip_c.x += range->x;
         clip_c.y += range->y;
         if (scui_area_inter(&clip_inter, &widget->clip, &clip_c)) {
-            scui_widget_move_pos(handle_c, &clip_c.pos);
+            scui_widget_move_pos(handle_c, &clip_c.pos, true);
             continue;
         }
         clip_c.x -= range->x;
         clip_c.y -= range->y;
         
         /* 正常继续偏转 */
-        scui_widget_move_pos(handle_c, &clip_c.pos);
+        scui_widget_move_pos(handle_c, &clip_c.pos, true);
     }
 }
 

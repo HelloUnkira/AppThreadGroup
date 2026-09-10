@@ -224,9 +224,10 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
                 break;
             
             scui_area_t   clip_c = scui_widget_clip(handle_c);
-            scui_point_t point_c = {.x = clip_c.x, };
-            point_c.y = clip_p.y + clip_p.h - (num_c - idx_c) * span - clip_c.h;
-            scui_widget_move_pos(handle_c, &point_c);
+            /* 相对父控件(event->object)坐标 */
+            scui_point_t point_c = {.x = clip_c.x - clip_p.x};
+            point_c.y = clip_p.h - (num_c - idx_c) * span - clip_c.h;
+            scui_widget_move_pos(handle_c, &point_c, false);
             
             idx_c++;
         }

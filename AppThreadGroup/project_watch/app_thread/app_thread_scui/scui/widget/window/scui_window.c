@@ -119,7 +119,7 @@ void scui_window_invoke(scui_event_t *event)
                 .x = idx == 0 ? -clip_s.h : idx == 1 ? +clip_w.h : 0,
             };
             /* 移动到对应位置 */
-            scui_widget_move_pos(handle_s, &point);
+            scui_widget_move_pos(handle_s, &point, true);
             SCUI_LOG_WARN("window preload: %d", handle_s);
         }
         #endif

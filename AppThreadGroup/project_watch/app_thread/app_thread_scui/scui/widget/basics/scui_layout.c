@@ -384,7 +384,7 @@ static void scui_layout_flex_exec(scui_layout_t *layout)
             .x = tag_v ? track_vice_pos[group_idx] + item_vice_off : child_main_pos,
             .y = tag_v ? child_main_pos : track_vice_pos[group_idx] + item_vice_off,
         };
-        scui_widget_align_pos(widget->child_list[child_idx], handle, scui_align_itl, &point);
+        scui_widget_move_pos(widget->child_list[child_idx], &point, false);
     }
 
     SCUI_MEM_FREE(main_size);
@@ -651,7 +651,7 @@ static void scui_layout_grid_exec(scui_layout_t *layout)
         }
         
         scui_point_t off = {off_x, off_y};
-        scui_widget_align_pos(handle_c, handle, scui_align_itl, &off);
+        scui_widget_move_pos(handle_c, &off, false);
     }
     
     SCUI_MEM_FREE(col_ofs);
