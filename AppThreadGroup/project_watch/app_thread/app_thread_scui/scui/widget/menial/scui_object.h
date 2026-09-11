@@ -185,6 +185,12 @@ void scui_object_make(void *inst, void *inst_maker, scui_handle_t *handle);
  */
 void scui_object_burn(scui_handle_t handle);
 
+/*@brief 对象控件应用过渡
+ *@param handle   控件句柄
+ *@param tran_idx 控件过渡索引
+ */
+void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx);
+
 /*@brief 事件处理回调
  *@param event 事件
  */

@@ -268,7 +268,7 @@ static void scui_window_move_anima_state(uint8_t type)
             
             /* 背景窗口虚化(加全局剪切域) */
             scui_widget_draw(handle_t, NULL, false, 0);
-            scui_widget_draw_blur(handle_t, NULL);
+            scui_widget_draw_blur(handle_t, NULL, 0, 0, 0);
             SCUI_LOG_INFO("");
         }
         break;

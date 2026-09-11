@@ -198,6 +198,7 @@ void scui_menial_arc_update_value(scui_handle_t handle, scui_coord3_t value, boo
         scui_object_style_arc_angle_e, scui_object_state_def, angle_e);
     
     value = scui_clamp(value, 0.0f, 100.0f);
+    
     scui_menial_arc_update_angle(handle, menial->data.arc.anti ?
         scui_map(value, 100.0f, 0.0f, angle_s.number, angle_e.number) :
         scui_map(value, 0.0f, 100.0f, angle_s.number, angle_e.number), anim);
@@ -294,20 +295,22 @@ void scui_menial_arc_invoke(scui_event_t *event)
             scui_object_style_arc_angle_e, scui_object_state_def, angle_e);
         
         scui_coord_t angle_d = scui_dist(angle_s.number, angle_e.number);
-        scui_coord_t angle_n_down = (menial->data.arc.angle_down - angle_s.number + 360) % 360;
-        /* 值从落点(角)起始: 落点归一化到bg范围得value_base, 再加指针增量, 卡在[0,100] */
-        if (angle_n_down > angle_d) angle_n_down = angle_d;
-        
-        scui_coord3_t value_base = menial->data.arc.anti ?
-            (angle_d - angle_n_down) * 100.0f / angle_d :
-            angle_n_down * 100.0f / angle_d;
-        
         scui_coord_t angle = (scui_atan2(x, y) - 90 + 360) % 360;
-        scui_coord_t delta = angle - menial->data.arc.angle_down;
+        
+        /* 增量累积:与上一次采样角求增量(折返归一化到±180)再累加到当前值
+           旧实现用"落点固定的绝对差",拖动超过180°时增量折返 -> 值被压回0并卡死 */
+        scui_coord_t angle_last = menial->data.arc.angle_down;
+        scui_coord_t delta = angle - angle_last;
         if (delta > +180) delta -= 360;
         if (delta < -180) delta += 360;
+        menial->data.arc.angle_down = angle;
         
-        scui_coord3_t value = value_base + (menial->data.arc.anti ?
+        /* 当前值:由angle_c反推(与update_value的映射互逆) */
+        scui_coord3_t value_cur = menial->data.arc.anti ?
+            (angle_e.number - menial->data.arc.angle_c) * 100.0f / angle_d :
+            (menial->data.arc.angle_c - angle_s.number) * 100.0f / angle_d;
+        
+        scui_coord3_t value = value_cur + (menial->data.arc.anti ?
             -delta : delta) * 100.0f / angle_d;
         
         value = scui_clamp(value, 0.0f, 100.0f);
@@ -335,7 +338,21 @@ void scui_menial_arc_invoke(scui_event_t *event)
         scui_coord_t angle = (scui_atan2(x, y) - 90 + 360) % 360;
         menial->data.arc.angle_down = angle;
         
-        scui_menial_arc_update_angle(event->object, angle, false);
+        scui_object_data_t angle_s = {0};
+        scui_object_data_t angle_e = {0};
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg,
+            scui_object_style_arc_angle_s, scui_object_state_def, angle_s);
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg,
+            scui_object_style_arc_angle_e, scui_object_state_def, angle_e);
+        
+        /* 落点角映射为值(夹取到弧范围:缺口落点不再越界跳动),作为增量累积的起点 */
+        scui_coord_t angle_d = scui_dist(angle_s.number, angle_e.number);
+        scui_coord3_t value = menial->data.arc.anti ?
+            (angle_e.number - angle) * 100.0f / angle_d :
+            (angle - angle_s.number) * 100.0f / angle_d;
+        value = scui_clamp(value, 0.0f, 100.0f);
+        
+        scui_menial_arc_update_value(event->object, value, false);
         break;
     }
     case scui_event_ptr_up:

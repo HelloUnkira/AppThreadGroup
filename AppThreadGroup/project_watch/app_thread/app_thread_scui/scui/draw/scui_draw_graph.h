@@ -135,10 +135,15 @@ typedef struct {
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_sbitfd_t       mode:1;         /* 抖动模式(0:static;1:dynamic) */
+        scui_coord_t        level;          /* 抖动幅度(0:默认) */
     } area_dither;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_sbitfd_t       mode:1;         /* 模糊模式(0:iir;1:gauss) */
+        scui_coord_t        skip;           /* 模糊跳跃(0:默认) */
+        scui_coord_t        radius;         /* 模糊半径(0:默认) */
     } area_blur;
     struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */

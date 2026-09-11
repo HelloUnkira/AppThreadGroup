@@ -367,7 +367,7 @@ void scui_widget_draw_ctx_dither(scui_handle_t handle, scui_area_t *target, scui
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
         
-        scui_draw_area_dither(false, widget->surface, dst_clip);
+        scui_draw_area_dither(false, widget->surface, dst_clip, draw_dsc->mode, draw_dsc->level);
     }
 }
 
@@ -394,7 +394,7 @@ void scui_widget_draw_ctx_blur(scui_handle_t handle, scui_area_t *target, scui_w
              &dst_clip, NULL, NULL, NULL)) continue;
         #endif
         
-        scui_draw_area_blur(false, widget->surface, dst_clip);
+        scui_draw_area_blur(false, widget->surface, dst_clip, draw_dsc->mode, draw_dsc->radius, draw_dsc->skip);
     }
 }
 

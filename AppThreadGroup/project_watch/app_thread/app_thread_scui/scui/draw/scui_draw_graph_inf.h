@@ -138,7 +138,7 @@ do {                                                                            
 
 
 /* scui_draw_type_area_dither */
-#define scui_draw_area_dither(sync_v, dst_surface_v, dst_clip_v)                    \
+#define scui_draw_area_dither(sync_v, dst_surface_v, dst_clip_v, mode_v, level_v)   \
 do {                                                                                \
     scui_draw_dsc_t *scui_dd_i = NULL;                                              \
     scui_draw_dsc_ready(&scui_dd_i);                                                \
@@ -146,11 +146,14 @@ do {                                                                            
     scui_dd_i->sync = sync_v;                                                       \
     scui_dd_i->area_dither.dst_surface = dst_surface_v,                             \
     scui_dd_i->area_dither.dst_clip    = dst_clip_v,                                \
+    scui_dd_i->area_dither.mode        = mode_v,                                    \
+    scui_dd_i->area_dither.level       = level_v,                                   \
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
 
-/* scui_draw_type_area_blur */
-#define scui_draw_area_blur(sync_v, dst_surface_v, dst_clip_v)                      \
+/* scui_draw_type_area_blur */                                                      \
+#define scui_draw_area_blur(sync_v, dst_surface_v, dst_clip_v,                      \
+    mode_v, radius_v, skip_v)                                                       \
 do {                                                                                \
     scui_draw_dsc_t *scui_dd_i = NULL;                                              \
     scui_draw_dsc_ready(&scui_dd_i);                                                \
@@ -158,6 +161,9 @@ do {                                                                            
     scui_dd_i->sync = sync_v;                                                       \
     scui_dd_i->area_blur.dst_surface = dst_surface_v,                               \
     scui_dd_i->area_blur.dst_clip    = dst_clip_v,                                  \
+    scui_dd_i->area_blur.mode        = mode_v,                                      \
+    scui_dd_i->area_blur.radius      = radius_v,                                    \
+    scui_dd_i->area_blur.skip        = skip_v,                                      \
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
 

@@ -89,9 +89,10 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         } else {
             scui_window_draw_lock_set(event->object, true);
             /* 背景窗口虚化 */
+            static uint8_t mode = 0; mode++;
             scui_widget_draw(event->object, NULL, false, 0);
-            // scui_widget_draw_dither(event->object, NULL);
-            scui_widget_draw_blur(event->object, NULL);
+            // scui_widget_draw_dither(event->object, NULL, mode % 2 == 0, 0);
+            scui_widget_draw_blur(event->object, NULL, mode % 2 == 0, 0, 0);
             scui_widget_refr(event->object, false);
         }
         #endif

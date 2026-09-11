@@ -502,6 +502,9 @@ void scui_object_state_set(scui_handle_t handle, scui_object_type_t state)
             
             tran->tick_d = 0;
             tran->tick_t = 0;
+            tran->pct_c  = 0;
+            /* 必须手动重置状态: */
+            scui_object_tran_sync(handle, idx);
             continue;
         }
         
@@ -518,7 +521,7 @@ void scui_object_state_set(scui_handle_t handle, scui_object_type_t state)
  *@param handle   控件句柄
  *@param tran_idx 控件过渡索引
  */
-static void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
+void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
     scui_widget_t *widget = scui_handle_source_check(handle);

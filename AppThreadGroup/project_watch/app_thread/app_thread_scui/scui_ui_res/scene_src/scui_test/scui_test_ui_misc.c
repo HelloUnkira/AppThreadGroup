@@ -184,7 +184,7 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         clip.h /= 2;
         clip.h -= 5;
         scui_widget_draw_color_grad(event->object, &clip, color_mix, false);
-        scui_widget_draw_dither(event->object, &clip);
+        scui_widget_draw_dither(event->object, &clip, 0, 0);
         
         clip.x = SCUI_HOR_RES * 1 / 13 + 15;
         clip.y = SCUI_VER_RES * 1 / 13 + 15;
@@ -194,7 +194,7 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         clip.y += clip.h + 5;
         clip.h -= 5;
         scui_widget_draw_color_grad(event->object, &clip, color_mix, true);
-        scui_widget_draw_dither(event->object, &clip);
+        scui_widget_draw_dither(event->object, &clip, 0, 0);
         #endif
         
         #if 1

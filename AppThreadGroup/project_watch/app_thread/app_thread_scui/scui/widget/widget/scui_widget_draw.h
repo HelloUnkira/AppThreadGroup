@@ -26,6 +26,11 @@ typedef struct {
     scui_coord_t    percent;        /* 圆环进度(百分比) */
     scui_handle_t   image_e;        /* 控件句柄 */
     
+    scui_handle_t   mode;           /* 抖动/模糊模式 */
+    scui_coord_t    level;          /* 抖动幅度(0:默认) */
+    scui_coord_t    radius;         /* 模糊半径(0:默认) */
+    scui_coord_t    skip;           /* 模糊跳跃(0:默认) */
+    
     void           *graph;          /* 类型:(scui_draw_dsc_t->graph) */
     
 } scui_widget_draw_dsc_t;
@@ -110,17 +115,24 @@ do {                                                                            
     scui_widget_draw_ctx_color_grad(handle_v, target_v, &scui_wdc_i);           \
 } while (0)
 
-#define scui_widget_draw_dither(handle_v, target_v)                             \
+#define scui_widget_draw_dither(handle_v, target_v, mode_v, level_v)            \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = { 0 };                                  \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .mode  = mode_v,                                                        \
+        .level = level_v,                                                       \
+    };                                                                          \
     scui_widget_draw_ctx_dither(handle_v, target_v, &scui_wdc_i);               \
-} while (0)
+} while (0)                                                                     \
 
-#define scui_widget_draw_blur(handle_v, target_v)                               \
+#define scui_widget_draw_blur(handle_v, target_v, mode_v, radius_v, skip_v)     \
 do {                                                                            \
-    scui_widget_draw_dsc_t scui_wdc_i = { 0 };                                  \
+    scui_widget_draw_dsc_t scui_wdc_i = {                                       \
+        .mode   = mode_v,                                                       \
+        .radius = radius_v,                                                     \
+        .skip   = skip_v,                                                       \
+    };                                                                          \
     scui_widget_draw_ctx_blur(handle_v, target_v, &scui_wdc_i);                 \
-} while (0)
+} while (0)                                                                     \
 
 #define scui_widget_draw_image(handle_v, target_v,                              \
     image_v, clip_v, color_v)                                                   \

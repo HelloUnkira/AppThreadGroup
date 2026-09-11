@@ -482,7 +482,7 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     
     /* 添加抖动模糊效果 */
     if (draw_dsc.graph.src_grad)
-        scui_widget_draw_dither(widget->myself, NULL);
+        scui_widget_draw_dither(widget->myself, NULL, 1, 0);
     
     return true;
 }
@@ -553,7 +553,7 @@ bool scui_object_draw_arc(scui_handle_t handle, scui_object_prop_t *prop)
     
     /* 添加抖动模糊效果 */
     if (draw_dsc.graph.src_grad)
-        scui_widget_draw_dither(widget->myself, NULL);
+        scui_widget_draw_dither(widget->myself, NULL, 1, 0);
     
     return true;
 }
