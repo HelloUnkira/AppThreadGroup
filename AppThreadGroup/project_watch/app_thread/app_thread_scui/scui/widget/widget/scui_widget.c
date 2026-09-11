@@ -53,6 +53,9 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     /* 自动计算控件宽度高度 */
     widget->state.layout_w = widget->clip.w == SCUI_WIDGET_AUTO_W;
     widget->state.layout_h = widget->clip.h == SCUI_WIDGET_AUTO_H;
+    SCUI_ASSERT(!(widget->state.layout_w && widget->style.buffer));
+    SCUI_ASSERT(!(widget->state.layout_h && widget->style.buffer));
+    /* 断言检查:独立画布决定不支持自动宽高(会导致不必要的语义繁杂)! */
     
     /* 构建孩子列表 */
     widget->child_now  = 0;

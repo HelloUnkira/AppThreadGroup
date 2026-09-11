@@ -95,6 +95,12 @@ void scui_window_invoke(scui_event_t *event)
         scui_window_draw_lock_set(event->object, false);
         break;
     
+    case scui_event_layout:
+        /* 特殊控件:禁止自动宽高 */
+        SCUI_ASSERT(!widget->state.layout_w);
+        SCUI_ASSERT(!widget->state.layout_h);
+        break;
+    
     case scui_event_window_preload: {
         /* 检查它的四个临近窗口 */
         /* 如果有预加载标记 */

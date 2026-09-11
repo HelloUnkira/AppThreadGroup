@@ -356,6 +356,78 @@ void scui_ximage_invoke(scui_event_t *event)
             scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
+    case scui_event_layout: {
+        /* 自动宽高:仅"资源或列表已定尺寸"的子类型可解析 */
+        /* 其余子类型保持自动标记, 由绘制断言捕获(不支持自动尺寸) */
+        scui_coord_t width  = widget->clip.w;
+        scui_coord_t height = widget->clip.h;
+        
+        switch (ximage->type) {
+        case scui_ximage_type_vedio: {
+            /* 帧资源宽高(gif/lottie 画布, 播放中各帧一致) */
+            scui_handle_t frame = ximage->data.vedio.frame.frame;
+            if (frame == SCUI_HANDLE_INVALID)
+                 break;
+            
+            if (widget->state.layout_w) width  = scui_image_w(frame);
+            if (widget->state.layout_h) height = scui_image_h(frame);
+            break;
+        }
+        case scui_ximage_type_sequence: {
+            scui_handle_t *image_list = ximage->data.sequence.list;
+            scui_coord_t   span       = ximage->data.sequence.span;
+            scui_coord_t   num        = ximage->data.sequence.num;
+            bool           way        = ximage->data.sequence.way;
+            
+            /* 主轴总长, 副轴单项最大(与绘制口径一致:末项不计span) */
+            scui_coord_t total = 0, single = 0;
+            scui_coord_t valid = 0;
+            for (scui_coord_t idx = 0; idx < num; idx++) {
+                if (image_list[idx] == SCUI_HANDLE_INVALID)
+                    continue;
+                
+                scui_coord_t w = scui_image_w(image_list[idx]);
+                scui_coord_t h = scui_image_h(image_list[idx]);
+                total += span;
+                total += way ? h : w;
+                single = scui_max(way ? w : h, single);
+                valid++;
+            }
+            if (valid == 0)
+                 break;
+            
+            total -= span;
+            if (widget->state.layout_w) width  = way ? single : total;
+            if (widget->state.layout_h) height = way ? total : single;
+            break;
+        }
+        case scui_ximage_type_replace: {
+            scui_handle_t *image_list = ximage->data.replace.list;
+            scui_coord_t   num        = ximage->data.replace.num;
+            
+            /* 多帧轮播:取全列表最大尺寸(按当前帧会在播放中反复改尺寸) */
+            scui_coord_t width_m = 0, height_m = 0;
+            for (scui_coord_t idx = 0; idx < num; idx++) {
+                if (image_list[idx] == SCUI_HANDLE_INVALID)
+                    continue;
+                
+                width_m  = scui_max(scui_image_w(image_list[idx]), width_m);
+                height_m = scui_max(scui_image_h(image_list[idx]), height_m);
+            }
+            if (width_m == 0 || height_m == 0)
+                 break;
+            
+            if (widget->state.layout_w) width  = width_m;
+            if (widget->state.layout_h) height = height_m;
+            break;
+        }
+        default:
+            break;
+        }
+        
+        scui_widget_adjust_size(event->object, width, height);
+        break;
+    }
     case scui_event_draw_graph: {
         switch (ximage->type) {
         case scui_ximage_type_vedio: {

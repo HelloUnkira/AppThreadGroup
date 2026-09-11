@@ -565,12 +565,30 @@ void scui_string_invoke(scui_event_t *event)
         scui_coord_t line_height = scui_font_line_height(font_unit.font);
         scui_cache_font_unload(&font_unit);
         
-        /* clip.h匹配自动标记或不足行高时, 高度取行高 */
+        scui_coord_t width  = widget->clip.w;
         scui_coord_t height = widget->clip.h;
-        if (widget->clip.h == SCUI_WIDGET_AUTO_H) height = line_height;
-        if (line_height > widget->clip.h) height = line_height;
         
-        scui_widget_adjust_size(event->object, widget->clip.w, height);
+        /* 自动宽度:仅单行模式支持 */
+        if (widget->state.layout_w && !string->args.line_multi) {
+            /* 尚未排版(首帧)或内容/尺寸有更新时, 先排版取内容宽度 */
+            if (string->args.update || string->args.width <= 0) {
+                string->args.utf8 = string->str_utf8;
+                string->args.clip = widget->clip;
+                string->args.clip.x = 0;
+                string->args.clip.y = 0;
+                string->args.update = true;
+                scui_string_args_proc(&string->args);
+            }
+            
+            /* 文本无效时不处理(保持自动标记, 交由绘制断言捕获) */
+            if (string->args.width > 0) width = string->args.width;
+        }
+        
+        /* 匹配自动标记或不足行高时, 高度取行高(保证最小一行) */
+        if (widget->state.layout_h) height = line_height;
+        if (line_height > height) height = line_height;
+        
+        scui_widget_adjust_size(event->object, width, height);
         break;
     }
     case scui_event_self_size: {

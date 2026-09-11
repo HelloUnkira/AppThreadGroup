@@ -1335,6 +1335,10 @@ void scui_scroll_invoke(scui_event_t *event)
         scroll->layout = true;
         break;
     case scui_event_layout: {
+        /* 特殊控件:禁止自动宽高 */
+        SCUI_ASSERT(!widget->state.layout_w);
+        SCUI_ASSERT(!widget->state.layout_h);
+        
         bool layout = scroll->layout;
         scui_coord_t offset_t = 0; scui_point_t offset = {0};
         if (layout) scui_scroll_offset_get(event->object, &offset_t);

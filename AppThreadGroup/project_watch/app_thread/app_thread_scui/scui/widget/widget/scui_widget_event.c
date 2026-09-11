@@ -315,6 +315,20 @@ static void scui_widget_event_process(scui_event_t *event)
             SCUI_LOG_INFO("widget layout over");
             return;
         }
+        
+        /* 基础控件绘制布局计算(只解算有背景图资源控件) */
+        if (widget->state.layout_w || widget->state.layout_h)
+
+        if (widget->style.fully_bg && widget->image != SCUI_HANDLE_INVALID) {
+            
+            scui_coord_t image_w = scui_image_w(widget->image);
+            scui_coord_t image_h = scui_image_h(widget->image);
+            scui_coord_t width   = widget->state.layout_w ? image_w : widget->clip.w;
+            scui_coord_t height  = widget->state.layout_h ? image_h : widget->clip.h;
+            
+            if (width > widget->clip.w || height > widget->clip.h)
+                scui_widget_adjust_size(widget->myself, width, height);
+        }
         break;
     }
     case scui_event_draw_ready: {

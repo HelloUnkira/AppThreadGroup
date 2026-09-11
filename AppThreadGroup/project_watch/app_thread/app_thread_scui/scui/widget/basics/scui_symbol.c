@@ -96,8 +96,16 @@ void scui_symbol_invoke(scui_event_t *event)
         uint32_t  sym_code = scui_symbol_code((uint8_t *)symbol->code);
         
         scui_area_t area = scui_symbol_area(font, sym_code);
-        if (area.w > widget->clip.w || area.h > widget->clip.h)
-            scui_widget_adjust_size(event->object, area.w, area.h);
+        
+        /* 自动宽高:以符号宽高作为实际宽高 */
+        scui_coord_t width  = widget->state.layout_w ? area.w : widget->clip.w;
+        scui_coord_t height = widget->state.layout_h ? area.h : widget->clip.h;
+        
+        /* 保证最小宽高:至少能显示完整符号 */
+        if (area.w > width)  width  = area.w;
+        if (area.h > height) height = area.h;
+        
+        scui_widget_adjust_size(event->object, width, height);
         break;
     }
     default:

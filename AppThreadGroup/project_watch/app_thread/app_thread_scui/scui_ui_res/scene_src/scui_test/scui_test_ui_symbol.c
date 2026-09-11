@@ -1,5 +1,7 @@
 /*实现目标:
  *    测试(widget symbol)
+ *    使用flex布局: layout外部全局居中, auto宽高;
+ *    symbol子控件auto宽高, 每组若干个, 轨道内/外均水平垂直居中+span;
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
@@ -72,14 +74,6 @@ static const uint8_t * const symbol_table[] = {
     SCUI_SYMBOL_STR_NEW_LINE,
 };
 
-/*@brief 符号行布局信息
- */
-typedef struct {
-    scui_coord_t count;    /* 行内符号数 */
-    scui_coord_t width;    /* 行内符号总宽(不含间隙) */
-    scui_coord_t height;   /* 行高(行内最大符号高) */
-} scui_symbol_row_t;
-
 /*@brief 画布控件事件响应回调
  *@param event 事件
  */
@@ -88,71 +82,39 @@ void scui_test_ui_symbol_canvas_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_widget_t *widget = scui_handle_source_check(event->object);
-        scui_handle_t font = scui_font_symbol_24bin;
-        scui_coord_t  gap  = 8;
-        scui_coord_t  row_gap = 8;
+        /* flex布局: auto宽高, 外部全局居中 */
+        scui_layout_maker_define(layout_maker);
+        scui_handle_t layout_handle = SCUI_HANDLE_INVALID;
         
-        scui_coord_t widget_w = widget->clip.w;
-        scui_coord_t widget_h = widget->clip.h;
-        scui_coord_t draw_w = widget_w / 2;   /* 中间 1/2 宽度绘制区 */
+        layout_maker.widget.parent = event->object;
+        layout_maker.widget.clip.w = SCUI_WIDGET_AUTO_W;
+        layout_maker.widget.clip.h = SCUI_WIDGET_AUTO_H;
+        layout_maker.widget.child_num = scui_arr_len(symbol_table);
+        layout_maker.type  = scui_layout_type_flex;
+        layout_maker.use   = true;           /* 开启外部对齐 */
+        layout_maker.align = scui_align_icc; /* 全局居中 */
+        layout_maker.offset = (scui_point_t){0};
+        scui_widget_create(&layout_maker, &layout_handle);
         
-        /* 第一遍: 按行分组, 计算每行宽度/行高 */
-        scui_symbol_row_t row[scui_arr_len(symbol_table)] = {{0}};
-        scui_coord_t      row_num = 0;
-        scui_coord_t      row_idx = 0;
+        /* 轨道方向: 水平(way=0); span各轴8; 轨道内/外均水平垂直居中 */
+        scui_layout_flex_way(layout_handle, 0, (scui_point_t){-1, 8},
+            scui_opt_pos_hor | scui_opt_pos_ver,   /* 轨道间(外)对齐: 水平垂直center */
+            scui_opt_pos_hor | scui_opt_pos_ver);  /* 轨道内对齐:     水平垂直center */
         
+        /* 每组加定数量的symbol, symbol本身auto宽高 */
+        const scui_coord_t group_size = 8;   /* 每组个数 */
         for (uint8_t idx = 0; idx < scui_arr_len(symbol_table); idx++) {
-            uint32_t    symbol = scui_symbol_code((uint8_t *)symbol_table[idx]);
-            scui_area_t area   = scui_symbol_area(font, symbol);
+            scui_symbol_maker_define(symbol_maker);
+            scui_handle_t symbol_handle = SCUI_HANDLE_INVALID;
             
-            if (row[row_idx].width + area.w + gap > draw_w && row[row_idx].count > 0)
-                row_idx++;
+            symbol_maker.widget.parent = layout_handle;
+            symbol_maker.widget.clip.w = SCUI_WIDGET_AUTO_W;
+            symbol_maker.widget.clip.h = SCUI_WIDGET_AUTO_H;
+            symbol_maker.color = SCUI_COLOR_WHITE;
+            scui_widget_create(&symbol_maker, &symbol_handle);
             
-            row[row_idx].count++;
-            row[row_idx].width  += area.w;
-            if (area.h > row[row_idx].height)
-                row[row_idx].height = area.h;
-        }
-        row_num = row_idx + 1;
-        
-        /* 整体垂直居中: 计算起始 y */
-        scui_coord_t total_h = 0;
-        for (row_idx = 0; row_idx < row_num; row_idx++) {
-            total_h += row[row_idx].height;
-            if (row_idx < row_num - 1)
-                total_h += row_gap;
-        }
-        scui_coord_t cur_y = (widget_h - total_h) / 2;
-        
-        /* 第二遍: 逐行构建symbol控件, 每行在绘制区水平居中 */
-        row_idx = 0;
-        scui_coord_t idx = 0;
-        for (row_idx = 0; row_idx < row_num; row_idx++) {
-            scui_coord_t row_w = row[row_idx].width + (row[row_idx].count - 1) * gap;
-            scui_coord_t cur_x = widget_w / 4 + (draw_w - row_w) / 2;
-            
-            for (scui_coord_t sub = 0; sub < row[row_idx].count; sub++) {
-                uint32_t    symbol = scui_symbol_code((uint8_t *)symbol_table[idx]);
-                scui_area_t area   = scui_symbol_area(font, symbol);
-                
-                scui_symbol_maker_define(symbol_maker);
-                scui_handle_t symbol_handle = SCUI_HANDLE_INVALID;
-                
-                symbol_maker.widget.parent = event->object;
-                symbol_maker.widget.clip.x = cur_x;
-                symbol_maker.widget.clip.y = cur_y + (row[row_idx].height - area.h) / 2;
-                symbol_maker.widget.clip.w = area.w;
-                symbol_maker.widget.clip.h = area.h;
-                symbol_maker.color = SCUI_COLOR_WHITE;
-                scui_widget_create(&symbol_maker, &symbol_handle);
-                
-                scui_symbol_update(symbol_handle, SCUI_FONT_IDX_X24, symbol_table[idx]);
-                
-                cur_x += area.w + gap;
-                idx++;
-            }
-            cur_y += row[row_idx].height + row_gap;
+            scui_symbol_update(symbol_handle, SCUI_FONT_IDX_X24, symbol_table[idx]);
+            scui_layout_flex_group(layout_handle, symbol_handle, idx / group_size);
         }
         break;
     }
