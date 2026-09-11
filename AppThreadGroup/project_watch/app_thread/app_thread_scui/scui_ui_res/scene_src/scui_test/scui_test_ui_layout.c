@@ -71,7 +71,7 @@ static scui_handle_t scui_test_subbox(scui_handle_t parent, scui_layout_type_t t
 
 /*@brief 填充一个flex子布局(内含色块), room=false走AUTO, 支持分组轨道; ai=轨道内交叉对齐 */
 static scui_handle_t scui_test_flex_fill(scui_handle_t parent, bool way, scui_opt_pos_t align,
-    scui_point_t span, scui_coord_t num, scui_coord_t grp, bool room,
+    scui_point_t span, scui_point_t evenly, scui_coord_t num, scui_coord_t grp, bool room,
     scui_coord_t rw, scui_coord_t rh, scui_opt_pos_t ai)
 {
     scui_handle_t sub = scui_test_subbox(parent, scui_layout_type_flex,
@@ -83,13 +83,13 @@ static scui_handle_t scui_test_flex_fill(scui_handle_t parent, bool way, scui_op
         scui_handle_t blk = scui_test_blk(sub, SCUI_HOR_RES / 18, bh);
         if (grp > 0) scui_layout_flex_group(sub, blk, b / grp);
     }
-    scui_layout_flex_way(sub, way, span, align, ai);
+    scui_layout_flex_way(sub, way, span, evenly, align, ai);
     return sub;
 }
 
 /*@brief 3层嵌套flex: 外层flex > 3个中层flex > 每中层2个子flex(各含2色块), Auto/固定混用 */
 static scui_handle_t scui_test_flex_deep(scui_handle_t parent,
-    bool oway, scui_opt_pos_t oalign, scui_point_t ospan, bool oroom,
+    bool oway, scui_opt_pos_t oalign, scui_point_t ospan, scui_point_t oev, bool oroom,
     scui_coord_t rw, scui_coord_t rh,
     bool iway, bool iroom)
 {
@@ -107,28 +107,28 @@ static scui_handle_t scui_test_flex_deep(scui_handle_t parent,
                 SCUI_WIDGET_AUTO_W, SCUI_WIDGET_AUTO_H, 2, 0xFF5A5A5A, false, 0);
             scui_test_blk(sub2, SCUI_HOR_RES / 22, SCUI_HOR_RES / 22);
             scui_test_blk(sub2, SCUI_HOR_RES / 22, SCUI_HOR_RES / 22);
-            scui_layout_flex_way(sub2, iway, (scui_point_t){4, 4},
+            scui_layout_flex_way(sub2, iway, (scui_point_t){4, 4}, (scui_point_t){0, 0},
                 j == 0 ? (scui_opt_pos_l | scui_opt_pos_u) :
                 (j == 1 ? (scui_opt_pos_hor | scui_opt_pos_u) :
                           (scui_opt_pos_r | scui_opt_pos_u)), 0);
         }
-        scui_layout_flex_way(mid, iway, (scui_point_t){6, 6}, scui_opt_pos_l | scui_opt_pos_u, 0);
+        scui_layout_flex_way(mid, iway, (scui_point_t){6, 6}, (scui_point_t){0, 0}, scui_opt_pos_l | scui_opt_pos_u, 0);
     }
-    scui_layout_flex_way(outer, oway, ospan, oalign, 0);
+    scui_layout_flex_way(outer, oway, ospan, oev, oalign, 0);
     return outer;
 }
 
 /*@brief 左右合并的双组合: 水平wrapper内 左一个子flex + 右一个子flex, 填充格子避免留白 */
 static scui_handle_t scui_test_flex_pair(scui_handle_t parent, scui_coord_t rw, scui_coord_t rh,
-    bool lway, scui_opt_pos_t lal, scui_point_t lsp, bool lroom,
-    bool rway, scui_opt_pos_t ral, scui_point_t rsp, bool rroom)
+    bool lway, scui_opt_pos_t lal, scui_point_t lsp, scui_point_t lve, bool lroom,
+    bool rway, scui_opt_pos_t ral, scui_point_t rsp, scui_point_t rve, bool rroom)
 {
     scui_handle_t wr = scui_test_subbox(parent, scui_layout_type_flex, rw, rh, 2, 0xFF2A2A2A, false, 0);
     scui_coord_t hw = rw / 2 - 6;
     scui_coord_t hh = rh - 20;
-    scui_test_flex_fill(wr, lway, lal, lsp, 4, 2, lroom, hw, hh, 0);
-    scui_test_flex_fill(wr, rway, ral, rsp, 4, 2, rroom, hw, hh, 0);
-    scui_layout_flex_way(wr, 0, (scui_point_t){6, 6}, scui_opt_pos_l | scui_opt_pos_ver, 0);
+    scui_test_flex_fill(wr, lway, lal, lsp, lve, 4, 2, lroom, hw, hh, 0);
+    scui_test_flex_fill(wr, rway, ral, rsp, rve, 4, 2, rroom, hw, hh, 0);
+    scui_layout_flex_way(wr, 0, (scui_point_t){6, 6}, (scui_point_t){0, 0}, scui_opt_pos_l | scui_opt_pos_ver, 0);
     return wr;
 }
 
@@ -223,25 +223,25 @@ static void scui_test_ui_layout_flex_nested(uint8_t page)
         switch (page) {
         case 0: { /* 单轨基础: 行/列 x 左/中/右/even */
             static const struct {
-                bool way; scui_opt_pos_t align; scui_point_t sp; scui_opt_pos_t ai; const char* tip;
+                bool way; scui_opt_pos_t align; scui_point_t sp; scui_point_t ev; scui_opt_pos_t ai; const char* tip;
             } b[4] = {
-                {0, scui_opt_pos_l   | scui_opt_pos_u, {8, 8},  0, "row left"},
-                {0, scui_opt_pos_hor | scui_opt_pos_u, {-1, 8}, scui_opt_pos_ver, "row even mid"},
-                {1, scui_opt_pos_u   | scui_opt_pos_l, {8, 8},  0, "col top"},
-                {1, scui_opt_pos_ver | scui_opt_pos_l, {8, -1}, scui_opt_pos_ver, "col even mid"},
+                {0, scui_opt_pos_l   | scui_opt_pos_u, {8, 8},  {0, 0},  0, "row left"},
+                {0, scui_opt_pos_hor | scui_opt_pos_u, {8, 8},  {1, 0},  scui_opt_pos_ver, "row even mid"},
+                {1, scui_opt_pos_u   | scui_opt_pos_l, {8, 8},  {0, 0},  0, "col top"},
+                {1, scui_opt_pos_ver | scui_opt_pos_l, {8, 8},  {0, 1},  scui_opt_pos_ver, "col even mid"},
             };
-            sub = scui_test_flex_fill(layout_handle, b[k].way, b[k].align, b[k].sp,
+            sub = scui_test_flex_fill(layout_handle, b[k].way, b[k].align, b[k].sp, b[k].ev,
                 3, 0, true, room_w, room_h, b[k].ai);
             SCUI_LOG_WARN("[flex] p%u cell%d: %s", page, k + 1, b[k].tip);
             break;
         }
         case 1: { /* 嵌套: 外层flex(固定)含3个内层flex(Auto单行), 对照不同主对齐 */
-            typedef struct { bool oway; scui_opt_pos_t oalign; scui_point_t osp; bool iway; const char* tip; } nest_t;
+            typedef struct { bool oway; scui_opt_pos_t oalign; scui_point_t osp; scui_point_t oev; bool iway; const char* tip; } nest_t;
             static const nest_t n[4] = {
-                {1, scui_opt_pos_ver | scui_opt_pos_l, {8, 8},  0, "col center span x row"},
-                {1, scui_opt_pos_ver | scui_opt_pos_l, {8, -1}, 0, "col center even x row"},
-                {0, scui_opt_pos_l   | scui_opt_pos_u, {-1, 8}, 1, "row left even x col"},
-                {0, scui_opt_pos_r   | scui_opt_pos_u, {-1, 8}, 1, "row right even x col"},
+                {1, scui_opt_pos_ver | scui_opt_pos_l, {8, 8},  {0, 0},  0, "col center span x row"},
+                {1, scui_opt_pos_ver | scui_opt_pos_l, {8, 8},  {0, 1},  0, "col center even x row"},
+                {0, scui_opt_pos_l   | scui_opt_pos_u, {8, 8},  {1, 0},  1, "row left even x col"},
+                {0, scui_opt_pos_r   | scui_opt_pos_u, {8, 8},  {1, 0},  1, "row right even x col"},
             };
             static const scui_opt_pos_t ials_rh[3] = {scui_opt_pos_l|scui_opt_pos_u, scui_opt_pos_hor|scui_opt_pos_u, scui_opt_pos_r|scui_opt_pos_u};
             static const scui_opt_pos_t ials_cv[3] = {scui_opt_pos_u|scui_opt_pos_l, scui_opt_pos_ver|scui_opt_pos_l, scui_opt_pos_d|scui_opt_pos_l};
@@ -250,43 +250,43 @@ static void scui_test_ui_layout_flex_nested(uint8_t page)
             sub = scui_test_subbox(layout_handle, scui_layout_type_flex, room_w, room_h,
                 3, 0xFF2A2A2A, false, 0);
             for (uint8_t i = 0; i < 3; i++)
-                scui_test_flex_fill(sub, nc->iway, ia[i], (scui_point_t){5, 5}, 3, 0, false, 0, 0, 0);
-            scui_layout_flex_way(sub, nc->oway, nc->osp, nc->oalign, 0);
+                scui_test_flex_fill(sub, nc->iway, ia[i], (scui_point_t){5, 5}, (scui_point_t){0, 0}, 3, 0, false, 0, 0, 0);
+            scui_layout_flex_way(sub, nc->oway, nc->osp, nc->oev, nc->oalign, 0);
             SCUI_LOG_WARN("[flex] p%u cell%d: NEST %s", page, k + 1, nc->tip);
             break;
         }
         case 2: { /* 多行合并: 每格 子layout 左=行多(左) 右=列多(右), 填充避免留白 */
             typedef struct {
-                bool lway; scui_opt_pos_t lal; scui_point_t lsp; bool lroom;
-                bool rway; scui_opt_pos_t ral; scui_point_t rsp; bool rroom;
+                bool lway; scui_opt_pos_t lal; scui_point_t lsp; scui_point_t lve; bool lroom;
+                bool rway; scui_opt_pos_t ral; scui_point_t rsp; scui_point_t rve; bool rroom;
                 const char* tip;
             } pair_t;
             static const pair_t p[4] = {
-                {0, scui_opt_pos_hor | scui_opt_pos_ver, {-1, -1}, true,
-                 1, scui_opt_pos_ver | scui_opt_pos_hor, {-1, -1}, true,  "rowEven | colEven"},
-                {0, scui_opt_pos_hor | scui_opt_pos_u,   {8, 8},   false,
-                 1, scui_opt_pos_ver | scui_opt_pos_l,   {8, 8},   false, "rowSpan | colSpan(auto)"},
-                {0, scui_opt_pos_r   | scui_opt_pos_hor, {-1, 8},  true,
-                 1, scui_opt_pos_ver | scui_opt_pos_hor, {8, -1},  true,  "rowEvenR | colEvenM"},
-                {0, scui_opt_pos_hor | scui_opt_pos_ver, {-1, -1}, false,
-                 0, scui_opt_pos_ver | scui_opt_pos_l,   {8, -1},  false, "rowBoth | colEven(auto)"},
+                {0, scui_opt_pos_hor | scui_opt_pos_ver, {8, 8},  {1, 1},  true,
+                 1, scui_opt_pos_ver | scui_opt_pos_hor, {8, 8},  {1, 1},  true,  "rowEven | colEven"},
+                {0, scui_opt_pos_hor | scui_opt_pos_u,   {8, 8},  {0, 0},  false,
+                 1, scui_opt_pos_ver | scui_opt_pos_l,   {8, 8},  {0, 0},  false, "rowSpan | colSpan(auto)"},
+                {0, scui_opt_pos_r   | scui_opt_pos_hor, {8, 8},  {1, 0},  true,
+                 1, scui_opt_pos_ver | scui_opt_pos_hor, {8, 8},  {0, 1},  true,  "rowEvenR | colEvenM"},
+                {0, scui_opt_pos_hor | scui_opt_pos_ver, {8, 8},  {1, 1},  false,
+                 0, scui_opt_pos_ver | scui_opt_pos_l,   {8, 8},  {0, 1},  false, "rowBoth | colEven(auto)"},
             };
             sub = scui_test_flex_pair(layout_handle, room_w, room_h,
-                p[k].lway, p[k].lal, p[k].lsp, p[k].lroom,
-                p[k].rway, p[k].ral, p[k].rsp, p[k].rroom);
+                p[k].lway, p[k].lal, p[k].lsp, p[k].lve, p[k].lroom,
+                p[k].rway, p[k].ral, p[k].rsp, p[k].rve, p[k].rroom);
             SCUI_LOG_WARN("[flex] p%u cell%d: %s", page, k + 1, p[k].tip);
             break;
         }
         default: { /* 深层嵌套(额外): 3层 Auto/固定混用 */
-            typedef struct { bool oway; scui_opt_pos_t oalign; scui_point_t osp; bool oroom;
+            typedef struct { bool oway; scui_opt_pos_t oalign; scui_point_t osp; scui_point_t oev; bool oroom;
                              bool iway; bool iroom; const char* tip; } deep_t;
             static const deep_t d[4] = {
-                {1, scui_opt_pos_ver | scui_opt_pos_l, {8, -1}, true,  0, false, "L3 colEven(auto mid)"},
-                {0, scui_opt_pos_hor | scui_opt_pos_u, {8, -1}, false, 1, true,  "L3 rowEven(room mid)"},
-                {1, scui_opt_pos_ver | scui_opt_pos_l, {-1, 8}, true,  1, true,  "L3 colCrossEven(room)"},
-                {0, scui_opt_pos_hor | scui_opt_pos_ver, {-1, -1}, true, 0, false, "L3 rowBothEven(auto)"},
+                {1, scui_opt_pos_ver | scui_opt_pos_l, {8, 8},  {0, 1},  true,  0, false, "L3 colEven(auto mid)"},
+                {0, scui_opt_pos_hor | scui_opt_pos_u, {8, 8},  {0, 1},  false, 1, true,  "L3 rowEven(room mid)"},
+                {1, scui_opt_pos_ver | scui_opt_pos_l, {8, 8},  {1, 0},  true,  1, true,  "L3 colCrossEven(room)"},
+                {0, scui_opt_pos_hor | scui_opt_pos_ver, {8, 8},  {1, 1},  true,  0, false, "L3 rowBothEven(auto)"},
             };
-            sub = scui_test_flex_deep(layout_handle, d[k].oway, d[k].oalign, d[k].osp, d[k].oroom,
+            sub = scui_test_flex_deep(layout_handle, d[k].oway, d[k].oalign, d[k].osp, d[k].oev, d[k].oroom,
                 room_w, room_h, d[k].iway, d[k].iroom);
             SCUI_LOG_WARN("[flex] p%u cell%d: %s", page, k + 1, d[k].tip);
             break;
@@ -363,9 +363,9 @@ static void scui_test_ui_layout_grid_combo(uint8_t idx)
             scui_layout_grid_way(sub, true,  h2, 2, 6);
             /* 上格: flex横 3块; 下格: flex纵 3块(拉伸占据) */
             scui_handle_t hf = scui_test_flex_fill(sub, 0, scui_opt_pos_hor | scui_opt_pos_u,
-                (scui_point_t){-1, 6}, 3, 0, true, cw - 30, chh * 3 / 10 - 30, 0);
+                (scui_point_t){6, 6}, (scui_point_t){1, 0}, 3, 0, true, cw - 30, chh * 3 / 10 - 30, 0);
             scui_handle_t vf = scui_test_flex_fill(sub, 1, scui_opt_pos_ver | scui_opt_pos_l,
-                (scui_point_t){6, -1}, 3, 0, true, cw - 30, chh * 7 / 10 - 30, 0);
+                (scui_point_t){6, 6}, (scui_point_t){0, 1}, 3, 0, true, cw - 30, chh * 7 / 10 - 30, 0);
             scui_layout_grid_cell(sub, hf, (scui_point_t){0, 0}, (scui_point_t){2, 1}, 0, 0);
             scui_layout_grid_cell(sub, vf, (scui_point_t){0, 1}, (scui_point_t){2, 1}, 0, 0);
         }

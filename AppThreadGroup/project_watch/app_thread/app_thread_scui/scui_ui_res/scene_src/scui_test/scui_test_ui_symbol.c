@@ -97,7 +97,7 @@ void scui_test_ui_symbol_canvas_event_proc(scui_event_t *event)
         scui_widget_create(&layout_maker, &layout_handle);
         
         /* 轨道方向: 水平(way=0); span各轴8; 轨道内/外均水平垂直居中 */
-        scui_layout_flex_way(layout_handle, 0, (scui_point_t){-1, 8},
+        scui_layout_flex_way(layout_handle, 0, (scui_point_t){8, 8}, (scui_point_t){1, 0},
             scui_opt_pos_hor | scui_opt_pos_ver,   /* 轨道间(外)对齐: 水平垂直center */
             scui_opt_pos_hor | scui_opt_pos_ver);  /* 轨道内对齐:     水平垂直center */
         

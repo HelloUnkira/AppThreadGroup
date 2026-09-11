@@ -179,12 +179,12 @@ static void scui_layout_flex_exec(scui_layout_t *layout)
     scui_handle_t  handle =  widget->myself;
     if (layout->flex.num == 0) return;
     
-    /* 主/副轴方向与间距 */
+    /* 主/副轴: 间距与均分(span/evenly均为水平/垂直, 按way映射) */
     bool tag_v = layout->flex.way;
     scui_coord_t main_span = tag_v ? layout->flex.span.y : layout->flex.span.x;
     scui_coord_t vice_span = tag_v ? layout->flex.span.x : layout->flex.span.y;
-    bool main_even = (main_span == -1);     /* 主轴 -1: 均等铺开 */
-    bool vice_even = (vice_span == -1);     /* 副轴 -1: 均等铺开 */
+    bool even_main = tag_v ? layout->flex.evenly.y : layout->flex.evenly.x;
+    bool even_vice = tag_v ? layout->flex.evenly.x : layout->flex.evenly.y;
     
     /* 步骤1: 采样子控件主/副轴尺寸与组号 */
     scui_coord_t  child_num = widget->child_num;
@@ -205,7 +205,7 @@ static void scui_layout_flex_exec(scui_layout_t *layout)
         group_chd[child_idx] = (node != NULL) ? node->group : 0;
     }
     
-    /* 步骤2: 去重统计组号(升序) */
+    /* 步骤2: 组号去重统计(升序) */
     scui_widget_child_list_btra(widget, child_idx) {
         scui_coord_t group_val = group_chd[child_idx];
         for (group_idx = 0; group_idx < group_cnt; group_idx++)
@@ -223,12 +223,12 @@ static void scui_layout_flex_exec(scui_layout_t *layout)
         group_cnt++;
     }
     
-    scui_coord_t *track_child_num = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * group_cnt);
     scui_coord_t *track_main_size = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * group_cnt);
-    scui_coord_t *track_main_gap  = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * group_cnt);
-    scui_coord_t *track_main_cur  = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * group_cnt);
-    scui_coord_t *track_vice_pos  = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * group_cnt);
+    scui_coord_t *track_child_num = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * group_cnt);
     scui_coord_t *track_vice_max  = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * group_cnt);
+    scui_coord_t *track_main_gap  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * group_cnt);
+    scui_coord_t *track_main_cur  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * group_cnt);
+    scui_coord_t *track_vice_pos  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_coord_t) * group_cnt);
     
     /* 步骤3: 组内统计(主轴合计/元素数, 副轴最大) */
     scui_widget_child_list_btra(widget, child_idx) {
@@ -243,116 +243,89 @@ static void scui_layout_flex_exec(scui_layout_t *layout)
             track_vice_max[group_idx] = vice_size[child_idx];
     }
     
-    /* 步骤4: auto 尺寸(均等移除固定span, 无自由空间退化为贴合) */
-    scui_coord_t auto_main_size = 0;
-    scui_coord_t auto_vice_size = 0;
+    /* 步骤4: 轨道内基础排布(主轴尺寸始终含span; 均分不参与统计) */
+    scui_coord_t auto_main = 0;
+    scui_coord_t auto_vice = 0;
     
     for (group_idx = 0; group_idx < group_cnt; group_idx++) {
         scui_coord_t group_main = track_main_size[group_idx];
-        group_main += (main_even ? 0 : main_span) * (track_child_num[group_idx] - 1);
+        group_main += main_span * (track_child_num[group_idx] - 1);
+        track_main_size[group_idx] = group_main;
         
-        if (group_main > auto_main_size)
-            auto_main_size = group_main;
+        if (group_main > auto_main)
+            auto_main = group_main;
         
-        auto_vice_size += track_vice_max[group_idx];
+        auto_vice += track_vice_max[group_idx];
     }
-    auto_vice_size += (vice_even ? 0 : vice_span) * (group_cnt - 1);
+    auto_vice += vice_span * (group_cnt - 1);
     
-    scui_coord_t width  = widget->state.layout_w ? (tag_v ? auto_vice_size : auto_main_size) : widget->clip.w;
-    scui_coord_t height = widget->state.layout_h ? (tag_v ? auto_main_size : auto_vice_size) : widget->clip.h;
+    /* 步骤5: 自适应尺寸 */
+    scui_coord_t width  = widget->state.layout_w ? (tag_v ? auto_vice : auto_main) : widget->clip.w;
+    scui_coord_t height = widget->state.layout_h ? (tag_v ? auto_main : auto_vice) : widget->clip.h;
     if (width != widget->clip.w || height != widget->clip.h)
         scui_widget_adjust_size(handle, width, height);
     
-    /* 步骤5: 主/副轴对齐按位分离  */
-    /* x轴(水平位) = 左/右/水平居中; */
-    /* y轴(垂直位) = 上/下/垂直居中; */
-    /* 主轴看主方向位, 副轴看另一方向位 */
-    scui_coord_t  main_extent = tag_v ? widget->clip.h : widget->clip.w;
-    scui_coord_t  vice_extent = tag_v ? widget->clip.w : widget->clip.h;
-    scui_opt_dir_t align_main = layout->flex.align_o & (tag_v ? scui_opt_pos_ver : scui_opt_pos_hor);
-    scui_opt_dir_t align_vice = layout->flex.align_o & (tag_v ? scui_opt_pos_hor : scui_opt_pos_ver);
-    scui_coord_t edge_st_main = 0, edge_en_main = 0;   /* 主轴起点/终点边缘缝隙 */
-    scui_coord_t edge_st_vice = 0, edge_en_vice = 0;   /* 副轴起点/终点边缘缝隙 */
-    /* 起始对齐: 终点侧补1; 末端对齐: 起点侧补1; 居中: 两侧各补1 */
-    /* 均等边缘: 依据对齐分离起点/终点侧是否各补一份 */
-    
-    switch (align_main) {
-    default:               edge_st_main = 0; edge_en_main = 1; break;
-    case scui_opt_pos_l:   edge_st_main = 0; edge_en_main = 1; break;
-    case scui_opt_pos_u:   edge_st_main = 0; edge_en_main = 1; break;
-    case scui_opt_pos_r:   edge_st_main = 1; edge_en_main = 0; break;
-    case scui_opt_pos_d:   edge_st_main = 1; edge_en_main = 0; break;
-    case scui_opt_pos_hor: edge_st_main = 1; edge_en_main = 1; break;
-    case scui_opt_pos_ver: edge_st_main = 1; edge_en_main = 1; break;
-    }
-    switch (align_vice) {
-    default:               edge_st_vice = 0; edge_en_vice = 1; break;
-    case scui_opt_pos_l:   edge_st_vice = 0; edge_en_vice = 1; break;
-    case scui_opt_pos_u:   edge_st_vice = 0; edge_en_vice = 1; break;
-    case scui_opt_pos_r:   edge_st_vice = 1; edge_en_vice = 0; break;
-    case scui_opt_pos_d:   edge_st_vice = 1; edge_en_vice = 0; break;
-    case scui_opt_pos_hor: edge_st_vice = 1; edge_en_vice = 1; break;
-    case scui_opt_pos_ver: edge_st_vice = 1; edge_en_vice = 1; break;
-    }
-    
-    /* 步骤6: 主轴缝隙(均等铺满 或 固定span+整体偏移) */
-    scui_coord_t main_start = 0;
-    
-    if (main_even) {
-        /* 每track独立均等铺满主轴(内容不同, 自由空间各异) */
-        for (group_idx = 0; group_idx < group_cnt; group_idx++) {
-            scui_coord_t main_free = main_extent  - track_main_size[group_idx];
-            scui_coord_t gap_slots = (track_child_num[group_idx] - 1) + edge_st_main + edge_en_main;
-            track_main_gap[group_idx] = (main_free > 0 && gap_slots > 0) ? main_free / gap_slots : 0;
-        }
-    } else {
-        scui_coord_t main_free = main_extent - auto_main_size;
-        if (main_free < 0) main_free = 0;
-        
-        switch (align_main) {
-        default:               main_start = 0;              break;
-        case scui_opt_pos_l:   main_start = 0;              break;
-        case scui_opt_pos_u:   main_start = 0;              break;
-        case scui_opt_pos_r:   main_start = main_free;      break;
-        case scui_opt_pos_d:   main_start = main_free;      break;
-        case scui_opt_pos_hor: main_start = main_free / 2;  break;
-        case scui_opt_pos_ver: main_start = main_free / 2;  break;
-        }
-        
-        for (group_idx = 0; group_idx < group_cnt; group_idx++)
-            track_main_gap[group_idx] = main_span;
-    }
-    
-    /* 步骤7: 副轴缝隙/偏移(均等铺满 或 固定span+整体对齐) */
-    scui_coord_t track_vice_off = 0, vice_gap = vice_span;
-    scui_coord_t vice_free = vice_extent - auto_vice_size;
+    /* 步骤6: 主/副轴可用空间与对齐位(主轴位看主方向, 副轴位看另一方向) */
+    scui_coord_t main_extent = tag_v ? widget->clip.h : widget->clip.w;
+    scui_coord_t vice_extent = tag_v ? widget->clip.w : widget->clip.h;
+    scui_coord_t vice_free = vice_extent - auto_vice;
     if (vice_free < 0) vice_free = 0;
     
-    if (vice_even) {
-        scui_coord_t gap_slots = (group_cnt - 1) + edge_st_vice + edge_en_vice;
-        vice_gap = (vice_free > 0 && gap_slots > 0) ? vice_free / gap_slots : 0;
-        track_vice_off = edge_st_vice * vice_gap;
+    scui_opt_dir_t align_main = layout->flex.align_o & (tag_v ? scui_opt_pos_ver : scui_opt_pos_hor);
+    scui_opt_dir_t align_vice = layout->flex.align_o & (tag_v ? scui_opt_pos_hor : scui_opt_pos_ver);
+    scui_opt_dir_t align_item = layout->flex.align_i & (tag_v ? scui_opt_pos_hor : scui_opt_pos_ver);
+    
+    /* 步骤7: 副轴排布(轨道堆叠: 均分剩余 或 固定间距+整体对齐) */
+    scui_coord_t vice_gap = vice_span;
+    scui_coord_t vice_off = 0;
+    
+    if (even_vice && group_cnt > 1) {
+        /* 均分: 基础间距+剩余均分到轨道间缝隙(AUTO无剩余退化为span) */
+        vice_gap = vice_span + vice_free / (group_cnt - 1);
     } else {
-        
-        switch (align_vice) {
-        default:               track_vice_off = 0;              break;
-        case scui_opt_pos_l:   track_vice_off = 0;              break;
-        case scui_opt_pos_u:   track_vice_off = 0;              break;
-        case scui_opt_pos_r:   track_vice_off = vice_free;      break;
-        case scui_opt_pos_d:   track_vice_off = vice_free;      break;
-        case scui_opt_pos_hor: track_vice_off = vice_free / 2;  break;
-        case scui_opt_pos_ver: track_vice_off = vice_free / 2;  break;
-        }
+        if (align_vice == scui_opt_pos_r || align_vice == scui_opt_pos_d)
+            vice_off = vice_free;
+        else if (align_vice == scui_opt_pos_hor || align_vice == scui_opt_pos_ver)
+            vice_off = vice_free / 2;
     }
     
-    /* 步骤8: 轨道定位(副轴堆叠 + 主轴内gap起点) */
-    scui_coord_t  vice_cur = 0;
+    scui_coord_t vice_cur = 0;
     for (group_idx = 0; group_idx < group_cnt; group_idx++) {
-        track_vice_pos[group_idx] = track_vice_off + vice_cur;
+        track_vice_pos[group_idx] = vice_off + vice_cur;
         vice_cur += track_vice_max[group_idx] + vice_gap;
+    }
+    
+    /* 步骤8: 主轴排布(轨道内间距: 均分剩余 或 固定span; 轨道整体: 逐轨道对齐) */
+    scui_coord_t main_gap_extra = 0;
+    
+    if (even_main) {
+        /* 均分: 整块主轴剩余均分到所有轨道内缝隙(AUTO无剩余退化为span) */
+        scui_coord_t main_free = main_extent - auto_main;
+        if (main_free < 0) main_free = 0;
         
-        /* edge_st_main 是 even 的边缘空隙槽, 仅even叠加; 非even时main_start已含对齐偏移 */
-        track_main_cur[group_idx] = main_start + (main_even ? edge_st_main * track_main_gap[group_idx] : 0);
+        scui_coord_t main_slots = 0;
+        for (group_idx = 0; group_idx < group_cnt; group_idx++)
+            main_slots += track_child_num[group_idx] - 1;
+        
+        if (main_slots > 0)
+            main_gap_extra = main_free / main_slots;
+    }
+    
+    for (group_idx = 0; group_idx < group_cnt; group_idx++) {
+        track_main_gap[group_idx] = main_span + main_gap_extra;
+        
+        /* 轨道实际主轴宽(含均分增量) → 逐轨道剩余 → 按轨道间对齐定起点 */
+        scui_coord_t track_use = track_main_size[group_idx] + main_gap_extra * (track_child_num[group_idx] - 1);
+        scui_coord_t track_free = main_extent - track_use;
+        if (track_free < 0) track_free = 0;
+        
+        scui_coord_t main_start = 0;
+        if (align_main == scui_opt_pos_r || align_main == scui_opt_pos_d)
+            main_start = track_free;
+        else if (align_main == scui_opt_pos_hor || align_main == scui_opt_pos_ver)
+            main_start = track_free / 2;
+        
+        track_main_cur[group_idx] = main_start;
     }
     
     /* 步骤9: 逐子摆放(主轴推进 + 轨道内交叉对齐) */
@@ -363,22 +336,15 @@ static void scui_layout_flex_exec(scui_layout_t *layout)
         
         scui_coord_t child_main_pos = track_main_cur[group_idx];
         track_main_cur[group_idx] += main_size[child_idx] + track_main_gap[group_idx];
+        
         scui_coord_t item_vice_free = track_vice_max[group_idx] - vice_size[child_idx];
         if (item_vice_free < 0) item_vice_free = 0;
         
-        /* 轨道内对齐(tag_v: vice水平向 r|center; 否则 vice垂直向 d|center) */
-        scui_opt_dir_t align_item = layout->flex.align_i & (tag_v ? scui_opt_pos_hor : scui_opt_pos_ver);
         scui_coord_t item_vice_off = 0;
-        
-        switch (align_item) {
-        default:               item_vice_off = 0;
-        case scui_opt_pos_l:   item_vice_off = 0;
-        case scui_opt_pos_u:   item_vice_off = 0;
-        case scui_opt_pos_r:   item_vice_off = item_vice_free;
-        case scui_opt_pos_d:   item_vice_off = item_vice_free;
-        case scui_opt_pos_hor: item_vice_off = item_vice_free / 2;
-        case scui_opt_pos_ver: item_vice_off = item_vice_free / 2;
-        };
+        if (align_item == scui_opt_pos_r || align_item == scui_opt_pos_d)
+            item_vice_off = item_vice_free;
+        else if (align_item == scui_opt_pos_hor || align_item == scui_opt_pos_ver)
+            item_vice_off = item_vice_free / 2;
         
         scui_point_t point = {
             .x = tag_v ? track_vice_pos[group_idx] + item_vice_off : child_main_pos,
@@ -386,29 +352,30 @@ static void scui_layout_flex_exec(scui_layout_t *layout)
         };
         scui_widget_move_pos(widget->child_list[child_idx], &point, false);
     }
-
+    
     SCUI_MEM_FREE(main_size);
     SCUI_MEM_FREE(vice_size);
     SCUI_MEM_FREE(group_chd);
     SCUI_MEM_FREE(group_lst);
     
-    SCUI_MEM_FREE(track_child_num);
     SCUI_MEM_FREE(track_main_size);
+    SCUI_MEM_FREE(track_child_num);
+    SCUI_MEM_FREE(track_vice_max);
     SCUI_MEM_FREE(track_main_gap);
     SCUI_MEM_FREE(track_main_cur);
-    SCUI_MEM_FREE(track_vice_max);
     SCUI_MEM_FREE(track_vice_pos);
 }
 
-/*@brief 布局控件(方向/间距/对齐)
+/*@brief 布局控件(方向/间距/均分/对齐)
  *@param handle 布局控件句柄
  *@param way    轨道方向(0:水平;1:垂直)
- *@param span   间距(水平/垂直)(EVNELY:-1)
+ *@param span   间距(水平/垂直)
+ *@param evenly 均分(水平/垂直)(与span对照, 1:该轴均分剩余; AUTO下无剩余退化为span)
  *@param alig_o 轨道间对齐
  *@param alig_i 轨道内对齐
  */
 void scui_layout_flex_way(scui_handle_t handle, bool way, scui_point_t span,
-    scui_opt_pos_t alig_o, scui_opt_pos_t alig_i)
+    scui_point_t evenly, scui_opt_pos_t alig_o, scui_opt_pos_t alig_i)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_layout));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -421,6 +388,7 @@ void scui_layout_flex_way(scui_handle_t handle, bool way, scui_point_t span,
     
     layout->flex.way     = way;
     layout->flex.span    = span;
+    layout->flex.evenly  = evenly;
     layout->flex.align_o = alig_o;
     layout->flex.align_i = alig_i;
     

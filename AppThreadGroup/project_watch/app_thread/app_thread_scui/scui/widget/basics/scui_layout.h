@@ -57,6 +57,7 @@ typedef struct {
         scui_opt_pos_t  align_i;    /* 轨道内对齐 */
         scui_sbitfd_t   way:1;      /* 轨道方向(0:水平;1:垂直) */
         scui_point_t    span;       /* 间距(水平/垂直) */
+        scui_point_t    evenly;     /* 均分(水平/垂直)(与span对照, 独立生效) */
     } flex;
     struct {
        scui_handle_t num;

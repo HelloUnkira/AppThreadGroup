@@ -14,12 +14,13 @@ void scui_layout_item_align(scui_handle_t handle, scui_handle_t handle_t,
 /*@brief 布局控件(方向/间距/对齐)
  *@param handle 布局控件句柄
  *@param way    轨道方向(0:水平;1:垂直)
- *@param span   间距(水平/垂直)(EVNELY:-1)
+ *@param span   间距(水平/垂直)
+ *@param evenly 均分(水平/垂直)(与span对照, 1:该轴均分剩余; AUTO下无剩余退化为span)
  *@param alig_o 轨道间对齐
  *@param alig_i 轨道内对齐
  */
 void scui_layout_flex_way(scui_handle_t handle, bool way, scui_point_t span,
-    scui_opt_pos_t alig_o, scui_opt_pos_t alig_i);
+    scui_point_t evenly, scui_opt_pos_t alig_o, scui_opt_pos_t alig_i);
 
 /*@brief 布局控件子控件分组
  *@param handle   布局控件句柄
