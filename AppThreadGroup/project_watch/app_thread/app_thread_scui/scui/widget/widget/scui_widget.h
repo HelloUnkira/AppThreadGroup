@@ -413,13 +413,6 @@ void scui_widget_clist_move_ofs_loop(scui_handle_t handle, scui_point_t *offset,
  */
 bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scui_point_t *offset, scui_opt_pos_t pos);
 
-/*@prief 事件滚动状态检查更新
- *@param type 0x00:锁定; 0x01:解锁; 0x02:检查
- *@retval state:0x02时是否滚动
- */
-bool scui_widget_scroll_state(uint8_t state);
-/* #define scui_widget_scroll_state(state) ((state != 0x02 ? (SCUI_LOG_WARN("scui_widget_scroll_state:%d", state), 0) : 0), scui_widget_scroll_state_(state)) */
-
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/

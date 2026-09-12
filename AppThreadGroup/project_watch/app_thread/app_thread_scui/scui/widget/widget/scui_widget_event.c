@@ -436,6 +436,12 @@ static void scui_widget_event_process(scui_event_t *event)
             return;
         }
         
+        /* 普通控件不响应移动/甩动(输入独占) */
+        if (event->type == scui_event_ptr_fling ||
+            event->type == scui_event_ptr_move)
+            if (scui_window_switch_work())
+                return;
+        
         /* 控件点包含检查: 动作链统一锚定真实按下点 */
         scui_handle_t  handle_t = scui_widget_tree(event->object);
         scui_widget_t *widget_t = scui_handle_source_check(handle_t);

@@ -37,22 +37,11 @@ typedef struct {
     scui_sbitfd_t   lock_move:1;        /* 滚动长留锁 */
     scui_sbitfd_t   over_scroll:1;      /* 滚动迭代状态 */
     scui_sbitfd_t   mask_springback:1;  /* 回弹暂留锁 */
-    /* 内部域(模式): */
-    union {
-        /* 无方向布局(自由布局) */
-        struct {
-            scui_point_t    ofs_sum;    /* 记录偏移点 */
-            scui_point_t    ofs_cur;    /* 当前偏移点 */
-            scui_point_t    ofs_min;    /* 最小偏移点 */
-            scui_point_t    ofs_max;    /* 最大偏移点 */
-        };
-        /* 方向布局(水平布局,垂直布局,非循环,循环) */
-        struct {
-            scui_coord_t    dis_sum;    /* 移动记录线 */
-            scui_coord_t    dis_ofs;    /* 移动记录线 */
-            scui_coord_t    dis_lim;    /* 移动限制线[0,range] */
-        };
-    };
+    /* 内部域(偏移状态,自由布局与方向布局共用): */
+    scui_point_t    ofs_cur;    /* 当前偏移点(已提交) */
+    scui_point_t    ofs_sum;    /* 累积偏移点(动画中) */
+    scui_point_t    ofs_min;    /* 最小偏移点(上/左边界,循环模式无意义) */
+    scui_point_t    ofs_max;    /* 最大偏移点(下/右边界,循环模式为内容总长) */
 } scui_scroll_t;
 
 #pragma pack(push, 1)

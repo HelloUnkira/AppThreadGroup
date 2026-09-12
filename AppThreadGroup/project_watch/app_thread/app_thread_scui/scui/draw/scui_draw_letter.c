@@ -188,7 +188,13 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             offset_letter.y -= glyph_unit.glyph.ofs_y;
             SCUI_LOG_INFO("offset_letter:<%d, %d>", offset_letter.x, offset_letter.y);
             
-            scui_area_t clip_letter = dst_clip_v;
+            /* 字符盒在目标上的绘制区域(屏幕绝对坐标) */
+            scui_area_t clip_letter = {
+                .x = dst_clip_v.x + offset_letter.x,
+                .y = dst_clip_v.y + offset_letter.y,
+                .w = glyph_unit.glyph.box_w,
+                .h = glyph_unit.glyph.box_h,
+            };
             scui_area_t clip_glyph  = {
                 .w = glyph_unit.glyph.box_w,
                 .h = glyph_unit.glyph.box_h,
@@ -196,7 +202,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             
             offset_glyph.x = offset_letter.x < 0 ? -offset_letter.x : 0;
             offset_glyph.y = offset_letter.y < 0 ? -offset_letter.y : 0;
-            if (!scui_area_limit_offset(&clip_letter, &offset_letter) ||
+            if (!scui_area_inter(&clip_letter, &clip_letter, &dst_clip_v) ||
                 !scui_area_limit_offset(&clip_glyph,  &offset_glyph))
                  goto keep_line_item;
             

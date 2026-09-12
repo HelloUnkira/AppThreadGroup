@@ -83,10 +83,10 @@
 /* indev: */
 
 /* 事件合并: */
-#define SCUI_INDEV_EVENT_MERGE                      (1)
+#define SCUI_INDEV_EVENT_MERGE                      (0)
 #define SCUI_INDEV_ANIMA_MERGE                      (SCUI_ANIMA_TICK * 2)
 #define SCUI_INDEV_PTR_EVENT_MERGE                  (0)
-#define SCUI_INDEV_ENC_EVENT_MERGE                  (1)
+#define SCUI_INDEV_ENC_EVENT_MERGE                  (0)
 #define SCUI_INDEV_BAR_EVENT_MERGE                  (0)
 #define SCUI_INDEV_KEY_EVENT_MERGE                  (0)
 

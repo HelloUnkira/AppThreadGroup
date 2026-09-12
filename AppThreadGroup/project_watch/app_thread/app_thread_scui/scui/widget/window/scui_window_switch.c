@@ -9,6 +9,14 @@
 
 static scui_window_switch_t scui_window_switch = {0};
 
+/*@brief 窗口切换工作状态
+ *@retval 窗口切换是否工作(输入独占)
+ */
+bool scui_window_switch_work(void)
+{
+    return scui_window_switch.indev_hold;
+}
+
 /*@brief 获取窗口切换风格
  *@param move_type 窗口切换风格
  */
@@ -384,9 +392,9 @@ static void scui_window_move_anima_finish(void *instance)
         scui_window_stack_switch(scui_window_switch.list[1]);
     }
     
-    scui_window_switch.lock_move = false;
-    scui_window_switch.lock_jump = false;
-    scui_widget_scroll_state(0x01);
+    scui_window_switch.lock_move  = false;
+    scui_window_switch.lock_jump  = false;
+    scui_window_switch.indev_hold = false;
 }
 
 /*@brief 窗口移动动画自动化
@@ -474,15 +482,16 @@ static bool scui_window_switch_event_catch(scui_event_t *event, scui_opt_dir_t e
     scui_handle_t target = SCUI_HANDLE_INVALID;
     scui_window_switch_type_t switch_type = scui_window_switch_auto;
     
+    if (scui_window_switch.indev_hold) {
+        SCUI_LOG_INFO("window switching");
+        return false;
+    }
+    
     if (scui_window_switch.lock_jump) {
         SCUI_LOG_INFO("window switching");
         return false;
     }
     if (scui_window_switch.lock_move) {
-        SCUI_LOG_INFO("window switching");
-        return false;
-    }
-    if (scui_widget_scroll_state(0x02)) {
         SCUI_LOG_INFO("window switching");
         return false;
     }
@@ -511,8 +520,8 @@ static bool scui_window_switch_event_catch(scui_event_t *event, scui_opt_dir_t e
     /* 抓获到运动的目标 */
     SCUI_LOG_INFO("dir:%u", event_dir);
     if (target != SCUI_HANDLE_INVALID && event_dir != scui_opt_dir_none) {
-        /* 全局滚动锁定 */
-        scui_widget_scroll_state(0x00);
+        /* 窗口切换输入独占 */
+        scui_window_switch.indev_hold = true;
         scui_window_switch.dir = event_dir;
         scui_window_switch.pos = event_dir;
         scui_window_switch.pct = 0;
@@ -781,13 +790,9 @@ bool scui_window_switch_jump(scui_handle_t handle, scui_window_switch_type_t typ
         SCUI_LOG_INFO("window switching");
         return false;
     }
-    if (scui_widget_scroll_state(0x02)) {
-        SCUI_LOG_INFO("window switching");
-        return false;
-    }
-    
     /* 先上锁(标记) */
-    scui_window_switch.lock_jump = true;
+    scui_window_switch.lock_jump  = true;
+    scui_window_switch.indev_hold = true;
     
     /* 如果没有焦点窗口 */
     /* 新窗口已经是焦点窗口 */
@@ -797,7 +802,8 @@ bool scui_window_switch_jump(scui_handle_t handle, scui_window_switch_type_t typ
         scui_window_switch_ready();
         scui_window_active(handle);
         scui_window_switch_finish(handle);
-        scui_window_switch.lock_jump = false;
+        scui_window_switch.lock_jump  = false;
+        scui_window_switch.indev_hold = false;
         return true;
     }
     
@@ -839,12 +845,12 @@ bool scui_window_switch_jump(scui_handle_t handle, scui_window_switch_type_t typ
         scui_window_switch_ready();
         scui_window_active(handle);
         scui_window_switch_finish(handle);
-        scui_window_switch.lock_jump = false;
+        scui_window_switch.lock_jump  = false;
+        scui_window_switch.indev_hold = false;
         return true;
     }
     
-    /* 全局滚动锁定 */
-    scui_widget_scroll_state(0x00);
+
     scui_window_switch.dir = scui_window_switch.dir;
     scui_window_switch.pos = scui_window_switch.dir;
     scui_window_switch.pct = 0;

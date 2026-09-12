@@ -181,7 +181,7 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     /* 单一窗口直接渲染 */
     bool mode_simple = num == 1;
     /* 仅窗口切换时应用特效渲染 */
-    mode_simple = mode_simple || !scui_widget_scroll_state(0x02);
+    mode_simple = mode_simple || !scui_window_switch_work();
     /* 直接渲染复用常规窗口移动变换(此时相当于不移动) */
     if (mode_simple) switch_type = scui_window_switch_move;
     
@@ -428,7 +428,7 @@ static void scui_window_surface_ready(void)
     scui_handle_t list_lvl_0_ofs = 0;
     scui_handle_t list_lvl_1_ofs = 0;
     /* 仅窗口切换时才应用特效渲染 */
-    if (!scui_widget_scroll_state(0x02)) {
+    if (!scui_window_switch_work()) {
         /* 过滤掉被覆盖的绘制窗口 */
         scui_window_list_filter(scui_window_list.widget_0, scui_window_list.widget_0_num, &list_lvl_0_ofs);
         /* 去除掉覆盖的窗口 */
@@ -562,7 +562,7 @@ void scui_window_event_dispatch(scui_event_t *event)
     case scui_event_anima_elapse: {
         
         #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
-        if (scui_widget_scroll_state(0x02))
+        if (scui_window_switch_work())
             return;
         #endif
         break;

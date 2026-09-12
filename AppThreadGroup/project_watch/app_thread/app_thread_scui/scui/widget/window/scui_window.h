@@ -103,6 +103,7 @@ typedef struct {
     scui_coord_t   ofs;             /* 窗口切换偏移(像素点) */
     scui_handle_t  anima;           /* 窗口切换动画 */
     scui_handle_t  anima_type;      /* 窗口切换动画类型 */
+    scui_sbitfd_t  indev_hold:1;    /* 窗口切换输入锁 */
     scui_sbitfd_t  lock_jump:1;     /* 窗口切换锁 */
     scui_sbitfd_t  lock_move:1;     /* 窗口切换锁 */
     scui_sbitfd_t  mask_fling:1;    /* 窗口切换锁 */
@@ -174,6 +175,11 @@ void scui_window_stack_switch(scui_handle_t handle);
  *@retval 窗口切换风格
  */
 scui_window_switch_type_t scui_window_switch_type(void);
+
+/*@brief 窗口切换工作状态
+ *@retval 窗口切换是否工作(输入独占)
+ */
+bool scui_window_switch_work(void);
 
 /*@brief 窗口切换方向
  *@retval 窗口切换方向

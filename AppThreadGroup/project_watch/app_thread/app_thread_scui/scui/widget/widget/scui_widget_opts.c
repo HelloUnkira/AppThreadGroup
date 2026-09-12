@@ -405,16 +405,3 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scu
     offset->y = -dist_t_y;
     return true;
 }
-
-/*@prief 事件滚动状态检查更新
- *@param type 0x00:锁定; 0x01:解锁; 0x02:检查
- *@retval state:0x02时是否滚动
- */
-bool scui_widget_scroll_state(uint8_t state)
-{
-    static scui_handle_t scroll_tick = 0;
-    if (state == 0x00) {scroll_tick++;}
-    if (state == 0x01) {SCUI_ASSERT(scroll_tick != 0); scroll_tick--;}
-    if (state == 0x02) {return scroll_tick != 0;}
-    return false;
-}
