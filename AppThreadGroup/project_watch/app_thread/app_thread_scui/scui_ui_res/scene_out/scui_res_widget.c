@@ -24,6 +24,7 @@ static void scui_widget_parser_event_cb_empty(scui_event_t *event)
 #define scui_ui_scene_activity_scroll_ditail_step_event_proc   scui_widget_parser_event_cb_empty
 #define scui_ui_scene_activity_scroll_ditail_dist_event_proc   scui_widget_parser_event_cb_empty
 #define scui_ui_scene_home_event_proc                          scui_widget_parser_event_cb_empty
+#define scui_ui_scene_home_sw_event_proc                       scui_widget_parser_event_cb_empty
 #define scui_ui_scene_hr_event_proc                            scui_widget_parser_event_cb_empty
 #define scui_ui_scene_hr_body_event_proc                       scui_widget_parser_event_cb_empty
 #define scui_ui_scene_mini_card_event_proc                     scui_widget_parser_event_cb_empty
@@ -114,6 +115,7 @@ extern void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *e
 extern void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event);
 extern void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event);
 extern void scui_ui_scene_home_event_proc(scui_event_t *event);
+extern void scui_ui_scene_home_sw_event_proc(scui_event_t *event);
 extern void scui_ui_scene_hr_event_proc(scui_event_t *event);
 extern void scui_ui_scene_hr_body_event_proc(scui_event_t *event);
 extern void scui_ui_scene_mini_card_event_proc(scui_event_t *event);
@@ -1025,6 +1027,36 @@ const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_HOME_key = {
 	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_HOME_cfg),
 	.val = scui_widget_SCUI_UI_SCENE_HOME_val,
 	.cfg = scui_widget_SCUI_UI_SCENE_HOME_cfg,
+};
+
+static void (*const scui_widget_SCUI_UI_SCENE_HOME_SW_cfg[])(void *maker, void *field) = {
+	scui_widget_json_widget_type,
+	scui_widget_json_widget_parent,
+	scui_widget_json_window_preload,
+	scui_widget_json_widget_child_num,
+	scui_widget_json_widget_event_cb,
+	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_indev_enc,
+	scui_widget_json_widget_style_indev_key,
+	scui_widget_json_widget_style_indev_ptr,
+};
+
+static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_HOME_SW_val[] = {
+	{ .handle = scui_widget_type_window, },
+	{ .handle = SCUI_HANDLE_INVALID, },
+	{ .sbitfd = 1, },
+	{ .handle = 5, },
+	{ .event = scui_ui_scene_home_sw_event_proc, },
+	{ .handle = SCUI_UI_SCENE_HOME_SW, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
+};
+
+const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_HOME_SW_key = {
+	.num = scui_arr_len(scui_widget_SCUI_UI_SCENE_HOME_SW_cfg),
+	.val = scui_widget_SCUI_UI_SCENE_HOME_SW_val,
+	.cfg = scui_widget_SCUI_UI_SCENE_HOME_SW_cfg,
 };
 
 static void (*const scui_widget_SCUI_UI_SCENE_HR_cfg[])(void *maker, void *field) = {
@@ -5261,7 +5293,7 @@ const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_STANDBY_key = {
 	.cfg = scui_widget_SCUI_UI_SCENE_STANDBY_cfg,
 };
 
-const void * const scui_widget_parser_table[140] = {
+const void * const scui_widget_parser_table[141] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE_key,
@@ -5281,6 +5313,7 @@ const void * const scui_widget_parser_table[140] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_DIST_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_BLANK_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_HOME_key,
+	(void *)&scui_widget_SCUI_UI_SCENE_HOME_SW_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_HR_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_HR_BODY_key,
 	(void *)&scui_widget_SCUI_UI_SCENE_HR_TITLE_key,

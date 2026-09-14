@@ -7,21 +7,13 @@
 
 #include "scui.h"
 
-static const char * cwf_json_bin[] = {
-    "D10597001.bin",
-    "D10598001.bin",
-    "D10599001.bin",
-    "D10600001.bin",
-    "D10601001.bin",
-    "D10602001.bin",
-    "D10603001.bin",
-    "D10604001.bin",
-};
+/* 切表盘: 编码器累计位移阈值(达到才切换一个表盘, 避免轻碰即切) */
+static const scui_coord_t scui_ui_home_dial_span = 3;
 
 static struct {
     void   *cwf_json_inst;
-    uint8_t cwf_json_idx;
     bool    ptr_long_jump;
+    bool    dial_jumping;           /* 已发起表盘过渡(等待过渡窗口回跳) */
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -52,11 +44,16 @@ void scui_ui_scene_float_s_event_proc(scui_event_t * event)
 void scui_ui_scene_home_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_create:
+    case scui_event_create: {
         scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
         scui_window_local_res_get(event->object, &scui_ui_res_local);
         // cwf json 测试
-        scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
+        /* 表盘索引与清单由 presenter 提供(切表盘重建界面时保持) */
+        uint32_t cwf_idx = scui_presenter.cwf_idx_get();
+        if (cwf_idx >= scui_presenter.cwf_dial_num())
+            cwf_idx  = 0;
+        scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, scui_presenter.cwf_dial_name(cwf_idx), event->object);
+        SCUI_LOG_INFO("home-create: idx:%u/%u", cwf_idx, scui_presenter.cwf_dial_num());
         
         
         
@@ -67,7 +64,9 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         // scui_ui_scene_xfloat_create(event->object, SCUI_VER_RES / 3, scui_opt_pos_u, scui_ui_scene_float_s_event_proc);
         // scui_ui_scene_xfloat_create(event->object, SCUI_VER_RES / 3, scui_opt_pos_d, scui_ui_scene_float_s_event_proc);
         break;
+    }
     case scui_event_destroy:
+        SCUI_LOG_INFO("home-destroy");
         // cwf json 测试
         scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
         break;
@@ -103,7 +102,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         break;
     case scui_event_ptr_hold:
         if (event->ptr_tick > 3000) {
-            if (!scui_ui_res_local->ptr_long_jump) SCUI_LOG_WARN("ptr long hold");
+            if (!scui_ui_res_local->ptr_long_jump) SCUI_LOG_INFO("ptr long hold");
             scui_ui_res_local->ptr_long_jump = true;
         }
         break;
@@ -121,19 +120,45 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
     case scui_event_enc_tick: {
         scui_event_mask_over(event);
         
-        if (event->enc_way == 0) {
-            scui_ui_res_local->cwf_json_idx += 1;
-        if (scui_ui_res_local->cwf_json_idx >= scui_arr_len(cwf_json_bin))
-            scui_ui_res_local->cwf_json_idx  = 0;
-        }
-        if (event->enc_way == 1) {
-            scui_ui_res_local->cwf_json_idx -= 1;
-        if (scui_ui_res_local->cwf_json_idx >= scui_arr_len(cwf_json_bin))
-            scui_ui_res_local->cwf_json_idx  = scui_arr_len(cwf_json_bin) - 1;
-        }
+        /* 表盘过渡中: 丢弃编码器
+         * 窗口切换动画进行中输入独占(框架仅覆盖 ptr_move/ptr_fling, 编码器未覆盖);
+         * 已发起过渡但过渡窗口尚未回跳时同理, 否则会额外加减索引并重复发起跳转 */
+        if (scui_window_switch_work() || scui_ui_res_local->dial_jumping)
+            break;
         
-        scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
-        scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
+        /* 编码器累计到位才切换: 同向累加, 反向对消(跨界面重建保持) */
+        static scui_coord_t dial_acc = 0;
+        dial_acc += event->enc_way == 0 ? event->enc_diff : -event->enc_diff;
+        if (scui_abs(dial_acc) < scui_ui_home_dial_span)
+            break;
+        
+        /* 表盘索引: 0 <-> n 循环; 方向决定过渡窗口从哪一侧进入
+         * (rtl: 新窗口在右侧, 从右进入; ltr: 新窗口在左侧, 从左进入)
+         * 左右相反则对调这两个方向即可 */
+        uint32_t     cwf_num = scui_presenter.cwf_dial_num();
+        uint32_t     cwf_idx = scui_presenter.cwf_idx_get();
+        scui_opt_dir_t dir = scui_opt_dir_none;
+        if (dial_acc > 0) {
+            cwf_idx += 1;
+            if (cwf_idx >= cwf_num)
+                cwf_idx  = 0;
+            dir = scui_opt_dir_rtl;
+        } else {
+            if (cwf_idx == 0)
+                cwf_idx  = cwf_num - 1;
+            else
+                cwf_idx -= 1;
+            dir = scui_opt_dir_ltr;
+        }
+        scui_presenter.cwf_idx_set(cwf_idx);
+        SCUI_LOG_INFO("home-dial-jump: idx:%u/%u dir:%d acc:%d", cwf_idx, cwf_num, dir, dial_acc);
+        /* 保留超出阈值的余量, 连续转动不丢格 */
+        dial_acc -= dial_acc > 0 ? scui_ui_home_dial_span : -scui_ui_home_dial_span;
+        
+        /* 覆盖式跳转到过渡窗口: 本窗口出栈销毁, 由过渡窗口承担切换动画
+         * 过渡窗口动画结束后(focus_get)无动画切回, 本窗口重建并取用新索引 */
+        if (scui_window_stack_cover_by(SCUI_UI_SCENE_HOME_SW, scui_window_switch_center_in, dir))
+            scui_ui_res_local->dial_jumping = true;
         break;
     }
     #endif

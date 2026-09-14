@@ -60,12 +60,12 @@
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_MIX * 30 / 100)
 #else
 /* 大内存方案(完整效果丰盈线: 6M左右): */
-/* MIX:256K; FONT:256K; GRAPH:7.5M - other; USER:64K */
+/* MIX:256K; FONT:256K; GRAPH:7.5M - other; USER:128K */
 
 #define SCUI_MEM_TYPE_SIZE_MIX                      (0x40000)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (0x40000)
-#define SCUI_MEM_TYPE_SIZE_GRAPH                    (0x780000 - 0x90000)
-#define SCUI_MEM_TYPE_SIZE_USER                     (0x10000)
+#define SCUI_MEM_TYPE_SIZE_GRAPH                    (0x780000 - 0x100000)
+#define SCUI_MEM_TYPE_SIZE_USER                     (0x20000)
 
 /* 缓存散列值(必要使用) */
 #define SCUI_CACHE_HASH_FONT                        (5)

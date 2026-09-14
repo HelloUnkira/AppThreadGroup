@@ -579,6 +579,73 @@ static bool scui_ui_func_local_vibrate_shot(void)
     app_module_vibrate_start();
 }
 
+/* 表盘索引(切表盘跨界面重建时保持) */
+static uint32_t scui_ui_cwf_idx = 0;
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_cwf_idx_get(void)
+{
+    return scui_ui_cwf_idx;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static void scui_ui_func_local_cwf_idx_set(uint32_t idx)
+{
+    scui_ui_cwf_idx = idx;
+}
+
+/* 表盘清单(表盘界面/息屏表盘共用, 新增表盘只改此处) */
+static const char * scui_ui_cwf_dial_bin[] = {
+    "D10597001.bin",
+    "D10598001.bin",
+    "D10599001.bin",
+    "D10600001.bin",
+    "D10601001.bin",
+    "D10602001.bin",
+    "D10603001.bin",
+    "D10604001.bin",
+};
+
+static const char * scui_ui_cwf_standby_bin[] = {
+    "D10705001.bin",
+    "D10706001.bin",
+    "D10707001.bin",
+};
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_cwf_dial_num(void)
+{
+    return scui_arr_len(scui_ui_cwf_dial_bin);
+}
+
+/*@brief scui ui数据交互回调
+ */
+static const char * scui_ui_func_local_cwf_dial_name(uint32_t idx)
+{
+    if (idx >= scui_arr_len(scui_ui_cwf_dial_bin))
+        return NULL;
+    return scui_ui_cwf_dial_bin[idx];
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_cwf_standby_num(void)
+{
+    return scui_arr_len(scui_ui_cwf_standby_bin);
+}
+
+/*@brief scui ui数据交互回调
+ */
+static const char * scui_ui_func_local_cwf_standby_name(uint32_t idx)
+{
+    if (idx >= scui_arr_len(scui_ui_cwf_standby_bin))
+        return NULL;
+    return scui_ui_cwf_standby_bin[idx];
+}
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -659,6 +726,14 @@ scui_presenter_t scui_presenter = {
     .compass_angle          = scui_ui_func_local_compass_angle,
     .altimeter_pressure     = scui_ui_func_local_altimeter_pressure,
     .altimeter_altitude     = scui_ui_func_local_altimeter_altitude,
+    
+    /* ui config: */
+    .cwf_idx_get            = scui_ui_func_local_cwf_idx_get,
+    .cwf_idx_set            = scui_ui_func_local_cwf_idx_set,
+    .cwf_dial_num           = scui_ui_func_local_cwf_dial_num,
+    .cwf_dial_name          = scui_ui_func_local_cwf_dial_name,
+    .cwf_standby_num        = scui_ui_func_local_cwf_standby_num,
+    .cwf_standby_name       = scui_ui_func_local_cwf_standby_name,
     
     /* drv func: */
     .vibrate_shot   = scui_ui_func_local_vibrate_shot,

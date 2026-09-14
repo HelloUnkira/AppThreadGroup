@@ -78,6 +78,14 @@ typedef struct {
     float    (*altimeter_pressure)(void);
     float    (*altimeter_altitude)(void);
     
+    /* ui config: */
+    uint32_t     (*cwf_idx_get)(void);                  /* 表盘索引(获取) */
+    void         (*cwf_idx_set)(uint32_t idx);          /* 表盘索引(设置) */
+    uint32_t     (*cwf_dial_num)(void);                 /* 表盘清单(数量) */
+    const char * (*cwf_dial_name)(uint32_t idx);        /* 表盘清单(资源名, 越界返回NULL) */
+    uint32_t     (*cwf_standby_num)(void);              /* 息屏表盘清单(数量) */
+    const char * (*cwf_standby_name)(uint32_t idx);     /* 息屏表盘清单(资源名, 越界返回NULL) */
+    
     /* drv func: */
     void (*vibrate_shot)(void);
     /* keep adding... */

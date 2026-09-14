@@ -7,12 +7,6 @@
 
 #include "scui.h"
 
-static const char * cwf_json_bin[] = {
-    "D10705001.bin",
-    "D10706001.bin",
-    "D10707001.bin",
-};
-
 static struct {
     void   *cwf_json_inst;
     uint8_t cwf_json_idx;
@@ -28,7 +22,7 @@ void scui_ui_scene_standby_event_proc(scui_event_t *event)
         scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
         scui_window_local_res_get(event->object, &scui_ui_res_local);
         // cwf json 测试
-        scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
+        scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, scui_presenter.cwf_standby_name(scui_ui_res_local->cwf_json_idx), event->object);
         break;
     case scui_event_destroy:
         // cwf json 测试
@@ -42,17 +36,17 @@ void scui_ui_scene_standby_event_proc(scui_event_t *event)
         
         if (event->enc_way == 0) {
             scui_ui_res_local->cwf_json_idx += 1;
-        if (scui_ui_res_local->cwf_json_idx >= scui_arr_len(cwf_json_bin))
+        if (scui_ui_res_local->cwf_json_idx >= scui_presenter.cwf_standby_num())
             scui_ui_res_local->cwf_json_idx  = 0;
         }
         if (event->enc_way == 1) {
             scui_ui_res_local->cwf_json_idx -= 1;
-        if (scui_ui_res_local->cwf_json_idx >= scui_arr_len(cwf_json_bin))
-            scui_ui_res_local->cwf_json_idx  = scui_arr_len(cwf_json_bin) - 1;
+        if (scui_ui_res_local->cwf_json_idx >= scui_presenter.cwf_standby_num())
+            scui_ui_res_local->cwf_json_idx  = scui_presenter.cwf_standby_num() - 1;
         }
         
         scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
-        scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
+        scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, scui_presenter.cwf_standby_name(scui_ui_res_local->cwf_json_idx), event->object);
         break;
     }
     case scui_event_ptr_click:
