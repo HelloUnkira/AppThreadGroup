@@ -52,18 +52,18 @@ void scui_ui_scene_sleep_body_event_proc(scui_event_t *event)
         scui_widget_draw_image(event->object, &clip_sleep, image_sleep, NULL, SCUI_COLOR_UNUSED);
         
         /* 标题(静态) */
-        scui_string_update_text(SCUI_UI_SCENE_SLEEP_TITLE, SCUI_LANG_0X004f);
+        scui_string_update_text(SCUI_UI_SCENE_SLEEP_TITLE, SCUI_LANG_IDX_0X004f);
         
         if (scui_presenter.sleep_none()) {
             /* 无睡眠记录 */
             scui_string_update_str(SCUI_UI_SCENE_SLEEP_HOUR, "--");
-            scui_string_update_text(SCUI_UI_SCENE_SLEEP_UNIT, SCUI_LANG_0X0050);
+            scui_string_update_text(SCUI_UI_SCENE_SLEEP_UNIT, SCUI_LANG_IDX_0X0050);
         } else {
             /* 睡眠时长 */
             char digit_str[10] = {0};
             snprintf(digit_str, sizeof(digit_str), "%d", scui_presenter.sleep_hour());
             scui_string_update_str(SCUI_UI_SCENE_SLEEP_HOUR, digit_str);
-            scui_string_update_text(SCUI_UI_SCENE_SLEEP_UNIT, SCUI_LANG_0X0126);
+            scui_string_update_text(SCUI_UI_SCENE_SLEEP_UNIT, SCUI_LANG_IDX_0X0126);
         }
         
         break;

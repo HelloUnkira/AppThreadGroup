@@ -1,2 +1,16 @@
-备注:translate.xlsx的生成见:
-..\lib_self\StudyRecord\KnowledgeSet\B_StudyRecord\Python\ExternDigest\BaiDuTranslate
+多语言词条建议用Agent支持，LLM是它天生专长项，可以快速批量修订
+以下是Agent补充约束信息:
+
+
+多语言表布局(`scui_lang_parser.xlsx` / 工作表 `translate`):
+    第1行: A1=编号区, B1=拼音区, C1 起=语言列表(与数据列一一对应)
+    第1列: 编号区 ID —— SCUI_LANG_IDX_0Xxxxx, 由excel表达式输出
+    第2列: 拼音区 ID —— SCUI_LANG_ABBR_xxxx, 由归一化写入
+             (最多取前 6 个汉字的首字母, 大写; 重复条目追加 _R1~n)
+    第3列起: 各语言文本
+
+
+
+说明:
+    前两列默认留空（自动生成）, 由前端「归一化」按钮写入并直接复写 xlsx; 
+    打包时会默认执行一次归一化;

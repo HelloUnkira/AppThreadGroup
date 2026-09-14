@@ -71,7 +71,7 @@ void scui_ui_scene_spo2_body_event_proc(scui_event_t *event)
         scui_widget_draw_image(event->object, &clip_spo2, image_spo2, NULL, SCUI_COLOR_UNUSED);
         
         /* 标题(静态) */
-        scui_string_update_text(SCUI_UI_SCENE_SPO2_TITLE, SCUI_LANG_0X0040);
+        scui_string_update_text(SCUI_UI_SCENE_SPO2_TITLE, SCUI_LANG_IDX_0X0040);
         
         /* 当前血氧 */
         char digit_str[10] = {0};

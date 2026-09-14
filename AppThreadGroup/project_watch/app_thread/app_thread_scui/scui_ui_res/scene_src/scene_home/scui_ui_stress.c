@@ -86,7 +86,7 @@ void scui_ui_scene_stress_body_event_proc(scui_event_t *event)
         scui_widget_draw_image(event->object, &clip_stress, image_stress, NULL, SCUI_COLOR_UNUSED);
         
         /* 标题(静态) */
-        scui_string_update_text(SCUI_UI_SCENE_STRESS_TITLE, SCUI_LANG_0X0049);
+        scui_string_update_text(SCUI_UI_SCENE_STRESS_TITLE, SCUI_LANG_IDX_0X0049);
         
         /* 当前压力大数字 */
         uint32_t stress_cur = scui_presenter.get_stress_cur();
@@ -95,18 +95,18 @@ void scui_ui_scene_stress_body_event_proc(scui_event_t *event)
         scui_string_update_str(SCUI_UI_SCENE_STRESS_VALUE, digit_str);
         
         /* 压力等级 */
-        scui_handle_t level_handle = SCUI_LANG_0X004b;
-        if (stress_cur >= 50) level_handle = SCUI_LANG_0X004c;
+        scui_handle_t level_handle = SCUI_LANG_IDX_0X004b;
+        if (stress_cur >= 50) level_handle = SCUI_LANG_IDX_0X004c;
         scui_string_update_text(SCUI_UI_SCENE_STRESS_LEVEL, level_handle);
         
         /* 最近测量时间 */
         uint32_t passby_last = scui_presenter.get_stress_passby();
-        scui_handle_t text_unit = SCUI_LANG_0X001d;
-        if (passby_last < 1) text_unit = SCUI_LANG_0X001d;
-        else if (passby_last < 59) text_unit = SCUI_LANG_0X001e;
-        else if (passby_last < 60 * 24) text_unit = SCUI_LANG_0X001f;
-        else if (passby_last < 60 * 24 * 7) text_unit = SCUI_LANG_0X0020;
-        else text_unit = SCUI_LANG_0X01c4;
+        scui_handle_t text_unit = SCUI_LANG_IDX_0X001d;
+        if (passby_last < 1) text_unit = SCUI_LANG_IDX_0X001d;
+        else if (passby_last < 59) text_unit = SCUI_LANG_IDX_0X001e;
+        else if (passby_last < 60 * 24) text_unit = SCUI_LANG_IDX_0X001f;
+        else if (passby_last < 60 * 24 * 7) text_unit = SCUI_LANG_IDX_0X0020;
+        else text_unit = SCUI_LANG_IDX_0X01c4;
         
         char data_unit[50] = {0};
         if (passby_last != 0 && passby_last < 60 * 24 * 7) {

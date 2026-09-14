@@ -6,7 +6,7 @@ cd /d "%~dp0"
 
 rem 前置依赖
 py -3 -m pip install --upgrade pip
-py -3 -m pip install pyinstaller py7zr openpyxl
+py -3 -m pip install pyinstaller py7zr openpyxl pypinyin
 
 rem 打单文件 exe; 各打包脚本作为模块打进(scui_pack_tools 为唯一入口)
 py -3 -m PyInstaller --noconsole --onefile --name scui_pack_tools ^
@@ -18,6 +18,7 @@ py -3 -m PyInstaller --noconsole --onefile --name scui_pack_tools ^
     --hidden-import scui_pack_cwf ^
     --hidden-import py7zr ^
     --hidden-import openpyxl ^
+    --hidden-import pypinyin ^
     "%~dp0scui_pack_tools.py"
 
 if exist "%~dp0dist\scui_pack_tools.exe" (

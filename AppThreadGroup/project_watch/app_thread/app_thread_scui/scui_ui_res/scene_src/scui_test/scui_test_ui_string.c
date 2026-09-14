@@ -57,7 +57,7 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 50;
-        string_maker.text             = SCUI_LANG_0X0029;
+        string_maker.text             = SCUI_LANG_IDX_0X0029;
         string_maker.args.line_under  = 1;
         string_maker.args.line_delete = 0;
         string_maker.args.color.color_s.full = 0xFFFF00FF;
@@ -71,7 +71,7 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 50;
-        string_maker.text             = SCUI_LANG_0X002e;
+        string_maker.text             = SCUI_LANG_IDX_0X002e;
         string_maker.args.line_under  = 0;
         string_maker.args.line_delete = 1;
         string_maker.args.color.color_s.full = 0xFFFF0000;
@@ -85,7 +85,7 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 130;
-        string_maker.text             = SCUI_LANG_0X0034;
+        string_maker.text             = SCUI_LANG_IDX_0X0034;
         string_maker.args.line_under  = 1;
         string_maker.args.line_delete = 0;
         string_maker.args.color.color_s.full = 0xFF00FF00;
@@ -100,7 +100,7 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 130;
-        string_maker.text             = SCUI_LANG_0X0042;
+        string_maker.text             = SCUI_LANG_IDX_0X0042;
         string_maker.args.line_under  = 0;
         string_maker.args.line_delete = 1;
         string_maker.args.color.color_s.full = 0xFF0000FF;

@@ -86,9 +86,9 @@ void scui_ui_scene_hr_body_event_proc(scui_event_t *event)
         scui_widget_draw_image(event->object, &clip_heart, image_heart, NULL, SCUI_COLOR_UNUSED);
         
         /* 标题/单位/按钮文字(静态) */
-        scui_string_update_text(SCUI_UI_SCENE_HR_TITLE, SCUI_LANG_0X0019);
-        scui_string_update_text(SCUI_UI_SCENE_HR_UNIT, SCUI_LANG_0X0021);
-        scui_string_update_text(SCUI_UI_SCENE_HR_BTN_TEXT, SCUI_LANG_0X002a);
+        scui_string_update_text(SCUI_UI_SCENE_HR_TITLE, SCUI_LANG_IDX_0X0019);
+        scui_string_update_text(SCUI_UI_SCENE_HR_UNIT, SCUI_LANG_IDX_0X0021);
+        scui_string_update_text(SCUI_UI_SCENE_HR_BTN_TEXT, SCUI_LANG_IDX_0X002a);
         
         /* 当前心率 */
         char digit_str[10] = {0};
@@ -97,12 +97,12 @@ void scui_ui_scene_hr_body_event_proc(scui_event_t *event)
         
         /* 最近测量时间 */
         uint32_t passby_last = scui_presenter.get_hr_passby();
-        scui_handle_t text_unit = SCUI_LANG_0X001d;
-        if (passby_last < 1) text_unit = SCUI_LANG_0X001d;
-        else if (passby_last < 59) text_unit = SCUI_LANG_0X001e;
-        else if (passby_last < 60 * 24) text_unit = SCUI_LANG_0X001f;
-        else if (passby_last < 60 * 24 * 7) text_unit = SCUI_LANG_0X0020;
-        else text_unit = SCUI_LANG_0X01c4;
+        scui_handle_t text_unit = SCUI_LANG_IDX_0X001d;
+        if (passby_last < 1) text_unit = SCUI_LANG_IDX_0X001d;
+        else if (passby_last < 59) text_unit = SCUI_LANG_IDX_0X001e;
+        else if (passby_last < 60 * 24) text_unit = SCUI_LANG_IDX_0X001f;
+        else if (passby_last < 60 * 24 * 7) text_unit = SCUI_LANG_IDX_0X0020;
+        else text_unit = SCUI_LANG_IDX_0X01c4;
         
         char data_unit[50] = {0};
         if (passby_last != 0 && passby_last < 60 * 24 * 7) {

@@ -1686,10 +1686,13 @@ class PackApp(object):
         self.tabs['lang'] = f
         self.lang_data = None     # (languages, rows)
         self.lang_sel = None
+        self.lang_col = 0         # 中栏预览的语言列(0=第1个语言, 默认zh)
+        self.mframe = None        # 中栏 LabelFrame(标题随预览语言变化)
 
         # 顶部
         top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
         ttk.Button(top, text='执行 lang 打包', command=lambda: self._run('lang')).pack(side='right')
+        ttk.Button(top, text='归一化', command=self._lang_normalize).pack(side='right', padx=(0, 6))
         ttk.Label(top, text='建议让 Agent 进行本任务开发，此界面用于浏览为主',
                   foreground='#c55').pack(side='left')
 
@@ -1702,12 +1705,12 @@ class PackApp(object):
         lvs = ttk.Scrollbar(lf, orient='vertical', command=self.ltree.yview)
         self.ltree.configure(yscrollcommand=lvs.set)
         self.ltree.pack(side='left', fill='both', expand=True); lvs.pack(side='right', fill='y')
+        self.ltree.bind('<<TreeviewSelect>>', self._lang_lang_pick)
 
-        # 中: 句柄行列表(zh 提示, 带省略号)
-        mf = ttk.LabelFrame(hp, text=' 句柄行(zh 预览) ', padding=(4, 4)); hp.add(mf, weight=3)
-        self.mtree = ttk.Treeview(mf, columns=('idx',), show='tree headings', selectmode='browse')
-        self.mtree.heading('#0', text='句柄行'); self.mtree.heading('idx', text='#')
-        self.mtree.column('idx', width=40, anchor='e', stretch=False)
+        # 中: 句柄行列表(当前语言列预览, 带省略号)
+        mf = ttk.LabelFrame(hp, text=' 句柄行预览 ', padding=(4, 4)); hp.add(mf, weight=3)
+        self.mframe = mf
+        self.mtree = ttk.Treeview(mf, show='tree', selectmode='browse')
         mvs = ttk.Scrollbar(mf, orient='vertical', command=self.mtree.yview)
         self.mtree.configure(yscrollcommand=mvs.set)
         self.mtree.pack(side='left', fill='both', expand=True); mvs.pack(side='right', fill='y')
@@ -1721,6 +1724,52 @@ class PackApp(object):
         self.nb.add(f, text='lang  ')
         self._lang_load()
 
+    def _lang_mod(self):
+        # 导入后端 lang 模块(共享表布局常量与归一化实现)
+        if self.tools not in sys.path:
+            sys.path.insert(0, self.tools)
+        mod = importlib.import_module('scui_pack_lang')
+        mod.SCUI_UI_ROOT = self.ui
+        mod.SCUI_TOOLS   = self.tools
+        return mod
+
+    def _lang_normalize(self):
+        # 归一化: 第1列编号区(excel 表达式) / 第2列拼音区(自定义), 直接复写 xlsx
+        try:
+            mod = self._lang_mod()
+            langs, nrow = mod.normalize_scui_lang_sheet(
+                self.in_abs['lang'], log=lambda s: self._append_log('lang', str(s) + '\n'))
+            self._append_log('lang', '归一化完成: %d 行, %d 语言\n' % (nrow, len(langs)))
+            self._lang_load()
+        except Exception as e:
+            self._append_log('lang', '归一化失败: %r\n' % e)
+
+    def _lang_fill_rows(self):
+        # 中栏: 句柄行预览(按当前语言列, 带省略号)
+        self.mtree.delete(*self.mtree.get_children())
+        if self.lang_data is None or self.mframe is None:
+            return
+        langs, data = self.lang_data
+        if not langs:
+            return
+        if self.lang_col >= len(langs):
+            self.lang_col = 0
+        ci = self._lang_mod().SCUI_LANG_COL_DATA
+        c  = ci + self.lang_col
+        self.mframe.configure(text=' 句柄行预览 (%s) ' % langs[self.lang_col])
+        for i, row in enumerate(data):
+            val = row[c] if c < len(row) else ''
+            show = val if len(val) <= 24 else val[:22] + '\u2026'
+            self.mtree.insert('', 'end', iid='r%d' % i, text=show)
+
+    def _lang_lang_pick(self, _ev=None):
+        # 左栏选中语言 -> 中栏切换为该语言列预览
+        sel = self.ltree.selection()
+        if not sel or self.lang_data is None:
+            return
+        self.lang_col = int(sel[0][4:])
+        self._lang_fill_rows()
+
     def _lang_load(self):
         self.ltree.delete(*self.ltree.get_children())
         self.mtree.delete(*self.mtree.get_children())
@@ -1728,36 +1777,31 @@ class PackApp(object):
         self.lang_data = None; self.lang_sel = None
 
         src = self.in_abs['lang']
-        cfg = os.path.join(src, 'scui_res_lang.json')
-        if not os.path.exists(cfg):
-            self._append_log('lang', '未找到配置: %s\n' % self._rel_log(cfg))
-            return
         try:
-            with open(cfg, 'r', encoding='utf-8') as fp:
-                j = json.load(fp)
-            langs = j.get('language', [])
-            xlsx_path = os.path.join(src, j.get('xlsx', ''))
-            sheet_name = j.get('sheet', '')
-            if not os.path.exists(xlsx_path):
-                self._append_log('lang', '未找到 xlsx: %s\n' % self._rel_log(xlsx_path))
+            mod = self._lang_mod()
+            path = os.path.join(src, mod.SCUI_LANG_XLSX)
+            if not os.path.exists(path):
+                self._append_log('lang', '未找到 xlsx: %s\n' % self._rel_log(path))
                 return
             import openpyxl
-            wb = openpyxl.load_workbook(xlsx_path, read_only=True, data_only=True)
-            ws = wb[sheet_name] if sheet_name in wb.sheetnames else wb[wb.sheetnames[0]]
+            wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+            ws = wb[mod.SCUI_LANG_SHEET] if mod.SCUI_LANG_SHEET in wb.sheetnames else wb[wb.sheetnames[0]]
             rows = []
             for row in ws.iter_rows(values_only=True):
                 rows.append([str(c) if c is not None else '' for c in row])
             wb.close()
-            self.lang_data = (langs, rows)
-            # 左: 语言列表
+            # 第1行: 首两列固定占用(编号区/拼音区), 其后为语言列表
+            head = rows[mod.SCUI_LANG_ROW_HEAD] if rows else []
+            ci = mod.SCUI_LANG_COL_DATA
+            langs = [str(h).strip() for h in head[ci:] if str(h).strip() != '']
+            data = rows[mod.SCUI_LANG_ROW_HEAD + 1:]
+            self.lang_data = (langs, data)
+            # 左: 语言列表(默认选中第 1 个语言列=zh)
             for i, l in enumerate(langs):
                 self.ltree.insert('', 'end', text=l, iid='lang%d' % i)
-            # 中: 句柄行(第 0 列为 zh, 带省略号)
-            for i, row in enumerate(rows):
-                zh = row[0] if row else ''
-                show = zh if len(zh) <= 24 else zh[:22] + '…'
-                self.mtree.insert('', 'end', iid='r%d' % i, text=show, values=(i,))
-            self._append_log('lang', '已加载 %d 行, %d 语言\n' % (len(rows), len(langs)))
+            self.ltree.selection_set('lang%d' % min(self.lang_col, max(len(langs) - 1, 0)))
+            self._lang_fill_rows()
+            self._append_log('lang', '已加载 %d 行, %d 语言 < %s\n' % (len(data), len(langs), mod.SCUI_LANG_XLSX))
         except Exception as e:
             self._append_log('lang', '加载失败: %r\n' % e)
 
@@ -1766,18 +1810,24 @@ class PackApp(object):
         if not sel or self.lang_data is None:
             return
         idx = int(sel[0][1:])
-        langs, rows = self.lang_data
-        if idx >= len(rows):
+        langs, data = self.lang_data
+        if idx >= len(data):
             return
-        row = rows[idx]
+        row = data[idx]
+        mod = self._lang_mod()
+        ci   = mod.SCUI_LANG_COL_DATA
+        abbr = row[mod.SCUI_LANG_COL_ABBR] if mod.SCUI_LANG_COL_ABBR < len(row) else ''
         self.rtext.configure(state='normal')
         self.rtext.delete('1.0', 'end')
-        self.rtext.insert('end', '句柄号: SCUI_LANG_0X%04x\n' % idx)
+        self.rtext.insert('end', '编号区: SCUI_LANG_IDX_0X%04x\n' % idx)
+        self.rtext.insert('end', '拼音区: %s\n' % (abbr if abbr else '(未归一化)'))
         self.rtext.insert('end', '-' * 40 + '\n')
-        for ci, lang in enumerate(langs):
-            val = row[ci] if ci < len(row) else ''
-            self.rtext.insert('end', '%s: %s\n' % (lang, val))
+        for li, lang in enumerate(langs):
+            val = row[ci + li] if ci + li < len(row) else ''
+            mark = '   <' if li == self.lang_col else ''
+            self.rtext.insert('end', '%s: %s%s\n' % (lang, val, mark))
         self.rtext.configure(state='disabled')
+
 
     #--------------- cwf 子界面(左:协议类型+注释 | 中:cwf浏览 | 右:json编辑) ---------------
     def _build_cwf_tab(self):

@@ -37,7 +37,7 @@ void scui_ui_scene_activity_event_proc(scui_event_t *event)
         if (event->key_id != scui_event_key_val_enter)
             break;
         
-        // scui_ui_scene_popup_exec(SCUI_LANG_0X002f, NULL);
+        // scui_ui_scene_popup_exec(SCUI_LANG_IDX_0X002f, NULL);
         scui_event_mask_over(event);
         break;
     default:
@@ -177,7 +177,7 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
         string_maker.args.color.color_s.full    = 0xFFFFFFFF;
         string_maker.args.color.color_e.full    = 0xFFFFFFFF;
         string_maker.args.color.filter          = true;
-        string_maker.text                       = SCUI_LANG_0X0017;
+        string_maker.text                       = SCUI_LANG_IDX_0X0017;
         string_maker.font_idx                   = SCUI_FONT_IDX_36;
         scui_widget_create(&string_maker, &string_handle);
         break;
@@ -205,13 +205,13 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
         for (int16_t idx = 0; idx < 7; idx++) {
             
             uint32_t text_week[] = {
-                SCUI_LANG_0X0016, /* 日 */
-                SCUI_LANG_0X0010, /* 一 */
-                SCUI_LANG_0X0011, /* 二 */
-                SCUI_LANG_0X0012, /* 三 */
-                SCUI_LANG_0X0013, /* 四 */
-                SCUI_LANG_0X0014, /* 五 */
-                SCUI_LANG_0X0015, /* 六 */
+                SCUI_LANG_IDX_0X0016, /* 日 */
+                SCUI_LANG_IDX_0X0010, /* 一 */
+                SCUI_LANG_IDX_0X0011, /* 二 */
+                SCUI_LANG_IDX_0X0012, /* 三 */
+                SCUI_LANG_IDX_0X0013, /* 四 */
+                SCUI_LANG_IDX_0X0014, /* 五 */
+                SCUI_LANG_IDX_0X0015, /* 六 */
             };
             
             /* 红色小圆圈绘制 */
@@ -419,7 +419,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         args.clip = clip;
         args.clip.w = SCUI_HOR_RES - 40 * 2; args.clip.x += 40;
         args.clip.h = 40; args.clip.y += 25 - 16;
-        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000a);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_IDX_0X000a);
         
         scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
         uint8_t char_digit[10] = {0};
@@ -443,7 +443,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         args.clip = clip;
         args.clip.y += 52; args.clip.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
         args.clip.h  = 40; args.clip.w = SCUI_HOR_RES - (args.clip.x - clip.x) - 40;
-        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000d);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_IDX_0X000d);
 
         for (int16_t idx = 0; idx <= 24; idx++) {
 
@@ -603,7 +603,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         args.clip = clip;
         args.clip.w = SCUI_HOR_RES - 40 * 2; args.clip.x += 40;
         args.clip.h = 40; args.clip.y += 25 - 16;
-        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000c);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_IDX_0X000c);
         
         scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
         uint8_t char_digit[10] = {0};
@@ -627,7 +627,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         args.clip = clip;
         args.clip.y += 52; args.clip.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
         args.clip.h  = 40; args.clip.w = SCUI_HOR_RES - (args.clip.x - clip.x) - 40;
-        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000f);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_IDX_0X000f);
 
         for (int16_t idx = 0; idx <= 24; idx++) {
 
@@ -788,7 +788,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         args.clip = clip;
         args.clip.w = SCUI_HOR_RES - 40 * 2; args.clip.x += 40;
         args.clip.h = 40; args.clip.y += 25 - 16;
-        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000b);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_IDX_0X000b);
         
         scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
         uint8_t char_digit[10] = {0};
@@ -812,7 +812,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         args.clip = clip;
         args.clip.y += 52; args.clip.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
         args.clip.h  = 40; args.clip.w = SCUI_HOR_RES - (args.clip.x - clip.x) - 40;
-        scui_custom_draw_text(event->object, &args, SCUI_LANG_0X000e);
+        scui_custom_draw_text(event->object, &args, SCUI_LANG_IDX_0X000e);
 
         for (int16_t idx = 0; idx <= 24; idx++) {
 
