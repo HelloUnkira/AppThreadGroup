@@ -21200,7 +21200,7 @@ void scui_lang_set(scui_lang_type_t *type)
 	SCUI_ASSERT(type != NULL);
 	scui_lang_type = *type;
 	
-	scui_event_define(event, SCUI_HANDLE_SYSTEM, false, scui_event_lang_change, scui_event_absorb_none);
+	scui_event_define_absorb_none(event, SCUI_HANDLE_SYSTEM, false, scui_event_lang_change);
 	scui_event_notify(&event);
 }
 

@@ -101,8 +101,8 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool abs)
     }
     
     /* 子控件更新, 父控件更新 */
-    scui_event_define(event_c, widget->myself, true, scui_event_self_pos,  scui_event_absorb_none);
-    scui_event_define(event_p, widget->parent, true, scui_event_child_pos, scui_event_absorb_none);
+    scui_event_define_absorb_none(event_c, widget->myself, true, scui_event_self_pos);
+    scui_event_define_absorb_none(event_p, widget->parent, true, scui_event_child_pos);
     scui_event_notify(&event_c); if (widget->parent == SCUI_HANDLE_INVALID) return;
     scui_event_notify(&event_p);
 }
@@ -220,8 +220,8 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     scui_widget_draw(widget->myself, NULL, false, 0);
     
     /* 子控件更新, 父控件更新 */
-    scui_event_define(event_c, widget->myself, true, scui_event_self_size,  scui_event_absorb_none);
-    scui_event_define(event_p, widget->parent, true, scui_event_child_size, scui_event_absorb_none);
+    scui_event_define_absorb_none(event_c, widget->myself, true, scui_event_self_size);
+    scui_event_define_absorb_none(event_p, widget->parent, true, scui_event_child_size);
     scui_event_notify(&event_c);
     scui_event_notify(&event_p);
 }

@@ -322,8 +322,8 @@ def encode_scui_lang_parser_c(file, ws, langs, row_s, row_e, col_s, col_e):
     file.write(' *@param type 语言类型编号\n */\n\n')
     file.write('void scui_lang_set(scui_lang_type_t *type)\n{\n')
     file.write('\tSCUI_ASSERT(type != NULL);\n\tscui_lang_type = *type;\n\t\n')
-    file.write('\tscui_event_define(event, SCUI_HANDLE_SYSTEM, false, ')
-    file.write('scui_event_lang_change, scui_event_absorb_none);\n')
+    file.write('\tscui_event_define_absorb_none(event, SCUI_HANDLE_SYSTEM, false, ')
+    file.write('scui_event_lang_change);\n')
     file.write('\tscui_event_notify(&event);\n}\n\n')
     # 填充函数定义或者声明
     file.write('/*@brief 多国语字符串转换\n')

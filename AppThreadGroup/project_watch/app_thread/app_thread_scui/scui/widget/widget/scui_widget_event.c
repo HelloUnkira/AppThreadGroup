@@ -99,7 +99,7 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync, scui_h
     
     /* 为根控件添加绘制事件 */
     scui_handle_t handle_t = scui_widget_tree(handle);
-    scui_event_define(event, handle_t, sync, scui_event_draw, scui_event_absorb_none);
+    scui_event_define_absorb_none(event, handle_t, sync, scui_event_draw);
     scui_event_notify(&event);
     
     /* 同步绘制后移除调度队列中 */
@@ -119,7 +119,7 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
 {
     SCUI_LOG_INFO("%u", handle);
     
-    scui_event_define(event, SCUI_HANDLE_SYSTEM, sync, scui_event_refr, scui_event_absorb_none);
+    scui_event_define_absorb_none(event, SCUI_HANDLE_SYSTEM, sync, scui_event_refr);
     scui_event_notify(&event);
 }
 

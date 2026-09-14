@@ -5,6 +5,10 @@
 #define scui_event_define(event_v, object_v, sync_v, type_v, absorb_v)  \
 scui_event_t event_v = {.object = object_v, .style.sync = sync_v,.type = type_v, .absorb = absorb_v,};
 
+/* 常用事件配置组合(吸收函数固定为 scui_event_absorb_none) */
+#define scui_event_define_absorb_none(event_v, object_v, sync_v, type_v)  \
+scui_event_t event_v = {.object = object_v, .style.sync = sync_v,.type = type_v, .absorb = scui_event_absorb_none,};
+
 /*@brief 事件引擎注册响应回调
  *@param event_cb 事件回调
  */
