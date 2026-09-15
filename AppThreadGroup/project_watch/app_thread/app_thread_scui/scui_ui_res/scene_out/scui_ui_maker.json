@@ -9,6 +9,7 @@
                 "widget.style.fully_bg": "true",
                 "widget.clip.w": "SCUI_HOR_RES",
                 "widget.clip.h": "SCUI_VER_RES",
+                "preload": "1",
                 "level": "0",
                 "switch_enc": "scui_opt_pos_all",
                 "switch_key": "scui_opt_pos_all",
@@ -31,21 +32,24 @@
             "class": "scui_widget_type_scroll",
             "default": {
                 "widget.type": "scui_widget_type_scroll",
-                "widget.clip.w": "SCUI_HOR_RES",
-                "widget.clip.h": "SCUI_VER_RES",
                 "widget.style.indev_enc": "true",
                 "widget.style.indev_key": "true",
-                "keyid_fdir": "SCUI_WIDGET_SCROLL_KEY_FDIR",
-                "keyid_bdir": "SCUI_WIDGET_SCROLL_KEY_BDIR",
+                "widget.clip.w": "SCUI_HOR_RES",
+                "widget.clip.h": "SCUI_VER_RES",
                 "pos": "scui_opt_pos_c",
-                "dir": "scui_opt_dir_ver"
+                "dir": "scui_opt_dir_ver",
+                "skip": "scui_opt_pos_all",
+                "space": "10",
+                "fling_page": "1",
+                "springback": "70",
+                "keyid_fdir": "SCUI_WIDGET_SCROLL_KEY_FDIR",
+                "keyid_bdir": "SCUI_WIDGET_SCROLL_KEY_BDIR"
             }
         },
         {
             "class": "scui_widget_type_custom",
             "default": {
-                "widget.type": "scui_widget_type_custom",
-                "widget.style.sched_anima": "true"
+                "widget.type": "scui_widget_type_custom"
             }
         },
         {
@@ -56,7 +60,8 @@
                 "args.line_width": "2",
                 "args.align_ver": "2",
                 "args.color.color_s.full": "0xFFFFFFFF",
-                "args.color.color_e.full": "0xFFFFFFFF"
+                "args.color.color_e.full": "0xFFFFFFFF",
+                "args.color.filter": "true"
             }
         },
         {
@@ -64,19 +69,27 @@
             "default": {
                 "widget.type": "scui_widget_type_symbol",
                 "widget.clip.w": "SCUI_WIDGET_AUTO_W",
-                "widget.clip.h": "SCUI_WIDGET_AUTO_H"
+                "widget.clip.h": "SCUI_WIDGET_AUTO_H",
+                "color.color.full": "0xFFFFFFFF"
             }
         },
         {
             "class": "scui_widget_type_roller",
             "default": {
-                "widget.type": "scui_widget_type_roller"
+                "widget.type": "scui_widget_type_roller",
+                "widget.child_num": "60",
+                "scroll.pos": "scui_opt_pos_c",
+                "scroll.dir": "scui_opt_dir_ver",
+                "scroll.skip": "scui_opt_pos_none",
+                "scroll.loop": "true"
             }
         },
         {
             "class": "scui_widget_type_ximage",
             "default": {
-                "widget.type": "scui_widget_type_ximage"
+                "widget.type": "scui_widget_type_ximage",
+                "widget.clip.w": "SCUI_WIDGET_AUTO_W",
+                "widget.clip.h": "SCUI_WIDGET_AUTO_H"
             }
         },
         {

@@ -73,9 +73,9 @@ _IMG_CFG_DEFS = [      # (键, bool/int, 标签, 选项)
 
 # 外源 lv_font_conv 命令模板(前置: cmd 中 lv_font_conv 可用)
 _FONT_SYMBOL_RANGE = '61441,61448,61451,61452,61452,61453,61457,61459,61461,61465,61468,61473,61478,61479,61480,61502,61507,61512,61515,61516,61517,61521,61522,61523,61524,61543,61544,61550,61552,61553,61556,61559,61560,61561,61563,61587,61589,61636,61637,61639,61641,61664,61671,61674,61683,61724,61732,61787,61931,62016,62017,62018,62019,62020,62087,62099,62212,62189,62810,63426,63650'
-_FONT_EU_RANGE  = '-r 0x00-0x7F -r 0x80-0xFF -r 0x100-0x17F -r 0x180-0x24F -r 0x2B0-0x2FF'
-_FONT_CJK_RANGE = '-r 0x00-0x7F -r 0x3000-0x303F -r 0x3040-0x309F -r 0x30A0-0x30FF -r 0x4E00-0x9FFF'
-_FONT_AP_RANGE  = '-r 0x00-0x7F -r 0x0600-0x06FF -r 0x0750-0x077F -r 0x08A0-0x08FF -r 0xFB50-0xFDFF -r 0xFE70-0xFEFF'
+_FONT_EU_RANGE  = '-r 0x20-0x7F -r 0x80-0xFF -r 0x100-0x17F -r 0x180-0x24F -r 0x2B0-0x2FF'
+_FONT_CJK_RANGE = '-r 0x20-0x7F -r 0x3000-0x303F -r 0x3040-0x309F -r 0x30A0-0x30FF -r 0x4E00-0x9FFF'
+_FONT_AP_RANGE  = '-r 0x20-0x7F -r 0x200C -r 0x2265 -r 0x0600-0x06FF -r 0xFB50-0xFDFF -r 0xFE70-0xFEFF'
 _FONT_CMD_ORD   = 'lv_font_conv --font "{}" {} --size {} --format bin --bpp {} -o "{}" --force-fast-kern-format'
 _FONT_CMD_DIY   = 'lv_font_conv --font "{}" {} --size {} --format bin --bpp {} -o "{}" --no-kerning'
 
@@ -2289,7 +2289,7 @@ class PackApp(object):
             # 类型: conv(生成) / copy(拷贝字库); bin 填前缀, size 逗号分隔生成多条 _size.bin
             {'t': 'conv', 'font': 'font_zh_en.ttf',   'range': '-r 0x20-0x7f',              'size': sz, 'bpp': '8', 'bin': 'font_ascii',  'mode': 'diy'},
             {'t': 'conv', 'font': 'font_symbol.woff', 'range': '-r ' + _FONT_SYMBOL_RANGE, 'size': sz, 'bpp': '8', 'bin': 'font_symbol', 'mode': 'ord'},
-            {'t': 'conv', 'font': 'font_en_2.ttf',    'range': '-r 0x00-0x7f',              'size': '32,36', 'bpp': '8', 'bin': 'font_en',  'mode': 'ord'},
+            {'t': 'conv', 'font': 'font_en_2.ttf',    'range': '-r 0x20-0x7f',              'size': '32,36', 'bpp': '8', 'bin': 'font_en',  'mode': 'ord'},
             {'t': 'conv', 'font': 'font_zh_2.ttf',    'range': _FONT_EU_RANGE,              'size': '32,36', 'bpp': '4', 'bin': 'font_eu',  'mode': 'diy'},
             {'t': 'conv', 'font': 'font_zh_1.ttf',    'range': _FONT_CJK_RANGE,             'size': '32,36', 'bpp': '2', 'bin': 'font_cjk', 'mode': 'diy'},
             {'t': 'conv', 'font': 'DejaVuSans.ttf',    'range': _FONT_AP_RANGE,               'size': '32,36', 'bpp': '4', 'bin': 'font_ap',  'mode': 'diy'},

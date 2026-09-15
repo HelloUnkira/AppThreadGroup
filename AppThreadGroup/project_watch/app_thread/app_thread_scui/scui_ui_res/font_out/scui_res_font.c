@@ -391,7 +391,7 @@ static const scui_font_t font_ap_32_bin = {
 	.font_lang	 = scui_font_lang_ap,
 	.font_size	 = 32,
 	.data_bin	 = 0x850af0,
-	.size_bin	 = 0x19c04,
+	.size_bin	 = 0xffd4,
 	
 	.base_line_ext = 0x0,
 	.line_height_ext = 0x0,
@@ -402,8 +402,8 @@ static const scui_font_t font_ap_36_bin = {
 	.font_name	 = "font_ap_36.bin",
 	.font_lang	 = scui_font_lang_ap,
 	.font_size	 = 36,
-	.data_bin	 = 0x86a6f4,
-	.size_bin	 = 0x202dc,
+	.data_bin	 = 0x860ac4,
+	.size_bin	 = 0x12eac,
 	
 	.base_line_ext = 0x0,
 	.line_height_ext = 0x0,
@@ -414,7 +414,7 @@ static const scui_font_t font_tinyTTF_ttf = {
 	.font_name	 = "font_tinyTTF.ttf",
 	.font_lang	 = scui_font_lang_multi,
 	.font_size	 = 0,
-	.data_bin	 = 0x88a9d0,
+	.data_bin	 = 0x873970,
 	.size_bin	 = 0xc256c4,
 	
 	.base_line_ext = 0x0,

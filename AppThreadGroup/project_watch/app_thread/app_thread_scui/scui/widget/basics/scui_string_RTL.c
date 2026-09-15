@@ -2,7 +2,7 @@
  *    字符串变形(RTL语言连字等)
  *    字符串双向调序(BIDI, 视觉顺序)
  *    取用了lv_txt_ap.c/.h整理得来
- *    取用了lv_bidi.c整理得来
+ *    取用了lv_bidi.c/.h整理得来
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
@@ -216,9 +216,8 @@ void scui_string_RTL(scui_string_args_t *args)
     
     for(uint32_t idx = 0; idx < str_len; idx++) ch_enc[idx] = 0;
     for(uint32_t idx = 0; idx < idx_ofs; idx++) ch_enc[idx] = ch_fin[idx];
-    ch_enc[idx_ofs] = 0;
-    /* 变换后字符数会减少(lam-alef 双字符合一), 原地改写需同步长度 */
-    args->number = idx_ofs;
+    ch_enc[idx_ofs]  = 0; args->number = idx_ofs;
+    /* 变换后字符数会减少, 原地改写需同步长度 */
     
     SCUI_MEM_FREE(ch_fin);
 }
@@ -264,6 +263,12 @@ static bool scui_bidi_letter_is_weak(uint32_t letter)
     for (uint32_t idx = 0; weaks[idx] != '\0'; idx++)
         if (letter == (uint32_t)weaks[idx])
             return true;
+    
+    /* 阿拉伯-印度数字(0x0660-0x0669)与波斯数字(0x06F0-0x06F9): RTL中保持LTR组 */
+    if (letter >= 0x0660 && letter <= 0x0669) return true;
+    if (letter >= 0x06F0 && letter <= 0x06F9) return true;
+    /* 阿拉伯百分号(0x066A): 归weak, 与数字组一并保持 */
+    if (letter == 0x066A) return true;
     
     return false;
 }
@@ -423,6 +428,15 @@ static scui_bidi_dir_t scui_bidi_get_next_run(uint32_t *unicode, scui_bidi_dir_t
     uint32_t max_len, uint32_t *len)
 {
     uint32_t i = 0;
+    /* 防御: 空段/段首为分隔符或0时, 直接返回单字符run, 杜绝 run_len=0 死循环 */
+    if (max_len == 0) {
+        *len = 0;
+        return base_dir;
+    }
+    if (unicode[0] == '\0' || unicode[0] == '\n' || unicode[0] == '\r') {
+        *len = 1;
+        return base_dir;
+    }
     uint32_t letter = unicode[0];
     scui_bidi_dir_t dir = scui_bidi_letter_dir(letter);
     if (dir == scui_bidi_dir_neutral)
@@ -441,13 +455,13 @@ static scui_bidi_dir_t scui_bidi_get_next_run(uint32_t *unicode, scui_bidi_dir_t
         
         if (i >= max_len) {
             *len = i;
-            return base_dir;
+            /* 纯weak/neutral组: 保持LTR顺序, 不按base逆序 */
+            return scui_bidi_dir_ltr;
         }
     }
     
     scui_bidi_dir_t run_dir = dir;
     uint32_t i_prev = i;
-    uint32_t i_last_strong = i;
     
     /* 找到下一个方向不同的字符 */
     scui_bidi_dir_t next_dir = base_dir;
@@ -465,30 +479,19 @@ static scui_bidi_dir_t scui_bidi_get_next_run(uint32_t *unicode, scui_bidi_dir_t
                 next_dir = scui_bidi_dir_ltr;
         }
         
-        /* 发现新方向run */
+        /* 发现新方向run: 末尾neutral并入本run, 防止单独成run后被按base错位 */
         if ((next_dir == scui_bidi_dir_rtl || next_dir == scui_bidi_dir_ltr) &&
             next_dir != run_dir) {
-            /* run_dir == base_dir 时包含末尾neutral */
-            if (run_dir == base_dir)
-                *len = i_prev;
-            /* run_dir != base_dir 时排除末尾neutral */
-            else
-                *len = i_last_strong;
+            *len = i_prev;
             
             return run_dir;
         }
         
-        if (next_dir != scui_bidi_dir_neutral)
-            i_last_strong = i;
-        
         i_prev = i;
     }
     
-    /* 处理到末尾, 末尾neutral应用base_dir */
-    if (run_dir == base_dir)
-        *len = i_prev;
-    else
-        *len = i_last_strong;
+    /* 处理到末尾: 末尾neutral并入本run(与循环内一致) */
+    *len = i_prev;
     
     return run_dir;
 }
@@ -536,7 +539,8 @@ static void scui_bidi_rtl_reverse(uint32_t *unicode, uint32_t len)
     
     for (uint32_t idx = 0; idx < len; idx++)
         unicode[idx] = unicode_out[idx];
-    unicode[len] = 0;
+    /* 不写 unicode[len]=0: 该位置属于相邻run的有效区, 会被逆序写回覆盖成0
+       段尾0由 process_paragraph 统一写 */
     
     SCUI_MEM_FREE(unicode_out);
 }
@@ -615,9 +619,13 @@ static void scui_bidi_process_paragraph(uint32_t *unicode, uint32_t len, scui_bi
         }
         
         rd += run_len;
+        /* 防御: run不前进说明输入异常, 跳出避免死循环 */
+        if (run_len == 0)
+            break;
     }
     
-    unicode[len] = 0;
+    /* 段尾0只写src缓冲(见前), 不写原数组: 段尾可能不是数组末尾(多行),
+       写0会覆盖段落分隔的换行符, 破坏后续段落划分 */
     SCUI_MEM_FREE(src);
 }
 

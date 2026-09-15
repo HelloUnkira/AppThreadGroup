@@ -17,6 +17,7 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		window_maker->widget.style.fully_bg  = true;
 		window_maker->widget.clip.w          = SCUI_HOR_RES;
 		window_maker->widget.clip.h          = SCUI_VER_RES;
+		window_maker->preload                = 1;
 		window_maker->level                  = 0;
 		window_maker->switch_enc             = scui_opt_pos_all;
 		window_maker->switch_key             = scui_opt_pos_all;
@@ -39,21 +40,24 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		scui_scroll_maker_t *scroll_maker = (scui_scroll_maker_t *)maker;
 		
 		scroll_maker->widget.type             = scui_widget_type_scroll;
-		scroll_maker->widget.clip.w           = SCUI_HOR_RES;
-		scroll_maker->widget.clip.h           = SCUI_VER_RES;
 		scroll_maker->widget.style.indev_enc  = true;
 		scroll_maker->widget.style.indev_key  = true;
-		scroll_maker->keyid_fdir              = SCUI_WIDGET_SCROLL_KEY_FDIR;
-		scroll_maker->keyid_bdir              = SCUI_WIDGET_SCROLL_KEY_BDIR;
+		scroll_maker->widget.clip.w           = SCUI_HOR_RES;
+		scroll_maker->widget.clip.h           = SCUI_VER_RES;
 		scroll_maker->pos                     = scui_opt_pos_c;
 		scroll_maker->dir                     = scui_opt_dir_ver;
+		scroll_maker->skip                    = scui_opt_pos_all;
+		scroll_maker->space                   = 10;
+		scroll_maker->fling_page              = 1;
+		scroll_maker->springback              = 70;
+		scroll_maker->keyid_fdir              = SCUI_WIDGET_SCROLL_KEY_FDIR;
+		scroll_maker->keyid_bdir              = SCUI_WIDGET_SCROLL_KEY_BDIR;
 		break;
 	}
 	case scui_widget_type_custom: {
 		scui_custom_maker_t *custom_maker = (scui_custom_maker_t *)maker;
 		
-		custom_maker->widget.type               = scui_widget_type_custom;
-		custom_maker->widget.style.sched_anima  = true;
+		custom_maker->widget.type  = scui_widget_type_custom;
 		break;
 	}
 	case scui_widget_type_string: {
@@ -65,26 +69,35 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		string_maker->args.align_ver           = 2;
 		string_maker->args.color.color_s.full  = 0xFFFFFFFF;
 		string_maker->args.color.color_e.full  = 0xFFFFFFFF;
+		string_maker->args.color.filter        = true;
 		break;
 	}
 	case scui_widget_type_symbol: {
 		scui_symbol_maker_t *symbol_maker = (scui_symbol_maker_t *)maker;
 		
-		symbol_maker->widget.type    = scui_widget_type_symbol;
-		symbol_maker->widget.clip.w  = SCUI_WIDGET_AUTO_W;
-		symbol_maker->widget.clip.h  = SCUI_WIDGET_AUTO_H;
+		symbol_maker->widget.type       = scui_widget_type_symbol;
+		symbol_maker->widget.clip.w     = SCUI_WIDGET_AUTO_W;
+		symbol_maker->widget.clip.h     = SCUI_WIDGET_AUTO_H;
+		symbol_maker->color.color.full  = 0xFFFFFFFF;
 		break;
 	}
 	case scui_widget_type_roller: {
 		scui_roller_maker_t *roller_maker = (scui_roller_maker_t *)maker;
 		
-		roller_maker->widget.type  = scui_widget_type_roller;
+		roller_maker->widget.type       = scui_widget_type_roller;
+		roller_maker->widget.child_num  = 60;
+		roller_maker->scroll.pos        = scui_opt_pos_c;
+		roller_maker->scroll.dir        = scui_opt_dir_ver;
+		roller_maker->scroll.skip       = scui_opt_pos_none;
+		roller_maker->scroll.loop       = true;
 		break;
 	}
 	case scui_widget_type_ximage: {
 		scui_ximage_maker_t *ximage_maker = (scui_ximage_maker_t *)maker;
 		
-		ximage_maker->widget.type  = scui_widget_type_ximage;
+		ximage_maker->widget.type    = scui_widget_type_ximage;
+		ximage_maker->widget.clip.w  = SCUI_WIDGET_AUTO_W;
+		ximage_maker->widget.clip.h  = SCUI_WIDGET_AUTO_H;
 		break;
 	}
 	case scui_widget_type_xwatch: {
