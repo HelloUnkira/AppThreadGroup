@@ -107,10 +107,10 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             scui_area_t   clip  = scui_widget_area(event->object);
             scui_color_t  color = {.color.full = 0xFF282828,};
             scui_handle_t image[4] = {
-                scui_image_prj_repeat_card_04_r36_1,
-                scui_image_prj_repeat_card_05_r36_2,
-                scui_image_prj_repeat_card_06_r36_3,
-                scui_image_prj_repeat_card_07_r36_4,
+                scui_image_prj_rpt_card_04_r36_1,
+                scui_image_prj_rpt_card_05_r36_2,
+                scui_image_prj_rpt_card_06_r36_3,
+                scui_image_prj_rpt_card_07_r36_4,
             };
             scui_custom_data_t custom_data;
             scui_custom_data_config_button(&custom_data, image, color, -1);
@@ -146,7 +146,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             scui_widget_draw_ring(event->object, &clip_fg, image_ring, NULL, +158, color_dist, +262, pct_dist, image_edge);
             
             // 绘制小图标
-            scui_handle_t image_icon_kcal = scui_image_prj_wgt_act_02_calories;
+            scui_handle_t image_icon_kcal = scui_image_prj_wgt_act_02_cal;
             scui_handle_t image_icon_step = scui_image_prj_wgt_act_08_steps;
             scui_handle_t image_icon_dist = scui_image_prj_wgt_act_03_dist;
             scui_area_t clip_icon_kcal = {.x = 25, .y = 23,};
@@ -312,15 +312,15 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
         case scui_ui_scene_mini_card_type_alarm: {
             
             if (scui_presenter.alarm_none()) {
-                scui_handle_t image = scui_image_prj_wgt_01_arrow;
+                scui_handle_t image = scui_image_prj_wgt_01_arr;
                 scui_area_t image_clip = {.x = 24, .y = 139,};
                 image_clip.w = scui_image_w(image); image_clip.h = scui_image_h(image);
                 scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             } else {
                 
-                scui_handle_t image_on  = scui_image_prj_repeat_switch_01_alarms;
-                scui_handle_t image_off = scui_image_prj_repeat_switch_05_off;
-                scui_handle_t image_dot = scui_image_prj_repeat_switch_03_dot;
+                scui_handle_t image_on  = scui_image_prj_rpt_switch_01_alarms;
+                scui_handle_t image_off = scui_image_prj_rpt_switch_05_off;
+                scui_handle_t image_dot = scui_image_prj_rpt_switch_03_dot;
                 
                 if (scui_presenter.alarm_near_state()) {
                     scui_area_t image_on_clip = {.x = 316, .y = 71,};
@@ -548,13 +548,13 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
             
             if (scui_presenter.compass_invalid()) {
                 
-                scui_handle_t image = scui_image_prj_wgt_01_arrow;
+                scui_handle_t image = scui_image_prj_wgt_01_arr;
                 scui_area_t image_clip = {.x = 24, .y = 136,};
                 image_clip.w = scui_image_w(image); image_clip.h = scui_image_h(image);
                 scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             } else {
                 
-                scui_handle_t image = scui_image_prj_wgt_cmps_03_arrow;
+                scui_handle_t image = scui_image_prj_wgt_cmps_03_arr;
                 
                 scui_point_t center = {
                     .x = scui_image_w(image) / 2,
@@ -623,7 +623,7 @@ static void scui_ui_scene_mini_card_item_event(scui_event_t *event)
         }
         case scui_ui_scene_mini_card_type_stopwatch: {
             
-            scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
+            scui_handle_t image_digit = scui_image_prj_num_44_white_04_03;
             
             uint8_t char_digit[50] = {0};
             scui_coord_t digit_num = snprintf(char_digit, sizeof(char_digit), "%02d:%02d.%02d", 0, 0, 0);
@@ -979,7 +979,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 ximage_maker.widget.parent = item_handle;
                 
                 /* kcal数字 */
-                scui_handle_t image_icon_kcal  = scui_image_prj_wgt_act_02_calories;
+                scui_handle_t image_icon_kcal  = scui_image_prj_wgt_act_02_cal;
                 scui_handle_t image_digit_kcal = scui_image_prj_wgt_act_num_pink_04_03;
                 ximage_maker.widget.clip.x = 25 + scui_image_w(image_icon_kcal) + 10;
                 ximage_maker.widget.clip.y = 23;
@@ -1130,7 +1130,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                     scui_widget_create(&string_t_maker, &string_handle);
                     
                     #if 1
-                    scui_handle_t image = scui_image_prj_repeat_arrow_01_back;
+                    scui_handle_t image = scui_image_prj_rpt_arr_01_back;
                     
                     string_t_maker.widget.clip.x += scui_image_w(image) + 10;
                     string_t_maker.widget.clip.y  = 129;
@@ -1300,7 +1300,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                     scui_string_update_str(string_handle, "--");
                     
                     #if 1
-                    scui_handle_t image = scui_image_prj_repeat_arrow_01_back;
+                    scui_handle_t image = scui_image_prj_rpt_arr_01_back;
                     
                     string_t_maker.widget.clip.x += scui_image_w(image) + 10;
                     string_t_maker.widget.clip.y = 129;
@@ -1404,7 +1404,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 /* 时间数字改ximage序列(创建子控件) */
                 scui_ximage_maker_define(ximage_maker);
                 scui_handle_t ximage_handle = SCUI_HANDLE_INVALID;
-                scui_handle_t image_digit = scui_image_prj_num_44_white_24x34_04_03;
+                scui_handle_t image_digit = scui_image_prj_num_44_white_04_03;
                 
                 ximage_maker.widget.parent = item_handle;
                 ximage_maker.widget.clip.x = 24;

@@ -63,24 +63,24 @@ static struct {
  */
 static void scui_ui_scene_butterfly_image_update(void)
 {
-    scui_ui_res_local->image_antenna = scui_image_prj_3d_Butterfly_Antenna;
-    scui_ui_res_local->image_trunk   = scui_image_prj_3d_Butterfly_BodyHalf;
+    scui_ui_res_local->image_antenna = scui_image_prj_3d_bfly_Antenna;
+    scui_ui_res_local->image_trunk   = scui_image_prj_3d_bfly_BodyHalf;
 
     if (scui_ui_res_local->image_wing_type == 0) {
-        scui_ui_res_local->image_wing[0] = scui_image_prj_3d_Butterfly_SwingUp0;
-        scui_ui_res_local->image_wing[1] = scui_image_prj_3d_Butterfly_SwingDown0;
+        scui_ui_res_local->image_wing[0] = scui_image_prj_3d_bfly_SwingUp0;
+        scui_ui_res_local->image_wing[1] = scui_image_prj_3d_bfly_SwingDown0;
     }
     if (scui_ui_res_local->image_wing_type == 1) {
-        scui_ui_res_local->image_wing[0] = scui_image_prj_3d_Butterfly_SwingUp1;
-        scui_ui_res_local->image_wing[1] = scui_image_prj_3d_Butterfly_SwingDown1;
+        scui_ui_res_local->image_wing[0] = scui_image_prj_3d_bfly_SwingUp1;
+        scui_ui_res_local->image_wing[1] = scui_image_prj_3d_bfly_SwingDown1;
     }
     if (scui_ui_res_local->image_wing_type == 2) {
-        scui_ui_res_local->image_wing[0] = scui_image_prj_3d_Butterfly_SwingUp2;
-        scui_ui_res_local->image_wing[1] = scui_image_prj_3d_Butterfly_SwingDown2;
+        scui_ui_res_local->image_wing[0] = scui_image_prj_3d_bfly_SwingUp2;
+        scui_ui_res_local->image_wing[1] = scui_image_prj_3d_bfly_SwingDown2;
     }
     if (scui_ui_res_local->image_wing_type == 3) {
-        scui_ui_res_local->image_wing[0] = scui_image_prj_3d_Butterfly_SwingUp3;
-        scui_ui_res_local->image_wing[1] = scui_image_prj_3d_Butterfly_SwingDown3;
+        scui_ui_res_local->image_wing[0] = scui_image_prj_3d_bfly_SwingUp3;
+        scui_ui_res_local->image_wing[1] = scui_image_prj_3d_bfly_SwingDown3;
     }
 }
 

@@ -94,9 +94,9 @@ void scui_test_ui_ring_canvas_event_proc(scui_event_t *event)
         break;
     case scui_event_draw_graph: {
         
-        scui_handle_t image_bg   = scui_image_prj_act_ring_big_max_01_bj;
-        scui_handle_t image_edge = scui_image_prj_act_ring_big_max_02_bj_00;
-        scui_handle_t image_ring = scui_image_prj_act_ring_big_max_03_bj_01;
+        scui_handle_t image_bg   = scui_image_prj_act_ring_b_max_01_bj;
+        scui_handle_t image_edge = scui_image_prj_act_ring_b_max_02_bj_00;
+        scui_handle_t image_ring = scui_image_prj_act_ring_b_max_03_bj_01;
         
         /* 绘制圆环背景图: */
         scui_widget_draw_image(event->object, NULL, image_bg, NULL, SCUI_COLOR_FILTER_TRANS);

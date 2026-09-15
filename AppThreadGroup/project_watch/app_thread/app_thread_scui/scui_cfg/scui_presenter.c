@@ -317,7 +317,7 @@ static uint32_t scui_ui_func_local_get_temp_type(void)
  */
 static uint32_t scui_ui_func_local_get_temp_icon(void)
 {
-    return scui_image_prj_weather_weather_small_01_00_sun;
+    return scui_image_prj_wthr_wsmall_01_00_sun;
 }
 
 /*@brief scui ui数据交互回调
@@ -515,7 +515,7 @@ static uint32_t scui_ui_func_local_women_health_type(void)
  */
 static uint32_t scui_ui_func_local_women_health_icon(void)
 {
-    return scui_image_prj_wgt_period_01_fertile;
+    return scui_image_prj_wgt_perd_01_fertile;
 }
 
 /*@brief scui ui数据交互回调

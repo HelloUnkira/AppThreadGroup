@@ -92,8 +92,8 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         #if 1
         custom_maker.type = scui_custom_type_slider;
         custom_maker.data = custom_data_zero;
-        custom_maker.data.slider.bar  = scui_image_prj_repeat_03_bar;
-        custom_maker.data.slider.edge = scui_image_prj_repeat_05_dot;
+        custom_maker.data.slider.bar  = scui_image_prj_rpt_03_bar;
+        custom_maker.data.slider.edge = scui_image_prj_rpt_05_dot;
         custom_maker.data.slider.color_bar.color.full  = 0xFF4F4F4F;
         custom_maker.data.slider.color_edge.color.full = 0xFFFFFFFF;
         custom_maker.data.slider.vmin = 0;
@@ -204,7 +204,7 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         clip.h = SCUI_VER_RES * 3 / 13 - 10 * 2;
         scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
         
-        scui_handle_t image_handle = scui_image_prj_repeat_btn_22_retry_heart;
+        scui_handle_t image_handle = scui_image_prj_rpt_btn_22_retry_heart;
         scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, image_scale, scui_opt_pos_c);
         #endif
         
@@ -216,7 +216,7 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         clip.h = SCUI_VER_RES * 3 / 13 - 10 * 2;
         scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
         
-        scui_handle_t   rot_image  = scui_image_prj_repeat_dot_02_white;
+        scui_handle_t   rot_image  = scui_image_prj_rpt_dot_02_white;
         scui_area_t     widget_clip = scui_widget_clip(event->object);
         scui_point_t    rot_anchor = {
             .x = widget_clip.x + clip.x + clip.w / 2,

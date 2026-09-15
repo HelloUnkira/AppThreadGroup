@@ -9,16 +9,16 @@
 
 /* sequence测试: 0~9数字序列 */
 static const scui_handle_t scui_seq_num_list[] = {
-    scui_image_prj_num_22_white_12x18_00,
-    scui_image_prj_num_22_white_12x18_01,
-    scui_image_prj_num_22_white_12x18_02,
-    scui_image_prj_num_22_white_12x18_03,
-    scui_image_prj_num_22_white_12x18_04,
-    scui_image_prj_num_22_white_12x18_05,
-    scui_image_prj_num_22_white_12x18_06,
-    scui_image_prj_num_22_white_12x18_07,
-    scui_image_prj_num_22_white_12x18_08,
-    scui_image_prj_num_22_white_12x18_09,
+    scui_image_prj_num_22_white_00,
+    scui_image_prj_num_22_white_01,
+    scui_image_prj_num_22_white_02,
+    scui_image_prj_num_22_white_03,
+    scui_image_prj_num_22_white_04,
+    scui_image_prj_num_22_white_05,
+    scui_image_prj_num_22_white_06,
+    scui_image_prj_num_22_white_07,
+    scui_image_prj_num_22_white_08,
+    scui_image_prj_num_22_white_09,
 };
 
 /* sequence测试: 内部align循环轮换 */
@@ -38,8 +38,8 @@ void scui_test_ui_ximage_indicator_event_proc(scui_event_t *event)
         scui_coord_t  idx    = scui_widget_child_to_index(handle);
         bool          way    = (idx == 8);   /* 8:垂直; 9:水平 */
         /* indicator形态: 未选中wait灰点 + 选中focus白点 */
-        scui_handle_t wait_ = scui_image_prj_repeat_dot_01_grey;
-        scui_handle_t focus = scui_image_prj_repeat_dot_02_white;
+        scui_handle_t wait_ = scui_image_prj_rpt_dot_01_grey;
+        scui_handle_t focus = scui_image_prj_rpt_dot_02_white;
         scui_coord_t count = 5;
         scui_coord_t span  = 6;
         
@@ -61,8 +61,8 @@ void scui_test_ui_ximage_indicator_event_proc(scui_event_t *event)
         scui_coord_t  idx    = scui_widget_child_to_index(handle);
         bool          way    = (idx == 8);
         scui_coord_t  bi     = idx - 8;
-        static const scui_handle_t wait_ = scui_image_prj_repeat_dot_01_grey;
-        static const scui_handle_t focus = scui_image_prj_repeat_dot_02_white;
+        static const scui_handle_t wait_ = scui_image_prj_rpt_dot_01_grey;
+        static const scui_handle_t focus = scui_image_prj_rpt_dot_02_white;
         scui_coord_t count = 5;
         scui_coord_t span  = 6;
         
@@ -124,12 +124,12 @@ void scui_test_ui_ximage_item_event_proc(scui_event_t *event)
             break;
         case 6: { /* replace:6个index 1秒循环 */
             static const scui_handle_t index_list[] = {
-                scui_image_prj_weather_arrow_up,
-                scui_image_prj_weather_arrow_down,
-                scui_image_prj_weather_up,
-                scui_image_prj_weather_down,
-                scui_image_prj_weather_uv,
-                scui_image_prj_weather_ring_uv,
+                scui_image_prj_wthr_arr_up,
+                scui_image_prj_wthr_arr_down,
+                scui_image_prj_wthr_up,
+                scui_image_prj_wthr_down,
+                scui_image_prj_wthr_uv,
+                scui_image_prj_wthr_ring_uv,
             };
             scui_coord_t index_num = scui_arr_len(index_list);
             scui_multi_t index_time = 1000 / index_num;
