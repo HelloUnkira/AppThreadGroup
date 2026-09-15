@@ -38,50 +38,11 @@
     控件:支持lvgl式渲染(有限度)
         猜想:基础源控件还需完备
     
-    
-    
-    优先级:低
-    文字:Bidi未实现,RTL小语种未测试
-    全局RTL化，设计一个可以让window整体布局全局RTL的程序逻辑
-    评估scui_widget_mirror_pos是否满足镜像调整坐标
-    (2026-09-15)评估: 可行, 设计已出(scui-watch/references/global_rtl_widget_tree.md)
-        方案 = RTL属性翻转时整树重建(回到纯LTR) + 布局末尾由根控件做一次整树水平镜像
-        镜像函数 = 思路对, 3处不足: 坐标基准错(仅父在画布原点时成立)/dir掩码陷阱/无过滤(需修)
-        "自己跳转自己"不生效(node_bak闸门), 建议 hide-all + show-all 直接重建
-        镜像只在"本轮真的重排过"的帧做一次(否则逐帧抖动); 只能解决控件级, 控件内绘制级不支持
-    
-    
-    产生lang事件的时候，原地产生自调度，自己跳转自己
-    layout结束后，最后再做一次RTL的mirror，获得真实RTL控件布局
-    虽然这只能解决控件级的问题，控件内绘制级别的问题解决不了
-    这是DIY的缺陷性，不过我并不打算支持它(这部分不应该考虑)?
-    我觉得实现难度实在过大，本身直接draw就有偷懒的嫌疑
-    
-    直接使用scui_widget_draw这种做法本身不符合现代构型
-    偷懒的做法，不过你可以推演一二，
-    试着将可以转化为控件布局的绘制调用，调整为控件布局，
-    优先用json去调整，不行再创建动态c代码
-    (2026-09-15)评估: scene_src 绘制级调用共 113 处(image 73/graph 23/scale 6/3d 6/rotate 2/dither 2/blur 1)
-        首批可转(json): hr大心脏(ximage vedio/sequence, 帧动画计时逻辑可省)、spo2/sleep/stress 静态图、
-                        activity 背景+3图标、popup/notify 整图
-        需动态C(ximage + 运行时换图): activity 状态图标、mini_card 的 31 处
-        不改: graph/scale/rotate/3d/blur/dither/动态排布(waterfall/spread/honeycomb/2.5D)
-    
-    
-    
-    
     优先级:中
     线条切割的渐变图表
     
-    优先级:中
-    font做一个ttf合并工具，
-    将一个ttf字库的字形，
-    塞到另一个ttf文件中，
-    lang加一个搜索框，当输入搜索时，从当前显示行预览搜索，
-    匹配到一个，让那一条滚动到可现实第一条，
-    继续搜索继续找下一个
-    
-    
+    menial_line的必要性???
+    btn空心圆角到直线的端点不平滑(有一个大的端点出现)
     
     优先级:低
     cwf数据类型改造，
@@ -102,6 +63,10 @@
     
     优先级:低
     json不支持有条件的动态构建
+    
+    优先级:低
+    全局RTL化，以协调RTL-Bidi显示，
+    设计一个可以让window整体布局全局RTL的程序逻辑
     
     优先级:低
     AUTO_W/AUTO_H:::

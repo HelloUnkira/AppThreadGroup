@@ -1689,6 +1689,9 @@ class PackApp(object):
         self.lang_sel = None
         self.lang_col = 0         # 中栏预览的语言列(0=第1个语言, 默认zh)
         self.mframe = None        # 中栏 LabelFrame(标题随预览语言变化)
+        self.lang_find_var = tk.StringVar()   # 中栏搜索关键词
+        self.lang_find_pos = None             # 下次搜索的起始行(继续搜索)
+        self.lang_find_kw = None              # 上次关键词(变化则从当前可视首行重搜)
 
         # 顶部
         top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
@@ -1711,11 +1714,20 @@ class PackApp(object):
         # 中: 句柄行列表(当前语言列预览, 带省略号)
         mf = ttk.LabelFrame(hp, text=' 句柄行预览 ', padding=(4, 4)); hp.add(mf, weight=3)
         self.mframe = mf
+        # 搜索行(在 tree 之前 pack, 才能占据顶部; 命中行滚动为可视第一行)
+        srow = ttk.Frame(mf); srow.pack(side='top', fill='x', pady=(0, 3))
+        ttk.Label(srow, text='搜索').pack(side='left')
+        ttk.Button(srow, text='清除', command=self._lang_find_clear).pack(side='right')
+        ttk.Button(srow, text='下一个', command=self._lang_find_next).pack(side='right', padx=(0, 4))
+        self.lang_find_ent = ttk.Entry(srow, textvariable=self.lang_find_var)
+        self.lang_find_ent.pack(side='left', fill='x', expand=True, padx=(4, 6))
+        self.lang_find_ent.bind('<Return>', lambda e: (self._lang_find_next(), 'break')[1])
         self.mtree = ttk.Treeview(mf, show='tree', selectmode='browse')
         mvs = ttk.Scrollbar(mf, orient='vertical', command=self.mtree.yview)
         self.mtree.configure(yscrollcommand=mvs.set)
         self.mtree.pack(side='left', fill='both', expand=True); mvs.pack(side='right', fill='y')
         self.mtree.bind('<<TreeviewSelect>>', self._lang_pick)
+        self.mtree.tag_configure('find', background='#ffe08a')   # 搜索命中行高亮
 
         # 右: 行详情(各语言内容)
         rf = ttk.LabelFrame(hp, text=' 行详情 ', padding=(4, 4)); hp.add(rf, weight=3)
@@ -1774,6 +1786,8 @@ class PackApp(object):
         if not sel or self.lang_data is None:
             return
         self.lang_col = int(sel[0][4:])
+        self.lang_find_pos = None
+        self.lang_find_kw = None
         self._lang_fill_rows()
 
     def _lang_load(self):
@@ -1848,6 +1862,68 @@ class PackApp(object):
                 self.rtext_font = (self.rtext_font[0], max(6, self.rtext_font[1] - 1))
         self.rtext.configure(font=self.rtext_font)
         return 'break'
+
+    def _lang_first_visible(self):
+        """中栏当前可视第一行(行高一致, 用 yview 比例估算)"""
+        n = len(self.mtree.get_children())
+        if n <= 0:
+            return 0
+        try:
+            top = int(round(self.mtree.yview()[0] * n))
+        except Exception:
+            top = 0
+        return max(0, min(n - 1, top))
+
+    def _lang_find_show(self, idx):
+        """命中行: 高亮 + 选中 + 滚动到可视第一行 + 刷新右侧详情"""
+        iid = 'r%d' % idx
+        if not self.mtree.exists(iid):
+            return
+        for it in self.mtree.get_children():
+            self.mtree.item(it, tags=())
+        self.mtree.item(iid, tags=('find',))
+        self.mtree.selection_set(iid)
+        self.mtree.see(iid)
+        n = max(1, len(self.mtree.get_children()))
+        self.mtree.yview_moveto(max(0.0, min(1.0, float(idx) / n)))
+        self._lang_pick()
+
+    def _lang_find_next(self):
+        """搜索下一处: 首次从当前可视首行起, 之后从上次命中下一行继续(回绕)"""
+        kw = self.lang_find_var.get().strip()
+        if not kw or self.lang_data is None:
+            return
+        langs, data = self.lang_data
+        if not langs:
+            return
+        c = self._lang_mod().SCUI_LANG_COL_DATA + self.lang_col
+        n = len(data)
+        if self.lang_find_kw != kw:
+            self.lang_find_kw = kw
+            self.lang_find_pos = self._lang_first_visible()
+        start = self.lang_find_pos if self.lang_find_pos is not None else 0
+        hit = None
+        for k in range(n):
+            i = (start + k) % n
+            val = data[i][c] if c < len(data[i]) else ''
+            if kw.lower() in val.lower():
+                hit = i
+                break
+        if hit is None:
+            self.lang_find_pos = None
+            self._append_log('lang', '搜索 "%s": 无匹配\n' % kw)
+            return
+        self.lang_find_pos = (hit + 1) % n
+        self._lang_find_show(hit)
+        self._append_log('lang', '搜索 "%s": 命中第 %d 行\n' % (kw, hit))
+
+    def _lang_find_clear(self):
+        """清除搜索: 清空关键词/状态与高亮"""
+        self.lang_find_var.set('')
+        self.lang_find_kw = None
+        self.lang_find_pos = None
+        for it in self.mtree.get_children():
+            self.mtree.item(it, tags=())
 
 
     #--------------- cwf 子界面(左:协议类型+注释 | 中:cwf浏览 | 右:json编辑) ---------------
@@ -2172,7 +2248,8 @@ class PackApp(object):
         bar = ttk.Frame(f); bar.pack(fill='x', pady=(2, 4))
         for t, c in (('加载 json', lambda: self._font_load(False)),
                      ('预览 json', self._font_preview),
-                     ('保存 json', self._font_save)):
+                     ('保存 json', self._font_save),
+                     ('ttf 合并', self._font_merge_dialog)):
             ttk.Button(bar, text=t, command=c).pack(side='left')
         ttk.Button(bar, text='执行 font 打包', command=lambda: self._run('font')).pack(side='right')
         ttk.Button(bar, text='刷新 font 源', command=self._font_src_refresh).pack(side='right')
@@ -2706,6 +2783,206 @@ class PackApp(object):
             self.font_status.set('已保存')
         except Exception as e:
             self.font_status.set('保存失败: %r' % e)
+
+    #--------------- font 附: ttf 字库合并(候选 range 字形覆盖到基版) ---------------
+    def _font_merge_mod(self):
+        """导入后端字库模块(ttf 合并与 font 打包同驻 scui_pack_font)"""
+        if self.tools not in sys.path:
+            sys.path.insert(0, self.tools)
+        mod = importlib.import_module('scui_pack_font')
+        mod.SCUI_UI_ROOT = self.ui
+        mod.SCUI_TOOLS   = self.tools
+        return mod
+
+    def _font_merge_dialog(self):
+        """ttf 合并弹窗: 选基版/候选(均为 font_src 下文件), 指定输出名与 range"""
+        import tkinter as tk
+        from tkinter import ttk
+
+        if getattr(self, '_font_merge_win', None) is not None:
+            try:
+                self._font_merge_win.lift()
+                self._font_merge_win.focus_set()
+                return
+            except Exception:
+                self._font_merge_win = None
+
+        ttf_list = [f for f in getattr(self, '_font_src_files', [])
+                    if f.lower().endswith('.ttf')]
+        if not ttf_list:
+            from tkinter import messagebox
+            messagebox.showwarning('ttf 合并', 'font 源下没有 .ttf 文件, 请先刷新 font 源')
+            return
+
+        top = tk.Toplevel(self.root)
+        top.title('ttf 字库合并')
+        top.geometry('760x420')
+        top.transient(self.root)
+        self._font_merge_win = top
+
+        if not hasattr(self, '_font_merge_base'):
+            self._font_merge_base = tk.StringVar(value=ttf_list[0])
+            self._font_merge_cand = tk.StringVar(value=ttf_list[0])
+            self._font_merge_out  = tk.StringVar()
+            self._font_merge_lbl_base = tk.StringVar(value='-')
+            self._font_merge_lbl_cand = tk.StringVar(value='-')
+            self._font_merge_stat = tk.StringVar(value='就绪')
+            self._font_merge_skipblank = tk.BooleanVar(value=True)
+        else:
+            # 重开: 列表可能已变化, 校正取值
+            if self._font_merge_base.get() not in ttf_list:
+                self._font_merge_base.set(ttf_list[0])
+            if self._font_merge_cand.get() not in ttf_list:
+                self._font_merge_cand.set(ttf_list[0])
+        if not self._font_merge_out.get():
+            self._font_merge_out.set(self._merge_out_default(self._font_merge_base.get()))
+
+        grid = ttk.Frame(top, padding=(8, 8)); grid.pack(fill='both', expand=True)
+        grid.columnconfigure(1, weight=1)
+
+        ttk.Label(grid, text='基版目标').grid(row=0, column=0, sticky='w', pady=3)
+        cb_b = ttk.Combobox(grid, textvariable=self._font_merge_base, values=ttf_list,
+                            state='readonly')
+        cb_b.grid(row=0, column=1, sticky='ew', pady=3)
+        cb_b.bind('<<ComboboxSelected>>', lambda e: self._font_merge_info())
+        ttk.Label(grid, textvariable=self._font_merge_lbl_base,
+                  foreground='#666').grid(row=1, column=1, sticky='w')
+
+        ttk.Label(grid, text='候选目标').grid(row=2, column=0, sticky='w', pady=3)
+        cb_c = ttk.Combobox(grid, textvariable=self._font_merge_cand, values=ttf_list,
+                            state='readonly')
+        cb_c.grid(row=2, column=1, sticky='ew', pady=3)
+        cb_c.bind('<<ComboboxSelected>>', lambda e: self._font_merge_info())
+        ttk.Label(grid, textvariable=self._font_merge_lbl_cand,
+                  foreground='#666').grid(row=3, column=1, sticky='w')
+
+        ttk.Label(grid, text='输出目标').grid(row=4, column=0, sticky='w', pady=3)
+        ent = ttk.Entry(grid, textvariable=self._font_merge_out)
+        ent.grid(row=4, column=1, sticky='ew', pady=3)
+        ttk.Label(grid, text='(落在 font 源下; 与既有文件同名则直接覆盖)',
+                  foreground='#666').grid(row=5, column=1, sticky='w')
+
+        ttk.Label(grid, text='取 range').grid(row=6, column=0, sticky='nw', pady=3)
+        txt = tk.Text(grid, font=('Consolas', 9), height=6)
+        txt.grid(row=6, column=1, sticky='nsew', pady=3)
+        grid.rowconfigure(6, weight=1)
+        self._font_merge_range = txt
+        if not getattr(self, '_font_merge_range_text', ''):
+            self._font_merge_range_text = '-r 0x0600-0x06FF -r 0xFB50-0xFDFF -r 0xFE70-0xFEFF'
+        txt.insert('1.0', self._font_merge_range_text)   # 重开弹窗保留上次 range 文本
+        ttk.Label(grid, text='从候选取字形的区间; 可多个, 如 -r 0x20-0x7f -r 0x0600-0x06FF'
+                             '(也支持 U+0600-U+06FF / 十进制)',
+                  foreground='#666', wraplength=520, justify='left').grid(row=7, column=1, sticky='w')
+        ttk.Checkbutton(grid, text='跳过候选空字形(基版同码位已有轮廓时不覆盖)',
+                        variable=self._font_merge_skipblank)\
+            .grid(row=8, column=1, sticky='w', pady=(0, 3))
+
+        bar = ttk.Frame(top, padding=(8, 0, 8, 8)); bar.pack(fill='x')
+        self._font_merge_btn = ttk.Button(bar, text='执行合并', command=self._font_merge_run)
+        self._font_merge_btn.pack(side='left')
+        ttk.Label(bar, textvariable=self._font_merge_stat, foreground='#777').pack(side='left', padx=(10, 0))
+        ttk.Button(bar, text='关闭', command=self._font_merge_close).pack(side='right')
+
+        self._font_merge_info()
+        top.grab_set()
+
+    def _merge_out_default(self, base):
+        """输出名默认: <基版名>_merge.ttf(可选同基版名以原地覆盖)"""
+        stem = os.path.splitext(os.path.basename(base or 'font'))[0]
+        return '%s_merge.ttf' % stem
+
+    def _font_merge_close(self):
+        try:
+            self._font_merge_range_text = self._font_merge_range.get('1.0', 'end').strip()
+        except Exception:
+            pass
+        try:
+            self._font_merge_win.destroy()
+        except Exception:
+            pass
+        self._font_merge_win = None
+
+    def _font_merge_info(self):
+        """刷新基版/候选摘要(upem/字形数/关键区覆盖), 便于判断能否合并"""
+        try:
+            mod = self._font_merge_mod()
+            for var, name in ((self._font_merge_lbl_base, self._font_merge_base.get()),
+                              (self._font_merge_lbl_cand, self._font_merge_cand.get())):
+                try:
+                    info = mod.scui_font_merge_font_info(os.path.join(self.font_src_dir, name))
+                    var.set(mod.scui_font_merge_info_text(info))
+                except Exception as e:
+                    var.set('检测失败: %r' % e)
+        except Exception as e:
+            self._font_merge_stat.set('后端不可用: %r' % e)
+
+    def _font_merge_run(self):
+        """执行合并(后台线程; 日志回主线程输出)"""
+        import threading
+        if getattr(self, '_font_merge_busy', False):
+            return
+        base = self._font_merge_base.get().strip()
+        cand = self._font_merge_cand.get().strip()
+        out  = self._font_merge_out.get().strip()
+        text = self._font_merge_range.get('1.0', 'end').strip() if hasattr(self, '_font_merge_range') else ''
+        if not base or not cand or not out or not text:
+            self._font_merge_stat.set('请填写 基版/候选/输出/range')
+            return
+        self._font_merge_range_text = text          # 保留供弹窗重开
+        if not out.lower().endswith('.ttf'):
+            out += '.ttf'
+            self._font_merge_out.set(out)
+        bp = os.path.join(self.font_src_dir, base)
+        cp = os.path.join(self.font_src_dir, cand)
+        op = os.path.join(self.font_src_dir, out)
+        if not os.path.isfile(bp) or not os.path.isfile(cp):
+            self._font_merge_stat.set('基版/候选文件不存在')
+            return
+        skipb = True
+        try:
+            skipb = bool(self._font_merge_skipblank.get())    # 主线程取值, 线程内不碰 Tk 变量
+        except Exception:
+            pass
+        self._font_merge_busy = True
+        self._font_merge_btn_state('disabled')
+        self._font_merge_stat.set('合并中…')
+        self._log_show()
+        self._append_log('font', '==== ttf 合并: %s + %s -> %s%s ====\n'
+                         % (base, cand, out, '' if skipb else ' [保留候选空字形]'))
+        q = []
+
+        def worker():
+            try:
+                mod = self._font_merge_mod()
+                mod.scui_font_merge(bp, cp, op, text, log=lambda s: q.append(s), skip_blank=skipb)
+                q.append('完成: %s' % out)
+            except Exception as e:
+                q.append('失败: %r' % e)
+            q.append('__DONE__')
+
+        threading.Thread(target=worker, daemon=True).start()
+        self._font_merge_drain(q)
+
+    def _font_merge_btn_state(self, state):
+        """按钮可用性(弹窗可能已被关闭, 容错)"""
+        try:
+            self._font_merge_btn.configure(state=state)
+        except Exception:
+            pass
+
+    def _font_merge_drain(self, q):
+        """主线程排空日志队列(仅主线程触碰 Tk 部件)"""
+        while q:
+            s = q.pop(0)
+            if s == '__DONE__':
+                self._font_merge_busy = False
+                self._font_merge_btn_state('normal')
+                self._font_merge_stat.set('完成')
+                self._font_src_refresh()
+                self._font_merge_info()
+                return
+            self._append_log('font', '[merge] %s\n' % s)
+        self.root.after(150, lambda: self._font_merge_drain(q))
 
     def _font_add(self):
         from tkinter import messagebox
@@ -3580,6 +3857,40 @@ def _single_instance():
     except Exception:
         return True                                # 非 Windows/异常则放行
 
+def _do_font_merge(ui, base, cand, out, rng, skip_blank=True):
+    """ttf 字库合并(命令行): --base/--cand/--out 可为 font 源下文件名或绝对路径
+       skip_blank=False(--keep-blank): 候选空字形也照覆(含覆盖基版实心字形)
+    """
+    ui, app, scui, tools, plugs = _dirs(ui)
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
+    src_dir = os.path.join(ui, 'font_src')                # 源字库目录(与 font 子界面一致)
+
+    def _p(v):
+        if not v:
+            return ''
+        return v if os.path.isabs(v) else os.path.join(src_dir, v)
+
+    bp, cp, op = _p(base), _p(cand), _p(out)
+    if not bp or not cp or not op:
+        print('[merge] 缺参数: 需 --base/--cand/--out')
+        return 1
+    if not rng:
+        print('[merge] 缺参数: 需 --range(如 --range 0x20-0x7f, 可多个)')
+        return 1
+    try:
+        mod = importlib.import_module('scui_pack_font')
+        mod.SCUI_UI_ROOT = ui
+        mod.SCUI_TOOLS   = tools
+        mod.scui_font_merge(bp, cp, op, ' '.join(rng), log=lambda s: print(s),
+                            skip_blank=skip_blank)
+    except Exception as e:
+        print('[merge] 失败: %s' % e)
+        return 1
+    print('[merge] 完成')
+    return 0
+
+
 def main():
     # 无控制台(exe)下 stdout/stderr 为 None, 替换为 devnull 避免意外崩溃
     if sys.stdout is None:
@@ -3596,6 +3907,9 @@ def main():
     # 轻量手动解析: 首个位置参数作为类型(须为已知类型); 未知参数一律忽略, 回退 GUI
     argv = sys.argv[1:]
     typ = ui = src = dst = proj = ''
+    base = cand = out = ''
+    rng = []
+    keep_blank = False
     i = 0
     while i < len(argv):
         a = argv[i]
@@ -3607,14 +3921,26 @@ def main():
             dst = argv[i + 1]; i += 2
         elif a == '--proj' and i + 1 < len(argv):
             proj = argv[i + 1]; i += 2
+        elif a == '--base' and i + 1 < len(argv):
+            base = argv[i + 1]; i += 2        # ttf 合并: 基版目标
+        elif a == '--cand' and i + 1 < len(argv):
+            cand = argv[i + 1]; i += 2        # ttf 合并: 候选目标
+        elif a == '--out' and i + 1 < len(argv):
+            out = argv[i + 1]; i += 2         # ttf 合并: 输出目标
+        elif a == '--range' and i + 1 < len(argv):
+            rng.append(argv[i + 1]); i += 2   # ttf 合并: range(可多个)
+        elif a == '--keep-blank':
+            keep_blank = True; i += 1         # ttf 合并: 不跳过候选空字形
         elif a.startswith('--'):
             i += 1                            # 未知选项忽略
         else:
-            if typ == '' and a in _TASK:
-                typ = a                       # 仅首个位置参数可为已知类型
+            if typ == '' and (a in _TASK or a == 'font_merge'):
+                typ = a                       # 仅首个位置参数可为已知类型(含 ttf 合并)
             i += 1                            # 其它位置参数(如误拖入的路径)忽略
 
     ui_root = os.path.normpath(ui or os.getcwd())
+    if typ == 'font_merge':
+        return _do_font_merge(ui_root, base, cand, out, rng, skip_blank=not keep_blank)
     if typ:
         sdef, ddef = _DEFAULT[typ]
         src = src or os.path.join(ui_root, sdef)

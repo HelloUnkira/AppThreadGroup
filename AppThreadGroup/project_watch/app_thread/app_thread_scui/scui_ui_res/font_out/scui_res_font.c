@@ -415,7 +415,7 @@ static const scui_font_t font_tinyTTF_ttf = {
 	.font_lang	 = scui_font_lang_multi,
 	.font_size	 = 0,
 	.data_bin	 = 0x873970,
-	.size_bin	 = 0xc256c4,
+	.size_bin	 = 0xc62a04,
 	
 	.base_line_ext = 0x0,
 	.line_height_ext = 0x0,

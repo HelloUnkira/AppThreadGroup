@@ -47,8 +47,9 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         string_maker.args.regrad       = true;
         string_maker.draw_cache        = true;
         
-        string_maker.font_idx  = SCUI_FONT_IDX_32;
-        string_maker.args.size = scui_ui_res_local->font_size;
+        string_maker.font_idx  = SCUI_FONT_IDX_MZ;
+        string_maker.args.lang = scui_lang_type_multi;
+        string_maker.args.size = scui_font_size_match(string_maker.font_idx, scui_ui_res_local->font_size);
         
         /* test:全文本渐变 */
         scui_coord_t y_offset = 25;
