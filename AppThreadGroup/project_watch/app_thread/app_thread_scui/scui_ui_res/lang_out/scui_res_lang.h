@@ -1532,13 +1532,13 @@ typedef struct {
 } scui_lang_item_t;
 #endif
 
-extern const void * const scui_lang_parser_table[756 * 7];
+extern const void * const scui_lang_parser_table[756 * 9];
 
 typedef enum {
 	scui_lang_str_num = 756,
 	scui_lang_ofs_num = 1,
 	
-	scui_lang_type_num		= 7,
+	scui_lang_type_num		= 9,
 	scui_lang_type_multi	= SCUI_HANDLE_SYSTEM - 1,
 	scui_lang_type_ascii	= SCUI_HANDLE_SYSTEM - 2,
 	scui_lang_type_symbol	= SCUI_HANDLE_SYSTEM - 3,
@@ -1549,6 +1549,8 @@ typedef enum {
 	scui_lang_type_nl		= scui_lang_str_num * 4 + scui_lang_ofs_num,
 	scui_lang_type_pt		= scui_lang_str_num * 5 + scui_lang_ofs_num,
 	scui_lang_type_jp		= scui_lang_str_num * 6 + scui_lang_ofs_num,
+	scui_lang_type_ar		= scui_lang_str_num * 7 + scui_lang_ofs_num,
+	scui_lang_type_fa		= scui_lang_str_num * 8 + scui_lang_ofs_num,
 } scui_lang_type_t;
 
 /*@brief 获取多国语语言类型
@@ -1568,5 +1570,10 @@ void scui_lang_set(scui_lang_type_t *type);
  *@retval 字符串
  */
 const char * scui_lang_str(scui_handle_t handle, scui_lang_type_t type);
+
+/*@brief 获取多国语语言类型是否为RTL(从右到左)
+ *@retval 是否为RTL
+ */
+bool scui_lang_RTL(void);
 
 #endif

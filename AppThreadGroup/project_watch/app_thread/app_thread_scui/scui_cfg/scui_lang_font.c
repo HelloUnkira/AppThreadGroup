@@ -80,6 +80,14 @@ scui_handle_t scui_font_name_match(scui_handle_t font_idx, scui_handle_t lang_ty
         }
         break;
     }
+    case scui_lang_type_ar:
+    case scui_lang_type_fa: {
+        switch (font_idx) {
+        case SCUI_FONT_IDX_32: return scui_font_match(scui_font_lang_ap, 32);
+        case SCUI_FONT_IDX_36: return scui_font_match(scui_font_lang_ap, 36);
+        }
+        break;
+    }
     }
     
     /* 如果有通配字库 */
@@ -97,8 +105,11 @@ scui_handle_t scui_font_name_match(scui_handle_t font_idx, scui_handle_t lang_ty
 scui_handle_t scui_font_size_match(scui_handle_t font_idx, scui_handle_t font_size)
 {
     /* 这里无需转换, 做一个检查即可 */
-    if (font_idx == SCUI_FONT_IDX_MZ)
+    if (font_idx == SCUI_FONT_IDX_MZ) {
         SCUI_ASSERT(font_size != 0);
+        return font_size;
+    }
     
-    return font_size;
+    /* 固定字号 */
+    return 0;
 }

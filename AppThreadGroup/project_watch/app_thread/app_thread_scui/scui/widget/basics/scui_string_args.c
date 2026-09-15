@@ -63,7 +63,10 @@ static void scui_string_args_match_word(scui_string_args_t *args,
         glyph_width += args->gap_item;
         
         if (width_max != NULL && *width + glyph_width > *width_max) {
-           *idx_e = idx - 1;
+            *idx_e = idx - 1;
+            /* RTL: 连字符不可折开, 回退到安全断点 */
+            while (*idx_e > *idx_s && !scui_string_RTL_break(args, *idx_e))
+                (*idx_e)--;
             break;
         }
         *width += glyph_width;
@@ -80,6 +83,10 @@ static void scui_string_args_match_word(scui_string_args_t *args,
         if (args->unicode[idx] >= 0x4E00 &&
             args->unicode[idx] <= 0x9FA5)   /* 0x4E00 */
             break_char = true;
+        
+        /* RTL: 连字符不可折开 */
+        if (break_char && !scui_string_RTL_break(args, idx))
+            break_char = false;
         
         if (break_char) {
            *idx_e = idx;
@@ -179,7 +186,9 @@ static void scui_string_args_trans(scui_string_args_t *args)
         return;
     
     /* 文字变形:将特殊的连序unicode替换成新的映射unicode */
-    scui_string_args_trans_ap(args);
+    scui_string_RTL(args);
+    /* 文字双向调序:将逻辑顺序转为视觉顺序(RTL语言逆序绘制) */
+    scui_string_BIDI(args);
 }
 
 /*@brief 字符串处理

@@ -50,13 +50,19 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
     if (string->args.lang == SCUI_HANDLE_INVALID)
         scui_lang_get(&string->args.lang);
     
-    if (string->unit_ms == 0)
-        string->unit_ms  = SCUI_WIDGET_STRING_UNIT_MS;
-    if (string->unit_dx == 0)
-        string->unit_dx  = SCUI_WIDGET_STRING_UNIT_DX;
-    
+    if (string->unit_ms == 0) string->unit_ms = SCUI_WIDGET_STRING_UNIT_MS;
+    if (string->unit_dx == 0) string->unit_dx = SCUI_WIDGET_STRING_UNIT_DX;
     string->args.size = scui_font_size_match(string->font_idx, string->args.size);
     string->args.name = scui_font_name_match(string->font_idx, string->args.lang);
+    
+    /* 滚动方向: RTL内容右移(offset正向), LTR内容左移(offset负向) */
+    string->unit_way = scui_lang_RTL() && !string->args.line_multi ? -1 : 1;
+    
+    /* RTL语言: 左对齐自动调整为右对齐 */
+    if (string->args.align_hor == 0 && scui_lang_RTL()) {
+        string->args.align_hor  = 1;
+        string->align_rtl       = true;
+    }
     
     /* 尝试初始更新字符串文本信息 */
     scui_string_update_text(*handle, string_maker->text);
@@ -360,6 +366,64 @@ void scui_string_adjust_size(scui_handle_t handle, scui_coord_t size)
     scui_widget_draw(widget->myself, NULL, false, 0);
 }
 
+/*@brief 字符串滚动映射(通用迭代+镜像)
+ *@param offset 内容位移(有符号; LTR负向, RTL正向)
+ *@param mirror RTL镜像(单行水平)
+ *@param size_t 内容长(单行=文本宽/多行=文本高)
+ *@param size_w 轨道宽(单行=控件宽/多行=控件高)
+ *@param gap    循环间距(单行=字间距/多行=行间距; 0=不循环补片)
+ *@param img_1  段1源裁剪(x为起点,w为宽)
+ *@param dst_1  段1目标偏移(窗口内)
+ *@param have_1 段1有效
+ *@param img_2  段2源裁剪(轮转补片)
+ *@param dst_2  段2目标偏移
+ *@param have_2 段2有效
+ */
+static void scui_string_scroll_map(scui_coord_t offset, bool mirror,
+    scui_coord_t size_t, scui_coord_t size_w, scui_coord_t gap,
+    scui_area_t *img_1, scui_area_t *dst_1, bool *have_1,
+    scui_area_t *img_2, scui_area_t *dst_2, bool *have_2)
+{
+    /* 窗口起始缘对应缓存源(段1起点) */
+    scui_coord_t s1 = mirror ? (size_t - size_w - offset) : -offset;
+    
+    /* 段1: 窗口与内容区 [0, size_t] 交集 */
+    scui_coord_t vis_s = s1 < 0 ? 0 : s1;
+    scui_coord_t vis_e = s1 + size_w > size_t ? size_t : s1 + size_w;
+    if (vis_e > vis_s) {
+        *have_1 = true;
+        img_1->x = vis_s;
+        img_1->w = vis_e - vis_s;
+        dst_1->x = vis_s - s1;
+    } else {
+        *have_1 = false;
+    }
+    
+    /* 段2: 轮转补片(跨环后从进入侧补开头) */
+    *have_2 = false;
+    if (mirror) {
+        /* RTL: 窗口起始缘跨间隙, 开头从窗口起始侧进入 */
+        scui_coord_t w2 = -(s1 + gap);
+        if (w2 > 0) {
+            w2 = w2 > size_w ? size_w : w2;
+            *have_2 = true;
+            img_2->x = size_t - w2;
+            img_2->w = w2;
+            dst_2->x = 0;
+        }
+    } else {
+        /* LTR: 窗口终止缘跨间隙, 开头从窗口终止侧进入 */
+        scui_coord_t w2 = s1 + size_w - (size_t + gap);
+        if (w2 > 0) {
+            w2 = w2 > size_w ? size_w : w2;
+            *have_2 = true;
+            img_2->x = 0;
+            img_2->w = w2;
+            dst_2->x = size_w - w2;
+        }
+    }
+}
+
 /*@brief 事件处理回调
  *@param event 事件
  */
@@ -390,18 +454,15 @@ void scui_string_invoke(scui_event_t *event)
         else string->rcd_ms -= string->unit_ms;
         
         scui_string_args_proc(&string->args);
+        /* 滚动迭代: 内容位移双向推进(方向由unit_way决定) */
+        /* LTR内容左移(offset负向), RTL内容右移(offset正向) */
         string->args.offset -= string->unit_dx * string->unit_way;
         
         if (string->args.mode_scroll == 0) {
-            
-            if (string->args.offset > 0 ||
-                string->args.offset < -string->args.limit) {
-                
-                if (string->args.offset > 0)
-                    string->args.offset = 0;
-                else
-                    string->args.offset = -string->args.limit;
-                
+            /* 左右来回: 端点反弹(双向迭代) */
+            if (scui_abs(string->args.offset) > string->args.limit) {
+                string->args.offset = string->args.offset > 0 ?
+                    string->args.limit : -string->args.limit;
                 string->unit_way = -string->unit_way;
                 /* 单次滚动结束标记 */
                 if (string->unit_s)
@@ -409,16 +470,15 @@ void scui_string_invoke(scui_event_t *event)
             }
         }
         if (string->args.mode_scroll == 1) {
-            
+            /* 轮转滚动: 周期循环(内容长+轨道宽+间距; RTL单行与LTR同周期) */
             scui_coord_t limit_all = string->args.line_multi ? widget->clip.h : widget->clip.w;
-            if (string->args.offset < -(string->args.limit + limit_all)) {
+            scui_coord_t gap       = string->args.line_multi ?
+                SCUI_WIDGET_STRING_SCROLL_LINE : SCUI_WIDGET_STRING_SCROLL_ITEM;
+            if (scui_abs(string->args.offset) > string->args.limit + limit_all + gap) {
                 
-                if (string->args.line_multi)
-                    string->args.offset = SCUI_WIDGET_STRING_SCROLL_LINE;
-                else
-                    string->args.offset = SCUI_WIDGET_STRING_SCROLL_ITEM;
+                string->args.offset = 0;
                 
-                string->unit_way = scui_abs(string->unit_way);
+                string->unit_way = scui_lang_RTL() && !string->args.line_multi ? -1 : 1;
                 /* 单次滚动结束标记 */
                 if (string->unit_s)
                     string->unit_over = true;
@@ -500,40 +560,51 @@ void scui_string_invoke(scui_event_t *event)
                 else
                     SCUI_LOG_DEBUG("offset x:%d", string->args.offset);
                 
-                if (string->args.mode_scroll == 0) {
-                    scui_area_t image_clip = scui_image_area(string->draw_image);
-                    image_clip.x = string->args.line_multi ? 0 : -string->args.offset;
-                    image_clip.y = string->args.line_multi ? -string->args.offset : 0;
-                    scui_widget_draw_image(widget->myself, NULL, string->draw_image, &image_clip, SCUI_COLOR_UNUSED);
-                }
+                /* 滚动映射: 通用迭代+镜像(段1主显示/段2轮转补片) */
+                /* mirror按控件自身RTL状态(align_rtl): 语言切换瞬间按旧语言渲染, 无过渡空帧 */
+                scui_coord_t offset = string->args.offset;
+                bool mirror = string->align_rtl && !string->args.line_multi;
                 
-                if (string->args.mode_scroll == 1) {
+                scui_coord_t limit_all = string->args.line_multi ? widget->clip.h : widget->clip.w;
+                scui_coord_t gap = string->args.line_multi ?
+                    SCUI_WIDGET_STRING_SCROLL_LINE : SCUI_WIDGET_STRING_SCROLL_ITEM;
+                scui_coord_t size_t = string->args.line_multi ? string->args.height : string->args.width;
+                scui_area_t  img_1 = {0}, img_2 = {0};
+                scui_area_t  dst_1 = {0}, dst_2 = {0};
+                bool have_1 = false, have_2 = false;
+                scui_string_scroll_map(offset, mirror, size_t, limit_all,
+                    string->args.mode_scroll == 1 ? gap : 0,
+                    &img_1, &dst_1, &have_1, &img_2, &dst_2, &have_2);
+                
+                
+                if (have_1) {
                     scui_area_t  draw_clip = widget->clip;
                     scui_area_t image_clip = scui_image_area(string->draw_image);
                     draw_clip.x = draw_clip.y = 0;
-                    
-                    if (string->args.offset < 0) {
-                        image_clip.x = string->args.line_multi ? 0 : -string->args.offset;
-                        image_clip.y = string->args.line_multi ? -string->args.offset : 0;
+                    if (string->args.line_multi) {
+                        image_clip.y = img_1.x;
+                        image_clip.h = img_1.w;
+                        draw_clip.y = dst_1.x;
                     } else {
-                        draw_clip.x += string->args.line_multi ? 0 : string->args.offset;
-                        draw_clip.y += string->args.line_multi ? string->args.offset : 0;
+                        image_clip.x = img_1.x;
+                        image_clip.w = img_1.w;
+                        draw_clip.x = dst_1.x;
                     }
                     scui_widget_draw_image(widget->myself, &draw_clip, string->draw_image, &image_clip, SCUI_COLOR_UNUSED);
                 }
-                if (string->args.mode_scroll == 1 && string->args.limit > 0) {
+                if (have_2) {
                     scui_area_t  draw_clip = widget->clip;
                     scui_area_t image_clip = scui_image_area(string->draw_image);
                     draw_clip.x = draw_clip.y = 0;
-                    
-                    scui_coord_t offset    = string->args.offset;
-                    scui_coord_t limit_all = string->args.line_multi ? widget->clip.h : widget->clip.w;
-                    offset += string->args.limit + limit_all;
-                    offset += string->args.line_multi ? SCUI_WIDGET_STRING_SCROLL_LINE : 0;
-                    offset += string->args.line_multi ? 0 : SCUI_WIDGET_STRING_SCROLL_ITEM;
-                    
-                    draw_clip.x += string->args.line_multi ? 0 : offset;
-                    draw_clip.y += string->args.line_multi ? offset : 0;
+                    if (string->args.line_multi) {
+                        image_clip.y = img_2.x;
+                        image_clip.h = img_2.w;
+                        draw_clip.y = dst_2.x;
+                    } else {
+                        image_clip.x = img_2.x;
+                        image_clip.w = img_2.w;
+                        draw_clip.x = dst_2.x;
+                    }
                     scui_widget_draw_image(widget->myself, &draw_clip, string->draw_image, &image_clip, SCUI_COLOR_UNUSED);
                 }
             }
@@ -542,18 +613,36 @@ void scui_string_invoke(scui_event_t *event)
         }
         
         /* 无缓存块的绘制下 */
+        /* 滚动映射(无缓存用绘制偏移表达) */
+        /* mirror按控件自身RTL状态(align_rtl): 语言切换瞬间按旧语言渲染, 无过渡空帧 */
+        scui_coord_t offset_bak = string->args.offset;
+        bool mirror = string->align_rtl && !string->args.line_multi;
+        /* 段1: 绘制偏移(窗口显示缓存区间 [s1, s1+W], off=-s1) */
+        string->args.offset = mirror ? offset_bak - string->args.limit : offset_bak;
         scui_widget_draw_string(widget->myself, NULL, &string->args);
         /* */
         if (string->args.mode_scroll == 1 && string->args.limit > 0) {
-            scui_coord_t offset = string->args.offset;
             scui_coord_t limit_all = string->args.line_multi ? widget->clip.h : widget->clip.w;
-            string->args.offset += string->args.limit + limit_all;
-            string->args.offset += string->args.line_multi ? SCUI_WIDGET_STRING_SCROLL_LINE : 0;
-            string->args.offset += string->args.line_multi ? 0 : SCUI_WIDGET_STRING_SCROLL_ITEM;
-            
-            scui_widget_draw_string(widget->myself, NULL, &string->args);
-            string->args.offset = offset;
+            scui_coord_t gap = string->args.line_multi ?
+                SCUI_WIDGET_STRING_SCROLL_LINE : SCUI_WIDGET_STRING_SCROLL_ITEM;
+            scui_coord_t size_t = string->args.line_multi ? string->args.height : string->args.width;
+            /* 段2: 轮转补片(与缓存路径同映射, 用绘制偏移表达) */
+            scui_area_t  img_1 = {0}, img_2 = {0};
+            scui_area_t  dst_1 = {0}, dst_2 = {0};
+            bool have_1 = false, have_2 = false;
+            scui_string_scroll_map(offset_bak, mirror, size_t, limit_all, gap,
+                &img_1, &dst_1, &have_1, &img_2, &dst_2, &have_2);
+            if (have_2) {
+                /* 补片绘制偏移: 开头对齐进入侧 */
+                if (mirror)
+                    string->args.offset = -img_2.x;
+                else
+                    string->args.offset = limit_all - img_2.w;
+                
+                scui_widget_draw_string(widget->myself, NULL, &string->args);
+            }
         }
+        string->args.offset = offset_bak;
         break;
     }
     case scui_event_layout: {
@@ -625,12 +714,25 @@ void scui_string_invoke(scui_event_t *event)
         
         if (string->text != SCUI_HANDLE_INVALID) {
             string->unit_over = false;
-            string->unit_way  = 1;
+            /* 滚动方向: RTL内容右移(offset正向), LTR内容左移(offset负向) */
+            string->unit_way  = scui_lang_RTL() && !string->args.line_multi ? -1 : 1;
+            /* 立即归位滚动位移(切换瞬间不再沿用旧语言滚动值) */
+            string->args.offset = 0;
             scui_handle_t text = string->text;
             scui_string_update_text(widget->myself, SCUI_HANDLE_INVALID);
             scui_lang_get(&string->args.lang);
             string->args.size = scui_font_size_match(string->font_idx, string->args.size);
             string->args.name = scui_font_name_match(string->font_idx, string->args.lang);
+            
+            /* RTL语言: 左对齐自动调整为右对齐(切回常规语言时还原) */
+            if (string->align_rtl) {
+                string->args.align_hor = 0;
+                string->align_rtl      = false;
+            }
+            if (string->args.align_hor == 0 && scui_lang_RTL()) {
+                string->args.align_hor  = 1;
+                string->align_rtl       = true;
+            }
             scui_string_update_text(widget->myself, text);
             scui_widget_draw(widget->myself, NULL, true, 0);
         }

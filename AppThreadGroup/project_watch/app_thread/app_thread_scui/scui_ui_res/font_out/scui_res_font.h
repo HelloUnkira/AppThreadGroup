@@ -5,11 +5,12 @@
 
 typedef enum {
 	scui_font_lang_ascii,
-	scui_font_lang_multi,
 	scui_font_lang_symbol,
 	scui_font_lang_en,
 	scui_font_lang_eu,
 	scui_font_lang_cjk,
+	scui_font_lang_ap,
+	scui_font_lang_multi,
 } scui_font_lang_t;
 
 typedef enum {
@@ -46,10 +47,12 @@ typedef enum {
 	scui_font_eu_36bin, // 0x401d
 	scui_font_cjk_32bin, // 0x401e
 	scui_font_cjk_36bin, // 0x401f
-	scui_font_tinyTTFttf, // 0x4020
+	scui_font_ap_32bin, // 0x4020
+	scui_font_ap_36bin, // 0x4021
+	scui_font_tinyTTFttf, // 0x4022
 } scui_font_type_t;
 
-extern const void * const scui_font_package_table[33];
+extern const void * const scui_font_package_table[35];
 
 /*@brief 字库语言字号匹配
  *@param lang 字库语言类型

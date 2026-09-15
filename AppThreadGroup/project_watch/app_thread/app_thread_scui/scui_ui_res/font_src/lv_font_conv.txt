@@ -123,4 +123,6 @@ lv_font_conv --font font_symbol.woff -r 61441,61448,61451,61452,61452,61453,6145
 
 lv_font_conv --font font_symbol.woff -r 61441,61448,61451,61452,61452,61453,61457,61459,61461,61465,61468,61473,61478,61479,61480,61502,61507,61512,61515,61516,61517,61521,61522,61523,61524,61543,61544,61550,61552,61553,61556,61559,61560,61561,61563,61587,61589,61636,61637,61639,61641,61664,61671,61674,61683,61724,61732,61787,61931,62016,62017,62018,62019,62020,62087,62099,62212,62189,62810,63426,63650 --size 36 --format bin  --bpp 8 --no-prefilter --no-kerning -o ../font_bin/font_symbol_36.bin
 
-
+例子(阿拉伯/波斯语字库 ap: DejaVuSans, 含阿拉伯呈现形式表; 参考lvgl官方persian_hebrew字库参数):
+lv_font_conv --font DejaVuSans.ttf -r 0x20-0x7f,0x600-0x6FF,0xFB50-0xFDFF,0xFE70-0xFEFF --size 32 --format bin --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ap_32.bin
+lv_font_conv --font DejaVuSans.ttf -r 0x20-0x7f,0x600-0x6FF,0xFB50-0xFDFF,0xFE70-0xFEFF --size 36 --format bin --bpp 4 --no-prefilter --no-kerning -o ../font_bin/font_ap_36.bin

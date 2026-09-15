@@ -3,11 +3,12 @@
     "anno": "字库字号信息映射表",
     "lang": [
         "ascii",
-        "multi",
         "symbol",
         "en",
         "eu",
-        "cjk"
+        "cjk",
+        "ap",
+        "multi"
     ],
     "info": [
         {
@@ -235,6 +236,27 @@
             "name": [
                 "font_cjk_32.bin",
                 "font_cjk_36.bin"
+            ],
+            "ext": [
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                },
+                {
+                    "base_line_ext": 0,
+                    "line_height_ext": 0
+                }
+            ]
+        },
+        {
+            "lang": "ap",
+            "size": [
+                32,
+                36
+            ],
+            "name": [
+                "font_ap_32.bin",
+                "font_ap_36.bin"
             ],
             "ext": [
                 {

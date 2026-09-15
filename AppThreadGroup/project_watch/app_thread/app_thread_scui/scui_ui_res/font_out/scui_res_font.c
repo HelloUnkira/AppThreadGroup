@@ -386,11 +386,35 @@ static const scui_font_t font_cjk_36_bin = {
 	
 };
 
+static const scui_font_t font_ap_32_bin = {
+	.font_name	 = "font_ap_32.bin",
+	.font_lang	 = scui_font_lang_ap,
+	.font_size	 = 32,
+	.data_bin	 = 0x850af0,
+	.size_bin	 = 0x19c04,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
+};
+
+static const scui_font_t font_ap_36_bin = {
+	.font_name	 = "font_ap_36.bin",
+	.font_lang	 = scui_font_lang_ap,
+	.font_size	 = 36,
+	.data_bin	 = 0x86a6f4,
+	.size_bin	 = 0x202dc,
+	
+	.base_line_ext = 0x0,
+	.line_height_ext = 0x0,
+	
+};
+
 static const scui_font_t font_tinyTTF_ttf = {
 	.font_name	 = "font_tinyTTF.ttf",
 	.font_lang	 = scui_font_lang_multi,
 	.font_size	 = 0,
-	.data_bin	 = 0x850af0,
+	.data_bin	 = 0x88a9d0,
 	.size_bin	 = 0xc256c4,
 	
 	.base_line_ext = 0x0,
@@ -398,7 +422,7 @@ static const scui_font_t font_tinyTTF_ttf = {
 	
 };
 
-const void * const scui_font_package_table[33] = {
+const void * const scui_font_package_table[35] = {
 	(void *)&font_ascii_8_bin,
 	(void *)&font_ascii_12_bin,
 	(void *)&font_ascii_16_bin,
@@ -431,6 +455,8 @@ const void * const scui_font_package_table[33] = {
 	(void *)&font_eu_36_bin,
 	(void *)&font_cjk_32_bin,
 	(void *)&font_cjk_36_bin,
+	(void *)&font_ap_32_bin,
+	(void *)&font_ap_36_bin,
 	(void *)&font_tinyTTF_ttf,
 };
 
@@ -453,6 +479,10 @@ scui_handle_t scui_font_match(scui_font_lang_t lang, scui_handle_t size)
 		return scui_font_cjk_32bin;
 	if (size ==  36 && lang == scui_font_lang_cjk)
 		return scui_font_cjk_36bin;
+	if (size ==  32 && lang == scui_font_lang_ap)
+		return scui_font_ap_32bin;
+	if (size ==  36 && lang == scui_font_lang_ap)
+		return scui_font_ap_36bin;
 	
 	return SCUI_HANDLE_INVALID;
 }

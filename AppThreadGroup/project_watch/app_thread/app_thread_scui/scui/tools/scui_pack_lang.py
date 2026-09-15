@@ -34,6 +34,8 @@ SCUI_LANG_COL_ABBR  = 1             # 第2列: 拼音区
 SCUI_LANG_COL_DATA  = 2             # 第3列起: 语言数据
 SCUI_LANG_HEAD_IDX  = '编号区'
 SCUI_LANG_HEAD_ABBR = '拼音区'
+# 语言表头标记: 允许在语言名后追加 '-标记'(如 'ar-RTL'), 声明该语言从右到左书写(RTL)
+SCUI_LANG_FLAG_RTL  = 'RTL'
 # 拼音区: 最多取前 N 个汉字的首字母(可能不足 N 个)
 SCUI_LANG_ABBR_MAX  = 6
 # 归一化统一写入的默认单元格属性列宽
@@ -145,13 +147,27 @@ def _sheet_pick(wb):
     return wb[wb.sheetnames[0]]
 
 
+def _lang_header_parse(text):
+    """解析第1行语言表头: 名称[-标记...] => (名称, 标记集)
+    例: 'ar-RTL' => ('ar', {'RTL'})
+    """
+    parts = str(text).split('-')
+    name  = parts[0].strip()
+    flags = set([p.strip().upper() for p in parts[1:] if p.strip() != ''])
+    return name, flags
+
+
 def _sheet_layout(ws):
-    """读取: 语言列表 + 数据行/列范围(1基, 含端点)"""
+    """读取: 语言列表 + RTL标记 + 数据行/列范围(1基, 含端点)"""
     langs = []
+    rtl   = []
     for c in range(SCUI_LANG_COL_DATA + 1, ws.max_column + 1):
-        langs.append(_cell_text(ws.cell(SCUI_LANG_ROW_HEAD + 1, c)).strip())
+        name, flags = _lang_header_parse(_cell_text(ws.cell(SCUI_LANG_ROW_HEAD + 1, c)))
+        langs.append(name)
+        rtl.append(SCUI_LANG_FLAG_RTL in flags)
     while langs and langs[-1] == '':
         langs.pop()
+        rtl.pop()
     row_s = SCUI_LANG_ROW_HEAD + 2
     row_e = ws.max_row
     col_hint = SCUI_LANG_COL_DATA + 1
@@ -159,7 +175,7 @@ def _sheet_layout(ws):
         row_e -= 1
     col_s = SCUI_LANG_COL_DATA + 1
     col_e = col_s + len(langs) - 1
-    return langs, row_s, row_e, col_s, col_e
+    return langs, rtl, row_s, row_e, col_s, col_e
 
 
 def _legacy_migrate(ws, log):
@@ -191,7 +207,7 @@ def normalize_scui_lang_sheet(src_path, log=print):
     if _cell_text(ws.cell(1, SCUI_LANG_COL_IDX + 1)).strip() != SCUI_LANG_HEAD_IDX:
         _legacy_migrate(ws, log)
 
-    langs, row_s, row_e, col_s, col_e = _sheet_layout(ws)
+    langs, rtl, row_s, row_e, col_s, col_e = _sheet_layout(ws)
     if not langs:
         log('lang 语言列表为空(第1行), 跳过归一化')
         wb.close()
@@ -244,6 +260,9 @@ def normalize_scui_lang_sheet(src_path, log=print):
     wb.save(path)
     wb.close()
     log('lang 归一化完成: %d 行, %d 语言 => %s' % (row_e - row_s + 1, len(langs), _rel_ui(path)))
+    langs_rtl = [langs[idx] for idx in range(len(langs)) if rtl[idx]]
+    if langs_rtl:
+        log('lang RTL语言(从右到左): %s' % ', '.join(langs_rtl))
     return langs, row_e - row_s + 1
 
 
@@ -269,7 +288,7 @@ def encode_scui_lang_parser_bin(file, ws, langs, row_s, row_e, col_s, col_e):
 
 
 # 编写集成化源文件
-def encode_scui_lang_parser_c(file, ws, langs, row_s, row_e, col_s, col_e):
+def encode_scui_lang_parser_c(file, ws, langs, rtl, row_s, row_e, col_s, col_e):
     n_row = row_e - row_s + 1
     n_col = len(langs)
     file.write('/* 本文件由 scui_pack_tools.exe 生成 */\n\n')
@@ -351,6 +370,21 @@ def encode_scui_lang_parser_c(file, ws, langs, row_s, row_e, col_s, col_e):
     file.write('\t#endif\n')
     file.write('\treturn str_utf8;\n')
     file.write('}\n\n\n')
+    # 填充函数定义或者声明(RTL: 由第1行语言表头的 '-RTL' 标记决定)
+    file.write('/*@brief 获取多国语语言类型是否为RTL(从右到左)\n')
+    file.write(' *@retval 是否为RTL\n */\n')
+    file.write('bool scui_lang_RTL(void)\n{\n')
+    if True in rtl:
+        file.write('\tswitch (scui_lang_type) {\n')
+        for idx, item in enumerate(langs):
+            if rtl[idx]:
+                file.write('\tcase scui_lang_type_%s:\n' % item)
+        file.write('\t\treturn true;\n')
+        file.write('\tdefault:\n\t\treturn false;\n')
+        file.write('\t}\n')
+    else:
+        file.write('\treturn false;\n')
+    file.write('}\n\n\n')
 
 
 # 编写集成化头文件
@@ -421,6 +455,10 @@ def encode_scui_lang_parser_h(file, ws, langs, row_s, row_e, col_s, col_e, offse
     file.write(' *@param type   语言类型编号\n')
     file.write(' *@retval 字符串\n */\n')
     file.write('const char * scui_lang_str(scui_handle_t handle, scui_lang_type_t type);\n\n')
+    # 填充函数定义或者声明
+    file.write('/*@brief 获取多国语语言类型是否为RTL(从右到左)\n')
+    file.write(' *@retval 是否为RTL\n */\n')
+    file.write('bool scui_lang_RTL(void);\n\n')
     file.write('#endif\n')
 
 
@@ -464,7 +502,7 @@ def encode_scui_lang_parser():
     # 以落盘结果为准重新打开工作簿
     xlsx_file = openpyxl.load_workbook(_sheet_path(src_path), read_only=False)
     xlsx_sheet = _sheet_pick(xlsx_file)
-    langs, row_s, row_e, col_s, col_e = _sheet_layout(xlsx_sheet)
+    langs, rtl, row_s, row_e, col_s, col_e = _sheet_layout(xlsx_sheet)
     if not langs:
         print('sheet language list is empty(head row)')
         xlsx_file.close()
@@ -477,7 +515,7 @@ def encode_scui_lang_parser():
     # 解析
     encode_scui_lang_parser_h(scui_lang_parser_h, xlsx_sheet, langs, row_s, row_e, col_s, col_e,
                               offset_name, offset_value)
-    encode_scui_lang_parser_c(scui_lang_parser_c, xlsx_sheet, langs, row_s, row_e, col_s, col_e)
+    encode_scui_lang_parser_c(scui_lang_parser_c, xlsx_sheet, langs, rtl, row_s, row_e, col_s, col_e)
     encode_scui_lang_parser_bin(scui_lang_parser_bin, xlsx_sheet, langs, row_s, row_e, col_s, col_e)
     encode_scui_lang_parser_txt(scui_lang_parser_txt, xlsx_sheet, langs, row_s, row_e, col_s, col_e)
     # 关闭四个文件

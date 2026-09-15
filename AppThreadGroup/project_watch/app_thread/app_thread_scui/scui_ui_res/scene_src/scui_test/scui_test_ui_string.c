@@ -42,19 +42,18 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         string_maker.widget.parent     = event->object;
         string_maker.args.line_width   = 2;
         string_maker.args.mode_scroll  = 1;
-        string_maker.args.align_hor    = 2;
+        string_maker.args.align_hor    = 0;
         string_maker.args.align_ver    = 2;
         string_maker.args.regrad       = true;
         string_maker.draw_cache        = true;
         
-        string_maker.font_idx  = SCUI_FONT_IDX_MZ;
-        string_maker.args.lang = scui_lang_type_multi;
+        string_maker.font_idx  = SCUI_FONT_IDX_32;
         string_maker.args.size = scui_ui_res_local->font_size;
         
         /* test:全文本渐变 */
         scui_coord_t y_offset = 25;
-        string_maker.widget.clip.x = SCUI_HOR_RES / 4;
-        string_maker.widget.clip.w = SCUI_HOR_RES / 2;
+        string_maker.widget.clip.x = SCUI_HOR_RES / 6;
+        string_maker.widget.clip.w = SCUI_HOR_RES * 2 / 3;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 50;
         string_maker.text             = SCUI_LANG_IDX_0X0029;
@@ -67,8 +66,6 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         scui_ui_res_local->string[0] = string_handle;
         
         y_offset += string_maker.widget.clip.h + 10;
-        string_maker.widget.clip.x = SCUI_HOR_RES / 4;
-        string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 50;
         string_maker.text             = SCUI_LANG_IDX_0X002e;
@@ -81,8 +78,6 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         scui_ui_res_local->string[1] = string_handle;
         
         y_offset += string_maker.widget.clip.h + 10;
-        string_maker.widget.clip.x = SCUI_HOR_RES / 4;
-        string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 130;
         string_maker.text             = SCUI_LANG_IDX_0X0034;
@@ -96,8 +91,6 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         scui_ui_res_local->string[2] = string_handle;
         
         y_offset += string_maker.widget.clip.h + 10;
-        string_maker.widget.clip.x = SCUI_HOR_RES / 4;
-        string_maker.widget.clip.w = SCUI_HOR_RES / 2;
         string_maker.widget.clip.y = y_offset;
         string_maker.widget.clip.h = 130;
         string_maker.text             = SCUI_LANG_IDX_0X0042;
@@ -120,11 +113,10 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         static const scui_lang_type_t lang_type_table[] = {
             scui_lang_type_zh,
             scui_lang_type_en,
-            scui_lang_type_de,
-            scui_lang_type_fra,
-            scui_lang_type_nl,
-            scui_lang_type_pt,
             scui_lang_type_jp,
+            scui_lang_type_fra,
+            scui_lang_type_ar,
+            scui_lang_type_fa,
         };
         scui_lang_type_t lang_type = 0;
         scui_lang_get(&lang_type);

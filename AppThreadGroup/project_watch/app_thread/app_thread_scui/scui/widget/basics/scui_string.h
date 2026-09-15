@@ -74,6 +74,7 @@ typedef struct {
     scui_sbitfd_t       unit_anima:1;       /* 滚动动画标记 */
     scui_sbitfd_t       unit_abort:1;       /* 滚动中止标记 */
     scui_sbitfd_t       unit_over:1;        /* 滚动结束标记 */
+    scui_sbitfd_t       align_rtl:1;        /* 排版对齐(RTL自动调整标记) */
     scui_coord_t        unit_way;           /* 滚动单元方向 */
     scui_coord_t        rcd_ms;
     uint8_t            *str_utf8;           /* 字符串(utf8) */
@@ -121,8 +122,10 @@ void scui_string_invoke(scui_event_t *event);
 void scui_string_args_proc(scui_string_args_t *args);
 
 /* string args extend: */
-void scui_string_args_trans_ap(scui_string_args_t *args);
-uint32_t scui_utf8_str_bytes_ap(uint8_t *str_utf8);
+void scui_string_RTL(scui_string_args_t *args);
+void scui_string_BIDI(scui_string_args_t *args);
+bool scui_string_RTL_break(scui_string_args_t *args, scui_coord_t idx_t);
+uint32_t scui_utf8_str_bytes_RTL(uint8_t *str_utf8);
 
 /*****************************************************************************/
 /* utf-8 unicode tools<s>: */
