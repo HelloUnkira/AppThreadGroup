@@ -113,3 +113,89 @@ scui_handle_t scui_font_size_match(scui_handle_t font_idx, scui_handle_t font_si
     /* 固定字号 */
     return 0;
 }
+
+static scui_lang_type_t scui_lang_type = 0;
+
+/*@brief 获取多国语语言类型
+ *@param type 语言类型编号
+ */
+void scui_lang_get(scui_lang_type_t *type)
+{
+    SCUI_ASSERT(type != NULL);
+    *type = scui_lang_type;
+}
+
+/*@brief 设置多国语语言类型
+ *@param type 语言类型编号
+ */
+void scui_lang_set(scui_lang_type_t *type)
+{
+    SCUI_ASSERT(type != NULL);
+    bool rtl_old = scui_lang_RTL();
+    scui_lang_type = *type;
+    bool rtl_new = scui_lang_RTL();
+    
+    #if 0
+    
+    if (rtl_old != rtl_new) {
+        /* 读写方向发生翻转时走全局镜像流程(重建控件树) */
+        scui_event_define_absorb_none(event, SCUI_HANDLE_SYSTEM, false, scui_event_lang_mirror);
+        scui_event_notify(&event);
+    } else {
+        /* 否则仅更新语言文本 */
+        scui_event_define_absorb_none(event, SCUI_HANDLE_SYSTEM, false, scui_event_lang_change);
+        scui_event_notify(&event);
+    }
+    #else
+    /* 更新语言文本 */
+    /* 我先禁用mirror的实现,仅仅只是镜像控件,应该不能完全达到验收标准(逻辑流程已打通) */
+    scui_event_define_absorb_none(event, SCUI_HANDLE_SYSTEM, false, scui_event_lang_change);
+    scui_event_notify(&event);
+    #endif
+}
+
+/*@brief 多国语字符串转换
+ *       需要同步拷贝使用
+ *@param handle 字符串句柄
+ *@param type   语言类型编号
+ *@retval 字符串
+ */
+const char * scui_lang_str(scui_handle_t handle, scui_lang_type_t type)
+{
+    scui_handle_t string = handle;
+    switch (type) {
+    default: string += type; break;
+    case scui_lang_type_multi: string += scui_lang_type; break;
+    case scui_lang_type_ascii: string += scui_lang_type; break;
+    case scui_lang_type_symbol: string += scui_lang_type; break;
+    }
+    string -= scui_lang_ofs_num;
+    
+    #if SCUI_LANG_PARSER_BIN_USE
+    static uint8_t scui_lang_str_buffer[SCUI_LANG_STR_BYTES_MAX + 1] = {0};
+    const scui_lang_item_t *item_utf8 = scui_handle_source(string);
+    SCUI_ASSERT(item_utf8->length < SCUI_LANG_STR_BYTES_MAX + 1);
+    SCUI_ASSERT(item_utf8->offset + item_utf8->length < SCUI_LANG_SRC_BYTES_SIZE);
+    scui_lang_src_read(scui_lang_str_buffer, item_utf8->offset, item_utf8->length);
+    scui_lang_str_buffer[item_utf8->length] = '\0';
+    const char *str_utf8 = scui_lang_str_buffer;
+    #else
+    const char *str_utf8 = scui_handle_source(string);
+    #endif
+    return str_utf8;
+}
+
+/*@brief 获取多国语语言类型是否为RTL(从右到左)
+ *@retval 是否为RTL
+ */
+bool scui_lang_RTL(void)
+{
+    /* 新增RTL语言需在此登记 */
+    switch (scui_lang_type) {
+    case scui_lang_type_ar:
+    case scui_lang_type_fa:
+        return true;
+    default:
+        return false;
+    }
+}

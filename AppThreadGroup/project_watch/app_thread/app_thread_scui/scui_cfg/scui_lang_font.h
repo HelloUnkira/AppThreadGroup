@@ -32,4 +32,27 @@ scui_handle_t scui_font_name_match(scui_handle_t font_idx, scui_handle_t lang_ty
  */
 scui_handle_t scui_font_size_match(scui_handle_t font_idx, scui_handle_t font_size);
 
+/*@brief 获取多国语语言类型
+ *@param type 语言类型编号
+ */
+void scui_lang_get(scui_lang_type_t *type);
+
+/*@brief 设置多国语语言类型
+ *@param type 语言类型编号
+ */
+void scui_lang_set(scui_lang_type_t *type);
+
+/*@brief 多国语字符串转换
+ *       需要同步拷贝使用
+ *@param handle 字符串句柄
+ *@param type   语言类型编号
+ *@retval 字符串
+ */
+const char * scui_lang_str(scui_handle_t handle, scui_lang_type_t type);
+
+/*@brief 获取多国语语言类型是否为RTL(从右到左)
+ *@retval 是否为RTL
+ */
+bool scui_lang_RTL(void);
+
 #endif

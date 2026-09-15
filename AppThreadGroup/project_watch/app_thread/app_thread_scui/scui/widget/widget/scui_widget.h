@@ -59,6 +59,7 @@ typedef struct {
     scui_sbitfd_t layout_w:1;           /* 布局自动计算控件宽 */
     scui_sbitfd_t layout_h:1;           /* 布局自动计算控件高 */
     scui_sbitfd_t indev_hold:1;         /* 输入事件持续占有(拒绝其他输入) */
+    scui_sbitfd_t mirror_rtl:1;         /* 控件树全局RTL镜像已执行(布局后单次) */
 } scui_widget_state_t;
 
 /*@brief 控件动画

@@ -577,6 +577,22 @@ void scui_window_event_dispatch(scui_event_t *event)
         scui_cache_glyph_rectify();
         break;
     }
+    case scui_event_lang_mirror: {
+        /* 全局镜像: 除活跃界面外, 其余界面统一隐藏以释放资源 */
+        scui_handle_t handle_active = scui_window_active_curr();
+        for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
+            scui_handle_t handle = scui_window_list.acts_cur[idx];
+            if (handle == SCUI_HANDLE_INVALID) continue;
+            if (handle == handle_active) continue;
+            scui_widget_hide(handle, true);
+        }
+        
+        /* 镜像之后补充一次预加载 */
+        scui_event_define_absorb_none(event, handle_active, false,
+            scui_event_window_preload);
+        scui_event_notify(&event);
+        return;
+    }
     }
     
     /* 窗口列表的组合调度:元素处理 */

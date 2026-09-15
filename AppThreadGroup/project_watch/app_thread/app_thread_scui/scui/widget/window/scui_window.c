@@ -31,6 +31,7 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
     window->resident = window_maker->resident;
     window->preload  = window_maker->preload;
     window->level    = window_maker->level;
+    window->mirror   = window_maker->mirror;
     
     /* 配置邻近窗口: */
     for (scui_coord_t idx = 0; idx < 4; idx++)

@@ -204,8 +204,42 @@ void scui_event_custom_check(scui_event_t *event)
 /*@brief 事件响应
  *@param event 事件包
  */
+static void scui_event_custom_mirror(scui_event_t *event)
+{
+    /* 界面句柄对框架不可见: 由自定义层重置到基准界面 */
+    /* 重置会销毁并重建控件树, 借此完成全局RTL镜像刷新 */
+    scui_handle_t handle_top = SCUI_HANDLE_INVALID;
+    scui_window_stack_top(&handle_top);
+    
+    /* 基准界面: 测试态回测试主页, 其余回主界面 */
+    scui_handle_t handle_base = handle_top == SCUI_UI_SCENE_TEST_UI_MAIN ?
+        SCUI_UI_SCENE_TEST_UI_MAIN : SCUI_UI_SCENE_HOME;
+    
+    if (handle_top != handle_base) {
+        /* 栈顶发生变更: 走常规跳转以重建控件树 */
+        scui_event_define_absorb_none(event_ui, SCUI_HANDLE_SYSTEM, false,
+            handle_base == SCUI_UI_SCENE_TEST_UI_MAIN ?
+            scui_event_ui_test_goto : scui_event_ui_home_goto);
+        scui_event_notify(&event_ui);
+    } else {
+        /* 栈顶不变时重置语义不生效, 以隐藏+显示强制重建控件树 */
+        scui_widget_hide(handle_top, true);
+        scui_widget_show(handle_top, true);
+    }
+}
+
+/*@brief 事件响应
+ *@param event 事件包
+ */
 void scui_event_custom_access(scui_event_t *event)
 {
+    /* 全局镜像语言: 重置界面以重建控件树 */
+    if (event->type == scui_event_lang_mirror) {
+        scui_event_mask_over(event);
+        scui_event_custom_mirror(event);
+        return;
+    }
+    
     scui_event_custom_system(event);
     scui_event_custom_active(event);
     scui_event_custom_window(event);

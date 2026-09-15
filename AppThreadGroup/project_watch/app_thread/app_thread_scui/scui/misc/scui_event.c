@@ -167,6 +167,14 @@ bool scui_event_dequeue(scui_event_t *event, bool hit, bool any)
     return retval;
 }
 
+/*@brief 事件队列清空
+ */
+void scui_event_clear(void)
+{
+    scui_event_t event = {0};
+    while (scui_event_dequeue(&event, false, false));
+}
+
 /*@brief 事件队列事件数量
  *@retval 事件数量
  */

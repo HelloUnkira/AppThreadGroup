@@ -330,61 +330,8 @@ def encode_scui_lang_parser_c(file, ws, langs, rtl, row_s, row_e, col_s, col_e):
             file.write('\t//--->>>%s\n\t%s,\n' % (data.replace('\n', '\\n'), c_array))
     file.write('};\n')
     file.write('#endif\n')
-    # 填充函数定义或者声明
-    file.write('\nstatic scui_lang_type_t scui_lang_type = 0;\n\n')
-    file.write('/*@brief 获取多国语语言类型\n')
-    file.write(' *@param type 语言类型编号\n */\n\n')
-    file.write('void scui_lang_get(scui_lang_type_t *type)\n{\n')
-    file.write('\tSCUI_ASSERT(type != NULL);\n\t*type = scui_lang_type;\n}\n\n')
-    # 填充函数定义或者声明
-    file.write('/*@brief 设置多国语语言类型\n')
-    file.write(' *@param type 语言类型编号\n */\n\n')
-    file.write('void scui_lang_set(scui_lang_type_t *type)\n{\n')
-    file.write('\tSCUI_ASSERT(type != NULL);\n\tscui_lang_type = *type;\n\t\n')
-    file.write('\tscui_event_define_absorb_none(event, SCUI_HANDLE_SYSTEM, false, ')
-    file.write('scui_event_lang_change);\n')
-    file.write('\tscui_event_notify(&event);\n}\n\n')
-    # 填充函数定义或者声明
-    file.write('/*@brief 多国语字符串转换\n')
-    file.write(' *       需要同步拷贝使用\n')
-    file.write(' *@param handle 字符串句柄\n')
-    file.write(' *@param type   语言类型编号\n')
-    file.write(' *@retval 字符串\n */\n')
-    file.write('const char * scui_lang_str(scui_handle_t handle, scui_lang_type_t type)')
-    file.write('\n{\n\tscui_handle_t string = handle;\n')
-    file.write('\tswitch (type) {\n')
-    file.write('\tdefault: string += type; break;\n')
-    for item in SCUI_LANG_CUSTOM:
-        file.write('\tcase scui_lang_type_%s: string += scui_lang_type; break;\n' % item)
-    file.write('\t}\n\tstring -= scui_lang_ofs_num;\n\t\n')
-    file.write('\t#if SCUI_LANG_PARSER_BIN_USE\n')
-    file.write('\tstatic uint8_t scui_lang_str_buffer[0x%X + 1] = {0};\n' % c_bytes_length_max)
-    file.write('\tconst scui_lang_item_t *item_utf8 = scui_handle_source(string);\n')
-    file.write('\tSCUI_ASSERT(item_utf8->length < 0x%X + 1);\n' % c_bytes_length_max);
-    file.write('\tSCUI_ASSERT(item_utf8->offset + item_utf8->length < 0x%X);\n' % c_bytes_offset);
-    file.write('\tscui_lang_src_read(scui_lang_str_buffer, item_utf8->offset, item_utf8->length);\n')
-    file.write('\tscui_lang_str_buffer[item_utf8->length] = \'\\0\';\n')
-    file.write('\tconst char *str_utf8 = scui_lang_str_buffer;\n')
-    file.write('\t#else\n')
-    file.write('\tconst char *str_utf8 = scui_handle_source(string);\n')
-    file.write('\t#endif\n')
-    file.write('\treturn str_utf8;\n')
-    file.write('}\n\n\n')
-    # 填充函数定义或者声明(RTL: 由第1行语言表头的 '-RTL' 标记决定)
-    file.write('/*@brief 获取多国语语言类型是否为RTL(从右到左)\n')
-    file.write(' *@retval 是否为RTL\n */\n')
-    file.write('bool scui_lang_RTL(void)\n{\n')
-    if True in rtl:
-        file.write('\tswitch (scui_lang_type) {\n')
-        for idx, item in enumerate(langs):
-            if rtl[idx]:
-                file.write('\tcase scui_lang_type_%s:\n' % item)
-        file.write('\t\treturn true;\n')
-        file.write('\tdefault:\n\t\treturn false;\n')
-        file.write('\t}\n')
-    else:
-        file.write('\treturn false;\n')
-    file.write('}\n\n\n')
+    # 多国语索引函数(scui_lang_type/get/set/str/RTL)已迁移至 scui_lang_font.c 手动维护
+    # 生成物仅保留语言表本体与尺寸宏
 
 
 # 编写集成化头文件
@@ -440,25 +387,20 @@ def encode_scui_lang_parser_h(file, ws, langs, row_s, row_e, col_s, col_e, offse
     for idx, item in enumerate(langs):
         file.write('\tscui_lang_type_%s\t\t= %s * %s + scui_lang_ofs_num,\n' % (item, 'scui_lang_str_num', str(idx)))
     file.write('} scui_lang_type_t;\n\n')
-    # 填充函数定义或者声明
-    file.write('/*@brief 获取多国语语言类型\n')
-    file.write(' *@param type 语言类型编号\n */\n')
-    file.write('void scui_lang_get(scui_lang_type_t *type);\n\n')
-    # 填充函数定义或者声明
-    file.write('/*@brief 设置多国语语言类型\n')
-    file.write(' *@param type 语言类型编号\n */\n')
-    file.write('void scui_lang_set(scui_lang_type_t *type);\n\n')
-    # 填充函数定义或者声明
-    file.write('/*@brief 多国语字符串转换\n')
-    file.write(' *       需要同步拷贝使用\n')
-    file.write(' *@param handle 字符串句柄\n')
-    file.write(' *@param type   语言类型编号\n')
-    file.write(' *@retval 字符串\n */\n')
-    file.write('const char * scui_lang_str(scui_handle_t handle, scui_lang_type_t type);\n\n')
-    # 填充函数定义或者声明
-    file.write('/*@brief 获取多国语语言类型是否为RTL(从右到左)\n')
-    file.write(' *@retval 是否为RTL\n */\n')
-    file.write('bool scui_lang_RTL(void);\n\n')
+    # 字符串缓冲尺寸(由内容推导, 供手动维护的 scui_lang_str 使用)
+    c_bytes_offset = 0
+    c_bytes_length_max = 0
+    for idx_col in range(n_col):
+        for idx_row in range(n_row):
+            c_bytes = _cell_text(ws.cell(row_s + idx_row, col_s + idx_col)).encode('utf-8')
+            c_bytes_len = len(c_bytes)
+            c_bytes_offset += c_bytes_len
+            if c_bytes_length_max <= c_bytes_len:
+                c_bytes_length_max = c_bytes_len
+    file.write('/* 多国语字符串缓冲尺寸: 单条最大字节数 */\n')
+    file.write('#define SCUI_LANG_STR_BYTES_MAX                  (0x%X)\n' % c_bytes_length_max)
+    file.write('/* 多国语字符串源总字节数 */\n')
+    file.write('#define SCUI_LANG_SRC_BYTES_SIZE                 (0x%X)\n\n' % c_bytes_offset)
     file.write('#endif\n')
 
 

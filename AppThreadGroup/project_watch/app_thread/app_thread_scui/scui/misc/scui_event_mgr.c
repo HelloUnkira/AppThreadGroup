@@ -63,6 +63,9 @@ static bool scui_event_cb_check(scui_event_t *event)
         scui_event_focus_get,
         scui_event_focus_lost,
         
+        scui_event_lang_mirror,
+        scui_event_lang_change,
+        
         scui_event_scroll_start,
         scui_event_scroll_over,
         scui_event_scroll_keep,
@@ -104,6 +107,7 @@ static void scui_event_adjust_prior(scui_event_t *event)
         [scui_event_child_pos]      = scui_event_prior_above,
         [scui_event_child_size]     = scui_event_prior_above,
         
+        [scui_event_lang_mirror]    = scui_event_prior_above,
         [scui_event_lang_change]    = scui_event_prior_above,
     };
     
@@ -239,6 +243,14 @@ static void scui_event_respond(scui_event_t *event)
             scui_window_event_dispatch(event);
             scui_event_mask_over(event);
             return;
+        }
+        break;
+    case scui_event_lang_mirror:
+        if (event->object == SCUI_HANDLE_SYSTEM) {
+            /* 全局镜像: 所有暂留调度均以旧控件树为对象, 直接清空 */
+            scui_event_clear();
+            /* 窗口管理器清理旧界面, 界面重置交由访问回调处理 */
+            scui_window_event_dispatch(event);
         }
         break;
     }

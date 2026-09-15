@@ -32,6 +32,7 @@ typedef enum {
     scui_event_child_num,           /* 控件的子控件数量变更 */
     scui_event_child_pos,           /* 控件的子控件坐标变更 */
     scui_event_child_size,          /* 控件的子控件尺寸变更 */
+    scui_event_lang_mirror,         /* 全局镜像语言 */
     scui_event_lang_change,         /* 全局更新语言 */
     scui_event_sched_e,
     /* 特殊控件生成事件: */

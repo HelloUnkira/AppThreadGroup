@@ -1553,27 +1553,9 @@ typedef enum {
 	scui_lang_type_fa		= scui_lang_str_num * 8 + scui_lang_ofs_num,
 } scui_lang_type_t;
 
-/*@brief 获取多国语语言类型
- *@param type 语言类型编号
- */
-void scui_lang_get(scui_lang_type_t *type);
-
-/*@brief 设置多国语语言类型
- *@param type 语言类型编号
- */
-void scui_lang_set(scui_lang_type_t *type);
-
-/*@brief 多国语字符串转换
- *       需要同步拷贝使用
- *@param handle 字符串句柄
- *@param type   语言类型编号
- *@retval 字符串
- */
-const char * scui_lang_str(scui_handle_t handle, scui_lang_type_t type);
-
-/*@brief 获取多国语语言类型是否为RTL(从右到左)
- *@retval 是否为RTL
- */
-bool scui_lang_RTL(void);
+/* 多国语字符串缓冲尺寸: 单条最大字节数 */
+#define SCUI_LANG_STR_BYTES_MAX                  (0x279)
+/* 多国语字符串源总字节数 */
+#define SCUI_LANG_SRC_BYTES_SIZE                 (0x219DE)
 
 #endif

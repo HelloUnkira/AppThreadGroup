@@ -171,6 +171,10 @@ bool scui_event_dequeue(scui_event_t *event, bool hit, bool any);
  */
 uint32_t scui_event_num(void);
 
+/*@brief 事件队列清空
+ */
+void scui_event_clear(void);
+
 /*@brief 事件回调列表事件准备
  *@param cb_list 事件回调列表
  */

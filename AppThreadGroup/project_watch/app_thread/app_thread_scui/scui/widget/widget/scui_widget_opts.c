@@ -163,24 +163,36 @@ void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_opt_
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     
+    /* 方向按位判定: 传 hor/ver 或单个方向均可生效 */
+    bool hor = (dir & scui_opt_dir_hor) != 0;
+    bool ver = (dir & scui_opt_dir_ver) != 0;
+    
     /* 移动孩子,迭代它的孩子列表 */
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t  handle_c = widget->child_list[idx];
         scui_widget_t *widget_c = scui_handle_source_check(handle_c);
-        scui_point_t    point_c = {0};
-        point_c.x = widget_c->clip.x;
-        point_c.y = widget_c->clip.y;
         
         /* 存在指定子控件时, 只镜像子控件 */
         if (child != SCUI_HANDLE_INVALID && child != handle_c)
             continue;
         
-        if (scui_opt_bits_equal(dir, scui_opt_dir_hor))
-            point_c.x = widget->clip.w - widget_c->clip.w - widget_c->clip.x;
-        if (scui_opt_bits_equal(dir, scui_opt_dir_ver))
-            point_c.y = widget->clip.h - widget_c->clip.h - widget_c->clip.y;
+        /* 取子控件在父相对坐标系中的坐标 */
+        /* 父即子的独立画布根时, clip坐标已是父相对; 否则剥离父的绝对偏置 */
+        bool  same_surface = scui_widget_root(handle_c) != widget->myself;
+        scui_point_t point_c = {0};
+        point_c.x = widget_c->clip.x;
+        point_c.y = widget_c->clip.y;
+        if (same_surface) {
+            point_c.x -= widget->clip.x;
+            point_c.y -= widget->clip.y;
+        }
         
-        scui_widget_move_pos(handle_c, &point_c, true);
+        /* 镜像到父控件的另一侧(对称翻转) */
+        if (hor) point_c.x = widget->clip.w - widget_c->clip.w - point_c.x;
+        if (ver) point_c.y = widget->clip.h - widget_c->clip.h - point_c.y;
+        
+        /* 父相对坐标写回 */
+        scui_widget_move_pos(handle_c, &point_c, false);
         
         if (!recurse)
              continue;

@@ -705,6 +705,18 @@ void scui_widget_event_dispatch(scui_event_t *event)
             
             /* 布局结束后清空布局参数 */
             scui_widget_layout_clear(widget->myself);
+            /* 全局RTL:仅支持镜像许可的窗口(默认不支持) */
+            /* 自根控件镜像整棵控件树(根控件自身不镜像) */
+            /* 布局以镜像前样式基准, 只镜像一次 */
+            if (widget->type == scui_widget_type_window) {
+                scui_window_t *window = (void *)widget;
+                if (window->mirror && scui_lang_RTL() &&
+                   !widget->state.mirror_rtl) {
+                    widget->state.mirror_rtl = true;
+                    scui_widget_mirror_pos(widget->myself, SCUI_HANDLE_INVALID,
+                        scui_opt_dir_hor, true);
+                }
+            }
         }
         return;
     }
@@ -836,6 +848,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
         scui_event_mask_over(event);
         return;
     }
+    case scui_event_lang_mirror:
     case scui_event_lang_change:
         event->style.suborder = false;
         event->style.preorder = false;
