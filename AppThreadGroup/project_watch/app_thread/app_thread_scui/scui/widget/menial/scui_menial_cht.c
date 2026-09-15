@@ -93,6 +93,7 @@ void scui_menial_cht_style(scui_handle_t handle, scui_menial_cht_res_t *res)
         sub.line.vpos_num.number   = menial->data.cht.number;
         sub.line.stroke.number     = scui_max(res->width, 1);
         sub.line.multi.multi.round = res->round;
+        sub.line.multi.multi.grad  = res->grad;
         
         sub.part  = scui_object_part_line_item;
         sub.state = scui_object_state_def;

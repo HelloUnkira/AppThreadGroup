@@ -110,10 +110,10 @@ typedef union {
     
     /* 组合值: */
     struct {
-    scui_sbitfd_t round:1;      /* arc */
+    scui_sbitfd_t round:1;      /* arc,line */
     scui_sbitfd_t shadow:1;     /* rect */
     scui_sbitfd_t grad_w:1;     /* rect,arc */
-    scui_sbitfd_t grad:1;       /* rect,arc */
+    scui_sbitfd_t grad:1;       /* rect,arc,line */
     } multi;
 } scui_object_data_t;
 

@@ -12,13 +12,13 @@
  */
 void scui_test_ui_list_item_event_proc(scui_event_t *event)
 {
-    static const char * const item_text[16] = {
+    static const char * const item_text[14] = {
         "Test Sim Ptr", "Test Sim Enc", "Test Sim Bar", "Test Sim Key", "Test Multiply Scroll",
         "Test Multiply Layout", "Test Multiply String", "Test Menial Object", "Test Multiply Ximage",
-        "Test Symbol Char", "Test Draw Graph", "Test Ring", "Test Chart", "Test Roller",
-        "Test Button", "Test Misc",
+        "Test Symbol Char", "Test Draw Graph", "Test Ring", "Test Roller",
+        "Test Misc",
     };
-    static const scui_handle_t item_scene[16] = {
+    static const scui_handle_t item_scene[14] = {
         SCUI_UI_SCENE_TEST_UI_INDEV_PTR,
         SCUI_UI_SCENE_TEST_UI_INDEV_ENC,
         SCUI_UI_SCENE_TEST_UI_INDEV_BAR,
@@ -31,9 +31,7 @@ void scui_test_ui_list_item_event_proc(scui_event_t *event)
         SCUI_UI_SCENE_TEST_UI_SYMBOL,
         SCUI_UI_SCENE_TEST_UI_GRAPH,
         SCUI_UI_SCENE_TEST_UI_RING,
-        SCUI_UI_SCENE_TEST_UI_CHART,
         SCUI_UI_SCENE_TEST_UI_ROLLER,
-        SCUI_UI_SCENE_TEST_UI_BUTTON,
         SCUI_UI_SCENE_TEST_UI_MISC,
     };
     
@@ -41,6 +39,8 @@ void scui_test_ui_list_item_event_proc(scui_event_t *event)
     case scui_event_create: {
         /* 文本只能通过函数调用设置 */
         scui_handle_t index = scui_widget_child_to_index(event->object);
+        if (index >= scui_arr_len(item_text))
+            break;
         scui_string_update_str(event->object, item_text[index]);
         break;
     }

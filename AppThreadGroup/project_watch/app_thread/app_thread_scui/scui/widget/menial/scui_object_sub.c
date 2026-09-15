@@ -195,15 +195,25 @@ static void scui_object_tvg_rect_cb(scui_draw_dsc_t *draw_dsc)
             w -= sw;
             h -= sw;
             
+            /* 圆角用cubic贝塞尔近似(90度弧), 保持整条路径连续:
+             * append_arc会move_to新子路径, 空心描边时断点渲染默认方形线帽,
+             * 圆角到直线的连接处会叠加出"大的端点"; 连续闭合路径则无此问题 */
+            float k = r * 0.5522847498f;
+            
             tvg_shape_move_to(paint, x + r, y);
             tvg_shape_line_to(paint, x + w - r, y);
-            tvg_shape_append_arc(paint, x + w - r, y + r, r, 270, 90, 0);
+            /* 右上角: 顶边 -> 右边 */
+            tvg_shape_cubic_to(paint, x + w - r + k, y, x + w, y + r - k, x + w, y + r);
             tvg_shape_line_to(paint, x + w, y + h - r);
-            tvg_shape_append_arc(paint, x + w - r, y + h - r, r, 0, 90, 0);
+            /* 右下角: 右边 -> 底边 */
+            tvg_shape_cubic_to(paint, x + w, y + h - r + k, x + w - r + k, y + h, x + w - r, y + h);
             tvg_shape_line_to(paint, x + r, y + h);
-            tvg_shape_append_arc(paint, x + r, y + h - r, r, 90, 90, 0);
+            /* 左下角: 底边 -> 左边 */
+            tvg_shape_cubic_to(paint, x + r - k, y + h, x, y + h - r + k, x, y + h - r);
             tvg_shape_line_to(paint, x, y + r);
-            tvg_shape_append_arc(paint, x + r, y + r, r, 180, 90, 0);
+            /* 左上角: 左边 -> 顶边 */
+            tvg_shape_cubic_to(paint, x, y + r - k, x + r - k, y, x + r, y);
+            tvg_shape_close(paint);
             
             tvg_shape_set_stroke_color(paint, x_r, x_g, x_b, x_a);
             tvg_shape_set_stroke_width(paint, src_stroke);
@@ -316,6 +326,7 @@ static void scui_object_tvg_line_cb(scui_draw_dsc_t *draw_dsc)
     scui_point_t   *src_vpos    =  draw_dsc->graph.src_vpos;
     scui_coord_t    src_vpos_c  =  draw_dsc->graph.src_vpos_c;
     bool            src_round   =  draw_dsc->graph.src_round;
+    scui_sbitfd_t   src_grad    =  draw_dsc->graph.src_grad;
     /* draw dsc args<e> */
     
     if (src_alpha == scui_alpha_trans)
@@ -338,6 +349,31 @@ static void scui_object_tvg_line_cb(scui_draw_dsc_t *draw_dsc)
     uint8_t s_r = src_color.color.ch.r;
     uint8_t s_g = src_color.color.ch.g;
     uint8_t s_b = src_color.color.ch.b;
+    
+    /* 渐变面积: 折线下方到底边线, 曲线(有)->底边(无) */
+    if (src_grad) {
+        scui_coord_t base_y = draw_dsc->graph.dst_part.y + draw_dsc->graph.dst_part.h;
+        Tvg_Paint *grad_paint = tvg_shape_new();
+        tvg_paint_set_opacity(grad_paint, src_alpha);
+        
+        /* 闭合面积: 底边 -> 曲线 -> 回底边 */
+        tvg_shape_move_to(grad_paint, src_vpos[0].x - dst_clip->x, base_y - dst_clip->y);
+        for (scui_coord_t idx = 0; idx < src_vpos_c; idx++)
+            tvg_shape_line_to(grad_paint, src_vpos[idx].x - dst_clip->x, src_vpos[idx].y - dst_clip->y);
+        tvg_shape_line_to(grad_paint, src_vpos[src_vpos_c - 1].x - dst_clip->x, base_y - dst_clip->y);
+        tvg_shape_close(grad_paint);
+        
+        /* 线性渐变(垂直): 顶部曲线色, 底部透明 */
+        Tvg_Color_Stop g_cs[2] = {0};
+        g_cs[0] = (Tvg_Color_Stop){0.0, .r = s_r, .g = s_g, .b = s_b, .a = s_a,};
+        g_cs[1] = (Tvg_Color_Stop){1.0, .r = s_r, .g = s_g, .b = s_b, .a = 0,};
+        Tvg_Gradient *grad = tvg_linear_gradient_new();
+        tvg_linear_gradient_set(grad, 0, draw_dsc->graph.dst_part.y - dst_clip->y,
+                                     0, base_y - dst_clip->y);
+        tvg_gradient_set_color_stops(grad, g_cs, 2);
+        tvg_shape_set_linear_gradient(grad_paint, grad);
+        tvg_canvas_push(canvas, grad_paint);
+    }
     
     /* 线条序列 */
     tvg_shape_move_to(paint, src_vpos[0].x - dst_clip->x, src_vpos[0].y - dst_clip->y);
@@ -609,8 +645,10 @@ bool scui_object_draw_line(scui_handle_t handle, scui_object_prop_t *prop)
     draw_dsc.type = scui_draw_type_pixel_tvg;
     draw_dsc.graph.src_vpos   = src_data[scui_object_style_idx(line_vpos)].pointer;
     draw_dsc.graph.src_vpos_c = src_data[scui_object_style_idx(line_vpos_num)].number;
-    draw_dsc.graph.src_stroke  = src_data[scui_object_style_idx(line_stroke)].number;
+    draw_dsc.graph.src_stroke = src_data[scui_object_style_idx(line_stroke)].number;
     draw_dsc.graph.src_round  = src_data[scui_object_style_idx(line_multi)].multi.round;
+    draw_dsc.graph.src_grad   = src_data[scui_object_style_idx(line_multi)].multi.grad;
+    draw_dsc.graph.dst_part   = area;
     #if SCUI_DRAW_USE_THORVG
     draw_dsc.graph.src_tvg_cb = scui_object_tvg_line_cb;
     #endif

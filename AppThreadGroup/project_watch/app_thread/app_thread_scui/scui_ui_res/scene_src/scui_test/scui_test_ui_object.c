@@ -110,7 +110,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         btn_res.part = scui_object_part_rect_bg;
         scui_menial_btn_style(menial_handle, &btn_res);
         
-        menial_maker.data.btn.fixed = 0;
+        menial_maker.data.btn.fixed = 1;
         menial_maker.data.btn.check = 0;
         btn_res.width  = 0;
         btn_res.radius = -1;
@@ -132,13 +132,60 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         
         menial_maker.data.btn.fixed = 0;
         menial_maker.data.btn.check = 1;
-        btn_res.width  = 2;
-        btn_res.radius = -1;
         menial_maker.widget.clip.x   = SCUI_HOR_RES * 3 / 4 - 120 / 2;
         menial_maker.widget.clip.y   = btn_ofs_y;
         scui_widget_create(&menial_maker, &menial_handle);
-        btn_res.part = scui_object_part_rect_bg;
-        scui_menial_btn_style(menial_handle, &btn_res);
+        
+        /* 四样式同显(bg/edge/box/sha), 覆盖自test_ui_button倒数1 */
+        scui_menial_btn_res_t bg_res = {0};
+        bg_res.part = scui_object_part_rect_bg;
+        bg_res.color[0].color_s.full = 0xFF87CEFA;  /* def */
+        bg_res.color[1].color_s.full = 0xFF4682B4;  /* pre */
+        bg_res.color[2].color_s.full = 0xFF87CEFA;  /* chk */
+        bg_res.color[3].color_s.full = 0xFF4682B4;  /* chk pre */
+        bg_res.area.w = 120 - (12 + 4 + 4) * 2;
+        bg_res.area.h = 60 - (12 + 4 + 4) * 2;
+        bg_res.width  = 0;
+        bg_res.radius = 30 - (12 + 4 + 4);
+        
+        scui_menial_btn_res_t edge_res = {0};
+        edge_res.part = scui_object_part_rect_edge;
+        edge_res.color[0].color_s.full = 0xFFFFFFFF;  /* def */
+        edge_res.color[1].color_s.full = 0xFFFFFFFF;  /* pre */
+        edge_res.color[2].color_s.full = 0xFFFFFFFF;  /* chk */
+        edge_res.color[3].color_s.full = 0xFFFFFFFF;  /* chk pre */
+        edge_res.area.w = 120 - (12 + 4) * 2;
+        edge_res.area.h = 60 - (12 + 4) * 2;
+        edge_res.width  = 4;
+        edge_res.radius = 30 - (12 + 4);
+        
+        scui_menial_btn_res_t box_res = {0};
+        box_res.part  = scui_object_part_rect_box;
+        box_res.color[0].color_s.full = 0xFFFF0000;  /* def */
+        box_res.color[1].color_s.full = 0xFFFF0000;  /* pre */
+        box_res.color[2].color_s.full = 0xFFFF0000;  /* chk */
+        box_res.color[3].color_s.full = 0xFFFF0000;  /* chk pre */
+        box_res.area.w = 120 - (12) * 2;
+        box_res.area.h = 60 - (12) * 2;
+        box_res.width  = 4;
+        box_res.radius = 30 - (12);
+        
+        scui_menial_btn_res_t sha_res = {0};
+        sha_res.part  = scui_object_part_rect_sha;
+        sha_res.color[0].color_s.full = 0xFF00FF00;  /* def */
+        sha_res.color[1].color_s.full = 0xFF00FF00;  /* pre */
+        sha_res.color[2].color_s.full = 0xFF00FF00;  /* chk */
+        sha_res.color[3].color_s.full = 0xFF00FF00;  /* chk pre */
+        sha_res.area.w = 120 - (0) * 2;
+        sha_res.area.h = 60 - (0) * 2;
+        sha_res.width  = 12;
+        sha_res.radius = 30 - (0);
+        sha_res.shadow = 1;
+        
+        scui_menial_btn_style(menial_handle, &bg_res);
+        scui_menial_btn_style(menial_handle, &edge_res);
+        scui_menial_btn_style(menial_handle, &box_res);
+        scui_menial_btn_style(menial_handle, &sha_res);
         #endif
         
         #if 1
@@ -341,7 +388,7 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         menial_maker.data.cht.area.h = menial_maker.widget.clip.h - 10 * 2;
         
         menial_maker.data.cht.type   = 0;
-        menial_maker.data.cht.number = 15;
+        menial_maker.data.cht.number = 19;
         menial_maker.data.cht.space  = 4;
         cht_res.width = 6;
         menial_maker.widget.clip.x = SCUI_HOR_RES *  1 / 25;
@@ -354,6 +401,7 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         menial_maker.data.cht.number = 30;
         menial_maker.data.cht.space  = 4;
         cht_res.width = 2;
+        cht_res.grad = true;
         menial_maker.widget.clip.x = SCUI_HOR_RES * 13 / 25;
         scui_widget_create(&menial_maker, &menial_handle);
         cht_res.part = scui_object_part_line_item;

@@ -47,6 +47,7 @@ typedef struct {
 typedef struct {
     scui_object_type_t part;      /* 部件(item) */
     scui_sbitfd_t      round:1;   /* 端点圆角 */
+    scui_sbitfd_t      grad:1;    /* 折线阴影 */
     scui_color_t       color;     /* 颜色 */
     scui_coord_t       width;     /* 线宽 */
 } scui_menial_cht_res_t;
