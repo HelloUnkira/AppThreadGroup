@@ -45,6 +45,10 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
     window->switch_enc = window_maker->switch_enc;
     window->switch_enc_way = window_maker->switch_enc_way;
     
+    /* 配置邻近窗口滑条交互: */
+    window->switch_bar = window_maker->switch_bar;
+    window->switch_bar_way = window_maker->switch_bar_way;
+    
     /* 配置邻近窗口按键交互: */
     window->switch_key = window_maker->switch_key;
     for (scui_coord_t idx = 0; idx < 4; idx++)
@@ -54,6 +58,11 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
     if (window->switch_enc_way != scui_opt_dir_hor &&
         window->switch_enc_way != scui_opt_dir_ver)
         window->switch_enc_way  = scui_opt_dir_ver;
+    
+    /* 初始化默认切换类型为垂直优先 */
+    if (window->switch_bar_way != scui_opt_dir_hor &&
+        window->switch_bar_way != scui_opt_dir_ver)
+        window->switch_bar_way  = scui_opt_dir_ver;
     
     /* 初始化默认切换类型为自适应 */
     for(scui_handle_t idx = 0; idx < 4; idx++)
@@ -221,6 +230,33 @@ void scui_window_switch_enc_set(scui_handle_t handle, scui_opt_pos_t switch_enc)
 }
 
 /*@brief 窗口配置参数获取
+ *@param handle      窗口控件句柄
+ *@param switch_bar  配置参数
+ */
+void scui_window_switch_bar_get(scui_handle_t handle, scui_opt_pos_t *switch_bar)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_window_t *window = (void *)widget;
+    
+    SCUI_ASSERT(switch_bar != NULL);
+    *switch_bar = window->switch_bar;
+}
+
+/*@brief 窗口配置参数设置
+ *@param handle      窗口控件句柄
+ *@param switch_bar  配置参数
+ */
+void scui_window_switch_bar_set(scui_handle_t handle, scui_opt_pos_t switch_bar)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_window_t *window = (void *)widget;
+    
+    window->switch_bar = switch_bar;
+}
+
+/*@brief 窗口配置参数获取
  *@param handle     窗口控件句柄
  *@param switch_key 配置参数
  */
@@ -272,6 +308,33 @@ void scui_window_switch_enc_way_set(scui_handle_t handle, scui_opt_dir_t switch_
     scui_window_t *window = (void *)widget;
     
     window->switch_enc_way = switch_enc_way;
+}
+
+/*@brief 窗口配置参数获取
+ *@param handle         窗口控件句柄
+ *@param switch_bar_way 配置参数
+ */
+void scui_window_switch_bar_way_get(scui_handle_t handle, scui_opt_dir_t *switch_bar_way)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_window_t *window = (void *)widget;
+    
+    SCUI_ASSERT(switch_bar_way != NULL);
+    *switch_bar_way = window->switch_bar_way;
+}
+
+/*@brief 窗口配置参数设置
+ *@param handle         窗口控件句柄
+ *@param switch_bar_way 配置参数
+ */
+void scui_window_switch_bar_way_set(scui_handle_t handle, scui_opt_dir_t switch_bar_way)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_window_t *window = (void *)widget;
+    
+    window->switch_bar_way = switch_bar_way;
 }
 
 /*@brief 窗口配置参数获取

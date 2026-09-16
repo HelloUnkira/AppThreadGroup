@@ -1248,10 +1248,10 @@ void scui_scroll_invoke(scui_event_t *event)
         scui_event_mask_over(event);
         break;
     }
+    case scui_event_bar_down:
+        break;
     case scui_event_bar_move:
     case scui_event_bar_fling: {
-        if (widget->state.indev_hold)
-            break;
         
         scui_coord_t way = 0;
         scui_opt_dir_t dir = scui_opt_dir_none;
@@ -1270,25 +1270,33 @@ void scui_scroll_invoke(scui_event_t *event)
         if (scui_scroll_edge_skip(event->object, dir))
             break;
         
-        if (scroll->dir != scui_opt_dir_hor &&
-            scroll->dir != scui_opt_dir_ver) {
-            break;
-        }
-        if (scroll->route_bar == 0) {
-            SCUI_LOG_ERROR("route bar is zero");
-            break;
+        if (!scroll->lock_move) {
+            
+            /* 不匹配的方向不支持 */
+            if (scroll->dir != scui_opt_dir_hor &&
+                scroll->dir != scui_opt_dir_ver) {
+                break;
+            }
+            
+            scroll->lock_move = true;
+            scroll->anima_type = 0;
+            widget->state.indev_hold = true;
+            
+            if (scroll->anima == SCUI_HANDLE_INVALID) {
+                scui_scroll_notify_alone(event->object, 0x00);
+            }
         }
         
+        /* 位移直出(不再route_bar映射), fling是带倍率的move */
         scui_coord_t diff = event->bar_diff;
-        /* fling是带倍率的move */
         if (event->type == scui_event_bar_fling)
             diff *= scroll->fling_page;
         
         scui_point_t offset = {0};
         if (scroll->dir == scui_opt_dir_hor)
-            offset.x = way * scroll->route_bar * diff;
+            offset.x = way * diff;
         if (scroll->dir == scui_opt_dir_ver)
-            offset.y = way * scroll->route_bar * diff;
+            offset.y = way * diff;
         
         if (scroll->anima != SCUI_HANDLE_INVALID) {
             scui_anima_stop(scroll->anima);
@@ -1298,6 +1306,20 @@ void scui_scroll_invoke(scui_event_t *event)
         scroll->anima_type = 2;
         scui_scroll_offset(event->object, &offset, true);
         scui_event_mask_over(event);
+        break;
+    }
+    case scui_event_bar_up: {
+        
+        if (scroll->lock_move) {
+            scroll->lock_move = false;
+            scroll->mask_springback = false;
+            
+            uint8_t type = 0x02;
+            scui_scroll_event_auto(event, type);
+            
+            scroll->anima_type = 4;
+            widget->state.indev_hold = false;
+        }
         break;
     }
     case scui_event_key_hold:

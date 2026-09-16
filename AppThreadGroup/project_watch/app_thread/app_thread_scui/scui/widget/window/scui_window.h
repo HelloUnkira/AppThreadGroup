@@ -12,6 +12,8 @@ typedef struct {
     scui_opt_pos_t      switch_enc;         /* 临近界面旋钮交互(上下左右) */
     scui_opt_pos_t      switch_key;         /* 临近界面按键交互(上下左右) */
     scui_opt_dir_t      switch_enc_way;     /* 临近界面旋钮方向(水平垂直) */
+    scui_opt_pos_t      switch_bar;         /* 临近界面滑条交互(上下左右) */
+    scui_opt_dir_t      switch_bar_way;     /* 临近界面滑条方向(水平垂直) */
     scui_coord_t        switch_key_id[4];   /* 临近界面按键交互id */
     scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
     scui_sbitfd_t       preload:1;          /* 窗口预加载时(许可预加载) */
@@ -34,6 +36,8 @@ typedef struct {
     scui_opt_pos_t      switch_enc;         /* 临近界面旋钮交互(上下左右) */
     scui_opt_pos_t      switch_key;         /* 临近界面按键交互(上下左右) */
     scui_opt_dir_t      switch_enc_way;     /* 临近界面旋钮方向(水平垂直) */
+    scui_opt_pos_t      switch_bar;         /* 临近界面滑条交互(上下左右) */
+    scui_opt_dir_t      switch_bar_way;     /* 临近界面滑条方向(水平垂直) */
     scui_coord_t        switch_key_id[4];   /* 临近界面按键交互id */
     scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
     scui_sbitfd_t       preload:1;          /* 窗口预加载时(许可预加载) */

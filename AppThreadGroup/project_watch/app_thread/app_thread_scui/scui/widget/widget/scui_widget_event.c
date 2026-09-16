@@ -555,6 +555,8 @@ static void scui_widget_event_process(scui_event_t *event)
     case scui_event_anima_elapse:
     case scui_event_ptr_down:
     case scui_event_ptr_up:
+    case scui_event_bar_down:
+    case scui_event_bar_up:
     case scui_event_key_down:
     case scui_event_key_up:
         /* 有些事件不允许被吸收 */

@@ -699,30 +699,29 @@ void scui_window_switch_event(scui_event_t *event)
         
         break;
     }
-    case scui_event_bar_move:
     case scui_event_bar_fling: {
-        
+        /* 滑条切换仅消费fling(不需要跟手down/up) */
         scui_opt_dir_t event_dir = scui_opt_dir_none;
         SCUI_LOG_INFO("bar_way:%u", event->bar_way);
         /* 方向检测与条件加载 */
         if (event->bar_way == 0) {
             
-            if (window->switch_enc_way == scui_opt_dir_hor) {
+            if (window->switch_bar_way == scui_opt_dir_hor) {
                 if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
                 if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_ltr;
             }
-            if (window->switch_enc_way == scui_opt_dir_ver) {
+            if (window->switch_bar_way == scui_opt_dir_ver) {
                 if (window->sibling[2] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_ltr;
                 if (window->sibling[0] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_utd;
             }
         }
         if (event->bar_way == 1) {
             
-            if (window->switch_enc_way == scui_opt_dir_hor) {
+            if (window->switch_bar_way == scui_opt_dir_hor) {
                 if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;
                 if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_rtl;
             }
-            if (window->switch_enc_way == scui_opt_dir_ver) {
+            if (window->switch_bar_way == scui_opt_dir_ver) {
                 if (window->sibling[3] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_rtl;
                 if (window->sibling[1] != SCUI_HANDLE_INVALID) event_dir = scui_opt_dir_dtu;
             }

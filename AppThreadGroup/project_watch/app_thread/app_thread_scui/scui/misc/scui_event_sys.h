@@ -71,8 +71,10 @@ typedef enum {
     /* 输入设备事件<bar,s> */
     scui_event_bar_s,
     scui_event_bar_all,
+    scui_event_bar_down,    /* 按下事件(无参) */
     scui_event_bar_fling,   /* 轻扫事件<方向,单位> */
     scui_event_bar_move,    /* 移动事件<方向,单位> */
+    scui_event_bar_up,      /* 抬起事件(无参) */
     scui_event_bar_e,
     /* 输入设备事件<bar,e> */
     

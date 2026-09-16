@@ -73,12 +73,16 @@ void scui_test_ui_indev_bar_strip_event_proc(scui_event_t *event)
         scui_indev_notify(&indev_data);
         break;
     }
+    case scui_event_bar_down:
+    case scui_event_bar_fling:
     case scui_event_bar_move:
-    case scui_event_bar_fling: {
+    case scui_event_bar_up: {
         const char *name = NULL;
         switch (event->type) {
-        case scui_event_bar_move:  name = "move";  break;
+        case scui_event_bar_down:  name = "down";  break;
         case scui_event_bar_fling: name = "fling"; break;
+        case scui_event_bar_move:  name = "move";  break;
+        case scui_event_bar_up:    name = "up";    break;
         }
         char mark[SCUI_UI_INDEV_BAR_MARK_LEN];
         snprintf(mark, sizeof(mark), "%s(way:%d,diff:%d)",

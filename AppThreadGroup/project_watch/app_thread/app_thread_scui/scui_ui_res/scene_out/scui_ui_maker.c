@@ -20,8 +20,10 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		window_maker->preload                = 1;
 		window_maker->level                  = 0;
 		window_maker->switch_enc             = scui_opt_pos_all;
+		window_maker->switch_bar             = scui_opt_pos_all;
 		window_maker->switch_key             = scui_opt_pos_all;
 		window_maker->switch_enc_way         = scui_opt_dir_ver;
+		window_maker->switch_bar_way         = scui_opt_dir_ver;
 		window_maker->switch_key_id[0]       = scui_event_key_val_down;
 		window_maker->switch_key_id[1]       = scui_event_key_val_up;
 		window_maker->switch_key_id[2]       = scui_event_key_val_right;
