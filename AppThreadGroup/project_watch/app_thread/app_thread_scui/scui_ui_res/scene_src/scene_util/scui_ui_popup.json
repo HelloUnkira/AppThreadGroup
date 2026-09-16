@@ -3,36 +3,46 @@
     "widget": [
         {
             "widget.type":              "scui_widget_type_window",
-            "widget.style.sched_anima": "true",
-            "widget.style.indev_ptr":   "true",
-            "widget.style.indev_key":   "true",
-            "widget.style.indev_enc":   "true",
             "widget.clip.x":            "58",
             "widget.clip.y":            "60",
             "widget.clip.w":            "350",
             "widget.clip.h":            "100",
             "widget.myself":            "SCUI_UI_SCENE_POPUP",
             "widget.event_cb":          "scui_ui_scene_popup_event_proc",
-            "widget.child_num":         "5",
             "level":                    "10",
             "resident":                 "true",
             "widget.format":            "SCUI_PIXEL_CF_DEF_A"
         },
         {
-            "widget.type":   "scui_widget_type_custom",
-            "widget.clip.w": "350",
-            "widget.clip.h": "100",
-            "widget.myself": "SCUI_UI_SCENE_POPUP_SCALE",
-            "widget.parent": "SCUI_UI_SCENE_POPUP"
+            "widget.type":              "scui_widget_type_custom",
+            "widget.style.buffer":      "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.style.indev_key":   "true",
+            "widget.style.sched_anima": "true",
+            "widget.format":            "SCUI_PIXEL_CF_DEF_A",
+            "widget.clip.w":            "350",
+            "widget.clip.h":            "100",
+            "widget.myself":            "SCUI_UI_SCENE_POPUP_SCALE",
+            "widget.parent":            "SCUI_UI_SCENE_POPUP",
+            "widget.event_cb":          "scui_ui_scene_popup_scale_event_proc",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.style.indev_key":   "true"
         },
         {
-            "widget.type":      "scui_widget_type_custom",
-            "widget.clip.w":    "350",
-            "widget.clip.h":    "100",
-            "widget.myself":    "SCUI_UI_SCENE_POPUP_BG",
-            "widget.parent":    "SCUI_UI_SCENE_POPUP_SCALE",
-            "widget.event_cb":  "scui_ui_scene_popup_bg_event_proc",
-            "widget.child_num": "5"
+            "widget.type":              "scui_widget_type_string",
+            "widget.clip.x":            "20",
+            "widget.clip.y":            "30",
+            "widget.clip.w":            "350 - 20 * 2",
+            "widget.clip.h":            "40",
+            "widget.myself":            "SCUI_UI_SCENE_POPUP_STRING",
+            "widget.parent":            "SCUI_UI_SCENE_POPUP_SCALE",
+            "args.align_hor":           "2",
+            "args.align_ver":           "2",
+            "args.color.color_s.full":  "0xFFFFFFFF",
+            "args.color.color_e.full":  "0xFFFFFFFF",
+            "font_idx":                 "SCUI_FONT_IDX_32",
+            "unit_s":                   "true"
         }
     ]
 }

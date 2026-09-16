@@ -43,10 +43,12 @@ static bool scui_widget_draw_clip(scui_handle_t handle, scui_area_t *clip, scui_
                  return false;
         }
         
-        clip_w.x += widget->clip.x;
-        clip_w.y += widget->clip.y;
-        if (!scui_area_inter2(&clip_w, &widget->clip))
-             return false;
+        if (widget->parent != SCUI_HANDLE_INVALID) {
+            clip_w.x += widget->clip.x;
+            clip_w.y += widget->clip.y;
+            if (!scui_area_inter2(&clip_w, &widget->clip))
+                 return false;
+        }
         
         /* 两者皆加 */
         scui_widget_clip_draw(widget_r, &clip_w, 2);
@@ -64,10 +66,12 @@ static bool scui_widget_draw_clip(scui_handle_t handle, scui_area_t *clip, scui_
                  return false;
         }
         
-        clip_w.x += widget->clip.x;
-        clip_w.y += widget->clip.y;
-        if (!scui_area_inter2(&clip_w, &widget->clip))
-             return false;
+        if (widget->parent != SCUI_HANDLE_INVALID) {
+            clip_w.x += widget->clip.x;
+            clip_w.y += widget->clip.y;
+            if (!scui_area_inter2(&clip_w, &widget->clip))
+                 return false;
+        }
         
         scui_widget_clip_draw(widget_r, &clip_w, 1);
         return true;

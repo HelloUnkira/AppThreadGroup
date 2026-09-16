@@ -37,7 +37,7 @@ void scui_ui_scene_activity_event_proc(scui_event_t *event)
         if (event->key_id != scui_event_key_val_enter)
             break;
         
-        // scui_ui_scene_popup_exec(SCUI_LANG_IDX_0X002f, NULL);
+        scui_ui_scene_popup_exec(SCUI_LANG_IDX_0X002f, NULL);
         scui_event_mask_over(event);
         break;
     default:

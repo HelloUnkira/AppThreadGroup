@@ -69,7 +69,7 @@ typedef enum {
 	SCUI_UI_SCENE_WATERFALL_BAR_ARC, // 4157, 0x103d
 	SCUI_UI_SCENE_POPUP, // 4158, 0x103e
 	SCUI_UI_SCENE_POPUP_SCALE, // 4159, 0x103f
-	SCUI_UI_SCENE_POPUP_BG, // 4160, 0x1040
+	SCUI_UI_SCENE_POPUP_STRING, // 4160, 0x1040
 	SCUI_UI_SCENE_TEST_UI_GRAPH, // 4161, 0x1041
 	SCUI_UI_SCENE_TEST_UI_GRAPH_1, // 4162, 0x1042
 	SCUI_UI_SCENE_TEST_UI_GRAPH_2, // 4163, 0x1043
@@ -210,7 +210,7 @@ extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL_k
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_WATERFALL_BAR_ARC_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_POPUP_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_POPUP_SCALE_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_POPUP_BG_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_POPUP_STRING_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_GRAPH_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_GRAPH_1_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_GRAPH_2_key;
