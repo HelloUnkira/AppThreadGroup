@@ -64,6 +64,7 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		scui_string_maker_t *string_maker = (scui_string_maker_t *)maker;
 		
 		string_maker->widget.type              = scui_widget_type_string;
+		string_maker->widget.clip.w            = SCUI_WIDGET_AUTO_W;
 		string_maker->widget.clip.h            = SCUI_WIDGET_AUTO_H;
 		string_maker->args.line_width          = 2;
 		string_maker->args.align_ver           = 2;

@@ -18,3 +18,5 @@ dist/
 *.tmp.image_data.bin
 *.src_tmp/
 __pack_tmp__/
+# 打包工具本地配置与构建产物(不提交)
+scui_pack_tools.json

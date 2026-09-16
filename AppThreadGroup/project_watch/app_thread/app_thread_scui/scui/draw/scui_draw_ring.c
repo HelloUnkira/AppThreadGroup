@@ -85,8 +85,8 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
         };
         if (scui_area_limit_offset(&src_edge_clip, &src_offset)) {
             
-            if (src_image->format != scui_pixel_cf_alpha4 &&
-                src_image->format != scui_pixel_cf_alpha8) {
+            if (!scui_pixel_type_alpha(src_image->format) &&
+                !scui_pixel_type_index(src_image->format)) {
                 /* 先取image底图到达edge画布 */ {
                     scui_area_t src_edge_clip_s = edge_clip_s;
                     src_edge_clip_s.x -= dst_clip->x - src_clip->x;
@@ -117,8 +117,8 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
         };
         if (scui_area_limit_offset(&src_edge_clip, &src_offset)) {
             
-            if (src_image->format != scui_pixel_cf_alpha4 &&
-                src_image->format != scui_pixel_cf_alpha8) {
+            if (!scui_pixel_type_alpha(src_image->format) &&
+                !scui_pixel_type_index(src_image->format)) {
                 /* 先取image底图到达edge画布 */ {
                     scui_area_t src_edge_clip_e = edge_clip_e;
                     src_edge_clip_e.x -= dst_clip->x - src_clip->x;
@@ -431,7 +431,8 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     uint8_t *src_addr = src_surface->pixel;
     
     /* 像素格式不带透明度, 像素格式带透明度 */
-    if (scui_pixel_type_bmp(dst_surface->format) && scui_pixel_type_bmp(src_surface->format)) {
+    if (scui_pixel_type_bmp(dst_surface->format) &&
+        scui_pixel_type_bmp(src_surface->format)) {
         
         scui_color_wt_t filter = 0;
         scui_pixel_by_color(src_surface->format, &filter, src_color.color_f);
@@ -470,8 +471,7 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
         }
     }
     
-    if (src_surface->format == scui_pixel_cf_alpha4 ||
-        src_surface->format == scui_pixel_cf_alpha8) {
+    if (scui_pixel_type_alpha(src_image->format)) {
         scui_coord_t dst_bits = scui_pixel_bits(dst_surface->format);
         scui_coord_t src_bits = scui_pixel_bits(src_surface->format);
         /* 调色板数组(为空时计算,有时直接取): */
@@ -534,6 +534,59 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
             }
         }
         SCUI_MEM_FREE(grey_table);
+    }
+    
+    if (scui_pixel_type_index(src_image->format)) {
+        scui_coord_t src_bits   = scui_pixel_bits(src_surface->format);
+        scui_multi_t bits_num   = 8 / src_bits;
+        scui_multi_t index_byte = scui_pixel_byte(scui_pixel_cf_bmp8565);
+        scui_multi_t index_len  = scui_max(1 << src_bits, 2);
+        uint8_t *index_table = src_surface->pixel;
+        
+        /* 图像颜色过滤(调色板项为8565编码) */
+        scui_color_wt_t filter = 0;
+        scui_pixel_by_color(scui_pixel_cf_bmp8565, &filter, src_color.color_f);
+        
+        for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
+            /* 扫描区不在dst_clip_v中,跳过它 */
+            scui_multi_t dst_line_y = dst_offset.y + src_area.y + idx_line;
+            if (dst_line_y < dst_clip_v.y ||
+                dst_line_y >= dst_clip_v.y + draw_area.h)
+                continue;
+            /* 原扫描行[0, draw_area.w],现在重新更新到新的限制扫描行 */
+            scui_point_t draw_area_x  = scui_draw_ctx_ring_quadrant_1_draw_area(&src_area,
+                                        idx_line, idx, angle_tan0_4096, angle_tan1_4096);
+            /* 扫描区不在src_clip_v中,跳过它 */
+            scui_multi_t draw_area_xl = scui_max(draw_area_x.x, src_clip_v.x - src_area.x);
+            scui_multi_t draw_area_xr = scui_min(draw_area_x.y, src_clip_v.x - src_area.x + draw_area.w);
+            /* 扫描区不在dst_clip_v中,跳过它 */
+            draw_area_xl = scui_max(draw_area_xl, dst_clip_v.x - dst_offset.x - src_area.x);
+            draw_area_xr = scui_min(draw_area_xr, dst_clip_v.x + dst_clip_v.w - dst_offset.x - src_area.x);
+            /* 更新原扫描行到新的限制扫描行即可 */
+            for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
+                uint8_t *dst_ofs = dst_addr  + scui_surface_pbyte_ofs(dst_surface, src_area.y + idx_line, src_area.x + idx_item);
+                uint32_t idx_ofs = src_ofs_p + scui_surface_point_ofs(src_surface, src_area.y + idx_line, src_area.x + idx_item);
+                /* 索引流位于调色板之后 */
+                uint8_t *src_ofs = index_table + index_len * index_byte + idx_ofs / bits_num;
+                
+                /* 取出索引并查调色板取色(调色板项为8565: A+R5G6B5) */
+                uint8_t index = scui_pixel_index_bpp_x(*src_ofs, src_bits, idx_ofs % bits_num);
+                scui_color8565_t *index_c = (void *)(index_table + index * index_byte);
+                
+                /* 过滤色调,去色(滤色发生在原图上) */
+                if (src_color.filter) {
+                    bool color_same = true;
+                    for (uint8_t idx_b = 0; idx_b < 3; idx_b++) {
+                        if (index_c->byte[idx_b] != ((uint8_t *)&filter)[idx_b]) { color_same = false; break; }
+                    }
+                    if (color_same) continue;
+                }
+                
+                /* 按调色板alpha与整体alpha混合 */
+                scui_pixel_mix_with(dst_surface->format, dst_ofs,
+                    scui_pixel_cf_bmp8565, index_c, src_surface->alpha);
+            }
+        }
     }
     
     over:

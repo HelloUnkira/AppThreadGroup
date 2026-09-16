@@ -56,6 +56,7 @@
             "class": "scui_widget_type_string",
             "default": {
                 "widget.type": "scui_widget_type_string",
+                "widget.clip.w": "SCUI_WIDGET_AUTO_W",
                 "widget.clip.h": "SCUI_WIDGET_AUTO_H",
                 "args.line_width": "2",
                 "args.align_ver": "2",

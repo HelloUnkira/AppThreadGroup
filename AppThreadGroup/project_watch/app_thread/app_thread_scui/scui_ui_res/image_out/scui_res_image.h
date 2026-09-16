@@ -6190,7 +6190,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0xa0,  0xa0,0xc0f7,0x12c00,0.64> scui_image_prj_3d_Aclock_Tbn_28
 //<  0xa0,  0xa0,0xc6f9,0x12c00,0.66> scui_image_prj_3d_Aclock_Tbn_29
 //<  0xa0,  0xa0,0xc991,0x12c00,0.67> scui_image_prj_3d_Aclock_Tbn_30
-//<  0x80,  0x4c,0x13af,0x7200,0.17> scui_image_prj_3d_Aclock01_0
+//< 0x1d2, 0x1d2,0xb688,0x6a088,0.11> scui_image_prj_3d_Aclock01_0
 //<  0x18,  0xeb,0x1928,0x4218,0.38> scui_image_prj_3d_Aclock01_00
 //<  0x18,  0xeb, 0x852,0x4218,0.13> scui_image_prj_3d_Aclock01_01
 //<  0x24,  0xb5,0x1c89,0x4c5c,0.37> scui_image_prj_3d_Aclock01_02
@@ -6395,13 +6395,13 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x50,  0x50, 0xc99,0x3200,0.25> scui_image_prj_3d_Soccer_wthr
 //< 0x100,  0x80,0x15863,0x18000,0.90> scui_image_prj_3d_Trans_Light
 //< 0x100,  0x80,0x1215e,0x18000,0.75> scui_image_prj_3d_Trans_Light_raw
-//< 0x3a4, 0x1d2,0xa927f,0x13e198,0.53> scui_image_prj_3d_Trans_Light_raw_HP
+//< 0x3a4, 0x1d2,0x14d71,0xd4110,0.10> scui_image_prj_3d_Trans_Light_raw_HP
 //< 0x1d2, 0x1d2,0x4448,0x9f0cc,0.03> scui_image_prj_3d_Wave_Board00
 //< 0x1d2, 0x1d2,0x8e40,0x9f0cc,0.06> scui_image_prj_3d_Wave_Board01
 //< 0x1d2, 0x1d2,0x6260,0x9f0cc,0.04> scui_image_prj_3d_Wave_Board02
 //< 0x1d2, 0x1d2,0x612c,0x9f0cc,0.04> scui_image_prj_3d_Wave_Board03
 //< 0x1d2, 0x1d2,0x509d,0x9f0cc,0.03> scui_image_prj_3d_Wave_Board04
-//< 0x190, 0x190,0x4a44,0x75300,0.04> scui_image_prj_400X400px
+//< 0x190, 0x190,0x45da,0x4e200,0.06> scui_image_prj_400X400px
 //<  0x32,  0x32,  0xe9, 0x4e2,0.19> scui_image_prj_400X400px_dot
 //<  0x2c,  0x2c, 0x594, 0xf20,0.37> scui_image_prj_act_01_dot
 //<  0x2c,  0x2c, 0x6b6, 0xf20,0.44> scui_image_prj_act_01_icon_dis
@@ -6421,10 +6421,10 @@ extern const void * const scui_image_parser_table[6132];
 //<   0xc,   0xc, 0x2ff, 0x120,2.66> scui_image_prj_act_bar_dot_dist
 //<   0xc,   0xc, 0x314, 0x120,2.74> scui_image_prj_act_bar_dot_steps
 //<   0xc,   0xc, 0x314, 0x120,2.74> scui_image_prj_act_bar_steps
-//<  0x26,  0x26, 0x552,0x10ec,0.31> scui_image_prj_act_dis
+//<  0x2c,  0x2c, 0x6b6, 0xf20,0.44> scui_image_prj_act_dis
 //<  0x2c,  0x2c, 0x594, 0xf20,0.37> scui_image_prj_act_dot
 //<  0x2c,  0x2c, 0x77b, 0xf20,0.49> scui_image_prj_act_icon_steps
-//<  0x26,  0x26, 0x576,0x10ec,0.32> scui_image_prj_act_kcal
+//<  0x2c,  0x2c, 0x59f, 0xf20,0.37> scui_image_prj_act_kcal
 //< 0x1ca, 0x1ca,0x3e5c,0x666c8,0.04> scui_image_prj_act_ring_b_bj
 //<  0x2e,  0x2e, 0x12e, 0x422,0.29> scui_image_prj_act_ring_b_bj_00
 //< 0x1ca, 0x1ca,0x12ea,0x199b2,0.05> scui_image_prj_act_ring_b_bj_01
@@ -6530,7 +6530,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x26,  0x10, 0x282, 0x720,0.35> scui_image_prj_act_ring_s_min_steps_09_09
 //<  0x26,  0x10, 0x2c4, 0x720,0.39> scui_image_prj_act_ring_s_min_steps_10
 //<  0x26,  0x10, 0x2c4, 0x720,0.39> scui_image_prj_act_ring_s_min_steps_10_10
-//<  0x26,  0x26, 0x5ac,0x10ec,0.34> scui_image_prj_act_steps
+//<  0x2c,  0x2c, 0x77b, 0xf20,0.49> scui_image_prj_act_steps
 //<  0x62,  0x62, 0xfd2,0x4b08,0.21> scui_image_prj_alarm_01_add
 //<  0x2c,  0x2c, 0x51f,0x16b0,0.23> scui_image_prj_alarm_02_check
 //<  0x26,  0x22, 0x623, 0xa18,0.61> scui_image_prj_alarm_03_more
@@ -6616,7 +6616,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x34,  0x34, 0x5b5,0x1520,0.27> scui_image_prj_brte_more_02
 //<  0x48,  0x48, 0xd24,0x2880,0.32> scui_image_prj_brte_pace
 //<  0x48,  0x48, 0xbb7,0x2880,0.29> scui_image_prj_brte_time
-//<  0x38,  0x38, 0x4f5,0x24c0,0.13> scui_image_prj_b_train_00
+//<  0x62,  0x62, 0x9ea,0x4b08,0.13> scui_image_prj_b_train_00
 //<  0x34,  0x34, 0x587,0x1520,0.26> scui_image_prj_b_train_01_more_00
 //<  0x62,  0x62, 0x9ea,0x4b08,0.13> scui_image_prj_b_train_01_play_00
 //<  0x38,  0x38, 0x4f6,0x24c0,0.13> scui_image_prj_b_train_02
@@ -6680,7 +6680,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x50,  0x44, 0x4da,0x2a80,0.11> scui_image_prj_calc_btn_00
 //<  0x70,  0x60, 0x5bc,0x7e00,0.05> scui_image_prj_calc_btn_01
 //<  0x50,  0x44, 0x4da,0x2a80,0.11> scui_image_prj_calc_btn_01_ac_00
-//<  0x70,  0x60, 0x583,0x7e00,0.04> scui_image_prj_calc_btn_02
+//<  0x50,  0x44, 0x644,0x2a80,0.15> scui_image_prj_calc_btn_02
 //<  0x70,  0x60, 0x583,0x7e00,0.04> scui_image_prj_calc_btn_02_ac_02
 //<  0x50,  0x44, 0x730,0x2a80,0.17> scui_image_prj_calc_btn_03_jiajian_00
 //<  0x70,  0x60, 0x5bc,0x7e00,0.05> scui_image_prj_calc_btn_04_jiajian_01
@@ -6760,7 +6760,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x70,  0x70, 0xa8f,0x6200,0.11> scui_image_prj_call_btn_12_msg_big
 //<  0x54,  0x54, 0x904,0x3720,0.16> scui_image_prj_call_btn_13_voice_t_off
 //<  0x7e,  0x7e, 0xa5c,0x7c08,0.08> scui_image_prj_call_btn_big
-//<  0x70,  0x70, 0x53d,0x6200,0.05> scui_image_prj_call_btn_big_bmp
+//<  0x70,  0x70, 0x5dc,0x3400,0.11> scui_image_prj_call_btn_big_bmp
 //<  0x70,  0x70, 0xabc,0x6200,0.11> scui_image_prj_call_btn_cacel
 //<  0x70,  0x70,0x115a,0x6200,0.18> scui_image_prj_call_btn_call
 //<  0x7e,  0x7e,0x1333,0x7c08,0.15> scui_image_prj_call_btn_call_big
@@ -6784,7 +6784,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x18,  0x18, 0x1f7, 0x6c0,0.29> scui_image_prj_call_calling
 //<  0x18,  0x18, 0x1df, 0x6c0,0.28> scui_image_prj_call_call_in
 //<  0x70,  0x70, 0xabc,0x6200,0.11> scui_image_prj_call_close
-//<  0x30,  0x30, 0x55a,0x1b00,0.20> scui_image_prj_call_contact
+//<  0x6a,  0x70, 0xa29,0x5cc0,0.11> scui_image_prj_call_contact
 //<  0x36,  0x25, 0x72f, 0xf9c,0.46> scui_image_prj_call_del
 //<  0x5e,  0x5e, 0x62a,0x4508,0.09> scui_image_prj_call_dot
 //<  0x30,  0x30, 0x81a,0x1b00,0.30> scui_image_prj_call_icon_01_contact
@@ -7309,8 +7309,8 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x22,  0x2a, 0x2f6,0x10bc,0.18> scui_image_prj_music_09_music_01
 //<  0x22,  0x2a, 0x3e7,0x10bc,0.23> scui_image_prj_music_10_music_no_00
 //<  0x22,  0x2a, 0x3d8,0x10bc,0.23> scui_image_prj_music_11_music_no_01
-//< 0x1d2, 0x1d2,0x209ec,0x9f0cc,0.21> scui_image_prj_music_bj
-//<  0xec,  0xec,0x9edf,0x28cb0,0.24> scui_image_prj_music_bj_01
+//< 0x1d2, 0x1d2,0x3f47,0x6a088,0.04> scui_image_prj_music_bj
+//<  0xec,  0xec,0x315f,0x1b320,0.11> scui_image_prj_music_bj_01
 //<  0x22,  0x2a, 0x317,0x10bc,0.18> scui_image_prj_music_music_00
 //<  0x22,  0x2a, 0x2f6,0x10bc,0.18> scui_image_prj_music_music_01
 //<  0x22,  0x2a, 0x3e7,0x10bc,0.23> scui_image_prj_music_music_no_00
@@ -7530,7 +7530,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x10,  0x16, 0x10f, 0x420,0.26> scui_image_prj_num_28_white_14_13
 //<  0x10,  0x16, 0x1d9, 0x420,0.45> scui_image_prj_num_28_white_7
 //<  0x1e,  0x1c, 0x309, 0x9d8,0.31> scui_image_prj_num_30x28
-//<  0x20,  0x22, 0x3f0, 0xcc0,0.31> scui_image_prj_num_32x34
+//<  0x20,  0x22, 0x5d0, 0x880,0.68> scui_image_prj_num_32x34
 //<  0x20,  0x4c, 0x20f,0x1c80,0.07> scui_image_prj_num_32x76
 //<  0x22,  0x30, 0x34c,0x1320,0.17> scui_image_prj_num_34x48
 //<  0x1e,  0x1c, 0x309, 0x9d8,0.31> scui_image_prj_num_34_c_30x28
@@ -7854,7 +7854,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x16,  0x10, 0x324, 0x2c0,1.14> scui_image_prj_perd_arr
 //<  0x3e,  0x6a, 0x759,0x3358,0.14> scui_image_prj_perd_bar_big
 //<  0x34,  0x58, 0x666,0x23c0,0.18> scui_image_prj_perd_bar_small
-//<  0x32,  0x32, 0x41c,0x1d4c,0.14> scui_image_prj_perd_big
+//<  0x3e,  0x6a, 0x759,0x3358,0.14> scui_image_prj_perd_big
 //<  0x2c,  0x2c, 0x5b6, 0xf20,0.38> scui_image_prj_perd_dot
 //<  0x32,  0x32, 0x41c,0x1d4c,0.14> scui_image_prj_perd_mens_big
 //<  0x28,  0x28, 0x341,0x12c0,0.17> scui_image_prj_perd_mens_small
@@ -7862,7 +7862,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x28,  0x28, 0x53a,0x12c0,0.28> scui_image_prj_perd_ovu_small
 //<  0x32,  0x32, 0x8eb,0x1d4c,0.30> scui_image_prj_perd_p3_ovu_big
 //<  0x28,  0x28, 0x53a,0x12c0,0.28> scui_image_prj_perd_p4_ovu_small
-//<  0x28,  0x28, 0x341,0x12c0,0.17> scui_image_prj_perd_small
+//<  0x34,  0x58, 0x666,0x23c0,0.18> scui_image_prj_perd_small
 //< 0x11a,  0x4a, 0x3db,0xa308,0.02> scui_image_prj_power_on_logo_00
 //< 0x11a,  0x4a, 0x3db,0xa308,0.02> scui_image_prj_power_on_logo_01
 //<  0x70,  0x46, 0x390,0x3d40,0.06> scui_image_prj_power_on_logo_01_00
@@ -7919,7 +7919,7 @@ extern const void * const scui_image_parser_table[6132];
 //< 0x11a,  0x4a,0x1566,0xa308,0.13> scui_image_prj_power_on_logo_34
 //< 0x11a,  0x4a,0x1566,0xa308,0.13> scui_image_prj_power_on_logo_35
 //< 0x11a,  0x4a,0x1566,0xa308,0.13> scui_image_prj_power_on_logo_36
-//<  0x80,  0x4c,0x13af,0x7200,0.17> scui_image_prj_qday_Aclock01_0
+//< 0x1d2, 0x1d2,0xb688,0x6a088,0.11> scui_image_prj_qday_Aclock01_0
 //<  0x18,  0xeb,0x1928,0x4218,0.38> scui_image_prj_qday_Aclock01_00
 //<  0x18,  0xeb, 0x852,0x4218,0.13> scui_image_prj_qday_Aclock01_01
 //<  0x24,  0xb5,0x1c89,0x4c5c,0.37> scui_image_prj_qday_Aclock01_02
@@ -8246,9 +8246,9 @@ extern const void * const scui_image_parser_table[6132];
 //<  0xa2,  0xb3,0x1d9e,0xe28c,0.13> scui_image_prj_rmd_perd_01_fp
 //<  0xa2,  0xb3,0x1de2,0xe28c,0.13> scui_image_prj_rmd_perd_02_mp
 //<  0xa2,  0xb3, 0xfba,0xe28c,0.07> scui_image_prj_rmd_perd_fp
-//<  0xb6,  0xc8,0x176a,0x11c60,0.08> scui_image_prj_rmd_perd_fp_bmp
+//<  0xb6,  0xc8,0x2a0b,0x9130,0.29> scui_image_prj_rmd_perd_fp_bmp
 //<  0xa2,  0xb3,0x1000,0xe28c,0.07> scui_image_prj_rmd_perd_mp
-//<  0xb6,  0xc8,0x1b9b,0x11c60,0.10> scui_image_prj_rmd_perd_mp_bmp
+//<  0xb6,  0xc8,0x3818,0x9130,0.39> scui_image_prj_rmd_perd_mp_bmp
 //<  0xc8,  0xc8, 0xc46,0x13880,0.04> scui_image_prj_rmd_sed_gif_00
 //<  0xc8,  0xc8, 0xcf5,0x13880,0.04> scui_image_prj_rmd_sed_gif_01
 //<  0xc8,  0xc8, 0xddd,0x13880,0.04> scui_image_prj_rmd_sed_gif_02
@@ -8706,7 +8706,7 @@ extern const void * const scui_image_parser_table[6132];
 //<   0xc,   0xc,  0x50,  0x48,1.11> scui_image_prj_rpt_slider_02_dot
 //< 0x1ce, 0x1ce,0x1469,0x1a0e2,0.05> scui_image_prj_rpt_slider_03_ring
 //<  0x2c,  0xec, 0xa05,0x79b0,0.08> scui_image_prj_rpt_slider_04_bg
-//<  0x2c,  0xec, 0xa05,0x79b0,0.08> scui_image_prj_rpt_slider_bg
+//<  0x2c,  0xec, 0x7d5,0x5120,0.10> scui_image_prj_rpt_slider_bg
 //<   0xc,   0xc,  0x50,  0x48,1.11> scui_image_prj_rpt_slider_dot
 //<  0x2a,  0x7b, 0x9b2,0x3c8a,0.16> scui_image_prj_rpt_slider_p1_icon_prog_bar_2
 //<  0x26,  0x54, 0x8de,0x2568,0.24> scui_image_prj_rpt_slider_p2_icon_prog_bar_3
@@ -8807,7 +8807,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x44,  0x4e, 0x3fd,0x2970,0.10> scui_image_prj_set_02_aod_dial_1_num_10
 //<  0x44,  0x4e, 0x87f,0x2970,0.21> scui_image_prj_set_02_aod_dial_1_num_10_09
 //<  0x44,  0x4e, 0x3fd,0x2970,0.10> scui_image_prj_set_02_aod_dial_1_num_11_10
-//< 0x1d2, 0x1d2,0x4daa,0x9f0cc,0.03> scui_image_prj_set_02_aod_dial_1_pv
+//< 0x17e, 0x12a,0x161a,0x37958,0.02> scui_image_prj_set_02_aod_dial_1_pv
 //< 0x17e, 0x12a,0x21d6,0x37958,0.04> scui_image_prj_set_02_aod_dial_2_01_pv
 //< 0x1d2, 0x1d2,0x5fc7,0x9f0cc,0.04> scui_image_prj_set_02_aod_dial_2_02_grid
 //< 0x1d2, 0x1d2,0x1969,0x6a088,0.01> scui_image_prj_set_02_aod_dial_2_bg_01_bg
@@ -8817,7 +8817,7 @@ extern const void * const scui_image_parser_table[6132];
 //<   0xe,  0xb3, 0xefc,0x1d5e,0.51> scui_image_prj_set_02_aod_dial_2_point_02_min
 //<   0xe,  0x79, 0xcc6,0x13da,0.64> scui_image_prj_set_02_aod_dial_2_point_hour
 //<   0xe,  0xb3, 0xefc,0x1d5e,0.51> scui_image_prj_set_02_aod_dial_2_point_min
-//< 0x1d2, 0x1d2,0x68a6,0x9f0cc,0.04> scui_image_prj_set_02_aod_dial_2_pv
+//< 0x17e, 0x12a,0x162d,0x37958,0.02> scui_image_prj_set_02_aod_dial_2_pv
 //<  0xb8,   0xa, 0x638,0x1590,0.29> scui_image_prj_set_03_bright_sound_theme_dnd_01_bar_1
 //<  0xba,   0xc,  0x67, 0x45c,0.09> scui_image_prj_set_03_bright_sound_theme_dnd_02_bar_2
 //<  0x2c,  0x2c, 0x2a7,0x16b0,0.12> scui_image_prj_set_03_bright_sound_theme_dnd_03_bright_1
@@ -10385,7 +10385,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x38,  0x38, 0x4f2,0x24c0,0.13> scui_image_prj_sport_02_set_goal_p6_kcal_01
 //<  0x4c,  0x4c, 0x698,0x43b0,0.10> scui_image_prj_sport_02_set_goal_p8_trip_00
 //<  0x38,  0x38, 0x500,0x24c0,0.14> scui_image_prj_sport_02_set_goal_p9_trip_Number_01
-//<  0x38,  0x38, 0x605,0x24c0,0.16> scui_image_prj_sport_02_set_goal_time
+//<  0x34,  0x34, 0x698,0x1520,0.31> scui_image_prj_sport_02_set_goal_time
 //<  0x48,  0x48, 0x967,0x2880,0.23> scui_image_prj_sport_02_set_goal_trip_00
 //<  0x34,  0x34, 0x616,0x1520,0.29> scui_image_prj_sport_02_set_goal_trip_Number_01
 //<  0x4c,  0x7c, 0x81d,0x49a0,0.11> scui_image_prj_sport_03_cd_01_1
@@ -10808,7 +10808,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x13af,0x4ecc,0.25> scui_image_prj_theme_icon_00_heart_07_06
 //<  0x66,  0x66,0x1a73,0x79ec,0.22> scui_image_prj_theme_icon_00_heart_08
 //<  0x5c,  0x5c,0x16ef,0x6330,0.23> scui_image_prj_theme_icon_00_heart_08_07
-//<  0x76,  0x76,0x219a,0xa32c,0.21> scui_image_prj_theme_icon_00_heart_09
+//<  0x76,  0x76,0x136f,0x6cc8,0.18> scui_image_prj_theme_icon_00_heart_09
 //<  0x66,  0x66,0x1a73,0x79ec,0.22> scui_image_prj_theme_icon_00_heart_09_08
 //<  0x76,  0x76,0x136f,0x6cc8,0.18> scui_image_prj_theme_icon_00_heart_10_09
 //<  0x16,  0x16, 0x41f, 0x5ac,0.73> scui_image_prj_theme_icon_01_spo2_00
@@ -10828,7 +10828,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x188f,0x4ecc,0.31> scui_image_prj_theme_icon_01_spo2_07_06
 //<  0x66,  0x66,0x206b,0x79ec,0.27> scui_image_prj_theme_icon_01_spo2_08
 //<  0x5c,  0x5c,0x1c89,0x6330,0.29> scui_image_prj_theme_icon_01_spo2_08_07
-//<  0x76,  0x76,0x272d,0xa32c,0.24> scui_image_prj_theme_icon_01_spo2_09
+//<  0x76,  0x76,0x15dd,0x6cc8,0.20> scui_image_prj_theme_icon_01_spo2_09
 //<  0x66,  0x66,0x206b,0x79ec,0.27> scui_image_prj_theme_icon_01_spo2_09_08
 //<  0x76,  0x76,0x15dd,0x6cc8,0.20> scui_image_prj_theme_icon_01_spo2_10_09
 //<  0x16,  0x16, 0x3de, 0x5ac,0.68> scui_image_prj_theme_icon_02_msg_00
@@ -10848,7 +10848,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1560,0x4ecc,0.27> scui_image_prj_theme_icon_02_msg_07_06
 //<  0x66,  0x66,0x1ca1,0x79ec,0.23> scui_image_prj_theme_icon_02_msg_08
 //<  0x5c,  0x5c,0x195d,0x6330,0.26> scui_image_prj_theme_icon_02_msg_08_07
-//<  0x76,  0x76,0x2502,0xa32c,0.23> scui_image_prj_theme_icon_02_msg_09
+//<  0x76,  0x76,0x14e9,0x6cc8,0.19> scui_image_prj_theme_icon_02_msg_09
 //<  0x66,  0x66,0x1ca1,0x79ec,0.23> scui_image_prj_theme_icon_02_msg_09_08
 //<  0x76,  0x76,0x14e9,0x6cc8,0.19> scui_image_prj_theme_icon_02_msg_10_09
 //<  0x16,  0x16, 0x488, 0x5ac,0.80> scui_image_prj_theme_icon_04_call_00
@@ -10868,7 +10868,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1db5,0x4ecc,0.38> scui_image_prj_theme_icon_04_call_07_06
 //<  0x66,  0x66,0x292d,0x79ec,0.34> scui_image_prj_theme_icon_04_call_08
 //<  0x5c,  0x5c,0x2344,0x6330,0.36> scui_image_prj_theme_icon_04_call_08_07
-//<  0x76,  0x76,0x3440,0xa32c,0.32> scui_image_prj_theme_icon_04_call_09
+//<  0x76,  0x76,0x13eb,0x6cc8,0.18> scui_image_prj_theme_icon_04_call_09
 //<  0x66,  0x66,0x292d,0x79ec,0.34> scui_image_prj_theme_icon_04_call_09_08
 //<  0x76,  0x76,0x13eb,0x6cc8,0.18> scui_image_prj_theme_icon_04_call_10_09
 //<  0x16,  0x16, 0x3a8, 0x5ac,0.64> scui_image_prj_theme_icon_05_sport_rcd_00
@@ -10888,7 +10888,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x13cd,0x4ecc,0.25> scui_image_prj_theme_icon_05_sport_rcd_07_06
 //<  0x66,  0x66,0x1a6d,0x79ec,0.22> scui_image_prj_theme_icon_05_sport_rcd_08
 //<  0x5c,  0x5c,0x17ae,0x6330,0.24> scui_image_prj_theme_icon_05_sport_rcd_08_07
-//<  0x76,  0x76,0x22b4,0xa32c,0.21> scui_image_prj_theme_icon_05_sport_rcd_09
+//<  0x76,  0x76,0x15f8,0x6cc8,0.20> scui_image_prj_theme_icon_05_sport_rcd_09
 //<  0x66,  0x66,0x1a6d,0x79ec,0.22> scui_image_prj_theme_icon_05_sport_rcd_09_08
 //<  0x76,  0x76,0x15f8,0x6cc8,0.20> scui_image_prj_theme_icon_05_sport_rcd_10_09
 //<  0x16,  0x16, 0x439, 0x5ac,0.74> scui_image_prj_theme_icon_06_act_00
@@ -10908,7 +10908,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x16eb,0x4ecc,0.29> scui_image_prj_theme_icon_06_act_07_06
 //<  0x66,  0x66,0x1ef0,0x79ec,0.25> scui_image_prj_theme_icon_06_act_08
 //<  0x5c,  0x5c,0x1a77,0x6330,0.27> scui_image_prj_theme_icon_06_act_08_07
-//<  0x76,  0x76,0x2685,0xa32c,0.24> scui_image_prj_theme_icon_06_act_09
+//<  0x76,  0x76,0x1315,0x6cc8,0.18> scui_image_prj_theme_icon_06_act_09
 //<  0x66,  0x66,0x1ef0,0x79ec,0.25> scui_image_prj_theme_icon_06_act_09_08
 //<  0x76,  0x76,0x1315,0x6cc8,0.18> scui_image_prj_theme_icon_06_act_10_09
 //<  0x16,  0x16, 0x291, 0x5ac,0.45> scui_image_prj_theme_icon_07_dial_00
@@ -10928,7 +10928,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52, 0x9ed,0x4ecc,0.13> scui_image_prj_theme_icon_07_dial_07_06
 //<  0x66,  0x66, 0xcaf,0x79ec,0.10> scui_image_prj_theme_icon_07_dial_08
 //<  0x5c,  0x5c, 0xb80,0x6330,0.12> scui_image_prj_theme_icon_07_dial_08_07
-//<  0x76,  0x76, 0xf49,0xa32c,0.09> scui_image_prj_theme_icon_07_dial_09
+//<  0x76,  0x76,0x1080,0x6cc8,0.15> scui_image_prj_theme_icon_07_dial_09
 //<  0x66,  0x66, 0xcaf,0x79ec,0.10> scui_image_prj_theme_icon_07_dial_09_08
 //<  0x76,  0x76,0x1080,0x6cc8,0.15> scui_image_prj_theme_icon_07_dial_10_09
 //<  0x16,  0x16, 0x49c, 0x5ac,0.81> scui_image_prj_theme_icon_09_f_phone_00
@@ -10948,7 +10948,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1c80,0x4ecc,0.36> scui_image_prj_theme_icon_09_f_phone_07_06
 //<  0x66,  0x66,0x27de,0x79ec,0.33> scui_image_prj_theme_icon_09_f_phone_08
 //<  0x5c,  0x5c,0x2215,0x6330,0.34> scui_image_prj_theme_icon_09_f_phone_08_07
-//<  0x76,  0x76,0x3308,0xa32c,0.31> scui_image_prj_theme_icon_09_f_phone_09
+//<  0x76,  0x76,0x15da,0x6cc8,0.20> scui_image_prj_theme_icon_09_f_phone_09
 //<  0x66,  0x66,0x27de,0x79ec,0.33> scui_image_prj_theme_icon_09_f_phone_09_08
 //<  0x76,  0x76,0x15da,0x6cc8,0.20> scui_image_prj_theme_icon_09_f_phone_10_09
 //<  0x16,  0x16, 0x4c6, 0x5ac,0.84> scui_image_prj_theme_icon_10_world_clk_00
@@ -10968,7 +10968,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1d07,0x4ecc,0.37> scui_image_prj_theme_icon_10_world_clk_07_06
 //<  0x66,  0x66,0x286f,0x79ec,0.33> scui_image_prj_theme_icon_10_world_clk_08
 //<  0x5c,  0x5c,0x2297,0x6330,0.35> scui_image_prj_theme_icon_10_world_clk_08_07
-//<  0x76,  0x76,0x3330,0xa32c,0.31> scui_image_prj_theme_icon_10_world_clk_09
+//<  0x76,  0x76,0x19ee,0x6cc8,0.24> scui_image_prj_theme_icon_10_world_clk_09
 //<  0x66,  0x66,0x286f,0x79ec,0.33> scui_image_prj_theme_icon_10_world_clk_09_08
 //<  0x76,  0x76,0x19ee,0x6cc8,0.24> scui_image_prj_theme_icon_10_world_clk_10_09
 //<  0x16,  0x16, 0x411, 0x5ac,0.72> scui_image_prj_theme_icon_11_wthr_00
@@ -10988,7 +10988,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x169a,0x4ecc,0.29> scui_image_prj_theme_icon_11_wthr_07_06
 //<  0x66,  0x66,0x1e5f,0x79ec,0.25> scui_image_prj_theme_icon_11_wthr_08
 //<  0x5c,  0x5c,0x1aa5,0x6330,0.27> scui_image_prj_theme_icon_11_wthr_08_07
-//<  0x76,  0x76,0x271f,0xa32c,0.24> scui_image_prj_theme_icon_11_wthr_09
+//<  0x76,  0x76,0x14e7,0x6cc8,0.19> scui_image_prj_theme_icon_11_wthr_09
 //<  0x66,  0x66,0x1e5f,0x79ec,0.25> scui_image_prj_theme_icon_11_wthr_09_08
 //<  0x76,  0x76,0x14e7,0x6cc8,0.19> scui_image_prj_theme_icon_11_wthr_10_09
 //<  0x16,  0x16, 0x4a1, 0x5ac,0.82> scui_image_prj_theme_icon_12_music_00
@@ -11008,7 +11008,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1ceb,0x4ecc,0.37> scui_image_prj_theme_icon_12_music_07_06
 //<  0x66,  0x66,0x2882,0x79ec,0.33> scui_image_prj_theme_icon_12_music_08
 //<  0x5c,  0x5c,0x227d,0x6330,0.35> scui_image_prj_theme_icon_12_music_08_07
-//<  0x76,  0x76,0x3199,0xa32c,0.30> scui_image_prj_theme_icon_12_music_09
+//<  0x76,  0x76,0x12dd,0x6cc8,0.17> scui_image_prj_theme_icon_12_music_09
 //<  0x66,  0x66,0x2882,0x79ec,0.33> scui_image_prj_theme_icon_12_music_09_08
 //<  0x76,  0x76,0x12dd,0x6cc8,0.17> scui_image_prj_theme_icon_12_music_10_09
 //<  0x16,  0x16, 0x46b, 0x5ac,0.78> scui_image_prj_theme_icon_13_alti_00
@@ -11048,7 +11048,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1cee,0x4ecc,0.37> scui_image_prj_theme_icon_14_set_07_06
 //<  0x66,  0x66,0x27bd,0x79ec,0.33> scui_image_prj_theme_icon_14_set_08
 //<  0x5c,  0x5c,0x225c,0x6330,0.35> scui_image_prj_theme_icon_14_set_08_07
-//<  0x76,  0x76,0x3268,0xa32c,0.31> scui_image_prj_theme_icon_14_set_09
+//<  0x76,  0x76,0x10b2,0x6cc8,0.15> scui_image_prj_theme_icon_14_set_09
 //<  0x66,  0x66,0x27bd,0x79ec,0.33> scui_image_prj_theme_icon_14_set_09_08
 //<  0x76,  0x76,0x10b2,0x6cc8,0.15> scui_image_prj_theme_icon_14_set_10_09
 //<  0x16,  0x16, 0x522, 0x5ac,0.90> scui_image_prj_theme_icon_15_t_photo_00
@@ -11068,7 +11068,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1f7e,0x4ecc,0.40> scui_image_prj_theme_icon_15_t_photo_07_06
 //<  0x66,  0x66,0x2bfe,0x79ec,0.36> scui_image_prj_theme_icon_15_t_photo_08
 //<  0x5c,  0x5c,0x25ef,0x6330,0.38> scui_image_prj_theme_icon_15_t_photo_08_07
-//<  0x76,  0x76,0x3723,0xa32c,0.34> scui_image_prj_theme_icon_15_t_photo_09
+//<  0x76,  0x76,0x141e,0x6cc8,0.18> scui_image_prj_theme_icon_15_t_photo_09
 //<  0x66,  0x66,0x2bfe,0x79ec,0.36> scui_image_prj_theme_icon_15_t_photo_09_08
 //<  0x76,  0x76,0x141e,0x6cc8,0.18> scui_image_prj_theme_icon_15_t_photo_10_09
 //<  0x16,  0x16, 0x56b, 0x5ac,0.96> scui_image_prj_theme_icon_16_sw_00
@@ -11088,7 +11088,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x2264,0x4ecc,0.44> scui_image_prj_theme_icon_16_sw_07_06
 //<  0x66,  0x66,0x2fa6,0x79ec,0.39> scui_image_prj_theme_icon_16_sw_08
 //<  0x5c,  0x5c,0x2902,0x6330,0.41> scui_image_prj_theme_icon_16_sw_08_07
-//<  0x76,  0x76,0x3c98,0xa32c,0.37> scui_image_prj_theme_icon_16_sw_09
+//<  0x76,  0x76,0x1872,0x6cc8,0.22> scui_image_prj_theme_icon_16_sw_09
 //<  0x66,  0x66,0x2fa6,0x79ec,0.39> scui_image_prj_theme_icon_16_sw_09_08
 //<  0x76,  0x76,0x1872,0x6cc8,0.22> scui_image_prj_theme_icon_16_sw_10_09
 //<  0x16,  0x16, 0x3bb, 0x5ac,0.66> scui_image_prj_theme_icon_17_alarms_00
@@ -11108,7 +11108,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1208,0x4ecc,0.23> scui_image_prj_theme_icon_17_alarms_07_06
 //<  0x66,  0x66,0x1783,0x79ec,0.19> scui_image_prj_theme_icon_17_alarms_08
 //<  0x5c,  0x5c,0x14d0,0x6330,0.21> scui_image_prj_theme_icon_17_alarms_08_07
-//<  0x76,  0x76,0x1c9e,0xa32c,0.18> scui_image_prj_theme_icon_17_alarms_09
+//<  0x76,  0x76,0x163c,0x6cc8,0.20> scui_image_prj_theme_icon_17_alarms_09
 //<  0x66,  0x66,0x1783,0x79ec,0.19> scui_image_prj_theme_icon_17_alarms_09_08
 //<  0x76,  0x76,0x163c,0x6cc8,0.20> scui_image_prj_theme_icon_17_alarms_10_09
 //<  0x16,  0x16, 0x442, 0x5ac,0.75> scui_image_prj_theme_icon_18_tmr_00
@@ -11128,7 +11128,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1714,0x4ecc,0.29> scui_image_prj_theme_icon_18_tmr_07_06
 //<  0x66,  0x66,0x208b,0x79ec,0.27> scui_image_prj_theme_icon_18_tmr_08
 //<  0x5c,  0x5c,0x1ca3,0x6330,0.29> scui_image_prj_theme_icon_18_tmr_08_07
-//<  0x76,  0x76,0x29d3,0xa32c,0.26> scui_image_prj_theme_icon_18_tmr_09
+//<  0x76,  0x76,0x1536,0x6cc8,0.19> scui_image_prj_theme_icon_18_tmr_09
 //<  0x66,  0x66,0x208b,0x79ec,0.27> scui_image_prj_theme_icon_18_tmr_09_08
 //<  0x76,  0x76,0x1536,0x6cc8,0.19> scui_image_prj_theme_icon_18_tmr_10_09
 //<  0x16,  0x16, 0x2e9, 0x5ac,0.51> scui_image_prj_theme_icon_20_voice_00
@@ -11148,7 +11148,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52, 0xd2c,0x4ecc,0.17> scui_image_prj_theme_icon_20_voice_07_06
 //<  0x66,  0x66,0x1112,0x79ec,0.14> scui_image_prj_theme_icon_20_voice_08
 //<  0x5c,  0x5c, 0xf35,0x6330,0.15> scui_image_prj_theme_icon_20_voice_08_07
-//<  0x76,  0x76,0x150f,0xa32c,0.13> scui_image_prj_theme_icon_20_voice_09
+//<  0x76,  0x76,0x14ec,0x6cc8,0.19> scui_image_prj_theme_icon_20_voice_09
 //<  0x66,  0x66,0x1112,0x79ec,0.14> scui_image_prj_theme_icon_20_voice_09_08
 //<  0x76,  0x76,0x14ec,0x6cc8,0.19> scui_image_prj_theme_icon_20_voice_10_09
 //<  0x16,  0x16, 0x3ef, 0x5ac,0.69> scui_image_prj_theme_icon_21_flash_00
@@ -11168,7 +11168,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x15f4,0x4ecc,0.28> scui_image_prj_theme_icon_21_flash_07_06
 //<  0x66,  0x66,0x1ba1,0x79ec,0.23> scui_image_prj_theme_icon_21_flash_08
 //<  0x5c,  0x5c,0x19e4,0x6330,0.26> scui_image_prj_theme_icon_21_flash_08_07
-//<  0x76,  0x76,0x23cc,0xa32c,0.22> scui_image_prj_theme_icon_21_flash_09
+//<  0x76,  0x76,0x138f,0x6cc8,0.18> scui_image_prj_theme_icon_21_flash_09
 //<  0x66,  0x66,0x1ba1,0x79ec,0.23> scui_image_prj_theme_icon_21_flash_09_08
 //<  0x76,  0x76,0x138f,0x6cc8,0.18> scui_image_prj_theme_icon_21_flash_10_09
 //<  0x16,  0x16, 0x3f5, 0x5ac,0.70> scui_image_prj_theme_icon_22_calc_00
@@ -11188,7 +11188,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x137d,0x4ecc,0.25> scui_image_prj_theme_icon_22_calc_07_06
 //<  0x66,  0x66,0x1a70,0x79ec,0.22> scui_image_prj_theme_icon_22_calc_08
 //<  0x5c,  0x5c,0x16e9,0x6330,0.23> scui_image_prj_theme_icon_22_calc_08_07
-//<  0x76,  0x76,0x2145,0xa32c,0.20> scui_image_prj_theme_icon_22_calc_09
+//<  0x76,  0x76,0x1404,0x6cc8,0.18> scui_image_prj_theme_icon_22_calc_09
 //<  0x66,  0x66,0x1a70,0x79ec,0.22> scui_image_prj_theme_icon_22_calc_09_08
 //<  0x76,  0x76,0x1404,0x6cc8,0.18> scui_image_prj_theme_icon_22_calc_10_09
 //<  0x16,  0x16, 0x387, 0x5ac,0.62> scui_image_prj_theme_icon_23_cmps_00
@@ -11228,7 +11228,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1c91,0x4ecc,0.36> scui_image_prj_theme_icon_24_stress_07_06
 //<  0x66,  0x66,0x27e6,0x79ec,0.33> scui_image_prj_theme_icon_24_stress_08
 //<  0x5c,  0x5c,0x2396,0x6330,0.36> scui_image_prj_theme_icon_24_stress_08_07
-//<  0x76,  0x76,0x33c5,0xa32c,0.32> scui_image_prj_theme_icon_24_stress_09
+//<  0x76,  0x76,0x1a1a,0x6cc8,0.24> scui_image_prj_theme_icon_24_stress_09
 //<  0x66,  0x66,0x27e6,0x79ec,0.33> scui_image_prj_theme_icon_24_stress_09_08
 //<  0x76,  0x76,0x1a1a,0x6cc8,0.24> scui_image_prj_theme_icon_24_stress_10_09
 //<  0x16,  0x16, 0x509, 0x5ac,0.89> scui_image_prj_theme_icon_25_brte_00
@@ -11248,7 +11248,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x215c,0x4ecc,0.42> scui_image_prj_theme_icon_25_brte_07_06
 //<  0x66,  0x66,0x2f0d,0x79ec,0.39> scui_image_prj_theme_icon_25_brte_08
 //<  0x5c,  0x5c,0x28df,0x6330,0.41> scui_image_prj_theme_icon_25_brte_08_07
-//<  0x76,  0x76,0x3c62,0xa32c,0.37> scui_image_prj_theme_icon_25_brte_09
+//<  0x76,  0x76,0x1790,0x6cc8,0.22> scui_image_prj_theme_icon_25_brte_09
 //<  0x66,  0x66,0x2f0d,0x79ec,0.39> scui_image_prj_theme_icon_25_brte_09_08
 //<  0x76,  0x76,0x1790,0x6cc8,0.22> scui_image_prj_theme_icon_25_brte_10_09
 //<  0x16,  0x16, 0x4c3, 0x5ac,0.84> scui_image_prj_theme_icon_26_sport_00
@@ -11268,7 +11268,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x20ef,0x4ecc,0.42> scui_image_prj_theme_icon_26_sport_07_06
 //<  0x66,  0x66,0x2e46,0x79ec,0.38> scui_image_prj_theme_icon_26_sport_08
 //<  0x5c,  0x5c,0x2787,0x6330,0.40> scui_image_prj_theme_icon_26_sport_08_07
-//<  0x76,  0x76,0x3a69,0xa32c,0.36> scui_image_prj_theme_icon_26_sport_09
+//<  0x76,  0x76,0x171f,0x6cc8,0.21> scui_image_prj_theme_icon_26_sport_09
 //<  0x66,  0x66,0x2e46,0x79ec,0.38> scui_image_prj_theme_icon_26_sport_09_08
 //<  0x76,  0x76,0x171f,0x6cc8,0.21> scui_image_prj_theme_icon_26_sport_10_09
 //<  0x16,  0x16, 0x422, 0x5ac,0.73> scui_image_prj_theme_icon_27_sleep_00
@@ -11288,7 +11288,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x166f,0x4ecc,0.28> scui_image_prj_theme_icon_27_sleep_07_06
 //<  0x66,  0x66,0x1df0,0x79ec,0.25> scui_image_prj_theme_icon_27_sleep_08
 //<  0x5c,  0x5c,0x1ab5,0x6330,0.27> scui_image_prj_theme_icon_27_sleep_08_07
-//<  0x76,  0x76,0x260f,0xa32c,0.23> scui_image_prj_theme_icon_27_sleep_09
+//<  0x76,  0x76,0x15b7,0x6cc8,0.20> scui_image_prj_theme_icon_27_sleep_09
 //<  0x66,  0x66,0x1df0,0x79ec,0.25> scui_image_prj_theme_icon_27_sleep_09_08
 //<  0x76,  0x76,0x15b7,0x6cc8,0.20> scui_image_prj_theme_icon_27_sleep_10_09
 //<  0x16,  0x16, 0x549, 0x5ac,0.93> scui_image_prj_theme_icon_28_perd_00
@@ -11308,7 +11308,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x2363,0x4ecc,0.45> scui_image_prj_theme_icon_28_perd_07_06
 //<  0x66,  0x66,0x312b,0x79ec,0.40> scui_image_prj_theme_icon_28_perd_08
 //<  0x5c,  0x5c,0x2a87,0x6330,0.43> scui_image_prj_theme_icon_28_perd_08_07
-//<  0x76,  0x76,0x3dfa,0xa32c,0.38> scui_image_prj_theme_icon_28_perd_09
+//<  0x76,  0x76,0x1690,0x6cc8,0.21> scui_image_prj_theme_icon_28_perd_09
 //<  0x66,  0x66,0x312b,0x79ec,0.40> scui_image_prj_theme_icon_28_perd_09_08
 //<  0x76,  0x76,0x1690,0x6cc8,0.21> scui_image_prj_theme_icon_28_perd_10_09
 //<  0x16,  0x16, 0x3b6, 0x5ac,0.65> scui_image_prj_theme_icon_29_discover_00
@@ -11328,7 +11328,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1317,0x4ecc,0.24> scui_image_prj_theme_icon_29_discover_07_06
 //<  0x66,  0x66,0x195b,0x79ec,0.21> scui_image_prj_theme_icon_29_discover_08
 //<  0x5c,  0x5c,0x15bf,0x6330,0.22> scui_image_prj_theme_icon_29_discover_08_07
-//<  0x76,  0x76,0x200f,0xa32c,0.20> scui_image_prj_theme_icon_29_discover_09
+//<  0x76,  0x76,0x149f,0x6cc8,0.19> scui_image_prj_theme_icon_29_discover_09
 //<  0x66,  0x66,0x195b,0x79ec,0.21> scui_image_prj_theme_icon_29_discover_09_08
 //<  0x76,  0x76,0x149f,0x6cc8,0.19> scui_image_prj_theme_icon_29_discover_10_09
 //<  0x16,  0x16, 0x509, 0x5ac,0.89> scui_image_prj_theme_icon_30_theme_00
@@ -11348,7 +11348,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1cc8,0x4ecc,0.37> scui_image_prj_theme_icon_30_theme_07_06
 //<  0x66,  0x66,0x2635,0x79ec,0.31> scui_image_prj_theme_icon_30_theme_08
 //<  0x5c,  0x5c,0x225e,0x6330,0.35> scui_image_prj_theme_icon_30_theme_08_07
-//<  0x76,  0x76,0x3038,0xa32c,0.30> scui_image_prj_theme_icon_30_theme_09
+//<  0x76,  0x76,0x1cb9,0x6cc8,0.26> scui_image_prj_theme_icon_30_theme_09
 //<  0x66,  0x66,0x2635,0x79ec,0.31> scui_image_prj_theme_icon_30_theme_09_08
 //<  0x76,  0x76,0x1cb9,0x6cc8,0.26> scui_image_prj_theme_icon_30_theme_10_09
 //<  0x16,  0x16, 0x4a5, 0x5ac,0.82> scui_image_prj_theme_icon_31_about_00
@@ -11368,7 +11368,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1ad5,0x4ecc,0.34> scui_image_prj_theme_icon_31_about_07_06
 //<  0x66,  0x66,0x250c,0x79ec,0.30> scui_image_prj_theme_icon_31_about_08
 //<  0x5c,  0x5c,0x1ff2,0x6330,0.32> scui_image_prj_theme_icon_31_about_08_07
-//<  0x76,  0x76,0x2f21,0xa32c,0.29> scui_image_prj_theme_icon_31_about_09
+//<  0x76,  0x76, 0xfc2,0x6cc8,0.14> scui_image_prj_theme_icon_31_about_09
 //<  0x66,  0x66,0x250c,0x79ec,0.30> scui_image_prj_theme_icon_31_about_09_08
 //<  0x76,  0x76, 0xfc2,0x6cc8,0.14> scui_image_prj_theme_icon_31_about_10_09
 //<  0x16,  0x16, 0x476, 0x5ac,0.79> scui_image_prj_theme_icon_32_brt_00
@@ -11388,7 +11388,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1ed1,0x4ecc,0.39> scui_image_prj_theme_icon_32_brt_07_06
 //<  0x66,  0x66,0x2a66,0x79ec,0.35> scui_image_prj_theme_icon_32_brt_08
 //<  0x5c,  0x5c,0x24a5,0x6330,0.37> scui_image_prj_theme_icon_32_brt_08_07
-//<  0x76,  0x76,0x35b6,0xa32c,0.33> scui_image_prj_theme_icon_32_brt_09
+//<  0x76,  0x76,0x1594,0x6cc8,0.20> scui_image_prj_theme_icon_32_brt_09
 //<  0x66,  0x66,0x2a66,0x79ec,0.35> scui_image_prj_theme_icon_32_brt_09_08
 //<  0x76,  0x76,0x1594,0x6cc8,0.20> scui_image_prj_theme_icon_32_brt_10_09
 //<  0x16,  0x16, 0x420, 0x5ac,0.73> scui_image_prj_theme_icon_33_pwd_00
@@ -11408,7 +11408,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x18c7,0x4ecc,0.31> scui_image_prj_theme_icon_33_pwd_07_06
 //<  0x66,  0x66,0x225e,0x79ec,0.28> scui_image_prj_theme_icon_33_pwd_08
 //<  0x5c,  0x5c,0x1d87,0x6330,0.30> scui_image_prj_theme_icon_33_pwd_08_07
-//<  0x76,  0x76,0x2b8d,0xa32c,0.27> scui_image_prj_theme_icon_33_pwd_09
+//<  0x76,  0x76,0x139e,0x6cc8,0.18> scui_image_prj_theme_icon_33_pwd_09
 //<  0x66,  0x66,0x225e,0x79ec,0.28> scui_image_prj_theme_icon_33_pwd_09_08
 //<  0x76,  0x76,0x139e,0x6cc8,0.18> scui_image_prj_theme_icon_33_pwd_10_09
 //<  0x16,  0x16, 0x405, 0x5ac,0.71> scui_image_prj_theme_icon_34_sound_00
@@ -11428,7 +11428,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x158e,0x4ecc,0.27> scui_image_prj_theme_icon_34_sound_07_06
 //<  0x66,  0x66,0x1c7b,0x79ec,0.23> scui_image_prj_theme_icon_34_sound_08
 //<  0x5c,  0x5c,0x18a0,0x6330,0.25> scui_image_prj_theme_icon_34_sound_08_07
-//<  0x76,  0x76,0x2380,0xa32c,0.22> scui_image_prj_theme_icon_34_sound_09
+//<  0x76,  0x76,0x14f3,0x6cc8,0.19> scui_image_prj_theme_icon_34_sound_09
 //<  0x66,  0x66,0x1c7b,0x79ec,0.23> scui_image_prj_theme_icon_34_sound_09_08
 //<  0x76,  0x76,0x14f3,0x6cc8,0.19> scui_image_prj_theme_icon_34_sound_10_09
 //<  0x16,  0x16, 0x3fa, 0x5ac,0.70> scui_image_prj_theme_icon_35_time_00
@@ -11448,7 +11448,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1509,0x4ecc,0.27> scui_image_prj_theme_icon_35_time_07_06
 //<  0x66,  0x66,0x1cd1,0x79ec,0.24> scui_image_prj_theme_icon_35_time_08
 //<  0x5c,  0x5c,0x185c,0x6330,0.25> scui_image_prj_theme_icon_35_time_08_07
-//<  0x76,  0x76,0x24d4,0xa32c,0.23> scui_image_prj_theme_icon_35_time_09
+//<  0x76,  0x76,0x1580,0x6cc8,0.20> scui_image_prj_theme_icon_35_time_09
 //<  0x66,  0x66,0x1cd1,0x79ec,0.24> scui_image_prj_theme_icon_35_time_09_08
 //<  0x76,  0x76,0x1580,0x6cc8,0.20> scui_image_prj_theme_icon_35_time_10_09
 //<  0x16,  0x16, 0x39b, 0x5ac,0.64> scui_image_prj_theme_icon_37_dnd_00
@@ -11468,7 +11468,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1146,0x4ecc,0.22> scui_image_prj_theme_icon_37_dnd_07_06
 //<  0x66,  0x66,0x1711,0x79ec,0.19> scui_image_prj_theme_icon_37_dnd_08
 //<  0x5c,  0x5c,0x1401,0x6330,0.20> scui_image_prj_theme_icon_37_dnd_08_07
-//<  0x76,  0x76,0x1ca8,0xa32c,0.18> scui_image_prj_theme_icon_37_dnd_09
+//<  0x76,  0x76,0x1195,0x6cc8,0.16> scui_image_prj_theme_icon_37_dnd_09
 //<  0x66,  0x66,0x1711,0x79ec,0.19> scui_image_prj_theme_icon_37_dnd_09_08
 //<  0x76,  0x76,0x1195,0x6cc8,0.16> scui_image_prj_theme_icon_37_dnd_10_09
 //<  0x16,  0x16, 0x44b, 0x5ac,0.76> scui_image_prj_theme_icon_38_aod_00
@@ -11488,7 +11488,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1919,0x4ecc,0.32> scui_image_prj_theme_icon_38_aod_07_06
 //<  0x66,  0x66,0x2331,0x79ec,0.29> scui_image_prj_theme_icon_38_aod_08
 //<  0x5c,  0x5c,0x1eb7,0x6330,0.31> scui_image_prj_theme_icon_38_aod_08_07
-//<  0x76,  0x76,0x2cd5,0xa32c,0.27> scui_image_prj_theme_icon_38_aod_09
+//<  0x76,  0x76,0x1603,0x6cc8,0.20> scui_image_prj_theme_icon_38_aod_09
 //<  0x66,  0x66,0x2331,0x79ec,0.29> scui_image_prj_theme_icon_38_aod_09_08
 //<  0x76,  0x76,0x1603,0x6cc8,0.20> scui_image_prj_theme_icon_38_aod_10_09
 //<  0x16,  0x16, 0x512, 0x5ac,0.89> scui_image_prj_theme_icon_39_sys_00
@@ -11508,7 +11508,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x2043,0x4ecc,0.41> scui_image_prj_theme_icon_39_sys_07_06
 //<  0x66,  0x66,0x2d98,0x79ec,0.37> scui_image_prj_theme_icon_39_sys_08
 //<  0x5c,  0x5c,0x2729,0x6330,0.39> scui_image_prj_theme_icon_39_sys_08_07
-//<  0x76,  0x76,0x3813,0xa32c,0.34> scui_image_prj_theme_icon_39_sys_09
+//<  0x76,  0x76,0x10d9,0x6cc8,0.15> scui_image_prj_theme_icon_39_sys_09
 //<  0x66,  0x66,0x2d98,0x79ec,0.37> scui_image_prj_theme_icon_39_sys_09_08
 //<  0x76,  0x76,0x10d9,0x6cc8,0.15> scui_image_prj_theme_icon_39_sys_10_09
 //<  0x16,  0x16, 0x464, 0x5ac,0.77> scui_image_prj_theme_icon_40_down_key_00
@@ -11528,7 +11528,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1a7e,0x4ecc,0.34> scui_image_prj_theme_icon_40_down_key_07_06
 //<  0x66,  0x66,0x24ee,0x79ec,0.30> scui_image_prj_theme_icon_40_down_key_08
 //<  0x5c,  0x5c,0x1f97,0x6330,0.32> scui_image_prj_theme_icon_40_down_key_08_07
-//<  0x76,  0x76,0x2ebb,0xa32c,0.29> scui_image_prj_theme_icon_40_down_key_09
+//<  0x76,  0x76,0x142b,0x6cc8,0.19> scui_image_prj_theme_icon_40_down_key_09
 //<  0x66,  0x66,0x24ee,0x79ec,0.30> scui_image_prj_theme_icon_40_down_key_09_08
 //<  0x76,  0x76,0x142b,0x6cc8,0.19> scui_image_prj_theme_icon_40_down_key_10_09
 //<  0x16,  0x16, 0x42e, 0x5ac,0.74> scui_image_prj_theme_icon_41_bp_00
@@ -11548,7 +11548,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1708,0x4ecc,0.29> scui_image_prj_theme_icon_41_bp_07_06
 //<  0x66,  0x66,0x1ee2,0x79ec,0.25> scui_image_prj_theme_icon_41_bp_08
 //<  0x5c,  0x5c,0x1ae2,0x6330,0.27> scui_image_prj_theme_icon_41_bp_08_07
-//<  0x76,  0x76,0x37f2,0xa32c,0.34> scui_image_prj_theme_icon_41_bp_09
+//<  0x76,  0x76,0x1470,0x6cc8,0.19> scui_image_prj_theme_icon_41_bp_09
 //<  0x66,  0x66,0x1ee2,0x79ec,0.25> scui_image_prj_theme_icon_41_bp_09_08
 //<  0x76,  0x76,0x1470,0x6cc8,0.19> scui_image_prj_theme_icon_41_bp_10_09
 //<  0x16,  0x16, 0x390, 0x5ac,0.63> scui_image_prj_theme_icon_41_mood_00
@@ -11568,7 +11568,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52, 0xf00,0x4ecc,0.19> scui_image_prj_theme_icon_41_mood_07_06
 //<  0x66,  0x66,0x13df,0x79ec,0.16> scui_image_prj_theme_icon_41_mood_08
 //<  0x5c,  0x5c,0x116a,0x6330,0.18> scui_image_prj_theme_icon_41_mood_08_07
-//<  0x76,  0x76,0x168f,0xa32c,0.14> scui_image_prj_theme_icon_41_mood_09
+//<  0x76,  0x76,0x1612,0x6cc8,0.20> scui_image_prj_theme_icon_41_mood_09
 //<  0x66,  0x66,0x13df,0x79ec,0.16> scui_image_prj_theme_icon_41_mood_09_08
 //<  0x76,  0x76,0x1612,0x6cc8,0.20> scui_image_prj_theme_icon_41_mood_10_09
 //<  0x16,  0x16, 0x3ba, 0x5ac,0.66> scui_image_prj_theme_icon_42_meas_00
@@ -11588,7 +11588,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x52,  0x52,0x1425,0x4ecc,0.26> scui_image_prj_theme_icon_42_meas_07_06
 //<  0x66,  0x66,0x1ad1,0x79ec,0.22> scui_image_prj_theme_icon_42_meas_08
 //<  0x5c,  0x5c,0x164c,0x6330,0.22> scui_image_prj_theme_icon_42_meas_08_07
-//<  0x76,  0x76,0x21c9,0xa32c,0.21> scui_image_prj_theme_icon_42_meas_09
+//<  0x76,  0x76,0x14b1,0x6cc8,0.19> scui_image_prj_theme_icon_42_meas_09
 //<  0x66,  0x66,0x1ad1,0x79ec,0.22> scui_image_prj_theme_icon_42_meas_09_08
 //<  0x76,  0x76,0x14b1,0x6cc8,0.19> scui_image_prj_theme_icon_42_meas_10_09
 //<  0x16,  0x16, 0x3db, 0x5ac,0.68> scui_image_prj_theme_icon_43_toggle_effect_00
@@ -11850,12 +11850,12 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x1c,  0x1c, 0x3b9, 0x930,0.41> scui_image_prj_wgt_act_steps
 //<  0x60,  0x60, 0x368,0x1200,0.19> scui_image_prj_wgt_act_steps_201021
 //<  0x1c,  0x1c, 0x521, 0x620,0.84> scui_image_prj_wgt_act_steps_icon_28x28
-//<  0x34,  0x34, 0x588,0x1fb0,0.17> scui_image_prj_wgt_arr
+//<  0x10,  0x1c, 0x363, 0x380,0.97> scui_image_prj_wgt_arr
 //<  0x34,  0x34, 0x56f,0x1fb0,0.17> scui_image_prj_wgt_arr2
 //<  0x34,  0x34, 0x57a,0x1520,0.26> scui_image_prj_wgt_arr_1
 //<  0x34,  0x34, 0x5fb,0x1520,0.28> scui_image_prj_wgt_arr_2
 //<  0x30,   0x8, 0x2c1, 0x300,0.92> scui_image_prj_wgt_bar
-//<  0x56,  0x56,0x13a1,0x56ac,0.23> scui_image_prj_wgt_bg
+//< 0x19a,  0x98, 0x925,0x1e6e0,0.02> scui_image_prj_wgt_bg
 //<  0x20,  0x20, 0x5c1, 0xc00,0.48> scui_image_prj_wgt_bp
 //< 0x116,  0x5c, 0xac3,0x12bb8,0.04> scui_image_prj_wgt_btn_grey_bg_278x92
 //<  0x46,  0x2a, 0x81c,0x16f8,0.35> scui_image_prj_wgt_btn_off
@@ -11865,7 +11865,7 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x20,  0x20, 0x421, 0x800,0.52> scui_image_prj_wgt_cmps_01_arr
 //<  0x58,  0x58, 0x69f,0x3c80,0.11> scui_image_prj_wgt_cmps_02_bg
 //<  0x20,  0x20, 0x41d, 0xc00,0.34> scui_image_prj_wgt_cmps_03_arr
-//<  0x20,  0x20, 0x41d, 0xc00,0.34> scui_image_prj_wgt_cmps_arr
+//<  0x20,  0x20, 0x421, 0x800,0.52> scui_image_prj_wgt_cmps_arr
 //<  0x58,  0x58, 0x69f,0x3c80,0.11> scui_image_prj_wgt_cmps_bg
 //<  0xb0,  0x64, 0xa24,0x8980,0.07> scui_image_prj_wgt_del_icon
 //<  0x20,  0x20, 0x54a, 0x800,0.66> scui_image_prj_wgt_dist_icon
@@ -11947,9 +11947,9 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x3a,  0x3a, 0x620,0x1a48,0.23> scui_image_prj_wthr_07_arr_up
 //< 0x174,   0x2, 0x2d3, 0x5d0,0.49> scui_image_prj_wthr_08_line
 //<  0x12,  0x12, 0x187, 0x3cc,0.40> scui_image_prj_wthr_1
-//<   0x8,   0x8,  0xf6,  0xc0,1.28> scui_image_prj_wthr_2
-//<  0x3a,  0x3a, 0x931,0x1024,0.57> scui_image_prj_wthr_arr_down
-//<  0x3a,  0x3a, 0x8cd,0x1024,0.55> scui_image_prj_wthr_arr_up
+//<  0xfc,   0xc, 0x45f,0x17a0,0.19> scui_image_prj_wthr_2
+//<  0x3a,  0x3a, 0x61a,0x1a48,0.23> scui_image_prj_wthr_arr_down
+//<  0x3a,  0x3a, 0x620,0x1a48,0.23> scui_image_prj_wthr_arr_up
 //<  0x38,  0x1a, 0x6ca, 0xb60,0.60> scui_image_prj_wthr_char_now_01_en
 //<  0x38,  0x1a, 0x7bd, 0xb60,0.68> scui_image_prj_wthr_char_now_02_zh
 //<  0x38,  0x1a, 0x6ca, 0xb60,0.60> scui_image_prj_wthr_char_now_en
@@ -11957,15 +11957,15 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x7a,  0x62, 0xac6,0x5d68,0.12> scui_image_prj_wthr_data
 //<  0x12,  0x12, 0x187, 0x3cc,0.40> scui_image_prj_wthr_dot_1
 //<   0x8,   0x8,  0xf6,  0xc0,1.28> scui_image_prj_wthr_dot_2
-//<  0x3a,  0x3a, 0x931,0x1024,0.57> scui_image_prj_wthr_down
+//<  0x3a,  0x3a, 0x61a,0x1a48,0.23> scui_image_prj_wthr_down
 //< 0x174,   0x2, 0x2d3, 0x5d0,0.49> scui_image_prj_wthr_line
 //<  0x7a,  0x62, 0xac6,0x5d68,0.12> scui_image_prj_wthr_no_data
 //<  0x30,  0xf6, 0xdfc,0x5c40,0.15> scui_image_prj_wthr_quality
 //<  0x30,  0xf6, 0xe05,0x5c40,0.15> scui_image_prj_wthr_ring_air_quality
-//<  0x30,  0xf6,0x1b28,0x3120,0.55> scui_image_prj_wthr_ring_uv
+//<  0x30,  0xf6, 0xf78,0x5c40,0.17> scui_image_prj_wthr_ring_uv
 //<  0xfc,   0xc, 0x45f,0x17a0,0.19> scui_image_prj_wthr_ring_uv_2
-//<  0x3a,  0x3a, 0x8cd,0x1024,0.55> scui_image_prj_wthr_up
-//<  0x30,  0xf6,0x1b28,0x3120,0.55> scui_image_prj_wthr_uv
+//<  0x3a,  0x3a, 0x620,0x1a48,0.23> scui_image_prj_wthr_up
+//<  0x30,  0xf6, 0xf78,0x5c40,0.17> scui_image_prj_wthr_uv
 //<  0x78,  0x78,0x11bd,0x7080,0.16> scui_image_prj_wthr_wbig_00_sun_00
 //<  0x78,  0x78,0x12a5,0x7080,0.17> scui_image_prj_wthr_wbig_00_sun_01
 //<  0x78,  0x78,0x11bd,0x7080,0.16> scui_image_prj_wthr_wbig_00_sun_01_00
@@ -12275,6 +12275,6 @@ extern const void * const scui_image_parser_table[6132];
 //<  0x2a,  0x2a, 0x55e,0x14ac,0.26> scui_image_prj_wthr_wsmall_tstorm
 //<  0x2a,  0x2a, 0x439,0x14ac,0.20> scui_image_prj_wthr_wsmall_unknown
 
-//static pct:0.15
+//static pct:0.14
 
 #endif

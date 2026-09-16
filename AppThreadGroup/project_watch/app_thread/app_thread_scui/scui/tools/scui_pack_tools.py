@@ -56,16 +56,18 @@ _IMAGE_CFG_DEFAULT = {
     'use_lz4':    True,
     'use_jpg':    True,
     'use_png':    True,
-    'workers':    6,
+    'workers':    10,
     'alpha_bits': 4,
     'index_bits': 8,
+    'index_all':  False,
     'endian':     False,
 }
 _IMG_CFG_DEFS = [      # (键, bool/int, 标签, 选项)
+    ('index_all',  'bool', 'index 全局',     None),
     ('use_lz4',    'bool', '启用 LZ4 压缩',   None),
     ('use_jpg',    'bool', '启用 JPG 打包',   None),
     ('use_png',    'bool', '启用 PNG 打包',   None),
-    ('workers',    'combo', '并行线程数(1-6)', ('1', '2', '3', '4', '5', '6')),
+    ('workers',    'combo', '并行线程数(1-16)', ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16')),
     ('alpha_bits', 'combo', 'alpha 位宽(1/2/4/8)', ('1', '2', '4', '8')),
     ('index_bits', 'combo', 'index 位宽(1/2/4/8)', ('1', '2', '4', '8')),
     ('endian',     'bool', '大端字节序(整体)', None),
@@ -628,6 +630,9 @@ class PackApp(object):
 
         # 主体: 左(scene) | 中(上 analyze 下 模板) | 右(编辑)
         hpan = ttk.Panedwindow(f, orient='horizontal'); hpan.pack(fill='both', expand=True, pady=(6, 0))
+        self._pane_drag = False
+        hpan.bind('<B1-Motion>', lambda e: setattr(self, '_pane_drag', True))
+        hpan.bind('<ButtonRelease-1>', self._pane_release)
 
         # 左: scene 文件树(虚拟化 Canvas, 只绘可见行, 支持折叠)
         lf = ttk.LabelFrame(hpan, text=' scene布局集合 ', padding=(4, 4)); hpan.add(lf, weight=3)
@@ -636,7 +641,7 @@ class PackApp(object):
         self.wcanv_tree.configure(yscrollcommand=self._wt_vsb.set)
         self.wcanv_tree.pack(side='left', fill='both', expand=True)
         self._wt_vsb.pack(side='right', fill='y')
-        self.wcanv_tree.bind('<Configure>', lambda e: self._wid_draw())
+        self.wcanv_tree.bind('<Configure>', lambda e: self._wid_draw_q())
         self.wcanv_tree.bind('<Enter>', lambda e: self.wcanv_tree.bind_all('<MouseWheel>', self._wid_tree_wheel))
         self.wcanv_tree.bind('<Leave>', lambda e: self.wcanv_tree.unbind_all('<MouseWheel>'))
         self.wcanv_tree.bind('<Button-1>', self._wid_tree_click)
@@ -876,6 +881,16 @@ class PackApp(object):
     def _wid_tree_wheel(self, e):
         self.wcanv_tree.yview_scroll(-1 * (e.delta // 120), 'units')
         self._wid_draw()
+
+    # 重绘去抖: 拖动分栏/窗口缩放时 Configure 高频触发, 合并 40ms 内重绘避免窗帘撕裂
+    # 拖动中(鼠标按住 sash)完全挂起, 松手统一刷新一次, 避免拖动过程反复全量重绘
+    def _wid_draw_q(self):
+        if getattr(self, '_pane_drag', False):
+            self._wid_draw_pending = True
+            return
+        if getattr(self, '_wid_draw_after', None) is not None:
+            self.root.after_cancel(self._wid_draw_after)
+        self._wid_draw_after = self.root.after(40, self._wid_draw)
 
     def _wid_draw(self):
         c = self.wcanv_tree
@@ -3216,8 +3231,10 @@ class PackApp(object):
 
         # 主体: 水平分栏(左|右)
         imh = ttk.Panedwindow(f, orient='horizontal'); imh.pack(fill='both', expand=True, pady=(4, 0))
-        lv = ttk.Frame(imh); imh.add(lv, weight=4)
-        rv = ttk.Panedwindow(imh, orient='vertical'); imh.add(rv, weight=3)
+        imh.bind('<B1-Motion>', lambda e: setattr(self, '_pane_drag', True))
+        imh.bind('<ButtonRelease-1>', self._pane_release)
+        lv = ttk.Frame(imh, width=520); imh.add(lv, weight=4)
+        rv = ttk.Frame(imh); imh.add(rv, weight=3)
 
         # 左上: 图形配置(固定顶部自然高, 不被下方挤压)
         gf = ttk.LabelFrame(lv, text=' 图形配置 ', padding=(6, 4)); gf.pack(side='top', fill='x')
@@ -3254,7 +3271,7 @@ class PackApp(object):
         self._img_root = None        # 图片源根目录
         self._img_exp = set()        # 已展开的目录(绝对路径)
         self._i_rowH = 22            # 每行像素高(虚拟化绘制)
-        self.it_canv.bind('<Configure>', lambda e: self._img_draw())
+        self.it_canv.bind('<Configure>', lambda e: self._img_draw_q())
         self.it_canv.bind('<Enter>', lambda e: self.it_canv.bind_all('<MouseWheel>', self._img_wheel))
         self.it_canv.bind('<Leave>', lambda e: self.it_canv.unbind_all('<MouseWheel>'))
         self.it_canv.bind('<Button-1>', self._img_canvas_click)
@@ -3262,7 +3279,7 @@ class PackApp(object):
         self.root.after(80, self._img_reload)
 
         # 右上: 图片配置(选中图片: 不参与编译/dither/index; 更新配置=重命名)
-        icf = ttk.LabelFrame(rv, text=' 图片配置 ', padding=(6, 4)); rv.add(icf, weight=2)
+        icf = ttk.LabelFrame(rv, text=' 图片配置 ', padding=(6, 4)); icf.pack(side='top', fill='x')
         self._i_sel_path = None
         self.i_sel_label = ttk.Label(icf, text='未选择图片(选中左侧图片生效)', foreground='#888')
         self.i_sel_label.pack(anchor='w', padx=(2, 0))
@@ -3280,7 +3297,7 @@ class PackApp(object):
         ttk.Label(ibar, text='更新配置≈重命名该图片文件', foreground='#888').pack(side='left', padx=(8, 0))
 
         # 右下: 图片详情(预览 + 解析字段)
-        df = ttk.LabelFrame(rv, text=' 图片详情 ', padding=(6, 4)); rv.add(df, weight=3)
+        df = ttk.LabelFrame(rv, text=' 图片详情 ', padding=(6, 4)); df.pack(fill='both', expand=True)
         dbody = ttk.Frame(df); dbody.pack(fill='both', expand=True)
         self.preview = ttk.Label(dbody, text='选择左侧图片查看预览', anchor='center',
                                  width=26, relief='groove')
@@ -3335,21 +3352,55 @@ class PackApp(object):
     #--------------- 图片资源(Canvas 行列表) ---------------
     def _img_wheel(self, e):
         self.it_canv.yview_scroll(-1 * (e.delta // 120), 'units')
-        self._img_draw()
+        self._img_draw_q()
 
     # 滚动条 command: 先滚动后重绘(虚拟化没有持久 item, 必须重绘才刷新)
     def _img_scroll_cmd(self, *args):
         self.it_canv.yview(*args)
-        self._img_draw()
+        self._img_draw_q()
+
+    # 重绘去抖: 滚动事件高频触发, 合并 40ms 内重绘避免撕裂
+    # 拖动中(鼠标按住 sash)完全挂起, 松手统一刷新一次, 避免拖动过程反复全量重绘
+    def _img_draw_q(self):
+        if getattr(self, '_pane_drag', False):
+            self._img_draw_pending = True
+            return
+        if getattr(self, '_img_draw_after', None) is not None:
+            self.root.after_cancel(self._img_draw_after)
+        self._img_draw_after = self.root.after(40, self._img_draw)
+
+    # 拖动松手: 清除标志并刷新挂起的重绘(widget + image 两个列表共用)
+    def _pane_release(self, e=None):
+        self._pane_drag = False
+        if getattr(self, '_wid_draw_pending', False):
+            self._wid_draw_pending = False
+            self._wid_draw()
+        if getattr(self, '_img_draw_pending', False):
+            self._img_draw_pending = False
+            self._img_draw()
 
     def _img_reload(self):
         self.it_canv.delete('all')
-        old_exp = getattr(self, '_img_exp', set())
-        self._img_root = self.in_abs['image'] if os.path.isdir(self.in_abs['image']) else self.ui
-        self._img_tree = self._img_scan_nodes(self._img_root)
-        # 保留仍存在的展开目录(重命名/增删后折叠状态不丢)
-        self._img_exp = {p for p in old_exp if os.path.isdir(p)} | {self._img_root}
+        self._status('扫描图片资源…')
+        threading.Thread(target=self._img_scan_worker, daemon=True).start()
+
+    # 后台扫描(IO密集): 完成后再回主线程刷新
+    def _img_scan_worker(self):
+        try:
+            old_exp = set(getattr(self, '_img_exp', set()))
+            root = self.in_abs['image'] if os.path.isdir(self.in_abs['image']) else self.ui
+            tree = self._img_scan_nodes(root)
+            exp = {p for p in old_exp if os.path.isdir(p)} | {root}
+            self.root.after(0, lambda: self._img_scan_done(root, tree, exp))
+        except Exception:
+            self.root.after(0, lambda: self._status(''))
+
+    def _img_scan_done(self, root, tree, exp):
+        self._img_root = root
+        self._img_tree = tree
+        self._img_exp = exp
         self._img_reflatten()
+        self._status('')
         # 若选中图片已不存在(被重命名/删除), 清空配置
         if self._i_sel and not os.path.exists(self._i_sel):
             self._i_sel = None
@@ -3556,17 +3607,16 @@ class PackApp(object):
         import tkinter as tk
         from PIL import Image, ImageTk
         preview_err = None
-        # 预览图无条件显示
-        try:
-            im = Image.open(path)
-            im.load()
-            im.thumbnail((180, 180))
-            ph = ImageTk.PhotoImage(im)
-            self._imgs.append(ph)
-            self.preview.configure(image=ph, text='')
-        except Exception as e:
-            preview_err = '%r' % e
-            self.preview.configure(image='', text=os.path.basename(path))
+        # 预览图后台线程解码(大图不阻塞主线程), PhotoImage 在主线程创建
+        def _pv_worker():
+            try:
+                im = Image.open(path)
+                im.load()
+                im.thumbnail((180, 180))
+                self.root.after(0, lambda: self._pv_done(path, im.copy()))
+            except Exception as e:
+                self.root.after(0, lambda: self._pv_done(path, None, e))
+        threading.Thread(target=_pv_worker, daemon=True).start()
 
         # 构造 file_tag(与打包后端一致的无尾缀句柄: 去扩展名/去.idx/.dit/去点)
         file_tag = _img_handle_tag(path, self.in_abs['image'])
@@ -3603,6 +3653,21 @@ class PackApp(object):
         self.field_text.delete('1.0', 'end')
         self.field_text.insert('1.0', '\n'.join(lines))
         self.field_text.configure(state='disabled')
+
+    def _pv_done(self, path, im, err=None):
+        # 已切换选择则丢弃旧结果
+        if path != self._i_sel:
+            return
+        if err is not None:
+            self.preview.configure(image='', text=os.path.basename(path))
+            return
+        try:
+            from PIL import ImageTk
+            ph = ImageTk.PhotoImage(im)
+            self._imgs.append(ph)
+            self.preview.configure(image=ph, text='')
+        except Exception:
+            self.preview.configure(image='', text=os.path.basename(path))
 
     def _image_from_h(self, file_tag):
         """从 scui_res_image.h 匹配句柄信息(file_tag 为去点后的相对路径)."""
