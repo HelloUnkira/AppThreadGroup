@@ -173,7 +173,6 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                 scui_indev_ptr_event_check(&event);
             }
-            scui_indev_ptr.cnt_tick = scui_tick_cnt();
             /* 发送抬起事件 */
             event.type     = scui_event_ptr_up;
             event.ptr_c    = point;
@@ -181,6 +180,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             event.ptr_tick = elapse;
             event.ptr_hit  = scui_indev_ptr.ptr_hit;
             SCUI_LOG_INFO("scui_event_ptr_up:%d,%d", event.ptr_cnt, event.ptr_tick);
+            scui_indev_ptr.cnt_tick = scui_tick_cnt();
             scui_indev_ptr_event_check(&event);
             return;
         }

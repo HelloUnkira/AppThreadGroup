@@ -238,8 +238,8 @@ do {                                                                            
 
 /* scui_draw_type_image_2d */
 #define scui_draw_image_2d(sync_v, dst_surface_v, dst_clip_v,                       \
-    src_image_v, src_clip_v, src_alpha_v, src_scale_v, src_angle_v,                 \
-    dst_anchor_v, src_center_v)                                                     \
+    src_image_v, src_clip_v, src_alpha_v, src_color_v,                              \
+    src_scale_v, src_angle_v, dst_anchor_v, src_center_v)                           \
 do {                                                                                \
     scui_draw_dsc_t *scui_dd_i = NULL;                                              \
     scui_draw_dsc_ready(&scui_dd_i);                                                \
@@ -250,6 +250,7 @@ do {                                                                            
     scui_dd_i->image_2d.src_image   = src_image_v,                                  \
     scui_dd_i->image_2d.src_clip    = src_clip_v,                                   \
     scui_dd_i->image_2d.src_alpha   = src_alpha_v,                                  \
+    scui_dd_i->image_2d.src_color   = src_color_v,                                  \
     scui_dd_i->image_2d.src_scale   = src_scale_v,                                  \
     scui_dd_i->image_2d.src_angle   = src_angle_v,                                  \
     scui_dd_i->image_2d.dst_anchor  = dst_anchor_v,                                 \

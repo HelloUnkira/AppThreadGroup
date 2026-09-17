@@ -205,7 +205,7 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
         
         scui_handle_t image_handle = scui_image_prj_rpt_btn_22_retry_heart;
-        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, image_scale, scui_opt_pos_c);
+        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, SCUI_COLOR_UNUSED, image_scale, scui_opt_pos_c);
         #endif
         
         #if 1
@@ -227,7 +227,7 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
             .y = scui_image_h(rot_image) / 2 + (clip.w / 2 - 20),
         };
         scui_widget_draw_image_rotate(event->object, NULL, rot_image, NULL,
-            rot_anchor, rot_center, rot_angle);
+            SCUI_COLOR_UNUSED, rot_anchor, rot_center, rot_angle);
         #endif
         
         break;

@@ -146,11 +146,12 @@ do {                                                                            
 } while (0)
 
 #define scui_widget_draw_image_scale(handle_v, target_v,                        \
-    image_v, clip_v, scale_v, pos_v)                                            \
+    image_v, clip_v, color_v, scale_v, pos_v)                                   \
 do {                                                                            \
     scui_widget_draw_dsc_t scui_wdc_i = {                                       \
         .image = image_v,                                                       \
         .clip  = clip_v,                                                        \
+        .color = color_v,                                                       \
         .scale = scale_v,                                                       \
         .pos   = pos_v,                                                         \
     };                                                                          \
@@ -158,11 +159,12 @@ do {                                                                            
 } while (0)
 
 #define scui_widget_draw_image_rotate(handle_v, target_v,                       \
-    image_v, clip_v, anchor_v, center_v, angle_v)                               \
+    image_v, clip_v, color_v, anchor_v, center_v, angle_v)                      \
 do {                                                                            \
     scui_widget_draw_dsc_t scui_wdc_i = {                                       \
         .image  = image_v,                                                      \
         .clip   = clip_v,                                                       \
+        .color  = color_v,                                                      \
         .anchor = anchor_v,                                                     \
         .center = center_v,                                                     \
         .angle  = angle_v,                                                      \
@@ -171,11 +173,12 @@ do {                                                                            
 } while (0)
 
 #define scui_widget_draw_image_2d(handle_v, target_v,                           \
-    image_v, clip_v, anchor_v, center_v, scale_v, angle_v)                      \
+    image_v, clip_v, color_v, anchor_v, center_v, scale_v, angle_v)             \
 do {                                                                            \
     scui_widget_draw_dsc_t scui_wdc_i = {                                       \
         .image  = image_v,                                                      \
         .clip   = clip_v,                                                       \
+        .color  = color_v,                                                      \
         .anchor = anchor_v,                                                     \
         .center = center_v,                                                     \
         .scale  = scale_v,                                                      \
@@ -185,11 +188,12 @@ do {                                                                            
 } while (0)
 
 #define scui_widget_draw_image_3d(handle_v, target_v,                           \
-    image_v, clip_v, matrix_v, inv_matrix_v)                                    \
+    image_v, clip_v, color_v, matrix_v, inv_matrix_v)                           \
 do {                                                                            \
     scui_widget_draw_dsc_t scui_wdc_i = {                                       \
         .image      = image_v,                                                  \
         .clip       = clip_v,                                                   \
+        .color      = color_v,                                                  \
         .matrix     = matrix_v,                                                 \
         .inv_matrix = inv_matrix_v,                                             \
     };                                                                          \

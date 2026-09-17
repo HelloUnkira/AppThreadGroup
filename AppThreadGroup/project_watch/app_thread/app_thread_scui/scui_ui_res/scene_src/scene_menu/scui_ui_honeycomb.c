@@ -196,7 +196,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
                     .x = scale_clip.w * SCUI_SCALE_COF / scui_image_w(image),
                     .y = scale_clip.h * SCUI_SCALE_COF / scui_image_h(image),
                 };
-                scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, scale, scui_opt_pos_c);
+                scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED, scale, scui_opt_pos_c);
                 #else
                 scui_widget_draw_image(event->object, &draw_clip, image + idx, NULL, SCUI_COLOR_UNUSED);
                 #endif
@@ -209,7 +209,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
                     .x = scale_clip.w * SCUI_SCALE_COF / scui_image_w(image),
                     .y = scale_clip.h * SCUI_SCALE_COF / scui_image_h(image),
                 };
-                scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, scale, scui_opt_pos_c);
+                scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED, scale, scui_opt_pos_c);
                 #else
                 scui_widget_draw_image(event->object, &draw_clip, image + idx, NULL, SCUI_COLOR_UNUSED);
                 #endif

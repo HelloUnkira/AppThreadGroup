@@ -151,7 +151,7 @@ void scui_ui_scene_popup_scale_event_proc(scui_event_t *event)
         scui_widget_alpha_get(event->object, &alpha_old);
         scui_widget_alpha_set(event->object, scale_alpha, false);
         scui_handle_t surface_image = scui_widget_surface_image(event->object);
-        scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL, img_scale, scui_opt_pos_c);
+        scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL, SCUI_COLOR_UNUSED, img_scale, scui_opt_pos_c);
         scui_widget_alpha_set(event->object, alpha_old, false);
         break;
     }

@@ -7,13 +7,11 @@
 
 #include "scui.h"
 
-/* 切表盘: 编码器累计位移阈值(达到才切换一个表盘, 避免轻碰即切) */
-static const scui_coord_t scui_ui_home_dial_span = 3;
-
 static struct {
-    void   *cwf_json_inst;
-    bool    ptr_long_jump;
-    bool    dial_jumping;           /* 已发起表盘过渡(等待过渡窗口回跳) */
+    void *cwf_json_inst;
+    bool  dial_jumping;             /* 已发起表盘过渡(等待过渡窗口回跳) */
+    scui_coord_t hold_sec;          /* 长按提示节流(每秒打印) */
+    scui_coord_t dial_span;         /* 切表盘: 编码器累计位移阈值 */
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -52,6 +50,8 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         uint32_t cwf_idx = scui_presenter.cwf_idx_get();
         if (cwf_idx >= scui_presenter.cwf_dial_num())
             cwf_idx  = 0;
+        scui_ui_res_local->hold_sec  = 0;
+        scui_ui_res_local->dial_span = 3;
         scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, scui_presenter.cwf_dial_name(cwf_idx), event->object);
         SCUI_LOG_INFO("home-create: idx:%u/%u", cwf_idx, scui_presenter.cwf_dial_num());
         
@@ -98,17 +98,20 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_ptr_down:
-        scui_ui_res_local->ptr_long_jump = false;
+        scui_ui_res_local->hold_sec = 0;
         break;
-    case scui_event_ptr_hold:
-        if (event->ptr_tick > 3000) {
-            if (!scui_ui_res_local->ptr_long_jump) SCUI_LOG_INFO("ptr long hold");
-            scui_ui_res_local->ptr_long_jump = true;
+    case scui_event_ptr_hold: {
+        /* 长按提示: 每秒打印一次 */
+        scui_coord_t hold_sec = event->ptr_tick / 1000;
+        if (hold_sec != scui_ui_res_local->hold_sec) {
+            scui_ui_res_local->hold_sec = hold_sec;
+            SCUI_LOG_WARN("ptr hold: %ds", hold_sec);
         }
         break;
+    }
     case scui_event_ptr_up:
-        if (scui_ui_res_local->ptr_long_jump) {
-            scui_ui_res_local->ptr_long_jump = true;
+        /* 长按3秒以上: 进入表盘预览(lantern) */
+        if (event->ptr_tick > 3000) {
             #if SCUI_MEM_FEAT_MINI == 0
             scui_window_stack_add_by(SCUI_UI_SCENE_LANTERN,
                 scui_window_switch_circle, scui_opt_dir_none, false);
@@ -129,7 +132,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         /* 编码器累计到位才切换: 同向累加, 反向对消(跨界面重建保持) */
         static scui_coord_t dial_acc = 0;
         dial_acc += event->enc_way == 0 ? event->enc_diff : -event->enc_diff;
-        if (scui_abs(dial_acc) < scui_ui_home_dial_span)
+        if (scui_abs(dial_acc) < scui_ui_res_local->dial_span)
             break;
         
         /* 表盘索引: 0 <-> n 循环; 方向决定过渡窗口从哪一侧进入
@@ -153,7 +156,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         scui_presenter.cwf_idx_set(cwf_idx);
         SCUI_LOG_INFO("home-dial-jump: idx:%u/%u dir:%d acc:%d", cwf_idx, cwf_num, dir, dial_acc);
         /* 保留超出阈值的余量, 连续转动不丢格 */
-        dial_acc -= dial_acc > 0 ? scui_ui_home_dial_span : -scui_ui_home_dial_span;
+        dial_acc -= dial_acc > 0 ? scui_ui_res_local->dial_span : -scui_ui_res_local->dial_span;
         
         /* 覆盖式跳转到过渡窗口: 本窗口出栈销毁, 由过渡窗口承担切换动画
          * 过渡窗口动画结束后(focus_get)无动画切回, 本窗口重建并取用新索引 */

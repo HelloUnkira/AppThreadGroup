@@ -10,7 +10,7 @@
             "widget.myself":            "SCUI_UI_SCENE_ACTIVITY",
             "widget.event_cb":          "scui_ui_scene_activity_event_proc",
             "preload":                  "1",
-            "sibling[2]":               "SCUI_UI_SCENE_HOME",
+            "sibling[2]":               "SCUI_UI_SCENE_SOCCER",
             "sibling[3]":               "SCUI_UI_SCENE_HR"
         },
         {

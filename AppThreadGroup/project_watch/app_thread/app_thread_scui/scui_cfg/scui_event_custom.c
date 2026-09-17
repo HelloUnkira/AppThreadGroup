@@ -243,6 +243,8 @@ void scui_event_custom_access(scui_event_t *event)
                 scui_event_ui_standy_exit, NULL);
             scui_event_notify(&event_ui);
             
+            scui_event_mask_over(event);
+            
             app_module_system_dlps_set(false);
         }
         break;

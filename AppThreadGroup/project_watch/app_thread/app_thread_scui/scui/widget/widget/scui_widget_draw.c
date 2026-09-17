@@ -551,9 +551,8 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
         
         scui_multi_t angle = 0;
         scui_draw_image_2d(false, widget->surface, dst_clip,
-            image_inst, *clip, widget->alpha,
-            draw_dsc->scale, angle,
-            dst_anchor, src_center);
+            image_inst, *clip, widget->alpha, draw_dsc->color,
+            draw_dsc->scale, angle, dst_anchor, src_center);
     }
 }
 
@@ -606,9 +605,8 @@ void scui_widget_draw_ctx_image_rotate(scui_handle_t handle, scui_area_t *target
             .y = SCUI_SCALE_COF,
         };
         scui_draw_image_2d(false, widget->surface, dst_clip,
-            image_inst, *clip, widget->alpha,
-            scale, draw_dsc->angle,
-            anchor, center);
+            image_inst, *clip, widget->alpha, draw_dsc->color,
+            scale, draw_dsc->angle, anchor, center);
     }
 }
 
@@ -657,9 +655,8 @@ void scui_widget_draw_ctx_image_2d(scui_handle_t handle, scui_area_t *target, sc
         #endif
         
         scui_draw_image_2d(false, widget->surface, dst_clip,
-            image_inst, *clip, widget->alpha,
-            draw_dsc->scale, draw_dsc->angle,
-            anchor, center);
+            image_inst, *clip, widget->alpha, draw_dsc->color,
+            draw_dsc->scale, draw_dsc->angle, anchor, center);
     }
 }
 
@@ -715,7 +712,7 @@ void scui_widget_draw_ctx_image_3d(scui_handle_t handle, scui_area_t *target, sc
         #endif
         
         scui_draw_image_3d(false, widget->surface, dst_clip,
-            image_inst, *clip, widget->alpha, SCUI_COLOR_UNUSED,
+            image_inst, *clip, widget->alpha, draw_dsc->color,
             inv_matrix, src_matrix);
     }
 }

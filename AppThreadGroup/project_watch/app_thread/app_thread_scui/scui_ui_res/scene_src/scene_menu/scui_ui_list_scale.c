@@ -109,7 +109,7 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
         scui_custom_draw_button(event->object, &btn_clip, &custom_data);
         
         scui_handle_t surface_image = scui_widget_surface_image(event->object);
-        scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL, img_scale, img_pos);
+        scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL, SCUI_COLOR_UNUSED, img_scale, img_pos);
         
         /* 恢复原始 alpha */
         scui_widget_alpha_set(event->object, alpha_raw, true);

@@ -9,6 +9,10 @@
 
 static struct {
     scui_coord_t  size;             // 边长度
+    scui_coord_t  rotate_step;      // 自旋步进
+    scui_coord_t  rotate_way;       // 自旋方向(±1)
+    scui_coord_t  resize_step;      // 呼吸步进
+    scui_coord_t  resize_way;       // 呼吸方向(±1)
     scui_handle_t image[6];         // 面图标
     scui_matrix_t matrix[6];        // 仿射矩阵
     scui_matrix_t inv_matrix[6];    // 仿射矩阵
@@ -38,6 +42,10 @@ void scui_ui_scene_cube_event_proc(scui_event_t *event)
         scui_ui_res_local->image[4] = scui_image_prj_theme_icon_05_sport_rcd_09_08;
         scui_ui_res_local->image[5] = scui_image_prj_theme_icon_06_act_09_08;
         scui_ui_res_local->size = 102;
+        scui_ui_res_local->rotate_step = 0;
+        scui_ui_res_local->rotate_way  = 1;
+        scui_ui_res_local->resize_step = 0;
+        scui_ui_res_local->resize_way  = 1;
         
         scui_ui_res_local->rotate.x = 45.0f;
         scui_ui_res_local->rotate.y = 45.0f;
@@ -66,21 +74,17 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         if (scui_ui_res_local->move_lock)
             break;
         
-        static int32_t rotate_step = 0;
-        static int16_t rotate_way  = 1;
-        rotate_step += 1 * rotate_way;
-        if (!scui_betw_lr(rotate_step, -360, +360))
-             rotate_way = -rotate_way;
+        scui_ui_res_local->rotate_step += scui_ui_res_local->rotate_way;
+        if (!scui_betw_lr(scui_ui_res_local->rotate_step, -360, +360))
+            scui_ui_res_local->rotate_way = -scui_ui_res_local->rotate_way;
         
-        static int32_t resize_step = 0;
-        static int16_t resize_way  = 1;
-        resize_step += 1 * resize_way;
-        if (!scui_betw_lr(resize_step, 0, scui_ui_res_local->size / 2))
-             resize_way = -resize_way;
+        scui_ui_res_local->resize_step += scui_ui_res_local->resize_way;
+        if (!scui_betw_lr(scui_ui_res_local->resize_step, 0, scui_ui_res_local->size / 2))
+            scui_ui_res_local->resize_way = -scui_ui_res_local->resize_way;
         
-        scui_ui_res_local->rotate.y += 1.0f * rotate_way;
-        scui_ui_res_local->rotate.x -= 1.0f * rotate_way;
-        scui_ui_res_local->size += 1 * resize_way;
+        scui_ui_res_local->rotate.y += 1.0f * scui_ui_res_local->rotate_way;
+        scui_ui_res_local->rotate.x -= 1.0f * scui_ui_res_local->rotate_way;
+        scui_ui_res_local->size += 1 * scui_ui_res_local->resize_way;
         scui_widget_draw(event->object, NULL, false, 0);
         break;
     case scui_event_draw_ready: {
@@ -168,7 +172,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
             scui_matrix_t *matrix = scui_ui_res_local->matrix;
             scui_matrix_t *inv_matrix = scui_ui_res_local->inv_matrix;
             scui_widget_draw_image_3d(event->object, NULL, image[idx], NULL,
-                &matrix[idx], &inv_matrix[idx]);
+                SCUI_COLOR_UNUSED, &matrix[idx], &inv_matrix[idx]);
         }
         break;
     }
