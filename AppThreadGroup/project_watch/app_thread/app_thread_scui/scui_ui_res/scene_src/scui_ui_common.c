@@ -425,13 +425,21 @@ void scui_ui_scene_return(void)
     scui_window_stack_top(&stack_top);
     
     if (stack_nest > 1) {
+        // 如果是测试界面内的
+        if (scui_ui_scene_test()) {
+            scui_window_stack_del_by(SCUI_HANDLE_INVALID,
+                scui_window_switch_none, scui_opt_dir_none);
+            return;
+        }
+        
         // 返回上一层
         scui_window_stack_del(SCUI_HANDLE_INVALID);
         return;
     } else {
+        // 如果是测试界面内的
         if (scui_ui_scene_test()) {
-            // 如果是测试界面内的, 返回MAIN
-            scui_window_stack_reset(SCUI_UI_SCENE_TEST_UI_MAIN, false);
+            scui_window_stack_reset_by(SCUI_UI_SCENE_TEST_UI_MAIN,
+                scui_window_switch_none, scui_opt_dir_none, false);
             return;
         }
         

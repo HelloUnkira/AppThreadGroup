@@ -42,13 +42,13 @@ void scui_test_ui_main_monkey_event_proc(scui_event_t *event)
         static bool work = false; work = !work;
         scui_monkey_test(work);
         
-        scui_widget_color_set(event->object, SCUI_COLOR_MAKE32(false, 0x0,
-            work ? 0xFFFF0000 : 0xFF404040));
+        uint32_t color = work ? 0xFFFF0000 : 0xFF404040;
+        scui_widget_color_set(event->object, SCUI_COLOR_MAKE32(false, 0x0, color));
         scui_widget_draw(event->object, NULL, false, 0);
         
         SCUI_LOG_WARN("test ui main Monkey Test click To Home");
         scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
-            scui_event_ui_start, NULL);
+            scui_event_ui_home_goto, NULL);
         scui_event_notify(&event_ui);
         break;
     }
@@ -69,11 +69,11 @@ void scui_test_ui_main_monitor_event_proc(scui_event_t *event)
     case scui_event_ptr_click: {
         scui_event_mask_over(event);
         static bool use = false; use = !use;
-        if (use) scui_monitor_show(true);
+        if (use) scui_monitor_show(false);
         else scui_monitor_hide();
         
-        scui_widget_color_set(event->object, SCUI_COLOR_MAKE32(false, 0x0,
-            use ? 0xFFFF0000 : 0xFF404040));
+        uint32_t color = use ? 0xFFFF0000 : 0xFF404040;
+        scui_widget_color_set(event->object, SCUI_COLOR_MAKE32(false, 0x0, color));
         scui_widget_draw(event->object, NULL, false, 0);
         break;
     }
@@ -94,8 +94,8 @@ void scui_test_ui_main_test_event_proc(scui_event_t *event)
     case scui_event_ptr_click:
         scui_event_mask_over(event);
         SCUI_LOG_WARN("test ui main click Test List");
-        scui_window_stack_cover_by(SCUI_UI_SCENE_TEST_UI_LIST,
-            scui_window_switch_none, scui_opt_dir_none);
+        scui_window_stack_add_by(SCUI_UI_SCENE_TEST_UI_LIST,
+            scui_window_switch_none, scui_opt_dir_none, false);
         break;
     default:
         break;

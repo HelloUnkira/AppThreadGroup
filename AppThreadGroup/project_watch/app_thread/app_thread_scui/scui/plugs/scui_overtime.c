@@ -7,7 +7,7 @@
 
 #include "scui.h"
 
-static scui_overtime_work_t scui_overtime = {0};
+static scui_overtime_t scui_overtime = {0};
 
 /*@brief scui 超时模组动画响应回调
  */

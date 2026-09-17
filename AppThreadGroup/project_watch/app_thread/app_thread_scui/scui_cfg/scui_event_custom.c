@@ -35,12 +35,10 @@ static void scui_event_custom_system(scui_event_t *event)
         SCUI_LOG_WARN("ui start");
         
         /* 开启超时模组 */
-        #if SCUI_OVERTIME
         scui_overtime_ready();
         scui_overtime_work(true);
-        #endif
         
-        #if SCUI_SYSTEM_TEST
+        #if SCUI_UI_TEST
         /* 测试入口: 进测试主界面, ui_start延迟到点击main后 */
         scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
             scui_event_ui_test_goto, NULL);
@@ -58,9 +56,7 @@ static void scui_event_custom_system(scui_event_t *event)
         SCUI_LOG_WARN("ui stop");
         
         /* 关闭超时模组 */
-        #if SCUI_OVERTIME
         scui_overtime_work(false);
-        #endif
         
         /* 回空窗口 */
         scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
@@ -73,9 +69,7 @@ static void scui_event_custom_system(scui_event_t *event)
         SCUI_LOG_WARN("ui pause");
         
         /* 暂停超时模组 */
-        #if SCUI_OVERTIME
         scui_overtime_work(false);
-        #endif
         
         scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
             scui_event_ui_standy_enter, NULL);
@@ -87,9 +81,7 @@ static void scui_event_custom_system(scui_event_t *event)
         SCUI_LOG_WARN("ui resume");
         
         /* 恢复超时模组 */
-        #if SCUI_OVERTIME
         scui_overtime_work(true);
-        #endif
         
         scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
             scui_event_ui_standy_exit, NULL);
@@ -103,10 +95,8 @@ static void scui_event_custom_system(scui_event_t *event)
         scui_event_mask_over(event);
         SCUI_LOG_WARN("overtime sleep");
         
-        #if SCUI_OVERTIME
         /* 息屏: 记录息屏时刻 */
         scui_tick_idle(true);
-        #endif
         
         app_module_system_dlps_set(true);
         break;
@@ -155,15 +145,41 @@ static void scui_event_custom_window(scui_event_t *event)
     switch (event->type) {
     case scui_event_focus_get: {
         /* 界面获得焦点: 按界面句柄值取超时配置(未登记界面用默认值) */
-        #if SCUI_OVERTIME
         const scui_check_time_t *cfg = scui_check_time_find(event->object);
         scui_overtime_reset(cfg != NULL ? cfg->sleep_tick : SCUI_CHECK_TIME_DEF);
-        #endif
+        
+        /* 为当前窗口动态配置sibling或者别的风格 */
+        /* keep adding...... */
+        
         break;
     }
     case scui_event_focus_lost: {
         break;
     }
+    case scui_event_lang_mirror: {
+        scui_event_mask_over(event);
+        /* 界面句柄对框架不可见: 由自定义层重置到基准界面 */
+        /* 重置会销毁并重建控件树, 借此完成全局RTL镜像刷新 */
+        scui_handle_t handle_top = SCUI_HANDLE_INVALID;
+        scui_window_stack_top(&handle_top);
+        
+        /* 基准界面: 测试态回测试主页, 其余回主界面 */
+        scui_handle_t handle_base = handle_top == SCUI_UI_SCENE_TEST_UI_MAIN ?
+            SCUI_UI_SCENE_TEST_UI_MAIN : SCUI_UI_SCENE_HOME;
+        
+        if (handle_top != handle_base) {
+            /* 栈顶发生变更: 走常规跳转以重建控件树 */
+            scui_event_define_absorb_none(event_ui, SCUI_HANDLE_SYSTEM, false,
+                scui_ui_scene_test() ? scui_event_ui_test_goto : scui_event_ui_home_goto);
+            scui_event_notify(&event_ui);
+        } else {
+            /* 栈顶不变时重置语义不生效, 以隐藏+显示强制重建控件树 */
+            scui_widget_hide(handle_top, true);
+            scui_widget_show(handle_top, true);
+        }
+    }
+    default:
+        break;
     }
 }
 
@@ -204,41 +220,8 @@ void scui_event_custom_check(scui_event_t *event)
 /*@brief 事件响应
  *@param event 事件包
  */
-static void scui_event_custom_mirror(scui_event_t *event)
-{
-    /* 界面句柄对框架不可见: 由自定义层重置到基准界面 */
-    /* 重置会销毁并重建控件树, 借此完成全局RTL镜像刷新 */
-    scui_handle_t handle_top = SCUI_HANDLE_INVALID;
-    scui_window_stack_top(&handle_top);
-    
-    /* 基准界面: 测试态回测试主页, 其余回主界面 */
-    scui_handle_t handle_base = handle_top == SCUI_UI_SCENE_TEST_UI_MAIN ?
-        SCUI_UI_SCENE_TEST_UI_MAIN : SCUI_UI_SCENE_HOME;
-    
-    if (handle_top != handle_base) {
-        /* 栈顶发生变更: 走常规跳转以重建控件树 */
-        scui_event_define_absorb_none(event_ui, SCUI_HANDLE_SYSTEM, false,
-            scui_ui_scene_test() ? scui_event_ui_test_goto : scui_event_ui_home_goto);
-        scui_event_notify(&event_ui);
-    } else {
-        /* 栈顶不变时重置语义不生效, 以隐藏+显示强制重建控件树 */
-        scui_widget_hide(handle_top, true);
-        scui_widget_show(handle_top, true);
-    }
-}
-
-/*@brief 事件响应
- *@param event 事件包
- */
 void scui_event_custom_access(scui_event_t *event)
 {
-    /* 全局镜像语言: 重置界面以重建控件树 */
-    if (event->type == scui_event_lang_mirror) {
-        scui_event_mask_over(event);
-        scui_event_custom_mirror(event);
-        return;
-    }
-    
     scui_event_custom_system(event);
     scui_event_custom_active(event);
     scui_event_custom_window(event);
@@ -256,7 +239,6 @@ void scui_event_custom_access(scui_event_t *event)
     case scui_event_key_click:
         
         if (scui_window_active_curr() == SCUI_UI_SCENE_STANDBY) {
-            
             scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
                 scui_event_ui_standy_exit, NULL);
             scui_event_notify(&event_ui);
@@ -324,7 +306,6 @@ void scui_event_custom_myself(scui_event_t *event)
                 scui_window_switch_none, scui_opt_dir_none);
         }
         
-        #if SCUI_OVERTIME
         /* 未登记的界面(如待机窗口)使用默认值 */
         /* 息屏时长超过当前界面的"超时返回主界面"时间则回主界面, 否则仅退出息屏 */
         const scui_check_time_t *cfg = scui_check_time_find(scui_window_active_curr());
@@ -334,7 +315,6 @@ void scui_event_custom_myself(scui_event_t *event)
             scui_window_stack_reset_by(SCUI_UI_SCENE_HOME,
                 scui_window_switch_none, scui_opt_dir_none, false);
         }
-        #endif
         
         break;
     }

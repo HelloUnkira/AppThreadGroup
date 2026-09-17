@@ -1,12 +1,15 @@
 #ifndef SCUI_OVERTIME_H
 #define SCUI_OVERTIME_H
 
+/* 不使用超时的哨兵时长 */
+#define SCUI_OVERTIME_UNUSE         (0x3FFFF)
+
 typedef struct {
     scui_handle_t anima;
     scui_sbitfd_t use:1;            /* 使用标记 */
     scui_sbitfd_t tick:18;          /* 超时等待 */
     scui_sbitfd_t tick_bak:18;      /* 超时时长 */
-} scui_overtime_work_t;
+} scui_overtime_t;
 
 /*@brief scui 超时模组重置
  *@param tick 超时时长(SCUI_OVERTIME_UNUSE)

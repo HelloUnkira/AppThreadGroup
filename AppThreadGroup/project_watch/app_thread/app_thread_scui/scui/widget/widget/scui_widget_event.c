@@ -43,7 +43,8 @@ static bool scui_widget_draw_clip(scui_handle_t handle, scui_area_t *clip, scui_
                  return false;
         }
         
-        if (widget->parent != SCUI_HANDLE_INVALID) {
+        /* 根控件,无独立画布的根控件,要额外考虑 */
+        if (widget->parent != SCUI_HANDLE_INVALID || !widget->style.buffer) {
             clip_w.x += widget->clip.x;
             clip_w.y += widget->clip.y;
             if (!scui_area_inter2(&clip_w, &widget->clip))
@@ -66,7 +67,8 @@ static bool scui_widget_draw_clip(scui_handle_t handle, scui_area_t *clip, scui_
                  return false;
         }
         
-        if (widget->parent != SCUI_HANDLE_INVALID) {
+        /* 根控件,无独立画布的根控件,要额外考虑 */
+        if (widget->parent != SCUI_HANDLE_INVALID || !widget->style.buffer) {
             clip_w.x += widget->clip.x;
             clip_w.y += widget->clip.y;
             if (!scui_area_inter2(&clip_w, &widget->clip))

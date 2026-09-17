@@ -42,6 +42,109 @@ def _rel_ui(p, ui):
         return p
 
 #============================================================
+# json 字段值 / json 文本(widget 与 cwf 两个面板共用)
+#============================================================
+_MISS = object()
+
+# 字段值 -> 编辑框文本(容器加 [n]/{n} 规模标记, 元素按 JSON 字面量逗号分隔; 字符串原样直接编辑)
+def _json_val_text(v):
+    if isinstance(v, (list, tuple)):
+        if not v:
+            return '[]'
+        return '[%d] %s' % (len(v), ', '.join(
+            json.dumps(x, ensure_ascii=False) for x in v))
+    if isinstance(v, dict):
+        if not v:
+            return '{}'
+        return '{%d} %s' % (len(v), ', '.join(
+            '%s: %s' % (json.dumps(k, ensure_ascii=False),
+                        json.dumps(x, ensure_ascii=False)) for k, x in v.items()))
+    if isinstance(v, str):
+        return v
+    return json.dumps(v, ensure_ascii=False)
+
+# 编辑框文本 -> 字段值(标准 JSON 优先; 再认 [n]/{n} 标记形式; 否则按字符串)
+#   like = 编辑前的原值: 原值是字符串时, 解析出的标量回写成字符串
+#   (widget json 的值一律是 "true"/"2" 这类字符串, 直接写回 bool/int 会破坏该风格)
+def _json_val_parse(s, like=None):
+    t = s.strip()
+    try:
+        v = json.loads(t)
+    except Exception:
+        v = _MISS
+    if v is _MISS:
+        for oc, cc in (('[', ']'), ('{', '}')):
+            if not t.startswith(oc):
+                continue
+            p = t.find(cc)
+            if p < 0:
+                continue
+            body = t[p + 1:].strip()
+            try:
+                v = json.loads(oc + body + cc) if body else json.loads(oc + cc)
+            except Exception:
+                v = _MISS
+                continue
+            break
+    if v is _MISS:
+        return s
+    if isinstance(like, str) and not isinstance(v, (str, list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return v
+
+# 数组元素行: "[i] 元素" —— 逐元素展开显示时的单行文本
+def _json_elem_text(i, v):
+    return '[%d] %s' % (i, json.dumps(v, ensure_ascii=False))
+
+# "[i] 元素" -> 元素值(索引只是标记, 不参与解析; 空文本返回哨兵表示删掉该元素)
+def _json_elem_parse(s):
+    t = s.strip()
+    if not t:
+        return _MISS
+    m = re.match(r'^\[\d+\]\s*(.*)$', t)
+    body = (m.group(1) if m else t).strip()
+    if not body:
+        return _MISS
+    try:
+        return json.loads(body)
+    except Exception:
+        return body
+
+# json 文本化(对齐工程手写习惯: 同级键冒号对齐, 单元素数组保持单行)
+#   indent = 本对象所在行的缩进; 容器内的键/元素缩进 = indent + 4
+def _json_text(obj, indent=0):
+    pad = ' ' * indent
+    if isinstance(obj, dict):
+        if not obj:
+            return '{}'
+        names = ['"%s"' % k for k in obj]
+        col = indent + 4 + max(len(n) for n in names) + 2      # 值的起始列
+        out = ['{']
+        for idx, (n, v) in enumerate(zip(names, obj.values())):
+            head = pad + '    ' + n + ':'
+            head += ' ' * max(1, col - len(head))
+            body = _json_text(v, indent + 4)
+            if idx != len(names) - 1:
+                body += ','
+            out.append(head + body)
+        out.append(pad + '}')
+        return '\n'.join(out)
+    if isinstance(obj, (list, tuple)):
+        if not obj:
+            return '[]'
+        if len(obj) == 1 and not isinstance(obj[0], (dict, list, tuple)):
+            return '[%s]' % json.dumps(obj[0], ensure_ascii=False)
+        out = ['[']
+        for idx, v in enumerate(obj):
+            body = _json_text(v, indent + 4)
+            if idx != len(obj) - 1:
+                body += ','
+            out.append(' ' * (indent + 4) + body)
+        out.append(pad + ']')
+        return '\n'.join(out)
+    return json.dumps(obj, ensure_ascii=False)
+
+#============================================================
 # 句柄偏移默认值(与各打包脚本头部常量一致; 弹窗修改后写入 scui_pack_handle.json)
 #============================================================
 _HANDLE_DEFAULT = {
@@ -1228,7 +1331,8 @@ class PackApp(object):
             self._w_entry_rows[i] = []
             for k, v in fields.items():
                 kvar = tk.StringVar(value=str(k))
-                vvar = tk.StringVar(value=str(v))
+                vtext = _json_val_text(v)
+                vvar = tk.StringVar(value=vtext)
                 self._w_vars.extend([kvar, vvar])    # 保存引用防GC
                 row = tk.Frame(self._wbox, bg='#ffffff'); row.pack(fill='x', padx=(2, 2))
                 # maker下widget.type灰显锁定(与class绑定, 不可改不可删)
@@ -1250,7 +1354,7 @@ class PackApp(object):
                 ke.bind('<FocusIn>', lambda e, i=i, k=k, row=row: self._wid_focus(i, k, row))
                 ve.bind('<FocusIn>', lambda e, i=i, k=k, row=row: self._wid_focus(i, k, row))
                 row.bind('<Button-1>', lambda e, i=i, k=k, row=row: self._wid_focus(i, k, row))
-                self._w_rows.append([i, k, ke, ve, row])      # [条目, 字段key, key框, value框, 行框]
+                self._w_rows.append([i, k, ke, ve, row, vtext, v])   # [条目, key, key框, value框, 行框, 展示文本, 原值]
                 self._w_entry_rows[i].append(row)
             ttk.Label(self._wbox, text='').pack()
         self.wcanv.yview_moveto(frac)                 # 恢复滚动位置(加载新文件已置 0)
@@ -1296,14 +1400,15 @@ class PackApp(object):
         if not self.widget_data:
             return
         groups = {}
-        for i, k, ke, ve, row in self._w_rows:
-            groups.setdefault(i, []).append((ke.get(), ve.get()))
+        for i, k, ke, ve, row, vtext, vraw in self._w_rows:
+            groups.setdefault(i, []).append((ke.get(), ve.get(), vtext, vraw))
         for i, pairs in groups.items():
             if i >= len(self.widget_data['widget']):
                 continue
             d = {}
-            for k, v in pairs:
-                d[k] = v
+            for k, v, vtext, vraw in pairs:
+                # 文本没动过就原值回填(展示形式与数据解耦, 编辑时按 JSON 认)
+                d[k] = vraw if v == vtext else _json_val_parse(v, vraw)
             if self.widget_maker:
                 self.widget_data['widget'][i]['default'] = d
             else:
@@ -1415,7 +1520,7 @@ class PackApp(object):
         newd[''] = ''                               # 追加到末尾空白字段
         self._wid_set_fields(i, newd)
         self._wid_render_json()
-        row = next((_row for _i, _k, _ke, _ve, _row in self._w_rows if _i == i and _k == ''), None)
+        row = next((_r[4] for _r in self._w_rows if _r[0] == i and _r[1] == ''), None)
         self._wid_focus(i, '', row)
         self._wlog('已添加字段到控件末尾(空行, 未保存)')
 
@@ -1459,7 +1564,7 @@ class PackApp(object):
         newd = {k: fields[k] for k in ks}
         self._wid_set_fields(i, newd)
         self._wid_render_json()
-        row = next((_row for _i, _k, _ke, _ve, _row in self._w_rows if _i == i and _k == fkey), None)
+        row = next((_r[4] for _r in self._w_rows if _r[0] == i and _r[1] == fkey), None)
         self._wid_focus(i, fkey, row)
 
     #--------------- 控件模板 ---------------
@@ -1627,7 +1732,7 @@ class PackApp(object):
         t.pack(fill='both', expand=True, padx=8, pady=8)
         try:
             # 预览清除空白占位行(不改动当前编辑副本, 编辑时仍保留空行自由编辑)
-            s = json.dumps(self._wid_clean_copy(self.widget_data), ensure_ascii=False, indent=4)
+            s = _json_text(self._wid_clean_copy(self.widget_data))   # 预览前先整理一遍格式
         except Exception as e:
             s = '%r' % e
         t.insert('1.0', s)
@@ -1685,7 +1790,7 @@ class PackApp(object):
             # 保存时清除空白占位行(编辑时保留空行自由编辑, 落盘前统一去重)
             self.widget_data = self._wid_clean_copy(self.widget_data)
             with open(self.widget_path, 'w', encoding='utf-8') as fp:
-                json.dump(self.widget_data, fp, ensure_ascii=False, indent=4)
+                fp.write(_json_text(self.widget_data) + '\n')
             self._w_base = json.loads(json.dumps(self.widget_data))   # 保存后重置基快照
             self._wid_render_json()                     # 按清理后数据重绘(空行消失)
             self.widget_status.config(text='已保存: %s' % os.path.basename(self.widget_path))
@@ -2085,16 +2190,23 @@ class PackApp(object):
             tl.pack(fill='x', anchor='w', pady=(6, 2))
             tl.bind('<Button-1>', lambda e, i=i: self._cwf_active_set(i, None))
             for f, (k, v) in enumerate(it.items()):
-                kvar = tk.StringVar(value=str(k))
-                vvar = tk.StringVar(value=str(v))
-                row = ttk.Frame(self._cbox); row.pack(fill='x', padx=(2, 2))
-                ke = ttk.Entry(row, textvariable=kvar, font=('Consolas', 9))
-                ve = ttk.Entry(row, textvariable=vvar, font=('Consolas', 9))
-                ke.pack(side='left', fill='x', expand=True, padx=(0, 8))
-                ve.pack(side='left', fill='x', expand=True)
-                ke.bind('<FocusIn>', lambda e, i=i, f=f: self._cwf_active_set(i, f))
-                ve.bind('<FocusIn>', lambda e, i=i, f=f: self._cwf_active_set(i, f))
-                self._cwf_rows.append([i, f, kvar, vvar])
+                # 数组逐元素展开: 首行带 key, 其余行 key 留空, 值形如 [i] 元素
+                if isinstance(v, (list, tuple)) and v:
+                    lines = [(str(k) if n == 0 else '', n, _json_elem_text(n, x), x)
+                             for n, x in enumerate(v)]
+                else:
+                    lines = [(str(k), None, _json_val_text(v), v)]
+                for ktext, elem, vtext, vraw in lines:
+                    kvar = tk.StringVar(value=ktext)
+                    vvar = tk.StringVar(value=vtext)
+                    row = ttk.Frame(self._cbox); row.pack(fill='x', padx=(2, 2))
+                    ke = ttk.Entry(row, textvariable=kvar, font=('Consolas', 9))
+                    ve = ttk.Entry(row, textvariable=vvar, font=('Consolas', 9))
+                    ke.pack(side='left', fill='x', expand=True, padx=(0, 8))
+                    ve.pack(side='left', fill='x', expand=True)
+                    ke.bind('<FocusIn>', lambda e, i=i, f=f: self._cwf_active_set(i, f))
+                    ve.bind('<FocusIn>', lambda e, i=i, f=f: self._cwf_active_set(i, f))
+                    self._cwf_rows.append([i, f, kvar, vvar, vtext, vraw, elem])
             ttk.Label(self._cbox, text='').pack()
 
     def _cwf_active_set(self, i, f):
@@ -2107,15 +2219,32 @@ class PackApp(object):
         if not self.cwf_data:
             return
         groups = {}
-        for i, f, ke, ve in self._cwf_rows:
-            groups.setdefault(i, []).append((ke.get(), ve.get()))
+        for i, f, ke, ve, vtext, vraw, elem in self._cwf_rows:
+            groups.setdefault(i, []).append((ke.get(), ve.get(), vtext, vraw, elem))
         for i, pairs in groups.items():
             if i >= len(self.cwf_data['layout']):
                 continue
             d = {}
-            for k, v in pairs:
-                if k:
-                    d[k] = v
+            key = None                       # 数组元素行归属的字段
+            for k, v, vtext, vraw, elem in pairs:
+                if elem is None:             # 整值行
+                    key = k or None
+                    if not k:
+                        continue             # 空 key 的新字段(还没填完)丢弃
+                    # 文本没动过就原值回填(展示形式与数据解耦, 编辑时按 JSON 认)
+                    d[k] = vraw if v == vtext else _json_val_parse(v, vraw)
+                    continue
+                if elem == 0:                # 数组首元素行: 建列表
+                    if not k:
+                        continue
+                    key = k
+                    d[k] = []
+                if key is None or not isinstance(d.get(key), list):
+                    continue
+                x = vraw if v == vtext else _json_elem_parse(v)
+                if x is _MISS:
+                    continue                 # 该行被清空 = 删掉这个元素
+                d[key].append(x)
             self.cwf_data['layout'][i] = d
 
     def _cwf_dirty(self):
@@ -2231,7 +2360,7 @@ class PackApp(object):
         t = scrolledtext.ScrolledText(top, wrap='none', font=('Consolas', 9), state='normal')
         t.pack(fill='both', expand=True, padx=8, pady=8)
         try:
-            s = json.dumps(self.cwf_data, ensure_ascii=False, indent=4)
+            s = _json_text(self.cwf_data)                   # 预览前统一整理一遍格式
         except Exception as e:
             s = '%r' % e
         t.insert('1.0', s)
@@ -2242,9 +2371,13 @@ class PackApp(object):
             self._append_log('cwf', '[save] 无待保存内容\n')
             return
         try:
+            if not self._cwf_dirty():
+                self.cwf_status.config(text='无改动: %s' % os.path.basename(self.cwf_path))
+                self._append_log('cwf', '[save] 无改动, 未写入\n')
+                return
             self._cwf_sync_back()
             with open(self.cwf_path, 'w', encoding='utf-8') as fp:
-                json.dump(self.cwf_data, fp, ensure_ascii=False, indent=4)
+                fp.write(_json_text(self.cwf_data) + '\n')
             self._cwf_base = json.loads(json.dumps(self.cwf_data))
             self.cwf_status.config(text='已保存: %s' % os.path.basename(self.cwf_path))
             self._append_log('cwf', '[save] 已写入: %s\n' % self._rel_log(self.cwf_path))
