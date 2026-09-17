@@ -10,9 +10,8 @@ typedef enum {
     /* 系统唯一事件:特殊 */
     scui_event_engine_ready,
     scui_event_engine_show,
-    /* 系统事件:超时/空闲 */
-    scui_event_check_time_over,
-    scui_event_check_time_idle,
+    /* 系统事件:超时 */
+    scui_event_overtime,
     /* 系统事件:全局调度 */
     scui_event_ui_start,
     scui_event_ui_resume,
@@ -21,6 +20,7 @@ typedef enum {
     
     
     
+    /* 待定中:不必要 */
     scui_event_ui_none_goto,
     scui_event_ui_home_goto,
     scui_event_ui_test_goto,

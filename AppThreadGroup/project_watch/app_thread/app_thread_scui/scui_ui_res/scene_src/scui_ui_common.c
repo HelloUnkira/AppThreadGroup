@@ -386,6 +386,37 @@ void scui_ui_scene_mini_card_cfg(void)
 }
 
 /*****************************************************************************/
+bool scui_ui_scene_test(void)
+{
+    scui_handle_t stack_top  = 0;
+    scui_window_stack_top(&stack_top);
+    
+    static scui_handle_t test_ui_list[] = {
+        SCUI_UI_SCENE_TEST_UI_GRAPH,
+        SCUI_UI_SCENE_TEST_UI_INDEV_BAR,
+        SCUI_UI_SCENE_TEST_UI_INDEV_ENC,
+        SCUI_UI_SCENE_TEST_UI_INDEV_KEY,
+        SCUI_UI_SCENE_TEST_UI_INDEV_PTR,
+        SCUI_UI_SCENE_TEST_UI_LAYOUT,
+        SCUI_UI_SCENE_TEST_UI_LIST,
+        SCUI_UI_SCENE_TEST_UI_MAIN,
+        SCUI_UI_SCENE_TEST_UI_MISC,
+        SCUI_UI_SCENE_TEST_UI_OBJECT,
+        SCUI_UI_SCENE_TEST_UI_RING,
+        SCUI_UI_SCENE_TEST_UI_ROLLER,
+        SCUI_UI_SCENE_TEST_UI_SCROLL,
+        SCUI_UI_SCENE_TEST_UI_STRING,
+        SCUI_UI_SCENE_TEST_UI_SYMBOL,
+        SCUI_UI_SCENE_TEST_UI_XIMAGE,
+    };
+    
+    for (scui_handle_t idx = 0; idx < scui_arr_len(test_ui_list); idx++)
+        if (stack_top == test_ui_list[idx]) return true;
+    
+    return false;
+}
+
+/*****************************************************************************/
 void scui_ui_scene_return(void)
 {
     scui_handle_t stack_nest = 0;
@@ -398,6 +429,12 @@ void scui_ui_scene_return(void)
         scui_window_stack_del(SCUI_HANDLE_INVALID);
         return;
     } else {
+        if (scui_ui_scene_test()) {
+            // 如果是测试界面内的, 返回MAIN
+            scui_window_stack_reset(SCUI_UI_SCENE_TEST_UI_MAIN, false);
+            return;
+        }
+        
         // 回到主界面
         scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
         return;

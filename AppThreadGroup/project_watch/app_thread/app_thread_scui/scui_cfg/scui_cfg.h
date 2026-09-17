@@ -250,12 +250,9 @@
 
 /* 开机进测试界面 */
 #define SCUI_SYSTEM_TEST                            (1)
-/* 超时/空闲模组 */
-#define SCUI_CHECK_TIME                             (1)
-#define SCUI_CHECK_TIME_OVER_UNUSE                  (0xFF)
-#define SCUI_CHECK_TIME_IDLE_UNUSE                  (0xFF)
-#define SCUI_CHECK_TIME_OVER_DEF                    (10)
-#define SCUI_CHECK_TIME_IDLE_DEF                    (5)
+/* 超时模组 */
+#define SCUI_OVERTIME                               (1)
+#define SCUI_OVERTIME_UNUSE                         (0x3FFFF)
 
 /*************************************************************************************************/
 /*************************************************************************************************/

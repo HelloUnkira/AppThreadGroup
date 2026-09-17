@@ -25,6 +25,7 @@ typedef struct {
 typedef struct {
     uint64_t cnt_passby;
     uint64_t pos_active;
+    uint64_t pos_idle;
     uint64_t tag_work:1;
     scui_tick_stat_t stat;
 } scui_tick_t;
@@ -38,6 +39,12 @@ uint64_t scui_tick_cnt(void);
  *@retval 耗时
  */
 uint64_t scui_tick_us(void);
+
+/*@brief 嘀嗒idle时间锚点
+ *@param reset 是否重置锚点
+ *@retval 距离锚点重置过去多久(ms)
+ */
+uint64_t scui_tick_idle(bool reset);
 
 /*@brief 滴答器启停
  *@param work 启停状态

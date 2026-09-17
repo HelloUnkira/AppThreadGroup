@@ -20,7 +20,7 @@ void scui_test_ui_main_home_event_proc(scui_event_t *event)
         scui_event_mask_over(event);
         SCUI_LOG_WARN("test ui main click Home");
         scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false,
-            scui_event_ui_start, NULL);
+            scui_event_ui_home_goto, NULL);
         scui_event_notify(&event_ui);
         break;
     default:
@@ -69,7 +69,7 @@ void scui_test_ui_main_monitor_event_proc(scui_event_t *event)
     case scui_event_ptr_click: {
         scui_event_mask_over(event);
         static bool use = false; use = !use;
-        if (use) scui_monitor_show(false);
+        if (use) scui_monitor_show(true);
         else scui_monitor_hide();
         
         scui_widget_color_set(event->object, SCUI_COLOR_MAKE32(false, 0x0,

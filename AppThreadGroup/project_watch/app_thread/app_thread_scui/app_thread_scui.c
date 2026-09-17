@@ -297,14 +297,8 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
             app_dev_gui_enc_dlps_exit(&app_dev_gui_enc);
             app_dev_gui_ptr_dlps_exit(&app_dev_gui_ptr);
             
-            #if SCUI_SYSTEM_TEST
-            /* 测试入口: 进测试主界面, ui_start延迟到点击main后 */
-            scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false, scui_event_ui_test_goto, NULL);
-            scui_event_notify(&event_ui);
-            #else
             scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false, scui_event_ui_start, NULL);
             scui_event_notify(&event_ui);
-            #endif
         }
         /* 终止UI窗口 */
         if (package->event == app_thread_scui_ui_scene_stop) {

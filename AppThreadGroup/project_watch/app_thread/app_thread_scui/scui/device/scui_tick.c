@@ -22,7 +22,19 @@ uint64_t scui_tick_cnt(void)
  */
 uint64_t scui_tick_us(void)
 {
+    /* 系统启动到现在的时间流逝 */
     return app_execute_us();
+}
+
+/*@brief 嘀嗒idle时间锚点
+ *@param reset 是否重置锚点
+ *@retval 距离锚点重置过去多久(ms)
+ */
+uint64_t scui_tick_idle(bool reset)
+{
+    uint64_t passby = scui_tick_us() / 1000 - scui_tick.pos_idle;
+    if (reset) scui_tick.pos_idle = scui_tick_us() / 1000;
+    return passby;
 }
 
 /*@brief 滴答器启停
