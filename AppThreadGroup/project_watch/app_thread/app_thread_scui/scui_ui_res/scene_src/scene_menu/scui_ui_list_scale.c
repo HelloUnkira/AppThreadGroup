@@ -39,11 +39,19 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
             }
         
         scui_area_t image_clip = scui_widget_area(event->object);
-        scui_handle_t image_icon = scui_ui_scene_list_image[match_idx] + 3;
-        image_clip.x += (20);
-        image_clip.y += (image_clip.h - scui_image_h(image_icon)) / 2;
-        image_clip.h -= (image_clip.h - scui_image_h(image_icon));
-        scui_widget_draw_image(event->object, &image_clip, image_icon, NULL, SCUI_COLOR_UNUSED);
+        scui_handle_t image_icon = scui_ui_scene_list[match_idx].image;
+        /* 统一单图, 图标固定48x48居中, 按目标尺寸缩放 */
+        scui_coord_t isz = 48;
+        image_clip.x += 20;
+        image_clip.y += (image_clip.h - isz) / 2;
+        image_clip.w = isz;
+        image_clip.h = isz;
+        scui_point_t iscale = {
+            .x = isz * SCUI_SCALE_COF / scui_image_w(image_icon),
+            .y = isz * SCUI_SCALE_COF / scui_image_h(image_icon),
+        };
+        scui_widget_draw_image_scale(event->object, &image_clip, image_icon, NULL,
+            SCUI_COLOR_UNUSED, iscale, scui_opt_pos_c);
         
         image_clip = scui_widget_area(event->object);
         image_icon = scui_image_prj_rpt_arr_06_back;
@@ -188,7 +196,7 @@ void scui_ui_scene_list_scale_scroll_event(scui_event_t *event)
                 string_maker.args.color.color_e.full = 0xFFFFFFFF;
                 string_maker.args.color.filter       = true;
                 // string_maker.draw_cache              = true;
-                string_maker.text                    = scui_ui_scene_list_text[idx];
+                string_maker.text                    = scui_ui_scene_list[idx].text;
                 string_maker.font_idx                = SCUI_FONT_IDX_36;
                 scui_widget_create(&string_maker, &string_handle);
             }

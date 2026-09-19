@@ -1,0 +1,14 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":              "AUTO_W/H 环排测试窗口",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_HOBBY",
+            "widget.child_num":         "12",
+            "widget.event_cb":          "scui_test_ui_hobby_event_proc"
+        }
+    ]
+}

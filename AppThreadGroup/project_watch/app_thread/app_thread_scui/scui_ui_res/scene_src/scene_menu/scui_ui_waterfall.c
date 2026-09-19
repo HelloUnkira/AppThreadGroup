@@ -1,5 +1,8 @@
 /*实现目标:
- *    窗口:xxx
+ *    主题:瀑布
+ *    三列瀑布(左/中/右), 滚动时图标沿球面弧运动
+ *    距中心垂直距离映射真实缩放(中心大, 上下小) + 弧面横向偏移 + 透明度渐变
+ *    无换挡组图
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
@@ -9,6 +12,9 @@
 
 static struct {
     scui_ui_bar_arc_t bar_arc;
+    scui_coord_t  line_space;    /* 图标垂直间隙 */
+    scui_coord3_t scale_max;     /* 中心(选中行)缩放 */
+    scui_coord3_t scale_min;     /* 边缘缩放 */
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -38,10 +44,9 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         if (scui_ui_scene_list_num % 3 == 2 &&
             index == scui_ui_scene_list_num - 1) type = 2;
         
-        scui_handle_t image   = scui_ui_scene_list_image[index];
-        scui_coord_t  ofs_min = SCUI_UI_WATERFALL_OFS_MIN;
-        scui_coord_t  ofs_max = SCUI_UI_WATERFALL_OFS_MAX;
-        scui_coord_t  ofs_cur = ofs_min;
+        scui_handle_t image = scui_ui_scene_list[index].image;
+        scui_coord_t  image_w = scui_image_w(image);
+        scui_coord_t  image_h = scui_image_h(image);
         
         scui_area_t  scroll_c  = scui_widget_area(SCUI_UI_SCENE_WATERFALL_SCROLL);
         scui_coord_t scroll_cx = scroll_c.x + scroll_c.w / 2;
@@ -51,43 +56,19 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         scui_area_t  icon_c_origin = icon_c;
         scui_coord_t icon_cx = icon_c.x + icon_c.w / 2;
         scui_coord_t icon_cy = icon_c.y + icon_c.h / 2;
-        scui_coord_t dist_cx = scui_dist(scroll_cx, icon_cx);
         scui_coord_t dist_cy = scui_dist(scroll_cy, icon_cy);
-        scui_coord_t dist_cw = scroll_c.w / 2;
         scui_coord_t dist_ch = scroll_c.h / 2;
         
-        #if 1
+        /* 真实缩放: 距中心垂直距离映射(中心scale_max, 边缘scale_min) */
+        scui_coord3_t scale_s = scui_ui_res_local->scale_max;
         if (dist_cy <= dist_ch)
-            ofs_cur = scui_map(dist_cy, 0, dist_ch, ofs_max + 1, ofs_min - 1);
-        // SCUI_LOG_WARN("ofs_cur:%d, dist_y:%d, dist_c:%d", ofs_cur, dist_y, dist_ch);
-        #else
-        scui_multi_t dist_x2 = dist_cx * dist_cx;
-        scui_multi_t dist_y2 = dist_cy * dist_cy;
-        scui_multi_t dist_w2 = dist_cw * dist_cw;
-        scui_multi_t dist_h2 = dist_ch * dist_ch;
-        scui_multi_t dist_cd = dist_x2 + dist_y2;
-        scui_multi_t dist_cf = 0;
-        scui_multi_t dist_md = dist_w2 + dist_h2;
-        scui_multi_t dist_mf = 0;
-        scui_sqrt(dist_cd, &dist_cd, &dist_cf, 0x8000);
-        scui_sqrt(dist_md, &dist_md, &dist_mf, 0x8000);
-        if (dist_cd <= dist_md)
-            ofs_cur = scui_map(dist_cd, 0, dist_md, ofs_max + 1, ofs_min - 1);
-        SCUI_LOG_WARN("ofs_cur:%d, dist_cd:%d, dist_md:%d", ofs_cur, dist_cd, dist_md);
-        #endif
+            scale_s = scui_ui_res_local->scale_max +
+                (scui_ui_res_local->scale_min - scui_ui_res_local->scale_max) * dist_cy / (scui_coord3_t)dist_ch;
+        scui_coord_t icon_w = image_w * scale_s;
+        scui_coord_t icon_h = image_h * scale_s;
         
-        if (ofs_cur < ofs_min)
-            ofs_cur = ofs_min;
-        if (ofs_cur > ofs_max)
-            ofs_cur = ofs_max;
-        
-        image += ofs_cur;
-        
-        // 三角函数:
-        // sin_a = dist_y / rad_rr;
-        // cos_a = 1 - sin_a * sin_a
-        // dis_x = rad_rr - rad_rr * cos_a
-        scui_multi_t rad_rr = scroll_c.w / 2 - scui_image_h(image) / 2;
+        /* 球面弧: 横向偏移(滚动时图标沿弧面运动) */
+        scui_multi_t rad_rr = scroll_c.w / 2 - image_h / 2;
         scui_multi_t dist_y = scui_min(rad_rr, scui_dist(icon_cy, scroll_cy));
         
         scui_multi_t cos_a2 = (1024 * 1024) - (1024 * dist_y / rad_rr) * (1024 * dist_y / rad_rr);
@@ -95,8 +76,7 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         scui_multi_t cos_fa = 0;
         scui_sqrt(cos_a2, &cos_ia, &cos_fa, 0x8000);
         scui_multi_t dist_x = (1024 - cos_ia) * (rad_rr) / 1024;
-        dist_x = scui_min(dist_x, icon_c.w - scui_image_w(image));
-        SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
+        dist_x = scui_min(dist_x, icon_c.w - icon_w);
         
         scui_alpha_t alpha = scui_map(dist_y, 0, rad_rr, scui_alpha_pct100, scui_alpha_pct0);
         scui_widget_alpha_set(event->object, alpha, true);
@@ -104,13 +84,13 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         if (type == 0)
             icon_c.x += dist_x;
         if (type == 1)
-            icon_c.x += (icon_c.w - scui_image_w(image)) / 2;
+            icon_c.x += (icon_c.w - icon_w) / 2;
         if (type == 2)
-            icon_c.x += (icon_c.w - scui_image_w(image)) - dist_x;
+            icon_c.x += (icon_c.w - icon_w) - dist_x;
         
-        icon_c.y += (icon_c.h - scui_image_h(image)) / 2;
-        icon_c.h  = scui_image_h(image);
-        icon_c.w  = scui_image_w(image);
+        icon_c.y += (icon_c.h - icon_h) / 2;
+        icon_c.h  = icon_h;
+        icon_c.w  = icon_w;
         
         if (event->type == scui_event_draw_graph) {
             /* 绘制目标:从滚动空间坐标转换为控件局部坐标 */
@@ -120,7 +100,11 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
                 .w = icon_c.w,
                 .h = icon_c.h,
             };
-            scui_widget_draw_image(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED);
+            scui_point_t scale = {
+                .x = icon_w * SCUI_SCALE_COF / image_w,
+                .y = icon_h * SCUI_SCALE_COF / image_h,
+            };
+            scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED, scale, scui_opt_pos_c);
         }
         
         if (event->type == scui_event_ptr_click) {
@@ -160,8 +144,7 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
         scui_coord_t scroll_h = scui_widget_area(event->object).w;
         
         // 取一张图(随便, 反正所有图都一样)
-        scui_handle_t icon = scui_ui_scene_list_image[0];
-        icon += SCUI_UI_WATERFALL_OFS_MAX;
+        scui_handle_t icon = scui_ui_scene_list[0].image;
         scui_coord_t icon_w = scui_image_w(icon);
         scui_coord_t icon_h = scui_image_h(icon);
         
@@ -200,7 +183,7 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
                 idx == scui_ui_scene_list_num - 1) {
                 custom_maker.widget.clip = clip_m;
                 scui_widget_create(&custom_maker, &custom_handle);
-                clip_m.y += clip_m.h + SCUI_UI_WATERFALL_LINE_SPACE;
+                clip_m.y += clip_m.h + scui_ui_res_local->line_space;
                 continue;
             }
             // 余下俩个,填俩边
@@ -208,37 +191,37 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
                 idx == scui_ui_scene_list_num - 2) {
                 custom_maker.widget.clip = clip_l;
                 scui_widget_create(&custom_maker, &custom_handle);
-                clip_l.y += clip_l.h + SCUI_UI_WATERFALL_LINE_SPACE;
+                clip_l.y += clip_l.h + scui_ui_res_local->line_space;
                 continue;
             }
             if (scui_ui_scene_list_num % 3 == 2 &&
                 idx == scui_ui_scene_list_num - 1) {
                 custom_maker.widget.clip = clip_r;
                 scui_widget_create(&custom_maker, &custom_handle);
-                clip_r.y += clip_r.h + SCUI_UI_WATERFALL_LINE_SPACE;
+                clip_r.y += clip_r.h + scui_ui_res_local->line_space;
                 continue;
             }
             // 按顺序填充三列
             if (idx % 3 == 0) {
                 custom_maker.widget.clip = clip_l;
                 scui_widget_create(&custom_maker, &custom_handle);
-                clip_l.y += clip_l.h + SCUI_UI_WATERFALL_LINE_SPACE;
+                clip_l.y += clip_l.h + scui_ui_res_local->line_space;
             }
             if (idx % 3 == 1) {
                 custom_maker.widget.clip = clip_m;
                 scui_widget_create(&custom_maker, &custom_handle);
-                clip_m.y += clip_m.h + SCUI_UI_WATERFALL_LINE_SPACE;
+                clip_m.y += clip_m.h + scui_ui_res_local->line_space;
             }
             if (idx % 3 == 2) {
                 custom_maker.widget.clip = clip_r;
                 scui_widget_create(&custom_maker, &custom_handle);
-                clip_r.y += clip_r.h + SCUI_UI_WATERFALL_LINE_SPACE;
+                clip_r.y += clip_r.h + scui_ui_res_local->line_space;
             }
         }
         
-        clip_l.y -= SCUI_UI_WATERFALL_LINE_SPACE;
-        clip_m.y -= SCUI_UI_WATERFALL_LINE_SPACE;
-        clip_r.y -= SCUI_UI_WATERFALL_LINE_SPACE;
+        clip_l.y -= scui_ui_res_local->line_space;
+        clip_m.y -= scui_ui_res_local->line_space;
+        clip_r.y -= scui_ui_res_local->line_space;
         
         /* 下半部分空白 */
         custom_maker.widget.style.indev_ptr = false;
@@ -279,6 +262,10 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
     case scui_event_create:
         scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
         scui_window_local_res_get(event->object, &scui_ui_res_local);
+        
+        scui_ui_res_local->line_space = 8;
+        scui_ui_res_local->scale_max  = 1.0f;
+        scui_ui_res_local->scale_min  = 0.4f;
         
         scui_ui_scene_list_cfg(scui_ui_scene_list_type_waterfall);
         break;

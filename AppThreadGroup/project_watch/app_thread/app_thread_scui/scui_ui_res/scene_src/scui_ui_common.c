@@ -7,365 +7,57 @@
 
 #include "scui.h"
 
-/*****************************************************************************/
-/* 主题:蜂窝使用 */
+/* 全局主题列表: image/text/jump 同序合一, 所有 theme 共用 */
+static const scui_ui_scene_list_item_t list[] = {
+    { scui_image_prj_theme_menu_ai,              SCUI_LANG_IDX_0X0009,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_alipay,          SCUI_LANG_IDX_0X010b,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_baidu,           SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_book,            SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_bp,              SCUI_LANG_IDX_0X0040,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_brte,            SCUI_LANG_IDX_0X00fe,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_calc,            SCUI_LANG_IDX_0X0138,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_calendar,        SCUI_LANG_IDX_0X0181,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_camera,          SCUI_LANG_IDX_0X0136,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_card,            SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_clock,           SCUI_LANG_IDX_0X0181,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_cmps,            SCUI_LANG_IDX_0X011c,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_contacts,        SCUI_LANG_IDX_0X008b,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_data,            SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_game,            SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_hr,              SCUI_LANG_IDX_0X0040,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_lefun,           SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_lefunAI,         SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_msg,             SCUI_LANG_IDX_0X00c9,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_music,           SCUI_LANG_IDX_0X010b,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_pwd,             SCUI_LANG_IDX_0X0185,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_phone,           SCUI_LANG_IDX_0X008b,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_photo,           SCUI_LANG_IDX_0X0136,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_physiology,      SCUI_LANG_IDX_0X0040,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_pres,            SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_recording,       SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_restart,         SCUI_LANG_IDX_0X019b,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_restore,         SCUI_LANG_IDX_0X019b,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_set,             SCUI_LANG_IDX_0X0151,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_Shutdown,        SCUI_LANG_IDX_0X019b,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_sleep,           SCUI_LANG_IDX_0X004f,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_Somatosensory,   SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_spo2,            SCUI_LANG_IDX_0X0040,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_sport,           SCUI_LANG_IDX_0X01c7,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_sport_rcd,       SCUI_LANG_IDX_0X01c5,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_sw,              SCUI_LANG_IDX_0X013f,      SCUI_UI_SCENE_NONE },
+    { scui_image_prj_theme_menu_stylus,          SCUI_LANG_IDX_0X0030,      SCUI_UI_SCENE_NONE },
+};
 
-void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, SCUI_UI_HONEYCOMB_T ofs_cur)
-{
-    #define HB_DIFX     scui_ui_honeycomb_dif_x(ofs_cur)
-    #define HB_DIFY     scui_ui_honeycomb_dif_y(ofs_cur)
-    #define HB_MIDX     scui_ui_honeycomb_mid_x(ofs_cur)
-    #define HB_MIDY     scui_ui_honeycomb_mid_y(ofs_cur)
-    
-    scui_point_t hb_layout[SCUI_UI_HONEYCOMB_LIST_NUM] =
-    {
-        /* -3线 */
-        {HB_MIDX - HB_DIFX * 1 / 2  - HB_DIFX * 1, HB_MIDY - HB_DIFY * 3},
-        {HB_MIDX - HB_DIFX * 1 / 2               , HB_MIDY - HB_DIFY * 3},
-        {HB_MIDX + HB_DIFX * 1 / 2               , HB_MIDY - HB_DIFY * 3},
-        {HB_MIDX + HB_DIFX * 1 / 2  + HB_DIFX * 1, HB_MIDY - HB_DIFY * 3},
-
-        /* -2线 */
-        {HB_MIDX                    - HB_DIFX * 2, HB_MIDY - HB_DIFY * 2},
-        {HB_MIDX                    - HB_DIFX * 1, HB_MIDY - HB_DIFY * 2},
-        {HB_MIDX                                 , HB_MIDY - HB_DIFY * 2},
-        {HB_MIDX                    + HB_DIFX * 1, HB_MIDY - HB_DIFY * 2},
-        {HB_MIDX                    + HB_DIFX * 2, HB_MIDY - HB_DIFY * 2},
-
-        /* -1线 */
-        {HB_MIDX - HB_DIFX * 1 / 2  - HB_DIFX * 2, HB_MIDY - HB_DIFY * 1},
-        {HB_MIDX - HB_DIFX * 1 / 2  - HB_DIFX * 1, HB_MIDY - HB_DIFY * 1},
-        {HB_MIDX - HB_DIFX * 1 / 2               , HB_MIDY - HB_DIFY * 1},
-        {HB_MIDX + HB_DIFX * 1 / 2               , HB_MIDY - HB_DIFY * 1},
-        {HB_MIDX + HB_DIFX * 1 / 2  + HB_DIFX * 1, HB_MIDY - HB_DIFY * 1},
-        {HB_MIDX + HB_DIFX * 1 / 2  + HB_DIFX * 2, HB_MIDY - HB_DIFY * 1},
-
-        /* 中心线: */
-        {HB_MIDX                    - HB_DIFX * 3, HB_MIDY},
-        {HB_MIDX                    - HB_DIFX * 2, HB_MIDY},
-        {HB_MIDX                    - HB_DIFX * 1, HB_MIDY},
-        {HB_MIDX                                 , HB_MIDY},    // 中心图标
-        {HB_MIDX                    + HB_DIFX * 1, HB_MIDY},
-        {HB_MIDX                    + HB_DIFX * 2, HB_MIDY},
-        {HB_MIDX                    + HB_DIFX * 3, HB_MIDY},
-
-        /* +1线 */
-        {HB_MIDX - HB_DIFX * 1 / 2  - HB_DIFX * 2, HB_MIDY + HB_DIFY * 1},
-        {HB_MIDX - HB_DIFX * 1 / 2  - HB_DIFX * 1, HB_MIDY + HB_DIFY * 1},
-        {HB_MIDX - HB_DIFX * 1 / 2               , HB_MIDY + HB_DIFY * 1},
-        {HB_MIDX + HB_DIFX * 1 / 2               , HB_MIDY + HB_DIFY * 1},
-        {HB_MIDX + HB_DIFX * 1 / 2  + HB_DIFX * 1, HB_MIDY + HB_DIFY * 1},
-        {HB_MIDX + HB_DIFX * 1 / 2  + HB_DIFX * 2, HB_MIDY + HB_DIFY * 1},
-
-        /* +2线 */
-        {HB_MIDX                    - HB_DIFX * 2, HB_MIDY + HB_DIFY * 2},
-        {HB_MIDX                    - HB_DIFX * 1, HB_MIDY + HB_DIFY * 2},
-        {HB_MIDX                                 , HB_MIDY + HB_DIFY * 2},
-        {HB_MIDX                    + HB_DIFX * 1, HB_MIDY + HB_DIFY * 2},
-        {HB_MIDX                    + HB_DIFX * 2, HB_MIDY + HB_DIFY * 2},
-
-        /* +3线 */
-        {HB_MIDX - HB_DIFX * 1 / 2  - HB_DIFX * 1, HB_MIDY + HB_DIFY * 3},
-        {HB_MIDX - HB_DIFX * 1 / 2               , HB_MIDY + HB_DIFY * 3},
-        {HB_MIDX + HB_DIFX * 1 / 2               , HB_MIDY + HB_DIFY * 3},
-        {HB_MIDX + HB_DIFX * 1 / 2  + HB_DIFX * 1, HB_MIDY + HB_DIFY * 3},
-    };
-    
-    uintptr_t size = SCUI_UI_HONEYCOMB_LIST_NUM * sizeof(scui_point_t);
-    memcpy(list_layout, hb_layout, size);
-}
-
-/*****************************************************************************/
-/* 应用列表,设置列表等使用 */
-scui_handle_t  scui_ui_scene_list_num   = 0;
-scui_handle_t *scui_ui_scene_list_image = NULL;
-scui_handle_t *scui_ui_scene_list_text  = NULL;
-scui_handle_t *scui_ui_scene_list_jump  = NULL;
+scui_handle_t  scui_ui_scene_list_num = 0;
+const scui_ui_scene_list_item_t *scui_ui_scene_list = NULL;
 
 void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type)
 {
-    switch (type) {
-    case scui_ui_scene_list_type_list_scale:
-    case scui_ui_scene_list_type_list_arc:
-    case scui_ui_scene_list_type_waterfall:
-    case scui_ui_scene_list_type_themewheel:
-    case scui_ui_scene_list_type_spread: {
-        
-        static const scui_handle_t list_image[] = {
-            scui_image_prj_theme_icon_00_heart_01_00,
-            scui_image_prj_theme_icon_01_spo2_01_00,
-            scui_image_prj_theme_icon_02_msg_01_00,
-            scui_image_prj_theme_icon_04_call_01_00,
-            scui_image_prj_theme_icon_05_sport_rcd_01_00,
-            scui_image_prj_theme_icon_06_act_01_00,
-            scui_image_prj_theme_icon_07_dial_01_00,
-            scui_image_prj_theme_icon_09_f_phone_01_00,
-            scui_image_prj_theme_icon_10_world_clk_01_00,
-            scui_image_prj_theme_icon_11_wthr_01_00,
-            scui_image_prj_theme_icon_12_music_01_00,
-            scui_image_prj_theme_icon_13_alti_01_00,
-            scui_image_prj_theme_icon_14_set_01_00,
-            scui_image_prj_theme_icon_15_t_photo_01_00,
-            scui_image_prj_theme_icon_16_sw_01_00,
-            scui_image_prj_theme_icon_17_alarms_01_00,
-            scui_image_prj_theme_icon_18_tmr_01_00,
-            scui_image_prj_theme_icon_20_voice_01_00,
-            scui_image_prj_theme_icon_21_flash_01_00,
-            scui_image_prj_theme_icon_22_calc_01_00,
-            scui_image_prj_theme_icon_23_cmps_01_00,
-            scui_image_prj_theme_icon_24_stress_01_00,
-            scui_image_prj_theme_icon_25_brte_01_00,
-            scui_image_prj_theme_icon_26_sport_01_00,
-            scui_image_prj_theme_icon_27_sleep_01_00,
-            scui_image_prj_theme_icon_28_perd_01_00,
-            scui_image_prj_theme_icon_29_discover_01_00,
-            scui_image_prj_theme_icon_30_theme_01_00,
-            scui_image_prj_theme_icon_31_about_01_00,
-            scui_image_prj_theme_icon_32_brt_01_00,
-            scui_image_prj_theme_icon_33_pwd_01_00,
-            scui_image_prj_theme_icon_34_sound_01_00,
-            scui_image_prj_theme_icon_35_time_01_00,
-            scui_image_prj_theme_icon_37_dnd_01_00,
-            scui_image_prj_theme_icon_38_aod_01_00,
-            scui_image_prj_theme_icon_39_sys_01_00,
-            scui_image_prj_theme_icon_40_down_key_01_00,
-            // scui_image_prj_theme_icon_41_bp_01_00,
-            // scui_image_prj_theme_icon_42_meas_01_00,
-        };
-        static const scui_handle_t list_text[] = {
-            SCUI_LANG_IDX_0X0019,
-            SCUI_LANG_IDX_0X0040,
-            SCUI_LANG_IDX_0X00c9,
-            SCUI_LANG_IDX_0X008b,
-            SCUI_LANG_IDX_0X01c5,
-            SCUI_LANG_IDX_0X0009,
-            SCUI_LANG_IDX_0X008b,
-            SCUI_LANG_IDX_0X0133,
-            SCUI_LANG_IDX_0X0140,
-            SCUI_LANG_IDX_0X0092,
-            SCUI_LANG_IDX_0X010b,
-            SCUI_LANG_IDX_0X0030,
-            SCUI_LANG_IDX_0X0151,
-            SCUI_LANG_IDX_0X0136,
-            SCUI_LANG_IDX_0X013f,
-            SCUI_LANG_IDX_0X00e6,
-            SCUI_LANG_IDX_0X0139,
-            SCUI_LANG_IDX_0X016e,
-            SCUI_LANG_IDX_0X0134,
-            SCUI_LANG_IDX_0X0138,
-            SCUI_LANG_IDX_0X011c,
-            SCUI_LANG_IDX_0X0049,
-            SCUI_LANG_IDX_0X00fe,
-            SCUI_LANG_IDX_0X01c7,
-            SCUI_LANG_IDX_0X004f,
-            SCUI_LANG_IDX_0X0110,
-            SCUI_LANG_IDX_0X0030,
-            SCUI_LANG_IDX_0X0163,
-            SCUI_LANG_IDX_0X01a2,
-            SCUI_LANG_IDX_0X0030,
-            SCUI_LANG_IDX_0X0185,
-            SCUI_LANG_IDX_0X016e,
-            SCUI_LANG_IDX_0X0181,
-            SCUI_LANG_IDX_0X0177,
-            SCUI_LANG_IDX_0X0154,
-            SCUI_LANG_IDX_0X019b,
-            SCUI_LANG_IDX_0X017a,
-            // SCUI_LANG_IDX_0X0030,
-            // SCUI_LANG_IDX_0X0030,
-        };
-        static const scui_handle_t list_jump[] = {
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            // SCUI_UI_SCENE_NONE,
-            // SCUI_UI_SCENE_NONE,
-        };
-        
-        scui_ui_scene_list_num   = scui_arr_len(list_image);
-        scui_ui_scene_list_image = list_image;
-        scui_ui_scene_list_text  = list_text;
-        scui_ui_scene_list_jump  = list_jump;
-        SCUI_ASSERT(scui_arr_len(list_image) == scui_arr_len(list_text));
-        SCUI_ASSERT(scui_arr_len(list_image) == scui_arr_len(list_jump));
-        break;
-    }
-    case scui_ui_scene_list_type_honeycomb: {
-        
-        #if SCUI_UI_HONEYCOMB_SCALE_MODE
-        static const scui_handle_t list_image[SCUI_UI_HONEYCOMB_LIST_NUM] = {
-            scui_image_prj_theme_menu_ai,
-            scui_image_prj_theme_menu_alipay,
-            scui_image_prj_theme_menu_baidu,
-            scui_image_prj_theme_menu_book,
-            scui_image_prj_theme_menu_bp,
-            scui_image_prj_theme_menu_brte,
-            scui_image_prj_theme_menu_calc,
-            scui_image_prj_theme_menu_calendar,
-            scui_image_prj_theme_menu_camera,
-            scui_image_prj_theme_menu_card,
-            scui_image_prj_theme_menu_clock,
-            scui_image_prj_theme_menu_cmps,
-            scui_image_prj_theme_menu_contacts,
-            scui_image_prj_theme_menu_data,
-            scui_image_prj_theme_menu_game,
-            scui_image_prj_theme_menu_hr,
-            scui_image_prj_theme_menu_lefun,
-            scui_image_prj_theme_menu_lefunAI,
-            scui_image_prj_theme_menu_msg,
-            scui_image_prj_theme_menu_music,
-            scui_image_prj_theme_menu_pwd,
-            scui_image_prj_theme_menu_phone,
-            scui_image_prj_theme_menu_photo,
-            scui_image_prj_theme_menu_physiology,
-            scui_image_prj_theme_menu_pres,
-            scui_image_prj_theme_menu_recording,
-            scui_image_prj_theme_menu_restart,
-            scui_image_prj_theme_menu_restore,
-            scui_image_prj_theme_menu_set,
-            scui_image_prj_theme_menu_Shutdown,
-            scui_image_prj_theme_menu_sleep,
-            scui_image_prj_theme_menu_Somatosensory,
-            scui_image_prj_theme_menu_spo2,
-            scui_image_prj_theme_menu_sport,
-            scui_image_prj_theme_menu_sport_rcd,
-            scui_image_prj_theme_menu_sw,
-            scui_image_prj_theme_menu_stylus,
-            // scui_image_prj_theme_menu_tmr,
-            // scui_image_prj_theme_menu_video,
-            // scui_image_prj_theme_menu_wallet,
-            // scui_image_prj_theme_menu_wf,
-            // scui_image_prj_theme_menu_wthr,
-        };
-        #else
-        static const scui_handle_t list_image[SCUI_UI_HONEYCOMB_LIST_NUM] = {
-            scui_image_prj_theme_icon_00_heart_01_00,
-            scui_image_prj_theme_icon_01_spo2_01_00,
-            scui_image_prj_theme_icon_02_msg_01_00,
-            scui_image_prj_theme_icon_04_call_01_00,
-            scui_image_prj_theme_icon_05_sport_rcd_01_00,
-            scui_image_prj_theme_icon_06_act_01_00,
-            scui_image_prj_theme_icon_07_dial_01_00,
-            scui_image_prj_theme_icon_09_f_phone_01_00,
-            scui_image_prj_theme_icon_10_world_clk_01_00,
-            scui_image_prj_theme_icon_11_wthr_01_00,
-            scui_image_prj_theme_icon_12_music_01_00,
-            scui_image_prj_theme_icon_13_alti_01_00,
-            scui_image_prj_theme_icon_14_set_01_00,
-            scui_image_prj_theme_icon_15_t_photo_01_00,
-            scui_image_prj_theme_icon_16_sw_01_00,
-            scui_image_prj_theme_icon_17_alarms_01_00,
-            scui_image_prj_theme_icon_18_tmr_01_00,
-            scui_image_prj_theme_icon_20_voice_01_00,
-            scui_image_prj_theme_icon_21_flash_01_00,
-            scui_image_prj_theme_icon_22_calc_01_00,
-            scui_image_prj_theme_icon_23_cmps_01_00,
-            scui_image_prj_theme_icon_24_stress_01_00,
-            scui_image_prj_theme_icon_25_brte_01_00,
-            scui_image_prj_theme_icon_26_sport_01_00,
-            scui_image_prj_theme_icon_27_sleep_01_00,
-            scui_image_prj_theme_icon_28_perd_01_00,
-            scui_image_prj_theme_icon_29_discover_01_00,
-            scui_image_prj_theme_icon_30_theme_01_00,
-            scui_image_prj_theme_icon_31_about_01_00,
-            scui_image_prj_theme_icon_32_brt_01_00,
-            scui_image_prj_theme_icon_33_pwd_01_00,
-            scui_image_prj_theme_icon_34_sound_01_00,
-            scui_image_prj_theme_icon_35_time_01_00,
-            scui_image_prj_theme_icon_37_dnd_01_00,
-            scui_image_prj_theme_icon_38_aod_01_00,
-            scui_image_prj_theme_icon_39_sys_01_00,
-            scui_image_prj_theme_icon_40_down_key_01_00,
-            // scui_image_prj_theme_icon_41_bp_01_00,
-            // scui_image_prj_theme_icon_42_meas_01_00,
-        };
-        #endif
-        
-        static const scui_handle_t list_jump[SCUI_UI_HONEYCOMB_LIST_NUM] = {
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-            SCUI_UI_SCENE_NONE,
-        };
-        
-        scui_ui_scene_list_num   = SCUI_UI_HONEYCOMB_LIST_NUM;
-        scui_ui_scene_list_image = list_image;
-        scui_ui_scene_list_text  = NULL;
-        scui_ui_scene_list_jump  = list_jump;
-        SCUI_ASSERT(scui_arr_len(list_image) == scui_arr_len(list_jump));
-        break;
-    }
-    default:
-        SCUI_ASSERT(false);
-        break;
-    }
+    (void)type;
+    scui_ui_scene_list_num = scui_arr_len(list);
+    scui_ui_scene_list     = list;
 }
+
 
 /*****************************************************************************/
 scui_handle_t scui_ui_scene_mini_card_num = 0;

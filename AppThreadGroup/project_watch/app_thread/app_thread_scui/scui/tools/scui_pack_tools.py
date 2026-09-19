@@ -530,8 +530,13 @@ class PackApp(object):
         from tkinter import ttk
         bar = ttk.Frame(self.root, padding=(12, 6))
         bar.pack(fill='x')
-        ttk.Label(bar, text='scui_ui: %s' % self.ui, foreground='#777').pack(side='left')
-        self.path_status = ttk.Label(bar, text='', foreground='#888')
+        # 全局提示(整个工具仅此一处)
+        ttk.Label(bar, text='建议让Agent进行核心开发！本工具仅提供轻量DIY，以浏览信息及打包资源为目标。',
+                  foreground='#c55', wraplength=900, justify='left')\
+            .pack(anchor='w', pady=(0, 4))
+        row = ttk.Frame(bar); row.pack(fill='x')
+        ttk.Label(row, text='scui_ui: %s' % self.ui, foreground='#777').pack(side='left')
+        self.path_status = ttk.Label(row, text='', foreground='#888')
         self.path_status.pack(side='left', padx=(14, 0))
 
     #--------------- 路径设置子弹窗(显示所有路径, 前两项只读, 其余可改) ---------------
@@ -1817,8 +1822,6 @@ class PackApp(object):
         top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
         ttk.Button(top, text='执行 lang 打包', command=lambda: self._run('lang')).pack(side='right')
         ttk.Button(top, text='归一化', command=self._lang_normalize).pack(side='right', padx=(0, 6))
-        ttk.Label(top, text='建议让 Agent 进行本任务开发，此界面用于浏览为主',
-                  foreground='#c55').pack(side='left')
 
         # 主体: 三栏(占满, 不再内嵌 LOG)
         hp = ttk.Panedwindow(f, orient='horizontal'); hp.pack(fill='both', expand=True, pady=(6, 0))
@@ -2061,8 +2064,6 @@ class PackApp(object):
 
         # 顶部工具条
         top = ttk.Frame(f); top.pack(fill='x', pady=(2, 4))
-        ttk.Label(top, text='建议让 Agent 进行本任务开发，此界面用于浏览为主',
-                  foreground='#c55').pack(side='left')
         ttk.Button(top, text='预览 json', command=self._cwf_preview).pack(side='left')
         ttk.Button(top, text='保存 json', command=self._cwf_save).pack(side='left', padx=(6, 0))
         ttk.Button(top, text='执行 cwf 打包', command=lambda: self._run('cwf')).pack(side='right')

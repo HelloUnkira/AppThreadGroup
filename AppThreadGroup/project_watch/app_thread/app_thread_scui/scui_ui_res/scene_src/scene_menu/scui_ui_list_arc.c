@@ -12,6 +12,30 @@ static struct {
     scui_ui_bar_arc_t bar_arc;
 } * scui_ui_res_local = NULL;
 
+/*@brief icon绘制: 统一单图, 按控件48x48缩放(不再用换挡小档资源)
+ */
+static void scui_ui_scene_icon_arc_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_draw_graph: {
+        scui_handle_t img;
+        scui_widget_image_get(event->object, &img);
+        if (img == SCUI_HANDLE_INVALID)
+            break;
+        scui_area_t c = scui_widget_area(event->object);
+        scui_point_t s = {
+            .x = c.w * SCUI_SCALE_COF / scui_image_w(img),
+            .y = c.h * SCUI_SCALE_COF / scui_image_h(img),
+        };
+        scui_widget_draw_image_scale(event->object, &c, img, NULL,
+            SCUI_COLOR_UNUSED, s, scui_opt_pos_c);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 /*@brief 条目点击事件响应(附加到layout控件, 不影响布局)
  *@param event 事件
  */
@@ -59,7 +83,7 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
         item_maker.widget.clip.w    = SCUI_HOR_RES;
         item_maker.widget.parent    = event->object;
         item_maker.widget.child_num = 1;
-        scui_coord_t icon_h = scui_image_h(scui_ui_scene_list_image[0] + 4) + 30;
+        scui_coord_t icon_h = 48 + 30;   /* 统一单图, 图标固定48x48 */
         
         item_maker.widget.clip.h = SCUI_VER_RES / 2 - (icon_h + 10) / 2;
         scui_widget_create(&item_maker, &item_handle);
@@ -83,10 +107,11 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             scui_custom_maker_define(icon_maker);
             scui_handle_t icon_handle = SCUI_HANDLE_INVALID;
             
-            icon_maker.widget.style.fully_bg = true;
-            icon_maker.widget.image          = scui_ui_scene_list_image[idx] + 4;
-            icon_maker.widget.clip.w         = scui_image_w(icon_maker.widget.image);
-            icon_maker.widget.clip.h         = scui_image_h(icon_maker.widget.image);
+            icon_maker.widget.style.fully_bg = false;
+            icon_maker.widget.event_cb       = scui_ui_scene_icon_arc_event_proc;
+            icon_maker.widget.image          = scui_ui_scene_list[idx].image;
+            icon_maker.widget.clip.w         = 48;
+            icon_maker.widget.clip.h         = 48;
             icon_maker.widget.parent         = group_handle;
             scui_widget_create(&icon_maker, &icon_handle);
             
@@ -105,7 +130,7 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             string_maker.args.align_hor          = 0;
             string_maker.args.align_ver          = 2;
             // string_maker.draw_cache                 = 1;
-            string_maker.text                    = scui_ui_scene_list_text[idx];
+            string_maker.text                    = scui_ui_scene_list[idx].text;
             string_maker.font_idx                = SCUI_FONT_IDX_36;
             scui_widget_create(&string_maker, &string_handle);
             

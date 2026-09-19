@@ -1,311 +1,194 @@
 /*实现目标:
- *    窗口:xxx
+ *    主题:蜂窝(球面)
+ *    图标均匀铺在虚拟球面上(geodesic二十面体细分, 真球面均匀, 旋转对称)
+ *    观察者正对球心orthographic投影: 正对点最大, 边缘透视缩小
+ *    上下左右拖动=球旋转(跟手), 背面内容从球轮廓边界转进来
+ *    边缘圆形挤压: 图标中心在圆内, 缩到贴圆边
+ *    松手: 最近焦点回正中心; 点击: 先居中再跳转
+ *    单全屏custom原始解算贴图
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        2    /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
+/* geodesic球面均匀点(二十面体细分1级, 42个单位球坐标, 北极{0,0,1}起) */
+static const struct {
+    scui_coord3_t x, y, z;
+} scui_ui_honeycomb_geo[] = {
+    { 0.0000f,  0.0000f,  1.0000f},
+    { 0.0000f, -0.5257f,  0.8507f},
+    { 0.0000f,  0.5257f,  0.8507f},
+    { 0.5000f, -0.3090f,  0.8090f},
+    { 0.5000f,  0.3090f,  0.8090f},
+    {-0.5000f, -0.3090f,  0.8090f},
+    {-0.5000f,  0.3090f,  0.8090f},
+    { 0.8507f,  0.0000f,  0.5257f},
+    {-0.8507f,  0.0000f,  0.5257f},
+    { 0.3090f, -0.8090f,  0.5000f},
+    {-0.3090f,  0.8090f,  0.5000f},
+    {-0.3090f, -0.8090f,  0.5000f},
+    { 0.3090f,  0.8090f,  0.5000f},
+    {-0.8090f, -0.5000f,  0.3090f},
+    { 0.8090f,  0.5000f,  0.3090f},
+    {-0.8090f,  0.5000f,  0.3090f},
+    { 0.8090f, -0.5000f,  0.3090f},
+    {-0.5257f,  0.8507f,  0.0000f},
+    { 0.5257f,  0.8507f,  0.0000f},
+    {-0.5257f, -0.8507f,  0.0000f},
+    { 0.5257f, -0.8507f,  0.0000f},
+    { 1.0000f,  0.0000f,  0.0000f},
+    { 0.0000f,  1.0000f,  0.0000f},
+    {-1.0000f,  0.0000f,  0.0000f},
+    { 0.0000f, -1.0000f,  0.0000f},
+    {-0.8090f,  0.5000f, -0.3090f},
+    {-0.8090f, -0.5000f, -0.3090f},
+    { 0.8090f,  0.5000f, -0.3090f},
+    { 0.8090f, -0.5000f, -0.3090f},
+    { 0.3090f, -0.8090f, -0.5000f},
+    {-0.3090f,  0.8090f, -0.5000f},
+    { 0.3090f,  0.8090f, -0.5000f},
+    {-0.3090f, -0.8090f, -0.5000f},
+    { 0.8507f,  0.0000f, -0.5257f},
+    {-0.8507f,  0.0000f, -0.5257f},
+    {-0.5000f,  0.3090f, -0.8090f},
+    { 0.5000f, -0.3090f, -0.8090f},
+    {-0.5000f, -0.3090f, -0.8090f},
+    { 0.5000f,  0.3090f, -0.8090f},
+    { 0.0000f, -0.5257f, -0.8507f},
+    { 0.0000f,  0.5257f, -0.8507f},
+    { 0.0000f,  0.0000f, -1.0000f}
+};
+#define SCUI_UI_HONEYCOMB_GEO_NUM   scui_arr_len(scui_ui_honeycomb_geo)
+
 static struct {
-    scui_coord_t scroll_width;      // scroll控件属性.widget.clip.w
-    scui_coord_t scroll_height;     // scroll控件属性.widget.clip.h
-    
-    SCUI_UI_HONEYCOMB_T scale_ofs;
-    
+    scui_coord3_t pitch;        /* 球旋转: 俯仰(弧度) */
+    scui_coord3_t yaw;          /* 球旋转: 偏航(弧度) */
+    scui_coord3_t rad;          /* 球半径(短边一半) */
+    scui_coord3_t icon_max;     /* 正对图标wh */
+    scui_coord3_t icon_min;     /* 边缘图标wh */
+    scui_coord_t  geo_num;      /* 实际布点数(<=42) */
+
+    bool          touch;        /* 拖动中 */
+    scui_coord_t  down_x, down_y;  /* 按下起点 */
+    scui_coord_t  last_x, last_y;   /* 上次拖动点 */
+    scui_coord_t  move_lock;    /* 动画/跟手锁定 */
+
+    /* 回正/居中snap动画 */
+    bool          snap_on;
+    scui_coord_t  snap_jump;    /* >=0: 居中走完后跳转该app idx */
+    scui_coord3_t snap_p0, snap_y0;
+    scui_coord3_t snap_p1, snap_y1;
+    scui_coord_t  snap_t;
+    scui_coord_t  snap_dur;
+    scui_coord_t  drawn;
 } * scui_ui_res_local = NULL;
 
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-// 计算蜂窝布局的几个外部接口(布局使用图片原点坐标(左上角坐标))
-
-// 图标间隔水平宽度
-scui_coord_t scui_ui_honeycomb_dif_x(SCUI_UI_HONEYCOMB_T scale_ofs)
-{
-    // 图片宽度 + 一个间隙(控件:scroll.space属性, 同步修改)
-    #if SCUI_UI_HONEYCOMB_SCALE_MODE
-    return scale_ofs + SCUI_UI_HONEYCOMB_SPACE;
-    #else
-    scui_handle_t image = scui_ui_scene_list_image[0] + scale_ofs;
-    return scui_image_w(image) + SCUI_UI_HONEYCOMB_SPACE;
-    #endif
-}
-
-// 图标间隔:垂直线宽度
-scui_coord_t scui_ui_honeycomb_dif_y(SCUI_UI_HONEYCOMB_T scale_ofs)
-{
-    // 在六边形布局中, 等边三角形的高度差是边长的 二分之根号三: 86 / 100
-    return scui_ui_honeycomb_dif_x(scale_ofs) * 86 / 100;
-}
-
-// 中心图标水平偏移(原点(左上角))
-scui_coord_t scui_ui_honeycomb_mid_x(SCUI_UI_HONEYCOMB_T scale_ofs)
-{
-    #if SCUI_UI_HONEYCOMB_SCALE_MODE
-    return (scui_ui_res_local->scroll_width - scale_ofs) / 2;
-    #else
-    scui_handle_t image = scui_ui_scene_list_image[0] + scale_ofs;
-    return (scui_ui_res_local->scroll_width - scui_image_w(image)) / 2;
-    #endif
-}
-
-// 中心图标垂直偏移(原点(左上角))
-scui_coord_t scui_ui_honeycomb_mid_y(SCUI_UI_HONEYCOMB_T scale_ofs)
-{
-    #if SCUI_UI_HONEYCOMB_SCALE_MODE
-    return (scui_ui_res_local->scroll_height - scale_ofs) / 2;
-    #else
-    scui_handle_t image = scui_ui_scene_list_image[0] + scale_ofs;
-    return (scui_ui_res_local->scroll_height - scui_image_h(image)) / 2;
-    #endif
-}
-
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-
-/*@brief 控件事件响应回调
- *@param event 事件
+/*@brief 解算单个图标(球面3D坐标+旋转+ortho投影+透视+圆形挤压)
+ *@param gx/gy/gz 球面单位坐标
+ *@param widget_cx/cy 屏幕中心
+ *@param rad 球半径
+ *@param out_x/out_y 输出图标中心
+ *@param out_size 输出图标wh
+ *@param out_z2 输出旋转后z分量(透视/可见)
  */
-static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
+static void scui_ui_honeycomb_solve(scui_coord3_t gx, scui_coord3_t gy, scui_coord3_t gz,
+    scui_coord3_t widget_cx, scui_coord3_t widget_cy, scui_coord3_t rad,
+    scui_coord3_t *out_x, scui_coord3_t *out_y, scui_coord3_t *out_size,
+    scui_coord3_t *out_z2)
 {
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        break;
-    case scui_event_draw_graph: {
-        
-        scui_handle_t  parent = scui_widget_parent(event->object);
-        scui_handle_t  index  = scui_widget_child_to_index(event->object);
-        
-        scui_handle_t image = scui_ui_scene_list_image[index];
-        scui_handle_t scale_ofs = scui_ui_res_local->scale_ofs;
-        
-        scui_area_t edge_clip = scui_widget_clip(parent);
-        scui_area_t icon_clip = scui_widget_clip(event->object);
-        
-        scui_area_t edge_center = {
-            .x = edge_clip.x + edge_clip.w / 2,
-            .y = edge_clip.y + edge_clip.h / 2,
-        };
-        scui_area_t icon_center = {
-            .x = icon_clip.x + icon_clip.w / 2,
-            .y = icon_clip.y + icon_clip.h / 2,
-        };
-        
-        // 获得icon的四个中点以确定水平与垂直的缩放方向
-        scui_opt_dir_t hor_dir = scui_opt_dir_none;
-        scui_opt_dir_t ver_dir = scui_opt_dir_none;
-        
-        if (icon_center.x < edge_center.x)
-            hor_dir = scui_opt_dir_ltr;
-        if (icon_center.x > edge_center.x)
-            hor_dir = scui_opt_dir_rtl;
-        
-        if (icon_center.y < edge_center.y)
-            ver_dir = scui_opt_dir_utd;
-        if (icon_center.y > edge_center.y)
-            ver_dir = scui_opt_dir_dtu;
-        
-        #if 0
-        // 距离中心偏移做球面映射
-        scui_multi_t edge_rw = (edge_clip.w - icon_clip.w) / 2;
-        scui_multi_t edge_rh = (edge_clip.h - icon_clip.h) / 2;
-        scui_multi_t dist_cx = scui_dist(icon_center.x, edge_center.x) + icon_clip.w / 2;
-        scui_multi_t dist_cy = scui_dist(icon_center.y, edge_center.y) + icon_clip.h / 2;
-        scui_multi_t dist_dm = edge_rw * edge_rw + edge_rh * edge_rh;
-        scui_multi_t dist_cm = dist_cx * dist_cx + dist_cy * dist_cy;
-        dist_cm = scui_min(dist_cm, dist_dm);
-        
-        #if 0
-        scui_multi_t sin_a2 = (1024 * 1024) - (1024 * dist_cm / dist_dm) * (1024 * dist_cm / dist_dm);
-        scui_multi_t sin_ia = 0;
-        scui_multi_t sin_fa = 0;
-        scui_sqrt(sin_a2, &sin_ia, &sin_fa, 0x8000);
-        scui_multi_t dist_x = (1024 - sin_ia) * (dist_dm) / 1024;
-        scale_ofs = scui_map(dist_x, 0, dist_dm, scale_ofs, SCUI_UI_HONEYCOMB_SCALE_MIN);
-        #else
-        scale_ofs = scui_map(dist_dm - dist_cm, 0, dist_dm, SCUI_UI_HONEYCOMB_SCALE_MIN, scale_ofs);
-        #endif
-        #endif
-        
-        #if SCUI_UI_HONEYCOMB_SCALE_MODE
-        for (int64_t idx = scale_ofs; idx >= SCUI_UI_HONEYCOMB_SCALE_MIN; idx -= SCUI_UI_HONEYCOMB_SCALE_STEP) {
-            scui_coord_t image_clip_w = idx;
-            scui_coord_t image_clip_h = idx;
-        #else
-        for (int64_t idx = scale_ofs; idx >= SCUI_UI_HONEYCOMB_OFS_MIN; idx--) {
-            scui_coord_t image_clip_w = scui_image_w(image + idx);
-            scui_coord_t image_clip_h = scui_image_h(image + idx);
-        #endif
-            
-            scui_area_t scale_clip = {
-                .x = icon_clip.x,
-                .y = icon_clip.y,
-                .w = image_clip_w,
-                .h = image_clip_h,
-            };
-            
-            #if 0
-            // 图标居中对齐
-            scale_clip.x += (icon_clip.w - image_clip_w) / 2;
-            scale_clip.y += (icon_clip.h - image_clip_h) / 2;
-            #else
-            // 水平缩放
-            if (hor_dir == scui_opt_dir_none)
-                scale_clip.x += (icon_clip.w - image_clip_w) / 2;
-            if (hor_dir == scui_opt_dir_rtl)
-                scale_clip.x += (icon_clip.w - image_clip_w) * 1 / 4;
-            if (hor_dir == scui_opt_dir_ltr)
-                scale_clip.x += (icon_clip.w - image_clip_w) * 3 / 4;
-            
-            // 垂直缩放
-            if (ver_dir == scui_opt_dir_none)
-                scale_clip.y += (icon_clip.h - image_clip_h) / 2;
-            if (ver_dir == scui_opt_dir_dtu)
-                scale_clip.y += (icon_clip.h - image_clip_h) * 1 / 4;
-            if (ver_dir == scui_opt_dir_utd)
-                scale_clip.y += (icon_clip.h - image_clip_h) * 3 / 4;
-            #endif
-            
-            
-            
-            /* 绘制目标:从滚动空间坐标转换为控件局部坐标 */
-            scui_area_t draw_clip = {
-                .x = scale_clip.x - icon_clip.x,
-                .y = scale_clip.y - icon_clip.y,
-                .w = scale_clip.w,
-                .h = scale_clip.h,
-            };
+    scui_coord3_t cp = scui_cos(scui_ui_res_local->pitch);
+    scui_coord3_t sp = scui_sin(scui_ui_res_local->pitch);
+    scui_coord3_t y1 = gy * cp - gz * sp;
+    scui_coord3_t z1 = gy * sp + gz * cp;
+    scui_coord3_t cy = scui_cos(scui_ui_res_local->yaw);
+    scui_coord3_t sy = scui_sin(scui_ui_res_local->yaw);
+    scui_coord3_t x1 = gx * cy + z1 * sy;
+    scui_coord3_t z2 = -gx * sy + z1 * cy;
 
-            #if 0
-            #elif SCUI_UI_HONEYCOMB_EDGE_MODE == 0  // 圆屏
-            scui_area_t scale_center = {
-                .x = scale_clip.x + scale_clip.w / 2,
-                .y = scale_clip.y + scale_clip.h / 2,
-            };
-            // 检查缩放的目标是否在圆屏的区域内
-            scui_multi_t dist_cx = scui_dist(scale_center.x, edge_center.x) + image_clip_w / 2;
-            scui_multi_t dist_cy = scui_dist(scale_center.y, edge_center.y) + image_clip_h / 2;
-            dist_cx *= dist_cx;
-            dist_cy *= dist_cy;
-            
-            if (dist_cx + dist_cy < edge_center.x * edge_center.y) {
-                #if SCUI_UI_HONEYCOMB_SCALE_MODE
-                scui_point_t scale = {
-                    .x = scale_clip.w * SCUI_SCALE_COF / scui_image_w(image),
-                    .y = scale_clip.h * SCUI_SCALE_COF / scui_image_h(image),
-                };
-                scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED, scale, scui_opt_pos_c);
-                #else
-                scui_widget_draw_image(event->object, &draw_clip, image + idx, NULL, SCUI_COLOR_UNUSED);
-                #endif
-                break;
-            }
-            #elif SCUI_UI_HONEYCOMB_EDGE_MODE == 1  // 方屏
-            if (scui_area_inside(&edge_clip, &scale_clip)) {
-                #if SCUI_UI_HONEYCOMB_SCALE_MODE
-                scui_point_t scale = {
-                    .x = scale_clip.w * SCUI_SCALE_COF / scui_image_w(image),
-                    .y = scale_clip.h * SCUI_SCALE_COF / scui_image_h(image),
-                };
-                scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED, scale, scui_opt_pos_c);
-                #else
-                scui_widget_draw_image(event->object, &draw_clip, image + idx, NULL, SCUI_COLOR_UNUSED);
-                #endif
-                break;
-            }
-            #else
-            #error "unknown edge mode"
-            #endif
-        }
-        
-        
-        
-        break;
-    }
-    case scui_event_ptr_click: {
-        
-        scui_event_mask_over(event);
-        scui_handle_t  parent = scui_widget_parent(event->object);
-        scui_handle_t  index  = scui_widget_child_to_index(event->object);
-        SCUI_LOG_WARN("click idx:%d", index);
-        
-        break;
-    }
-    default:
-        break;
-    }
+    *out_z2 = z2;
+    *out_x = widget_cx + x1 * rad;
+    *out_y = widget_cy + y1 * rad;
+
+    /* 透视大小: 正对(z2=1)最大, 边缘(z2=0)最小 */
+    scui_coord3_t persp = z2;
+    if (persp < 0.0f)
+        persp = 0.0f;
+    scui_coord3_t size = scui_ui_res_local->icon_min +
+        (scui_ui_res_local->icon_max - scui_ui_res_local->icon_min) * persp;
+
+    /* 圆形挤压: 中心在圆内, 缩到贴圆边 */
+    scui_coord3_t half = size / 2;
+    scui_coord3_t ddx = *out_x - widget_cx;
+    scui_coord3_t ddy = *out_y - widget_cy;
+    scui_coord3_t avail = rad - sqrtf(ddx * ddx + ddy * ddy);
+    if (avail < half)
+        size = avail * 2;
+    if (size < 1.0f)
+        size = 1.0f;
+    *out_size = size;
 }
 
-/*@brief 控件事件响应回调
- *@param event 事件
+/*@brief 启动snap动画(把目标点转到中心)
+ *@param gx/gy/gz 目标球面坐标
+ *@param jump  >=0: 走完后跳转该app idx
+ *@param limit  >0: 限幅(回正);  0: 不限幅(点击精确居中)
  */
-void scui_ui_scene_honeycomb_scroll_event_proc(scui_event_t *event)
+static void scui_ui_honeycomb_snap(scui_coord3_t gx, scui_coord3_t gy, scui_coord3_t gz,
+    scui_coord_t jump, scui_coord3_t limit)
 {
-    switch (event->type) {
-    case scui_event_create: {
-        
-        scui_ui_res_local->scroll_width  = scui_widget_area(event->object).w;
-        scui_ui_res_local->scroll_height = scui_widget_area(event->object).h;
-        
-        #if SCUI_UI_HONEYCOMB_SCALE_MODE
-        scui_handle_t icon = scui_ui_scene_list_image[0];
-        SCUI_ASSERT(scui_image_w(icon) == scui_image_h(icon));
-        scui_ui_res_local->scale_ofs = SCUI_UI_HONEYCOMB_SCALE_DEF;
-        scui_coord_t icon_w = scui_ui_res_local->scale_ofs;
-        scui_coord_t icon_h = scui_ui_res_local->scale_ofs;
-        #else
-        scui_ui_res_local->scale_ofs = SCUI_UI_HONEYCOMB_OFS_DEF;
-        scui_handle_t icon = scui_ui_scene_list_image[0];
-        icon += scui_ui_res_local->scale_ofs;
-        scui_coord_t icon_w = scui_image_w(icon);
-        scui_coord_t icon_h = scui_image_h(icon);
-        #endif
-        
-        scui_point_t edge = {.x = icon_w, .y = icon_h,};
-        scui_scroll_edge(event->object, &edge);
-        
-        uintptr_t layout_size = SCUI_UI_HONEYCOMB_LIST_NUM * sizeof(scui_point_t);
-        scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_user, layout_size);
-        scui_ui_honeycomb_list_layout(list_layout, scui_ui_res_local->scale_ofs);
-        
-        scui_custom_maker_define(custom_maker);
-        scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
-        
-        custom_maker.widget.style.indev_ptr = true;
-        custom_maker.widget.clip.w          = icon_w;
-        custom_maker.widget.clip.h          = icon_h;
-        custom_maker.widget.parent          = event->object;
-        custom_maker.widget.event_cb        = scui_ui_scene_honeycomb_icon_event_proc;
-        
-        for (uint8_t idx = 0; idx < SCUI_UI_HONEYCOMB_LIST_NUM; idx++) {
-            custom_maker.widget.clip.x = list_layout[idx].x;
-            custom_maker.widget.clip.y = list_layout[idx].y;
-            scui_widget_create(&custom_maker, &custom_handle);
+    scui_coord3_t pt = atan2f(gy, gz);
+    scui_coord3_t yw = atan2f(-gx, hypotf(gy, gz));
+    scui_coord3_t dp = pt - scui_ui_res_local->pitch;
+    scui_coord3_t dy = yw - scui_ui_res_local->yaw;
+    if (limit > 0.0f) {
+        scui_coord3_t dd = hypotf(dp, dy);
+        if (dd > limit) {
+            dp *= limit / dd;
+            dy *= limit / dd;
         }
-        
-        SCUI_MEM_FREE(list_layout);
-        
-        break;
     }
-    default:
-        break;
-    }
+    scui_ui_res_local->snap_on   = true;
+    scui_ui_res_local->snap_jump = jump;
+    scui_ui_res_local->snap_p0   = scui_ui_res_local->pitch;
+    scui_ui_res_local->snap_y0   = scui_ui_res_local->yaw;
+    scui_ui_res_local->snap_p1   = scui_ui_res_local->pitch + dp;
+    scui_ui_res_local->snap_y1   = scui_ui_res_local->yaw + dy;
+    scui_ui_res_local->snap_t    = 0;
+    scui_ui_res_local->snap_dur  = 280;
 }
-/*@brief 控件事件响应回调
+
+/*@brief 窗口控件事件响应回调
  *@param event 事件
  */
 void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_anima_elapse:
-        break;
     case scui_event_create:
         scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
         scui_window_local_res_get(event->object, &scui_ui_res_local);
-        
+
+        scui_ui_res_local->pitch      = 0.0f;
+        scui_ui_res_local->yaw       = 0.0f;
+        scui_ui_res_local->touch      = false;
+        scui_ui_res_local->move_lock  = 0;
+        scui_ui_res_local->snap_on    = false;
+        scui_ui_res_local->snap_jump  = -1;
+        scui_ui_res_local->drawn      = false;
+
+        scui_area_t widget_clip = scui_widget_area(event->object);
+        scui_ui_res_local->rad = scui_min(widget_clip.w, widget_clip.h) / 2;
+        scui_ui_res_local->icon_max = scui_ui_res_local->rad * 0.50f;
+        scui_ui_res_local->icon_min = scui_ui_res_local->rad * 0.09f;
+
         scui_ui_scene_list_cfg(scui_ui_scene_list_type_honeycomb);
+        scui_ui_res_local->geo_num = scui_min((scui_coord_t)scui_ui_scene_list_num,
+            (scui_coord_t)SCUI_UI_HONEYCOMB_GEO_NUM);
+        SCUI_LOG_INFO("[hb] create rad=%d max=%d min=%d num=%d geo=%d",
+            (int)scui_ui_res_local->rad, (int)scui_ui_res_local->icon_max,
+            (int)scui_ui_res_local->icon_min, (int)scui_ui_scene_list_num,
+            scui_ui_res_local->geo_num);
         break;
     case scui_event_destroy:
         break;
@@ -313,59 +196,181 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_lost:
         break;
-    case scui_event_enc_tick: {
-        
-        bool relayout = false;
-        #if SCUI_UI_HONEYCOMB_SCALE_MODE
-        if (event->enc_way == 0 &&
-            scui_ui_res_local->scale_ofs <  SCUI_UI_HONEYCOMB_SCALE_MAX) {
-            scui_ui_res_local->scale_ofs += SCUI_UI_HONEYCOMB_SCALE_SPAN;
-            relayout = true;
-        }
-        if (event->enc_way == 1 &&
-            scui_ui_res_local->scale_ofs >  SCUI_UI_HONEYCOMB_SCALE_MIN) {
-            scui_ui_res_local->scale_ofs -= SCUI_UI_HONEYCOMB_SCALE_SPAN;
-            relayout = true;
-        }
-        #else
-        if (event->enc_way == 0 &&
-            scui_ui_res_local->scale_ofs < SCUI_UI_HONEYCOMB_OFS_MAX) {
-            scui_ui_res_local->scale_ofs++;
-            relayout = true;
-        }
-        if (event->enc_way == 1 &&
-            scui_ui_res_local->scale_ofs > SCUI_UI_HONEYCOMB_OFS_MIN) {
-            scui_ui_res_local->scale_ofs--;
-            relayout = true;
-        }
-        #endif
-        
-        if (relayout) {
-            #if SCUI_UI_HONEYCOMB_SCALE_MODE
-            scui_coord_t icon_w = scui_ui_res_local->scale_ofs;
-            scui_coord_t icon_h = scui_ui_res_local->scale_ofs;
-            #else
-            scui_handle_t icon = scui_ui_scene_list_image[0];
-            icon += scui_ui_res_local->scale_ofs;
-            scui_coord_t icon_w = scui_image_w(icon);
-            scui_coord_t icon_h = scui_image_h(icon);
-            #endif
-            
-            scui_point_t edge = {.x = icon_w, .y = icon_h,};
-            scui_scroll_edge(SCUI_UI_SCENE_HONEYCOMB_SCROLL, &edge);
-            
-            uintptr_t layout_size = SCUI_UI_HONEYCOMB_LIST_NUM * sizeof(scui_point_t);
-            scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_user, layout_size);
-            scui_ui_honeycomb_list_layout(list_layout, scui_ui_res_local->scale_ofs);
-            
-            scui_handle_t child_now = scui_widget_child_now(SCUI_UI_SCENE_HONEYCOMB_SCROLL);
-            for (scui_multi_t idx = 0; idx < child_now; idx++) {
-                scui_handle_t child = scui_widget_child_by_index(SCUI_UI_SCENE_HONEYCOMB_SCROLL, idx);
-                scui_widget_adjust_size(child, icon_w, icon_h);
-                scui_widget_move_pos(child, &list_layout[idx], false);
+    case scui_event_key_click:
+        break;
+    default:
+        break;
+    }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_honeycomb_custom_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+
+        if (scui_ui_res_local->snap_on) {
+            scui_ui_res_local->snap_t += event->tick;
+            scui_coord3_t k = (scui_coord3_t)scui_ui_res_local->snap_t /
+                scui_ui_res_local->snap_dur;
+            if (k > 1.0f)
+                k = 1.0f;
+            k = k * k * (3.0f - 2.0f * k);   /* smoothstep */
+            scui_ui_res_local->pitch = scui_ui_res_local->snap_p0 +
+                (scui_ui_res_local->snap_p1 - scui_ui_res_local->snap_p0) * k;
+            scui_ui_res_local->yaw = scui_ui_res_local->snap_y0 +
+                (scui_ui_res_local->snap_y1 - scui_ui_res_local->snap_y0) * k;
+            if (scui_ui_res_local->snap_t >= scui_ui_res_local->snap_dur) {
+                scui_ui_res_local->snap_on = false;
+                scui_ui_res_local->move_lock = 0;
+                /* 居中动画走完 -> 跳转 */
+                if (scui_ui_res_local->snap_jump >= 0) {
+                    scui_coord_t idx = scui_ui_res_local->snap_jump;
+                    scui_ui_res_local->snap_jump = -1;
+                    SCUI_LOG_INFO("[hb] jump app idx=%d", idx);
+                    scui_event_mask_over(event);
+                    scui_window_stack_jump(scui_ui_scene_list[idx].jump, 1,
+                        scui_window_switch_center_out, scui_opt_dir_none, false, NULL);
+                }
             }
-            
-            SCUI_MEM_FREE(list_layout);
+            scui_widget_draw(event->object, NULL, false, 0);
+        }
+        break;
+    }
+    case scui_event_ptr_down: {
+
+        scui_ui_res_local->down_x = event->ptr_c.x;
+        scui_ui_res_local->down_y = event->ptr_c.y;
+        scui_ui_res_local->last_x = event->ptr_c.x;
+        scui_ui_res_local->last_y = event->ptr_c.y;
+        scui_ui_res_local->touch = false;
+        break;
+    }
+    case scui_event_ptr_move: {
+
+        scui_event_mask_over(event);
+        if (scui_ui_res_local->move_lock)
+            break;
+
+        /* 位移超阈值才视为拖动(区分点击) */
+        if (!scui_ui_res_local->touch) {
+            scui_coord_t dx = event->ptr_e.x - scui_ui_res_local->down_x;
+            scui_coord_t dy = event->ptr_e.y - scui_ui_res_local->down_y;
+            if (dx * dx + dy * dy < 16 * 16)
+                break;
+            scui_ui_res_local->touch = true;
+            scui_ui_res_local->snap_on = false;
+        }
+
+        /* 跟手: 拖下球向下转, 拖右球向右转 */
+        scui_coord3_t dx = event->ptr_e.x - scui_ui_res_local->last_x;
+        scui_coord3_t dy = event->ptr_e.y - scui_ui_res_local->last_y;
+        scui_ui_res_local->last_x = event->ptr_e.x;
+        scui_ui_res_local->last_y = event->ptr_e.y;
+        scui_ui_res_local->pitch -= dy / scui_ui_res_local->rad;
+        scui_ui_res_local->yaw   += dx / scui_ui_res_local->rad;
+        scui_widget_draw(event->object, NULL, false, 0);
+        break;
+    }
+    case scui_event_ptr_up: {
+
+        if (scui_ui_res_local->move_lock)
+            break;
+
+        if (scui_ui_res_local->touch) {
+            /* 拖动松手: 最近焦点回正(限幅) */
+            scui_ui_res_local->touch = false;
+            scui_area_t  widget_clip = scui_widget_area(event->object);
+            scui_coord_t widget_cx = widget_clip.x + widget_clip.w / 2;
+            scui_coord_t widget_cy = widget_clip.y + widget_clip.h / 2;
+            scui_coord3_t best_z = -1.0f;
+            scui_coord_t best = 0;
+            scui_coord3_t ox, oy, os, oz;
+            for (scui_coord_t i = 0; i < scui_ui_res_local->geo_num; i++) {
+                scui_ui_honeycomb_solve(scui_ui_honeycomb_geo[i].x,
+                    scui_ui_honeycomb_geo[i].y, scui_ui_honeycomb_geo[i].z,
+                    widget_cx, widget_cy, scui_ui_res_local->rad,
+                    &ox, &oy, &os, &oz);
+                if (oz > best_z) {
+                    best_z = oz;
+                    best = i;
+                }
+            }
+            scui_ui_honeycomb_snap(scui_ui_honeycomb_geo[best].x,
+                scui_ui_honeycomb_geo[best].y, scui_ui_honeycomb_geo[best].z,
+                -1, 0.35f);
+        } else {
+            /* 点击: 命中最上层图标 -> 精确居中 -> 跳转 */
+            scui_area_t  widget_clip = scui_widget_area(event->object);
+            scui_coord_t widget_cx = widget_clip.x + widget_clip.w / 2;
+            scui_coord_t widget_cy = widget_clip.y + widget_clip.h / 2;
+            scui_coord_t mx = event->ptr_c.x;
+            scui_coord_t my = event->ptr_c.y;
+            scui_coord3_t best_z = 0.0f;
+            scui_coord_t hit = -1;
+            scui_coord3_t ox, oy, os, oz;
+            for (scui_coord_t i = 0; i < scui_ui_res_local->geo_num; i++) {
+                scui_ui_honeycomb_solve(scui_ui_honeycomb_geo[i].x,
+                    scui_ui_honeycomb_geo[i].y, scui_ui_honeycomb_geo[i].z,
+                    widget_cx, widget_cy, scui_ui_res_local->rad,
+                    &ox, &oy, &os, &oz);
+                if (oz <= 0.0f)
+                    continue;
+                scui_coord_t ddx = mx - ox;
+                scui_coord_t ddy = my - oy;
+                if (ddx >= -os / 2 && ddx <= os / 2 && ddy >= -os / 2 && ddy <= os / 2) {
+                    if (oz > best_z) {
+                        best_z = oz;
+                        hit = i;
+                    }
+                }
+            }
+            if (hit >= 0) {
+                scui_event_mask_over(event);
+                scui_ui_res_local->move_lock = 1;
+                scui_ui_honeycomb_snap(scui_ui_honeycomb_geo[hit].x,
+                    scui_ui_honeycomb_geo[hit].y, scui_ui_honeycomb_geo[hit].z,
+                    hit, 0.0f);
+            }
+        }
+        scui_widget_draw(event->object, NULL, false, 0);
+        break;
+    }
+    case scui_event_draw_graph: {
+
+        scui_area_t  widget_clip = scui_widget_area(event->object);
+        scui_coord_t widget_cx = widget_clip.x + widget_clip.w / 2;
+        scui_coord_t widget_cy = widget_clip.y + widget_clip.h / 2;
+
+        for (scui_coord_t i = 0; i < scui_ui_res_local->geo_num; i++) {
+            scui_coord3_t ox, oy, os, oz;
+            scui_ui_honeycomb_solve(scui_ui_honeycomb_geo[i].x,
+                scui_ui_honeycomb_geo[i].y, scui_ui_honeycomb_geo[i].z,
+                widget_cx, widget_cy, scui_ui_res_local->rad,
+                &ox, &oy, &os, &oz);
+            if (oz <= 0.0f || os <= 2.0f)
+                continue;
+            scui_handle_t image = scui_ui_scene_list[i].image;
+            scui_area_t   draw_clip = {
+                .x = (scui_coord_t)floorf(ox - os / 2) - widget_clip.x,
+                .y = (scui_coord_t)floorf(oy - os / 2) - widget_clip.y,
+                .w = (scui_coord_t)ceilf(os),
+                .h = (scui_coord_t)ceilf(os),
+            };
+            scui_point_t scale = {
+                .x = os * SCUI_SCALE_COF / scui_image_w(image),
+                .y = os * SCUI_SCALE_COF / scui_image_h(image),
+            };
+            scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL,
+                SCUI_COLOR_UNUSED, scale, scui_opt_pos_c);
+        }
+        if (!scui_ui_res_local->drawn) {
+            scui_ui_res_local->drawn = true;
+            SCUI_LOG_INFO("[hb] draw p=%.2f y=%.2f num=%d",
+                scui_ui_res_local->pitch, scui_ui_res_local->yaw,
+                scui_ui_res_local->geo_num);
         }
         break;
     }
