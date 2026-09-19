@@ -295,8 +295,12 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
                         .x = fw * SCUI_SCALE_COF / img_w,
                         .y = fw * SCUI_SCALE_COF / img_h,
                     };
+                    scui_area_t  area_i  = scui_image_area(scui_ui_scene_list[si].image);
+                    scui_area_t  area_w  = dc;
+                    scui_point_t anchor = scui_area_center(&area_w);
+                    scui_point_t center = scui_area_center(&area_i);
                     scui_widget_draw_image_scale(event->object, &dc,
-                        scui_ui_scene_list[si].image, NULL, SCUI_COLOR_UNUSED, sc, scui_opt_pos_c);
+                        scui_ui_scene_list[si].image, NULL, SCUI_COLOR_UNUSED, anchor, center, sc);
                     continue;
                 }
 
@@ -312,8 +316,12 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
                     .x = sw * SCUI_SCALE_COF / img_w,
                     .y = sw * SCUI_SCALE_COF / img_h,
                 };
+                scui_area_t  area_i  = scui_image_area(scui_ui_scene_list[si].image);
+                scui_area_t  area_w  = dc;
+                scui_point_t anchor = scui_area_center(&area_w);
+                scui_point_t center = scui_area_center(&area_i);
                 scui_widget_draw_image_scale(event->object, &dc,
-                    scui_ui_scene_list[si].image, NULL, SCUI_COLOR_UNUSED, sc, scui_opt_pos_c);
+                    scui_ui_scene_list[si].image, NULL, SCUI_COLOR_UNUSED, anchor, center, sc);
             }
         }
         break;

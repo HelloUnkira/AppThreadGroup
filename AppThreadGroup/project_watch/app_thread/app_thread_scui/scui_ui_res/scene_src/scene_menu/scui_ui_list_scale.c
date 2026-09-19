@@ -50,8 +50,11 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
             .x = isz * SCUI_SCALE_COF / scui_image_w(image_icon),
             .y = isz * SCUI_SCALE_COF / scui_image_h(image_icon),
         };
-        scui_widget_draw_image_scale(event->object, &image_clip, image_icon, NULL,
-            SCUI_COLOR_UNUSED, iscale, scui_opt_pos_c);
+        scui_area_t  area_i = scui_image_area(image_icon);
+        scui_point_t anchor = scui_area_center(&image_clip);
+        scui_point_t center = scui_area_center(&area_i);
+        scui_widget_draw_image_scale(event->object, NULL, image_icon, NULL,
+            SCUI_COLOR_UNUSED, anchor, center, iscale);
         
         image_clip = scui_widget_area(event->object);
         image_icon = scui_image_prj_rpt_arr_06_back;
@@ -106,7 +109,6 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
         };
         
         scui_point_t img_scale = {0};
-        scui_opt_pos_t img_pos = scui_opt_pos_c;
         img_scale.x = 1024 * (scui_multi_t)percent / 100;
         img_scale.y = 1024 * (scui_multi_t)percent / 100;
         scui_coord_t  btn_scale_x = (scui_multi_t)btn_clip.w * (1024 - img_scale.x) / 1024;
@@ -117,7 +119,12 @@ static void scui_ui_scene_list_scale_item_event(scui_event_t *event)
         scui_custom_draw_button(event->object, &btn_clip, &custom_data);
         
         scui_handle_t surface_image = scui_widget_surface_image(event->object);
-        scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL, SCUI_COLOR_UNUSED, img_scale, img_pos);
+        scui_area_t  area_i = scui_image_area(surface_image);
+        scui_area_t  area_w = scui_widget_area(event->object);
+        scui_point_t anchor = scui_area_center(&area_w);
+        scui_point_t center = scui_area_center(&area_i);
+        scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL,
+            SCUI_COLOR_UNUSED, anchor, center, img_scale);
         
         /* 恢复原始 alpha */
         scui_widget_alpha_set(event->object, alpha_raw, true);

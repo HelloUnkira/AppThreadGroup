@@ -191,7 +191,11 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
                     .x = icon_w * SCUI_SCALE_COF / image_w,
                     .y = icon_h * SCUI_SCALE_COF / image_h,
                 };
-                scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED, scale, scui_opt_pos_c);
+                scui_area_t  area_i  = scui_image_area(image);
+                scui_area_t  area_w  = draw_clip;
+                scui_point_t anchor = scui_area_center(&area_w);
+                scui_point_t center = scui_area_center(&area_i);
+                scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED, anchor, center, scale);
             }
             if (event->type == scui_event_ptr_click) {
                 if (scui_area_point(&dst_clip, &event->ptr_c)) {

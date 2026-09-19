@@ -104,7 +104,10 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
                 .x = icon_w * SCUI_SCALE_COF / image_w,
                 .y = icon_h * SCUI_SCALE_COF / image_h,
             };
-            scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED, scale, scui_opt_pos_c);
+            scui_area_t  wf_img  = scui_image_area(image);
+            scui_point_t anchor = scui_area_center(&draw_clip);
+            scui_point_t center = scui_area_center(&wf_img);
+            scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL, SCUI_COLOR_UNUSED, anchor, center, scale);
         }
         
         if (event->type == scui_event_ptr_click) {

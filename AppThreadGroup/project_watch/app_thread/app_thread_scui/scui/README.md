@@ -51,10 +51,6 @@
     .agent下有别的平台的game
     里面有布局资源和图片，可以用来复刻ui
     
-    list_scale背景透明变色有问题(杂色)
-    scui_widget_draw_image_scale在边缘缩放不好用
-    要调整一下接口
-    
     优先级:低
     cwf数据类型改造，
     之前的数据类型不是很契合，
@@ -84,6 +80,6 @@
     app_sys_timer_reduce加点特殊指定信息，
     查一下app_thread_scui_timer工作异常问题
     刚才发现在app_sys_timer转换的node为NULL异常
-    scroll中触发 -- 目前可能确定是scroll的问题, 修订后继续观察
     
+    scroll中触发 -- 目前可能确定是scroll的问题, 修订后继续观察
     表盘切换偶现死机 -- 目前可能确定user太小, 放大后继续观察

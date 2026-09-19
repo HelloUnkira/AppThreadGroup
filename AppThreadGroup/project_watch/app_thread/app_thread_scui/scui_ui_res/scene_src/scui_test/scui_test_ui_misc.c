@@ -205,7 +205,10 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         scui_widget_draw_color(event->object, &clip, SCUI_COLOR_BLACK);
         
         scui_handle_t image_handle = scui_image_prj_rpt_btn_22_retry_heart;
-        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, SCUI_COLOR_UNUSED, image_scale, scui_opt_pos_c);
+        scui_area_t  tm_img  = scui_image_area(image_handle);
+        scui_point_t anchor = scui_area_center(&clip);
+        scui_point_t center = scui_area_center(&tm_img);
+        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, SCUI_COLOR_UNUSED, anchor, center, image_scale);
         #endif
         
         #if 1

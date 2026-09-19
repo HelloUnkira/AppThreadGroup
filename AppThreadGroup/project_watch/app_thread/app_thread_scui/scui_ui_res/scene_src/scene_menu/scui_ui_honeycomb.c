@@ -363,8 +363,12 @@ void scui_ui_scene_honeycomb_custom_event_proc(scui_event_t *event)
                 .x = os * SCUI_SCALE_COF / scui_image_w(image),
                 .y = os * SCUI_SCALE_COF / scui_image_h(image),
             };
+            scui_area_t  area_i  = scui_image_area(image);
+            scui_area_t  area_w  = draw_clip;
+            scui_point_t anchor = scui_area_center(&area_w);
+            scui_point_t center = scui_area_center(&area_i);
             scui_widget_draw_image_scale(event->object, &draw_clip, image, NULL,
-                SCUI_COLOR_UNUSED, scale, scui_opt_pos_c);
+                SCUI_COLOR_UNUSED, anchor, center, scale);
         }
         if (!scui_ui_res_local->drawn) {
             scui_ui_res_local->drawn = true;

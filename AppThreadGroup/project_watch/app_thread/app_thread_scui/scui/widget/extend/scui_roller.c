@@ -113,11 +113,17 @@ static void scui_roller_event(scui_event_t *event)
         }
         case scui_roller_type_scale: {
             scui_point_t img_scale = {0};
-            scui_opt_pos_t img_pos = scui_opt_pos_c;
             img_scale.x = 1024 * (scui_multi_t)percent / 100;
             img_scale.y = 1024 * (scui_multi_t)percent / 100;
             scui_handle_t surface_image = scui_widget_surface_image(event->object);
-            scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL, SCUI_COLOR_UNUSED, img_scale, img_pos);
+            
+            scui_area_t  area_i = scui_image_area(surface_image);
+            scui_area_t  area_w = scui_widget_area(event->object);
+            scui_point_t anchor = scui_area_center(&area_w);
+            scui_point_t center = scui_area_center(&area_i);
+            
+            scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL,
+                SCUI_COLOR_UNUSED, anchor, center, img_scale);
             break;
         }
         case scui_roller_type_spin: {

@@ -20,15 +20,18 @@ static void scui_ui_scene_icon_arc_event_proc(scui_event_t *event)
     case scui_event_draw_graph: {
         scui_handle_t img;
         scui_widget_image_get(event->object, &img);
-        if (img == SCUI_HANDLE_INVALID)
-            break;
-        scui_area_t c = scui_widget_area(event->object);
-        scui_point_t s = {
-            .x = c.w * SCUI_SCALE_COF / scui_image_w(img),
-            .y = c.h * SCUI_SCALE_COF / scui_image_h(img),
+        if (img == SCUI_HANDLE_INVALID) break;
+        
+        scui_area_t  area_i = scui_image_area(img);
+        scui_area_t  area_w = scui_widget_area(event->object);
+        scui_point_t anchor = scui_area_center(&area_w);
+        scui_point_t center = scui_area_center(&area_i);
+        scui_point_t  scale = {
+            .x = area_w.w * SCUI_SCALE_COF / scui_image_w(img),
+            .y = area_w.h * SCUI_SCALE_COF / scui_image_h(img),
         };
-        scui_widget_draw_image_scale(event->object, &c, img, NULL,
-            SCUI_COLOR_UNUSED, s, scui_opt_pos_c);
+        scui_widget_draw_image_scale(event->object, NULL, img, NULL,
+            SCUI_COLOR_UNUSED, anchor, center, scale);
         break;
     }
     default:

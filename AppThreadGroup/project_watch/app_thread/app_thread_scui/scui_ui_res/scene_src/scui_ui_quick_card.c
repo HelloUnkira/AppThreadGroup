@@ -88,7 +88,11 @@ static void scui_ui_scene_quick_card_item_event(scui_event_t *event)
         img_scale.y = 1024 * (scui_multi_t)percent / 100;
         
         scui_handle_t surface_image = scui_widget_surface_image(event->object);
-        scui_widget_draw_image_scale(event->object, NULL, surface_image, NULL, SCUI_COLOR_UNUSED, img_scale, img_pos);
+        scui_area_t  qc_area = scui_widget_area(event->object);
+        scui_area_t  qc_img  = scui_image_area(surface_image);
+        scui_point_t anchor = scui_area_center(&qc_area);
+        scui_point_t center = scui_area_center(&qc_img);
+        scui_widget_draw_image_scale(event->object, &qc_area, surface_image, NULL, SCUI_COLOR_UNUSED, anchor, center, img_scale);
         scui_widget_alpha_set(event->object, alpha_raw, true);
         #else
         scui_area_t target = {

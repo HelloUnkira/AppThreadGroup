@@ -498,8 +498,17 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
     scui_widget_t *widget = scui_handle_source_check(handle);
     if (!scui_widget_draw_target(widget, &target)) return;
     
-    scui_handle_t image = draw_dsc->image;
-    scui_area_t  *clip  = draw_dsc->clip;
+    scui_handle_t image  = draw_dsc->image;
+    scui_area_t  *clip   = draw_dsc->clip;
+    scui_point_t  anchor = draw_dsc->anchor;
+    scui_point_t  center = draw_dsc->center;
+    
+    /* anchor同源坐标转换 */
+    if (widget->surface == NULL ||
+        widget->surface != widget->surface_s) {
+        anchor.x += widget->clip.x;
+        anchor.y += widget->clip.y;
+    }
     
     /* step:image<s> */
     scui_area_t   image_clip = scui_image_area(image);
@@ -507,31 +516,6 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
     if (clip != NULL && !scui_area_inter2(&image_clip, clip)) return;
     clip = &image_clip;
     /* step:image<e> */
-    
-    /* step:align<s> */
-    scui_point_t src_center = {0};
-    scui_point_t dst_anchor = {0};
-    
-    if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_dir_hor)) {
-        src_center.x = clip->w / 2;
-        dst_anchor.x = target->x + target->w / 2;
-    } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_l)) {
-        dst_anchor.x = target->x;
-    } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_r)) {
-        src_center.x = clip->w;
-        dst_anchor.x = target->x + target->w;
-    }
-    
-    if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_ver)) {
-        src_center.y = clip->h / 2;
-        dst_anchor.y = target->y + target->h / 2;
-    } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_u)) {
-        dst_anchor.y = target->y;
-    } else if (scui_opt_bits_equal(draw_dsc->pos, scui_opt_pos_d)) {
-        src_center.y = clip->h;
-        dst_anchor.y = target->y + target->h;
-    }
-    /* step:align<e> */
     
     scui_clip_btra(widget->clip_set, node) {
         scui_clip_unit_t *unit = scui_clip_unit(node);
@@ -545,14 +529,13 @@ void scui_widget_draw_ctx_image_scale(scui_handle_t handle, scui_area_t *target,
         if (!scui_frame_buffer_clip_seg(widget->surface,
              &dst_clip, NULL, NULL, &seg_offset)) continue;
         
-        dst_anchor.x -= seg_offset.x;
-        dst_anchor.y -= seg_offset.y;
+        anchor.x -= seg_offset.x;
+        anchor.y -= seg_offset.y;
         #endif
         
-        scui_multi_t angle = 0;
         scui_draw_image_2d(false, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha, draw_dsc->color,
-            draw_dsc->scale, angle, dst_anchor, src_center);
+            draw_dsc->scale, 0, anchor, center);
     }
 }
 
@@ -571,6 +554,13 @@ void scui_widget_draw_ctx_image_rotate(scui_handle_t handle, scui_area_t *target
     scui_area_t  *clip   = draw_dsc->clip;
     scui_point_t  anchor = draw_dsc->anchor;
     scui_point_t  center = draw_dsc->center;
+    
+    /* anchor同源坐标转换 */
+    if (widget->surface == NULL ||
+        widget->surface != widget->surface_s) {
+        anchor.x += widget->clip.x;
+        anchor.y += widget->clip.y;
+    }
     
     /* step:image<s> */
     scui_area_t   image_clip = scui_image_area(image);
@@ -625,6 +615,13 @@ void scui_widget_draw_ctx_image_2d(scui_handle_t handle, scui_area_t *target, sc
     scui_area_t  *clip   = draw_dsc->clip;
     scui_point_t  anchor = draw_dsc->anchor;
     scui_point_t  center = draw_dsc->center;
+    
+    /* anchor同源坐标转换 */
+    if (widget->surface == NULL ||
+        widget->surface != widget->surface_s) {
+        anchor.x += widget->clip.x;
+        anchor.y += widget->clip.y;
+    }
     
     /* step:image<s> */
     scui_area_t   image_clip = scui_image_area(image);

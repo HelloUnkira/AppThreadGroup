@@ -545,9 +545,12 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
                 .w = scui_ui_res_local->photon_size,
                 .h = scui_ui_res_local->photon_size,
             };
+            scui_area_t  tg_img  = scui_image_area(image_star);
+            scui_point_t anchor = scui_area_center(&target);
+            scui_point_t center = scui_area_center(&tg_img);
             scui_widget_draw_image_scale(event->object, &target, image_star, NULL,
                 SCUI_COLOR_MAKE32(true, 0xFF000000, 0xFFFFFFFF),
-                scale, scui_opt_pos_c);
+                anchor, center, scale);
         }
         break;
     }

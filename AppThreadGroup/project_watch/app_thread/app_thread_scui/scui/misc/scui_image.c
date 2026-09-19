@@ -262,21 +262,19 @@ scui_coord_t scui_image_list_remap(scui_handle_t *list, scui_coord_t num, scui_h
     SCUI_ASSERT(map  != NULL);
     SCUI_ASSERT(str  != NULL);
     
+    scui_coord_t cnt = 0;
     /* 约定字符集(0~9-+%/:*) */
+    /* 查约定索引(缺位映射到'-') */
     static const char set[] = "0123456789-+%/:*";
-    
-    scui_coord_t count = 0;
-    while (str[count] != '\0' && count < num) {
-        /* 查约定索引(缺位映射到'-') */
-        scui_coord_t idx = 10;
+    for (scui_coord_t idx = 10; str[cnt] != '\0' && cnt < num; idx = 10) {
         for (scui_coord_t i = 0; i < 16; i++) {
-            if (set[i] == str[count]) {
+            if (set[i] == str[cnt]) {
                 idx = i;
                 break;
             }
         }
-        list[count] = map[idx];
-        count++;
+        list[cnt] = map[idx];
+        cnt++;
     }
-    return count;
+    return cnt;
 }

@@ -146,14 +146,15 @@ do {                                                                            
 } while (0)
 
 #define scui_widget_draw_image_scale(handle_v, target_v,                        \
-    image_v, clip_v, color_v, scale_v, pos_v)                                   \
+    image_v, clip_v, color_v, anchor_v, center_v, scale_v)                      \
 do {                                                                            \
     scui_widget_draw_dsc_t scui_wdc_i = {                                       \
-        .image = image_v,                                                       \
-        .clip  = clip_v,                                                        \
-        .color = color_v,                                                       \
-        .scale = scale_v,                                                       \
-        .pos   = pos_v,                                                         \
+        .image  = image_v,                                                      \
+        .clip   = clip_v,                                                       \
+        .color  = color_v,                                                      \
+        .anchor = anchor_v,                                                     \
+        .center = center_v,                                                     \
+        .scale  = scale_v,                                                      \
     };                                                                          \
     scui_widget_draw_ctx_image_scale(handle_v, target_v, &scui_wdc_i);          \
 } while (0)
