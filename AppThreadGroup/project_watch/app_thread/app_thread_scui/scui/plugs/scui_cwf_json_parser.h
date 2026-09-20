@@ -36,6 +36,8 @@ typedef struct {
     uint32_t       list_num;
     uint8_t       *list_type;
     void         **list_src;
+    /* 保活 */
+    scui_multi_t   refr_tick;            /* 距上次整屏刷新的累计ms */
 } scui_cwf_json_parser_t;
 
 /*@brief 销毁cwf

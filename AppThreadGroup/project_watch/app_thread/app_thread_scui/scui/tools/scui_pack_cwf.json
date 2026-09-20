@@ -1,26 +1,22 @@
 {
-    "annotation": "简单的cloud watch face双边json布局协议",
-    "annotation": "布局协议较为固定主要支持大部分较为简单云表盘显示元素使用",
-    "annotation": "解析器会从bin文件中解析出json布局以及图片资源等相关信息",
-    "annotation": "而文字相关的内容则以设备实际情况去支持显示",
+    "anno": "scui cloud watch face 双边json布局协议",
+    "anno": "本文件是协议约束文件, 工具与固件双方依此协议进行更新与同步",
+    "anno": "解析器会从bin文件中解析出json布局以及其他各个类型资源等相关信息",
     
-    "annotation": "注意:在json布局文件中",
-    "annotation": "无论你写多少annotation都不会被打包到bin中",
-    "annotation": "所有的注释相关的信息都写成此关键字标记",
+    "anno": "每一个cwf在编写时都要指定自己的版本号,固件解析器和cwf资源对应",
+    "anno": "所有版本都来源于本协议,脚本和固件都依此协议同步更新版本号",
+    "version": [0, 0, 1, 17],
     
-    "annotation": "每一个cwf在编写时都要指定自己的版本号,固件解析器和cwf资源对应",
-    "annotation": "所有版本都来源于本协议,脚本和固件都依此协议同步更新版本号",
-    "version":    [0, 0, 1, 17],
+    "anno": "每一个cwf都有一个自己的id号,由业务协议规定即可,不重复",
+    "anno": "这个主要用于下载和替换cwf时使用,保证本地的cwf唯一性",
+    "id": "固定前缀 + 编号, 例: SCUI_CWF_XT0001",
     
-    "annotation": "每一个cwf都有一个自己的id号,由业务协议规定即可,不重复",
-    "annotation": "这个主要用于下载和替换cwf时使用,保证本地的cwf唯一性",
-    "id"        : "一般是一个固定前缀加一个编号组成: 如CWF_XT0001",
+    "anno": "每一个cwf都有一个自己的layout, 每一个layout都对应一个完整的显示动作",
+    "anno": "后面的显示会覆盖前面的显示,是以显示优先级越高越往后排列",
+    "anno": "每一个显示类型都是列表中一个小集合,layout至少有一个集合",
+    "anno": "被列举的字段不可省略,至少填一个默认值",
     
-    "annotation": "每一个cwf都有一个自己的layout, 每一个layout都对应一个完整的显示动作",
-    "annotation": "后面的显示会覆盖前面的显示,是以显示优先级越高越往后排列",
-    "annotation": "每一个显示类型都是列表中的一个小集合,layout至少有一个集合",
-    "annotation": "被列举的字段不可省略,至少填一个默认值",
-    
+    "anno": "像素格式",
     "scui_cwf_json_pixel_cf": [
         "scui_cwf_json_pixel_cf_none",
         "scui_cwf_json_pixel_cf_alpha1",
@@ -38,6 +34,7 @@
         "scui_cwf_json_pixel_cf_num"
     ],
     
+    "anno": "图片格式",
     "scui_cwf_json_image_cf": [
         "scui_cwf_json_image_cf_bmp",
         "scui_cwf_json_image_cf_idx",
@@ -51,192 +48,142 @@
         "scui_cwf_json_image_cf_num"
     ],
     
+    "anno": "渲染类别",
+    "anno": "img:(1)单图",
+    "anno": "map:(x+n)映射图集, x按数据类型固定数量, n不定数量",
+    "anno": "map:例: 0~100的电量值 -> 充电(x==1) + 0~n的进度组合",
+    "anno": "map:取值 = map(值, 值域min, 值域max, x, x+n-1); 值域不填用 source 天然值域",
+    "anno": "seq:自然数字(不补位)逐位映射到图集并平铺, 盒宽由nums撑开, 内容盒内右对齐",
+    "anno": "anim:(n)帧动画. 让图片跟随帧动画循环切换, 之后循环从头开始",
+    "anno": "font:(0~1)字库文字, 不带资源用系统字库",
+    "anno": "group:(n*x)符号图组, n固定, x不定(>=1)",
+    "anno": "group:例:APM: (n2,x1)[AM,PM]",
+    "anno": "group:例:APM: (n2,x2)[AM,PM,上午,下午]",
     "scui_cwf_json_type": [
-        {"key": "scui_cwf_json_type_none",                  "annotation": ""},
-        
-        {"key": "scui_cwf_json_type_img_s",                 "annotation": ""},
-        {
-            "key": "scui_cwf_json_type_img_preview",
-            "annotation": "预览:不显示"
-        },
-        {
-            "key": "scui_cwf_json_type_img_simple",
-            "annotation": "(1)单图:只显示",
-            "annotation": "x:坐标;y:坐标"
-        },
-        {
-            "key": "scui_cwf_json_type_img_watch",
-            "annotation": "(3)指针:表盘指针(时分秒)",
-            "annotation": "hx:坐标;hy:坐标;h_cy:图心y",
-            "annotation": "mx:坐标;my:坐标;m_cy:图心y",
-            "annotation": "sx:坐标;sy:坐标;s_cy:图心y"
-        },
-        
-        {
-            "key": "scui_cwf_json_type_img_day",
-            "annotation": "(10)天",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2",
-            "annotation": "span:间隙,默认0"
-        },
-        {
-            "key": "scui_cwf_json_type_img_hour",
-            "annotation": "(10)时间:时",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2",
-            "annotation": "span:间隙,默认0"
-        },
-        {
-            "key": "scui_cwf_json_type_img_minute",
-            "annotation": "(10)时间:分",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2",
-            "annotation": "span:间隙,默认0"
-        },
-        {
-            "key": "scui_cwf_json_type_img_second",
-            "annotation": "(10)时间:秒",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2",
-            "annotation": "span:间隙,默认0"
-        },
-        
-        {
-            "key": "scui_cwf_json_type_img_month",
-            "annotation": "(12)月份",
-            "annotation": "x:坐标;y:坐标"
-        },
-        {
-            "key": "scui_cwf_json_type_img_week",
-            "annotation": "(7)星期:日一二三四五六",
-            "annotation": "x:坐标;y:坐标"
-        },
-        {
-            "key": "scui_cwf_json_type_img_ampm",
-            "annotation": "(2)上午下午",
-            "annotation": "x:坐标;y:坐标"
-        },
-        
-        {
-            "key": "scui_cwf_json_type_img_hr_prog",
-            "annotation": "(n)进度条,系统映射",
-            "annotation": "x:坐标;y:坐标"
-        },
-        {
-            "key": "scui_cwf_json_type_img_hr",
-            "annotation": "(10)",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2百3",
-            "annotation": "span:间隙,默认0"
-        },
-        
-        {
-            "key": "scui_cwf_json_type_img_kcal_prog",
-            "annotation": "(n)进度条,系统映射",
-            "annotation": "x:坐标;y:坐标"
-        },
-        {
-            "key": "scui_cwf_json_type_img_kcal",
-            "annotation": "(10)",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2百3千4万5",
-            "annotation": "span:间隙,默认0"
-        },
-        
-        {
-            "key": "scui_cwf_json_type_img_step_prog",
-            "annotation": "(n)进度条,系统映射",
-            "annotation": "x:坐标;y:坐标"
-        },
-        {
-            "key": "scui_cwf_json_type_img_step",
-            "annotation": "(10)",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2百3千4万5",
-            "annotation": "span:间隙,默认0"
-        },
-        
-        {
-            "key": "scui_cwf_json_type_img_batt_prog",
-            "annotation": "(n)进度条,系统映射",
-            "annotation": "x:坐标;y:坐标"
-        },
-        {
-            "key": "scui_cwf_json_type_img_batt",
-            "annotation": "(10)",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2百3",
-            "annotation": "span:间隙,默认0"
-        },
-        
-        {
-            "key": "scui_cwf_json_type_img_dist_prog",
-            "annotation": "(n)进度条,系统映射",
-            "annotation": "x:坐标;y:坐标"
-        },
-        {
-            "key": "scui_cwf_json_type_img_dist",
-            "annotation": "(10)",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2百3千4万5",
-            "annotation": "span:间隙,默认0"
-        },
-        
-        {
-            "key": "scui_cwf_json_type_img_temp",
-            "annotation": "(10)",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2百3",
-            "annotation": "span:间隙,默认0"
-        },
-        {
-            "key": "scui_cwf_json_type_img_temp_unit",
-            "annotation": "(2)",
-            "annotation": "x:坐标;y:坐标"
-        },
-        
-        {
-            "key": "scui_cwf_json_type_img_anim",
-            "annotation": "(n)",
-            "annotation": "x:坐标;y:坐标"
-        },
-        {"key": "scui_cwf_json_type_img_e",                 "annotation": ""},
-        
-        
-        
-        {"key": "scui_cwf_json_type_txt_s",                 "annotation": ""},
-        {"key": "scui_cwf_json_type_txt_week",              "annotation": ""},
-        {"key": "scui_cwf_json_type_txt_ampm",              "annotation": ""},
-        {"key": "scui_cwf_json_type_txt_day",               "annotation": ""},
-        {"key": "scui_cwf_json_type_txt_mon",               "annotation": ""},
-        {"key": "scui_cwf_json_type_txt_digit_mon",         "annotation": ""},
-        {"key": "scui_cwf_json_type_txt_digit_mon_day",     "annotation": ""},
-        {"key": "scui_cwf_json_type_txt_day_digit_mon",     "annotation": ""},
-        {"key": "scui_cwf_json_type_txt_bat",               "annotation": ""},
-        {"key": "scui_cwf_json_type_txt_bat_pct",           "annotation": ""},
-        {"key": "scui_cwf_json_type_txt_e",                 "annotation": ""},
-        
-        
-        
-        {"key": "scui_cwf_json_type_num",                   "annotation": ""}
+        "scui_cwf_json_type_none",
+        "scui_cwf_json_type_img",
+        "scui_cwf_json_type_map",
+        "scui_cwf_json_type_seq",
+        "scui_cwf_json_type_anim",
+        "scui_cwf_json_type_font",
+        "scui_cwf_json_type_group",
+        "scui_cwf_json_type_num"
     ],
     
-    "layout" : [
-        {
-            "type"      : "cwf类型:scui_cwf_json_type_img_字段",
-            "image_src" : ["这里填图片的名字(只要前缀),字符串逗号隔开"]
-        },
-        {
-            "type"      : "cwf类型:scui_cwf_json_type_txt_字段",
-            
-            "x"         : "原点坐标(也就是左上角坐标)",
-            "y"         : "原点坐标(也就是左上角坐标)",
-            "w"         : "显示信息宽度(必须填非0值)",
-            "h"         : "显示信息高度(必须填非0值)",
-            
-            "align"     : "默认左对齐(0);居中对齐(1);右对齐(2);",
-            "color"     : "通用色字符串,固定32位16进制字符串,如:0xFFFFFFFF",
-            "size"      : "文字参考大小,设备给出支持的最临近文字大小"
-        }
-    ]
+    "anno": "惰性协议序列",
+    "anno": "主要使用者:scui_cwf_json_type_group:x",
+    "scui_cwf_json_lang": [
+        "scui_cwf_json_lang_en",
+        "scui_cwf_json_lang_zh",
+        "scui_cwf_json_lang_de",
+        "scui_cwf_json_lang_fra",
+        "scui_cwf_json_lang_nl",
+        "scui_cwf_json_lang_pt",
+        "scui_cwf_json_lang_jp",
+        "scui_cwf_json_lang_ar",
+        "scui_cwf_json_lang_fa",
+        "scui_cwf_json_lang_num"
+    ],
+    
+    "anno": "数据源",
+    "scui_cwf_json_source": [
+        {"key": "scui_cwf_json_source_none",        "n":  0, "anno": "无数据源"},
+        {"key": "scui_cwf_json_source_year",        "n": 10, "anno": "年(四位数字)"},
+        {"key": "scui_cwf_json_source_month",       "n": 10, "anno": "月(1-12)"},
+        {"key": "scui_cwf_json_source_day",         "n": 10, "anno": "日(1-31)"},
+        {"key": "scui_cwf_json_source_hour",        "n": 10, "anno": "时(0-23)"},
+        {"key": "scui_cwf_json_source_minute",      "n": 10, "anno": "分(0-59)"},
+        {"key": "scui_cwf_json_source_second",      "n": 10, "anno": "秒(0-59)"},
+        {"key": "scui_cwf_json_source_week",        "n":  7, "anno": "星期(0-6:日一二三四五六)"},
+        {"key": "scui_cwf_json_source_ampm",        "n":  2, "anno": "上下午(0=AM,1=PM); 24小时制隐藏"},
+        
+        {"key": "scui_cwf_json_source_batt",        "n": 10, "anno": "电量(0~100)"},
+        {"key": "scui_cwf_json_source_hr",          "n": 10, "anno": "心率(整数数字)"},
+        {"key": "scui_cwf_json_source_spo2",        "n": 10, "anno": "血氧(整数数字)"},
+        {"key": "scui_cwf_json_source_stress",      "n": 10, "anno": "压力(整数数字)"},
+        {"key": "scui_cwf_json_source_step",        "n": 10, "anno": "步数(整数数字)"},
+        {"key": "scui_cwf_json_source_dist",        "n": 10, "anno": "距离(小数数字)"},
+        {"key": "scui_cwf_json_source_kcal",        "n": 10, "anno": "卡路里(整数数字)"},
+        {"key": "scui_cwf_json_source_temp",        "n": 10, "anno": "温度(整数数字)"},
+        {"key": "scui_cwf_json_source_dist_unit",   "n":  2, "anno": "距离单位(0=公里,1=英里)"},
+        {"key": "scui_cwf_json_source_temp_unit",   "n":  2, "anno": "温度单位(0=摄氏,1=华氏)"},
+        {"key": "scui_cwf_json_source_anim",        "n":  0, "anno": "自增帧号(type=anim)"},
+        {"key": "scui_cwf_json_source_num",         "n":  0, "anno": ""}
+    ],
+    
+    
+    "anno": "布局",
+    "scui_cwf_json_align": [
+        {"key": "scui_cwf_json_align_itl",              "anno": "in top left"},
+        {"key": "scui_cwf_json_align_itm",              "anno": "in top middle"},
+        {"key": "scui_cwf_json_align_itr",              "anno": "in top right"},
+        {"key": "scui_cwf_json_align_ibl",              "anno": "in bottom left"},
+        {"key": "scui_cwf_json_align_ibm",              "anno": "in bottom middle"},
+        {"key": "scui_cwf_json_align_ibr",              "anno": "in bottom right"},
+        {"key": "scui_cwf_json_align_ilm",              "anno": "in left middle"},
+        {"key": "scui_cwf_json_align_irm",              "anno": "in right middle"},
+        {"key": "scui_cwf_json_align_icc",              "anno": "in center center"},
+
+        {"key": "scui_cwf_json_align_otl",              "anno": "out top left"},
+        {"key": "scui_cwf_json_align_otm",              "anno": "out top middle"},
+        {"key": "scui_cwf_json_align_otr",              "anno": "out top right"},
+        {"key": "scui_cwf_json_align_obl",              "anno": "out bottom left"},
+        {"key": "scui_cwf_json_align_obm",              "anno": "out bottom middle"},
+        {"key": "scui_cwf_json_align_obr",              "anno": "out bottom right"},
+
+        {"key": "scui_cwf_json_align_olt",              "anno": "out left top"},
+        {"key": "scui_cwf_json_align_olm",              "anno": "out left middle"},
+        {"key": "scui_cwf_json_align_olb",              "anno": "out left bottom"},
+        {"key": "scui_cwf_json_align_ort",              "anno": "out right top"},
+        {"key": "scui_cwf_json_align_orm",              "anno": "out right middle"},
+        {"key": "scui_cwf_json_align_orb",              "anno": "out right bottom"},
+        {"key": "scui_cwf_json_align_num",              "anno": ""}
+    ],
+    
+    "anno": "字体",
+    "scui_cwf_json_font": [
+        {"key": "scui_cwf_json_font_ttf",               "anno": "ttf文件"},
+        {"key": "scui_cwf_json_font_fixed",             "anno": "bin文件"},
+        {"key": "scui_cwf_json_font_num",               "anno": ""}
+    ],
+    
+    "scui_cwf_json_key": [
+        "scui_cwf_json_key_one",
+        "scui_cwf_json_key_layout",
+        "scui_cwf_json_key_preview",
+        "scui_cwf_json_key_watch",
+        "scui_cwf_json_key_num"
+    ],
+    
+    
+    
+    "type":      "scui_cwf_json_type",
+    "source":    "scui_cwf_json_source",
+    "font":      "scui_cwf_json_font",
+    "key":       "scui_cwf_json_key",
+    
+    "area_x":   "坐标",
+    "area_y":   "坐标",
+    "area_w":   "为0, align以x线对齐",
+    "area_h":   "为0, align以y线对齐",
+    
+    "img_res":   "图集",
+    "font_res":  "字库",
+    "size":      "字号, ttf用/bin固定",
+    
+    "align":     "scui_cwf_json_align",
+    "child":     "key:layout打包后面几个元素",
+    "align_ofs": "对齐偏移目标: (-1=上一元素, -2=上上个元素); 找不到或找错则退回父控件",
+    
+    "anima_ms":  "type:anim帧动画间隔(ms)",
+    "nums":      "seq场宽(格数,0=贴内容); 内容在盒内右对齐",
+    "span":      "像素间隙: seq的数字间距/layout的子元素间隙/out对齐的外扩间隙",
+    "color":     "通用色字符串, 固定32位16进制字符串, 如: 0xFFFFFFFF",
+    
+    "anno": "seq 字符集约束",
+    "anno": "seq 图集固定 16 张, 下标即字符在下列序列中的位置",
+    "anno": "前11位是不会缺的,剩下的缺位用-代替即可",
+    "scui_cwf_json_seq_set": "0123456789-+%/:*",
+    "anno": "seq 逐位留白一律由盒内右对齐承担, 不再用前导0占位",
+    "anno": ""
 }

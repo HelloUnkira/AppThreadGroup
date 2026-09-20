@@ -115,13 +115,17 @@ uintptr_t scui_image_size(scui_image_t *image);
  */
 scui_coord_t scui_image_list_calc(scui_handle_t *list, scui_coord_t num, bool way);
 
-/*@brief 图像映射[map:16][0~9-+%/:*](缺位映射到'-')
- *@param list 输出句柄表
- *@param num  输出表长度
- *@param map  映射表(16)
- *@param str  字符串
+/*@brief 图像映射(字符集查表, 缺位映射到'-')
+ *@param list    输出句柄表
+ *@param num     输出表长度
+ *@param map     映射表
+ *@param map_num 映射表长度
+ *@param set     字符集
+ *@param set_num 字符集长度
+ *@param str     字符串
  *@retval 填充数量
  */
-scui_coord_t scui_image_list_remap(scui_handle_t *list, scui_coord_t num, scui_handle_t map[16], char *str);
+scui_coord_t scui_image_list_remap(scui_handle_t *list, scui_coord_t num,
+    scui_handle_t *map, scui_coord_t map_num, const char *set, scui_coord_t set_num, char *str);
 
 #endif

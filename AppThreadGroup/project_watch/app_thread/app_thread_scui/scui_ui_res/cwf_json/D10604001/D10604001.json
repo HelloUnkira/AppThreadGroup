@@ -2,164 +2,201 @@
     "cwf_id": "D10604001",
     "layout": [
         {
-            "type":     "scui_cwf_json_type_img_preview",
-            "image_src": ["cwf_preview_01_1jpg"]
+            "type":    "scui_cwf_json_type_img",
+            "source":  "scui_cwf_json_source_none",
+            "key":     "scui_cwf_json_key_preview",
+            "area_x":  0,
+            "area_y":  0,
+            "align":   "scui_cwf_json_align_itl",
+            "img_res": ["cwf_preview_01_1"]
         },
         {
-            "type":     "scui_cwf_json_type_img_simple",
-            "x":        0,
-            "y":        0,
-            "image_src": ["cwf_bg_01_00jpg"]
+            "type":    "scui_cwf_json_type_img",
+            "source":  "scui_cwf_json_source_none",
+            "key":     "scui_cwf_json_key_one",
+            "area_x":  0,
+            "area_y":  0,
+            "align":   "scui_cwf_json_align_itl",
+            "img_res": ["cwf_bg_01_00"]
         },
-        
         {
-            "type":     "scui_cwf_json_type_img_anim",
-            "x":        66,
-            "y":        51,
-            "image_src": [
-                "cwf_gif_01_00jpg",
-                "cwf_gif_02_01jpg",
-                "cwf_gif_03_02jpg",
-                "cwf_gif_04_03jpg"
-            ]
-        },
-        
-        {
-            "type":     "scui_cwf_json_type_img_simple",
-            "x":        242,
-            "y":        339,
-            "image_src": ["cwf_char_unit_batt_01_00png"]
-        },
-        
-        {
-            "type":     "scui_cwf_json_type_img_batt_prog",
-            "x":        188,
-            "y":        292,
-            "image_src": [
-                "cwf_icon_batt_01_00jpg",
-                "cwf_icon_batt_02_01jpg",
-                "cwf_icon_batt_03_02jpg",
-                "cwf_icon_batt_04_03jpg",
-                "cwf_icon_batt_05_04jpg",
-                "cwf_icon_batt_06_05jpg",
-                "cwf_icon_batt_07_06jpg",
-                "cwf_icon_batt_08_07jpg",
-                "cwf_icon_batt_09_08jpg",
-                "cwf_icon_batt_10_09jpg",
-                "cwf_icon_batt_11_10jpg"
-            ]
-        },
-        
-        {
-            "type":     "scui_cwf_json_type_img_kcal_prog",
-            "x":        82,
-            "y":        187,
-            "image_src": [
-                "cwf_icon_kcal_01_00jpg",
-                "cwf_icon_kcal_02_01jpg",
-                "cwf_icon_kcal_03_02jpg",
-                "cwf_icon_kcal_04_03jpg",
-                "cwf_icon_kcal_05_04jpg",
-                "cwf_icon_kcal_06_05jpg",
-                "cwf_icon_kcal_07_06jpg",
-                "cwf_icon_kcal_08_07jpg",
-                "cwf_icon_kcal_09_08jpg",
-                "cwf_icon_kcal_10_09jpg",
-                "cwf_icon_kcal_11_10jpg"
+            "type":    "scui_cwf_json_type_anim",
+            "source":  "scui_cwf_json_source_anim",
+            "key":     "scui_cwf_json_key_one",
+            "area_x":  66,
+            "area_y":  51,
+            "align":   "scui_cwf_json_align_itl",
+            "img_res": [
+                "cwf_gif_01_00",
+                "cwf_gif_02_01",
+                "cwf_gif_03_02",
+                "cwf_gif_04_03"
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img_step_prog",
-            "x":        292,
-            "y":        187,
-            "image_src": [
-                "cwf_icon_step_01_00jpg",
-                "cwf_icon_step_02_01jpg",
-                "cwf_icon_step_03_02jpg",
-                "cwf_icon_step_04_03jpg",
-                "cwf_icon_step_05_04jpg",
-                "cwf_icon_step_06_05jpg",
-                "cwf_icon_step_07_06jpg",
-                "cwf_icon_step_08_07jpg",
-                "cwf_icon_step_09_08jpg",
-                "cwf_icon_step_10_09jpg",
-                "cwf_icon_step_11_10jpg"
-            ]
+            "type":    "scui_cwf_json_type_img",
+            "source":  "scui_cwf_json_source_none",
+            "key":     "scui_cwf_json_key_one",
+            "area_x":  242,
+            "area_y":  339,
+            "align":   "scui_cwf_json_align_itl",
+            "img_res": ["cwf_char_unit_batt_01_00"]
         },
-        
         {
-            "type":     "scui_cwf_json_type_img_kcal",
-            "x":        104,
-            "y":        234,
-            "bits":     0,
-            "span":     0,
-            "image_src": [
-                "cwf_num_kcal_step_batt_04_03png",
-                "cwf_num_kcal_step_batt_05_04png",
-                "cwf_num_kcal_step_batt_06_05png",
-                "cwf_num_kcal_step_batt_07_06png",
-                "cwf_num_kcal_step_batt_08_07png",
-                "cwf_num_kcal_step_batt_09_08png",
-                "cwf_num_kcal_step_batt_10_09png",
-                "cwf_num_kcal_step_batt_11_10png",
-                "cwf_num_kcal_step_batt_12_11png",
-                "cwf_num_kcal_step_batt_13_12png"
+            "type":    "scui_cwf_json_type_map",
+            "source":  "scui_cwf_json_source_batt",
+            "key":     "scui_cwf_json_key_one",
+            "area_x":  188,
+            "area_y":  292,
+            "align":   "scui_cwf_json_align_itl",
+            "img_res": [
+                "cwf_icon_batt_01_00",
+                "cwf_icon_batt_02_01",
+                "cwf_icon_batt_03_02",
+                "cwf_icon_batt_04_03",
+                "cwf_icon_batt_05_04",
+                "cwf_icon_batt_06_05",
+                "cwf_icon_batt_07_06",
+                "cwf_icon_batt_08_07",
+                "cwf_icon_batt_09_08",
+                "cwf_icon_batt_10_09",
+                "cwf_icon_batt_11_10"
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img_step",
-            "x":        308,
-            "y":        234,
-            "bits":     0,
-            "span":     0,
-            "image_src": [
-                "cwf_num_kcal_step_batt_04_03png",
-                "cwf_num_kcal_step_batt_05_04png",
-                "cwf_num_kcal_step_batt_06_05png",
-                "cwf_num_kcal_step_batt_07_06png",
-                "cwf_num_kcal_step_batt_08_07png",
-                "cwf_num_kcal_step_batt_09_08png",
-                "cwf_num_kcal_step_batt_10_09png",
-                "cwf_num_kcal_step_batt_11_10png",
-                "cwf_num_kcal_step_batt_12_11png",
-                "cwf_num_kcal_step_batt_13_12png"
+            "type":    "scui_cwf_json_type_map",
+            "source":  "scui_cwf_json_source_kcal",
+            "key":     "scui_cwf_json_key_one",
+            "area_x":  82,
+            "area_y":  187,
+            "align":   "scui_cwf_json_align_itl",
+            "img_res": [
+                "cwf_icon_kcal_01_00",
+                "cwf_icon_kcal_02_01",
+                "cwf_icon_kcal_03_02",
+                "cwf_icon_kcal_04_03",
+                "cwf_icon_kcal_05_04",
+                "cwf_icon_kcal_06_05",
+                "cwf_icon_kcal_07_06",
+                "cwf_icon_kcal_08_07",
+                "cwf_icon_kcal_09_08",
+                "cwf_icon_kcal_10_09",
+                "cwf_icon_kcal_11_10"
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img_batt",
-            "x":        206,
-            "y":        339,
-            "bits":     0,
-            "span":     0,
-            "image_src": [
-                "cwf_num_kcal_step_batt_04_03png",
-                "cwf_num_kcal_step_batt_05_04png",
-                "cwf_num_kcal_step_batt_06_05png",
-                "cwf_num_kcal_step_batt_07_06png",
-                "cwf_num_kcal_step_batt_08_07png",
-                "cwf_num_kcal_step_batt_09_08png",
-                "cwf_num_kcal_step_batt_10_09png",
-                "cwf_num_kcal_step_batt_11_10png",
-                "cwf_num_kcal_step_batt_12_11png",
-                "cwf_num_kcal_step_batt_13_12png"
+            "type":    "scui_cwf_json_type_map",
+            "source":  "scui_cwf_json_source_step",
+            "key":     "scui_cwf_json_key_one",
+            "area_x":  292,
+            "area_y":  187,
+            "align":   "scui_cwf_json_align_itl",
+            "img_res": [
+                "cwf_icon_step_01_00",
+                "cwf_icon_step_02_01",
+                "cwf_icon_step_03_02",
+                "cwf_icon_step_04_03",
+                "cwf_icon_step_05_04",
+                "cwf_icon_step_06_05",
+                "cwf_icon_step_07_06",
+                "cwf_icon_step_08_07",
+                "cwf_icon_step_09_08",
+                "cwf_icon_step_10_09",
+                "cwf_icon_step_11_10"
             ]
         },
-        
         {
-            "type":     "scui_cwf_json_type_img_watch",
-            "hx":        233,
-            "hy":        233,
-            "h_cy":      130,
-            "mx":        233,
-            "my":        233,
-            "m_cy":      196,
-            "sx":        233,
-            "sy":        233,
-            "s_cy":      196,
-            "image_src": [
-                "cwf_h_01_00png",
-                "cwf_m_01_00png",
-                "cwf_s_01_00png"
+            "type":    "scui_cwf_json_type_seq",
+            "source":  "scui_cwf_json_source_kcal",
+            "key":     "scui_cwf_json_key_one",
+            "area_x":  104,
+            "area_y":  234,
+            "area_w":  48,
+            "area_h":  19,
+            "align":   "scui_cwf_json_align_itl",
+            "nums":    4,
+            "span":    0,
+            "img_res": [
+                "cwf_num_kcal_step_batt_04_03",
+                "cwf_num_kcal_step_batt_05_04",
+                "cwf_num_kcal_step_batt_06_05",
+                "cwf_num_kcal_step_batt_07_06",
+                "cwf_num_kcal_step_batt_08_07",
+                "cwf_num_kcal_step_batt_09_08",
+                "cwf_num_kcal_step_batt_10_09",
+                "cwf_num_kcal_step_batt_11_10",
+                "cwf_num_kcal_step_batt_12_11",
+                "cwf_num_kcal_step_batt_13_12"
+            ]
+        },
+        {
+            "type":    "scui_cwf_json_type_seq",
+            "source":  "scui_cwf_json_source_step",
+            "key":     "scui_cwf_json_key_one",
+            "area_x":  308,
+            "area_y":  234,
+            "area_w":  60,
+            "area_h":  19,
+            "align":   "scui_cwf_json_align_itl",
+            "nums":    5,
+            "span":    0,
+            "img_res": [
+                "cwf_num_kcal_step_batt_04_03",
+                "cwf_num_kcal_step_batt_05_04",
+                "cwf_num_kcal_step_batt_06_05",
+                "cwf_num_kcal_step_batt_07_06",
+                "cwf_num_kcal_step_batt_08_07",
+                "cwf_num_kcal_step_batt_09_08",
+                "cwf_num_kcal_step_batt_10_09",
+                "cwf_num_kcal_step_batt_11_10",
+                "cwf_num_kcal_step_batt_12_11",
+                "cwf_num_kcal_step_batt_13_12"
+            ]
+        },
+        {
+            "type":    "scui_cwf_json_type_seq",
+            "source":  "scui_cwf_json_source_batt",
+            "key":     "scui_cwf_json_key_one",
+            "area_x":  206,
+            "area_y":  339,
+            "area_w":  36,
+            "area_h":  19,
+            "align":   "scui_cwf_json_align_itl",
+            "nums":    3,
+            "span":    0,
+            "img_res": [
+                "cwf_num_kcal_step_batt_04_03",
+                "cwf_num_kcal_step_batt_05_04",
+                "cwf_num_kcal_step_batt_06_05",
+                "cwf_num_kcal_step_batt_07_06",
+                "cwf_num_kcal_step_batt_08_07",
+                "cwf_num_kcal_step_batt_09_08",
+                "cwf_num_kcal_step_batt_10_09",
+                "cwf_num_kcal_step_batt_11_10",
+                "cwf_num_kcal_step_batt_12_11",
+                "cwf_num_kcal_step_batt_13_12"
+            ]
+        },
+        {
+            "type":    "scui_cwf_json_type_group",
+            "source":  "scui_cwf_json_source_none",
+            "key":     "scui_cwf_json_key_watch",
+            "area_x":  0,
+            "area_y":  0,
+            "align":   "scui_cwf_json_align_itl",
+            "hx":      233,
+            "hy":      233,
+            "h_cy":    130,
+            "mx":      233,
+            "my":      233,
+            "m_cy":    196,
+            "sx":      233,
+            "sy":      233,
+            "s_cy":    196,
+            "img_res": [
+                "cwf_h_01_00",
+                "cwf_m_01_00",
+                "cwf_s_01_00"
             ]
         }
     ]

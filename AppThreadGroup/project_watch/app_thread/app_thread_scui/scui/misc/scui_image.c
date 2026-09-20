@@ -249,32 +249,44 @@ scui_coord_t scui_image_list_calc(scui_handle_t *list, scui_coord_t num, bool wa
     return distance;
 }
 
-/*@brief 图像映射[map:16][0~9-+%/:*](缺位映射到'-')
- *@param list 输出句柄表
- *@param num  输出表长度
- *@param map  映射表(16)
- *@param str  字符串
+/*@brief 图像映射(字符集查表, 缺位映射到'-')
+ *@param list    输出句柄表
+ *@param num     输出表长度
+ *@param map     映射表
+ *@param map_num 映射表长度
+ *@param set     字符集
+ *@param set_num 字符集长度
+ *@param str     字符串
  *@retval 填充数量
  */
-scui_coord_t scui_image_list_remap(scui_handle_t *list, scui_coord_t num, scui_handle_t map[16], char *str)
+scui_coord_t scui_image_list_remap(scui_handle_t *list, scui_coord_t num,
+    scui_handle_t *map, scui_coord_t map_num, const char *set, scui_coord_t set_num, char *str)
 {
     SCUI_ASSERT(list != NULL);
     SCUI_ASSERT(map  != NULL);
+    SCUI_ASSERT(set  != NULL);
     SCUI_ASSERT(str  != NULL);
     
+    /* 缺位索引(字符集中的'-') */
+    scui_coord_t idx_def = map_num;
+    for (scui_coord_t i = 0; i < set_num; i++) {
+        if (set[i] != '-') continue;
+        idx_def = i; break;
+    }
+    
     scui_coord_t cnt = 0;
-    /* 约定字符集(0~9-+%/:*) */
-    /* 查约定索引(缺位映射到'-') */
-    static const char set[] = "0123456789-+%/:*";
-    for (scui_coord_t idx = 10; str[cnt] != '\0' && cnt < num; idx = 10) {
-        for (scui_coord_t i = 0; i < 16; i++) {
+    for (cnt = 0; str[cnt] != '\0' && cnt < num; cnt++) {
+        scui_coord_t idx = idx_def;
+        for (scui_coord_t i = 0; i < set_num; i++) {
             if (set[i] == str[cnt]) {
                 idx = i;
                 break;
             }
         }
+        
+        /* 缺位索引越界则截断 */
+        if (idx >= map_num) break;
         list[cnt] = map[idx];
-        cnt++;
     }
     return cnt;
 }

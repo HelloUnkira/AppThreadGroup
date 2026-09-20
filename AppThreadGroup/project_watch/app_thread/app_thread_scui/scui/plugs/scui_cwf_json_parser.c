@@ -38,10 +38,14 @@ static uint32_t scui_cwf_json_u32(uint8_t byte4[4])
 /*@brief 解析器指定项更新
  *@param parser 解析器
  *@param idx    指定项
+ *@param tick   流失ms
+ *@param force  强制刷新(跳过帧动画间隔门限)
  */
-void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx);
+void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx,
+                             uint32_t tick, bool force);
 void scui_cwf_json_burn_item(scui_cwf_json_parser_t *parser, uint32_t idx);
-void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON *dict);
+void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx,
+                             cJSON *dict, scui_handle_t parent);
 
 /*@brief 更新cwf
  *@param inst 实例
@@ -56,16 +60,16 @@ static void scui_cwf_json_custom_event(scui_event_t *event)
         
         scui_cwf_json_parser_t *parser = *inst;
         
-        /* 做个缓速 */
-        static int32_t span_fps = 7;
-        static int32_t tick_cnt = 0;
-        tick_cnt += event->tick;
+        /* 保活: 累计流失ms, 达到周期则整屏无条件刷新 */
+        parser->refr_tick += event->tick;
+        bool any_refr = parser->refr_tick >= SCUI_CWF_JSON_ANY_REFR;
+        if (any_refr) parser->refr_tick = 0;
         
-        if (tick_cnt <  1000 / span_fps) return;
-            tick_cnt -= 1000 / span_fps;
-        
+        /* 各元素按自己的间隔推进(保活帧强制推进) */
         for (uint32_t idx = 0; idx < parser->list_num; idx++)
-            scui_cwf_json_anim_item(parser, idx);
+            scui_cwf_json_anim_item(parser, idx, event->tick, any_refr);
+        
+        if (any_refr) scui_widget_draw(parser->parent, NULL, false, 0);
         break;
     }
     default:
@@ -227,31 +231,58 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     /* 构建一个父容器,用于承载cwf */
     scui_custom_maker_define(custom_maker);
     
-    custom_maker.widget.clip      = scui_widget_clip(parent);
+    custom_maker.widget.clip      = scui_widget_area(parent);
     custom_maker.widget.parent    = parent;
     custom_maker.widget.child_num = parser->list_num;
     
-    /* 给这个父容器悬挂帧动画更新 */
-    custom_maker.widget.event_cb = scui_cwf_json_custom_event;
-    
     custom_maker.widget.style.fully_bg = true;
     custom_maker.widget.style.cover_fg = true;
+    custom_maker.widget.style.sched_anima = true;
+    /* 给这个父容器悬挂帧动画更新 */
+    custom_maker.widget.event_cb = scui_cwf_json_custom_event;
     scui_widget_create(&custom_maker, &parser->parent);
     scui_widget_user_data_set(parser->parent, (void *)inst);
     
     /* 按索引顺序一个个解析, 然后添加到parser中去 */
+    /* key:layout 容器: 把后续 child 个元素装进容器(支持嵌套) */
+    struct {
+        scui_handle_t handle;
+        scui_handle_t remain;
+    } layout_stack[8] = {0};
+    uint32_t layout_num = 0;
+    
     for (uint32_t idx = 0; idx < parser->list_num; idx++) {
         cJSON *json_dict = cJSON_GetArrayItem(json_layout, idx);
-        scui_cwf_json_make_item(parser, idx, json_dict);
+        scui_handle_t parent_cur = parser->parent;
+        scui_cwf_json_item_res_t *res = NULL;
+        
+        while (layout_num > 0 && layout_stack[layout_num - 1].remain == 0)
+            layout_num--;
+        
+        if (layout_num > 0) {
+            parent_cur = layout_stack[layout_num - 1].handle;
+            layout_stack[layout_num - 1].remain--;
+        }
+        
+        scui_cwf_json_make_item(parser, idx, json_dict, parent_cur);
+        
+        res = parser->list_src[idx];
+        
+        if (res != NULL && res->key == scui_cwf_json_key_layout &&
+            res->child > 0 && layout_num < scui_arr_len(layout_stack)) {
+            layout_stack[layout_num].handle = parser->list_child[idx];
+            layout_stack[layout_num].remain = res->child;
+            layout_num++;
+        }
     }
     
     SCUI_MEM_FREE(image_info);
     cJSON_Delete(json_object);
     SCUI_MEM_FREE(json_file);
     
-    /* 在结束的时候,进行一次anim更新 */
+    /* 在结束的时候,进行一次首帧更新(强制) */
     for (uint32_t idx = 0; idx < parser->list_num; idx++)
-        scui_cwf_json_anim_item(parser, idx);
+        scui_cwf_json_anim_item(parser, idx, 0, true);
     
     scui_widget_draw(parent, NULL, true, 2);
 }
@@ -318,12 +349,12 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
     for (uint32_t idx = 0; idx < cJSON_GetArraySize(json_layout); idx++) {
         cJSON *json_dict = cJSON_GetArrayItem(json_layout, idx);
         
-        uint8_t type = cJSON_GetNumberValue(cJSON_GetObjectItem(json_dict, "type")) + 0.1;
+        uint8_t key = cJSON_GetNumberValue(cJSON_GetObjectItem(json_dict, "key")) + 0.1;
         
         /* 预览图被记录在: */
-        /* scui_cwf_json_type_img_preview */
-        if (type == scui_cwf_json_type_img_preview) {
-            cJSON *json_src = cJSON_GetObjectItem(json_dict, "image_src");
+        /* scui_cwf_json_key_preview */
+        if (key == scui_cwf_json_key_preview) {
+            cJSON *json_src = cJSON_GetObjectItem(json_dict, "img_res");
             cJSON *json_num = cJSON_GetObjectItem(json_dict, "image_num");
             uint32_t img_ofs = cJSON_GetNumberValue(cJSON_GetArrayItem(json_src, 0)) + 0.1;
             uint16_t img_num = cJSON_GetNumberValue(json_num) + 0.1;

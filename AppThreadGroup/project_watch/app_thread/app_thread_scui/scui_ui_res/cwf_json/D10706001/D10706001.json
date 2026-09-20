@@ -2,34 +2,44 @@
     "cwf_id": "D10706001",
     "layout": [
         {
-            "type":     "scui_cwf_json_type_img_preview",
-            "image_src": ["cwf_perview_01_00jpg"]
+            "type":    "scui_cwf_json_type_img",
+            "source":  "scui_cwf_json_source_none",
+            "key":     "scui_cwf_json_key_preview",
+            "area_x":  0,
+            "area_y":  0,
+            "align":   "scui_cwf_json_align_itl",
+            "img_res": ["cwf_perview_01_00"]
         },
         {
-            "type":     "scui_cwf_json_type_img_simple",
-            "x":        0,
-            "y":        0,
-            "image_src": ["cwf_bg_01_2jpg"]
+            "type":    "scui_cwf_json_type_img",
+            "source":  "scui_cwf_json_source_none",
+            "key":     "scui_cwf_json_key_one",
+            "area_x":  0,
+            "area_y":  0,
+            "align":   "scui_cwf_json_align_itl",
+            "img_res": ["cwf_bg_01_2"]
         },
-        
         {
-            "type":     "scui_cwf_json_type_img_watch",
-            "hx":        233,
-            "hy":        233,
-            "h_cy":      125,
-            "mx":        233,
-            "my":        233,
-            "m_cy":      204,
-            "sx":        233,
-            "sy":        233,
-            "s_cy":      203,
-            "image_src": [
-                "cwf_hour_01_00png",
-                "cwf_min_01_00png",
-                "cwf_sec_01_00png"
+            "type":    "scui_cwf_json_type_group",
+            "source":  "scui_cwf_json_source_none",
+            "key":     "scui_cwf_json_key_watch",
+            "area_x":  0,
+            "area_y":  0,
+            "align":   "scui_cwf_json_align_itl",
+            "hx":      233,
+            "hy":      233,
+            "h_cy":    125,
+            "mx":      233,
+            "my":      233,
+            "m_cy":    204,
+            "sx":      233,
+            "sy":      233,
+            "s_cy":    203,
+            "img_res": [
+                "cwf_hour_01_00",
+                "cwf_min_01_00",
+                "cwf_sec_01_00"
             ]
         }
     ]
 }
-
-

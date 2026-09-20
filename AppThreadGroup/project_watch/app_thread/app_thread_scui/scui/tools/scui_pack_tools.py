@@ -4,9 +4,12 @@
 # 无参       -> 启动图形界面(五个子界面)
 # 带参型     -> 命令行模式: python scui_pack_tools.py <type> [--src P] [--dst P] [--proj N]
 # 说明: GUI 运行时把控制台 stdout/stderr 打印重定向输出到全局共享日志窗口;
-#       运行产生的临时/缓存统一落在 __pack_tmp__(当前相对路径), 已被 .gitignore 忽略
+#       打包产物(image解压/image_array/scui_res_image等中间文件)一律保留在本地;
+#       它们均被各目录下的 .gitignore 忽略, 打包前统一清除, 打完不再收尾清除
 import os
 import re
+import io
+import glob
 import json
 import sys
 import importlib
@@ -288,14 +291,56 @@ def _do_task(name, ui, src, dst, proj):
 
     print('[pack] argv : %s' % [_rel_ui(a, ui) if os.path.isabs(a) else a for a in argv])
     ret = _run_module(task, argv, ui)
-    if tmp:
-        shutil.rmtree(tmp, ignore_errors=True)
+    # tmp(<tag>.src_tmp)保留在本地: .gitignore 已忽略, 下次解压前会先清空
     print()
     print('[pack] %s 执行完成: %s' % (name, 'OK' if ret == 0 else 'FAIL'))
     return ret
 
 #============================================================
-# cwf 多步打包(解压7z -> image parser -> cwf parser -> 清理)
+# cwf 中间产物清除(打包前执行)
+#   清除依据为父级 .gitignore(<src>/.gitignore), 只识别两段式条目:
+#     '*/name'   -> <src>/<wf>/name              (该 cwf 目录内)
+#     'bin/name' -> <src>/bin/name 仅限本 cwf 产物(文件名以 <wf> 开头)
+#   产物均在忽略列表内, 因此生成后保留在本地, 由下次打包的此步清除
+#============================================================
+def _cwf_clean_tmp(src, dst, wf):
+    gi = os.path.join(src, '.gitignore')
+    if not os.path.isfile(gi):
+        return []
+    
+    with io.open(gi, mode='r', encoding='utf-8') as f:
+        lines = f.read().splitlines()
+    
+    removed = []
+    for line in lines:
+        line = line.strip()
+        if not line or line.startswith('#') or line.startswith('!'):
+            continue
+        head, sep, rest = line.partition('/')
+        if not sep or not rest or '/' in rest:
+            continue                    # 只认两段式, 其余(递归/通配)不动
+        
+        if head == '*':
+            base, only = os.path.join(src, wf), None
+        else:
+            base, only = os.path.join(src, head), wf
+        
+        for p in sorted(glob.glob(os.path.join(base, rest))):
+            if only is not None and not os.path.basename(p).startswith(only):
+                continue                # 目标目录内只清本 cwf 自己的产物
+            if os.path.isdir(p):
+                shutil.rmtree(p, ignore_errors=True)
+            else:
+                try:
+                    os.remove(p)
+                except OSError:
+                    continue
+            removed.append(p)
+    
+    return removed
+
+#============================================================
+# cwf 多步打包(清除中间产物 -> 解压7z -> image parser -> cwf parser)
 #============================================================
 def _do_cwf_task(ui, src, dst):
     ui_dir, app, scui, tools, plugs = _dirs(ui)
@@ -332,6 +377,9 @@ def _do_cwf_task(ui, src, dst):
     for wf in cwf_list:
         wf_dir = os.path.join(src, wf)
         print('=========== [%s] start ============' % wf)
+        # step0: 先清除该 cwf 的中间产物(被父级 .gitignore 标记的资源), 保证全新生成
+        for p in _cwf_clean_tmp(src, dst, wf):
+            print('[%s] clean -> %s' % (wf, _rel_ui(p, ui)))
         # step1: 解压 image.7z -> cwf 目录(7z 内含 image/ 子目录, 不能再嵌套)
         img_dir = os.path.join(wf_dir, 'image')
         shutil.rmtree(img_dir, ignore_errors=True)
@@ -376,20 +424,20 @@ def _do_cwf_task(ui, src, dst):
         finally:
             sys.argv = argv_old
 
-        # step4: 清理临时文件
-        shutil.rmtree(img_dir, ignore_errors=True)
-        shutil.rmtree(os.path.join(wf_dir, 'image_array'), ignore_errors=True)
-        for f in ('scui_res_image.h', 'scui_res_image.c',
-                  'scui_res_image.bin'):
-            p = os.path.join(wf_dir, f)
-            if os.path.exists(p):
-                os.remove(p)
-        # cwf parser 临时目录(统一 __pack_tmp__/, 相对 CWD, 见 .gitignore)
-        shutil.rmtree('__pack_tmp__', ignore_errors=True)
-        prog = os.path.join(dst, wf + '_json.prog')
-        if os.path.exists(prog):
-            os.remove(prog)
-        # 清理 __pycache__
+        # step4: cwf 额外改名: 资源产物去扩展名(仅 cwf 约定, 与 image 打包本身无关)
+        for name in ('scui_res_image.c', 'scui_res_image.h', 'scui_res_image.bin'):
+            src_f = os.path.join(wf_dir, name)
+            if not os.path.isfile(src_f):
+                continue
+            dst_f = os.path.join(wf_dir, name.replace('.', '_'))
+            if os.path.exists(dst_f):
+                os.remove(dst_f)
+            os.rename(src_f, dst_f)
+            print('[%s] rename -> %s' % (wf, _rel_ui(dst_f, ui)))
+        
+        # 中间产物(image解压/image_array/scui_res_image/_json.prog/__pack_tmp__)
+        # 一律保留在本地: 它们都在 .gitignore 内, 由下次打包的 step0 统一清除
+        # 仅回收 python 字节码缓存(与打包产物无关)
         shutil.rmtree(os.path.join(tools, '__pycache__'), ignore_errors=True)
         shutil.rmtree(os.path.join(plugs, '__pycache__'), ignore_errors=True)
         print('=========== [%s] finish ============' % wf)

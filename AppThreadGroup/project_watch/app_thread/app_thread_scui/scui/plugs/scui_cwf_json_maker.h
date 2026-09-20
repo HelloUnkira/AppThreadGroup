@@ -7,27 +7,37 @@ typedef struct {
     /* linker */
     scui_cwf_json_parser_t *parser;
     uint32_t list_idx;
-    /* struct */
-    union {
-    /* type img */
-    struct {
+    /* 协议字段 */
+    uint8_t  type;                              /* 渲染类别 */
+    uint8_t  source;                            /* 数据源 */
+    uint8_t  key;                               /* 元素角色 */
+    uint8_t  align;                             /* 对齐(协议对齐表下标) */
+    int8_t   align_ofs;                         /* 对齐参照目标索引偏移 */
+    uint16_t child;                             /* key:layout 子元素数量 */
+    uint16_t nums;                              /* seq场宽(格数,0=贴内容) */
+    uint16_t span;                              /* 像素间隙 */
+    uint16_t anima_ms;                          /* 帧动画间隔 */
+    /* 区域 */
+    scui_coord_t area_x;
+    scui_coord_t area_y;
+    scui_coord_t area_w;
+    scui_coord_t area_h;
+    /* 指针锚点(key:watch) */
+    scui_point_t watch_anchor[3];
+    scui_coord_t watch_center[3];
+    /* 图集 */
+    uint16_t  img_num;
+    uint16_t *img_res;
     scui_coord_t img_w;
     scui_coord_t img_h;
-    uint64_t  img_bits;
-    uint16_t  img_span;
-    uint16_t  img_num;
-    uint16_t *img_ofs;
-    /* parament */
-    uint8_t  *idx_ofs;
+    /* 运行时 */
     uint16_t  idx_num;
     uint16_t  idx_anim;
-    };
-    /* type txt */
-    struct {
-    uint64_t *txt_none;
-    };
-    /* keep adding... */
-    };
-} scui_csf_json_item__res_t;
+    scui_multi_t anim_tick;
+} scui_cwf_json_item_res_t;
+
+#define SCUI_CWF_JSON_SEQ_MAX       10
+#define SCUI_CWF_JSON_ANIMA_DEF     1000   /* 帧动画默认间隔(ms) */
+#define SCUI_CWF_JSON_ANY_REFR      1000   /* 保活: 整屏无条件刷新周期(ms) */
 
 #endif

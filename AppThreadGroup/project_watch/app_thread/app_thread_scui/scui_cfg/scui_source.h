@@ -16,8 +16,9 @@
 #include "scui_res_font.h"              /* 字库资源信息表 */
 #include "scui_res_lang.h"              /* 多国语字符串表 */
 #include "scui_lang_font.h"             /* 多国语字库表 */
-#include "scui_presenter.h"             /* presenter */
 #include "scui_check_time.h"            /* 超时/空闲配置表 */
+#include "scui_cwf_source.h"            /* cwf资源转接表 */
+#include "scui_presenter.h"             /* presenter */
 #include "scui_ui_maker.h"              /* maker */
 #include "scui_ui_apply.h"              /* apply */
 #include "scui_ready.h"                 /* ready */

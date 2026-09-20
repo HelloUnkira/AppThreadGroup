@@ -1,3 +1,6 @@
 */image
 */image_array
+*/scui_res_image_c
+*/scui_res_image_h
+*/scui_res_image_bin
 bin/*.prog

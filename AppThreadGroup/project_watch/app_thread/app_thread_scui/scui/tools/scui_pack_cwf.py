@@ -27,22 +27,51 @@ def _scui_cwf_proto_json():
     return os.path.join(_scui_cwf_tools_dir(), 'scui_pack_cwf.json')
 
 
-# 缓存列表, 统一生成到当前目录的 __pack_tmp__ 下, 与提交无关(见 .gitignore)
-scui_cwf_json_parser_tmp_dir  = '__pack_tmp__'
-scui_cwf_json_parser_tmp_bin = [
-    os.path.join(scui_cwf_json_parser_tmp_dir, 'scui.cwf.json.bin'),
-    os.path.join(scui_cwf_json_parser_tmp_dir, 'scui.cwf.image_info.bin'),
-    os.path.join(scui_cwf_json_parser_tmp_dir, 'scui.cwf.image_data.bin'),
-]
+# 缓存列表, 统一生成到 tools 目录的 __pack_tmp__ 下, 与提交无关(见 tools/.gitignore)
+# 用函数取而不是模块常量: 打包(exe)环境下 tools 目录由前端在调用前注入
+def scui_cwf_json_parser_tmp_dir():
+    return os.path.join(_scui_cwf_tools_dir(), '__pack_tmp__')
+
+
+def scui_cwf_json_parser_tmp_bin():
+    tmp_dir = scui_cwf_json_parser_tmp_dir()
+    return [
+        os.path.join(tmp_dir, 'scui.cwf.json.bin'),
+        os.path.join(tmp_dir, 'scui.cwf.image_info.bin'),
+        os.path.join(tmp_dir, 'scui.cwf.image_data.bin'),
+    ]
 
 
 # 清洗协议json的annotation字段, 将其移除
 def scui_cwf_json_parser_remove_annotations(json_obj):
     if isinstance(json_obj, dict):
-        json_obj = {k: scui_cwf_json_parser_remove_annotations(v) for k, v in json_obj.items() if not k.endswith('annotation')}
+        json_obj = {k: scui_cwf_json_parser_remove_annotations(v) for k, v in json_obj.items()
+                    if not (k.endswith('annotation') or k == 'anno')}
     elif isinstance(json_obj, list):
         json_obj = [scui_cwf_json_parser_remove_annotations(item) for item in json_obj]
     return json_obj
+
+
+# 协议枚举项 -> 名字(兼容纯字符串与 {"key": ...} 两种写法)
+def scui_cwf_json_enum_key(item):
+    return item['key'] if isinstance(item, dict) else item
+
+
+# 协议枚举表 -> 名字表(过滤掉尾部哨兵)
+def scui_cwf_json_enum_list(json_parser, table, sentinel=True):
+    names = [scui_cwf_json_enum_key(item) for item in json_parser[table]]
+    if not sentinel:
+        names = [name for name in names if not name.endswith('_num')]
+    return names
+
+
+# 枚举字段: 名字 -> 下标(原地替换)
+def scui_cwf_json_enum_remap(node, json_parser, field, table):
+    for idx, name in enumerate(scui_cwf_json_enum_list(json_parser, table)):
+        if name == node[field]:
+            node[field] = idx
+            return
+    raise ValueError('json %s error:%r' % (field, node[field]))
 
 
 # 对json进行预处理
@@ -58,25 +87,21 @@ def scui_cwf_json_parser_preprocess(c_file_list, json_obj):
     # print(json.dumps(json_obj, indent=4))
     # 清洗后缀, 提出图片的前缀
     image_list = [file_name.rsplit('.', 1)[0] for file_name in c_file_list]
-    # print(image_list)
-    # 清洗image_src字段, 将其替换成协议c_file_list中列表下标
-    # 更新image_num字段, 将其替换成实际image_src数量
+    # 清洗img_res字段: 图集名 -> 图集下标; 同时登记image_num(实际张数)
     for idx, node in enumerate(json_obj['layout']):
-        # 有些类型没有这个字段
-        if re.match('scui_cwf_json_type_img_', node['type']) is not None:
-            image_src = json_obj['layout'][idx]['image_src']
-            for idx_t, image in enumerate(node['image_src']):
-                json_obj['layout'][idx]['image_src'][idx_t] = image_list.index(image)
-            json_obj['layout'][idx]['image_num'] = len(image_src)
-    # 替换type
+        if 'img_res' in node:
+            img_res = node['img_res']
+            node['img_res'] = [image_list.index(image) for image in img_res]
+            node['image_num'] = len(img_res)
+    # 替换枚举字段: 名字 -> 下标
     for idx, node in enumerate(json_obj['layout']):
-        for idx_t, dict in enumerate(json_parser['scui_cwf_json_type']):
-            if dict['key'] == node['type']:
-                json_obj['layout'][idx]['type'] = idx_t
-                break
-        if type(json_obj['layout'][idx]['type']) != int:
-            print(json.dumps(json_obj, indent=4))
-            raise ValueError("json type error:%d" % idx)
+        for field, table in (('type',   'scui_cwf_json_type'),
+                             ('source', 'scui_cwf_json_source'),
+                             ('key',    'scui_cwf_json_key'),
+                             ('font',   'scui_cwf_json_font'),
+                             ('align',  'scui_cwf_json_align')):
+            if field in node:
+                scui_cwf_json_enum_remap(node, json_parser, field, table)
     # print(json.dumps(json_obj, indent=4))
     return json_obj
 
@@ -102,6 +127,17 @@ def scui_cwf_json_parser_proto():
     # 生成或更新protocol(输出到固件解析器目录, 供 scui_plugs.h 引用)
     os.makedirs(_scui_cwf_plugs_dir(), exist_ok=True)
     parser_path = os.path.join(_scui_cwf_plugs_dir(), 'scui_cwf_json_proto.h')
+    # 协议枚举表 -> 固件枚举(序列一律由协议导出, 固件不再自行定义)
+    enum_tables = (
+        ('scui_cwf_json_pixel_cf', 'scui_cwf_json_pixel_cf_t'),
+        ('scui_cwf_json_image_cf', 'scui_cwf_json_image_cf_t'),
+        ('scui_cwf_json_type',     'scui_cwf_json_type_t'),
+        ('scui_cwf_json_source',   'scui_cwf_json_source_t'),
+        ('scui_cwf_json_key',      'scui_cwf_json_key_t'),
+        ('scui_cwf_json_font',     'scui_cwf_json_font_t'),
+        ('scui_cwf_json_align',    'scui_cwf_json_align_t'),
+        ('scui_cwf_json_lang',     'scui_cwf_json_lang_t'),
+    )
     with open(parser_path, mode='w', encoding='utf-8') as file:
         file.write('#ifndef SCUI_CWF_JSON_PROTO_H\n')
         file.write('#define SCUI_CWF_JSON_PROTO_H\n\n')
@@ -109,20 +145,16 @@ def scui_cwf_json_parser_proto():
             (json_parser['version'][3], json_parser['version'][2],
              json_parser['version'][1], json_parser['version'][0]))
         
-        file.write('typedef enum {\n')
-        for idx, item in enumerate(json_parser['scui_cwf_json_pixel_cf']):
-            file.write('\t%s%s,\n' % (item, ' = 0' if idx == 0 else ''))
-        file.write('} scui_cwf_json_pixel_cf_t;\n\n')
-        
-        file.write('typedef enum {\n')
-        for idx, item in enumerate(json_parser['scui_cwf_json_image_cf']):
-            file.write('\t%s%s,\n' % (item, ' = 0' if idx == 0 else ''))
-        file.write('} scui_cwf_json_image_cf_t;\n\n')
-        
-        file.write('typedef enum {\n')
-        for idx, dict in enumerate(json_parser['scui_cwf_json_type']):
-            file.write('\t%s%s,\n' % (dict['key'], ' = 0' if idx == 0 else ''))
-        file.write('} scui_cwf_json_type_t;\n\n')
+        for table, ctype in enum_tables:
+            file.write('typedef enum {\n')
+            for idx, name in enumerate(scui_cwf_json_enum_list(json_parser, table)):
+                file.write('\t%s%s,\n' % (name, ' = 0' if idx == 0 else ''))
+            file.write('} %s;\n\n' % ctype)
+        # seq 字符集(下标即字符在序列中的位置, 图集张数由序列长度决定)
+        seq_set = json_parser['scui_cwf_json_seq_set']
+        file.write('#define SCUI_CWF_JSON_SEQ_SET\t"%s"\n' % seq_set)
+        file.write('#define SCUI_CWF_JSON_SEQ_NUM\t%d\n' % len(seq_set))
+        file.write('\n')
         
         file.write('#endif\n')
 
@@ -150,7 +182,7 @@ def scui_cwf_json_parser_json(src_path, dst_path, c_file_list, json_name):
     with open(os.path.join(dst_path, json_name + '_json.prog'), mode='w', encoding='utf-8') as file:
         file.write(json.dumps(json.loads(json_data), indent=4))
     # 写入json文件到达缓存目标文件
-    with open(scui_cwf_json_parser_tmp_bin[0], mode='wb') as file:
+    with open(scui_cwf_json_parser_tmp_bin()[0], mode='wb') as file:
         file.write(json_bytes)
         file.write(int(0).to_bytes(byteorder='little', length=1))
     #
@@ -222,7 +254,7 @@ def scui_cwf_json_parser_image_info(image_path, c_file_list, c_data_offset):
         image_info_bytes.extend(scui_image_size_mem.to_bytes(byteorder='little', length=4))
         image_info_bytes.extend(scui_image_data.to_bytes(byteorder='little', length=4))
     # 写入json文件到达缓存目标文件
-    with open(scui_cwf_json_parser_tmp_bin[1], mode='wb') as file:
+    with open(scui_cwf_json_parser_tmp_bin()[1], mode='wb') as file:
         file.write(image_info_bytes)
 
 
@@ -264,7 +296,7 @@ def scui_cwf_json_parser_image_data(image_path, c_file_list):
             print("image array bin size unmatched:%s" % file_name)
             print("image array bin size diff: <%d, %d>" % (image_size, context_size))
     # 写入json文件到达缓存目标文件
-    with open(scui_cwf_json_parser_tmp_bin[2], mode='wb') as file:
+    with open(scui_cwf_json_parser_tmp_bin()[2], mode='wb') as file:
         file.write(image_data_bytes)
 
 
@@ -288,7 +320,7 @@ def scui_cwf_json_parser():
         print('img path is not exist')
         return
     # 确保统一临时目录存在
-    os.makedirs(scui_cwf_json_parser_tmp_dir, exist_ok=True)
+    os.makedirs(scui_cwf_json_parser_tmp_dir(), exist_ok=True)
     # 生成或更新json对应c头文件
     scui_cwf_json_parser_proto()
     # 读取本文件夹下所有的json文件并获得文件名
@@ -304,11 +336,11 @@ def scui_cwf_json_parser():
     scui_cwf_json_parser_image_info(img_path, c_file_list, c_data_offset)
     scui_cwf_json_parser_image_data(img_path, c_file_list)
     # 打包三个文件变成一个
-    with open(scui_cwf_json_parser_tmp_bin[0], mode='rb') as file:
+    with open(scui_cwf_json_parser_tmp_bin()[0], mode='rb') as file:
         json_bytes = file.read()
-    with open(scui_cwf_json_parser_tmp_bin[1], mode='rb') as file:
+    with open(scui_cwf_json_parser_tmp_bin()[1], mode='rb') as file:
         image_info_bytes = file.read()
-    with open(scui_cwf_json_parser_tmp_bin[2], mode='rb') as file:
+    with open(scui_cwf_json_parser_tmp_bin()[2], mode='rb') as file:
         image_data_bytes = file.read()
     # 打包三个文件变成一个
     with open(os.path.join(dst_path, json_name + '.bin'), mode='wb') as file:
@@ -338,10 +370,8 @@ if __name__ == '__main__':
     except Exception as e:
         print(e)
     
-    # 移除临时文件
-    for file_name in scui_cwf_json_parser_tmp_bin:
-        if os.path.isfile(file_name):
-            os.remove(file_name)
+    # 中间文件一律保留(与打包器共用同一套清除时机: 下次打包的 step0 清空)
+    # 位置: scui/tools/__pack_tmp__, 已被 tools/.gitignore 忽略
     
     print('scui cwf parser finish')
     input('请按任意键退出...')
