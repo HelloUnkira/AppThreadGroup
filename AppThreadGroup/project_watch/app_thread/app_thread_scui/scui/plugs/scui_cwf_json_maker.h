@@ -22,9 +22,6 @@ typedef struct {
     scui_coord_t area_y;
     scui_coord_t area_w;
     scui_coord_t area_h;
-    /* 指针锚点(key:watch) */
-    scui_point_t watch_anchor[3];
-    scui_coord_t watch_center[3];
     /* 图集 */
     uint16_t  img_num;
     uint16_t *img_res;
@@ -36,8 +33,8 @@ typedef struct {
     scui_multi_t anim_tick;
 } scui_cwf_json_item_res_t;
 
-#define SCUI_CWF_JSON_SEQ_MAX       10
-#define SCUI_CWF_JSON_ANIMA_DEF     1000   /* 帧动画默认间隔(ms) */
-#define SCUI_CWF_JSON_ANY_REFR      1000   /* 保活: 整屏无条件刷新周期(ms) */
+#define SCUI_CWF_JSON_SEQ_MAX                       (10)
+#define SCUI_CWF_JSON_ANIMA_DEF                     (137)
+#define SCUI_CWF_JSON_ANIMA_REFR                    (100)
 
 #endif

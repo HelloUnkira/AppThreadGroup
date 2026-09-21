@@ -24,4 +24,11 @@ bool scui_cwf_json_source_value(scui_cwf_json_source_t source, scui_coord_t *val
  */
 void scui_cwf_json_source_range(scui_cwf_json_source_t source, scui_coord_t *val_min, scui_coord_t *val_max);
 
+/*@brief 表针时间数据转接(scui_xwatch 外界时钟回调用, 屏蔽 presenter 依赖)
+ */
+uint8_t  scui_cwf_json_source_tick_h(void);
+uint8_t  scui_cwf_json_source_tick_m(void);
+uint8_t  scui_cwf_json_source_tick_s(void);
+uint16_t scui_cwf_json_source_tick_ms(void);
+
 #endif

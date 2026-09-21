@@ -180,6 +180,12 @@
     "span":      "像素间隙: seq的数字间距/layout的子元素间隙/out对齐的外扩间隙",
     "color":     "通用色字符串, 固定32位16进制字符串, 如: 0xFFFFFFFF",
     
+    "anno": "key:watch 表针字段(x/y成对, 屏幕坐标)",
+    "anno": "hx/hy/h_cx/h_cy: 时针锚点/旋转中心",
+    "anno": "mx/my/m_cx/m_cy: 分针锚点/旋转中心",
+    "anno": "sx/sy/s_cx/s_cy: 秒针锚点/旋转中心",
+    "anno": "旋转中心默认取指针图宽的一半, center_x 如与图宽不符则显式配置",
+    
     "anno": "seq 字符集约束",
     "anno": "seq 图集固定 16 张, 下标即字符在下列序列中的位置",
     "anno": "前11位是不会缺的,剩下的缺位用-代替即可",

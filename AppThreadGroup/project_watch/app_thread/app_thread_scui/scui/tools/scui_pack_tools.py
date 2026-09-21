@@ -2121,14 +2121,19 @@ class PackApp(object):
         # 主体: 三栏(占满, 不再内嵌 LOG)
         hp = ttk.Panedwindow(f, orient='horizontal'); hp.pack(fill='both', expand=True, pady=(6, 0))
 
-        # 左: 协议类型 + 注释
+        # 左: 协议类型(全局协议枚举段列表表格, 参考右栏 json 就地编辑)
         lf = ttk.LabelFrame(hp, text=' cwf 协议类型 ', padding=(4, 4)); hp.add(lf, weight=3)
-        self.cbook = ttk.Treeview(lf, columns=('anno',), show='tree headings', selectmode='browse')
-        self.cbook.heading('#0', text='type'); self.cbook.heading('anno', text='annotation')
-        self.cbook.column('anno', width=120, stretch=False)
-        cvs = ttk.Scrollbar(lf, orient='vertical', command=self.cbook.yview)
-        self.cbook.configure(yscrollcommand=cvs.set)
-        self.cbook.pack(side='left', fill='both', expand=True); cvs.pack(side='right', fill='y')
+        self.pcanv = tk.Canvas(lf, highlightthickness=0)
+        pvs = ttk.Scrollbar(lf, orient='vertical', command=self.pcanv.yview)
+        self.pcanv.configure(yscrollcommand=pvs.set)
+        self._pbox = ttk.Frame(self.pcanv)
+        self._pbox_id = self.pcanv.create_window((0, 0), window=self._pbox, anchor='nw')
+        self._pbox.bind('<Configure>', lambda e: self.pcanv.configure(scrollregion=self.pcanv.bbox('all')))
+        self.pcanv.bind('<Configure>', lambda e: (self.pcanv.itemconfigure(self._pbox_id, width=e.width),
+                                                  self.pcanv.configure(scrollregion=self.pcanv.bbox('all'))))
+        self.pcanv.pack(side='left', fill='both', expand=True); pvs.pack(side='right', fill='y')
+        self.pcanv.bind('<Enter>', lambda e: self.pcanv.bind_all('<MouseWheel>', self._proto_wheel))
+        self.pcanv.bind('<Leave>', lambda e: self.pcanv.unbind_all('<MouseWheel>'))
 
         # 中: cwf 浏览(满足: 有 image.7z + 同名 .json)
         mf = ttk.LabelFrame(hp, text=' cwf 列表 ', padding=(4, 4)); hp.add(mf, weight=3)
@@ -2165,9 +2170,14 @@ class PackApp(object):
     def _cwf_wheel(self, e):
         self.ccanv.yview_scroll(-1 * (e.delta // 120), 'units')
 
-    # 加载协议 json(类型 + 注释)
+    def _proto_wheel(self, e):
+        self.pcanv.yview_scroll(-1 * (e.delta // 120), 'units')
+
+    # 加载全局协议 json -> 左栏列表表格(各枚举段分组展示)
     def _cwf_load_proto(self):
-        self.cbook.delete(*self.cbook.get_children())
+        from tkinter import ttk
+        for w in self._pbox.winfo_children():
+            w.destroy()
         proto = os.path.join(self.tools, 'scui_pack_cwf.json')
         if not os.path.exists(proto):
             self._append_log('cwf', '未找到协议: %s\n' % self._rel_log(proto))
@@ -2175,11 +2185,33 @@ class PackApp(object):
         try:
             with open(proto, 'r', encoding='utf-8') as fp:
                 j = json.load(fp)
-            for item in j.get('scui_cwf_json_type', []):
-                key = item.get('key', '?')
-                annos = [v for k, v in item.items() if k == 'annotation']
-                anno = ' ; '.join(annos) if annos else ''
-                self.cbook.insert('', 'end', text=key, values=(anno,))
+            for sec in ('scui_cwf_json_type', 'scui_cwf_json_source', 'scui_cwf_json_align',
+                        'scui_cwf_json_font', 'scui_cwf_json_key', 'scui_cwf_json_lang'):
+                items = j.get(sec)
+                if not isinstance(items, list) or not items:
+                    continue
+                title = sec.replace('scui_cwf_json_', '')
+                tl = ttk.Label(self._pbox, text='%s (%d)' % (title, len(items)),
+                               foreground='#2266cc', font=('Consolas', 9, 'bold'))
+                tl.pack(fill='x', anchor='w', pady=(6, 2))
+                for it in items:
+                    if isinstance(it, dict):
+                        key = it.get('key', '?')
+                        annos = [str(v) for k, v in it.items() if k in ('anno', 'annotation')]
+                        if 'n' in it:
+                            annos.insert(0, 'n=%s' % it['n'])
+                        anno = ' ; '.join(annos)
+                    else:
+                        key = str(it)
+                        anno = ''
+                    row = ttk.Frame(self._pbox); row.pack(fill='x', padx=(2, 2))
+                    ke = ttk.Entry(row, font=('Consolas', 9))
+                    ve = ttk.Entry(row, font=('Consolas', 9))
+                    ke.insert(0, key); ve.insert(0, anno)
+                    ke.config(state='readonly'); ve.config(state='readonly')
+                    ke.pack(side='left', fill='x', expand=True, padx=(0, 8))
+                    ve.pack(side='left', fill='x', expand=True)
+                ttk.Label(self._pbox, text='').pack()
         except Exception as e:
             self._append_log('cwf', '协议加载失败: %r\n' % e)
 

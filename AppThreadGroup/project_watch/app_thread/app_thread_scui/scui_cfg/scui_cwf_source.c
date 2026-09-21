@@ -56,7 +56,7 @@ bool scui_cwf_json_source_value(scui_cwf_json_source_t source, scui_coord_t *val
     case scui_cwf_json_source_kcal:      *val = scui_presenter.get_kcal_cur();  break;
     case scui_cwf_json_source_temp:      *val = scui_presenter.get_temp_cur();  break;
     case scui_cwf_json_source_temp_unit: *val = scui_presenter.get_temp_unit() ? 0 : 1; break;
-    default: SCUI_LOG_WARN("cwf json source unsupported:%d", source); return false;
+    default: SCUI_LOG_INFO("cwf json source unsupported:%d", source); return false;
     }
     
     return true;
@@ -104,4 +104,32 @@ void scui_cwf_json_source_range(scui_cwf_json_source_t source, scui_coord_t *val
     
     *val_min = scui_cwf_json_source_info[source].val_min;
     *val_max = scui_cwf_json_source_info[source].val_max;
+}
+
+/*@brief 表针时间数据转接(scui_xwatch 外界时钟回调用, 屏蔽 presenter 依赖)
+ */
+uint8_t scui_cwf_json_source_tick_h(void)
+{
+    return scui_presenter.get_hour();
+}
+
+/*@brief 表针时间数据转接(scui_xwatch 外界时钟回调用, 屏蔽 presenter 依赖)
+ */
+uint8_t scui_cwf_json_source_tick_m(void)
+{
+    return scui_presenter.get_min();
+}
+
+/*@brief 表针时间数据转接(scui_xwatch 外界时钟回调用, 屏蔽 presenter 依赖)
+ */
+uint8_t scui_cwf_json_source_tick_s(void)
+{
+    return scui_presenter.get_sec();
+}
+
+/*@brief 表针时间数据转接(scui_xwatch 外界时钟回调用, 屏蔽 presenter 依赖)
+ */
+uint16_t scui_cwf_json_source_tick_ms(void)
+{
+    return scui_presenter.get_msec();
 }

@@ -39,10 +39,8 @@ static uint32_t scui_cwf_json_u32(uint8_t byte4[4])
  *@param parser 解析器
  *@param idx    指定项
  *@param tick   流失ms
- *@param force  强制刷新(跳过帧动画间隔门限)
  */
-void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx,
-                             uint32_t tick, bool force);
+void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx, uint32_t tick);
 void scui_cwf_json_burn_item(scui_cwf_json_parser_t *parser, uint32_t idx);
 void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx,
                              cJSON *dict, scui_handle_t parent);
@@ -57,19 +55,18 @@ static void scui_cwf_json_custom_event(scui_event_t *event)
     case scui_event_anima_elapse: {
         void **inst = NULL;
         scui_widget_user_data_get(event->object, (void **)&inst);
-        
         scui_cwf_json_parser_t *parser = *inst;
         
-        /* 保活: 累计流失ms, 达到周期则整屏无条件刷新 */
+        /* 保活: 累计流失ms */
         parser->refr_tick += event->tick;
-        bool any_refr = parser->refr_tick >= SCUI_CWF_JSON_ANY_REFR;
-        if (any_refr) parser->refr_tick = 0;
         
-        /* 各元素按自己的间隔推进(保活帧强制推进) */
+        /* 各元素按自己的间隔推进 */
         for (uint32_t idx = 0; idx < parser->list_num; idx++)
-            scui_cwf_json_anim_item(parser, idx, event->tick, any_refr);
+            scui_cwf_json_anim_item(parser, idx, event->tick);
         
-        if (any_refr) scui_widget_draw(parser->parent, NULL, false, 0);
+        if (parser->refr_tick >= SCUI_CWF_JSON_ANIMA_REFR)
+            parser->refr_tick -= SCUI_CWF_JSON_ANIMA_REFR;
+        
         break;
     }
     default:
@@ -281,8 +278,9 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     SCUI_MEM_FREE(json_file);
     
     /* 在结束的时候,进行一次首帧更新(强制) */
+    parser->refr_tick = SCUI_CWF_JSON_ANIMA_REFR;
     for (uint32_t idx = 0; idx < parser->list_num; idx++)
-        scui_cwf_json_anim_item(parser, idx, 0, true);
+        scui_cwf_json_anim_item(parser, idx, 0);
     
     scui_widget_draw(parent, NULL, true, 2);
 }
@@ -296,12 +294,9 @@ void scui_cwf_json_burn_pv(scui_handle_t *preview)
     scui_handle_t image_hit = *preview;
     *preview = SCUI_HANDLE_INVALID;
     
-    if (image_hit == SCUI_HANDLE_INVALID)
-        return;
-    
-    scui_image_t *image_src = scui_handle_source_check(image_hit);
-    
     /* 记得要清理缓存 */
+    if (image_hit == SCUI_HANDLE_INVALID) return;
+    scui_image_t *image_src = scui_handle_source_check(image_hit);
     scui_cache_image_unit_t image_unit = {.image = image_src,};
     scui_cache_image_invalidate(&image_unit);
     
