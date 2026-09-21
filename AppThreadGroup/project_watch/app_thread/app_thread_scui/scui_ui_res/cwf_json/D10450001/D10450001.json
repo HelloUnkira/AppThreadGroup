@@ -18,6 +18,38 @@
             "area_y":  0,
             "align":   "scui_cwf_json_align_itl",
             "img_res": ["cwf_bg_01_bg"]
+        },
+        {
+            "type":      "scui_cwf_json_type_font",
+            "source":    "scui_cwf_json_source_int",
+            "key":       "scui_cwf_json_key_one",
+            "font":      "scui_cwf_json_font_ttf",
+            "font_size": 32,
+            "font_res":  ["font_en_1"],
+            "area_x":    40,
+            "area_y":    60,
+            "align":     "scui_cwf_json_align_itl"
+        },
+        {
+            "type":      "scui_cwf_json_type_font",
+            "source":    "scui_cwf_json_source_float",
+            "key":       "scui_cwf_json_key_one",
+            "font":      "scui_cwf_json_font_ttf",
+            "font_size": 32,
+            "font_res":  ["font_en_1"],
+            "area_x":    40,
+            "area_y":    140,
+            "align":     "scui_cwf_json_align_itl"
+        },
+        {
+            "type":      "scui_cwf_json_type_font",
+            "source":    "scui_cwf_json_source_int",
+            "key":       "scui_cwf_json_key_one",
+            "font":      "scui_cwf_json_font_fixed",
+            "font_res":  ["font_ascii_32"],
+            "area_x":    40,
+            "area_y":    220,
+            "align":     "scui_cwf_json_align_itl"
         }
     ]
 }

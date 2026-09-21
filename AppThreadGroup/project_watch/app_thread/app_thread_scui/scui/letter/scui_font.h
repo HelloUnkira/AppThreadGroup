@@ -11,11 +11,12 @@
  *最终只需完成该目标即可
  */
 
-typedef struct {
+typedef struct {
     /* 字库资源信息: */
     const char   *font_name;
     scui_handle_t font_lang;
     scui_handle_t font_size;
+    scui_handle_t from;             /* 字库来源(携带资源文件名字句柄) */
     uintptr_t data_bin;
     uintptr_t size_bin;
     /* 字库参数调整: */

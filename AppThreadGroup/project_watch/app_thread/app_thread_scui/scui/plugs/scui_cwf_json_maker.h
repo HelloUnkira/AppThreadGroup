@@ -27,14 +27,19 @@ typedef struct {
     uint16_t *img_res;
     scui_coord_t img_w;
     scui_coord_t img_h;
+    /* 字体 */
+    uint16_t font_res;      /* 字体资源下标(资源表) */
+    uint16_t font_size;     /* 字库尺寸 */
+    uint8_t  font_type;     /* 字体类型(ttf/fixed) */
+    scui_handle_t font;     /* 字体句柄 */
     /* 运行时 */
     uint16_t  idx_num;
     uint16_t  idx_anim;
     scui_multi_t anim_tick;
 } scui_cwf_json_item_res_t;
 
-#define SCUI_CWF_JSON_SEQ_MAX                       (10)
-#define SCUI_CWF_JSON_ANIMA_DEF                     (137)
-#define SCUI_CWF_JSON_ANIMA_REFR                    (100)
+#define SCUI_CWF_JSON_SEQ_MAX       (10)
+#define SCUI_CWF_JSON_ANIMA_DEF     (137)
+#define SCUI_CWF_JSON_ANIMA_REFR    (100)
 
 #endif

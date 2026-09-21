@@ -948,7 +948,11 @@ static lv_font_t * lv_font_load(scui_font_t *font_src)
     strcpy(font->name, font_src->font_name);
     font->font_src.data_bin = font_src->data_bin;
     font->font_src.size_bin = font_src->size_bin;
-    scui_font_src_open(&font->font_src, font_src);
+    /* 来源优先: 内嵌字库由from携带表盘bin文件名 */
+    /* 无来源: 回落默认字库文件(scui_res_font.bin) */
+    const char *font_file = font_src->from != SCUI_HANDLE_INVALID ?
+        scui_handle_source(font_src->from) : NULL;
+    scui_font_src_open(&font->font_src, font_file);
     
     lv_font_fmt_txt_dsc_t *font_dsc = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_dsc_t));
     font->size += sizeof(lv_font_fmt_txt_dsc_t);
@@ -1350,7 +1354,11 @@ static void * lv_font_ttf_tiny_load(scui_font_t *font_src)
     strcpy(font->name, font_src->font_name);
     font->font_src.data_bin = font_src->data_bin;
     font->font_src.size_bin = font_src->size_bin;
-    scui_font_src_open(&font->font_src, font_src->font_name);
+    /* 来源优先: 内嵌字库由from携带表盘bin文件名 */
+    /* 无来源: 回落默认字库文件(scui_res_font.bin) */
+    const char *font_file = font_src->from != SCUI_HANDLE_INVALID ?
+        scui_handle_source(font_src->from) : NULL;
+    scui_font_src_open(&font->font_src, font_file);
     
     /* 加载ttf_tiny实例 */
     int index0 = stbtt_GetFontOffsetForIndex(&font->font_src, 0);
@@ -1558,7 +1566,11 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
     
     if (font->font_size == 0) {
         lv_font_t *lv_font = font->bmp_fixed;
-        scui_font_src_open(&lv_font->font_src, lv_font->name);
+        /* 来源优先: 内嵌字库由from携带表盘bin文件名 */
+        /* 无来源: 回落默认字库文件(scui_res_font.bin) */
+        const char *font_file = font->from != SCUI_HANDLE_INVALID ?
+            scui_handle_source(font->from) : NULL;
+        scui_font_src_open(&lv_font->font_src, font_file);
         lv_font_glpyh_load(lv_font, glyph);
         scui_font_src_close(&lv_font->font_src);
     } else {

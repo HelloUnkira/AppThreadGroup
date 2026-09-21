@@ -31,6 +31,13 @@ typedef struct {
     scui_image_t  *image_src;
     scui_handle_t *image_hit;
     uint32_t       image_num;
+    /* 字体资源定位表(cwf内嵌字库) */
+    uint32_t      *font_ofs;
+    uint32_t      *font_size;
+    uint32_t       font_num;
+    /* 字体资源定义(cache按需加载实例) */
+    scui_font_t   *font_src;
+    scui_handle_t *font_hit;
     scui_handle_t  parent;
     scui_handle_t *list_child;
     uint32_t       list_num;

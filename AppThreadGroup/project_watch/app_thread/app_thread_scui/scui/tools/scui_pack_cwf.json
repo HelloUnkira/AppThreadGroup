@@ -108,6 +108,8 @@
         {"key": "scui_cwf_json_source_dist_unit",   "n":  2, "anno": "距离单位(0=公里,1=英里)"},
         {"key": "scui_cwf_json_source_temp_unit",   "n":  2, "anno": "温度单位(0=摄氏,1=华氏)"},
         {"key": "scui_cwf_json_source_anim",        "n":  0, "anno": "自增帧号(type=anim)"},
+        {"key": "scui_cwf_json_source_int",         "n": 10, "anno": "整数(模拟自增)"},
+        {"key": "scui_cwf_json_source_float",       "n": 10, "anno": "小数(模拟自增, 值x10)"},
         {"key": "scui_cwf_json_source_num",         "n":  0, "anno": ""}
     ],
     

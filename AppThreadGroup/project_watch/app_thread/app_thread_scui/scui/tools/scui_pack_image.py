@@ -3,6 +3,7 @@ import re
 import os
 import sys
 import json
+import shutil
 import PIL.Image
 import lz4.block
 import lz4.frame
@@ -629,6 +630,17 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name, 
     for r in keep:
         scui_image_parser_c.write('\t(void *)&%s,\n' % r['tag'])
     scui_image_parser_c.write('};\n')
+    # cwf项目: 字库文件(ttf/bin)原样copy到子目录, 由cwf打包端收集为font条目
+    if project_name == 'cwf':
+        font_ext_list = ('.ttf', '.otf', '.bin')
+        for root, dirs, files in os.walk(src_path):
+            for fname in files:
+                if fname.lower().endswith(font_ext_list):
+                    src_file = os.path.join(root, fname)
+                    dst_file = os.path.join(scui_image_parser_sub, fname)
+                    # 同名时直接覆盖(字库文件原样保留)
+                    shutil.copy2(src_file, dst_file)
+                    print('font copy:' + fname)
 
 
 # 遍历整个文件夹,提取目标文件

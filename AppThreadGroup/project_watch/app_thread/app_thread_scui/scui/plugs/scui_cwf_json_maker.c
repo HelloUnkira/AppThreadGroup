@@ -241,6 +241,20 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx, uint3
             scui_widget_draw(handle, NULL, false, 0);
             break;
         }
+        case scui_cwf_json_type_font: {
+            /* 值刷新: 整数/小数转文本(小数源值x10, 还原一位小数) */
+            static char text[32] = {0};
+            
+            if (res->source == scui_cwf_json_source_int)
+                snprintf(text, sizeof(text), "%d", val);
+            if (res->source == scui_cwf_json_source_float) {
+                int32_t dec = val % 10; if (dec < 0) dec = -dec;
+                snprintf(text, sizeof(text), "%d.%d", val / 10, dec);
+            }
+            
+            scui_string_update_str(handle, text);
+            break;
+        }
         default:
             break;
         }
@@ -313,9 +327,16 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         }
         break;
     }
-    case scui_cwf_json_type_font:
-        /* 将来: 字体资源装载 */
+    case scui_cwf_json_type_font: {
+        /* 字体资源装载: 资源下标先取表, 具体数据定位在构造分支展开 */
+        cJSON *json_font = cJSON_GetObjectItem(dict, "font_res");
+        
+        if (cJSON_IsArray(json_font)) {
+            res->font_res = (uint16_t)scui_cwf_json_number(cJSON_GetArrayItem(json_font, 0));
+            SCUI_ASSERT(res->font_res < parser->image_num + parser->font_num);
+        }
         break;
+    }
     default:
         break;
     }
@@ -429,9 +450,36 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         scui_widget_create(&custom_maker, &parser->list_child[idx]);
         break;
     }
-    case scui_cwf_json_type_font:
-        SCUI_LOG_WARN("cwf json font unsupported");
+    case scui_cwf_json_type_font: {
+        res->source     = ( uint8_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "source"));
+        res->font_type  = ( uint8_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "font"));
+        res->font_size  = (uint16_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "font_size"));
+        res->area_w = (scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_w"));
+        res->area_h = (scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_h"));
+        if (res->area_w == 0) res->area_w = SCUI_WIDGET_AUTO_W;
+        if (res->area_h == 0) res->area_h = SCUI_WIDGET_AUTO_H;
+        /* 内容自适应: 区域为0时按文本宽度 */
+        
+        /* 字体资源: 资源表尾部为字体条目(font_res - image_num 得到字体序号) */
+        /* 字库定义句柄: 实例由cache按(字号)加载, 控件只携带定义 */
+        SCUI_ASSERT(res->font_res >= parser->image_num);
+        uint16_t font_idx = (uint16_t)(res->font_res - parser->image_num);
+        SCUI_ASSERT(font_idx < parser->font_num);
+        res->font = parser->font_hit[font_idx];
+        
+        /* 创建文本控件 */
+        scui_string_maker_define(string_maker);
+        string_maker.widget.clip.x = res->area_x;
+        string_maker.widget.clip.y = res->area_y;
+        string_maker.widget.clip.w = res->area_w;
+        string_maker.widget.clip.h = res->area_h;
+        string_maker.widget.parent = parent;
+        string_maker.args.name = res->font;
+        string_maker.args.size = res->font_type == scui_cwf_json_font_ttf ? res->font_size : 0;
+        string_maker.text = SCUI_HANDLE_INVALID;
+        scui_widget_create(&string_maker, &parser->list_child[idx]);
         break;
+    }
     default:
         SCUI_LOG_WARN("cwf json type unknown:%d", res->type);
         break;

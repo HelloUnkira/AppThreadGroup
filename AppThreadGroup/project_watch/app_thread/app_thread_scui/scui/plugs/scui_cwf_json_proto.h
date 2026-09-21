@@ -65,6 +65,8 @@ typedef enum {
 	scui_cwf_json_source_dist_unit,
 	scui_cwf_json_source_temp_unit,
 	scui_cwf_json_source_anim,
+	scui_cwf_json_source_int,
+	scui_cwf_json_source_float,
 	scui_cwf_json_source_num,
 } scui_cwf_json_source_t;
 
@@ -119,6 +121,8 @@ typedef enum {
 	scui_cwf_json_lang_fa,
 	scui_cwf_json_lang_num,
 } scui_cwf_json_lang_t;
+
+#define SCUI_CWF_JSON_PIXEL_CF_FONT		(0xFE)
 
 #define SCUI_CWF_JSON_SEQ_SET	"0123456789-+%/:*"
 #define SCUI_CWF_JSON_SEQ_NUM	16

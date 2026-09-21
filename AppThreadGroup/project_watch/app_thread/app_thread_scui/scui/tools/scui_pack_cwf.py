@@ -9,6 +9,9 @@ import re
 SCUI_CWF_TOOLS = None
 SCUI_CWF_PLUGS = None
 
+# 字体条目标记: 复用info.format字段(0xFE为哨兵值, 不占像素格式枚举, 固件端按此识别字体条目)
+SCUI_CWF_JSON_PIXEL_CF_FONT = 0xFE
+
 
 # 解析器基础设施目录(读 协议 json)
 def _scui_cwf_tools_dir():
@@ -93,6 +96,11 @@ def scui_cwf_json_parser_preprocess(c_file_list, json_obj):
             img_res = node['img_res']
             node['img_res'] = [image_list.index(image) for image in img_res]
             node['image_num'] = len(img_res)
+    # 清洗font_res字段: 字库名 -> 资源表下标(字体条目在列表尾部)
+    for idx, node in enumerate(json_obj['layout']):
+        if 'font_res' in node:
+            font_res = node['font_res']
+            node['font_res'] = [image_list.index(font) for font in font_res]
     # 替换枚举字段: 名字 -> 下标
     for idx, node in enumerate(json_obj['layout']):
         for field, table in (('type',   'scui_cwf_json_type'),
@@ -150,6 +158,8 @@ def scui_cwf_json_parser_proto():
             for idx, name in enumerate(scui_cwf_json_enum_list(json_parser, table)):
                 file.write('\t%s%s,\n' % (name, ' = 0' if idx == 0 else ''))
             file.write('} %s;\n\n' % ctype)
+        # 字体条目标记: 复用info.format字段(0xFE为哨兵值, 不占像素格式枚举)
+        file.write('#define SCUI_CWF_JSON_PIXEL_CF_FONT\t\t(0x%X)\n\n' % SCUI_CWF_JSON_PIXEL_CF_FONT)
         # seq 字符集(下标即字符在序列中的位置, 图集张数由序列长度决定)
         seq_set = json_parser['scui_cwf_json_seq_set']
         file.write('#define SCUI_CWF_JSON_SEQ_SET\t"%s"\n' % seq_set)
@@ -162,13 +172,21 @@ def scui_cwf_json_parser_proto():
 def scui_cwf_json_parser_image_collect(image_path):
     # 统计所有的image c文件
     c_file_list = []
-    for file_name in [file_name for file_name in os.listdir(image_path)]:
+    font_file_list = []
+    for file_name in sorted(os.listdir(image_path)):
+        # 字库文件(ttf/bin): 原样收集到列表尾部(固件端约定字体条目在资源表尾部)
+        ext = file_name.rsplit('.', 1)[-1].lower()
+        if ext in ('ttf', 'otf', 'bin'):
+            font_file_list.append(file_name)
+            continue
         # 处理每一个文件, 如果匹配到指定结构, 该文件便是我们要找的目标
         with open(os.path.join(image_path, file_name), mode='r', encoding='utf-8') as file:
             if re.search('const scui_image_t', file.read()):
                 c_file_list.append(file_name)
     print('image src file num:%d' % len(c_file_list))
-    return c_file_list
+    if font_file_list:
+        print('font src file num:%d' % len(font_file_list))
+    return c_file_list + font_file_list
 
 
 # 子流程:json文件处理,存入缓存列表中去
@@ -210,6 +228,22 @@ def scui_cwf_json_parser_image_info(image_path, c_file_list, c_data_offset):
     # 对所有的image info统计
     image_info_bytes = bytearray()
     for file_name in c_file_list:
+        # 字库文件: 直接按文件大小登记(format=0xFE标记, 固件端识别为字体条目)
+        ext = file_name.rsplit('.', 1)[-1].lower()
+        if ext in ('ttf', 'otf', 'bin'):
+            font_size = os.path.getsize(os.path.join(image_path, file_name))
+            if font_size == 0:
+                raise ValueError('incomplete font info %s' % file_name)
+            scui_image_data = c_data_offset
+            c_data_offset += font_size
+            image_info_bytes.extend(int(SCUI_CWF_JSON_PIXEL_CF_FONT).to_bytes(byteorder='little', length=1))
+            image_info_bytes.extend(int(0).to_bytes(byteorder='little', length=1))
+            image_info_bytes.extend(int(0).to_bytes(byteorder='little', length=4))   # height
+            image_info_bytes.extend(int(0).to_bytes(byteorder='little', length=4))   # width
+            image_info_bytes.extend(font_size.to_bytes(byteorder='little', length=4))
+            image_info_bytes.extend(int(0).to_bytes(byteorder='little', length=4))   # size_mem
+            image_info_bytes.extend(scui_image_data.to_bytes(byteorder='little', length=4))
+            continue
         scui_image_format = 0
         scui_image_type = 0
         scui_image_height = 0
@@ -263,6 +297,12 @@ def scui_cwf_json_parser_image_data(image_path, c_file_list):
     image_data_bytes = bytearray()
     # 对所有的image data统计
     for file_name in c_file_list:
+        # 字库文件: 原样字节流(与info的format=0xFE条目对齐)
+        ext = file_name.rsplit('.', 1)[-1].lower()
+        if ext in ('ttf', 'otf', 'bin'):
+            with open(os.path.join(image_path, file_name), mode='rb') as file:
+                image_data_bytes.extend(file.read())
+            continue
         # 从c源文件的此区域内, 提取十六进制字符串的bin文件数据流
         image_size = 0
         context_size = 0

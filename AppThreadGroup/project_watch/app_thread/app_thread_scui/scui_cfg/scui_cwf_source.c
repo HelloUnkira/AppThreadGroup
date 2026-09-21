@@ -29,6 +29,8 @@ const scui_cwf_json_source_info_t scui_cwf_json_source_info[scui_cwf_json_source
     [scui_cwf_json_source_dist_unit] = {0,     1},
     [scui_cwf_json_source_temp_unit] = {0,     1},
     [scui_cwf_json_source_anim]      = {0,     0},
+    [scui_cwf_json_source_int]       = {0,  9999},
+    [scui_cwf_json_source_float]     = {0,   999},
 };
 
 /*@brief 取数据源当前值
@@ -38,6 +40,8 @@ const scui_cwf_json_source_info_t scui_cwf_json_source_info[scui_cwf_json_source
  */
 bool scui_cwf_json_source_value(scui_cwf_json_source_t source, scui_coord_t *val)
 {
+    static uint32_t source_tick = 0;
+    
     switch (source) {
     case scui_cwf_json_source_year:      *val = scui_presenter.get_year();      break;
     case scui_cwf_json_source_month:     *val = scui_presenter.get_mon();       break;
@@ -56,9 +60,13 @@ bool scui_cwf_json_source_value(scui_cwf_json_source_t source, scui_coord_t *val
     case scui_cwf_json_source_kcal:      *val = scui_presenter.get_kcal_cur();  break;
     case scui_cwf_json_source_temp:      *val = scui_presenter.get_temp_cur();  break;
     case scui_cwf_json_source_temp_unit: *val = scui_presenter.get_temp_unit() ? 0 : 1; break;
+    case scui_cwf_json_source_int:       *val = (scui_coord_t)(source_tick % 10000);     break;
+    case scui_cwf_json_source_float:     *val = (scui_coord_t)((source_tick * 13) % 1000); break;
     default: SCUI_LOG_INFO("cwf json source unsupported:%d", source); return false;
     }
     
+    /* 测试数据源自增(每秒约10次取值) */
+    source_tick++;
     return true;
 }
 

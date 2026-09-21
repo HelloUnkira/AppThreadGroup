@@ -52,8 +52,10 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     if (string->unit_ms == 0) string->unit_ms = SCUI_WIDGET_STRING_UNIT_MS;
     if (string->unit_dx == 0) string->unit_dx = SCUI_WIDGET_STRING_UNIT_DX;
-    string->args.size = scui_font_size_match(string->font_idx, string->args.size);
-    string->args.name = scui_font_name_match(string->font_idx, string->args.lang);
+    if (string->args.name == SCUI_HANDLE_INVALID) {
+        string->args.name  = scui_font_name_match(string->font_idx, string->args.lang);
+        string->args.size  = scui_font_size_match(string->font_idx, string->args.size);
+    }
     
     /* 滚动方向: RTL内容右移(offset正向), LTR内容左移(offset负向) */
     string->unit_way = scui_lang_RTL() && !string->args.line_multi ? -1 : 1;

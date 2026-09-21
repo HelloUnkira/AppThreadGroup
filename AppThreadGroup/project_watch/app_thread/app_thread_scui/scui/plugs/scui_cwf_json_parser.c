@@ -107,6 +107,15 @@ void scui_cwf_json_burn(void **inst)
     /* 回收内部维护资源 */
     SCUI_MEM_FREE(parser->image_hit);
     SCUI_MEM_FREE(parser->image_src);
+    /* 批量回收所有字体句柄(实例由cache管理) */
+    for (uint32_t idx = 0; idx < parser->font_num; idx++)
+        scui_handle_clear(parser->font_hit[idx]);
+    /* 回收内部维护资源 */
+    SCUI_MEM_FREE(parser->font_hit);
+    SCUI_MEM_FREE(parser->font_src);
+    /* 字体资源定位表 */
+    SCUI_MEM_FREE(parser->font_ofs);
+    SCUI_MEM_FREE(parser->font_size);
     /* 回收名字和对应句柄 */
     const char *name = scui_handle_source(parser->name);
     scui_handle_clear(parser->name);
@@ -115,6 +124,11 @@ void scui_cwf_json_burn(void **inst)
     
     /* 销毁解析器 */
     SCUI_MEM_FREE(parser);
+    
+    /* 清理一下碎片 */
+    scui_cache_font_rectify();
+    scui_cache_glyph_rectify();
+    scui_cache_image_rectify();
 }
 
 /*@brief 构建cwf
@@ -158,13 +172,31 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     scui_handle_linker(parser->name, name);
     
     SCUI_ASSERT(image_isize % 22 == 0);
-    parser->image_num = image_isize / 22;
+    uint32_t info_num = image_isize / 22;
+    uint8_t *image_info = SCUI_MEM_ALLOC(scui_mem_type_user, info_num * 22);
+    scui_image_bin_read(file, image_iofs, info_num * 22, image_info);
+    
+    /* 第一遍: 区分图片条目与字体条目(format==0xFE), 统计各自数量 */
+    parser->image_num = 0;
+    parser->font_num  = 0;
+    for (uint32_t idx = 0; idx < info_num; idx++) {
+        uint8_t format = image_info[22 * idx + 0];
+        if (format == SCUI_CWF_JSON_PIXEL_CF_FONT)
+            parser->font_num++;
+        else
+            parser->image_num++;
+    }
+    
     parser->image_src = SCUI_MEM_ALLOC(scui_mem_type_user, parser->image_num * sizeof(scui_image_t));
     parser->image_hit = SCUI_MEM_ALLOC(scui_mem_type_user, parser->image_num * sizeof(scui_handle_t));
+    parser->font_ofs  = SCUI_MEM_ALLOC(scui_mem_type_user, parser->font_num * sizeof(uint32_t));
+    parser->font_size = SCUI_MEM_ALLOC(scui_mem_type_user, parser->font_num * sizeof(uint32_t));
+    parser->font_src  = SCUI_MEM_ALLOC(scui_mem_type_user, parser->font_num * sizeof(scui_font_t));
+    parser->font_hit  = SCUI_MEM_ALLOC(scui_mem_type_user, parser->font_num * sizeof(scui_handle_t));
     
-    uint8_t *image_info = SCUI_MEM_ALLOC(scui_mem_type_user, parser->image_num * 22);
-    scui_image_bin_read(file, image_iofs, parser->image_num * 22, image_info);
-    for (uint32_t idx = 0; idx < parser->image_num; idx++) {
+    /* 第二遍: 按序填充(图片/字体分开计数定位) */
+    uint32_t img_ofs = 0, font_ofs = 0;
+    for (uint32_t idx = 0; idx < info_num; idx++) {
         uint8_t  format   = image_info[22 * idx + 0];
         uint8_t  type     = image_info[22 * idx + 1];
         uint32_t height   = scui_cwf_json_u32(&image_info[22 * idx + 2 + 4 * 0]);
@@ -173,33 +205,54 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
         uint32_t size_mem = scui_cwf_json_u32(&image_info[22 * idx + 2 + 4 * 3]);
         uint32_t data_bin = scui_cwf_json_u32(&image_info[22 * idx + 2 + 4 * 4]);
         
+        /* 字体条目: 记录数据定位并构建字库定义(实例由cache按需加载) */
+        if (format == SCUI_CWF_JSON_PIXEL_CF_FONT) {
+            parser->font_ofs[font_ofs]  = data_bin;
+            parser->font_size[font_ofs] = size_bin;
+            /* 字库定义(复刻image范式): 携带来源与数据定位, 不在此加载实例 */
+            scui_font_t *font_src = &parser->font_src[font_ofs];
+            font_src->from      = parser->name;
+            font_src->font_name = scui_handle_source(parser->name);
+            font_src->font_lang = SCUI_HANDLE_INVALID;
+            font_src->font_size = 0;
+            font_src->data_bin  = data_bin;
+            font_src->size_bin  = size_bin;
+            parser->font_hit[font_ofs] = scui_handle_find();
+            scui_handle_linker(parser->font_hit[font_ofs], font_src);
+            font_ofs++;
+            continue;
+        }
+        
         switch (format) {
-        case scui_cwf_json_pixel_cf_alpha1:   parser->image_src[idx].format = scui_pixel_cf_alpha1;   break;
-        case scui_cwf_json_pixel_cf_alpha2:   parser->image_src[idx].format = scui_pixel_cf_alpha2;   break;
-        case scui_cwf_json_pixel_cf_alpha4:   parser->image_src[idx].format = scui_pixel_cf_alpha4;   break;
-        case scui_cwf_json_pixel_cf_alpha8:   parser->image_src[idx].format = scui_pixel_cf_alpha8;   break;
-        case scui_cwf_json_pixel_cf_index1:   parser->image_src[idx].format = scui_pixel_cf_index1;   break;
-        case scui_cwf_json_pixel_cf_index2:   parser->image_src[idx].format = scui_pixel_cf_index2;   break;
-        case scui_cwf_json_pixel_cf_index4:   parser->image_src[idx].format = scui_pixel_cf_index4;   break;
-        case scui_cwf_json_pixel_cf_index8:   parser->image_src[idx].format = scui_pixel_cf_index8;   break;
-        case scui_cwf_json_pixel_cf_bmp565:   parser->image_src[idx].format = scui_pixel_cf_bmp565;   break;
-        case scui_cwf_json_pixel_cf_bmp888:   parser->image_src[idx].format = scui_pixel_cf_bmp888;   break;
-        case scui_cwf_json_pixel_cf_bmp8565:  parser->image_src[idx].format = scui_pixel_cf_bmp8565;  break;
-        case scui_cwf_json_pixel_cf_bmp8888:  parser->image_src[idx].format = scui_pixel_cf_bmp8888;  break;
+        case scui_cwf_json_pixel_cf_alpha1:   parser->image_src[img_ofs].format = scui_pixel_cf_alpha1;   break;
+        case scui_cwf_json_pixel_cf_alpha2:   parser->image_src[img_ofs].format = scui_pixel_cf_alpha2;   break;
+        case scui_cwf_json_pixel_cf_alpha4:   parser->image_src[img_ofs].format = scui_pixel_cf_alpha4;   break;
+        case scui_cwf_json_pixel_cf_alpha8:   parser->image_src[img_ofs].format = scui_pixel_cf_alpha8;   break;
+        case scui_cwf_json_pixel_cf_index1:   parser->image_src[img_ofs].format = scui_pixel_cf_index1;   break;
+        case scui_cwf_json_pixel_cf_index2:   parser->image_src[img_ofs].format = scui_pixel_cf_index2;   break;
+        case scui_cwf_json_pixel_cf_index4:   parser->image_src[img_ofs].format = scui_pixel_cf_index4;   break;
+        case scui_cwf_json_pixel_cf_index8:   parser->image_src[img_ofs].format = scui_pixel_cf_index8;   break;
+        case scui_cwf_json_pixel_cf_bmp565:   parser->image_src[img_ofs].format = scui_pixel_cf_bmp565;   break;
+        case scui_cwf_json_pixel_cf_bmp888:   parser->image_src[img_ofs].format = scui_pixel_cf_bmp888;   break;
+        case scui_cwf_json_pixel_cf_bmp8565:  parser->image_src[img_ofs].format = scui_pixel_cf_bmp8565;  break;
+        case scui_cwf_json_pixel_cf_bmp8888:  parser->image_src[img_ofs].format = scui_pixel_cf_bmp8888;  break;
         default: SCUI_LOG_ERROR("unknown cwf json image format:%d", format);
         }
-        parser->image_src[idx].type = type;
-        parser->image_src[idx].pixel.height   = (uintptr_t)height;
-        parser->image_src[idx].pixel.width    = (uintptr_t)width;
-        parser->image_src[idx].pixel.size_bin = (uintptr_t)size_bin;
-        parser->image_src[idx].pixel.size_mem = (uintptr_t)size_mem;
-        parser->image_src[idx].pixel.data_bin = (uintptr_t)data_bin;
-        parser->image_src[idx].from = parser->name;
+        parser->image_src[img_ofs].type = type;
+        parser->image_src[img_ofs].pixel.height   = (uintptr_t)height;
+        parser->image_src[img_ofs].pixel.width    = (uintptr_t)width;
+        parser->image_src[img_ofs].pixel.size_bin = (uintptr_t)size_bin;
+        parser->image_src[img_ofs].pixel.size_mem = (uintptr_t)size_mem;
+        parser->image_src[img_ofs].pixel.data_bin = (uintptr_t)data_bin;
+        parser->image_src[img_ofs].from = parser->name;
         
         /* 资源关联绑定 handle <---> image */
-        parser->image_hit[idx] = scui_handle_find();
-        scui_handle_linker(parser->image_hit[idx], &parser->image_src[idx]);
+        parser->image_hit[img_ofs] = scui_handle_find();
+        scui_handle_linker(parser->image_hit[img_ofs], &parser->image_src[img_ofs]);
+        img_ofs++;
     }
+    SCUI_ASSERT(img_ofs  == parser->image_num);
+    SCUI_ASSERT(font_ofs == parser->font_num);
     
     /* cJSON组件初始化(选择性使用) */
     #if SCUI_CWF_JSON_PARSER_HOOK
