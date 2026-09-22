@@ -21,14 +21,19 @@ void scui_object_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_object_t *object = widget;
     scui_object_maker_t *object_maker = widget_maker;
     
-    /* 必须标记anima,ptr事件 */
+    /* 必须标记anima事件 */
     widget_maker->style.sched_anima = true;
-    widget_maker->style.indev_ptr   = true;
     
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_object));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
+    
+    /* menial必须依赖SVG */
+    #if SCUI_DRAW_USE_THORVG == 0
+    SCUI_LOG_ERROR("object must rely on SVG");
+    SCUI_ASSERT(false);
+    #endif
     
     object->press   = false;
     object->check   = false;

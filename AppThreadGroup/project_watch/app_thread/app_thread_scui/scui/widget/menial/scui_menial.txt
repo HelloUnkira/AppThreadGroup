@@ -1,5 +1,0 @@
-在object实现样式动画以供menial继承
-在object实现TVG的泛用小部件绘制(不完备)
-在menial实现特殊目标的DIY化(不完备)
-继续扩充实现menial即可......
-

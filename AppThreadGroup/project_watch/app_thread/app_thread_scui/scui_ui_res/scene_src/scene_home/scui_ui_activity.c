@@ -347,32 +347,32 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        // chart hist (menial cht)
-        scui_menial_maker_define(menial_maker);
-        scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
+        // chart hist (obj chart)
+        scui_obj_chart_maker_define(chart_maker);
+        scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
-        menial_maker.widget.clip.x = 0;
-        menial_maker.widget.clip.y = 100;
-        menial_maker.widget.clip.w = SCUI_HOR_RES;
-        menial_maker.widget.clip.h = 86;
-        menial_maker.widget.parent = event->object;
-        menial_maker.type = scui_menial_type_cht;
-        menial_maker.data.cht.type      = 0;
-        menial_maker.data.cht.value_min = 0;
-        menial_maker.data.cht.value_max = 100;
-        menial_maker.data.cht.number    = 24;
-        menial_maker.data.cht.area.x  = 42;
-        menial_maker.data.cht.area.y  = 0;
-        menial_maker.data.cht.area.w  = SCUI_HOR_RES - 42;
-        menial_maker.data.cht.area.h  = 86;
-        menial_maker.data.cht.space   = 4;
-        scui_widget_create(&menial_maker, &menial_handle);
+        chart_maker.widget.clip.x = 0;
+        chart_maker.widget.clip.y = 100;
+        chart_maker.widget.clip.w = SCUI_HOR_RES;
+        chart_maker.widget.clip.h = 86;
+        chart_maker.widget.parent = event->object;
         
-        scui_menial_cht_res_t cht_res = {0};
+        chart_maker.type      = 0;
+        chart_maker.value_min = 0;
+        chart_maker.value_max = 100;
+        chart_maker.number    = 24;
+        chart_maker.area.x  = 42;
+        chart_maker.area.y  = 0;
+        chart_maker.area.w  = SCUI_HOR_RES - 42;
+        chart_maker.area.h  = 86;
+        chart_maker.space   = 4;
+        scui_widget_create(&chart_maker, &chart_handle);
+        
+        scui_obj_chart_res_t cht_res = {0};
         cht_res.round  = true;
         cht_res.color.color.full = 0xFFF9104F;
         cht_res.part = scui_object_part_rect_item;
-        scui_menial_cht_style(menial_handle, &cht_res);
+        scui_obj_chart_style(chart_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_kcal_day7_24(scui_presenter.get_week(), day7_24);
@@ -383,7 +383,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
             vlist_min[idx] = 0;
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_kcal_min(), scui_presenter.get_kcal_max(), 0, 100);
         }
-        scui_menial_cht_hist_data(menial_handle, vlist_min, vlist_max);
+        scui_obj_chart_hist_data(chart_handle, vlist_min, vlist_max);
         
         /* 数字改ximage序列(创建子控件) */
         scui_ximage_maker_define(ximage_maker);
@@ -531,32 +531,32 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        // chart hist (menial cht)
-        scui_menial_maker_define(menial_maker);
-        scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
+        // chart hist (obj chart)
+        scui_obj_chart_maker_define(chart_maker);
+        scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
-        menial_maker.widget.clip.x = 0;
-        menial_maker.widget.clip.y = 100;
-        menial_maker.widget.clip.w = SCUI_HOR_RES;
-        menial_maker.widget.clip.h = 86;
-        menial_maker.widget.parent = event->object;
-        menial_maker.type = scui_menial_type_cht;
-        menial_maker.data.cht.type      = 0;
-        menial_maker.data.cht.value_min = 0;
-        menial_maker.data.cht.value_max = 100;
-        menial_maker.data.cht.number    = 24;
-        menial_maker.data.cht.area.x  = 42;
-        menial_maker.data.cht.area.y  = 0;
-        menial_maker.data.cht.area.w  = SCUI_HOR_RES - 42;
-        menial_maker.data.cht.area.h  = 86;
-        menial_maker.data.cht.space   = 4;
-        scui_widget_create(&menial_maker, &menial_handle);
+        chart_maker.widget.clip.x = 0;
+        chart_maker.widget.clip.y = 100;
+        chart_maker.widget.clip.w = SCUI_HOR_RES;
+        chart_maker.widget.clip.h = 86;
+        chart_maker.widget.parent = event->object;
         
-        scui_menial_cht_res_t cht_res = {0};
+        chart_maker.type      = 0;
+        chart_maker.value_min = 0;
+        chart_maker.value_max = 100;
+        chart_maker.number    = 24;
+        chart_maker.area.x  = 42;
+        chart_maker.area.y  = 0;
+        chart_maker.area.w  = SCUI_HOR_RES - 42;
+        chart_maker.area.h  = 86;
+        chart_maker.space   = 4;
+        scui_widget_create(&chart_maker, &chart_handle);
+        
+        scui_obj_chart_res_t cht_res = {0};
         cht_res.round  = true;
         cht_res.color.color.full = 0xFFE1CC00;
         cht_res.part = scui_object_part_rect_item;
-        scui_menial_cht_style(menial_handle, &cht_res);
+        scui_obj_chart_style(chart_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_step_day7_24(scui_presenter.get_week(), day7_24);
@@ -567,7 +567,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
             vlist_min[idx] = 0;
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_step_min(), scui_presenter.get_step_max(), 0, 100);
         }
-        scui_menial_cht_hist_data(menial_handle, vlist_min, vlist_max);
+        scui_obj_chart_hist_data(chart_handle, vlist_min, vlist_max);
         
         /* 数字改ximage序列(创建子控件) */
         scui_ximage_maker_define(ximage_maker);
@@ -716,32 +716,32 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        // chart hist (menial cht)
-        scui_menial_maker_define(menial_maker);
-        scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
+        // chart hist (obj chart)
+        scui_obj_chart_maker_define(chart_maker);
+        scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
-        menial_maker.widget.clip.x = 0;
-        menial_maker.widget.clip.y = 100;
-        menial_maker.widget.clip.w = SCUI_HOR_RES;
-        menial_maker.widget.clip.h = 86;
-        menial_maker.widget.parent = event->object;
-        menial_maker.type = scui_menial_type_cht;
-        menial_maker.data.cht.type      = 0;
-        menial_maker.data.cht.value_min = 0;
-        menial_maker.data.cht.value_max = 100;
-        menial_maker.data.cht.number    = 24;
-        menial_maker.data.cht.area.x  = 42;
-        menial_maker.data.cht.area.y  = 0;
-        menial_maker.data.cht.area.w  = SCUI_HOR_RES - 42;
-        menial_maker.data.cht.area.h  = 86;
-        menial_maker.data.cht.space   = 4;
-        scui_widget_create(&menial_maker, &menial_handle);
+        chart_maker.widget.clip.x = 0;
+        chart_maker.widget.clip.y = 100;
+        chart_maker.widget.clip.w = SCUI_HOR_RES;
+        chart_maker.widget.clip.h = 86;
+        chart_maker.widget.parent = event->object;
         
-        scui_menial_cht_res_t cht_res = {0};
+        chart_maker.type      = 0;
+        chart_maker.value_min = 0;
+        chart_maker.value_max = 100;
+        chart_maker.number    = 24;
+        chart_maker.area.x  = 42;
+        chart_maker.area.y  = 0;
+        chart_maker.area.w  = SCUI_HOR_RES - 42;
+        chart_maker.area.h  = 86;
+        chart_maker.space   = 4;
+        scui_widget_create(&chart_maker, &chart_handle);
+        
+        scui_obj_chart_res_t cht_res = {0};
         cht_res.round  = true;
         cht_res.color.color.full = 0xFF00B7FF;
         cht_res.part = scui_object_part_rect_item;
-        scui_menial_cht_style(menial_handle, &cht_res);
+        scui_obj_chart_style(chart_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_dist_day7_24(scui_presenter.get_week(), day7_24);
@@ -752,7 +752,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
             vlist_min[idx] = 0;
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_dist_min(), scui_presenter.get_dist_max(), 0, 100);
         }
-        scui_menial_cht_hist_data(menial_handle, vlist_min, vlist_max);
+        scui_obj_chart_hist_data(chart_handle, vlist_min, vlist_max);
         
         /* 数字改ximage序列(创建子控件) */
         scui_ximage_maker_define(ximage_maker);

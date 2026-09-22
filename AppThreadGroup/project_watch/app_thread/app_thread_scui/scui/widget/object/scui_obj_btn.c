@@ -7,35 +7,59 @@
 
 #include "scui.h"
 
-/*@brief 控件构造(子类型)
- *@param maker inst是构造器
- *@param inst  构造器或实例
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
  */
-void scui_menial_btn_make(bool maker, void *inst)
+void scui_obj_btn_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    scui_menial_t *menial = inst;
-    scui_menial_maker_t *menial_maker = inst;
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 继承对象 */
+    scui_object_t *object = widget;
+    scui_object_maker_t *object_maker = widget_maker;
+    /* 本类对象 */
+    scui_obj_btn_t *obj_btn = widget;
+    scui_obj_btn_maker_t *obj_btn_maker = widget_maker;
     
-    if (maker) {
-    } else {
-    }
+    /* 必须标记ptr,widget事件 */
+    widget_maker->style.indev_ptr    = true;
+    widget_maker->style.sched_widget = true;
+    
+    /* 构造派生控件实例 */
+    scui_object_make(object, object_maker, handle);
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_obj_btn));
+    SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
+    
+    /* 资源同步与构造 */
+    obj_btn->fixed = obj_btn_maker->fixed;
+    obj_btn->check = obj_btn_maker->check;
+    obj_btn->click = false;
 }
 
-/*@brief 控件析构(子类型)
- *@param menial 控件实例
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
-void scui_menial_btn_burn(scui_menial_t *menial)
+void scui_obj_btn_burn(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_btn));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_obj_btn_t *obj_btn = (void *)widget;
+    
+    /* 析构派生控件实例 */
+    scui_object_burn(widget->myself);
 }
 
-/*@brief 控件样式应用(子类型)
+/*@brief 控件样式应用
  *@param handle 控件句柄
  *@param res    样式资源
  */
-void scui_menial_btn_style(scui_handle_t handle, scui_menial_btn_res_t *res)
+void scui_obj_btn_style(scui_handle_t handle, scui_obj_btn_res_t *res)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_menial_t *menial = (void *)widget;
+    scui_obj_btn_t *obj_btn = (void *)widget;
     
     /* 部件宽高 */
     scui_coord_t area_w = res->area.w ? res->area.w : widget->clip.w;
@@ -58,16 +82,16 @@ void scui_menial_btn_style(scui_handle_t handle, scui_menial_btn_res_t *res)
     sub.state = scui_object_state_pre;
     scui_object_prop_rect(handle, &sub);
     
-    if (menial->data.btn.check) {
+    if (obj_btn->check) {
         sub.state = scui_object_state_chk;
         scui_object_prop_rect(handle, &sub);
     }
     
     scui_coord_t time = res->time;
-    if (time == 0) time = SCUI_WIDGET_MENIAL_BTN_TIME;
+    if (time == 0) time = SCUI_WIDGET_OBJ_BTN_TIME;
     
     scui_coord_t lim = res->lim;
-    if (lim == 0) lim = SCUI_WIDGET_MENIAL_BTN_PCT;
+    if (lim == 0) lim = SCUI_WIDGET_OBJ_BTN_PCT;
     scui_multi_t scale_w = (scui_multi_t)area_w * lim / 100;
     scui_multi_t scale_h = (scui_multi_t)area_h * lim / 100;
     
@@ -98,7 +122,7 @@ void scui_menial_btn_style(scui_handle_t handle, scui_menial_btn_res_t *res)
         }
         
         /* width && height prop: fixed=1 尺寸固定(全状态同 area, 无缩放) */
-        if (menial->data.btn.fixed) {
+        if (obj_btn->fixed) {
             scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
                 scui_object_state_def, scui_object_data_number(area_w));
             scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
@@ -130,7 +154,7 @@ void scui_menial_btn_style(scui_handle_t handle, scui_menial_btn_res_t *res)
     }
     
     /* chk<->pre: 颜色/缩放/动画(选中时) */
-    if (menial->data.btn.check) {
+    if (obj_btn->check) {
         /* color prop(chk<->pre): color_s状态色, color_e渐变 */
         scui_object_prop_add_s(handle, res->part, scui_object_style_rect_color,
             scui_object_state_chk, scui_object_data_color32(res->color[2].color_s));
@@ -155,7 +179,7 @@ void scui_menial_btn_style(scui_handle_t handle, scui_menial_btn_res_t *res)
         }
         
         /* width && height prop: fixed=1 尺寸固定(全状态同 area, 无缩放) */
-        if (menial->data.btn.fixed) {
+        if (obj_btn->fixed) {
             scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
                 scui_object_state_chk, scui_object_data_number(area_w));
             scui_object_prop_add_s(handle, res->part, scui_object_style_rect_width,
@@ -192,19 +216,22 @@ void scui_menial_btn_style(scui_handle_t handle, scui_menial_btn_res_t *res)
         scui_object_data_number(time));
 }
 
-/*@brief 事件处理回调(子类型)
+/*@brief 事件处理回调
  *@param event 事件
  */
-void scui_menial_btn_invoke(scui_event_t *event)
+void scui_obj_btn_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_menial_t *menial = (void *)widget;
+    scui_obj_btn_t *obj_btn = (void *)widget;
+    
+    /* 基类处理(过渡动画推进) */
+    scui_object_invoke(event);
     
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 动画完成才消费点击标记 */
-        if (!menial->data.btn.click) break;
+        if (!obj_btn->click) break;
         
         scui_object_type_t state = scui_object_type_none;
         scui_object_state_get(event->object, &state);
@@ -214,7 +241,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
             /* 过渡动画未结束则不消费 */
             if (!scui_object_tran_idle(event->object)) break;
             
-            menial->data.btn.click = false;
+            obj_btn->click = false;
             scui_event_define(event, widget->myself, true, scui_event_button_click, NULL);
             scui_event_notify(&event);
         }
@@ -229,7 +256,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
         scui_object_state_get(event->object, &state);
         if (state != scui_object_state_pre) break;
         
-        if (menial->data.btn.check) {
+        if (obj_btn->check) {
             scui_object_type_t state_l = scui_object_type_none;
             scui_object_state_l_get(event->object, &state_l);
             
@@ -252,7 +279,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
     }
     case scui_event_ptr_click: {
         scui_event_mask_over(event);
-        menial->data.btn.click = true;
+        obj_btn->click = true;
         break;
     }
     
@@ -260,7 +287,7 @@ void scui_menial_btn_invoke(scui_event_t *event)
         
         /* 运行状态初始化(运行时初值已由构造器拷贝) */
         scui_object_press_set(event->object, true);
-        scui_object_check_set(event->object, menial->data.btn.check);
+        scui_object_check_set(event->object, obj_btn->check);
         break;
     }
     

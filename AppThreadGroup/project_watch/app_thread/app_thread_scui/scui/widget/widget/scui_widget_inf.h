@@ -210,17 +210,20 @@ void scui_widget_create(void *maker, scui_handle_t *handle);
 
 /*@brief 构造器实例定义
  */
-#define scui_window_maker_define(name)  scui_widget_maker_define(name, window)
-#define scui_layout_maker_define(name)  scui_widget_maker_define(name, layout)
-#define scui_scroll_maker_define(name)  scui_widget_maker_define(name, scroll)
-#define scui_custom_maker_define(name)  scui_widget_maker_define(name, custom)
-#define scui_string_maker_define(name)  scui_widget_maker_define(name, string)
-#define scui_symbol_maker_define(name)  scui_widget_maker_define(name, symbol)
-#define scui_roller_maker_define(name)  scui_widget_maker_define(name, roller)
-#define scui_ximage_maker_define(name)  scui_widget_maker_define(name, ximage)
-#define scui_xwatch_maker_define(name)  scui_widget_maker_define(name, xwatch)
-#define scui_object_maker_define(name)  scui_widget_maker_define(name, object)
-#define scui_menial_maker_define(name)  scui_widget_maker_define(name, menial)
+#define scui_window_maker_define(name)      scui_widget_maker_define(name, window)
+#define scui_layout_maker_define(name)      scui_widget_maker_define(name, layout)
+#define scui_scroll_maker_define(name)      scui_widget_maker_define(name, scroll)
+#define scui_custom_maker_define(name)      scui_widget_maker_define(name, custom)
+#define scui_string_maker_define(name)      scui_widget_maker_define(name, string)
+#define scui_symbol_maker_define(name)      scui_widget_maker_define(name, symbol)
+#define scui_roller_maker_define(name)      scui_widget_maker_define(name, roller)
+#define scui_ximage_maker_define(name)      scui_widget_maker_define(name, ximage)
+#define scui_xwatch_maker_define(name)      scui_widget_maker_define(name, xwatch)
+#define scui_object_maker_define(name)      scui_widget_maker_define(name, object)
+#define scui_obj_btn_maker_define(name)     scui_widget_maker_define(name, obj_btn)
+#define scui_obj_arc_maker_define(name)     scui_widget_maker_define(name, obj_arc)
+#define scui_obj_bar_maker_define(name)     scui_widget_maker_define(name, obj_bar)
+#define scui_obj_chart_maker_define(name)   scui_widget_maker_define(name, obj_chart)
 
 /*************************************************************************************************/
 /*************************************************************************************************/

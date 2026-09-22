@@ -2,9 +2,8 @@
 #define SCUI_OBJECT_H
 
 /*对象控件(lvgl式)
- *它会吸收lvgl控件
-设计部分思想
- *最终为用于menial控件继承使用
+ *它会吸收lvgl控件设计部分思想
+ *最终为对象控件派生继承使用
  */
 
 typedef enum {

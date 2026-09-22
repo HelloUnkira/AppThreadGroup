@@ -8,14 +8,14 @@
 #include "scui.h"
 
 static struct {
-    scui_coord_t  menial_arc_w;    /* 圆弧值方向 */
-    scui_coord_t  menial_arc_v;    /* 圆弧值 */
-    scui_handle_t menial_arc_1;    /* 圆弧控件 */
-    scui_handle_t menial_arc_2;    /* 圆弧控件 */
-    scui_handle_t menial_arc_3;    /* 圆弧控件 */
-    scui_coord_t  menial_bar_w1;   /* 条形值方向 */
-    scui_coord_t  menial_bar_v1;   /* 条形值 */
-    scui_handle_t menial_bar_1;    /* 条形控件 */
+    scui_coord_t  obj_arc_w;    /* 圆弧值方向 */
+    scui_coord_t  obj_arc_v;    /* 圆弧值 */
+    scui_handle_t obj_arc_1;    /* 圆弧控件 */
+    scui_handle_t obj_arc_2;    /* 圆弧控件 */
+    scui_handle_t obj_arc_3;    /* 圆弧控件 */
+    scui_coord_t  obj_bar_w1;   /* 条形值方向 */
+    scui_coord_t  obj_bar_v1;   /* 条形值 */
+    scui_handle_t obj_bar_1;    /* 条形控件 */
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -38,7 +38,7 @@ void scui_test_ui_object_arc_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_update_value: {
         scui_coord3_t angle = 0.0f;
-        scui_menial_arc_current_angle(event->object, &angle);
+        scui_obj_arc_current_angle(event->object, &angle);
         SCUI_LOG_INFO("arc angle:%.2f", angle);
         break;
     }
@@ -53,7 +53,7 @@ void scui_test_ui_object_bar_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_update_value: {
         scui_coord3_t value = 0.0f;
-        scui_menial_bar_current_value(event->object, &value);
+        scui_obj_bar_current_value(event->object, &value);
         SCUI_LOG_INFO("bar value:%.2f", value);
         break;
     }
@@ -82,260 +82,265 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_menial_maker_define(menial_maker);
-        scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
-        menial_maker.widget.parent = event->object;
-        
         #if 1
-        // menial_btn:
-        scui_coord_t btn_ofs_y = 30 + 60 + 10;
-        menial_maker.widget.clip.w = 120;
-        menial_maker.widget.clip.h = 60;
-        menial_maker.widget.event_cb = scui_test_ui_object_btn_event_proc;
-        menial_maker.type = scui_menial_type_btn;
+        // obj_btn:
+        scui_obj_btn_maker_define(obj_btn_maker);
+        scui_handle_t obj_btn_handle = SCUI_HANDLE_INVALID;
+        obj_btn_maker.widget.parent = event->object;
         
-        scui_menial_btn_res_t btn_res = {0};
-        btn_res.color[0].color_s.full = 0xFF00FF00;  /* def */
-        btn_res.color[1].color_s.full = 0xFF008000;  /* pre */
-        btn_res.color[2].color_s.full = 0xFFFF0000;  /* chk */
-        btn_res.color[3].color_s.full = 0xFF800000;  /* chk pre */
+        scui_coord_t obj_btn_ofs_y = 30 + 60 + 10;
+        obj_btn_maker.widget.clip.w = 120;
+        obj_btn_maker.widget.clip.h = 60;
+        obj_btn_maker.widget.event_cb = scui_test_ui_object_btn_event_proc;
         
-        menial_maker.data.btn.fixed = 1;
-        menial_maker.data.btn.check = 1;
-        btn_res.width  = 0;
-        btn_res.radius = -1;
-        menial_maker.widget.clip.x = (SCUI_HOR_RES - 120) / 2;
-        menial_maker.widget.clip.y = 30;
-        scui_widget_create(&menial_maker, &menial_handle);
-        btn_res.part = scui_object_part_rect_bg;
-        scui_menial_btn_style(menial_handle, &btn_res);
+        scui_obj_btn_res_t obj_btn_res = {0};
+        obj_btn_res.color[0].color_s.full = 0xFF00FF00;  /* def */
+        obj_btn_res.color[1].color_s.full = 0xFF008000;  /* pre */
+        obj_btn_res.color[2].color_s.full = 0xFFFF0000;  /* chk */
+        obj_btn_res.color[3].color_s.full = 0xFF800000;  /* chk pre */
         
-        menial_maker.data.btn.fixed = 1;
-        menial_maker.data.btn.check = 0;
-        btn_res.width  = 0;
-        btn_res.radius = -1;
-        menial_maker.widget.clip.x   = SCUI_HOR_RES * 1 / 4 - 120 / 2;
-        menial_maker.widget.clip.y   = btn_ofs_y;
-        scui_widget_create(&menial_maker, &menial_handle);
-        btn_res.part = scui_object_part_rect_bg;
-        scui_menial_btn_style(menial_handle, &btn_res);
+        obj_btn_maker.fixed = 1;
+        obj_btn_maker.check = 1;
+        obj_btn_res.width  = 0;
+        obj_btn_res.radius = -1;
+        obj_btn_maker.widget.clip.x = (SCUI_HOR_RES - 120) / 2;
+        obj_btn_maker.widget.clip.y = 30;
+        scui_widget_create(&obj_btn_maker, &obj_btn_handle);
+        obj_btn_res.part = scui_object_part_rect_bg;
+        scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
-        menial_maker.data.btn.fixed = 0;
-        menial_maker.data.btn.check = 1;
-        btn_res.width  = 0;
-        btn_res.radius = 5;
-        menial_maker.widget.clip.x   = SCUI_HOR_RES * 2 / 4 - 120 / 2;
-        menial_maker.widget.clip.y   = btn_ofs_y;
-        scui_widget_create(&menial_maker, &menial_handle);
-        btn_res.part = scui_object_part_rect_bg;
-        scui_menial_btn_style(menial_handle, &btn_res);
+        obj_btn_maker.fixed = 1;
+        obj_btn_maker.check = 0;
+        obj_btn_res.width  = 0;
+        obj_btn_res.radius = -1;
+        obj_btn_maker.widget.clip.x   = SCUI_HOR_RES * 1 / 4 - 120 / 2;
+        obj_btn_maker.widget.clip.y   = obj_btn_ofs_y;
+        scui_widget_create(&obj_btn_maker, &obj_btn_handle);
+        obj_btn_res.part = scui_object_part_rect_bg;
+        scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
-        menial_maker.data.btn.fixed = 0;
-        menial_maker.data.btn.check = 1;
-        menial_maker.widget.clip.x   = SCUI_HOR_RES * 3 / 4 - 120 / 2;
-        menial_maker.widget.clip.y   = btn_ofs_y;
-        scui_widget_create(&menial_maker, &menial_handle);
+        obj_btn_maker.fixed = 0;
+        obj_btn_maker.check = 1;
+        obj_btn_res.width  = 0;
+        obj_btn_res.radius = 5;
+        obj_btn_maker.widget.clip.x   = SCUI_HOR_RES * 2 / 4 - 120 / 2;
+        obj_btn_maker.widget.clip.y   = obj_btn_ofs_y;
+        scui_widget_create(&obj_btn_maker, &obj_btn_handle);
+        obj_btn_res.part = scui_object_part_rect_bg;
+        scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
+        
+        obj_btn_maker.fixed = 0;
+        obj_btn_maker.check = 1;
+        obj_btn_maker.widget.clip.x   = SCUI_HOR_RES * 3 / 4 - 120 / 2;
+        obj_btn_maker.widget.clip.y   = obj_btn_ofs_y;
+        scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         
         /* 四样式同显(bg/edge/box/sha), 覆盖自test_ui_button倒数1 */
-        scui_menial_btn_res_t bg_res = {0};
-        bg_res.part = scui_object_part_rect_bg;
-        bg_res.color[0].color_s.full = 0xFF87CEFA;  /* def */
-        bg_res.color[1].color_s.full = 0xFF4682B4;  /* pre */
-        bg_res.color[2].color_s.full = 0xFF87CEFA;  /* chk */
-        bg_res.color[3].color_s.full = 0xFF4682B4;  /* chk pre */
-        bg_res.area.w = 120 - (12 + 4 + 4) * 2;
-        bg_res.area.h = 60 - (12 + 4 + 4) * 2;
-        bg_res.width  = 0;
-        bg_res.radius = 30 - (12 + 4 + 4);
+        scui_obj_btn_res_t obj_btn_bg_res = {0};
+        obj_btn_bg_res.part = scui_object_part_rect_bg;
+        obj_btn_bg_res.color[0].color_s.full = 0xFF87CEFA;  /* def */
+        obj_btn_bg_res.color[1].color_s.full = 0xFF4682B4;  /* pre */
+        obj_btn_bg_res.color[2].color_s.full = 0xFF87CEFA;  /* chk */
+        obj_btn_bg_res.color[3].color_s.full = 0xFF4682B4;  /* chk pre */
+        obj_btn_bg_res.area.w = 120 - (12 + 4 + 4) * 2;
+        obj_btn_bg_res.area.h = 60 - (12 + 4 + 4) * 2;
+        obj_btn_bg_res.width  = 0;
+        obj_btn_bg_res.radius = 30 - (12 + 4 + 4);
         
-        scui_menial_btn_res_t edge_res = {0};
-        edge_res.part = scui_object_part_rect_edge;
-        edge_res.color[0].color_s.full = 0xFFFFFFFF;  /* def */
-        edge_res.color[1].color_s.full = 0xFFFFFFFF;  /* pre */
-        edge_res.color[2].color_s.full = 0xFFFFFFFF;  /* chk */
-        edge_res.color[3].color_s.full = 0xFFFFFFFF;  /* chk pre */
-        edge_res.area.w = 120 - (12 + 4) * 2;
-        edge_res.area.h = 60 - (12 + 4) * 2;
-        edge_res.width  = 4;
-        edge_res.radius = 30 - (12 + 4);
+        scui_obj_btn_res_t obj_btn_edge_res = {0};
+        obj_btn_edge_res.part = scui_object_part_rect_edge;
+        obj_btn_edge_res.color[0].color_s.full = 0xFFFFFFFF;  /* def */
+        obj_btn_edge_res.color[1].color_s.full = 0xFFFFFFFF;  /* pre */
+        obj_btn_edge_res.color[2].color_s.full = 0xFFFFFFFF;  /* chk */
+        obj_btn_edge_res.color[3].color_s.full = 0xFFFFFFFF;  /* chk pre */
+        obj_btn_edge_res.area.w = 120 - (12 + 4) * 2;
+        obj_btn_edge_res.area.h = 60 - (12 + 4) * 2;
+        obj_btn_edge_res.width  = 4;
+        obj_btn_edge_res.radius = 30 - (12 + 4);
         
-        scui_menial_btn_res_t box_res = {0};
-        box_res.part  = scui_object_part_rect_box;
-        box_res.color[0].color_s.full = 0xFFFF0000;  /* def */
-        box_res.color[1].color_s.full = 0xFFFF0000;  /* pre */
-        box_res.color[2].color_s.full = 0xFFFF0000;  /* chk */
-        box_res.color[3].color_s.full = 0xFFFF0000;  /* chk pre */
-        box_res.area.w = 120 - (12) * 2;
-        box_res.area.h = 60 - (12) * 2;
-        box_res.width  = 4;
-        box_res.radius = 30 - (12);
+        scui_obj_btn_res_t obj_btn_box_res = {0};
+        obj_btn_box_res.part  = scui_object_part_rect_box;
+        obj_btn_box_res.color[0].color_s.full = 0xFFFF0000;  /* def */
+        obj_btn_box_res.color[1].color_s.full = 0xFFFF0000;  /* pre */
+        obj_btn_box_res.color[2].color_s.full = 0xFFFF0000;  /* chk */
+        obj_btn_box_res.color[3].color_s.full = 0xFFFF0000;  /* chk pre */
+        obj_btn_box_res.area.w = 120 - (12) * 2;
+        obj_btn_box_res.area.h = 60 - (12) * 2;
+        obj_btn_box_res.width  = 4;
+        obj_btn_box_res.radius = 30 - (12);
         
-        scui_menial_btn_res_t sha_res = {0};
-        sha_res.part  = scui_object_part_rect_sha;
-        sha_res.color[0].color_s.full = 0xFF00FF00;  /* def */
-        sha_res.color[1].color_s.full = 0xFF00FF00;  /* pre */
-        sha_res.color[2].color_s.full = 0xFF00FF00;  /* chk */
-        sha_res.color[3].color_s.full = 0xFF00FF00;  /* chk pre */
-        sha_res.area.w = 120 - (0) * 2;
-        sha_res.area.h = 60 - (0) * 2;
-        sha_res.width  = 12;
-        sha_res.radius = 30 - (0);
-        sha_res.shadow = 1;
+        scui_obj_btn_res_t obj_btn_sha_res = {0};
+        obj_btn_sha_res.part  = scui_object_part_rect_sha;
+        obj_btn_sha_res.color[0].color_s.full = 0xFF00FF00;  /* def */
+        obj_btn_sha_res.color[1].color_s.full = 0xFF00FF00;  /* pre */
+        obj_btn_sha_res.color[2].color_s.full = 0xFF00FF00;  /* chk */
+        obj_btn_sha_res.color[3].color_s.full = 0xFF00FF00;  /* chk pre */
+        obj_btn_sha_res.area.w = 120 - (0) * 2;
+        obj_btn_sha_res.area.h = 60 - (0) * 2;
+        obj_btn_sha_res.width  = 12;
+        obj_btn_sha_res.radius = 30 - (0);
+        obj_btn_sha_res.shadow = 1;
         
-        scui_menial_btn_style(menial_handle, &bg_res);
-        scui_menial_btn_style(menial_handle, &edge_res);
-        scui_menial_btn_style(menial_handle, &box_res);
-        scui_menial_btn_style(menial_handle, &sha_res);
+        scui_obj_btn_style(obj_btn_handle, &obj_btn_bg_res);
+        scui_obj_btn_style(obj_btn_handle, &obj_btn_edge_res);
+        scui_obj_btn_style(obj_btn_handle, &obj_btn_box_res);
+        scui_obj_btn_style(obj_btn_handle, &obj_btn_sha_res);
         #endif
         
         #if 1
-        // menial_arc:
-        scui_coord_t arc_ofs_y = btn_ofs_y + 60 + 10;
-        menial_maker.widget.clip.w = 100;
-        menial_maker.widget.clip.h = 100;
-        menial_maker.widget.event_cb = scui_test_ui_object_arc_event_proc;
-        menial_maker.type = scui_menial_type_arc;
+        // obj_arc:
+        scui_obj_arc_maker_define(obj_arc_maker);
+        scui_handle_t obj_arc_handle = SCUI_HANDLE_INVALID;
+        obj_arc_maker.widget.parent = event->object;
         
-        scui_menial_arc_res_t arc_res = {0};
-        arc_res.color[0].color_s.full = 0xFF000080;
-        arc_res.color[1].color_s.full = 0xFF0000FF;
-        arc_res.color[0].color_e.full = 0xFF008000;
-        arc_res.color[1].color_e.full = 0xFF00FF00;
-        arc_res.center.x = 100 / 2;
-        arc_res.center.y = 100 / 2;
-        arc_res.radius   = 100 / 2;
-        arc_res.time     = 1500;
+        scui_coord_t obj_arc_ofs_y = obj_btn_ofs_y + 60 + 10;
+        obj_arc_maker.widget.clip.w = 100;
+        obj_arc_maker.widget.clip.h = 100;
+        obj_arc_maker.widget.event_cb = scui_test_ui_object_arc_event_proc;
         
-        menial_maker.data.arc.anti = 1;
-        menial_maker.data.arc.ext_touch = 0;
-        menial_maker.data.arc.ext_spinner = 1;
-        arc_res.width   = 8;
-        arc_res.round   = 1;
-        arc_res.gradw   = 0;
-        arc_res.grad    = 1;
-        menial_maker.widget.clip.x = SCUI_HOR_RES * 1 / 4 - 100 / 2;
-        menial_maker.widget.clip.y = arc_ofs_y;
-        scui_widget_create(&menial_maker, &menial_handle);
+        scui_obj_arc_res_t obj_arc_res = {0};
+        obj_arc_res.color[0].color_s.full = 0xFF000080;
+        obj_arc_res.color[1].color_s.full = 0xFF0000FF;
+        obj_arc_res.color[0].color_e.full = 0xFF008000;
+        obj_arc_res.color[1].color_e.full = 0xFF00FF00;
+        obj_arc_res.center.x = 100 / 2;
+        obj_arc_res.center.y = 100 / 2;
+        obj_arc_res.radius   = 100 / 2;
+        obj_arc_res.time     = 1500;
         
-        arc_res.part = scui_object_part_arc_bg;
-        scui_menial_arc_style(menial_handle, &arc_res);
-        arc_res.part = scui_object_part_arc_fg;
-        scui_menial_arc_style(menial_handle, &arc_res);
-        scui_ui_res_local->menial_arc_1 = menial_handle;
+        obj_arc_maker.anti = 1;
+        obj_arc_maker.ext_touch = 0;
+        obj_arc_maker.ext_spinner = 1;
+        obj_arc_res.width   = 8;
+        obj_arc_res.round   = 1;
+        obj_arc_res.gradw   = 0;
+        obj_arc_res.grad    = 1;
+        obj_arc_maker.widget.clip.x = SCUI_HOR_RES * 1 / 4 - 100 / 2;
+        obj_arc_maker.widget.clip.y = obj_arc_ofs_y;
+        scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         
-        arc_res.angle_s = 0;
-        arc_res.angle_e = 0;
-        arc_res.time    = 0;
+        obj_arc_res.part = scui_object_part_arc_bg;
+        scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
+        obj_arc_res.part = scui_object_part_arc_fg;
+        scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
+        scui_ui_res_local->obj_arc_1 = obj_arc_handle;
         
-        menial_maker.data.arc.anti = 1;
-        menial_maker.data.arc.ext_touch = 0;
-        menial_maker.data.arc.ext_spinner = 0;
-        arc_res.width   = 0;
-        arc_res.round   = 0;
-        arc_res.gradw   = 1;
-        arc_res.grad    = 0;
-        menial_maker.widget.clip.x = SCUI_HOR_RES * 2 / 4 - 100 / 2;
-        menial_maker.widget.clip.y = arc_ofs_y;
-        scui_widget_create(&menial_maker, &menial_handle);
-        arc_res.part = scui_object_part_arc_bg;
-        scui_menial_arc_style(menial_handle, &arc_res);
-        arc_res.part = scui_object_part_arc_fg;
-        scui_menial_arc_style(menial_handle, &arc_res);
-        scui_ui_res_local->menial_arc_2 = menial_handle;
+        obj_arc_res.angle_s = 0;
+        obj_arc_res.angle_e = 0;
+        obj_arc_res.time    = 0;
         
-        menial_maker.data.arc.anti = 0;
-        menial_maker.data.arc.ext_touch = 1;
-        menial_maker.data.arc.ext_spinner = 0;
-        arc_res.width   = 8;
-        arc_res.round   = 1;
-        arc_res.gradw   = 1;
-        arc_res.grad    = 1;
-        menial_maker.widget.clip.x = SCUI_HOR_RES * 3 / 4 - 100 / 2;
-        menial_maker.widget.clip.y = arc_ofs_y;
-        scui_widget_create(&menial_maker, &menial_handle);
-        arc_res.part = scui_object_part_arc_bg;
-        scui_menial_arc_style(menial_handle, &arc_res);
-        arc_res.part = scui_object_part_arc_fg;
-        scui_menial_arc_style(menial_handle, &arc_res);
-        scui_ui_res_local->menial_arc_3 = menial_handle;
+        obj_arc_maker.anti = 1;
+        obj_arc_maker.ext_touch = 0;
+        obj_arc_maker.ext_spinner = 0;
+        obj_arc_res.width   = 0;
+        obj_arc_res.round   = 0;
+        obj_arc_res.gradw   = 1;
+        obj_arc_res.grad    = 0;
+        obj_arc_maker.widget.clip.x = SCUI_HOR_RES * 2 / 4 - 100 / 2;
+        obj_arc_maker.widget.clip.y = obj_arc_ofs_y;
+        scui_widget_create(&obj_arc_maker, &obj_arc_handle);
+        obj_arc_res.part = scui_object_part_arc_bg;
+        scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
+        obj_arc_res.part = scui_object_part_arc_fg;
+        scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
+        scui_ui_res_local->obj_arc_2 = obj_arc_handle;
+        
+        obj_arc_maker.anti = 0;
+        obj_arc_maker.ext_touch = 1;
+        obj_arc_maker.ext_spinner = 0;
+        obj_arc_res.width   = 8;
+        obj_arc_res.round   = 1;
+        obj_arc_res.gradw   = 1;
+        obj_arc_res.grad    = 1;
+        obj_arc_maker.widget.clip.x = SCUI_HOR_RES * 3 / 4 - 100 / 2;
+        obj_arc_maker.widget.clip.y = obj_arc_ofs_y;
+        scui_widget_create(&obj_arc_maker, &obj_arc_handle);
+        obj_arc_res.part = scui_object_part_arc_bg;
+        scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
+        obj_arc_res.part = scui_object_part_arc_fg;
+        scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
+        scui_ui_res_local->obj_arc_3 = obj_arc_handle;
         #endif
         
         #if 1
-        // menial_bar:
-        scui_coord_t bar_ofs_y = arc_ofs_y + 100 + 10;
-        menial_maker.widget.event_cb = scui_test_ui_object_bar_event_proc;
-        menial_maker.type = scui_menial_type_bar;
+        // obj_bar:
+        scui_obj_bar_maker_define(obj_bar_maker);
+        scui_handle_t obj_bar_handle = SCUI_HANDLE_INVALID;
+        obj_bar_maker.widget.parent = event->object;
         
-        scui_menial_bar_res_t bar_res = {0};
-        bar_res.color[0].color_s.full = 0xFF000080;
-        bar_res.color[1].color_s.full = 0xFF0000FF;
-        bar_res.color[0].color_e.full = 0xFF008000;
-        bar_res.color[1].color_e.full = 0xFF00FF00;
+        scui_coord_t obj_bar_ofs_y = obj_arc_ofs_y + 100 + 10;
+        obj_bar_maker.widget.event_cb = scui_test_ui_object_bar_event_proc;
         
-        menial_maker.data.bar.value_lim = 100;
-        bar_res.radius = 7;
-        bar_res.grad = 1;
-        menial_maker.data.bar.way  = 0;
-        menial_maker.widget.clip.x = SCUI_HOR_RES * 1 / 4 - 120 / 2 - 10;
-        menial_maker.widget.clip.y = bar_ofs_y;
-        menial_maker.widget.clip.w = 120;
-        menial_maker.widget.clip.h = 60;
-        scui_widget_create(&menial_maker, &menial_handle);
-        bar_res.part = scui_object_part_rect_bg;
-        scui_menial_bar_style(menial_handle, &bar_res);
-        bar_res.part = scui_object_part_rect_fg;
-        scui_menial_bar_style(menial_handle, &bar_res);
-        scui_ui_res_local->menial_bar_1 = menial_handle;
+        scui_obj_bar_res_t obj_bar_res = {0};
+        obj_bar_res.color[0].color_s.full = 0xFF000080;
+        obj_bar_res.color[1].color_s.full = 0xFF0000FF;
+        obj_bar_res.color[0].color_e.full = 0xFF008000;
+        obj_bar_res.color[1].color_e.full = 0xFF00FF00;
         
-        menial_maker.data.bar.value_lim = 100;
-        menial_maker.data.bar.ext_switch = 1;
-        menial_maker.data.bar.ext_slider = 0;
-        bar_res.radius = -1;
-        bar_res.grad = 0;
-        menial_maker.data.bar.way  = 0;
-        menial_maker.widget.clip.x = SCUI_HOR_RES * 2 / 4 - 120 / 2;
-        menial_maker.widget.clip.y = bar_ofs_y;
-        menial_maker.widget.clip.w = 120;
-        menial_maker.widget.clip.h = 60;
-        scui_widget_create(&menial_maker, &menial_handle);
-        bar_res.part = scui_object_part_rect_bg;
-        scui_menial_bar_style(menial_handle, &bar_res);
-        bar_res.part = scui_object_part_rect_fg;
-        scui_menial_bar_style(menial_handle, &bar_res);
+        obj_bar_maker.value_lim = 100;
+        obj_bar_res.radius = 7;
+        obj_bar_res.grad = 1;
+        obj_bar_maker.way  = 0;
+        obj_bar_maker.widget.clip.x = SCUI_HOR_RES * 1 / 4 - 120 / 2 - 10;
+        obj_bar_maker.widget.clip.y = obj_bar_ofs_y;
+        obj_bar_maker.widget.clip.w = 120;
+        obj_bar_maker.widget.clip.h = 60;
+        scui_widget_create(&obj_bar_maker, &obj_bar_handle);
+        obj_bar_res.part = scui_object_part_rect_bg;
+        scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_fg;
+        scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
+        scui_ui_res_local->obj_bar_1 = obj_bar_handle;
         
-        menial_maker.data.bar.value_lim = 100;
-        menial_maker.data.bar.ext_slider = 1;
-        menial_maker.data.bar.ext_switch = 0;
-        bar_res.radius = -1;
-        bar_res.grad = 1;
-        menial_maker.data.bar.way  = 0;
-        menial_maker.widget.clip.x = SCUI_HOR_RES * 3 / 4 - 120 / 2 + 10;
-        menial_maker.widget.clip.y = bar_ofs_y;
-        menial_maker.widget.clip.w = 120;
-        menial_maker.widget.clip.h = 60;
-        scui_widget_create(&menial_maker, &menial_handle);
-        bar_res.part = scui_object_part_rect_bg;
-        scui_menial_bar_style(menial_handle, &bar_res);
-        bar_res.part = scui_object_part_rect_fg;
-        scui_menial_bar_style(menial_handle, &bar_res);
+        obj_bar_maker.value_lim = 100;
+        obj_bar_maker.ext_switch = 1;
+        obj_bar_maker.ext_slider = 0;
+        obj_bar_res.radius = -1;
+        obj_bar_res.grad = 0;
+        obj_bar_maker.way  = 0;
+        obj_bar_maker.widget.clip.x = SCUI_HOR_RES * 2 / 4 - 120 / 2;
+        obj_bar_maker.widget.clip.y = obj_bar_ofs_y;
+        obj_bar_maker.widget.clip.w = 120;
+        obj_bar_maker.widget.clip.h = 60;
+        scui_widget_create(&obj_bar_maker, &obj_bar_handle);
+        obj_bar_res.part = scui_object_part_rect_bg;
+        scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_fg;
+        scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
         
-        menial_maker.data.bar.value_lim = 7;
-        menial_maker.data.bar.value_int = 1;
-        menial_maker.data.bar.ext_slider = 1;
-        menial_maker.data.bar.ext_switch = 0;
-        menial_maker.data.bar.way = 1;
-        bar_res.radius = 10;
-        bar_res.grad = 1;
-        menial_maker.data.bar.way  = 1;
-        menial_maker.widget.clip.x = SCUI_HOR_RES * 2 / 4 - 120 / 2;
-        menial_maker.widget.clip.y = bar_ofs_y + 60 + 10;
-        menial_maker.widget.clip.w = 120;
-        menial_maker.widget.clip.h = 90;
-        scui_widget_create(&menial_maker, &menial_handle);
-        bar_res.part = scui_object_part_rect_bg;
-        scui_menial_bar_style(menial_handle, &bar_res);
-        bar_res.part = scui_object_part_rect_fg;
-        scui_menial_bar_style(menial_handle, &bar_res);
+        obj_bar_maker.value_lim = 100;
+        obj_bar_maker.ext_slider = 1;
+        obj_bar_maker.ext_switch = 0;
+        obj_bar_res.radius = -1;
+        obj_bar_res.grad = 1;
+        obj_bar_maker.way  = 0;
+        obj_bar_maker.widget.clip.x = SCUI_HOR_RES * 3 / 4 - 120 / 2 + 10;
+        obj_bar_maker.widget.clip.y = obj_bar_ofs_y;
+        obj_bar_maker.widget.clip.w = 120;
+        obj_bar_maker.widget.clip.h = 60;
+        scui_widget_create(&obj_bar_maker, &obj_bar_handle);
+        obj_bar_res.part = scui_object_part_rect_bg;
+        scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_fg;
+        scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
+        
+        obj_bar_maker.value_lim = 7;
+        obj_bar_maker.value_int = 1;
+        obj_bar_maker.ext_slider = 1;
+        obj_bar_maker.ext_switch = 0;
+        obj_bar_maker.way = 1;
+        obj_bar_res.radius = 10;
+        obj_bar_res.grad = 1;
+        obj_bar_maker.way  = 1;
+        obj_bar_maker.widget.clip.x = SCUI_HOR_RES * 2 / 4 - 120 / 2;
+        obj_bar_maker.widget.clip.y = obj_bar_ofs_y + 60 + 10;
+        obj_bar_maker.widget.clip.w = 120;
+        obj_bar_maker.widget.clip.h = 90;
+        scui_widget_create(&obj_bar_maker, &obj_bar_handle);
+        obj_bar_res.part = scui_object_part_rect_bg;
+        scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_fg;
+        scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
         #endif
         break;
     }
@@ -352,13 +357,13 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_menial_maker_define(menial_maker);
-        scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
-        
-        menial_maker.widget.parent = event->object;
-        
         #if 1
-        // menial_cht:
+        // obj_chart:
+        scui_obj_chart_maker_define(obj_chart_maker);
+        scui_handle_t obj_chart_handle = SCUI_HANDLE_INVALID;
+        
+        obj_chart_maker.widget.parent = event->object;
+        
         scui_coord_t vlist[100] = {0};
         scui_coord_t vlist_min[100] = {0};
         scui_coord_t vlist_max[100] = {0};
@@ -368,45 +373,44 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
             vlist[idx] = 60 + (uint32_t)scui_rand(0xFF) % ((220 - 60));
         }
         
-        menial_maker.widget.style.fully_bg = true;
-        menial_maker.widget.color.color.full = 0xFF4F4F4F;
-        menial_maker.widget.clip.y = SCUI_VER_RES *  1 / 25;
-        menial_maker.widget.clip.w = SCUI_HOR_RES * 11 / 25;
-        menial_maker.widget.clip.h = SCUI_VER_RES * 11 / 25;
-        menial_maker.widget.event_cb = scui_test_ui_object_cht_event_proc;
-        menial_maker.type = scui_menial_type_cht;
+        obj_chart_maker.widget.style.fully_bg = true;
+        obj_chart_maker.widget.color.color.full = 0xFF4F4F4F;
+        obj_chart_maker.widget.clip.y = SCUI_VER_RES *  1 / 25;
+        obj_chart_maker.widget.clip.w = SCUI_HOR_RES * 11 / 25;
+        obj_chart_maker.widget.clip.h = SCUI_VER_RES * 11 / 25;
+        obj_chart_maker.widget.event_cb = scui_test_ui_object_cht_event_proc;
         
-        scui_menial_cht_res_t cht_res = {0};
-        cht_res.round = true;
-        cht_res.color.color.full = 0xFFFF0000;
+        scui_obj_chart_res_t obj_chart_res = {0};
+        obj_chart_res.round = true;
+        obj_chart_res.color.color.full = 0xFFFF0000;
         
-        menial_maker.data.cht.value_min = 60;
-        menial_maker.data.cht.value_max = 220;
-        menial_maker.data.cht.area.x = 10;
-        menial_maker.data.cht.area.y = 10;
-        menial_maker.data.cht.area.w = menial_maker.widget.clip.w - 10 * 2;
-        menial_maker.data.cht.area.h = menial_maker.widget.clip.h - 10 * 2;
+        obj_chart_maker.value_min = 60;
+        obj_chart_maker.value_max = 220;
+        obj_chart_maker.area.x = 10;
+        obj_chart_maker.area.y = 10;
+        obj_chart_maker.area.w = obj_chart_maker.widget.clip.w - 10 * 2;
+        obj_chart_maker.area.h = obj_chart_maker.widget.clip.h - 10 * 2;
         
-        menial_maker.data.cht.type   = 0;
-        menial_maker.data.cht.number = 19;
-        menial_maker.data.cht.space  = 4;
-        cht_res.width = 6;
-        menial_maker.widget.clip.x = SCUI_HOR_RES *  1 / 25;
-        scui_widget_create(&menial_maker, &menial_handle);
-        cht_res.part = scui_object_part_rect_item;
-        scui_menial_cht_style(menial_handle, &cht_res);
-        scui_menial_cht_hist_data(menial_handle, vlist_min, vlist_max);
+        obj_chart_maker.type   = 0;
+        obj_chart_maker.number = 19;
+        obj_chart_maker.space  = 4;
+        obj_chart_res.width = 6;
+        obj_chart_maker.widget.clip.x = SCUI_HOR_RES *  1 / 25;
+        scui_widget_create(&obj_chart_maker, &obj_chart_handle);
+        obj_chart_res.part = scui_object_part_rect_item;
+        scui_obj_chart_style(obj_chart_handle, &obj_chart_res);
+        scui_obj_chart_hist_data(obj_chart_handle, vlist_min, vlist_max);
         
-        menial_maker.data.cht.type   = 1;
-        menial_maker.data.cht.number = 30;
-        menial_maker.data.cht.space  = 4;
-        cht_res.width = 2;
-        cht_res.grad = true;
-        menial_maker.widget.clip.x = SCUI_HOR_RES * 13 / 25;
-        scui_widget_create(&menial_maker, &menial_handle);
-        cht_res.part = scui_object_part_line_item;
-        scui_menial_cht_style(menial_handle, &cht_res);
-        scui_menial_cht_line_data(menial_handle, vlist);
+        obj_chart_maker.type   = 1;
+        obj_chart_maker.number = 30;
+        obj_chart_maker.space  = 4;
+        obj_chart_res.width = 2;
+        obj_chart_res.grad = true;
+        obj_chart_maker.widget.clip.x = SCUI_HOR_RES * 13 / 25;
+        scui_widget_create(&obj_chart_maker, &obj_chart_handle);
+        obj_chart_res.part = scui_object_part_line_item;
+        scui_obj_chart_style(obj_chart_handle, &obj_chart_res);
+        scui_obj_chart_line_data(obj_chart_handle, vlist);
         #endif
         break;
     }
@@ -425,36 +429,34 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
         
         #if 0
         // test tvg cache block draw
-        scui_menial_maker_define(menial_maker);
-        scui_handle_t menial_handle = SCUI_HANDLE_INVALID;
+        scui_obj_bar_maker_define(obj_bar_maker);
+        scui_handle_t obj_bar_handle = SCUI_HANDLE_INVALID;
         
-        menial_maker.widget.parent = event->object;
+        obj_bar_maker.widget.parent = event->object;
         
-        menial_maker.type = scui_menial_type_bar;
+        obj_bar_maker.widget.clip.w = SCUI_HOR_RES * 3 / 4;
+        obj_bar_maker.widget.clip.h = SCUI_VER_RES * 1 / 2;
+        obj_bar_maker.widget.clip.x = (SCUI_HOR_RES - obj_bar_maker.widget.clip.w) / 2;
+        obj_bar_maker.widget.clip.y = (SCUI_VER_RES - obj_bar_maker.widget.clip.h) / 2;
+        obj_bar_maker.value_lim = 7;
+        obj_bar_maker.value_int = 1;
+        obj_bar_maker.ext_slider = 1;
+        obj_bar_maker.ext_switch = 0;
+        obj_bar_maker.way  = 1;
+        scui_widget_create(&obj_bar_maker, &obj_bar_handle);
         
-        menial_maker.widget.clip.w = SCUI_HOR_RES * 3 / 4;
-        menial_maker.widget.clip.h = SCUI_VER_RES * 1 / 2;
-        menial_maker.widget.clip.x = (SCUI_HOR_RES - menial_maker.widget.clip.w) / 2;
-        menial_maker.widget.clip.y = (SCUI_VER_RES - menial_maker.widget.clip.h) / 2;
-        menial_maker.data.bar.value_lim = 7;
-        menial_maker.data.bar.value_int = 1;
-        menial_maker.data.bar.ext_slider = 1;
-        menial_maker.data.bar.ext_switch = 0;
-        menial_maker.data.bar.way  = 1;
-        scui_widget_create(&menial_maker, &menial_handle);
-        
-        scui_menial_bar_res_t bar_res = {0};
-        bar_res.color[0].color_s.full = 0xFF000080;
-        bar_res.color[1].color_s.full = 0xFF0000FF;
-        bar_res.color[0].color_e.full = 0xFF008000;
-        bar_res.color[1].color_e.full = 0xFF00FF00;
-        bar_res.radius = 23;
-        bar_res.grad = 1;
-        menial_maker.data.bar.way  = 1;
-        bar_res.part = scui_object_part_rect_bg;
-        scui_menial_bar_style(menial_handle, &bar_res);
-        bar_res.part = scui_object_part_rect_fg;
-        scui_menial_bar_style(menial_handle, &bar_res);
+        scui_obj_bar_res_t obj_bar_res = {0};
+        obj_bar_res.color[0].color_s.full = 0xFF000080;
+        obj_bar_res.color[1].color_s.full = 0xFF0000FF;
+        obj_bar_res.color[0].color_e.full = 0xFF008000;
+        obj_bar_res.color[1].color_e.full = 0xFF00FF00;
+        obj_bar_res.radius = 23;
+        obj_bar_res.grad = 1;
+        obj_bar_maker.way  = 1;
+        obj_bar_res.part = scui_object_part_rect_bg;
+        scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_fg;
+        scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
         #endif
         
         break;
@@ -479,33 +481,33 @@ void scui_test_ui_object_event_proc(scui_event_t *event)
     case scui_event_anima_elapse: {
         
         #if 1
-        // menial_arc:
-        scui_ui_res_local->menial_arc_v += scui_ui_res_local->menial_arc_w;
+        // obj_arc:
+        scui_ui_res_local->obj_arc_v += scui_ui_res_local->obj_arc_w;
         
-        if (scui_ui_res_local->menial_arc_v == 0)
-            scui_ui_res_local->menial_arc_w = +1;
-        if (scui_ui_res_local->menial_arc_v == 100)
-            scui_ui_res_local->menial_arc_w = -1;
+        if (scui_ui_res_local->obj_arc_v == 0)
+            scui_ui_res_local->obj_arc_w = +1;
+        if (scui_ui_res_local->obj_arc_v == 100)
+            scui_ui_res_local->obj_arc_w = -1;
         
-        // scui_menial_arc_update_value(scui_ui_res_local->menial_arc_1,
-        //     scui_ui_res_local->menial_arc_v, false);
-        scui_menial_arc_update_value(scui_ui_res_local->menial_arc_2,
-            scui_ui_res_local->menial_arc_v, false);
-        // scui_menial_arc_update_value(scui_ui_res_local->menial_arc_3,
-        //     scui_ui_res_local->menial_arc_v, false);
+        // scui_obj_arc_update_value(scui_ui_res_local->obj_arc_1,
+        //     scui_ui_res_local->obj_arc_v, false);
+        scui_obj_arc_update_value(scui_ui_res_local->obj_arc_2,
+            scui_ui_res_local->obj_arc_v, false);
+        // scui_obj_arc_update_value(scui_ui_res_local->obj_arc_3,
+        //     scui_ui_res_local->obj_arc_v, false);
         #endif
         
         #if 1
-        // menial_bar:
-        scui_ui_res_local->menial_bar_v1 += scui_ui_res_local->menial_bar_w1;
+        // obj_bar:
+        scui_ui_res_local->obj_bar_v1 += scui_ui_res_local->obj_bar_w1;
         
-        if (scui_ui_res_local->menial_bar_v1 == 0)
-            scui_ui_res_local->menial_bar_w1 = +1;
-        if (scui_ui_res_local->menial_bar_v1 == 100)
-            scui_ui_res_local->menial_bar_w1 = -1;
+        if (scui_ui_res_local->obj_bar_v1 == 0)
+            scui_ui_res_local->obj_bar_w1 = +1;
+        if (scui_ui_res_local->obj_bar_v1 == 100)
+            scui_ui_res_local->obj_bar_w1 = -1;
         
-        scui_menial_bar_update_value(scui_ui_res_local->menial_bar_1,
-            scui_ui_res_local->menial_bar_v1, false);
+        scui_obj_bar_update_value(scui_ui_res_local->obj_bar_1,
+            scui_ui_res_local->obj_bar_v1, false);
         #endif
         break;
     }

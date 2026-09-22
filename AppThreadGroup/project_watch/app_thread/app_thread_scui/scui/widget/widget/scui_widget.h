@@ -4,20 +4,23 @@
 /*@brief 控件类型
  */
 typedef enum {
-    scui_widget_type_unknown,   /* 未知控件 */
-    scui_widget_type_window,    /* 窗口控件(根控件) */
-    scui_widget_type_layout,    /* 布局控件 */
-    scui_widget_type_scroll,    /* 滚动控件 */
-    scui_widget_type_custom,    /* 自定义控件 */
-    scui_widget_type_string,    /* 字符串控件 */
-    scui_widget_type_symbol,    /* 符号控件 */
+    scui_widget_type_unknown,       /* 未知控件 */
+    scui_widget_type_window,        /* 窗口控件(根控件) */
+    scui_widget_type_layout,        /* 布局控件 */
+    scui_widget_type_scroll,        /* 滚动控件 */
+    scui_widget_type_custom,        /* 自定义控件 */
+    scui_widget_type_string,        /* 字符串控件 */
+    scui_widget_type_symbol,        /* 符号控件 */
     /* 扩展控件 */
-    scui_widget_type_roller,    /* 滚动控件 */
-    scui_widget_type_ximage,    /* 图像控件 */
-    scui_widget_type_xwatch,    /* 指针控件 */
+    scui_widget_type_roller,        /* 滚动控件 */
+    scui_widget_type_ximage,        /* 图像控件 */
+    scui_widget_type_xwatch,        /* 指针控件 */
     /* 可选控件 */
-    scui_widget_type_object,    /* 对象控件 */
-    scui_widget_type_menial,    /* 仆从控件 */
+    scui_widget_type_object,        /* 对象控件 */
+    scui_widget_type_obj_btn,       /* 对象控件:按钮 */
+    scui_widget_type_obj_arc,       /* 对象控件:圆弧 */
+    scui_widget_type_obj_bar,       /* 对象控件:条形 */
+    scui_widget_type_obj_chart,     /* 对象控件:图表 */
     /* 继续补充... */
     scui_widget_type_num,
 } scui_widget_type_t;

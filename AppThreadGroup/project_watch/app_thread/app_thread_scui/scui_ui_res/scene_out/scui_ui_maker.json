@@ -108,9 +108,27 @@
             }
         },
         {
-            "class": "scui_widget_type_menial",
+            "class": "scui_widget_type_obj_btn",
             "default": {
-                "widget.type": "scui_widget_type_menial"
+                "widget.type": "scui_widget_type_obj_btn"
+            }
+        },
+        {
+            "class": "scui_widget_type_obj_arc",
+            "default": {
+                "widget.type": "scui_widget_type_obj_arc"
+            }
+        },
+        {
+            "class": "scui_widget_type_obj_bar",
+            "default": {
+                "widget.type": "scui_widget_type_obj_bar"
+            }
+        },
+        {
+            "class": "scui_widget_type_obj_chart",
+            "default": {
+                "widget.type": "scui_widget_type_obj_chart"
             }
         }
     ]

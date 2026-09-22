@@ -75,8 +75,11 @@
 /* widget(custom): */
 #include "scui_object.h"            /* 控件(对象) */
 #include "scui_object_inf.h"        /* 控件(对象)API */
-#include "scui_menial.h"            /* 控件(仆从) */
-#include "scui_menial_inf.h"        /* 控件(仆从)API */
+#include "scui_obj_btn.h"           /* 控件(对象:按钮) */
+#include "scui_obj_arc.h"           /* 控件(对象:圆弧) */
+#include "scui_obj_bar.h"           /* 控件(对象:条形) */
+#include "scui_obj_chart.h"         /* 控件(对象:图表) */
+#include "scui_obj_inf.h"           /* 控件(对象:子控件)API */
 
 /* draw,linker: */
 #include "scui_draw_graph.h"

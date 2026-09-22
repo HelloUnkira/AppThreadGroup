@@ -226,15 +226,15 @@
 /* object:属性和过渡扩充步进, 主体样式 */
 #define SCUI_WIDGET_OBJECT_PROP_STEP                (3)
 #define SCUI_WIDGET_OBJECT_TRAN_STEP                (6)
-/* menial(btn):缩放限制百分比 */
-#define SCUI_WIDGET_MENIAL_BTN_TIME                 (100)
-#define SCUI_WIDGET_MENIAL_BTN_PCT                  (90)
-/* menial(arc):进度动画时间(360度) */
-#define SCUI_WIDGET_MENIAL_ARC_TIME                 (500)
-/* menial(bar):进度动画时间(100%) */
-#define SCUI_WIDGET_MENIAL_BAR_TIME                 (500)
-#define SCUI_WIDGET_MENIAL_BAR_EXT_SLIDER_TIME      (500)
-#define SCUI_WIDGET_MENIAL_BAR_EXT_SWITCH_TIME      (100)
+/* obj(btn):缩放限制百分比 */
+#define SCUI_WIDGET_OBJ_BTN_TIME                    (100)
+#define SCUI_WIDGET_OBJ_BTN_PCT                     (90)
+/* obj(arc):进度动画时间(360度) */
+#define SCUI_WIDGET_OBJ_ARC_TIME                    (500)
+/* obj(bar):进度动画时间(100%) */
+#define SCUI_WIDGET_OBJ_BAR_TIME                    (500)
+#define SCUI_WIDGET_OBJ_BAR_EXT_SLIDER_TIME         (500)
+#define SCUI_WIDGET_OBJ_BAR_EXT_SWITCH_TIME         (100)
 
 /* button:按钮1缩放限制百分比 */
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)

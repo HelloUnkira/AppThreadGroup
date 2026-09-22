@@ -7,48 +7,74 @@
 
 #include "scui.h"
 
-/*@brief 控件构造(子类型)
- *@param maker inst是构造器
- *@param inst  构造器或实例
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
  */
-void scui_menial_arc_make(bool maker, void *inst)
+void scui_obj_arc_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    scui_menial_t *menial = inst;
-    scui_menial_maker_t *menial_maker = inst;
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 继承对象 */
+    scui_object_t *object = widget;
+    scui_object_maker_t *object_maker = widget_maker;
+    /* 本类对象 */
+    scui_obj_arc_t *obj_arc = widget;
+    scui_obj_arc_maker_t *obj_arc_maker = widget_maker;
     
-    if (maker) {
-    } else {
-        /* 不能同时开启touch和spinner */
-        bool ext_touch   = menial->data.arc.ext_touch;
-        bool ext_spinner = menial->data.arc.ext_spinner;
-        SCUI_ASSERT(!(ext_touch && ext_spinner));
-    }
+    /* 必须标记ptr,anima,widget事件 */
+    widget_maker->style.indev_ptr    = true;
+    widget_maker->style.sched_anima  = true;
+    widget_maker->style.sched_widget = true;
+    
+    /* 构造派生控件实例 */
+    scui_object_make(object, object_maker, handle);
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_obj_arc));
+    SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
+    
+    /* 资源同步与构造 */
+    obj_arc->angle_c      = obj_arc_maker->angle_c;
+    obj_arc->angle_down   = obj_arc_maker->angle_down;
+    obj_arc->anti         = obj_arc_maker->anti;
+    obj_arc->ext_touch    = obj_arc_maker->ext_touch;
+    obj_arc->ext_spinner  = obj_arc_maker->ext_spinner;
+    
+    /* 不能同时开启touch和spinner */
+    SCUI_ASSERT(!(obj_arc->ext_touch && obj_arc->ext_spinner));
 }
 
-/*@brief 控件析构(子类型)
- *@param menial 控件实例
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
-void scui_menial_arc_burn(scui_menial_t *menial)
+void scui_obj_arc_burn(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_arc));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_obj_arc_t *obj_arc = (void *)widget;
+    
+    /* 析构派生控件实例 */
+    scui_object_burn(widget->myself);
 }
 
-/*@brief 控件样式应用(子类型)
+/*@brief 控件样式应用
  *@param handle 控件句柄
  *@param res    样式资源
  */
-void scui_menial_arc_style(scui_handle_t handle, scui_menial_arc_res_t *res)
+void scui_obj_arc_style(scui_handle_t handle, scui_obj_arc_res_t *res)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_menial_t *menial = (void *)widget;
+    scui_obj_arc_t *obj_arc = (void *)widget;
     
     scui_coord3_t angle_s = res->angle_s;
     scui_coord3_t angle_e = res->angle_e;
-    if (menial->data.arc.ext_spinner) {
+    if (obj_arc->ext_spinner) {
         angle_s = 0.0f;  angle_e = 360.0f;
     }
     
     /* 补充一个容错的默认参数值 */
-    if (!menial->data.arc.ext_spinner &&
+    if (!obj_arc->ext_spinner &&
         SCUI_IS_ZERO_VAL_F(scui_dist(angle_s, angle_e))) {
         angle_s = 0.0f; angle_e = 360.0f;
     }
@@ -78,7 +104,7 @@ void scui_menial_arc_style(scui_handle_t handle, scui_menial_arc_res_t *res)
         
         /* 同步全局time属性(默认值/可覆盖) */
         scui_coord_t time = res->time;
-        if (time == 0) time = SCUI_WIDGET_MENIAL_ARC_TIME;
+        if (time == 0) time = SCUI_WIDGET_OBJ_ARC_TIME;
         scui_coord3_t angle_d = scui_dist(angle_s, angle_e);
         time = time * angle_d / 360.0f;
         
@@ -87,47 +113,45 @@ void scui_menial_arc_style(scui_handle_t handle, scui_menial_arc_res_t *res)
             scui_object_data_number(time));
         
         /* 样式修改复位到默认值 */
-        scui_menial_arc_update_value(handle, 0.0f, false);
+        scui_obj_arc_update_value(handle, 0.0f, false);
     }
 }
 
-/*@brief 控件当前值(子类型)
+/*@brief 控件当前值
  *@param handle 控件句柄
  *@param angle  目标角度
  */
-void scui_menial_arc_current_angle(scui_handle_t handle, scui_coord3_t *angle)
+void scui_obj_arc_current_angle(scui_handle_t handle, scui_coord3_t *angle)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_arc));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_menial_t *menial = (void *)widget;
+    scui_obj_arc_t *obj_arc = (void *)widget;
     
-    SCUI_ASSERT(menial->type == scui_menial_type_arc);
-    if (menial->data.arc.ext_spinner) return;
+    if (obj_arc->ext_spinner) return;
     /* spinner不使用此接口 */
     
-    *angle = menial->data.arc.angle_c;
+    *angle = obj_arc->angle_c;
 }
 
-/*@brief 控件更新值(子类型)
+/*@brief 控件更新值
  *@param handle 控件句柄
  *@param angle  目标角度
  *@param anim   动画更新
  */
-void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, bool anim)
+void scui_obj_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, bool anim)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_arc));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_menial_t *menial = (void *)widget;
+    scui_obj_arc_t *obj_arc = (void *)widget;
     
-    SCUI_ASSERT(menial->type == scui_menial_type_arc);
-    if (menial->data.arc.ext_spinner) return;
+    if (obj_arc->ext_spinner) return;
     /* spinner不使用此接口 */
     
-    menial->data.arc.angle_c = angle;
+    obj_arc->angle_c = angle;
     scui_event_define(event, widget->myself, true, scui_event_update_value, NULL);
     scui_event_notify(&event);
     
-    bool anti = menial->data.arc.anti;
+    bool anti = obj_arc->anti;
     scui_object_prop_t prop_def = {0};
     scui_object_tran_t tran_def = {0};
     prop_def.part  = scui_object_part_arc_fg;
@@ -141,8 +165,7 @@ void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, boo
     tran_def.state_n = prop_def.state;
     tran_def.style   = prop_def.style;
     tran_def.data_p.number = prop_def.data.number;
-    tran_def.data_n.number = menial->data.arc.angle_c;
-    SCUI_LOG_INFO("tran(%d->%d)", tran_def.data_p.number, tran_def.data_n.number);
+    tran_def.data_n.number = obj_arc->angle_c;
     
     if (anim) {
         /* 同步time属性 */
@@ -174,19 +197,18 @@ void scui_menial_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, boo
     }
 }
 
-/*@brief 控件更新值(子类型)
+/*@brief 控件更新值
  *@param handle 控件句柄
  *@param value  目标进度[0.0f, 100.0f]
  *@param anim   动画更新
  */
-void scui_menial_arc_update_value(scui_handle_t handle, scui_coord3_t value, bool anim)
+void scui_obj_arc_update_value(scui_handle_t handle, scui_coord3_t value, bool anim)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_arc));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_menial_t *menial = (void *)widget;
+    scui_obj_arc_t *obj_arc = (void *)widget;
     
-    SCUI_ASSERT(menial->type == scui_menial_type_arc);
-    if (menial->data.arc.ext_spinner) return;
+    if (obj_arc->ext_spinner) return;
     /* spinner不使用此接口 */
     
     /* 端点基准从bg取(稳定), fg为动态进度 */
@@ -199,24 +221,27 @@ void scui_menial_arc_update_value(scui_handle_t handle, scui_coord3_t value, boo
     
     value = scui_clamp(value, 0.0f, 100.0f);
     
-    scui_menial_arc_update_angle(handle, menial->data.arc.anti ?
+    scui_obj_arc_update_angle(handle, obj_arc->anti ?
         scui_map(value, 100.0f, 0.0f, angle_s.number, angle_e.number) :
         scui_map(value, 0.0f, 100.0f, angle_s.number, angle_e.number), anim);
 }
 
-/*@brief 事件处理回调(子类型)
+/*@brief 事件处理回调
  *@param event 事件
  */
-void scui_menial_arc_invoke(scui_event_t *event)
+void scui_obj_arc_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_menial_t *menial = (void *)widget;
+    scui_obj_arc_t *obj_arc = (void *)widget;
+    
+    /* 基类处理(过渡动画推进) */
+    scui_object_invoke(event);
     
     switch (event->type) {
     case scui_event_anima_elapse: {
         
-        if (menial->data.arc.ext_spinner) {
+        if (obj_arc->ext_spinner) {
             /* 同步time属性(旋转速度) */
             scui_object_data_t main_time = {0};
             scui_object_prop_sync_s(event->object, scui_object_part_main,
@@ -226,18 +251,17 @@ void scui_menial_arc_invoke(scui_event_t *event)
             scui_coord3_t angle_s = 0.0f;
             scui_coord3_t angle_e = 360.0f;
             scui_coord3_t angle_d = 360.0f;
-            menial->data.arc.angle_c += scui_map(event->tick, 0, main_time.number, 0.0f, angle_d);
-            if (menial->data.arc.angle_c > 360) menial->data.arc.angle_c -= 360;
+            obj_arc->angle_c += scui_map(event->tick, 0, main_time.number, 0.0f, angle_d);
+            if (obj_arc->angle_c > 360) obj_arc->angle_c -= 360;
             
-            scui_coord_t  angle_w = menial->data.arc.anti ? -1 : +1;
-            scui_coord_t  angle_c = menial->data.arc.angle_c;
+            scui_coord_t  angle_w = obj_arc->anti ? -1 : +1;
+            scui_coord_t  angle_c = obj_arc->angle_c;
             angle_c = scui_map(angle_c, 0, angle_d, 0, 360);
             /* angle_c映射到[0, 360]度中去(有精度损失但不影响) */
             scui_map_cb_t path_map = scui_map_ease_out;
             if (scui_mabs(angle_c / 180, 2) == 1)
                 path_map = scui_map_ease_in;
             
-            SCUI_LOG_INFO("angle:%d", angle_c);
             scui_coord_t  angle_p = scui_mabs(angle_c % 180, 180);
             angle_s += angle_w * path_map(angle_p, 0, 180, 0, angle_d);
             angle_e += angle_w * scui_map(angle_p, 0, 180, 0, angle_d) + angle_w * angle_d;
@@ -270,7 +294,7 @@ void scui_menial_arc_invoke(scui_event_t *event)
         break;
     }
     case scui_event_ptr_move: {
-        if (!menial->data.arc.ext_touch)
+        if (!obj_arc->ext_touch)
              break;
         
         scui_point_t point = event->ptr_e;
@@ -299,27 +323,27 @@ void scui_menial_arc_invoke(scui_event_t *event)
         
         /* 增量累积:与上一次采样角求增量(折返归一化到±180)再累加到当前值
            旧实现用"落点固定的绝对差",拖动超过180°时增量折返 -> 值被压回0并卡死 */
-        scui_coord_t angle_last = menial->data.arc.angle_down;
+        scui_coord_t angle_last = obj_arc->angle_down;
         scui_coord_t delta = angle - angle_last;
         if (delta > +180) delta -= 360;
         if (delta < -180) delta += 360;
-        menial->data.arc.angle_down = angle;
+        obj_arc->angle_down = angle;
         
         /* 当前值:由angle_c反推(与update_value的映射互逆) */
-        scui_coord3_t value_cur = menial->data.arc.anti ?
-            (angle_e.number - menial->data.arc.angle_c) * 100.0f / angle_d :
-            (menial->data.arc.angle_c - angle_s.number) * 100.0f / angle_d;
+        scui_coord3_t value_cur = obj_arc->anti ?
+            (angle_e.number - obj_arc->angle_c) * 100.0f / angle_d :
+            (obj_arc->angle_c - angle_s.number) * 100.0f / angle_d;
         
-        scui_coord3_t value = value_cur + (menial->data.arc.anti ?
+        scui_coord3_t value = value_cur + (obj_arc->anti ?
             -delta : delta) * 100.0f / angle_d;
         
         value = scui_clamp(value, 0.0f, 100.0f);
-        scui_menial_arc_update_value(event->object, value, false);
+        scui_obj_arc_update_value(event->object, value, false);
         scui_event_mask_over(event);
         break;
     }
     case scui_event_ptr_down: {
-        if (!menial->data.arc.ext_touch)
+        if (!obj_arc->ext_touch)
              break;
         
         scui_point_t point = event->ptr_c;
@@ -336,7 +360,7 @@ void scui_menial_arc_invoke(scui_event_t *event)
         if (x == 0 && y == 0) break;
         
         scui_coord_t angle = (scui_atan2(x, y) - 90 + 360) % 360;
-        menial->data.arc.angle_down = angle;
+        obj_arc->angle_down = angle;
         
         scui_object_data_t angle_s = {0};
         scui_object_data_t angle_e = {0};
@@ -347,12 +371,12 @@ void scui_menial_arc_invoke(scui_event_t *event)
         
         /* 落点角映射为值(夹取到弧范围:缺口落点不再越界跳动),作为增量累积的起点 */
         scui_coord_t angle_d = scui_dist(angle_s.number, angle_e.number);
-        scui_coord3_t value = menial->data.arc.anti ?
+        scui_coord3_t value = obj_arc->anti ?
             (angle_e.number - angle) * 100.0f / angle_d :
             (angle - angle_s.number) * 100.0f / angle_d;
         value = scui_clamp(value, 0.0f, 100.0f);
         
-        scui_menial_arc_update_value(event->object, value, false);
+        scui_obj_arc_update_value(event->object, value, false);
         break;
     }
     case scui_event_ptr_up:

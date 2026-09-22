@@ -7,43 +7,70 @@
 
 #include "scui.h"
 
-/*@brief 控件构造(子类型)
- *@param maker inst是构造器
- *@param inst  构造器或实例
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
  */
-void scui_menial_bar_make(bool maker, void *inst)
+void scui_obj_bar_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    scui_menial_t *menial = inst;
-    scui_menial_maker_t *menial_maker = inst;
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 继承对象 */
+    scui_object_t *object = widget;
+    scui_object_maker_t *object_maker = widget_maker;
+    /* 本类对象 */
+    scui_obj_bar_t *obj_bar = widget;
+    scui_obj_bar_maker_t *obj_bar_maker = widget_maker;
     
-    if (maker) {
-    } else {
-        /* 不能同时开启slider和switch */
-        bool ext_slider = menial->data.bar.ext_slider;
-        bool ext_switch = menial->data.bar.ext_switch;
-        SCUI_ASSERT(!(ext_slider && ext_switch));
-        
-        /* 运行时默认(未配置补默认), 样式默认由 apply 应用常规 res */
-        if (SCUI_IS_ZERO_VAL_F(menial->data.bar.value_lim))
-            menial->data.bar.value_lim = 100.0f;
-    }
+    /* 必须标记ptr,anima,widget事件 */
+    widget_maker->style.indev_ptr    = true;
+    widget_maker->style.sched_anima  = true;
+    widget_maker->style.sched_widget = true;
+    
+    /* 构造派生控件实例 */
+    scui_object_make(object, object_maker, handle);
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_obj_bar));
+    SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
+    
+    /* 资源同步与构造 */
+    obj_bar->way        = obj_bar_maker->way;
+    obj_bar->value_cur  = obj_bar_maker->value_cur;
+    obj_bar->value_lim  = obj_bar_maker->value_lim;
+    obj_bar->value_int  = obj_bar_maker->value_int;
+    obj_bar->ext_slider = obj_bar_maker->ext_slider;
+    obj_bar->ext_switch = obj_bar_maker->ext_switch;
+    
+    /* 不能同时开启slider和switch */
+    SCUI_ASSERT(!(obj_bar->ext_slider && obj_bar->ext_switch));
+    
+    /* 运行时默认(未配置补默认), 样式默认由 apply 应用常规 res */
+    if (SCUI_IS_ZERO_VAL_F(obj_bar->value_lim))
+        obj_bar->value_lim = 100.0f;
 }
 
-/*@brief 控件析构(子类型)
- *@param menial 控件实例
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
-void scui_menial_bar_burn(scui_menial_t *menial)
+void scui_obj_bar_burn(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_bar));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_obj_bar_t *obj_bar = (void *)widget;
+    
+    /* 析构派生控件实例 */
+    scui_object_burn(widget->myself);
 }
 
-/*@brief 控件样式应用(子类型)
+/*@brief 控件样式应用
  *@param handle 控件句柄
  *@param res    样式资源
  */
-void scui_menial_bar_style(scui_handle_t handle, scui_menial_bar_res_t *res)
+void scui_obj_bar_style(scui_handle_t handle, scui_obj_bar_res_t *res)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_menial_t *menial = (void *)widget;
+    scui_obj_bar_t *obj_bar = (void *)widget;
     
     scui_coord_t idx = 0;
     if (res->part == scui_object_part_rect_bg) idx = 0;
@@ -56,13 +83,13 @@ void scui_menial_bar_style(scui_handle_t handle, scui_menial_bar_res_t *res)
     sub.rect.width.number          = widget->clip.w;
     sub.rect.height.number         = widget->clip.h;
     sub.rect.radius.number         = res->radius;
-    sub.rect.multi.multi.grad_w    = menial->data.bar.way;
+    sub.rect.multi.multi.grad_w    = obj_bar->way;
     sub.rect.multi.multi.grad      = res->grad;
     sub.rect.grad_c.color32        = res->color[idx].color_e;
     
     if (res->part == scui_object_part_rect_fg) {
-        sub.rect.width.number  = menial->data.bar.way ? widget->clip.w : 0;
-        sub.rect.height.number = menial->data.bar.way ? 0 : widget->clip.h;
+        sub.rect.width.number  = obj_bar->way ? widget->clip.w : 0;
+        sub.rect.height.number = obj_bar->way ? 0 : widget->clip.h;
     }
     
     sub.state = scui_object_state_def;
@@ -70,59 +97,56 @@ void scui_menial_bar_style(scui_handle_t handle, scui_menial_bar_res_t *res)
     
     /* 同步全局time属性(默认值/可覆盖) */
     scui_coord_t time = res->time;
-    if (time == 0) time = SCUI_WIDGET_MENIAL_BAR_TIME;
+    if (time == 0) time = SCUI_WIDGET_OBJ_BAR_TIME;
+    
     scui_object_prop_add_s(handle, scui_object_part_main,
         scui_object_style_main_time, scui_object_state_def,
         scui_object_data_number(time));
     
     /* 样式修改复位到默认值 */
-    scui_menial_bar_update_value(handle, 0.0f, false);
+    scui_obj_bar_update_value(handle, 0.0f, false);
 }
 
-/*@brief 控件当前值(子类型)
+/*@brief 控件当前值
  *@param handle 控件句柄
  *@param value  目标进度
  */
-void scui_menial_bar_current_value(scui_handle_t handle, scui_coord3_t *value)
+void scui_obj_bar_current_value(scui_handle_t handle, scui_coord3_t *value)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_bar));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_menial_t *menial = (void *)widget;
+    scui_obj_bar_t *obj_bar = (void *)widget;
     
-    SCUI_ASSERT(menial->type == scui_menial_type_bar);
-    
-    *value = menial->data.bar.value_cur;
+    *value = obj_bar->value_cur;
 }
 
-/*@brief 控件更新值(子类型)
+/*@brief 控件更新值
  *@param handle 控件句柄
  *@param value  目标进度[0.0f, value_lim]
  *@param anim   动画更新
  */
-void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool anim)
+void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool anim)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_menial));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_bar));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_menial_t *menial = (void *)widget;
-    
-    SCUI_ASSERT(menial->type == scui_menial_type_bar);
+    scui_obj_bar_t *obj_bar = (void *)widget;
     
     /* 这可以实现丝滑到分段效果 */
-    value = scui_clamp(value, 0.0f, menial->data.bar.value_lim);
-    if (menial->data.bar.value_int) value = (scui_coord_t)value;
+    value = scui_clamp(value, 0.0f, obj_bar->value_lim);
+    if (obj_bar->value_int) value = (scui_coord_t)value;
     
     /* 可选:slider无动画 */
     /* 可选:switch有动画,端点值 */
-    if (menial->data.bar.ext_slider) anim = false;
-    if (menial->data.bar.ext_switch) {
-        scui_coord3_t value_d = menial->data.bar.value_lim;
+    if (obj_bar->ext_slider) anim = false;
+    if (obj_bar->ext_switch) {
+        scui_coord3_t value_d = obj_bar->value_lim;
         value = (value < value_d / 2) ? 0.0f : value_d;
     }
-    menial->data.bar.value_cur = value;
+    obj_bar->value_cur = value;
     scui_event_define(event, widget->myself, true, scui_event_update_value, NULL);
     scui_event_notify(&event);
     
-    bool way = menial->data.bar.way;
+    bool way = obj_bar->way;
     scui_object_prop_t prop_def = {0};
     scui_object_tran_t tran_def = {0};
     prop_def.part  = scui_object_part_rect_fg;
@@ -134,8 +158,8 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
     #if 1
     /* 计算宽高值 */
     scui_area_t  dst_part = widget->clip;
-    scui_coord3_t value_d = menial->data.bar.value_lim;
-    scui_coord3_t value_c = menial->data.bar.value_cur;
+    scui_coord3_t value_d = obj_bar->value_lim;
+    scui_coord3_t value_c = obj_bar->value_cur;
     scui_object_data_t value_m = {0};
     scui_object_prop_sync_s(handle, scui_object_part_rect_bg,
         scui_object_style_rect_radius, scui_object_state_def, value_m);
@@ -165,7 +189,7 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
             scui_object_style_main_time, scui_object_state_def, main_time);
         
         scui_coord_t  val_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
-        scui_coord3_t value_d = menial->data.bar.value_lim;
+        scui_coord3_t value_d = obj_bar->value_lim;
         tran_def.time = scui_map(val_dif, 0, size_max, 0,
             main_time.number * value_d / 100.0f);
         
@@ -181,30 +205,33 @@ void scui_menial_bar_update_value(scui_handle_t handle, scui_coord3_t value, boo
     }
 }
 
-/*@brief 事件处理回调(子类型)
+/*@brief 事件处理回调
  *@param event 事件
  */
-void scui_menial_bar_invoke(scui_event_t *event)
+void scui_obj_bar_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_menial_t *menial = (void *)widget;
+    scui_obj_bar_t *obj_bar = (void *)widget;
+    
+    /* 基类处理(过渡动画推进) */
+    scui_object_invoke(event);
     
     switch (event->type) {
     case scui_event_ptr_click: {
-        if (!menial->data.bar.ext_switch)
+        if (!obj_bar->ext_switch)
              break;
         
-        scui_coord3_t value_c = menial->data.bar.value_cur;
-        scui_coord3_t value_d = menial->data.bar.value_lim;
+        scui_coord3_t value_c = obj_bar->value_cur;
+        scui_coord3_t value_d = obj_bar->value_lim;
         value_c = (value_c > value_d / 2) ? 0.0f : value_d;
         
-        scui_menial_bar_update_value(widget->myself, value_c, true);
+        scui_obj_bar_update_value(widget->myself, value_c, true);
         scui_event_mask_over(event);
         break;
     }
     case scui_event_ptr_move: {
-        if (!menial->data.bar.ext_slider)
+        if (!obj_bar->ext_slider)
              break;
         
         scui_point_t ptr_c = event->ptr_e;
@@ -212,9 +239,9 @@ void scui_menial_bar_invoke(scui_event_t *event)
         scui_area_m_to_s(&dst_part, &dst_part);
         
         scui_coord3_t value_c = 0.0f;
-        scui_coord3_t value_d = menial->data.bar.value_lim;
+        scui_coord3_t value_d = obj_bar->value_lim;
         /* 取最后的落点计算百分比值就地更新 */
-        if (menial->data.bar.way) {
+        if (obj_bar->way) {
             value_c = scui_map(ptr_c.y, dst_part.y1, dst_part.y2, 0.0f, value_d);
             value_c = scui_clamp(value_c, 0.0f, value_d);
         } else {
@@ -222,21 +249,20 @@ void scui_menial_bar_invoke(scui_event_t *event)
             value_c = scui_clamp(value_c, 0.0f, value_d);
         }
         
-        scui_menial_bar_update_value(widget->myself, value_c, false);
+        scui_obj_bar_update_value(widget->myself, value_c, false);
         scui_event_mask_over(event);
         break;
     }
-    
     case scui_event_draw_graph: {
         
         scui_object_prop_t prop = {0};
         prop.part = scui_object_part_rect_bg;
         scui_object_state_get(event->object, &prop.state);
-        scui_object_draw_rect(event->object, &prop);
+        scui_object_draw_rect(event->object,  &prop);
         
         prop.part = scui_object_part_rect_fg;
         scui_object_state_get(event->object, &prop.state);
-        scui_object_draw_rect(event->object, &prop);
+        scui_object_draw_rect(event->object,  &prop);
         break;
     }
     default:

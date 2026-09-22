@@ -115,10 +115,28 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		object_maker->widget.type  = scui_widget_type_object;
 		break;
 	}
-	case scui_widget_type_menial: {
-		scui_menial_maker_t *menial_maker = (scui_menial_maker_t *)maker;
+	case scui_widget_type_obj_btn: {
+		scui_obj_btn_maker_t *obj_btn_maker = (scui_obj_btn_maker_t *)maker;
 		
-		menial_maker->widget.type  = scui_widget_type_menial;
+		obj_btn_maker->widget.type  = scui_widget_type_obj_btn;
+		break;
+	}
+	case scui_widget_type_obj_arc: {
+		scui_obj_arc_maker_t *obj_arc_maker = (scui_obj_arc_maker_t *)maker;
+		
+		obj_arc_maker->widget.type  = scui_widget_type_obj_arc;
+		break;
+	}
+	case scui_widget_type_obj_bar: {
+		scui_obj_bar_maker_t *obj_bar_maker = (scui_obj_bar_maker_t *)maker;
+		
+		obj_bar_maker->widget.type  = scui_widget_type_obj_bar;
+		break;
+	}
+	case scui_widget_type_obj_chart: {
+		scui_obj_chart_maker_t *obj_chart_maker = (scui_obj_chart_maker_t *)maker;
+		
+		obj_chart_maker->widget.type  = scui_widget_type_obj_chart;
 		break;
 	}
 	default:
