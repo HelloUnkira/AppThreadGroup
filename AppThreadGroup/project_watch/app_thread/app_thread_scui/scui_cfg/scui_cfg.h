@@ -129,10 +129,6 @@
 #define SCUI_HOR_RES                                (466)
 #define SCUI_VER_RES                                (466)
 
-/* 放大系数以及偏移值 */
-#define SCUI_SCALE_COF                              (1024)
-#define SCUI_SCALE_OFS                              (10)
-
 /* 设备像素格式(默认) */
 #define SCUI_PIXEL_CF_DEF                           (scui_pixel_cf_bmp565)
 #define SCUI_PIXEL_CF_DEF_A                         (scui_pixel_cf_bmp8565)

@@ -32,9 +32,11 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     /* 状态初始化 */
-    roller->type   = roller_maker->type;
-    roller->grad   = roller_maker->grad;
-    roller->center = SCUI_HANDLE_INVALID;
+    roller->type    = roller_maker->type;
+    roller->grad    = roller_maker->grad;
+    roller->focus_s = roller_maker->focus_s;
+    roller->focus_h = roller_maker->focus_h;
+    roller->center  = SCUI_HANDLE_INVALID;
 }
 
 /*@brief 控件析构
@@ -60,13 +62,10 @@ static void scui_roller_event(scui_event_t *event)
         break;
     case scui_event_draw_buffer: {
         
-        SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
         scui_handle_t  handle = scui_widget_parent(event->object);
         scui_widget_t *widget = scui_handle_source_check(handle);
         scui_scroll_t *scroll = (void *)widget;
         scui_roller_t *roller = (void *)widget;
-        
-        
         
         scui_point_t offset  = {0};
         scui_multi_t percent = 100;
@@ -101,7 +100,7 @@ static void scui_roller_event(scui_event_t *event)
             scui_widget_alpha_set(event->object, alpha, false);
         }
         SCUI_LOG_INFO("widget %u draw sub idx: %u", widget->myself,
-            scui_widget_child_to_index(widget->myself, event->object));
+            scui_widget_child_to_index(event->object));
         
         
         
@@ -109,6 +108,72 @@ static void scui_roller_event(scui_event_t *event)
         case scui_roller_type_simple: {
             scui_handle_t surface_image = scui_widget_surface_image(event->object);
             scui_widget_draw_image(event->object, NULL, surface_image, NULL, SCUI_COLOR_UNUSED);
+            break;
+        }
+        case scui_roller_type_differ: {
+            scui_handle_t surface_image = scui_widget_surface_image(event->object);
+            if (roller->focus_s == 0 || roller->focus_s == SCUI_SCALE_COF) {
+                scui_widget_draw_image(event->object, NULL, surface_image, NULL, SCUI_COLOR_UNUSED);
+                /* 差异系数未配置(或等于1.0): 退化为原尺寸绘制 */
+                break;
+            }
+            
+            scui_area_t  clip_p  = scui_widget_clip(handle);
+            scui_area_t  clip_w  = scui_widget_clip(event->object);
+            scui_multi_t clip_cy = clip_p.y + clip_p.h / 2;
+            scui_multi_t focus_s = roller->focus_s;
+            scui_multi_t focus_h = roller->focus_h;
+            scui_multi_t mid_ch  = (focus_h * SCUI_SCALE_COF + focus_s / 2) / focus_s;
+            scui_multi_t mid_cor = (focus_h - mid_ch) / 2;
+            
+            /* 内容在middle内的部分(2x定点, 内容坐标0..clip_w.h) */
+            scui_multi_t c_top = (clip_cy * 2 - mid_ch- clip_w.y * 2) / 2;
+            scui_multi_t c_bot = (clip_cy * 2 + mid_ch- clip_w.y * 2) / 2;
+            if (c_top < 0) c_top = 0; if (c_top > clip_w.h) c_top = clip_w.h;
+            if (c_bot < 0) c_bot = 0; if (c_bot > clip_w.h) c_bot = clip_w.h;
+            
+            /* 不与middle交集区域: 偏移后正常绘制(原尺寸+mid_cor) */
+            if (c_top > 0) {
+                scui_area_t dsp = clip_w;
+                dsp.x -= clip_p.x;
+                dsp.y  = ((clip_w.y - clip_cy) * 2 < -mid_ch ? clip_w.y - mid_cor :
+                    (clip_w.y - clip_cy) * 2 > mid_ch ? clip_w.y + mid_cor :
+                    clip_cy + (clip_w.y - clip_cy) * focus_s / SCUI_SCALE_COF) - clip_p.y;
+                dsp.h  = c_top;
+                scui_area_t sub = {0, 0, dsp.w, c_top};
+                scui_widget_draw_image(widget->myself, &dsp, surface_image, &sub, SCUI_COLOR_UNUSED);
+            }
+            /* 与middle交集区域: 偏移后放大绘制(放大focus_s) */
+            if (c_bot > c_top) {
+                
+                scui_multi_t Ys = (clip_w.y + c_top - clip_cy) * 2 < -mid_ch ?
+                    clip_w.y + c_top - mid_cor : (clip_w.y + c_top - clip_cy) * 2 > mid_ch ?
+                    clip_w.y + c_top + mid_cor : (clip_w.y + c_top - clip_cy) * focus_s / SCUI_SCALE_COF + clip_cy;
+                scui_multi_t Ye = (clip_w.y + c_bot - clip_cy) * 2 < -mid_ch ?
+                    clip_w.y + c_bot - mid_cor : (clip_w.y + c_bot - clip_cy) * 2 > mid_ch ?
+                    clip_w.y + c_bot + mid_cor : (clip_w.y + c_bot - clip_cy) * focus_s / SCUI_SCALE_COF + clip_cy;
+                
+                scui_point_t anchor = {0};
+                anchor.x = clip_w.x - clip_p.x + clip_w.w / 2;
+                anchor.y = (Ys + Ye) / 2 - clip_p.y;
+                
+                scui_area_t sub = {0, c_top, clip_w.w, c_bot - c_top};
+                scui_point_t center = {.x = sub.w / 2, .y = sub.h / 2};
+                scui_point_t scale  = {(scui_coord_t)focus_s, (scui_coord_t)focus_s};
+                scui_widget_draw_image_scale(widget->myself, NULL, surface_image, &sub,
+                    SCUI_COLOR_UNUSED, anchor, center, scale);
+            }
+            /* 不与middle交集区域: 偏移后正常绘制(原尺寸+mid_cor) */
+            if (c_bot < clip_w.h) {
+                scui_area_t dsp = clip_w;
+                dsp.x -= clip_p.x;
+                dsp.y  = ((clip_w.y + c_bot - clip_cy) * 2 < -mid_ch ? clip_w.y + c_bot - mid_cor :
+                    (clip_w.y + c_bot - clip_cy) * 2 > mid_ch ? clip_w.y + c_bot + mid_cor :
+                    clip_cy + (clip_w.y + c_bot - clip_cy) * focus_s / SCUI_SCALE_COF) - clip_p.y;
+                dsp.h  = clip_w.h - c_bot;
+                scui_area_t sub = {0, c_bot, dsp.w, clip_w.h - c_bot};
+                scui_widget_draw_image(widget->myself, &dsp, surface_image, &sub, SCUI_COLOR_UNUSED);
+            }
             break;
         }
         case scui_roller_type_scale: {
@@ -132,19 +197,27 @@ static void scui_roller_event(scui_event_t *event)
             scui_coord_t c_py = clip_p.y + clip_p.h / 2;
             scui_coord_t c_wx = clip_w.x + clip_w.w / 2;
             scui_coord_t c_wy = clip_w.y + clip_w.h / 2;
-            scui_coord3_t dist_x3 = ((scui_coord3_t)cos_ia) / 1024;
-            scui_coord3_t dist_y3 = ((scui_coord3_t)dist_y) / 1024;
-            scui_coord3_t dist_yf = c_wy < c_py ? +1.0f : -1.0f;
+            scui_coord_t dy = c_wy - c_py;
+            scui_coord_t dist_yf = c_wy < c_py ? +1 : -1;
+            
+            scui_multi_t rad_rr = clip_p.h / 2 - clip_w.h / 2;
+            scui_multi_t theta  = (scui_multi_t)scui_dist(c_py, c_wy) * 75 / rad_rr;
+            
+            theta = scui_clamp(theta, 0, +75);
+            scui_multi_t sin_ia = scui_sin4096((int32_t)theta);
+            scui_multi_t cos_ia = scui_cos4096((int32_t)theta);
+            scui_coord3_t dist_x3 = ((scui_coord3_t)cos_ia) / 4096;
+            scui_coord3_t dist_y3 = ((scui_coord3_t)sin_ia) / 4096;
             
             scui_matrix_t x_matrix = {0};
             scui_matrix_identity(&x_matrix);
             scui_point2_t chord = {.x = dist_x3, .y = dist_yf * dist_y3,};
             scui_matrix_rotate_c(&x_matrix, &chord, 0x01);
-            /* 视点在控件中心 */
+            /* 视点在控件中心(拉近增强透视深度) */
             scui_view3_t view3 = {
                 .x = +c_px,
                 .y = +c_py,
-                .z = +rad_rr * 8,
+                .z = +rad_rr * 6,
             };
             scui_point3_t offset3 = {.x = c_px, .y = c_py,};
             /* 创建面, 平行xy平面, 距离z轴一个cos距离 */

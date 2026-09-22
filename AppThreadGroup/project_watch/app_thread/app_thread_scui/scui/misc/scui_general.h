@@ -267,6 +267,10 @@ typedef enum {
 /* 通用结构位域, 字段整理 */
 typedef uintptr_t scui_sbitfd_t;
 
+/* 放大系数以及偏移值 */
+#define SCUI_SCALE_COF      (1024)
+#define SCUI_SCALE_OFS      (10)
+
 /*@brief 操作检查
  */
 #define scui_opt_bits_equal(bits, mask)     (((bits) & (mask)) == (mask))

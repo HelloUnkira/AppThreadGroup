@@ -3,6 +3,7 @@
 
 typedef enum {
     scui_roller_type_simple = 0,
+    scui_roller_type_differ,
     scui_roller_type_scale,
     scui_roller_type_spin,
 } scui_roller_type_t;
@@ -16,8 +17,10 @@ typedef struct {
     /* 外部域: */
     scui_roller_type_t  type;
     scui_sbitfd_t       grad:1;
+    scui_coord_t        focus_s;    // differ
+    scui_coord_t        focus_h;    // differ
     /* 内部域: */
-    scui_handle_t center;
+    scui_handle_t       center;
 } scui_roller_t;
 
 #pragma pack(push, 1)
@@ -30,6 +33,8 @@ typedef struct {
     /* 外部域: */
     scui_roller_type_t  type;
     scui_sbitfd_t       grad:1;
+    scui_coord_t        focus_s;    // differ
+    scui_coord_t        focus_h;    // differ
 } scui_roller_maker_t;
 #pragma pack(pop)
 
