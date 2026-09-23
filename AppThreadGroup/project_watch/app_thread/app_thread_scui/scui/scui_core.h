@@ -79,6 +79,9 @@
 #include "scui_obj_arc.h"           /* 控件(对象:圆弧) */
 #include "scui_obj_bar.h"           /* 控件(对象:条形) */
 #include "scui_obj_chart.h"         /* 控件(对象:图表) */
+#include "scui_obj_slider.h"        /* 控件(对象:滑条) */
+#include "scui_obj_switch.h"        /* 控件(对象:开关) */
+#include "scui_obj_spinner.h"       /* 控件(对象:旋转器) */
 #include "scui_obj_inf.h"           /* 控件(对象:子控件)API */
 
 /* draw,linker: */

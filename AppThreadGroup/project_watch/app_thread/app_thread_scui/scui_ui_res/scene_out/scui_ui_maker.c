@@ -139,6 +139,24 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		obj_chart_maker->widget.type  = scui_widget_type_obj_chart;
 		break;
 	}
+	case scui_widget_type_obj_slider: {
+		scui_obj_slider_maker_t *obj_slider_maker = (scui_obj_slider_maker_t *)maker;
+		
+		obj_slider_maker->widget.type  = scui_widget_type_obj_slider;
+		break;
+	}
+	case scui_widget_type_obj_switch: {
+		scui_obj_switch_maker_t *obj_switch_maker = (scui_obj_switch_maker_t *)maker;
+		
+		obj_switch_maker->widget.type  = scui_widget_type_obj_switch;
+		break;
+	}
+	case scui_widget_type_obj_spinner: {
+		scui_obj_spinner_maker_t *obj_spinner_maker = (scui_obj_spinner_maker_t *)maker;
+		
+		obj_spinner_maker->widget.type  = scui_widget_type_obj_spinner;
+		break;
+	}
 	default:
 		break;
 	}

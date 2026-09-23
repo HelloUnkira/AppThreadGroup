@@ -39,11 +39,6 @@ void scui_obj_bar_make(void *inst, void *inst_maker, scui_handle_t *handle)
     obj_bar->value_cur  = obj_bar_maker->value_cur;
     obj_bar->value_lim  = obj_bar_maker->value_lim;
     obj_bar->value_int  = obj_bar_maker->value_int;
-    obj_bar->ext_slider = obj_bar_maker->ext_slider;
-    obj_bar->ext_switch = obj_bar_maker->ext_switch;
-    
-    /* 不能同时开启slider和switch */
-    SCUI_ASSERT(!(obj_bar->ext_slider && obj_bar->ext_switch));
     
     /* 运行时默认(未配置补默认), 样式默认由 apply 应用常规 res */
     if (SCUI_IS_ZERO_VAL_F(obj_bar->value_lim))
@@ -134,14 +129,6 @@ void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool a
     /* 这可以实现丝滑到分段效果 */
     value = scui_clamp(value, 0.0f, obj_bar->value_lim);
     if (obj_bar->value_int) value = (scui_coord_t)value;
-    
-    /* 可选:slider无动画 */
-    /* 可选:switch有动画,端点值 */
-    if (obj_bar->ext_slider) anim = false;
-    if (obj_bar->ext_switch) {
-        scui_coord3_t value_d = obj_bar->value_lim;
-        value = (value < value_d / 2) ? 0.0f : value_d;
-    }
     obj_bar->value_cur = value;
     scui_event_define(event, widget->myself, true, scui_event_update_value, NULL);
     scui_event_notify(&event);
@@ -218,41 +205,6 @@ void scui_obj_bar_invoke(scui_event_t *event)
     scui_object_invoke(event);
     
     switch (event->type) {
-    case scui_event_ptr_click: {
-        if (!obj_bar->ext_switch)
-             break;
-        
-        scui_coord3_t value_c = obj_bar->value_cur;
-        scui_coord3_t value_d = obj_bar->value_lim;
-        value_c = (value_c > value_d / 2) ? 0.0f : value_d;
-        
-        scui_obj_bar_update_value(widget->myself, value_c, true);
-        scui_event_mask_over(event);
-        break;
-    }
-    case scui_event_ptr_move: {
-        if (!obj_bar->ext_slider)
-             break;
-        
-        scui_point_t ptr_c = event->ptr_e;
-        scui_area_t  dst_part = widget->clip;
-        scui_area_m_to_s(&dst_part, &dst_part);
-        
-        scui_coord3_t value_c = 0.0f;
-        scui_coord3_t value_d = obj_bar->value_lim;
-        /* 取最后的落点计算百分比值就地更新 */
-        if (obj_bar->way) {
-            value_c = scui_map(ptr_c.y, dst_part.y1, dst_part.y2, 0.0f, value_d);
-            value_c = scui_clamp(value_c, 0.0f, value_d);
-        } else {
-            value_c = scui_map(ptr_c.x, dst_part.x1, dst_part.x2, 0.0f, value_d);
-            value_c = scui_clamp(value_c, 0.0f, value_d);
-        }
-        
-        scui_obj_bar_update_value(widget->myself, value_c, false);
-        scui_event_mask_over(event);
-        break;
-    }
     case scui_event_draw_graph: {
         
         scui_object_prop_t prop = {0};

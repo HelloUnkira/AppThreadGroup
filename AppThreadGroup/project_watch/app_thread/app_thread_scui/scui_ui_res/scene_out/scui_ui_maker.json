@@ -130,6 +130,24 @@
             "default": {
                 "widget.type": "scui_widget_type_obj_chart"
             }
+        },
+        {
+            "class": "scui_widget_type_obj_slider",
+            "default": {
+                "widget.type": "scui_widget_type_obj_slider"
+            }
+        },
+        {
+            "class": "scui_widget_type_obj_switch",
+            "default": {
+                "widget.type": "scui_widget_type_obj_switch"
+            }
+        },
+        {
+            "class": "scui_widget_type_obj_spinner",
+            "default": {
+                "widget.type": "scui_widget_type_obj_spinner"
+            }
         }
     ]
 }

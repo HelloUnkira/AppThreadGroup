@@ -70,6 +70,49 @@ void scui_ui_apply(scui_handle_t handle)
         }
         break;
     }
+    case scui_widget_type_obj_slider: {
+        /* 常规 res: 背景浅灰, 前景天蓝 */
+        scui_obj_bar_res_t res = {0};
+        res.color[0].color_s.full = 0xFFE0E0E0;
+        res.color[0].color_e.full = 0xFFE0E0E0;
+        res.color[1].color_s.full = 0xFF2196F3;
+        res.color[1].color_e.full = 0xFF2196F3;
+        
+        res.part = scui_object_part_rect_bg;
+        scui_obj_bar_style(handle, &res);
+        res.part = scui_object_part_rect_fg;
+        scui_obj_bar_style(handle, &res);
+        break;
+    }
+    case scui_widget_type_obj_switch: {
+        /* 常规 res: 背景浅灰, 前景天蓝 */
+        scui_obj_bar_res_t res = {0};
+        res.color[0].color_s.full = 0xFFE0E0E0;
+        res.color[0].color_e.full = 0xFFE0E0E0;
+        res.color[1].color_s.full = 0xFF2196F3;
+        res.color[1].color_e.full = 0xFF2196F3;
+        
+        res.part = scui_object_part_rect_bg;
+        scui_obj_bar_style(handle, &res);
+        res.part = scui_object_part_rect_fg;
+        scui_obj_bar_style(handle, &res);
+        break;
+    }
+    case scui_widget_type_obj_spinner: {
+        /* 常规 res: 背景灰, 前景天蓝, 0~360度 */
+        scui_obj_arc_res_t res = {0};
+        res.color[0].color_s.full = 0xFF9E9E9E;
+        res.color[0].color_e.full = 0xFF9E9E9E;
+        res.color[1].color_s.full = 0xFF2196F3;
+        res.color[1].color_e.full = 0xFF2196F3;
+        res.round = true;
+        
+        res.part = scui_object_part_arc_bg;
+        scui_obj_arc_style(handle, &res);
+        res.part = scui_object_part_arc_fg;
+        scui_obj_arc_style(handle, &res);
+        break;
+    }
     default:
         break;
     }

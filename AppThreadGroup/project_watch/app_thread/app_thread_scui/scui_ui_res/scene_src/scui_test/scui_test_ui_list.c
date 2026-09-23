@@ -14,7 +14,7 @@ void scui_test_ui_list_item_event_proc(scui_event_t *event)
 {
     static const char * const item_text[15] = {
         "Test Sim Ptr", "Test Sim Enc", "Test Sim Bar", "Test Sim Key", "Test Multiply Scroll",
-        "Test Multiply Layout", "Test Multiply String", "Test Menial Object", "Test Multiply Ximage",
+        "Test Multiply Layout", "Test Multiply String", "Test Multiply Object", "Test Multiply Ximage",
         "Test Symbol Char", "Test Draw Graph", "Test Ring", "Test Roller",
         "Test Misc",
         "Test Hobby Auto",

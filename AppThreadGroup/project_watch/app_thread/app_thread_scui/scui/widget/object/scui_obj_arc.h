@@ -10,9 +10,8 @@ typedef struct {
     /* 外部域: */
     scui_coord3_t  angle_c;       /* 当前角度 */
     scui_sbitfd_t  anti:1;        /* 反方向 */
-    scui_sbitfd_t  ext_touch:1;   /* 跟手修改 */
-    scui_sbitfd_t  ext_spinner:1; /* 加载圆环 */
-    scui_coord_t   angle_down;    /* 跟手:基准角(按下=落点,拖动中=上一次采样) */
+    scui_sbitfd_t  touch:1;       /* 跟手修改 */
+    scui_coord_t   angle_d;       /* 跟手:基准角(按下=落点,拖动中=上一次采样) */
     /* 内部域: */
 } scui_obj_arc_t;
 
@@ -25,10 +24,9 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_coord3_t  angle_c;       /* 当前角度 */
-    scui_sbitfd_t  anti:1;        /* 反方向 */
-    scui_sbitfd_t  ext_touch:1;   /* 跟手修改 */
-    scui_sbitfd_t  ext_spinner:1; /* 加载圆环 */
-    scui_coord_t   angle_down;    /* 跟手:基准角(按下=落点,拖动中=上一次采样) */
+    scui_sbitfd_t  anti:1;        /* 反向 */
+    scui_sbitfd_t  touch:1;       /* 跟手修改 */
+    scui_coord_t   angle_d;       /* 跟手:基准角(按下=落点,拖动中=上一次采样) */
 } scui_obj_arc_maker_t;
 #pragma pack(pop)
 

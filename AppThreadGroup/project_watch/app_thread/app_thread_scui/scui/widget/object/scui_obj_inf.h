@@ -4,52 +4,52 @@
 /*@brief 样式资源
  */
 typedef struct {
-    scui_object_type_t part;     /* 部件(bg/edge/box/sha) */
-    scui_area_t        area;     /* 宽高(部件) */
-    scui_color_t       color[4]; /* 颜色(def[0]/pre[1]/chk[2]/pre[3]; s状态色->e渐变) */
-    scui_coord_t       width;    /* 边界(实心:<=0;空心:>0) */
-    scui_coord_t       radius;   /* 圆角半径(最大:<0) */
-    scui_coord_t       time;     /* 动画时间(ms) */
-    scui_coord_t       lim;      /* 缩小限制(pct) */
-    scui_sbitfd_t      grad:1;   /* 渐变(可选) */
-    scui_sbitfd_t      gradw:1;  /* 渐变方向(水平:0;垂直:1) */
-    scui_sbitfd_t      shadow:1; /* 阴影(可选) */
+    scui_object_type_t part;        /* 部件(bg/edge/box/sha) */
+    scui_area_t        area;        /* 宽高(部件) */
+    scui_color_t       color[4];    /* 颜色(def[0]/pre[1]/chk[2]/pre[3]; s状态色->e渐变) */
+    scui_coord_t       width;       /* 边界(实心:<=0;空心:>0) */
+    scui_coord_t       radius;      /* 圆角半径(最大:<0) */
+    scui_coord_t       time;        /* 动画时间(ms) */
+    scui_coord_t       lim;         /* 缩小限制(pct) */
+    scui_sbitfd_t      grad:1;      /* 渐变(可选) */
+    scui_sbitfd_t      gradw:1;     /* 渐变方向(水平:0;垂直:1) */
+    scui_sbitfd_t      shadow:1;    /* 阴影(可选) */
 } scui_obj_btn_res_t;
 
 /*@brief 样式资源
  */
 typedef struct {
-    scui_object_type_t part;      /* 部件(bg/fg) */
-    scui_point_t       center;    /* 弧心 */
-    scui_coord_t       width;     /* 弧宽(扇形:<= 0;弧型:>0) */
-    scui_coord_t       radius;    /* 半径(>0) */
-    scui_coord3_t      angle_s;   /* 起始角度(默认:0) */
-    scui_coord3_t      angle_e;   /* 结束角度(默认:360) */
-    scui_color_t       color[2];  /* 颜色(背景[0]前景[1]) */
-    scui_coord_t       time;      /* 动画时间(ms) */
-    scui_sbitfd_t      round:1;   /* 端点圆角(可选) */
-    scui_sbitfd_t      gradw:1;   /* 渐变方向(水平:0;垂直:1) */
-    scui_sbitfd_t      grad:1;    /* 渐变(可选)(s->e) */
+    scui_object_type_t part;        /* 部件(bg/fg) */
+    scui_point_t       center;      /* 弧心 */
+    scui_coord_t       width;       /* 弧宽(扇形:<= 0;弧型:>0) */
+    scui_coord_t       radius;      /* 半径(>0) */
+    scui_coord3_t      angle_s;     /* 起始角度(默认:0) */
+    scui_coord3_t      angle_e;     /* 结束角度(默认:360) */
+    scui_color_t       color[2];    /* 颜色(背景[0]前景[1]) */
+    scui_coord_t       time;        /* 动画时间(ms) */
+    scui_sbitfd_t      round:1;     /* 端点圆角(可选) */
+    scui_sbitfd_t      gradw:1;     /* 渐变方向(水平:0;垂直:1) */
+    scui_sbitfd_t      grad:1;      /* 渐变(可选)(s->e) */
 } scui_obj_arc_res_t;
 
 /*@brief 样式资源
  */
 typedef struct {
-    scui_object_type_t part;      /* 部件(bg/fg) */
-    scui_color_t       color[2];  /* 颜色(背景[0]前景[1]) */
-    scui_coord_t       radius;    /* 圆角半径(最大:<0) */
-    scui_coord_t       time;      /* 动画时间(ms) */
-    scui_sbitfd_t      grad:1;    /* 渐变(可选)(s->e) */
+    scui_object_type_t part;        /* 部件(bg/fg) */
+    scui_color_t       color[2];    /* 颜色(背景[0]前景[1]) */
+    scui_coord_t       radius;      /* 圆角半径(最大:<0) */
+    scui_coord_t       time;        /* 动画时间(ms) */
+    scui_sbitfd_t      grad:1;      /* 渐变(可选)(s->e) */
 } scui_obj_bar_res_t;
 
 /*@brief 样式资源
  */
 typedef struct {
-    scui_object_type_t part;      /* 部件(item) */
-    scui_sbitfd_t      round:1;   /* 端点圆角 */
-    scui_sbitfd_t      grad:1;    /* 折线阴影 */
-    scui_color_t       color;     /* 颜色 */
-    scui_coord_t       width;     /* 线宽 */
+    scui_object_type_t part;        /* 部件(item) */
+    scui_sbitfd_t      round:1;     /* 端点圆角 */
+    scui_sbitfd_t      grad:1;      /* 折线阴影 */
+    scui_color_t       color;       /* 颜色 */
+    scui_coord_t       width;       /* 线宽 */
 } scui_obj_chart_res_t;
 
 /*@brief 控件样式应用

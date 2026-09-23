@@ -12,8 +12,6 @@ typedef struct {
     scui_coord_t   value_cur;     /* 当前进度 */
     scui_coord3_t  value_lim;     /* 进度限制(默认:100) */
     scui_sbitfd_t  value_int:1;   /* 进度单元 */
-    scui_sbitfd_t  ext_slider:1;  /* 滑动交互 */
-    scui_sbitfd_t  ext_switch:1;  /* 点击开关 */
     /* 内部域: */
 } scui_obj_bar_t;
 
@@ -29,8 +27,6 @@ typedef struct {
     scui_coord_t   value_cur;     /* 当前进度 */
     scui_coord3_t  value_lim;     /* 进度限制(默认:100) */
     scui_sbitfd_t  value_int:1;   /* 进度单元 */
-    scui_sbitfd_t  ext_slider:1;  /* 滑动交互 */
-    scui_sbitfd_t  ext_switch:1;  /* 点击开关 */
 } scui_obj_bar_maker_t;
 #pragma pack(pop)
 
