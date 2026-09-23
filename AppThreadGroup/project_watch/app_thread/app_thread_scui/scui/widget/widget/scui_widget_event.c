@@ -378,11 +378,6 @@ static void scui_widget_event_process(scui_event_t *event)
             SCUI_LOG_INFO("widget clip is empty");
             return;
         }
-        /* 绘制事件没有剪切域,忽略 */
-        if (widget->style.buffer && widget->style.buffer_d)
-        if (scui_area_empty(&widget->clip_set_p->clip)) {
-            return;
-        }
         /* 根控件画布为空,忽略 */
         if (widget->surface->pixel == NULL)
             return;
@@ -444,9 +439,17 @@ static void scui_widget_event_process(scui_event_t *event)
         
         /* 普通控件不响应移动/甩动(输入独占) */
         if (event->type == scui_event_ptr_fling ||
-            event->type == scui_event_ptr_move)
+            event->type == scui_event_ptr_move) {
             if (scui_window_switch_work())
                 return;
+            
+            scui_handle_t handle_h = SCUI_HANDLE_INVALID;
+            scui_handle_t handle_t = scui_widget_tree(widget->myself);
+            /* 持续时间已经被控件独占, 需要断言是否为自己 */
+            if (scui_widget_indev_hold(handle_t, &handle_h))
+            if (handle_h != widget->myself)
+                return;
+        }
         
         /* 控件点包含检查: 动作链统一锚定真实按下点 */
         scui_handle_t  handle_t = scui_widget_tree(event->object);
@@ -677,9 +680,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
         scui_event_mask_keep(event);
         scui_widget_t *widget = scui_handle_source_check(event->object);
         if (widget->parent == SCUI_HANDLE_INVALID) {
-            bool surface_only = scui_widget_surface_only(widget);
             
             /* 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘 */
+            bool surface_only = scui_widget_surface_only(widget);
             if (widget->type == scui_widget_type_window && surface_only) {
                 scui_window_t *window = (void *)widget;
                 if (window->draw_lock)

@@ -163,48 +163,40 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip)
 {
     SCUI_LOG_DEBUG("widget: %u", widget->myself);
     
-    /* 从根控件开始更新(它会保存最终剪切域) */
-    /* 如果其他子控件都不存在独立画布的话 */
-    if (widget->parent == SCUI_HANDLE_INVALID) {
-        SCUI_ASSERT(clip == NULL);
+    /* 从根控件,独立画布控件更新(它会保存最终剪切域) */
+    if (widget->parent == SCUI_HANDLE_INVALID || widget->style.buffer) {
         
-        /* 为所有控件及其子控件添加画布控件剪切域 */
-        scui_clip_btra(widget->clip_set, node) {
-            scui_clip_unit_t *unit = scui_clip_unit(node);
+        /* 先为自己加剪切域 */
+        if (clip != NULL) {
+            scui_area_t clip_inter = {0};
+            if (scui_area_inter(&clip_inter, &widget->clip_set_p->clip, clip))
+                scui_clip_add(widget->clip_set_p, &clip_inter);
+        }
+        
+        /* 为所有子控件添加画布控件剪切域 */
+        scui_widget_child_list_btra(widget, idx) {
+            scui_handle_t  handle_c = widget->child_list[idx];
+            scui_widget_t *widget_c = scui_handle_source_check(handle_c);
             
-            scui_widget_child_list_btra(widget, idx) {
-                scui_handle_t  handle_c = widget->child_list[idx];
-                scui_widget_t *widget_c = scui_handle_source_check(handle_c);
-                scui_widget_clip_reset(widget_c, &unit->clip);
+            if (scui_clip_empty(&widget->clip_set)) {
+                /* 以单一调度让派发可以被迭代下去 */
+                scui_widget_clip_reset(widget_c, NULL);
+            } else {
+                /* 为所有子控件添加画布控件剪切域 */
+                scui_clip_btra(widget->clip_set, node) {
+                    scui_clip_unit_t *unit = scui_clip_unit(node);
+                    scui_widget_clip_reset(widget_c, &unit->clip);
+                }
             }
         }
         return;
     }
     
-    if (widget->style.buffer) {
-        
-        SCUI_ASSERT(clip != NULL);
+    if (clip != NULL) {
         scui_area_t clip_inter = {0};
-        if (scui_area_inter(&clip_inter, &widget->clip_set_p->clip, clip))
-            scui_clip_add(widget->clip_set_p, &clip_inter);
-        
-        /* 为所有控件及其子控件添加画布控件剪切域 */
-        scui_clip_btra(widget->clip_set, node) {
-            scui_clip_unit_t *unit = scui_clip_unit(node);
-            scui_widget_child_list_btra(widget, idx) {
-                scui_handle_t  handle_c = widget->child_list[idx];
-                scui_widget_t *widget_c = scui_handle_source_check(handle_c);
-                scui_widget_clip_reset(widget_c, &unit->clip);
-            }
-        }
-        
-        return;
+        if (scui_area_inter(&clip_inter, &widget->clip_set.clip, clip))
+            scui_clip_add(&widget->clip_set, &clip_inter);
     }
-    
-    SCUI_ASSERT(clip != NULL);
-    scui_area_t clip_inter = {0};
-    if (scui_area_inter(&clip_inter, &widget->clip_set.clip, clip))
-        scui_clip_add(&widget->clip_set, &clip_inter);
     
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t  handle_c = widget->child_list[idx];
@@ -511,7 +503,9 @@ void scui_widget_surface_ready(scui_handle_t handle)
     /* 创建时设置完整绘制域 */
     if (widget->style.buffer_d) {
         scui_widget_clip_draw_tree(widget);
-        scui_widget_clip_reset(widget, &widget->clip_set.clip);
+        scui_handle_t  handle_t = scui_widget_tree(widget->myself);
+        scui_widget_t *widget_t = scui_handle_source_check(handle_t);
+        scui_widget_clip_reset(widget_t, NULL);
     }
 }
 

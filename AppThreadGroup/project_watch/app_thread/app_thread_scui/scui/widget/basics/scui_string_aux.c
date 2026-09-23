@@ -181,14 +181,17 @@ static void scui_string_args_enc(scui_string_args_t *args)
  */
 static void scui_string_args_trans(scui_string_args_t *args)
 {
+    /* 文字变形:将特殊的连序unicode替换成新的映射unicode */
+    /* 文字双向调序:将逻辑顺序转为视觉顺序(RTL语言逆序绘制) */
+    
     if (args->utf8 == NULL || args->number == 0 ||
         args->name == SCUI_HANDLE_INVALID)
         return;
     
-    /* 文字变形:将特殊的连序unicode替换成新的映射unicode */
-    scui_string_RTL(args);
-    /* 文字双向调序:将逻辑顺序转为视觉顺序(RTL语言逆序绘制) */
-    scui_string_BIDI(args);
+    if (scui_lang_RTL()) {
+        scui_string_RTL(args);
+        scui_string_BIDI(args);
+    }
 }
 
 /*@brief 字符串处理

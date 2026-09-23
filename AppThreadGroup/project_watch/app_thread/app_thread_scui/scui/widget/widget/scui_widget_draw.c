@@ -129,13 +129,13 @@ bool scui_widget_draw_buffer(scui_handle_t handle, bool redirect)
     if (widget->parent == SCUI_HANDLE_INVALID) return false;
     SCUI_ASSERT(widget->surface_s != NULL);
     
-    static scui_surface_t *surface = NULL;
+    static scui_surface_t *surface  = NULL;
     static scui_clip_set_t clip_set = {0};
     
     if (redirect) {
         SCUI_ASSERT(surface == NULL);
-        surface = widget->surface;
-        clip_set  = widget->clip_set;
+        surface  = widget->surface;
+        clip_set = widget->clip_set;
         
         /* 映射到父控件画布 */
         scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
@@ -812,7 +812,7 @@ void scui_widget_draw_ctx_graph(scui_handle_t handle, scui_area_t *target, scui_
     
     /* 偏移坐标转换 */
     if (!widget->style.buffer) {
-        scui_area_t clip = scui_widget_clip_root(widget->myself);
+        scui_area_t clip = scui_widget_clip(widget->myself);
         draw_dsc_i->graph.dst_part.x    += clip.x;
         draw_dsc_i->graph.dst_part.y    += clip.y;
         draw_dsc_i->graph.src_center.x  += clip.x;

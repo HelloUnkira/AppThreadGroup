@@ -269,6 +269,12 @@ static void scui_widget_json_widget_style_buffer(void *maker, void *field)
 	widget_maker->style.buffer = ((scui_widget_json_val_t *)field)->sbitfd;
 }
 
+static void scui_widget_json_widget_style_buffer_d(void *maker, void *field)
+{
+	scui_widget_maker_t *widget_maker = (scui_widget_maker_t *)maker;
+	widget_maker->style.buffer_d = ((scui_widget_json_val_t *)field)->sbitfd;
+}
+
 static void scui_widget_json_widget_style_fully_bg(void *maker, void *field)
 {
 	scui_widget_maker_t *widget_maker = (scui_widget_maker_t *)maker;
@@ -4558,6 +4564,8 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_1_cfg[])(void 
 	scui_widget_json_widget_clip_w,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_buffer,
+	scui_widget_json_widget_style_buffer_d,
 };
 
 static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_1_val[] = {
@@ -4569,6 +4577,8 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAG
 	{ .coord = SCUI_HOR_RES, },
 	{ .event = scui_test_ui_object_page_1_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_1, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
 };
 
 const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_1_key = {
@@ -4628,6 +4638,8 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_2_cfg[])(void 
 	scui_widget_json_widget_clip_w,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_buffer,
+	scui_widget_json_widget_style_buffer_d,
 	scui_widget_json_widget_style_sched_anima,
 };
 
@@ -4640,6 +4652,8 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAG
 	{ .coord = SCUI_HOR_RES, },
 	{ .event = scui_test_ui_object_page_2_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_2, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
 	{ .sbitfd = true, },
 };
 
@@ -4700,6 +4714,8 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_3_cfg[])(void 
 	scui_widget_json_widget_clip_w,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_buffer,
+	scui_widget_json_widget_style_buffer_d,
 	scui_widget_json_widget_style_sched_anima,
 };
 
@@ -4712,6 +4728,8 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAG
 	{ .coord = SCUI_HOR_RES, },
 	{ .event = scui_test_ui_object_page_3_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_3, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
 	{ .sbitfd = true, },
 };
 
@@ -4772,6 +4790,8 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_4_cfg[])(void 
 	scui_widget_json_widget_clip_w,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_buffer,
+	scui_widget_json_widget_style_buffer_d,
 };
 
 static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_4_val[] = {
@@ -4783,6 +4803,8 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAG
 	{ .coord = SCUI_HOR_RES, },
 	{ .event = scui_test_ui_object_page_4_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_4, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
 };
 
 const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_4_key = {
@@ -4842,6 +4864,8 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_5_cfg[])(void 
 	scui_widget_json_widget_clip_w,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_buffer,
+	scui_widget_json_widget_style_buffer_d,
 };
 
 static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_5_val[] = {
@@ -4853,6 +4877,8 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAG
 	{ .coord = SCUI_HOR_RES, },
 	{ .event = scui_test_ui_object_page_5_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_5, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
 };
 
 const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_5_key = {
@@ -4912,6 +4938,8 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_6_cfg[])(void 
 	scui_widget_json_widget_clip_w,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_buffer,
+	scui_widget_json_widget_style_buffer_d,
 };
 
 static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_6_val[] = {
@@ -4923,6 +4951,8 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAG
 	{ .coord = SCUI_HOR_RES, },
 	{ .event = scui_test_ui_object_page_6_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_6, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
 };
 
 const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_6_key = {
@@ -4982,6 +5012,8 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_7_cfg[])(void 
 	scui_widget_json_widget_clip_w,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_buffer,
+	scui_widget_json_widget_style_buffer_d,
 };
 
 static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_7_val[] = {
@@ -4993,6 +5025,8 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAG
 	{ .coord = SCUI_HOR_RES, },
 	{ .event = scui_test_ui_object_page_7_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_7, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
 };
 
 const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_7_key = {
@@ -5052,6 +5086,8 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8_cfg[])(void 
 	scui_widget_json_widget_clip_w,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_buffer,
+	scui_widget_json_widget_style_buffer_d,
 };
 
 static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8_val[] = {
@@ -5063,6 +5099,8 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAG
 	{ .coord = SCUI_HOR_RES, },
 	{ .event = scui_test_ui_object_page_8_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
 };
 
 const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8_key = {
@@ -5122,6 +5160,8 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_9_cfg[])(void 
 	scui_widget_json_widget_clip_w,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_buffer,
+	scui_widget_json_widget_style_buffer_d,
 };
 
 static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_9_val[] = {
@@ -5133,6 +5173,8 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAG
 	{ .coord = SCUI_HOR_RES, },
 	{ .event = scui_test_ui_object_page_9_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_9, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
 };
 
 const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_9_key = {
@@ -5192,6 +5234,8 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_10_cfg[])(void
 	scui_widget_json_widget_clip_w,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_buffer,
+	scui_widget_json_widget_style_buffer_d,
 };
 
 static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_10_val[] = {
@@ -5203,6 +5247,8 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAG
 	{ .coord = SCUI_HOR_RES, },
 	{ .event = scui_test_ui_object_page_10_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_10, },
+	{ .sbitfd = true, },
+	{ .sbitfd = true, },
 };
 
 const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_10_key = {

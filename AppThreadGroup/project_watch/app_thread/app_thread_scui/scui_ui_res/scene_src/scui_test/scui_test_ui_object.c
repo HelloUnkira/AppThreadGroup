@@ -132,6 +132,10 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         scui_obj_btn_maker_define(obj_btn_maker);
+        obj_btn_maker.widget.color.color.full = 0xFF808080;
+        obj_btn_maker.widget.style.fully_bg = 1;
+        
+
         scui_handle_t obj_btn_handle = SCUI_HANDLE_INVALID;
         obj_btn_maker.widget.parent = event->object;
         obj_btn_maker.widget.event_cb = scui_test_ui_object_btn_event_proc;
@@ -341,6 +345,10 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         scui_obj_arc_maker_define(obj_arc_maker);
+        obj_arc_maker.widget.color.color.full = 0xFF808080;
+        obj_arc_maker.widget.style.fully_bg = 1;
+        
+
         scui_handle_t obj_arc_handle = SCUI_HANDLE_INVALID;
         obj_arc_maker.widget.parent = event->object;
         obj_arc_maker.widget.event_cb = scui_test_ui_object_arc_event_proc;
@@ -522,6 +530,10 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         scui_obj_bar_maker_define(obj_bar_maker);
+        obj_bar_maker.widget.color.color.full = 0xFF808080;
+        obj_bar_maker.widget.style.fully_bg = 1;
+        
+
         scui_handle_t obj_bar_handle = SCUI_HANDLE_INVALID;
         obj_bar_maker.widget.parent = event->object;
         obj_bar_maker.widget.event_cb = scui_test_ui_object_bar_event_proc;
@@ -649,6 +661,10 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         scui_obj_slider_maker_define(obj_slider_maker);
+        obj_slider_maker.widget.color.color.full = 0xFF808080;
+        obj_slider_maker.widget.style.fully_bg = 1;
+        
+
         scui_handle_t obj_slider_handle = SCUI_HANDLE_INVALID;
         obj_slider_maker.widget.parent = event->object;
         obj_slider_maker.widget.event_cb = scui_test_ui_object_bar_event_proc;
@@ -760,6 +776,10 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         scui_obj_switch_maker_define(obj_switch_maker);
+        obj_switch_maker.widget.color.color.full = 0xFF808080;
+        obj_switch_maker.widget.style.fully_bg = 1;
+        
+
         scui_handle_t obj_switch_handle = SCUI_HANDLE_INVALID;
         obj_switch_maker.widget.parent = event->object;
         obj_switch_maker.widget.event_cb = scui_test_ui_object_bar_event_proc;
@@ -879,6 +899,10 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         scui_obj_spinner_maker_define(obj_spinner_maker);
+        obj_spinner_maker.widget.color.color.full = 0xFF808080;
+        obj_spinner_maker.widget.style.fully_bg = 1;
+        
+
         scui_handle_t obj_spinner_handle = SCUI_HANDLE_INVALID;
         obj_spinner_maker.widget.parent = event->object;
         obj_spinner_maker.widget.event_cb = scui_test_ui_object_arc_event_proc;
@@ -1024,6 +1048,10 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         scui_obj_chart_maker_define(obj_chart_maker);
+        obj_chart_maker.widget.color.color.full = 0xFF808080;
+        obj_chart_maker.widget.style.fully_bg = 1;
+        
+
         scui_handle_t obj_chart_handle = SCUI_HANDLE_INVALID;
         obj_chart_maker.widget.parent = event->object;
         obj_chart_maker.widget.event_cb = scui_test_ui_object_cht_event_proc;

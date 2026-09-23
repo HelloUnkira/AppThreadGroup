@@ -20,6 +20,8 @@
         {
             "annotation":       "page_1: Test Btn",
             "widget.type":      "scui_widget_type_custom",
+            "widget.style.buffer":   "true",
+            "widget.style.buffer_d": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
             "widget.myself":    "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_1",
@@ -47,6 +49,8 @@
         {
             "annotation":       "page_2: Test Arc",
             "widget.type":      "scui_widget_type_custom",
+            "widget.style.buffer":   "true",
+            "widget.style.buffer_d": "true",
             "widget.style.sched_anima": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
@@ -75,6 +79,8 @@
         {
             "annotation":       "page_3: Test Bar",
             "widget.type":      "scui_widget_type_custom",
+            "widget.style.buffer":   "true",
+            "widget.style.buffer_d": "true",
             "widget.style.sched_anima": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
@@ -103,6 +109,8 @@
         {
             "annotation":       "page_4: Test Slider",
             "widget.type":      "scui_widget_type_custom",
+            "widget.style.buffer":   "true",
+            "widget.style.buffer_d": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
             "widget.myself":    "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_4",
@@ -130,6 +138,8 @@
         {
             "annotation":       "page_5: Test Switch",
             "widget.type":      "scui_widget_type_custom",
+            "widget.style.buffer":   "true",
+            "widget.style.buffer_d": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
             "widget.myself":    "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_5",
@@ -157,6 +167,8 @@
         {
             "annotation":       "page_6: Test Spinner",
             "widget.type":      "scui_widget_type_custom",
+            "widget.style.buffer":   "true",
+            "widget.style.buffer_d": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
             "widget.myself":    "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_6",
@@ -184,6 +196,8 @@
         {
             "annotation":       "page_7: Test Chart",
             "widget.type":      "scui_widget_type_custom",
+            "widget.style.buffer":   "true",
+            "widget.style.buffer_d": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
             "widget.myself":    "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_7",
@@ -211,6 +225,8 @@
         {
             "annotation":       "page_8: Test Empty",
             "widget.type":      "scui_widget_type_custom",
+            "widget.style.buffer":   "true",
+            "widget.style.buffer_d": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
             "widget.myself":    "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8",
@@ -238,6 +254,8 @@
         {
             "annotation":       "page_9: Test Empty",
             "widget.type":      "scui_widget_type_custom",
+            "widget.style.buffer":   "true",
+            "widget.style.buffer_d": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
             "widget.myself":    "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_9",
@@ -265,6 +283,8 @@
         {
             "annotation":       "page_10: Test Empty",
             "widget.type":      "scui_widget_type_custom",
+            "widget.style.buffer":   "true",
+            "widget.style.buffer_d": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
             "widget.myself":    "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_10",

@@ -33,6 +33,30 @@ bool scui_widget_switch_point(scui_handle_t handle, scui_point_t *point)
     return false;
 }
 
+/*@brief 控件输入独占检查
+ *@param handle   控件句柄
+ *@param handle_h 控件句柄(占有者)
+ *@param 存在输入独占
+ */
+bool scui_widget_indev_hold(scui_handle_t handle, scui_handle_t *handle_h)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    if (widget->state.indev_hold) {
+        if (handle_h != NULL)
+           *handle_h  = handle;
+        
+        return true;
+    }
+    
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle_c = widget->child_list[idx];
+        if (scui_widget_indev_hold(handle_c, handle_h))
+            return true;
+    }
+    
+    return false;
+}
+
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点

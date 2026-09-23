@@ -239,6 +239,13 @@ void scui_widget_create(void *maker, scui_handle_t *handle);
  */
 bool scui_widget_switch_point(scui_handle_t handle, scui_point_t *point);
 
+/*@brief 控件输入独占检查
+ *@param handle   控件句柄
+ *@param handle_h 控件句柄(占有者)
+ *@param 存在输入独占
+ */
+bool scui_widget_indev_hold(scui_handle_t handle, scui_handle_t *handle_h);
+
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点
