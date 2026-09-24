@@ -67,8 +67,8 @@ void scui_obj_btn_style(scui_handle_t handle, scui_obj_btn_res_t *res)
     
     /* 几何属性(def<->pre) */
     scui_object_sub_t sub = {.part = res->part, .form = res->form};
-    sub.rect.alpha.alpha        = scui_alpha_cover;
-    sub.rect.align.align        = scui_opt_pos_c;
+    sub.rect.alpha.alpha        = res->alpha;
+    sub.rect.align.align        = res->align;
     sub.rect.width.number       = area_w;
     sub.rect.height.number      = area_h;
     sub.rect.radius.number      = res->radius;

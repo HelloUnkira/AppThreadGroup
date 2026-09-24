@@ -71,14 +71,9 @@ void scui_obj_arc_style(scui_handle_t handle, scui_obj_arc_res_t *res)
         angle_s = 0.0f; angle_e = 360.0f;
     }
     
-    scui_coord_t idx = 0;
-    if (res->part == scui_object_part_arc_bg) idx = 0;
-    if (res->part == scui_object_part_arc_fg ||
-        res->part == scui_object_part_arc_knob) idx = 1;   /* 前景/端点:前景色 */
-    
     scui_object_sub_t sub = {.part = res->part, .form = res->form};
-    sub.arc.alpha.alpha        = scui_alpha_cover;
-    sub.arc.color.color32      = res->color[idx].color_s;
+    sub.arc.alpha.alpha        = res->alpha;
+    sub.arc.color.color32      = res->color.color_s;
     sub.arc.angle_s.number     = angle_s;
     sub.arc.angle_e.number     = angle_e;
     sub.arc.center.point       = res->center;
@@ -87,7 +82,7 @@ void scui_obj_arc_style(scui_handle_t handle, scui_obj_arc_res_t *res)
     sub.arc.multi.multi.round  = res->round;
     sub.arc.multi.multi.grad_w = res->gradw;
     sub.arc.multi.multi.grad   = res->grad;
-    sub.arc.grad_c.color32     = res->color[idx].color_e;
+    sub.arc.grad_c.color32     = res->color.color_e;
     
     sub.state = scui_object_state_def;
     scui_object_prop_arc(handle, &sub);

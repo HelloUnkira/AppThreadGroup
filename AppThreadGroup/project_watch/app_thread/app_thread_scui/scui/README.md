@@ -41,9 +41,29 @@
     
     优先级:高
     控件:支持lvgl式渲染(有限度)
-    猜想:基础源控件还需完备
-    menial_line的必要性???
-    需待评估
+    评估:bar支持俩端生长<->是否有必要(s,e)?
+    评估:chart扩充(参考完整效果)
+    评估:checkbox一个框框里面带symbol
+    评估:dropdown折叠效果，这个应该考虑一下升级到外部组件
+    
+    评估:slider扩充<>让knob去捕获，增加press效果
+    评估:switch扩充<>让fg可以不绘制，当距离不够的时候
+    
+    评估:textarea,还是有很多用处的,有必要实现
+    评估:spinbox,文本框,仅仅数字符号显示,光标移动,从textarea继承
+    
+    评估:led是否需要，可以做着玩，问题倒不大
+    评估:scale是否需要，可以做着玩，问题倒不大
+    评估:btn_mat必要(支持布局, item DIY)(待研究:每一个item都能DIY???)
+         btn_mat其实也可以用layout+btn实现，但这种其实是为了省控件
+             calendar继承的btn_mat，只需要给plug加一个计算万年历的即可
+             剩下的就是简要的布局游戏了
+    
+    评估:line,绘制轨迹图,貌似无意义
+    
+    评估:msgbox,目前的window支持该效果，是否单独构建
+    
+        
     
     将EGUI降档,移植Lvgl后端蒙版
     实现基于蒙版输出的alpha图形

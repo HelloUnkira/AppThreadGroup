@@ -369,6 +369,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_widget_create(&chart_maker, &chart_handle);
         
         scui_obj_chart_res_t cht_res = {0};
+        cht_res.alpha = scui_alpha_cover;
         cht_res.round  = true;
         cht_res.color.color.full = 0xFFF9104F;
         cht_res.part = scui_object_part_rect_fg;
@@ -554,6 +555,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         scui_widget_create(&chart_maker, &chart_handle);
         
         scui_obj_chart_res_t cht_res = {0};
+        cht_res.alpha = scui_alpha_cover;
         cht_res.round  = true;
         cht_res.color.color.full = 0xFFE1CC00;
         cht_res.part = scui_object_part_rect_fg;
@@ -740,6 +742,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         scui_widget_create(&chart_maker, &chart_handle);
         
         scui_obj_chart_res_t cht_res = {0};
+        cht_res.alpha = scui_alpha_cover;
         cht_res.round  = true;
         cht_res.color.color.full = 0xFF00B7FF;
         cht_res.part = scui_object_part_rect_fg;

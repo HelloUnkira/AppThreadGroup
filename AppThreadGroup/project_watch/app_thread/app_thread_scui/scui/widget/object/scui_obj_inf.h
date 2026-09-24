@@ -10,6 +10,8 @@ typedef struct {
     scui_color_t       color[4];    /* 颜色(def[0]/pre[1]/chk[2]/pre[3]; s状态色->e渐变) */
     scui_coord_t       width;       /* 边界(实心:<=0;空心:>0) */
     scui_coord_t       radius;      /* 圆角半径(最大:<0) */
+    scui_alpha_t       alpha;       /* 透明度(默认cover) */
+    scui_opt_pos_t     align;       /* 对齐(默认中心) */
     scui_coord_t       time;        /* 动画时间(ms) */
     scui_coord_t       lim;         /* 缩小限制(pct) */
     scui_sbitfd_t      grad:1;      /* 渐变(可选) */
@@ -27,8 +29,9 @@ typedef struct {
     scui_coord_t       radius;      /* 半径(>0) */
     scui_coord3_t      angle_s;     /* 起始角度(默认:0) */
     scui_coord3_t      angle_e;     /* 结束角度(默认:360) */
-    scui_color_t       color[2];    /* 颜色(背景[0]前景[1]) */
+    scui_color_t       color;       /* 颜色(s状态色->e渐变) */
     scui_coord_t       time;        /* 动画时间(ms) */
+    scui_alpha_t       alpha;       /* 透明度(默认cover) */
     scui_sbitfd_t      round:1;     /* 端点圆角(可选) */
     scui_sbitfd_t      gradw:1;     /* 渐变方向(水平:0;垂直:1) */
     scui_sbitfd_t      grad:1;      /* 渐变(可选)(s->e) */
@@ -43,6 +46,8 @@ typedef struct {
     scui_color_t       color;       /* 颜色(s状态色->e渐变) */
     scui_coord_t       width;       /* 边界(实心:<=0;空心:>0) */
     scui_coord_t       radius;      /* 圆角半径(最大:<0) */
+    scui_alpha_t       alpha;       /* 透明度(默认cover) */
+    scui_opt_pos_t     align;       /* 对齐(默认左上) */
     scui_coord_t       time;        /* 动画时间(ms) */
     scui_sbitfd_t      grad:1;      /* 渐变(可选)(s->e) */
     scui_sbitfd_t      gradw:1;     /* 渐变方向(水平:0;垂直:1) */
@@ -58,6 +63,7 @@ typedef struct {
     scui_sbitfd_t      grad:1;      /* 折线阴影 */
     scui_color_t       color;       /* 颜色 */
     scui_coord_t       width;       /* 线宽 */
+    scui_alpha_t       alpha;       /* 透明度(默认cover) */
 } scui_obj_chart_res_t;
 
 /*@brief 控件样式应用
@@ -83,6 +89,17 @@ void scui_obj_bar_style(scui_handle_t handle, scui_obj_bar_res_t *res);
  *@param res    样式资源
  */
 void scui_obj_chart_style(scui_handle_t handle, scui_obj_chart_res_t *res);
+
+/******************************************************************************/
+
+/*@brief 辅助推演矩形样式参数
+ *@param res    样式资源(base/edge/box/sha)
+ *@param size   最大宽高
+ *@param stroke 各层描边(base/edge/box/sha; 0=跳过(alpha=trans))
+ *@param radius 最大圆角
+ */
+void scui_obj_aux_res_rect(scui_obj_btn_res_t res[4], scui_point_t size,
+    scui_coord_t stroke[4], scui_point_t radius);
 
 /******************************************************************************/
 

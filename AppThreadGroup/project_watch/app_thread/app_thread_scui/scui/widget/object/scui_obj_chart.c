@@ -134,7 +134,7 @@ void scui_obj_chart_style(scui_handle_t handle, scui_obj_chart_res_t *res)
     case scui_object_part_line_item: {
         /* 线型图表(折线) */
         scui_object_sub_t sub = {0};
-        sub.line.alpha.alpha       = scui_alpha_cover;
+        sub.line.alpha.alpha       = res->alpha;
         sub.line.color.color32     = res->color.color;
         sub.line.area.area         = obj_chart->area;
         sub.line.vpos_num.number   = obj_chart->number;
@@ -150,7 +150,7 @@ void scui_obj_chart_style(scui_handle_t handle, scui_obj_chart_res_t *res)
     case scui_object_part_rect_fg: {
         /* 直方图表(柱状) */
         scui_object_sub_t sub = {0};
-        sub.rect.alpha.alpha   = scui_alpha_cover;
+        sub.rect.alpha.alpha   = res->alpha;
         sub.rect.color.color32 = res->color.color;
         sub.rect.width.number  = scui_max(res->width, 1);
         sub.rect.radius.number = res->round ? -1 : 0;

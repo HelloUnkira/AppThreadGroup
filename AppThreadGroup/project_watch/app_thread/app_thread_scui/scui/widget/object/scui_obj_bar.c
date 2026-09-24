@@ -72,9 +72,9 @@ void scui_obj_bar_style(scui_handle_t handle, scui_obj_bar_res_t *res)
     scui_coord_t area_h = res->area.h ? res->area.h : widget->clip.h;
     
     scui_object_sub_t sub = {.part = res->part, .form = res->form};
-    sub.rect.alpha.alpha        = scui_alpha_cover;
+    sub.rect.alpha.alpha        = res->alpha;
     sub.rect.color.color32      = res->color.color_s;
-    sub.rect.align.align        = scui_opt_pos_l | scui_opt_pos_u;
+    sub.rect.align.align        = res->align;
     sub.rect.width.number       = area_w;
     sub.rect.height.number      = area_h;
     sub.rect.radius.number      = res->radius;
