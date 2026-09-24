@@ -371,7 +371,8 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_obj_chart_res_t cht_res = {0};
         cht_res.round  = true;
         cht_res.color.color.full = 0xFFF9104F;
-        cht_res.part = scui_object_part_rect_item;
+        cht_res.part = scui_object_part_rect_fg;
+        cht_res.form = scui_object_form_rect_base;
         scui_obj_chart_style(chart_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
@@ -555,7 +556,8 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         scui_obj_chart_res_t cht_res = {0};
         cht_res.round  = true;
         cht_res.color.color.full = 0xFFE1CC00;
-        cht_res.part = scui_object_part_rect_item;
+        cht_res.part = scui_object_part_rect_fg;
+        cht_res.form = scui_object_form_rect_base;
         scui_obj_chart_style(chart_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
@@ -740,7 +742,8 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         scui_obj_chart_res_t cht_res = {0};
         cht_res.round  = true;
         cht_res.color.color.full = 0xFF00B7FF;
-        cht_res.part = scui_object_part_rect_item;
+        cht_res.part = scui_object_part_rect_fg;
+        cht_res.form = scui_object_form_rect_base;
         scui_obj_chart_style(chart_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};

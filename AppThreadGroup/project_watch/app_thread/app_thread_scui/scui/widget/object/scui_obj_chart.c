@@ -147,7 +147,7 @@ void scui_obj_chart_style(scui_handle_t handle, scui_obj_chart_res_t *res)
         scui_object_prop_line(handle, &sub);
         break;
     }
-    case scui_object_part_rect_item: {
+    case scui_object_part_rect_fg: {
         /* 直方图表(柱状) */
         scui_object_sub_t sub = {0};
         sub.rect.alpha.alpha   = scui_alpha_cover;
@@ -155,7 +155,8 @@ void scui_obj_chart_style(scui_handle_t handle, scui_obj_chart_res_t *res)
         sub.rect.width.number  = scui_max(res->width, 1);
         sub.rect.radius.number = res->round ? -1 : 0;
         
-        sub.part  = scui_object_part_rect_item;
+        sub.part  = scui_object_part_rect_fg;
+        sub.form  = scui_object_form_rect_base;
         sub.state = scui_object_state_def;
         scui_object_prop_rect(handle, &sub);
         break;
@@ -234,11 +235,13 @@ void scui_obj_chart_invoke(scui_event_t *event)
         default:SCUI_ASSERT(false);break;
         case 0: {
             scui_object_data_t width = {0};
-            scui_object_prop_sync_s(event->object, scui_object_part_rect_item,
+            scui_object_prop_sync_s(event->object, scui_object_part_rect_fg,
+                scui_object_form_rect_base,
                 scui_object_style_rect_width, scui_object_state_def, width);
             
             scui_object_prop_t prop = {0};
-            prop.part = scui_object_part_rect_item;
+            prop.part = scui_object_part_rect_fg;
+            prop.form = scui_object_form_rect_base;
             scui_object_state_get(event->object, &prop.state);
             
             scui_point_t offset = obj_chart->area.pos;
@@ -269,7 +272,7 @@ void scui_obj_chart_invoke(scui_event_t *event)
         case 1: {
             
             scui_object_data_t width = {0};
-            scui_object_prop_sync_s(event->object, scui_object_part_line_item,
+            scui_object_prop_sync_s(event->object, scui_object_part_line_item, 0,
                 scui_object_style_line_stroke, scui_object_state_def, width);
             
             scui_point_t offset = obj_chart->area.pos;

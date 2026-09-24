@@ -21,6 +21,7 @@ void scui_ui_apply(scui_handle_t handle)
         res.radius = -1;
         
         res.part = scui_object_part_rect_bg;
+        res.form = scui_object_form_rect_base;
         scui_obj_btn_style(handle, &res);
         break;
     }
@@ -34,22 +35,25 @@ void scui_ui_apply(scui_handle_t handle)
         res.round = true;
         
         res.part = scui_object_part_arc_bg;
+        res.form = scui_object_form_arc_base;
         scui_obj_arc_style(handle, &res);
         res.part = scui_object_part_arc_fg;
+        res.form = scui_object_form_arc_base;
         scui_obj_arc_style(handle, &res);
         break;
     }
     case scui_widget_type_obj_bar: {
         /* 常规 res: 背景浅灰, 前景天蓝 */
         scui_obj_bar_res_t res = {0};
-        res.color[0].color_s.full = 0xFFE0E0E0;
-        res.color[0].color_e.full = 0xFFE0E0E0;
-        res.color[1].color_s.full = 0xFF2196F3;
-        res.color[1].color_e.full = 0xFF2196F3;
-        
+        res.color.color_s.full = 0xFFE0E0E0;
+        res.color.color_e.full = 0xFFE0E0E0;
         res.part = scui_object_part_rect_bg;
+        res.form = scui_object_form_rect_base;
         scui_obj_bar_style(handle, &res);
+        res.color.color_s.full = 0xFF2196F3;
+        res.color.color_e.full = 0xFF2196F3;
         res.part = scui_object_part_rect_fg;
+        res.form = scui_object_form_rect_base;
         scui_obj_bar_style(handle, &res);
         break;
     }
@@ -62,10 +66,12 @@ void scui_ui_apply(scui_handle_t handle)
         scui_obj_chart_type(handle, &type);
         
         if (type == 0) {
-            res.part = scui_object_part_rect_item;
+            res.part = scui_object_part_rect_fg;
+            res.form = scui_object_form_rect_base;
             scui_obj_chart_style(handle, &res);
         } else {
             res.part = scui_object_part_line_item;
+            res.form = 0;
             scui_obj_chart_style(handle, &res);
         }
         break;
@@ -73,28 +79,35 @@ void scui_ui_apply(scui_handle_t handle)
     case scui_widget_type_obj_slider: {
         /* 常规 res: 背景浅灰, 前景天蓝 */
         scui_obj_bar_res_t res = {0};
-        res.color[0].color_s.full = 0xFFE0E0E0;
-        res.color[0].color_e.full = 0xFFE0E0E0;
-        res.color[1].color_s.full = 0xFF2196F3;
-        res.color[1].color_e.full = 0xFF2196F3;
-        
+        res.color.color_s.full = 0xFFE0E0E0;
+        res.color.color_e.full = 0xFFE0E0E0;
         res.part = scui_object_part_rect_bg;
+        res.form = scui_object_form_rect_base;
         scui_obj_bar_style(handle, &res);
+        res.color.color_s.full = 0xFF2196F3;
+        res.color.color_e.full = 0xFF2196F3;
         res.part = scui_object_part_rect_fg;
+        res.form = scui_object_form_rect_base;
         scui_obj_bar_style(handle, &res);
         break;
     }
     case scui_widget_type_obj_switch: {
-        /* 常规 res: 背景浅灰, 前景天蓝 */
+        /* 常规 res: 背景浅灰, 前景天蓝, 端点白色 */
         scui_obj_bar_res_t res = {0};
-        res.color[0].color_s.full = 0xFFE0E0E0;
-        res.color[0].color_e.full = 0xFFE0E0E0;
-        res.color[1].color_s.full = 0xFF2196F3;
-        res.color[1].color_e.full = 0xFF2196F3;
-        
+        res.color.color_s.full = 0xFFE0E0E0;
+        res.color.color_e.full = 0xFFE0E0E0;
         res.part = scui_object_part_rect_bg;
+        res.form = scui_object_form_rect_base;
         scui_obj_bar_style(handle, &res);
+        res.color.color_s.full = 0xFF2196F3;
+        res.color.color_e.full = 0xFF2196F3;
         res.part = scui_object_part_rect_fg;
+        res.form = scui_object_form_rect_base;
+        scui_obj_bar_style(handle, &res);
+        res.color.color_s.full = 0xFFFFFFFF;
+        res.color.color_e.full = 0xFFFFFFFF;
+        res.part = scui_object_part_rect_knob;
+        res.form = scui_object_form_rect_base;
         scui_obj_bar_style(handle, &res);
         break;
     }
@@ -108,8 +121,10 @@ void scui_ui_apply(scui_handle_t handle)
         res.round = true;
         
         res.part = scui_object_part_arc_bg;
+        res.form = scui_object_form_arc_base;
         scui_obj_arc_style(handle, &res);
         res.part = scui_object_part_arc_fg;
+        res.form = scui_object_form_arc_base;
         scui_obj_arc_style(handle, &res);
         break;
     }

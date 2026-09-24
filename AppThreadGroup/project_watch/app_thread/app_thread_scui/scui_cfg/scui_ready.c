@@ -36,8 +36,8 @@ static void scui_stat_info(void)
         
         scui_widget_map_t *widget_map = NULL;
         scui_widget_map_find(type, &widget_map);
-        SCUI_LOG_INFO("widget[%s]\t size(inst):%4d, size(maker):%4d",
-            widget_map->name, widget_map->size, widget_map->maker);
+        SCUI_LOG_INFO("widget map(inst:%4d)(maker:%4d)[%s]",
+            widget_map->size, widget_map->maker, widget_map->name);
     }
     SCUI_LOG_INFO("");
     SCUI_LOG_INFO("scui string args size:%4d", sizeof(scui_string_args_t));

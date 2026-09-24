@@ -112,10 +112,12 @@ void scui_object_state_set(scui_handle_t handle, scui_object_type_t state);
 /* 简要宏化简属性过渡的添加: */
 
 /* scui_object_prop_add宏化简 */
-#define scui_object_prop_add_s(handle_v, part_v, style_v, state_v, data_v)      \
+#define scui_object_prop_add_s(handle_v, part_v, form_v,                        \
+    style_v, state_v, data_v)                                                   \
 do {                                                                            \
     scui_object_prop_t scui_op_i = {                                            \
         .part  = part_v,                                                        \
+        .form  = form_v,                                                        \
         .style = style_v,                                                       \
         .state = state_v,                                                       \
         .data  = data_v,                                                        \
@@ -124,10 +126,12 @@ do {                                                                            
 } while (0)                                                                     \
 
 /* scui_object_prop_sync宏化简 */
-#define scui_object_prop_sync_s(handle_v, part_v, style_v, state_v, data_v)     \
+#define scui_object_prop_sync_s(handle_v, part_v, form_v,                       \
+    style_v, state_v, data_v)                                                   \
 do {                                                                            \
     scui_object_prop_t scui_op_i = {                                            \
         .part  = part_v,                                                        \
+        .form  = form_v,                                                        \
         .style = style_v,                                                       \
         .state = state_v,                                                       \
     };                                                                          \
@@ -136,11 +140,12 @@ do {                                                                            
 } while (0)                                                                     \
 
 /* scui_object_tran_add宏化简 */
-#define scui_object_tran_add_s(handle_v, part_v, style_v,                       \
+#define scui_object_tran_add_s(handle_v, part_v, form_v, style_v,               \
     state_p_v, state_n_v, data_p_v, data_n_v, path_v, time_v, delay_v)          \
 do {                                                                            \
     scui_object_tran_t scui_ot_i = {                                            \
         .part    = part_v,                                                      \
+        .form    = form_v,                                                      \
         .style   = style_v,                                                     \
         .state_p = state_p_v,                                                   \
         .state_n = state_n_v,                                                   \
@@ -154,20 +159,21 @@ do {                                                                            
 } while (0)                                                                     \
 
 /* scui_object_tran_add宏二次化简 */
-#define scui_object_tran_add_s2(handle_v, part_v, style_v,                      \
+#define scui_object_tran_add_s2(handle_v, part_v, form_v, style_v,              \
     state_p_v, state_n_v, data_p_v, data_n_v, path_v, time_v, delay_v)          \
 do {                                                                            \
-    scui_object_tran_add_s(handle_v, part_v, style_v, state_p_v, state_n_v,     \
-    data_p_v, data_n_v, path_v, time_v, delay_v);                               \
-    scui_object_tran_add_s(handle_v, part_v, style_v, state_n_v, state_p_v,     \
-    data_n_v, data_p_v, path_v, time_v, delay_v);                               \
+    scui_object_tran_add_s(handle_v, part_v, form_v, style_v, state_p_v,        \
+    state_n_v, data_p_v, data_n_v, path_v, time_v, delay_v);                    \
+    scui_object_tran_add_s(handle_v, part_v, form_v, style_v, state_n_v,        \
+    state_p_v, data_n_v, data_p_v, path_v, time_v, delay_v);                    \
 } while (0)                                                                     \
 
 /*****************************************************************************/
-/* 标准部件样式属性配置及绘制: */
+/* 标准样式属性配置及绘制: */
 
 typedef struct {
     scui_object_type_t part;
+    scui_object_type_t form;
     scui_object_type_t state;
     /* 本结构打包初始化无效??? */
     

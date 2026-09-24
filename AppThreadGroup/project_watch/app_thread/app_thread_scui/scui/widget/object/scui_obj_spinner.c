@@ -72,7 +72,7 @@ void scui_obj_spinner_invoke(scui_event_t *event)
         
         /* 同步time属性(旋转速度) */
         scui_object_data_t main_time = {0};
-        scui_object_prop_sync_s(event->object, scui_object_part_main,
+        scui_object_prop_sync_s(event->object, scui_object_part_main, 0,
             scui_object_style_main_time, scui_object_state_def, main_time);
         
         /* spinner端点基准固化 */
@@ -97,6 +97,7 @@ void scui_obj_spinner_invoke(scui_event_t *event)
         /* 加载圆环背景(0, 360) */
         scui_object_prop_t prop_def = {0};
         prop_def.part  = scui_object_part_arc_bg;
+        prop_def.form  = scui_object_form_arc_base;
         prop_def.state = scui_object_state_def;
         
         prop_def.data.number = 0;
@@ -109,6 +110,7 @@ void scui_obj_spinner_invoke(scui_event_t *event)
         
         /* 加载圆环前景(angle_s, angle_e) */
         prop_def.part  = scui_object_part_arc_fg;
+        prop_def.form  = scui_object_form_arc_base;
         prop_def.state = scui_object_state_def;
         
         prop_def.data.number = angle_s;

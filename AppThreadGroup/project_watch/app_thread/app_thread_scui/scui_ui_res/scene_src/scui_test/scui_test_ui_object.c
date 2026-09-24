@@ -159,6 +159,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_maker.widget.clip.h = btn_h;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
+        obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
         obj_btn_maker.fixed = 0;
@@ -173,6 +174,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_maker.widget.clip.y = 48;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
+        obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
         obj_btn_maker.fixed = 1;
@@ -187,6 +189,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_maker.widget.clip.y = 48;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
+        obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
         /* 第2行: 四样式/渐变/圆头 */
@@ -205,6 +208,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         /* 四样式同显(bg/edge/box/sha) */
         scui_obj_btn_res_t obj_btn_bg_res = {0};
         obj_btn_bg_res.part = scui_object_part_rect_bg;
+        obj_btn_bg_res.form = scui_object_form_rect_base;
         obj_btn_bg_res.color[0].color_s.full = 0xFF87CEFA;
         obj_btn_bg_res.color[1].color_s.full = 0xFF4682B4;
         obj_btn_bg_res.color[2].color_s.full = 0xFF87CEFA;
@@ -215,7 +219,8 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_bg_res.radius = 30 - (12 + 4 + 4);
         
         scui_obj_btn_res_t obj_btn_edge_res = {0};
-        obj_btn_edge_res.part = scui_object_part_rect_edge;
+        obj_btn_edge_res.part = scui_object_part_rect_bg;
+        obj_btn_edge_res.form = scui_object_form_rect_edge;
         obj_btn_edge_res.color[0].color_s.full = 0xFFFFFFFF;
         obj_btn_edge_res.color[1].color_s.full = 0xFFFFFFFF;
         obj_btn_edge_res.color[2].color_s.full = 0xFFFFFFFF;
@@ -226,7 +231,8 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_edge_res.radius = 30 - (12 + 4);
         
         scui_obj_btn_res_t obj_btn_box_res = {0};
-        obj_btn_box_res.part  = scui_object_part_rect_box;
+        obj_btn_box_res.part = scui_object_part_rect_bg;
+        obj_btn_box_res.form = scui_object_form_rect_box;
         obj_btn_box_res.color[0].color_s.full = 0xFFFF0000;
         obj_btn_box_res.color[1].color_s.full = 0xFFFF0000;
         obj_btn_box_res.color[2].color_s.full = 0xFFFF0000;
@@ -237,7 +243,8 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_box_res.radius = 30 - (12);
         
         scui_obj_btn_res_t obj_btn_sha_res = {0};
-        obj_btn_sha_res.part  = scui_object_part_rect_sha;
+        obj_btn_sha_res.part = scui_object_part_rect_bg;
+        obj_btn_sha_res.form = scui_object_form_rect_sha;
         obj_btn_sha_res.color[0].color_s.full = 0xFF00FF00;
         obj_btn_sha_res.color[1].color_s.full = 0xFF00FF00;
         obj_btn_sha_res.color[2].color_s.full = 0xFF00FF00;
@@ -265,6 +272,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_maker.widget.clip.y = 158;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
+        obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
         obj_btn_maker.fixed = 1;
@@ -279,6 +287,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_maker.widget.clip.y = 158;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
+        obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
         /* 第3行: 黄/紫/青 */
@@ -294,6 +303,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_maker.widget.clip.y = 268;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
+        obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
         obj_btn_maker.fixed = 0;
@@ -308,6 +318,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_maker.widget.clip.y = 268;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
+        obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
         obj_btn_maker.fixed = 1;
@@ -322,6 +333,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_maker.widget.clip.y = 268;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
+        obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         break;
     }
@@ -382,8 +394,10 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         obj_arc_maker.widget.clip.h = arc_h;
         scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         
         obj_arc_res.angle_s  = 0;
@@ -395,8 +409,10 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         obj_arc_maker.widget.clip.x = 168;
         scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         
         obj_arc_res.angle_s  = 0;
@@ -409,8 +425,10 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         obj_arc_maker.widget.clip.x = 308;
         scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         
         /* 第2行: 跟手/细弧/粗弧 */
@@ -426,8 +444,10 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         obj_arc_maker.widget.clip.y = 165;
         scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         
         obj_arc_maker.touch = 0;
@@ -438,8 +458,10 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         obj_arc_maker.widget.clip.x = 168;
         scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         
         obj_arc_res.angle_s  = 0;
@@ -451,8 +473,10 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         obj_arc_maker.widget.clip.x = 308;
         scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         
         /* 第3行: 动画/渐变/圆头粗弧 */
@@ -466,8 +490,10 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         obj_arc_maker.widget.clip.y = 285;
         scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         scui_ui_res_local->obj_arc_anima = obj_arc_handle;
         
@@ -480,8 +506,10 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         obj_arc_maker.widget.clip.x = 168;
         scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         
         obj_arc_res.angle_s  = 0;
@@ -493,8 +521,10 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         obj_arc_maker.widget.clip.x = 308;
         scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_arc_handle, &obj_arc_res);
         break;
     }
@@ -539,11 +569,7 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
         obj_bar_maker.widget.event_cb = scui_test_ui_object_bar_event_proc;
         
         scui_obj_bar_res_t obj_bar_res = {0};
-        /* 统一渐变色调: bg 深蓝->深绿, fg 亮蓝->亮绿 */
-        obj_bar_res.color[0].color_s.full = 0xFF000080;
-        obj_bar_res.color[1].color_s.full = 0xFF0000FF;
-        obj_bar_res.color[0].color_e.full = 0xFF008000;
-        obj_bar_res.color[1].color_e.full = 0xFF00FF00;
+        /* 统一渐变色调: bg 暗灰(暗色), fg 亮蓝->亮绿 */
         
         scui_coord_t cell_x[3] = {13, 163, 313};
         scui_coord_t cell_y[3] = {48, 158, 268};
@@ -560,8 +586,14 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
             obj_bar_maker.widget.clip.h = 24;
             scui_widget_create(&obj_bar_maker, &obj_bar_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF303030;
+            obj_bar_res.color.color_e.full = 0xFF505050;
             scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
             obj_bar_res.part = scui_object_part_rect_fg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF0000FF;
+            obj_bar_res.color.color_e.full = 0xFF00FF00;
             scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
             scui_obj_bar_update_value(obj_bar_handle, 30.0f + idx * 40, false);
         }
@@ -582,8 +614,14 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
             obj_bar_maker.widget.clip.x = cell_x[idx];
             scui_widget_create(&obj_bar_maker, &obj_bar_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF303030;
+            obj_bar_res.color.color_e.full = 0xFF505050;
             scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
             obj_bar_res.part = scui_object_part_rect_fg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF0000FF;
+            obj_bar_res.color.color_e.full = 0xFF00FF00;
             scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
             scui_obj_bar_update_value(obj_bar_handle, 60.0f - idx * 10, false);
         }
@@ -605,8 +643,14 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
             obj_bar_maker.widget.clip.h = 100;
             scui_widget_create(&obj_bar_maker, &obj_bar_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF303030;
+            obj_bar_res.color.color_e.full = 0xFF505050;
             scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
             obj_bar_res.part = scui_object_part_rect_fg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF0000FF;
+            obj_bar_res.color.color_e.full = 0xFF00FF00;
             scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
             scui_obj_bar_update_value(obj_bar_handle, 40.0f + idx * 20, false);
         }
@@ -623,8 +667,14 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
         obj_bar_maker.widget.clip.h = 30;
         scui_widget_create(&obj_bar_maker, &obj_bar_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF303030;
+        obj_bar_res.color.color_e.full = 0xFF505050;
         scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
         obj_bar_res.part = scui_object_part_rect_fg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF0000FF;
+        obj_bar_res.color.color_e.full = 0xFF00FF00;
         scui_obj_bar_style(obj_bar_handle, &obj_bar_res);
         scui_ui_res_local->obj_bar_anima = obj_bar_handle;
         break;
@@ -670,11 +720,7 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
         obj_slider_maker.widget.event_cb = scui_test_ui_object_bar_event_proc;
         
         scui_obj_bar_res_t obj_bar_res = {0};
-        /* 统一渐变色调: bg 深蓝->深绿, fg 亮蓝->亮绿 */
-        obj_bar_res.color[0].color_s.full = 0xFF000080;
-        obj_bar_res.color[1].color_s.full = 0xFF0000FF;
-        obj_bar_res.color[0].color_e.full = 0xFF008000;
-        obj_bar_res.color[1].color_e.full = 0xFF00FF00;
+        /* 统一渐变色调: bg 暗灰(暗色), fg 亮蓝->亮绿 */
         
         scui_coord_t cell_x[3] = {13, 163, 313};
         scui_coord_t cell_y[3] = {48, 158, 268};
@@ -691,8 +737,14 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
             obj_slider_maker.widget.clip.h = 24;
             scui_widget_create(&obj_slider_maker, &obj_slider_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF303030;
+            obj_bar_res.color.color_e.full = 0xFF505050;
             scui_obj_bar_style(obj_slider_handle, &obj_bar_res);
             obj_bar_res.part = scui_object_part_rect_fg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF0000FF;
+            obj_bar_res.color.color_e.full = 0xFF00FF00;
             scui_obj_bar_style(obj_slider_handle, &obj_bar_res);
             scui_obj_bar_update_value(obj_slider_handle, 30.0f + idx * 40, false);
         }
@@ -713,8 +765,14 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
             obj_slider_maker.widget.clip.x = cell_x[idx];
             scui_widget_create(&obj_slider_maker, &obj_slider_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF303030;
+            obj_bar_res.color.color_e.full = 0xFF505050;
             scui_obj_bar_style(obj_slider_handle, &obj_bar_res);
             obj_bar_res.part = scui_object_part_rect_fg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF0000FF;
+            obj_bar_res.color.color_e.full = 0xFF00FF00;
             scui_obj_bar_style(obj_slider_handle, &obj_bar_res);
             scui_obj_bar_update_value(obj_slider_handle, 60.0f - idx * 10, false);
         }
@@ -732,8 +790,14 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
             obj_slider_maker.widget.clip.h = 100;
             scui_widget_create(&obj_slider_maker, &obj_slider_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF303030;
+            obj_bar_res.color.color_e.full = 0xFF505050;
             scui_obj_bar_style(obj_slider_handle, &obj_bar_res);
             obj_bar_res.part = scui_object_part_rect_fg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF0000FF;
+            obj_bar_res.color.color_e.full = 0xFF00FF00;
             scui_obj_bar_style(obj_slider_handle, &obj_bar_res);
             scui_obj_bar_update_value(obj_slider_handle, 40.0f + idx * 20, false);
         }
@@ -750,8 +814,14 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
         obj_slider_maker.widget.clip.h = 30;
         scui_widget_create(&obj_slider_maker, &obj_slider_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF303030;
+        obj_bar_res.color.color_e.full = 0xFF505050;
         scui_obj_bar_style(obj_slider_handle, &obj_bar_res);
         obj_bar_res.part = scui_object_part_rect_fg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF0000FF;
+        obj_bar_res.color.color_e.full = 0xFF00FF00;
         scui_obj_bar_style(obj_slider_handle, &obj_bar_res);
         scui_obj_bar_update_value(obj_slider_handle, 60.0f, false);
         break;
@@ -785,11 +855,7 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         obj_switch_maker.widget.event_cb = scui_test_ui_object_bar_event_proc;
         
         scui_obj_bar_res_t obj_bar_res = {0};
-        /* 统一渐变色调: bg 深蓝->深绿, fg 亮蓝->亮绿 */
-        obj_bar_res.color[0].color_s.full = 0xFF000080;
-        obj_bar_res.color[1].color_s.full = 0xFF0000FF;
-        obj_bar_res.color[0].color_e.full = 0xFF008000;
-        obj_bar_res.color[1].color_e.full = 0xFF00FF00;
+        /* 统一渐变色调: bg 暗灰(暗色), fg 亮蓝->亮绿 */
         
         scui_coord_t cell_x[3] = {13, 163, 313};
         scui_coord_t cell_y[3] = {48, 158, 268};
@@ -808,8 +874,19 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
             obj_switch_maker.widget.clip.h = cell_h[idx];
             scui_widget_create(&obj_switch_maker, &obj_switch_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF303030;
+            obj_bar_res.color.color_e.full = 0xFF505050;
             scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
             obj_bar_res.part = scui_object_part_rect_fg;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFF0000FF;
+            obj_bar_res.color.color_e.full = 0xFF00FF00;
+            scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
+            obj_bar_res.part = scui_object_part_rect_knob;
+            obj_bar_res.form = scui_object_form_rect_base;
+            obj_bar_res.color.color_s.full = 0xFFFFFFFF;
+            obj_bar_res.color.color_e.full = 0xFFFFFFFF;
             scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         }
         
@@ -821,16 +898,38 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         obj_switch_maker.widget.clip.h = 60;
         scui_widget_create(&obj_switch_maker, &obj_switch_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF303030;
+        obj_bar_res.color.color_e.full = 0xFF505050;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         obj_bar_res.part = scui_object_part_rect_fg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF0000FF;
+        obj_bar_res.color.color_e.full = 0xFF00FF00;
+        scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_knob;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFFFFFFFF;
+        obj_bar_res.color.color_e.full = 0xFFFFFFFF;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         
         obj_bar_res.radius = -1;
         obj_switch_maker.widget.clip.x = cell_x[1] + 20;
         scui_widget_create(&obj_switch_maker, &obj_switch_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF303030;
+        obj_bar_res.color.color_e.full = 0xFF505050;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         obj_bar_res.part = scui_object_part_rect_fg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF0000FF;
+        obj_bar_res.color.color_e.full = 0xFF00FF00;
+        scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_knob;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFFFFFFFF;
+        obj_bar_res.color.color_e.full = 0xFFFFFFFF;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         
         obj_bar_res.radius = 20;
@@ -838,8 +937,19 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         obj_switch_maker.widget.clip.x = cell_x[2] + 20;
         scui_widget_create(&obj_switch_maker, &obj_switch_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF303030;
+        obj_bar_res.color.color_e.full = 0xFF505050;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         obj_bar_res.part = scui_object_part_rect_fg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF0000FF;
+        obj_bar_res.color.color_e.full = 0xFF00FF00;
+        scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_knob;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFFFFFFFF;
+        obj_bar_res.color.color_e.full = 0xFFFFFFFF;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         
         /* 第3行: 尺寸/渐变组合 */
@@ -851,8 +961,19 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         obj_switch_maker.widget.clip.h = 60;
         scui_widget_create(&obj_switch_maker, &obj_switch_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF303030;
+        obj_bar_res.color.color_e.full = 0xFF505050;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         obj_bar_res.part = scui_object_part_rect_fg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF0000FF;
+        obj_bar_res.color.color_e.full = 0xFF00FF00;
+        scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_knob;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFFFFFFFF;
+        obj_bar_res.color.color_e.full = 0xFFFFFFFF;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         
         obj_bar_res.grad = 1;
@@ -862,8 +983,19 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         obj_switch_maker.widget.clip.h = 70;
         scui_widget_create(&obj_switch_maker, &obj_switch_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF303030;
+        obj_bar_res.color.color_e.full = 0xFF505050;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         obj_bar_res.part = scui_object_part_rect_fg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF0000FF;
+        obj_bar_res.color.color_e.full = 0xFF00FF00;
+        scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_knob;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFFFFFFFF;
+        obj_bar_res.color.color_e.full = 0xFFFFFFFF;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         
         obj_bar_res.grad = 0;
@@ -874,8 +1006,19 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         obj_switch_maker.widget.clip.h = 40;
         scui_widget_create(&obj_switch_maker, &obj_switch_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF303030;
+        obj_bar_res.color.color_e.full = 0xFF505050;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         obj_bar_res.part = scui_object_part_rect_fg;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFF0000FF;
+        obj_bar_res.color.color_e.full = 0xFF00FF00;
+        scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
+        obj_bar_res.part = scui_object_part_rect_knob;
+        obj_bar_res.form = scui_object_form_rect_base;
+        obj_bar_res.color.color_s.full = 0xFFFFFFFF;
+        obj_bar_res.color.color_e.full = 0xFFFFFFFF;
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         break;
     }
@@ -934,16 +1077,20 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
         obj_spinner_maker.widget.clip.h = arc_h;
         scui_widget_create(&obj_spinner_maker, &obj_spinner_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         
         obj_arc_res.time    = 500;
         obj_spinner_maker.widget.clip.x = 173;
         scui_widget_create(&obj_spinner_maker, &obj_spinner_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         
         obj_spinner_maker.obj_arc.anti = 1;
@@ -951,8 +1098,10 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
         obj_spinner_maker.widget.clip.x = 313;
         scui_widget_create(&obj_spinner_maker, &obj_spinner_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         
         /* 第2行: 圆头/渐变/粗弧 */
@@ -966,8 +1115,10 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
         obj_spinner_maker.widget.clip.y = 170;
         scui_widget_create(&obj_spinner_maker, &obj_spinner_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         
         obj_arc_res.round   = 0;
@@ -976,8 +1127,10 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
         obj_spinner_maker.widget.clip.x = 173;
         scui_widget_create(&obj_spinner_maker, &obj_spinner_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         
         obj_arc_res.width   = 16;
@@ -987,8 +1140,10 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
         obj_spinner_maker.widget.clip.x = 313;
         scui_widget_create(&obj_spinner_maker, &obj_spinner_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         
         /* 第3行: 细弧/渐变圆头/默认 */
@@ -1000,8 +1155,10 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
         obj_spinner_maker.widget.clip.y = 290;
         scui_widget_create(&obj_spinner_maker, &obj_spinner_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         
         obj_arc_res.width   = 12;
@@ -1011,8 +1168,10 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
         obj_spinner_maker.widget.clip.x = 173;
         scui_widget_create(&obj_spinner_maker, &obj_spinner_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         
         obj_arc_res.width   = 8;
@@ -1023,8 +1182,10 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
         obj_spinner_maker.widget.clip.x = 313;
         scui_widget_create(&obj_spinner_maker, &obj_spinner_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         obj_arc_res.part = scui_object_part_arc_fg;
+        obj_arc_res.form = scui_object_form_arc_base;
         scui_obj_arc_style(obj_spinner_handle, &obj_arc_res);
         break;
     }
@@ -1085,7 +1246,8 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
         obj_chart_res.width = 6;
         obj_chart_res.round = true;
         scui_widget_create(&obj_chart_maker, &obj_chart_handle);
-        obj_chart_res.part = scui_object_part_rect_item;
+        obj_chart_res.part = scui_object_part_rect_fg;
+        obj_chart_res.form = scui_object_form_rect_base;
         scui_obj_chart_style(obj_chart_handle, &obj_chart_res);
         scui_obj_chart_hist_data(obj_chart_handle, vlist_min, vlist_max);
         
@@ -1098,6 +1260,7 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
         obj_chart_res.color.color.full = 0xFF2196F3;
         scui_widget_create(&obj_chart_maker, &obj_chart_handle);
         obj_chart_res.part = scui_object_part_line_item;
+        obj_chart_res.form = 0;
         scui_obj_chart_style(obj_chart_handle, &obj_chart_res);
         scui_obj_chart_line_data(obj_chart_handle, vlist);
         
@@ -1113,7 +1276,8 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
         obj_chart_res.round = true;
         obj_chart_res.color.color.full = 0xFF00FF00;
         scui_widget_create(&obj_chart_maker, &obj_chart_handle);
-        obj_chart_res.part = scui_object_part_rect_item;
+        obj_chart_res.part = scui_object_part_rect_fg;
+        obj_chart_res.form = scui_object_form_rect_base;
         scui_obj_chart_style(obj_chart_handle, &obj_chart_res);
         scui_obj_chart_hist_data(obj_chart_handle, vlist_min, vlist_max);
         
@@ -1126,6 +1290,7 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
         obj_chart_res.color.color.full = 0xFFFF8000;
         scui_widget_create(&obj_chart_maker, &obj_chart_handle);
         obj_chart_res.part = scui_object_part_line_item;
+        obj_chart_res.form = 0;
         scui_obj_chart_style(obj_chart_handle, &obj_chart_res);
         scui_obj_chart_line_data(obj_chart_handle, vlist);
         break;

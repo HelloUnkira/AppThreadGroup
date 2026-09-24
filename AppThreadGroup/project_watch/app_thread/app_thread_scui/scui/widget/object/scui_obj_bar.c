@@ -67,24 +67,31 @@ void scui_obj_bar_style(scui_handle_t handle, scui_obj_bar_res_t *res)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_obj_bar_t *obj_bar = (void *)widget;
     
-    scui_coord_t idx = 0;
-    if (res->part == scui_object_part_rect_bg) idx = 0;
-    if (res->part == scui_object_part_rect_fg) idx = 1;
+    /* 部件宽高 */
+    scui_coord_t area_w = res->area.w ? res->area.w : widget->clip.w;
+    scui_coord_t area_h = res->area.h ? res->area.h : widget->clip.h;
     
-    scui_object_sub_t sub = {.part = res->part};
-    sub.rect.alpha.alpha           = scui_alpha_cover;
-    sub.rect.color.color32         = res->color[idx].color_s;
-    sub.rect.align.align           = scui_opt_pos_l | scui_opt_pos_u;
-    sub.rect.width.number          = widget->clip.w;
-    sub.rect.height.number         = widget->clip.h;
-    sub.rect.radius.number         = res->radius;
-    sub.rect.multi.multi.grad_w    = obj_bar->way;
-    sub.rect.multi.multi.grad      = res->grad;
-    sub.rect.grad_c.color32        = res->color[idx].color_e;
+    scui_object_sub_t sub = {.part = res->part, .form = res->form};
+    sub.rect.alpha.alpha        = scui_alpha_cover;
+    sub.rect.color.color32      = res->color.color_s;
+    sub.rect.align.align        = scui_opt_pos_l | scui_opt_pos_u;
+    sub.rect.width.number       = area_w;
+    sub.rect.height.number      = area_h;
+    sub.rect.radius.number      = res->radius;
+    sub.rect.stroke.number      = res->width;
+    sub.rect.multi.multi.grad_w = res->gradw ? res->gradw : obj_bar->way;
+    sub.rect.multi.multi.grad   = res->grad;
+    sub.rect.multi.multi.shadow = res->shadow;
+    sub.rect.grad_c.color32     = res->color.color_e;
     
     if (res->part == scui_object_part_rect_fg) {
-        sub.rect.width.number  = obj_bar->way ? widget->clip.w : 0;
-        sub.rect.height.number = obj_bar->way ? 0 : widget->clip.h;
+        sub.rect.width.number  = obj_bar->way ? area_w : 0;
+        sub.rect.height.number = obj_bar->way ? 0 : area_h;
+    }
+    
+    if (res->part == scui_object_part_rect_knob) {
+        sub.rect.width.number  = obj_bar->way ? area_w : 0;
+        sub.rect.height.number = obj_bar->way ? 0 : area_h;
     }
     
     sub.state = scui_object_state_def;
@@ -94,12 +101,14 @@ void scui_obj_bar_style(scui_handle_t handle, scui_obj_bar_res_t *res)
     scui_coord_t time = res->time;
     if (time == 0) time = SCUI_WIDGET_OBJ_BAR_TIME;
     
-    scui_object_prop_add_s(handle, scui_object_part_main,
+    scui_object_prop_add_s(handle, scui_object_part_main, 0,
         scui_object_style_main_time, scui_object_state_def,
         scui_object_data_number(time));
     
-    /* 样式修改复位到默认值 */
-    scui_obj_bar_update_value(handle, 0.0f, false);
+    /* 前景进度复位到默认值(其他层级无进度概念) */
+    if (res->part == scui_object_part_rect_fg &&
+        res->form == scui_object_form_rect_base)
+        scui_obj_bar_update_value(handle, 0.0f, false);
 }
 
 /*@brief 控件当前值
@@ -137,6 +146,7 @@ void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool a
     scui_object_prop_t prop_def = {0};
     scui_object_tran_t tran_def = {0};
     prop_def.part  = scui_object_part_rect_fg;
+    prop_def.form  = scui_object_form_rect_base;
     prop_def.state = scui_object_state_def;
     if (way) prop_def.style = scui_object_style_rect_height;
     else prop_def.style = scui_object_style_rect_width;
@@ -148,7 +158,7 @@ void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool a
     scui_coord3_t value_d = obj_bar->value_lim;
     scui_coord3_t value_c = obj_bar->value_cur;
     scui_object_data_t value_m = {0};
-    scui_object_prop_sync_s(handle, scui_object_part_rect_bg,
+    scui_object_prop_sync_s(handle, scui_object_part_rect_bg, scui_object_form_rect_base,
         scui_object_style_rect_radius, scui_object_state_def, value_m);
     
     value_m.number *= 2;
@@ -162,6 +172,7 @@ void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool a
     #endif
     
     tran_def.part    = prop_def.part;
+    tran_def.form    = prop_def.form;
     tran_def.state_p = prop_def.state;
     tran_def.state_n = prop_def.state;
     tran_def.style   = prop_def.style;
@@ -169,10 +180,60 @@ void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool a
     tran_def.data_n.number = scui_map(value, 0.0f, value_d, size_min, size_max);
     SCUI_LOG_INFO("tran(%d->%d)", tran_def.data_p.number, tran_def.data_n.number);
     
+    /* 端点(knob)坐标: 平行于fg更新(当前端点->目标端点)
+       knob 包围宽/高 = min(fg当前尺寸, 直径); 左/上边缘贴fg增长端;
+       放得下整圆时为直径, 否则与fg一致(圆角钳制自动退化) */
+    scui_object_tran_t tran_knob = {0};
+    scui_object_tran_t tran_size = {0};
+    scui_object_prop_t prop_knob = {0};
+    prop_knob.part  = scui_object_part_rect_knob;
+    prop_knob.form  = scui_object_form_rect_base;
+    prop_knob.state = scui_object_state_def;
+    prop_knob.style = scui_object_style_rect_point;
+    
+    scui_coord_t size_knob = way ? dst_part.w : dst_part.h;   /* 直径=fg固定厚度 */
+    if (size_knob > 0) {
+        scui_coord_t fg_p = prop_def.data.number;
+        scui_coord_t fg_n = tran_def.data_n.number;
+        
+        /* knob 动态尺寸: 放得下整圆才为直径, 否则跟fg一致 */
+        scui_coord_t size_p = scui_min(fg_p, size_knob);
+        scui_coord_t size_n = scui_min(fg_n, size_knob);
+        
+        /* 左/上边缘贴fg增长端 */
+        scui_point_t point_p = {0};
+        scui_point_t point_n = {0};
+        if (way) {
+            point_p.x = 0;              point_p.y = fg_p - size_p;
+            point_n.x = 0;              point_n.y = fg_n - size_n;
+        } else {
+            point_p.x = fg_p - size_p;  point_p.y = 0;
+            point_n.x = fg_n - size_n;  point_n.y = 0;
+        }
+        
+        tran_knob.part    = scui_object_part_rect_knob;
+        tran_knob.form    = scui_object_form_rect_base;
+        tran_knob.state_p = scui_object_state_def;
+        tran_knob.state_n = scui_object_state_def;
+        tran_knob.style   = scui_object_style_rect_point;
+        tran_knob.data_p.point = point_p;
+        tran_knob.data_n.point = point_n;
+        
+        /* knob 动态尺寸: 平行tran */
+        tran_size.part    = scui_object_part_rect_knob;
+        tran_size.form    = scui_object_form_rect_base;
+        tran_size.state_p = scui_object_state_def;
+        tran_size.state_n = scui_object_state_def;
+        if (way) tran_size.style = scui_object_style_rect_height;
+        else tran_size.style = scui_object_style_rect_width;
+        tran_size.data_p.number = size_p;
+        tran_size.data_n.number = size_n;
+    }
+    
     if (anim) {
         /* 同步time属性 */
         scui_object_data_t main_time = {0};
-        scui_object_prop_sync_s(handle, scui_object_part_main,
+        scui_object_prop_sync_s(handle, scui_object_part_main, 0,
             scui_object_style_main_time, scui_object_state_def, main_time);
         
         scui_coord_t  val_dif = scui_dist(tran_def.data_p.number, tran_def.data_n.number);
@@ -180,15 +241,39 @@ void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool a
         tran_def.time = scui_map(val_dif, 0, size_max, 0,
             main_time.number * value_d / 100.0f);
         
-        /* 过渡动画更新 */
+        /* 过渡动画更新(fg) */
         scui_object_tran_add(handle, &tran_def);
         scui_object_tran_work(handle, &tran_def);
+        
+        /* 过渡动画更新(knob point/size): 平行于fg推进 */
+        if (size_knob > 0) {
+            tran_knob.time = tran_def.time;
+            scui_object_tran_add(handle, &tran_knob);
+            scui_object_tran_work(handle, &tran_knob);
+            tran_size.time = tran_def.time;
+            scui_object_tran_add(handle, &tran_size);
+            scui_object_tran_work(handle, &tran_size);
+        }
     } else {
         /* 直接更新(过渡动画移除) */
         scui_object_tran_del(handle, &tran_def);
+        if (size_knob > 0) {
+            scui_object_tran_del(handle, &tran_knob);
+            scui_object_tran_del(handle, &tran_size);
+        }
         
         prop_def.data.number = tran_def.data_n.number;
         scui_object_prop_add(handle, &prop_def);
+        
+        /* 端点(knob)坐标/尺寸: 直接更新到样式 */
+        if (size_knob > 0) {
+            prop_knob.data = tran_knob.data_n;
+            scui_object_prop_add(handle, &prop_knob);
+            prop_knob.style = way ? scui_object_style_rect_height
+                                  : scui_object_style_rect_width;
+            prop_knob.data = tran_size.data_n;
+            scui_object_prop_add(handle, &prop_knob);
+        }
     }
 }
 
@@ -207,14 +292,28 @@ void scui_obj_bar_invoke(scui_event_t *event)
     switch (event->type) {
     case scui_event_draw_graph: {
         
-        scui_object_prop_t prop = {0};
-        prop.part = scui_object_part_rect_bg;
-        scui_object_state_get(event->object, &prop.state);
-        scui_object_draw_rect(event->object,  &prop);
+        /* 默认绘制全部部件 */
+        static const scui_object_type_t part_table[] = {
+            scui_object_part_rect_bg,
+            scui_object_part_rect_fg,
+            scui_object_part_rect_knob,
+        };
+        /* 默认绘制全部层级: 阴影->基础->边界->盒子 */
+        static const scui_object_type_t form_table[] = {
+            scui_object_form_rect_sha,
+            scui_object_form_rect_base,
+            scui_object_form_rect_edge,
+            scui_object_form_rect_box,
+        };
         
-        prop.part = scui_object_part_rect_fg;
-        scui_object_state_get(event->object, &prop.state);
-        scui_object_draw_rect(event->object,  &prop);
+        for (uint8_t idx_i = 0; idx_i < scui_arr_len(part_table); idx_i++)
+        for (uint8_t idx_j = 0; idx_j < scui_arr_len(form_table); idx_j++) {
+            scui_object_prop_t prop = {0};
+            prop.part = part_table[idx_i];
+            prop.form = form_table[idx_j];
+            scui_object_state_get(event->object, &prop.state);
+            scui_object_draw_rect(event->object, &prop);
+        }
         break;
     }
     default:

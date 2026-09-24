@@ -67,10 +67,13 @@ static bool scui_object_prop_check(scui_object_prop_t *prop)
     const scui_object_type_t scui_object_type_part_l  = scui_object_type_part  + scui_object_type_limit;
     const scui_object_type_t scui_object_type_state_l = scui_object_type_state + scui_object_type_limit;
     const scui_object_type_t scui_object_type_style_l = scui_object_type_style + scui_object_type_limit;
+    const scui_object_type_t scui_object_type_form_l  = scui_object_type_form  + scui_object_type_limit;
     
     if (prop->part  > scui_object_type_part  && prop->part  < scui_object_type_part_l  &&
         prop->state > scui_object_type_state && prop->state < scui_object_type_state_l &&
-        prop->style > scui_object_type_style && prop->style < scui_object_type_style_l)
+        prop->style > scui_object_type_style && prop->style < scui_object_type_style_l &&
+        (prop->form == 0 ||
+        (prop->form > scui_object_type_form && prop->form < scui_object_type_form_l)))
         return true;
     
     return false;
@@ -91,6 +94,7 @@ void scui_object_prop_del(scui_handle_t handle, scui_object_prop_t *prop)
         if (!local_prop->use) continue;
         
         if (local_prop->part  != prop->part  ||
+            local_prop->form  != prop->form  ||
             local_prop->state != prop->state ||
             local_prop->style != prop->style)
             continue;
@@ -123,6 +127,7 @@ void scui_object_prop_add(scui_handle_t handle, scui_object_prop_t *prop)
         if (!local_prop->use) continue;
         
         if (local_prop->part  != prop->part  ||
+            local_prop->form  != prop->form  ||
             local_prop->state != prop->state ||
             local_prop->style != prop->style)
             continue;
@@ -182,6 +187,7 @@ bool scui_object_prop_sync(scui_handle_t handle, scui_object_prop_t *prop)
              continue;
         
         if (local_prop->part  != prop->part ||
+            local_prop->form  != prop->form ||
             local_prop->style != prop->style)
             continue;
         
@@ -190,9 +196,7 @@ bool scui_object_prop_sync(scui_handle_t handle, scui_object_prop_t *prop)
     }
     
     return false;
-}
-
-/*@brief 对象控件过渡检查
+}/*@brief 对象控件过渡检查
  *@param prop 控件过渡
  *@retval 有效过渡
  */
@@ -201,11 +205,14 @@ static bool scui_object_tran_check(scui_object_tran_t *tran)
     const scui_object_type_t scui_object_type_part_l  = scui_object_type_part  + scui_object_type_limit;
     const scui_object_type_t scui_object_type_state_l = scui_object_type_state + scui_object_type_limit;
     const scui_object_type_t scui_object_type_style_l = scui_object_type_style + scui_object_type_limit;
+    const scui_object_type_t scui_object_type_form_l  = scui_object_type_form  + scui_object_type_limit;
     
     if (tran->part    > scui_object_type_part  && tran->part    < scui_object_type_part_l  &&
         tran->state_p > scui_object_type_state && tran->state_p < scui_object_type_state_l &&
         tran->state_n > scui_object_type_state && tran->state_n < scui_object_type_state_l &&
-        tran->style   > scui_object_type_style && tran->style   < scui_object_type_style_l)
+        tran->style   > scui_object_type_style && tran->style   < scui_object_type_style_l &&
+        (tran->form == 0 ||
+        (tran->form > scui_object_type_form && tran->form < scui_object_type_form_l)))
         return true;
     
     return false;
@@ -226,6 +233,7 @@ void scui_object_tran_del(scui_handle_t handle, scui_object_tran_t *tran)
         if (!local_tran->use) continue;
         
         if (local_tran->part    != tran->part    ||
+            local_tran->form    != tran->form    ||
             local_tran->state_p != tran->state_p ||
             local_tran->state_n != tran->state_n ||
             local_tran->style   != tran->style)
@@ -261,6 +269,7 @@ void scui_object_tran_add(scui_handle_t handle, scui_object_tran_t *tran)
         if (!local_tran->use) continue;
         
         if (local_tran->part    != tran->part    ||
+            local_tran->form    != tran->form    ||
             local_tran->state_p != tran->state_p ||
             local_tran->state_n != tran->state_n ||
             local_tran->style   != tran->style)
@@ -329,8 +338,8 @@ bool scui_object_tran_add_by(scui_handle_t handle, scui_object_tran_t *tran)
     scui_object_tran_t local_tran = *tran;
     scui_object_prop_t prop_p = {.state = tran->state_p,};
     scui_object_prop_t prop_n = {.state = tran->state_n,};
-    prop_p.part = tran->part; prop_p.style = tran->style;
-    prop_n.part = tran->part; prop_n.style = tran->style;
+    prop_p.part = tran->part; prop_p.form = tran->form; prop_p.style = tran->style;
+    prop_n.part = tran->part; prop_n.form = tran->form; prop_n.style = tran->style;
     
     if (!scui_object_prop_sync(handle, &prop_p)) return false;
     if (!scui_object_prop_sync(handle, &prop_n)) return false;
@@ -357,6 +366,7 @@ bool scui_object_tran_work(scui_handle_t handle, scui_object_tran_t *tran)
         if (!local_tran->use) continue;
         
         if (local_tran->part    != tran->part    ||
+            local_tran->form    != tran->form    ||
             local_tran->state_p != tran->state_p ||
             local_tran->state_n != tran->state_n ||
             local_tran->style   != tran->style)
@@ -499,6 +509,7 @@ void scui_object_state_set(scui_handle_t handle, scui_object_type_t state)
             
             scui_object_prop_t prop = {0};
             prop.part  = tran->part;
+            prop.form  = tran->form;
             prop.state = tran->state_p;
             prop.style = tran->style;
             /* 从当前值续播:以被打断tran残留值作起点 */
@@ -537,6 +548,7 @@ void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
     /* 使用当前的pct_c计算data并且更新到prop_list */
     scui_object_prop_t prop = {0};
     prop.part  = local_tran->part;
+    prop.form  = local_tran->form;
     prop.state = local_tran->state_n;
     prop.style = local_tran->style;
     scui_multi_t pct_c = local_tran->pct_c;
@@ -567,6 +579,14 @@ void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         scui_color32_t color32_n = local_tran->data_n.color32;
         scui_color32_mix_with(&prop.data.color32, &color32_n, &color32_p, pct_c);
         SCUI_LOG_INFO("color:0x%x", prop.data.color32.full);
+        break;
+    }
+    case scui_object_style_rect_point: {
+        scui_point_t point_p = local_tran->data_p.point;
+        scui_point_t point_n = local_tran->data_n.point;
+        prop.data.point.x = scui_map(pct_c, 0, 100, point_p.x, point_n.x);
+        prop.data.point.y = scui_map(pct_c, 0, 100, point_p.y, point_n.y);
+        SCUI_LOG_INFO("point:%d,%d", prop.data.point.x, prop.data.point.y);
         break;
     }
     case scui_object_style_rect_width:

@@ -4,7 +4,8 @@
 /*@brief 样式资源
  */
 typedef struct {
-    scui_object_type_t part;        /* 部件(bg/edge/box/sha) */
+    scui_object_type_t part;        /* 关键部分(rect_bg) */
+    scui_object_type_t form;        /* 层级(base/edge/box/sha) */
     scui_area_t        area;        /* 宽高(部件) */
     scui_color_t       color[4];    /* 颜色(def[0]/pre[1]/chk[2]/pre[3]; s状态色->e渐变) */
     scui_coord_t       width;       /* 边界(实心:<=0;空心:>0) */
@@ -19,7 +20,8 @@ typedef struct {
 /*@brief 样式资源
  */
 typedef struct {
-    scui_object_type_t part;        /* 部件(bg/fg) */
+    scui_object_type_t part;        /* 关键部分(arc_bg/arc_fg/arc_knob) */
+    scui_object_type_t form;        /* 层级(base; 可扩edge/box/sha) */
     scui_point_t       center;      /* 弧心 */
     scui_coord_t       width;       /* 弧宽(扇形:<= 0;弧型:>0) */
     scui_coord_t       radius;      /* 半径(>0) */
@@ -35,17 +37,23 @@ typedef struct {
 /*@brief 样式资源
  */
 typedef struct {
-    scui_object_type_t part;        /* 部件(bg/fg) */
-    scui_color_t       color[2];    /* 颜色(背景[0]前景[1]) */
+    scui_object_type_t part;        /* 关键部分(rect_bg/rect_fg/rect_knob) */
+    scui_object_type_t form;        /* 层级(base/edge/box/sha) */
+    scui_area_t        area;        /* 宽高(部件) */
+    scui_color_t       color;       /* 颜色(s状态色->e渐变) */
+    scui_coord_t       width;       /* 边界(实心:<=0;空心:>0) */
     scui_coord_t       radius;      /* 圆角半径(最大:<0) */
     scui_coord_t       time;        /* 动画时间(ms) */
     scui_sbitfd_t      grad:1;      /* 渐变(可选)(s->e) */
+    scui_sbitfd_t      gradw:1;     /* 渐变方向(水平:0;垂直:1) */
+    scui_sbitfd_t      shadow:1;    /* 阴影(可选) */
 } scui_obj_bar_res_t;
 
 /*@brief 样式资源
  */
 typedef struct {
-    scui_object_type_t part;        /* 部件(item) */
+    scui_object_type_t part;        /* 关键部分(line_item/rect_fg) */
+    scui_object_type_t form;        /* 层级(base; 线条无层级恒0) */
     scui_sbitfd_t      round:1;     /* 端点圆角 */
     scui_sbitfd_t      grad:1;      /* 折线阴影 */
     scui_color_t       color;       /* 颜色 */

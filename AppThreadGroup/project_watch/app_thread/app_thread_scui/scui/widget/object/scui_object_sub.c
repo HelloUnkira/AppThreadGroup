@@ -407,6 +407,7 @@ static bool scui_object_draw_prop_sync(scui_handle_t handle, scui_object_prop_t 
     scui_object_data_t local_data_zero = {0};
     scui_object_prop_t local_prop = {
         .part  = prop->part,
+        .form  = prop->form,
         .state = prop->state,
     };
     for (scui_coord_t idx = 0; idx < number; idx++) {
@@ -436,7 +437,7 @@ void scui_object_prop_rect(scui_handle_t handle, scui_object_sub_t *sub)
     
     const scui_multi_t src_style_ofs = scui_object_style_rect_s + 1;
     const scui_coord_t src_style_num = scui_object_style_rect_e - scui_object_style_rect_s - 1;
-    scui_object_prop_t local_prop = {.part = sub->part,.state = sub->state,};
+    scui_object_prop_t local_prop = {.part = sub->part,.form = sub->form,.state = sub->state,};
     
     for (scui_coord_t idx = 0; idx < src_style_num; idx++) {
         local_prop.style = src_style_ofs + idx;
@@ -479,7 +480,7 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     scui_opt_pos_t align = src_data[scui_object_style_idx(rect_align)].align;
     scui_coord_t   width = src_data[scui_object_style_idx(rect_width)].number;
     scui_coord_t  height = src_data[scui_object_style_idx(rect_height)].number;
-    scui_coord_t stroke = src_data[scui_object_style_idx(rect_stroke)].number;
+    scui_coord_t  stroke = src_data[scui_object_style_idx(rect_stroke)].number;
     
     if (scui_opt_bits_equal(align, scui_opt_pos_hor))
         dst_area.x += (dst_area.w - width) / 2;
@@ -535,7 +536,7 @@ void scui_object_prop_arc(scui_handle_t handle, scui_object_sub_t *sub)
     
     const scui_multi_t src_style_ofs = scui_object_style_arc_s + 1;
     const scui_coord_t src_style_num = scui_object_style_arc_e - scui_object_style_arc_s - 1;
-    scui_object_prop_t local_prop = {.part = sub->part,.state = sub->state,};
+    scui_object_prop_t local_prop = {.part = sub->part,.form = sub->form,.state = sub->state,};
     
     for (scui_coord_t idx = 0; idx < src_style_num; idx++) {
         local_prop.style = src_style_ofs + idx;
@@ -606,7 +607,7 @@ void scui_object_prop_line(scui_handle_t handle, scui_object_sub_t *sub)
     
     const scui_multi_t src_style_ofs = scui_object_style_line_s + 1;
     const scui_coord_t src_style_num = scui_object_style_line_e - scui_object_style_line_s - 1;
-    scui_object_prop_t local_prop = {.part = sub->part,.state = sub->state,};
+    scui_object_prop_t local_prop = {.part = sub->part,.form = sub->form,.state = sub->state,};
     
     for (scui_coord_t idx = 0; idx < src_style_num; idx++) {
         local_prop.style = src_style_ofs + idx;
@@ -662,66 +663,3 @@ bool scui_object_draw_line(scui_handle_t handle, scui_object_prop_t *prop)
     
     return true;
 }
-
-#if 0
-
-/*@brief 对象控件添加经典矩形属性
- *@param handle 对象控件句柄
- *@param rect   矩形属性
- */
-void scui_object_prop_rect_x(scui_handle_t handle, scui_object_rect_t *rect)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_object_t *object = (void *)widget;
-    
-    const scui_object_type_t src_part[] = {
-        scui_object_part_rect_bg,
-        scui_object_part_rect_fg,
-        scui_object_part_rect_edge,
-        scui_object_part_rect_box,
-        scui_object_part_rect_sha,
-    };
-    
-    scui_object_rect_t local_crect = *rect;
-    for (scui_coord_t idx = 0; idx < scui_arr_len(src_part); idx++) {
-        local_crect.part  = src_part[idx];
-        scui_object_prop_rect(handle, &local_crect);
-    }
-}
-
-/*@brief 对象控件绘制矩形
- *@param handle 对象控件句柄
- *@param clip   剪切域
- *@param prop   属性(state)
- *@retval 成功失败
- */
-bool scui_object_draw_rect_x(scui_handle_t handle, scui_object_prop_t *prop)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_object_t *object = (void *)widget;
-    
-    const scui_object_type_t src_part[] = {
-        scui_object_part_rect_bg,
-        scui_object_part_rect_fg,
-        scui_object_part_rect_edge,
-        scui_object_part_rect_box,
-        scui_object_part_rect_sha,
-    };
-    
-    bool retval = true;
-    scui_object_prop_t local_prop = *prop;
-    for (scui_coord_t idx = 0; idx < scui_arr_len(src_part); idx++) {
-        local_prop.part = src_part[idx];
-        
-        scui_object_state_get(widget->myself, &local_prop.state);
-        if (scui_object_draw_rect(widget->myself, &local_prop))
-            continue;
-        
-        retval = false;
-    }
-    
-    return retval;
-}
-#endif
