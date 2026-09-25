@@ -55,6 +55,14 @@ typedef union {
     scui_coord_t meta[4];
 } scui_area_t;
 
+/* scui_area_t组合宏(这里用内联函数表出): */
+static inline scui_area_t SCUI_AREA_MAKE_WH(scui_coord_t w, scui_coord_t h)
+{return (scui_area_t){ .w = w, .h = h,};}
+static inline scui_area_t SCUI_AREA_MAKE_BM(scui_coord_t x, scui_coord_t y, scui_coord_t w, scui_coord_t h)
+{return (scui_area_t){ .x = x, .y = y, .w = w, .h = h,};}
+static inline scui_area_t SCUI_AREA_MAKE_BS(scui_coord_t x1, scui_coord_t y1, scui_coord_t x2, scui_coord_t y2)
+{return (scui_area_t){ .x = x1, .y = y1, .w = x2 - x1 + 1, .h = y2 - y1 + 1,};}
+
 /*@brief 点/区域对齐
  */
 typedef enum {

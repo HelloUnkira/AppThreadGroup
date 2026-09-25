@@ -110,6 +110,9 @@ typedef enum {
     
 } scui_object_type_t;
 
+/* 是否有必要做四级合并(评估待定中???): */
+/* uint32_t type = <part><form><state><style> */
+
 #define scui_object_part_idx(part)      (scui_object_type_mask & (scui_object_part_##part   - 1))
 #define scui_object_form_idx(form)      (scui_object_type_mask & (scui_object_form_##form   - 1))
 #define scui_object_state_idx(state)    (scui_object_type_mask & (scui_object_state_##state - 1))

@@ -171,10 +171,7 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
         /* 上半部分空白 */
         custom_maker.widget.style.indev_ptr = false;
         custom_maker.widget.event_cb        = NULL;
-        custom_maker.widget.clip.x = 0;
-        custom_maker.widget.clip.y = 0;
-        custom_maker.widget.clip.w = scroll_w;
-        custom_maker.widget.clip.h = (scroll_h - icon_h) / 2;
+        custom_maker.widget.clip          = SCUI_AREA_MAKE_BM(0, 0, scroll_w, (scroll_h - icon_h) / 2);
         scui_widget_create(&custom_maker, &custom_handle);
         
         custom_maker.widget.style.indev_ptr = true;
@@ -229,10 +226,7 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
         /* 下半部分空白 */
         custom_maker.widget.style.indev_ptr = false;
         custom_maker.widget.event_cb        = NULL;
-        custom_maker.widget.clip.x = 0;
-        custom_maker.widget.clip.y = scui_max(clip_m.y, scui_max(clip_l.y, clip_r.y));
-        custom_maker.widget.clip.w = scroll_w;
-        custom_maker.widget.clip.h = (scroll_h - icon_h) / 2;
+        custom_maker.widget.clip          = SCUI_AREA_MAKE_BM(0, scui_max(clip_m.y, scui_max(clip_l.y, clip_r.y)), scroll_w, (scroll_h - icon_h) / 2);
         scui_widget_create(&custom_maker, &custom_handle);
         
         scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_WATERFALL_BAR_ARC;

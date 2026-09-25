@@ -54,10 +54,7 @@ void scui_test_ui_ring_event_proc(scui_event_t *event)
         custom_maker.data.spinner.angle_s = 270;
         custom_maker.data.spinner.angle_l = 60;
         custom_maker.data.spinner.way = 1;
-        custom_maker.widget.clip.x = (SCUI_HOR_RES - scui_image_w(custom_maker.data.spinner.spinner)) / 2;
-        custom_maker.widget.clip.y = (SCUI_VER_RES - scui_image_h(custom_maker.data.spinner.spinner)) / 2;
-        custom_maker.widget.clip.w = scui_image_w(custom_maker.data.spinner.spinner);
-        custom_maker.widget.clip.h = scui_image_h(custom_maker.data.spinner.spinner);
+        custom_maker.widget.clip             = SCUI_AREA_MAKE_BM((SCUI_HOR_RES - scui_image_w(custom_maker.data.spinner.spinner)) / 2, (SCUI_VER_RES - scui_image_h(custom_maker.data.spinner.spinner)) / 2, scui_image_w(custom_maker.data.spinner.spinner), scui_image_h(custom_maker.data.spinner.spinner));
         custom_maker.widget.event_cb = scui_test_ui_ring_spinner_event_proc;
         scui_widget_create(&custom_maker, &custom_handle);
         scui_widget_child_move_background(custom_handle);

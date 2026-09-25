@@ -145,6 +145,7 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
             
             scui_custom_maker_define(cont_maker);
             scui_custom_maker_define(item_maker);
+            scui_widget_maker_buffer(&item_maker.widget, true, true, false, SCUI_PIXEL_CF_DEF);
             scui_handle_t cont_handle = SCUI_HANDLE_INVALID;
             scui_handle_t item_handle = SCUI_HANDLE_INVALID;
             
@@ -155,17 +156,14 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
             cont_maker.widget.child_num       = 1;
             scui_widget_create(&cont_maker, &cont_handle);
             
-            item_maker.widget.style.buffer    = true;
-            item_maker.widget.style.buffer_d  = true;
             item_maker.widget.style.fully_bg  = true;
             item_maker.widget.style.indev_ptr = true;
             item_maker.widget.format          = SCUI_PIXEL_CF_DEF;
-            item_maker.widget.parent          = cont_handle;
+            scui_widget_maker_linker(&item_maker.widget, 50, cont_handle);
             item_maker.widget.clip.w          = 410;
             item_maker.widget.clip.h          = 180;
             item_maker.widget.clip.x          = (SCUI_HOR_RES - item_maker.widget.clip.w) / 2;
             item_maker.widget.event_cb        = scui_ui_scene_quick_card_item_event;
-            item_maker.widget.child_num       = 50;
             
             scui_widget_create(&item_maker, &item_handle);
             scui_ui_res_local->item_list[idx] = item_handle;
@@ -257,17 +255,15 @@ void scui_ui_scene_quick_card_event_proc(scui_event_t *event)
         scui_ui_res_local->list_num = 10;
         
         scui_scroll_maker_define(scroll_maker);
+        scui_widget_maker_indev(&scroll_maker.widget, false, true, false, true);
+        scui_widget_maker_linker(&scroll_maker.widget, scui_ui_res_local->list_num + 2, event->object);
         scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
         
         scroll_maker.widget.style.fully_bg   = true;
-        scroll_maker.widget.style.indev_enc  = true;
-        scroll_maker.widget.style.indev_key  = true;
         scroll_maker.widget.style.order_draw = true;
         scroll_maker.widget.clip.w = SCUI_HOR_RES;
         scroll_maker.widget.clip.h = SCUI_VER_RES;
-        scroll_maker.widget.parent = event->object;
         scroll_maker.widget.event_cb   = scui_ui_scene_quick_card_scroll_event;
-        scroll_maker.widget.child_num  = scui_ui_res_local->list_num + 2;
         scroll_maker.pos        = scui_opt_pos_c;
         scroll_maker.dir        = scui_opt_dir_ver;
         scroll_maker.skip       = scui_opt_pos_all;

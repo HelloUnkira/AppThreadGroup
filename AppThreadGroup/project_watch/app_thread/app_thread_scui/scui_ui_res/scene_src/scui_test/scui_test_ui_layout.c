@@ -137,15 +137,11 @@ static void scui_test_ui_layout_item_create(void)
 {
     scui_handle_t layout_handle = SCUI_HANDLE_INVALID;
     scui_layout_maker_define(layout_maker);
+    scui_widget_maker_linker(&layout_maker.widget, 6, SCUI_UI_SCENE_TEST_UI_LAYOUT);
     
     layout_maker.widget.style.sched_widget = true;
     layout_maker.widget.style.fully_bg     = true;
-    layout_maker.widget.clip.x = 0;
-    layout_maker.widget.clip.y = 0;
-    layout_maker.widget.clip.w = SCUI_HOR_RES * 707 / 1000;
-    layout_maker.widget.clip.h = SCUI_VER_RES * 707 / 1000;
-    layout_maker.widget.parent    = SCUI_UI_SCENE_TEST_UI_LAYOUT;
-    layout_maker.widget.child_num = 6;
+    layout_maker.widget.clip             = SCUI_AREA_MAKE_BM(0, 0, SCUI_HOR_RES * 707 / 1000, SCUI_VER_RES * 707 / 1000);
     layout_maker.widget.color.color.full = 0xFF6F6F6F;  /* 亮灰 */
     layout_maker.type  = scui_layout_type_item;
     layout_maker.use   = true;          /* 开启外部对齐 */
@@ -161,10 +157,7 @@ static void scui_test_ui_layout_item_create(void)
     for (uint8_t idx = 0; idx < 6; idx++) {
         scui_custom_maker_t custom_maker = scui_test_ui_layout_custom_base(layout_handle);
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
-        custom_maker.widget.clip.x = (idx % 3) * (cell + span);
-        custom_maker.widget.clip.y = (idx / 3) * (cell * 2 / 3 + span);
-        custom_maker.widget.clip.w = cell;
-        custom_maker.widget.clip.h = cell * 2 / 3;
+        custom_maker.widget.clip       = SCUI_AREA_MAKE_BM((idx % 3) * (cell + span), (idx / 3) * (cell * 2 / 3 + span), cell, cell * 2 / 3);
         scui_widget_create(&custom_maker, &custom_handle);
         if (idx == 0) first = custom_handle;
     }
@@ -187,15 +180,11 @@ static void scui_test_ui_layout_flex_nested(uint8_t page)
 {
     scui_handle_t layout_handle = SCUI_HANDLE_INVALID;
     scui_layout_maker_define(layout_maker);
+    scui_widget_maker_linker(&layout_maker.widget, 4, SCUI_UI_SCENE_TEST_UI_LAYOUT);
     
     layout_maker.widget.style.sched_widget = true;
     layout_maker.widget.style.fully_bg     = true;
-    layout_maker.widget.clip.x = 0;
-    layout_maker.widget.clip.y = 0;
-    layout_maker.widget.clip.w = SCUI_HOR_RES * 707 / 1000;
-    layout_maker.widget.clip.h = SCUI_VER_RES * 707 / 1000;
-    layout_maker.widget.parent    = SCUI_UI_SCENE_TEST_UI_LAYOUT;
-    layout_maker.widget.child_num = 4;
+    layout_maker.widget.clip             = SCUI_AREA_MAKE_BM(0, 0, SCUI_HOR_RES * 707 / 1000, SCUI_VER_RES * 707 / 1000);
     layout_maker.widget.color.color.full = 0xFFBEBEBE;  /* 浅灰(大) */
     layout_maker.type  = scui_layout_type_grid;
     layout_maker.use   = true;
@@ -305,15 +294,11 @@ static void scui_test_ui_layout_grid_combo(uint8_t idx)
 {
     scui_handle_t layout_handle = SCUI_HANDLE_INVALID;
     scui_layout_maker_define(layout_maker);
+    scui_widget_maker_linker(&layout_maker.widget, 4, SCUI_UI_SCENE_TEST_UI_LAYOUT);
     
     layout_maker.widget.style.sched_widget = true;
     layout_maker.widget.style.fully_bg     = true;
-    layout_maker.widget.clip.x = 0;
-    layout_maker.widget.clip.y = 0;
-    layout_maker.widget.clip.w = SCUI_HOR_RES * 707 / 1000;
-    layout_maker.widget.clip.h = SCUI_VER_RES * 707 / 1000;
-    layout_maker.widget.parent    = SCUI_UI_SCENE_TEST_UI_LAYOUT;
-    layout_maker.widget.child_num = 4;
+    layout_maker.widget.clip             = SCUI_AREA_MAKE_BM(0, 0, SCUI_HOR_RES * 707 / 1000, SCUI_VER_RES * 707 / 1000);
     layout_maker.widget.color.color.full = 0xFFBEBEBE;  /* 浅灰(大) */
     layout_maker.type  = scui_layout_type_grid;
     layout_maker.use   = true;

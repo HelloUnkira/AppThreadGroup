@@ -174,9 +174,7 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
         string_maker.args.align_hor             = 2;
         string_maker.args.align_ver             = 2;
         string_maker.args.mode_scroll           = 1;
-        string_maker.args.color.color_s.full    = 0xFFFFFFFF;
-        string_maker.args.color.color_e.full    = 0xFFFFFFFF;
-        string_maker.args.color.filter          = true;
+        string_maker.args.color     = SCUI_COLOR_MAKE32_SE(true, 0, 0xFFFFFFFF, 0xFFFFFFFF);
         string_maker.text                       = SCUI_LANG_IDX_0X0017;
         string_maker.font_idx                   = SCUI_FONT_IDX_36;
         scui_widget_create(&string_maker, &string_handle);
@@ -351,10 +349,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_obj_chart_maker_define(chart_maker);
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
-        chart_maker.widget.clip.x = 0;
-        chart_maker.widget.clip.y = 100;
-        chart_maker.widget.clip.w = SCUI_HOR_RES;
-        chart_maker.widget.clip.h = 86;
+        chart_maker.widget.clip = SCUI_AREA_MAKE_BM(0, 100, SCUI_HOR_RES, 86);
         chart_maker.widget.parent = event->object;
         
         chart_maker.type      = 0;
@@ -393,10 +388,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_handle_t image_digit = scui_image_prj_num_44_white_04_03;
         
         ximage_maker.widget.parent = event->object;
-        ximage_maker.widget.clip.x = 40;
-        ximage_maker.widget.clip.y = 52;
-        ximage_maker.widget.clip.w = SCUI_HOR_RES - 40 * 2;
-        ximage_maker.widget.clip.h = scui_image_h(image_digit);
+        ximage_maker.widget.clip = SCUI_AREA_MAKE_BM(40, 52, SCUI_HOR_RES - 40 * 2, scui_image_h(image_digit));
         scui_widget_create(&ximage_maker, &ximage_handle);
         scui_ui_res_local->data_digit_kcal = ximage_handle;
         break;
@@ -537,10 +529,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         scui_obj_chart_maker_define(chart_maker);
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
-        chart_maker.widget.clip.x = 0;
-        chart_maker.widget.clip.y = 100;
-        chart_maker.widget.clip.w = SCUI_HOR_RES;
-        chart_maker.widget.clip.h = 86;
+        chart_maker.widget.clip = SCUI_AREA_MAKE_BM(0, 100, SCUI_HOR_RES, 86);
         chart_maker.widget.parent = event->object;
         
         chart_maker.type      = 0;
@@ -579,10 +568,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         scui_handle_t image_digit = scui_image_prj_num_44_white_04_03;
         
         ximage_maker.widget.parent = event->object;
-        ximage_maker.widget.clip.x = 40;
-        ximage_maker.widget.clip.y = 52;
-        ximage_maker.widget.clip.w = SCUI_HOR_RES - 40 * 2;
-        ximage_maker.widget.clip.h = scui_image_h(image_digit);
+        ximage_maker.widget.clip = SCUI_AREA_MAKE_BM(40, 52, SCUI_HOR_RES - 40 * 2, scui_image_h(image_digit));
         scui_widget_create(&ximage_maker, &ximage_handle);
         scui_ui_res_local->data_digit_step = ximage_handle;
         break;
@@ -724,10 +710,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         scui_obj_chart_maker_define(chart_maker);
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
-        chart_maker.widget.clip.x = 0;
-        chart_maker.widget.clip.y = 100;
-        chart_maker.widget.clip.w = SCUI_HOR_RES;
-        chart_maker.widget.clip.h = 86;
+        chart_maker.widget.clip = SCUI_AREA_MAKE_BM(0, 100, SCUI_HOR_RES, 86);
         chart_maker.widget.parent = event->object;
         
         chart_maker.type      = 0;
@@ -766,10 +749,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         scui_handle_t image_digit = scui_image_prj_num_44_white_04_03;
         
         ximage_maker.widget.parent = event->object;
-        ximage_maker.widget.clip.x = 40;
-        ximage_maker.widget.clip.y = 52;
-        ximage_maker.widget.clip.w = SCUI_HOR_RES - 40 * 2;
-        ximage_maker.widget.clip.h = scui_image_h(image_digit);
+        ximage_maker.widget.clip = SCUI_AREA_MAKE_BM(40, 52, SCUI_HOR_RES - 40 * 2, scui_image_h(image_digit));
         scui_widget_create(&ximage_maker, &ximage_handle);
         scui_ui_res_local->data_digit_dist = ximage_handle;
         break;

@@ -83,14 +83,12 @@ void scui_ui_scene_xfloat_create(scui_handle_t handle, scui_coord_t w_h,
     
     /* 滚动容器(替代 linear, 边缘对齐侧拉半屏浮窗) */
     scui_scroll_maker_define(scroll_maker);
+    scui_widget_maker_indev(&scroll_maker.widget, true, false, false, true);
+    scui_widget_maker_linker(&scroll_maker.widget, 2, handle);
     scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
     
-    scroll_maker.widget.style.indev_ptr = true;
-    scroll_maker.widget.style.indev_key = true;
     scroll_maker.widget.clip            = clip_z;
-    scroll_maker.widget.parent          = handle;
     scroll_maker.widget.event_cb        = scui_ui_scene_xfloat_event_proc;
-    scroll_maker.widget.child_num       = 2;
     scroll_maker.pos                    = pos;
     
     if (scui_opt_bits_check(pos, scui_opt_pos_hor)) scroll_maker.dir = scui_opt_dir_hor;
@@ -129,8 +127,7 @@ void scui_ui_scene_xfloat_create(scui_handle_t handle, scui_coord_t w_h,
             scui_area_t clip = clip_z;
             if (scui_opt_bits_check(pos, scui_opt_pos_hor)) clip.w = w_h;
             if (scui_opt_bits_check(pos, scui_opt_pos_ver)) clip.h = w_h;
-            custom_maker.widget.style.buffer   = true;
-            custom_maker.widget.style.buffer_d = true;
+            scui_widget_maker_buffer(&custom_maker.widget, true, true, false, SCUI_PIXEL_CF_DEF_A);
             custom_maker.widget.style.fully_bg = true;
             custom_maker.widget.event_cb       = scui_ui_scene_xfloat_buffer_event;
             custom_maker.widget.clip           = clip;

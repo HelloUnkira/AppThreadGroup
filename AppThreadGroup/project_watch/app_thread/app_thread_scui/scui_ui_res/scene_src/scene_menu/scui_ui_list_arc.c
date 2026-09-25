@@ -81,11 +81,10 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
     case scui_event_create: {
         
         scui_layout_maker_define(item_maker);
+        scui_widget_maker_linker(&item_maker.widget, 1, event->object);
         scui_handle_t item_handle = SCUI_HANDLE_INVALID;
         
         item_maker.widget.clip.w    = SCUI_HOR_RES;
-        item_maker.widget.parent    = event->object;
-        item_maker.widget.child_num = 1;
         scui_coord_t icon_h = 48 + 30;   /* 统一单图, 图标固定48x48 */
         
         item_maker.widget.clip.h = SCUI_VER_RES / 2 - (icon_h + 10) / 2;
@@ -97,22 +96,21 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             scui_widget_create(&item_maker, &item_handle);
             
             scui_layout_maker_define(group_maker);
+            scui_widget_maker_linker(&group_maker.widget, 2, item_handle);
             scui_handle_t group_handle = SCUI_HANDLE_INVALID;
             
             group_maker.widget.style.indev_ptr = true;
             group_maker.widget.clip.w          = SCUI_WIDGET_AUTO_W;
             group_maker.widget.clip.h          = SCUI_WIDGET_AUTO_H;
-            group_maker.widget.parent          = item_handle;
-            group_maker.widget.child_num       = 2;
             group_maker.widget.event_cb        = scui_ui_scene_item_arc_event_proc;
             scui_widget_create(&group_maker, &group_handle);
             
             scui_custom_maker_define(icon_maker);
+            scui_widget_maker_image(&icon_maker.widget, false, false, scui_ui_scene_list[idx].image, SCUI_COLOR_UNUSED);
             scui_handle_t icon_handle = SCUI_HANDLE_INVALID;
             
-            icon_maker.widget.style.fully_bg = false;
             icon_maker.widget.event_cb       = scui_ui_scene_icon_arc_event_proc;
-            icon_maker.widget.image          = scui_ui_scene_list[idx].image;
+
             icon_maker.widget.clip.w         = 48;
             icon_maker.widget.clip.h         = 48;
             icon_maker.widget.parent         = group_handle;
@@ -125,9 +123,7 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             scui_handle_t string_handle = SCUI_HANDLE_INVALID;
             
             string_maker.widget.parent           = group_handle;
-            string_maker.args.color.color_s.full = 0xFFFFFFFF;
-            string_maker.args.color.color_e.full = 0xFFFFFFFF;
-            string_maker.args.color.filter       = true;
+            string_maker.args.color   = SCUI_COLOR_MAKE32_SE(true, 0, 0xFFFFFFFF, 0xFFFFFFFF);
             string_maker.widget.clip.w           = scui_ui_res_local->string_width;
             string_maker.widget.clip.h           = SCUI_WIDGET_AUTO_H;
             string_maker.args.align_hor          = 0;

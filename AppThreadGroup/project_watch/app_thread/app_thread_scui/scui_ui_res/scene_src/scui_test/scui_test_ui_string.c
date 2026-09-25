@@ -60,8 +60,7 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         string_maker.text             = SCUI_LANG_IDX_0X0029;
         string_maker.args.line_under  = 1;
         string_maker.args.line_delete = 0;
-        string_maker.args.color.color_s.full = 0xFFFF00FF;
-        string_maker.args.color.color_e.full = 0xFFFF00FF;
+        string_maker.args.color     = SCUI_COLOR_MAKE32_SE(true, 0, 0xFFFF00FF, 0xFFFF00FF);
         scui_widget_create(&string_maker, &string_handle);
         scui_string_upgrade_grads(string_handle, (scui_color_t *)string_grads, 8, false);
         scui_ui_res_local->string[0] = string_handle;
@@ -72,8 +71,7 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         string_maker.text             = SCUI_LANG_IDX_0X002e;
         string_maker.args.line_under  = 0;
         string_maker.args.line_delete = 1;
-        string_maker.args.color.color_s.full = 0xFFFF0000;
-        string_maker.args.color.color_e.full = 0xFFFF0000;
+        string_maker.args.color     = SCUI_COLOR_MAKE32_SE(true, 0, 0xFFFF0000, 0xFFFF0000);
         scui_widget_create(&string_maker, &string_handle);
         scui_string_upgrade_grads(string_handle, (scui_color_t *)string_grads, 8, false);
         scui_ui_res_local->string[1] = string_handle;
@@ -84,8 +82,7 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         string_maker.text             = SCUI_LANG_IDX_0X0034;
         string_maker.args.line_under  = 1;
         string_maker.args.line_delete = 0;
-        string_maker.args.color.color_s.full = 0xFF00FF00;
-        string_maker.args.color.color_e.full = 0xFF00FF00;
+        string_maker.args.color     = SCUI_COLOR_MAKE32_SE(true, 0, 0xFF00FF00, 0xFF00FF00);
         string_maker.args.line_multi = true;
         scui_widget_create(&string_maker, &string_handle);
         scui_string_upgrade_grads(string_handle, (scui_color_t *)string_grads, 8, false);
@@ -97,8 +94,7 @@ void scui_test_ui_string_event_proc(scui_event_t *event)
         string_maker.text             = SCUI_LANG_IDX_0X0042;
         string_maker.args.line_under  = 0;
         string_maker.args.line_delete = 1;
-        string_maker.args.color.color_s.full = 0xFF0000FF;
-        string_maker.args.color.color_e.full = 0xFF0000FF;
+        string_maker.args.color     = SCUI_COLOR_MAKE32_SE(true, 0, 0xFF0000FF, 0xFF0000FF);
         string_maker.args.line_multi = true;
         scui_widget_create(&string_maker, &string_handle);
         scui_string_upgrade_grads(string_handle, (scui_color_t *)string_grads, 8, true);

@@ -84,12 +84,11 @@ void scui_test_ui_symbol_canvas_event_proc(scui_event_t *event)
         
         /* flex布局: auto宽高, 外部全局居中 */
         scui_layout_maker_define(layout_maker);
+        scui_widget_maker_linker(&layout_maker.widget, scui_arr_len(symbol_table), event->object);
         scui_handle_t layout_handle = SCUI_HANDLE_INVALID;
         
-        layout_maker.widget.parent = event->object;
         layout_maker.widget.clip.w = SCUI_WIDGET_AUTO_W;
         layout_maker.widget.clip.h = SCUI_WIDGET_AUTO_H;
-        layout_maker.widget.child_num = scui_arr_len(symbol_table);
         layout_maker.type  = scui_layout_type_flex;
         layout_maker.use   = true;           /* 开启外部对齐 */
         layout_maker.align = scui_align_icc; /* 全局居中 */
@@ -110,7 +109,7 @@ void scui_test_ui_symbol_canvas_event_proc(scui_event_t *event)
             symbol_maker.widget.parent = layout_handle;
             symbol_maker.widget.clip.w = SCUI_WIDGET_AUTO_W;
             symbol_maker.widget.clip.h = SCUI_WIDGET_AUTO_H;
-            symbol_maker.color = SCUI_COLOR_WHITE;
+            symbol_maker.color       = SCUI_COLOR_WHITE;
             scui_widget_create(&symbol_maker, &symbol_handle);
             
             scui_symbol_update(symbol_handle, SCUI_FONT_IDX_X24, symbol_table[idx]);

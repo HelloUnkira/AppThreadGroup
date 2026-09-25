@@ -94,12 +94,11 @@ void scui_test_ui_roller_event_proc(scui_event_t *event)
         #if SCUI_MEM_FEAT_MINI == 0
         // digit picker == scroll + string * num
         scui_roller_maker_define(roller_maker);
+        scui_widget_maker_linker(&roller_maker.widget, 60, SCUI_UI_SCENE_TEST_UI_ROLLER);
         
         roller_maker.widget.clip.w          = SCUI_HOR_RES * 11 / 25;
         roller_maker.widget.clip.h          = SCUI_VER_RES * 11 / 25;
-        roller_maker.widget.parent          = SCUI_UI_SCENE_TEST_UI_ROLLER;
         roller_maker.widget.event_cb        = scui_test_ui_roller_self_event_proc;
-        roller_maker.widget.child_num       = 60;
         roller_maker.scroll.pos             = scui_opt_pos_c;
         roller_maker.scroll.dir             = scui_opt_dir_ver;
         roller_maker.scroll.loop            = true;
@@ -108,9 +107,7 @@ void scui_test_ui_roller_event_proc(scui_event_t *event)
         
         string_maker.args.align_hor             = 2;
         string_maker.args.align_ver             = 2;
-        string_maker.args.color.color_s.full    = 0xFF2196F3;
-        string_maker.args.color.color_e.full    = 0xFF2196F3;
-        string_maker.args.color.filter          = true;
+        string_maker.args.color   = SCUI_COLOR_MAKE32_SE(true, 0, 0xFF2196F3, 0xFF2196F3);
         string_maker.widget.clip.w              = roller_maker.widget.clip.w;
         string_maker.widget.clip.h              = roller_maker.widget.clip.h / 5;
         string_maker.font_idx                   = SCUI_FONT_IDX_X32;

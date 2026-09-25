@@ -152,6 +152,18 @@ typedef struct {
 } scui_widget_maker_t;
 #pragma pack(pop)
 
+/* scui_widget_maker_t组合宏(这里用内联函数表出): */
+static inline void scui_widget_maker_buffer(scui_widget_maker_t *maker, bool buffer, bool buffer_d, bool cover_buf, scui_pixel_cf_t format)
+{maker->style.buffer = buffer; maker->style.buffer_d = buffer_d; maker->style.cover_buf = cover_buf; maker->format = format;}
+static inline void scui_widget_maker_image(scui_widget_maker_t *maker, bool fully_bg, bool cover_fg, scui_handle_t image, scui_color_t color)
+{maker->style.fully_bg = fully_bg; maker->style.cover_fg = cover_fg; maker->image = image; maker->color = color;}
+static inline void scui_widget_maker_indev(scui_widget_maker_t *maker, bool indev_ptr, bool indev_enc, bool indev_bar, bool indev_key)
+{maker->style.indev_ptr = indev_ptr; maker->style.indev_enc = indev_enc; maker->style.indev_bar = indev_bar; maker->style.indev_key = indev_key;}
+static inline void scui_widget_maker_sched(scui_widget_maker_t *maker, bool sched_anima, bool sched_widget, scui_event_cb_t event_cb)
+{maker->style.sched_anima = sched_anima; maker->style.sched_widget = sched_widget; maker->event_cb = event_cb;}
+static inline void scui_widget_maker_linker(scui_widget_maker_t *maker, scui_handle_t child_num, scui_handle_t parent)
+{maker->child_num = child_num; maker->parent = parent;}
+
 /*@brief 控件布局资料
  *       控件配置字段值
  */

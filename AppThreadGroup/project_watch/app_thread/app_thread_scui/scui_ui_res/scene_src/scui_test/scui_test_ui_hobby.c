@@ -51,18 +51,14 @@ void scui_test_ui_hobby_event_proc(scui_event_t *event)
             scui_handle_t string_handle = SCUI_HANDLE_INVALID;
 
             string_maker.widget.parent           = event->object;
-            string_maker.widget.clip.x           = 0;
-            string_maker.widget.clip.y           = 0;
-            string_maker.widget.clip.w           = SCUI_WIDGET_AUTO_W;
-            string_maker.widget.clip.h           = SCUI_WIDGET_AUTO_H;
+            string_maker.widget.clip           = SCUI_AREA_MAKE_BM(0, 0, SCUI_WIDGET_AUTO_W, SCUI_WIDGET_AUTO_H);
             string_maker.widget.style.fully_bg   = true;
             string_maker.widget.color.color.full = 0xFF6F6F6F;
             string_maker.font_idx                = SCUI_FONT_IDX_36;
             string_maker.args.lang               = scui_lang_type_zh;
             string_maker.args.align_hor          = 2;
             string_maker.args.align_ver          = 2;
-            string_maker.args.color.color_s.full = color_table[idx];
-            string_maker.args.color.color_e.full = color_table[idx];
+            string_maker.args.color            = SCUI_COLOR_MAKE32_SE(true, 0, color_table[idx], color_table[idx]);
             scui_widget_create(&string_maker, &string_handle);
             scui_string_update_str(string_handle, (uint8_t *)char_table[idx]);
             scui_ui_res_local->string[idx] = string_handle;

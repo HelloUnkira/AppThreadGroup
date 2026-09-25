@@ -108,9 +108,7 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
         string_maker.args.align_hor             = 0;
         string_maker.args.align_ver             = 2;
         string_maker.args.mode_scroll           = 1;
-        string_maker.args.color.color_s.full    = 0xFFFFFFFF;
-        string_maker.args.color.color_e.full    = 0xFFFFFFFF;
-        string_maker.args.color.filter          = true;
+        string_maker.args.color     = SCUI_COLOR_MAKE32_SE(true, 0, 0xFFFFFFFF, 0xFFFFFFFF);
         string_maker.font_idx                   = SCUI_FONT_IDX_36;
         scui_widget_create(&string_maker, &scui_ui_res_local->string);
         

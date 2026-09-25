@@ -100,19 +100,13 @@ void scui_test_ui_misc_event_proc(scui_event_t *event)
         custom_maker.data.slider.vmax = 100;
         custom_maker.data.slider.dist = 152;    // 152 没有水平滚动条背景
         custom_maker.data.slider.way  = 0;      // 1
-        custom_maker.widget.clip.x = 5;
-        custom_maker.widget.clip.y = SCUI_VER_RES - 160;
-        custom_maker.widget.clip.w = scui_image_w(custom_maker.data.slider.bar);
-        custom_maker.widget.clip.h = scui_image_h(custom_maker.data.slider.bar);
+        custom_maker.widget.clip                     = SCUI_AREA_MAKE_BM(5, SCUI_VER_RES - 160, scui_image_w(custom_maker.data.slider.bar), scui_image_h(custom_maker.data.slider.bar));
         custom_maker.widget.event_cb = scui_test_ui_misc_slider_event_proc;
         scui_widget_create(&custom_maker, &custom_handle);
         #endif
         
         #if 1
-        custom_maker.widget.clip.x = SCUI_HOR_RES * 1 / 13 + 10;
-        custom_maker.widget.clip.y = SCUI_VER_RES * 5 / 13 + 10;
-        custom_maker.widget.clip.w = SCUI_HOR_RES * 5 / 13 - 10 * 2;
-        custom_maker.widget.clip.h = SCUI_VER_RES * 5 / 13 - 10 * 2;
+        custom_maker.widget.clip                   = SCUI_AREA_MAKE_BM(SCUI_HOR_RES * 1 / 13 + 10, SCUI_VER_RES * 5 / 13 + 10, SCUI_HOR_RES * 5 / 13 - 10 * 2, SCUI_VER_RES * 5 / 13 - 10 * 2);
         custom_maker.type = scui_custom_type_spinner;
         custom_maker.data = custom_data_zero;
         custom_maker.data.spinner.spinner = scui_image_prj_wgt_act_05_ring;

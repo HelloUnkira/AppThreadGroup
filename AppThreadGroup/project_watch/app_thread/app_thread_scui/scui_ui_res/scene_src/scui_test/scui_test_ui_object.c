@@ -155,10 +155,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_res.color[3].color_s.full = 0xFF008000;
         obj_btn_res.width  = 0;
         obj_btn_res.radius = 20;
-        obj_btn_maker.widget.clip.x = 13;
-        obj_btn_maker.widget.clip.y = 48;
-        obj_btn_maker.widget.clip.w = btn_w;
-        obj_btn_maker.widget.clip.h = btn_h;
+        obj_btn_maker.widget.clip       = SCUI_AREA_MAKE_BM(13, 48, btn_w, btn_h);
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
         obj_btn_res.form = scui_object_form_rect_base;
@@ -363,10 +360,7 @@ void scui_test_ui_object_page_2_event_proc(scui_event_t *event)
         obj_arc_res.round   = 1;
         obj_arc_res.gradw   = 0;
         obj_arc_res.grad    = 1;
-        obj_arc_maker.widget.clip.x = 28;
-        obj_arc_maker.widget.clip.y = 45;
-        obj_arc_maker.widget.clip.w = arc_w;
-        obj_arc_maker.widget.clip.h = arc_h;
+        obj_arc_maker.widget.clip = SCUI_AREA_MAKE_BM(28, 45, arc_w, arc_h);
         scui_widget_create(&obj_arc_maker, &obj_arc_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
         obj_arc_res.form = scui_object_form_arc_base;
@@ -593,10 +587,7 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
         obj_bar_res.radius = 7;
         obj_bar_res.grad = 0;
         for (uint32_t idx = 0; idx < 3; idx++) {
-            obj_bar_maker.widget.clip.x = cell_x[idx];
-            obj_bar_maker.widget.clip.y = cell_y[0] + 38;
-            obj_bar_maker.widget.clip.w = 140;
-            obj_bar_maker.widget.clip.h = 24;
+            obj_bar_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[idx], cell_y[0] + 38, 140, 24);
             scui_widget_create(&obj_bar_maker, &obj_bar_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
             obj_bar_res.form = scui_object_form_rect_base;
@@ -650,10 +641,7 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
                 obj_bar_maker.value_lim = 5;
                 obj_bar_maker.value_int = 1;
             }
-            obj_bar_maker.widget.clip.x = cell_x[idx] + 58;
-            obj_bar_maker.widget.clip.y = cell_y[2];
-            obj_bar_maker.widget.clip.w = 24;
-            obj_bar_maker.widget.clip.h = 100;
+            obj_bar_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[idx] + 58, cell_y[2], 24, 100);
             scui_widget_create(&obj_bar_maker, &obj_bar_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
             obj_bar_res.form = scui_object_form_rect_base;
@@ -674,10 +662,7 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
         obj_bar_maker.value_int = 0;
         obj_bar_res.radius = 15;
         obj_bar_res.grad = 1;
-        obj_bar_maker.widget.clip.x = 83;
-        obj_bar_maker.widget.clip.y = 375;
-        obj_bar_maker.widget.clip.w = 300;
-        obj_bar_maker.widget.clip.h = 30;
+        obj_bar_maker.widget.clip = SCUI_AREA_MAKE_BM(83, 375, 300, 30);
         scui_widget_create(&obj_bar_maker, &obj_bar_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
         obj_bar_res.form = scui_object_form_rect_base;
@@ -746,10 +731,7 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
         obj_bar_res.radius = 7;
         obj_bar_res.grad = 0;
         for (uint32_t idx = 0; idx < 3; idx++) {
-            obj_slider_maker.widget.clip.x = cell_x[idx];
-            obj_slider_maker.widget.clip.y = cell_y[0] + 38;
-            obj_slider_maker.widget.clip.w = 140;
-            obj_slider_maker.widget.clip.h = 24;
+            obj_slider_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[idx], cell_y[0] + 38, 140, 24);
             scui_widget_create(&obj_slider_maker, &obj_slider_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
             obj_bar_res.form = scui_object_form_rect_base;
@@ -799,10 +781,7 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
         obj_bar_res.radius = 7;
         for (uint32_t idx = 0; idx < 3; idx++) {
             obj_bar_res.grad = (idx == 1) ? 1 : 0;
-            obj_slider_maker.widget.clip.x = cell_x[idx] + 58;
-            obj_slider_maker.widget.clip.y = cell_y[2];
-            obj_slider_maker.widget.clip.w = 24;
-            obj_slider_maker.widget.clip.h = 100;
+            obj_slider_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[idx] + 58, cell_y[2], 24, 100);
             scui_widget_create(&obj_slider_maker, &obj_slider_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
             obj_bar_res.form = scui_object_form_rect_base;
@@ -823,10 +802,7 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
         obj_slider_maker.obj_bar.value_int = 0;
         obj_bar_res.radius = 15;
         obj_bar_res.grad = 1;
-        obj_slider_maker.widget.clip.x = 83;
-        obj_slider_maker.widget.clip.y = 375;
-        obj_slider_maker.widget.clip.w = 300;
-        obj_slider_maker.widget.clip.h = 30;
+        obj_slider_maker.widget.clip     = SCUI_AREA_MAKE_BM(83, 375, 300, 30);
         scui_widget_create(&obj_slider_maker, &obj_slider_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
         obj_bar_res.form = scui_object_form_rect_base;
@@ -885,10 +861,7 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         obj_bar_res.grad = 0;
         for (uint32_t idx = 0; idx < 3; idx++) {
             obj_bar_res.radius = 10;
-            obj_switch_maker.widget.clip.x = cell_x[idx] + (140 - cell_w[idx]) / 2;
-            obj_switch_maker.widget.clip.y = cell_y[0] + (100 - cell_h[idx]) / 2;
-            obj_switch_maker.widget.clip.w = cell_w[idx];
-            obj_switch_maker.widget.clip.h = cell_h[idx];
+            obj_switch_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[idx] + (140 - cell_w[idx]) / 2, cell_y[0] + (100 - cell_h[idx]) / 2, cell_w[idx], cell_h[idx]);
             scui_widget_create(&obj_switch_maker, &obj_switch_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
             obj_bar_res.form = scui_object_form_rect_base;
@@ -909,10 +882,7 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         
         /* 第2行: 圆角/方角/渐变 */
         obj_bar_res.radius = 20;
-        obj_switch_maker.widget.clip.x = cell_x[0] + 20;
-        obj_switch_maker.widget.clip.y = cell_y[1] + 20;
-        obj_switch_maker.widget.clip.w = 100;
-        obj_switch_maker.widget.clip.h = 60;
+        obj_switch_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[0] + 20, cell_y[1] + 20, 100, 60);
         scui_widget_create(&obj_switch_maker, &obj_switch_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
         obj_bar_res.form = scui_object_form_rect_base;
@@ -972,10 +942,7 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         /* 第3行: 尺寸/渐变组合 */
         obj_bar_res.grad = 0;
         obj_bar_res.radius = 15;
-        obj_switch_maker.widget.clip.x = cell_x[0] + 20;
-        obj_switch_maker.widget.clip.y = cell_y[2] + 20;
-        obj_switch_maker.widget.clip.w = 100;
-        obj_switch_maker.widget.clip.h = 60;
+        obj_switch_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[0] + 20, cell_y[2] + 20, 100, 60);
         scui_widget_create(&obj_switch_maker, &obj_switch_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
         obj_bar_res.form = scui_object_form_rect_base;
@@ -994,10 +961,7 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         scui_obj_bar_style(obj_switch_handle, &obj_bar_res);
         
         obj_bar_res.grad = 1;
-        obj_switch_maker.widget.clip.x = cell_x[1] + 10;
-        obj_switch_maker.widget.clip.y = cell_y[2] + 15;
-        obj_switch_maker.widget.clip.w = 120;
-        obj_switch_maker.widget.clip.h = 70;
+        obj_switch_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[1] + 10, cell_y[2] + 15, 120, 70);
         scui_widget_create(&obj_switch_maker, &obj_switch_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
         obj_bar_res.form = scui_object_form_rect_base;
@@ -1017,10 +981,7 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         
         obj_bar_res.grad = 0;
         obj_bar_res.radius = 10;
-        obj_switch_maker.widget.clip.x = cell_x[2] + 30;
-        obj_switch_maker.widget.clip.y = cell_y[2] + 30;
-        obj_switch_maker.widget.clip.w = 80;
-        obj_switch_maker.widget.clip.h = 40;
+        obj_switch_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[2] + 30, cell_y[2] + 30, 80, 40);
         scui_widget_create(&obj_switch_maker, &obj_switch_handle);
         obj_bar_res.part = scui_object_part_rect_bg;
         obj_bar_res.form = scui_object_form_rect_base;
@@ -1085,10 +1046,7 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
         obj_arc_res.gradw   = 0;
         obj_arc_res.grad    = 0;
         obj_arc_res.time    = 3000;
-        obj_spinner_maker.widget.clip.x = 33;
-        obj_spinner_maker.widget.clip.y = 50;
-        obj_spinner_maker.widget.clip.w = arc_w;
-        obj_spinner_maker.widget.clip.h = arc_h;
+        obj_spinner_maker.widget.clip = SCUI_AREA_MAKE_BM(33, 50, arc_w, arc_h);
         scui_widget_create(&obj_spinner_maker, &obj_spinner_handle);
         obj_arc_res.part = scui_object_part_arc_bg;
         obj_arc_res.form = scui_object_form_arc_base;
@@ -1287,10 +1245,7 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
         obj_chart_maker.value_max = 220;
         obj_chart_maker.area.x = 10;
         obj_chart_maker.area.y = 10;
-        obj_chart_maker.widget.clip.x = 13;
-        obj_chart_maker.widget.clip.y = 50;
-        obj_chart_maker.widget.clip.w = 210;
-        obj_chart_maker.widget.clip.h = 180;
+        obj_chart_maker.widget.clip = SCUI_AREA_MAKE_BM(13, 50, 210, 180);
         obj_chart_maker.area.w = obj_chart_maker.widget.clip.w - 10 * 2;
         obj_chart_maker.area.h = obj_chart_maker.widget.clip.h - 10 * 2;
         obj_chart_res.width = 6;

@@ -321,6 +321,17 @@ void scui_widget_alpha_get(scui_handle_t handle, scui_alpha_t *alpha)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     *alpha = widget->alpha;
+    
+    #if 0
+    /* 是否有必要和需要,让alph在使用时继承 */
+    if (widget->buffer || widget->parent == SCUI_HANDLE_INVALID) {
+        return;
+    }
+    
+    scui_alpha_t alpha_p = scui_alpha_cover;
+    scui_widget_alpha_get(widget->parent, &alpha_p);
+    *alpha = scui_alpha_mix(widget->alpha, alpha_p);
+    #endif
 }
 
 /*@brief 控件图片获取
