@@ -1,0 +1,14 @@
+{
+    "type":   "scene",
+    "widget": [
+        {
+            "annotation":              "输入字符测试窗口(输入/输出/字符表/控制按钮)",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.style.indev_ptr":   "true",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_INCHAR",
+            "widget.child_num":         "4",
+            "widget.event_cb":          "scui_test_ui_inchar_event_proc"
+        }
+    ]
+}

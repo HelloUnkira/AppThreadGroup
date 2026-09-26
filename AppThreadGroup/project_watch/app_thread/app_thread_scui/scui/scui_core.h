@@ -63,6 +63,8 @@
 #include "scui_custom_inf.h"        /* 控件(自定义)API */
 #include "scui_string.h"            /* 控件(字符串) */
 #include "scui_string_inf.h"        /* 控件(字符串)API */
+#include "scui_inchar.h"            /* 控件(输入字符) */
+#include "scui_inchar_inf.h"        /* 控件(输入字符)API */
 #include "scui_symbol.h"            /* 控件(符号) */
 #include "scui_symbol_inf.h"        /* 控件(符号)API */
 /* widget(extend): */

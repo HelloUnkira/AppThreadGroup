@@ -75,6 +75,16 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		string_maker->args.color.filter        = true;
 		break;
 	}
+	case scui_widget_type_inchar: {
+		scui_inchar_maker_t *inchar_maker = (scui_inchar_maker_t *)maker;
+		
+		inchar_maker->widget.type                     = scui_widget_type_inchar;
+		inchar_maker->string.args.align_ver           = 2;
+		inchar_maker->string.args.color.color_s.full  = 0xFFFFFFFF;
+		inchar_maker->string.args.color.color_e.full  = 0xFFFFFFFF;
+		inchar_maker->string.args.color.filter        = true;
+		break;
+	}
 	case scui_widget_type_symbol: {
 		scui_symbol_maker_t *symbol_maker = (scui_symbol_maker_t *)maker;
 		

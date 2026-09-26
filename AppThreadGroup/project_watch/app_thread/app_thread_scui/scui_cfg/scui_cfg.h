@@ -222,6 +222,8 @@
 /* string:文本滚动空余间隙 */
 #define SCUI_WIDGET_STRING_SCROLL_ITEM              (75)
 #define SCUI_WIDGET_STRING_SCROLL_LINE              (50)
+/* inchar:输入字符控件光标呼吸周期 */
+#define SCUI_WIDGET_INCHAR_BREATH_TIME              (1000)
 
 /* object:属性和过渡扩充步进, 主体样式 */
 #define SCUI_WIDGET_OBJECT_PROP_STEP                (3)

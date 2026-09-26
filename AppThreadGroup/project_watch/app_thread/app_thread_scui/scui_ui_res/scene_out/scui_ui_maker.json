@@ -1,150 +1,160 @@
 {
-    "type": "scui widget default config",
+    "type":   "scui widget default config",
     "widget": [
         {
-            "class": "scui_widget_type_window",
+            "class":   "scui_widget_type_window",
             "default": {
-                "widget.type": "scui_widget_type_window",
-                "widget.style.buffer": "true",
+                "widget.type":           "scui_widget_type_window",
+                "widget.style.buffer":   "true",
                 "widget.style.fully_bg": "true",
-                "widget.clip.w": "SCUI_HOR_RES",
-                "widget.clip.h": "SCUI_VER_RES",
-                "preload": "1",
-                "level": "0",
-                "switch_enc": "scui_opt_pos_all",
-                "switch_bar": "scui_opt_pos_all",
-                "switch_key": "scui_opt_pos_all",
-                "switch_enc_way": "scui_opt_dir_ver",
-                "switch_bar_way": "scui_opt_dir_ver",
-                "switch_key_id[0]": "scui_event_key_val_down",
-                "switch_key_id[1]": "scui_event_key_val_up",
-                "switch_key_id[2]": "scui_event_key_val_right",
-                "switch_key_id[3]": "scui_event_key_val_left"
+                "widget.clip.w":         "SCUI_HOR_RES",
+                "widget.clip.h":         "SCUI_VER_RES",
+                "preload":               "1",
+                "level":                 "0",
+                "switch_enc":            "scui_opt_pos_all",
+                "switch_bar":            "scui_opt_pos_all",
+                "switch_key":            "scui_opt_pos_all",
+                "switch_enc_way":        "scui_opt_dir_ver",
+                "switch_bar_way":        "scui_opt_dir_ver",
+                "switch_key_id[0]":      "scui_event_key_val_down",
+                "switch_key_id[1]":      "scui_event_key_val_up",
+                "switch_key_id[2]":      "scui_event_key_val_right",
+                "switch_key_id[3]":      "scui_event_key_val_left"
             }
         },
         {
-            "class": "scui_widget_type_layout",
+            "class":   "scui_widget_type_layout",
             "default": {
-                "widget.type": "scui_widget_type_layout",
+                "widget.type":   "scui_widget_type_layout",
                 "widget.clip.w": "SCUI_WIDGET_AUTO_W",
                 "widget.clip.h": "SCUI_WIDGET_AUTO_H"
             }
         },
         {
-            "class": "scui_widget_type_scroll",
+            "class":   "scui_widget_type_scroll",
             "default": {
-                "widget.type": "scui_widget_type_scroll",
+                "widget.type":            "scui_widget_type_scroll",
                 "widget.style.indev_enc": "true",
                 "widget.style.indev_key": "true",
-                "widget.clip.w": "SCUI_HOR_RES",
-                "widget.clip.h": "SCUI_VER_RES",
-                "pos": "scui_opt_pos_c",
-                "dir": "scui_opt_dir_ver",
-                "skip": "scui_opt_pos_all",
-                "space": "10",
-                "fling_page": "1",
-                "springback": "70",
-                "keyid_fdir": "SCUI_WIDGET_SCROLL_KEY_FDIR",
-                "keyid_bdir": "SCUI_WIDGET_SCROLL_KEY_BDIR"
+                "widget.clip.w":          "SCUI_HOR_RES",
+                "widget.clip.h":          "SCUI_VER_RES",
+                "pos":                    "scui_opt_pos_c",
+                "dir":                    "scui_opt_dir_ver",
+                "skip":                   "scui_opt_pos_all",
+                "space":                  "10",
+                "fling_page":             "1",
+                "springback":             "70",
+                "keyid_fdir":             "SCUI_WIDGET_SCROLL_KEY_FDIR",
+                "keyid_bdir":             "SCUI_WIDGET_SCROLL_KEY_BDIR"
             }
         },
         {
-            "class": "scui_widget_type_custom",
+            "class":   "scui_widget_type_custom",
             "default": {
                 "widget.type": "scui_widget_type_custom"
             }
         },
         {
-            "class": "scui_widget_type_string",
+            "class":   "scui_widget_type_string",
             "default": {
-                "widget.type": "scui_widget_type_string",
-                "widget.clip.w": "SCUI_WIDGET_AUTO_W",
-                "widget.clip.h": "SCUI_WIDGET_AUTO_H",
-                "args.line_width": "2",
-                "args.align_ver": "2",
+                "widget.type":             "scui_widget_type_string",
+                "widget.clip.w":           "SCUI_WIDGET_AUTO_W",
+                "widget.clip.h":           "SCUI_WIDGET_AUTO_H",
+                "args.line_width":         "2",
+                "args.align_ver":          "2",
                 "args.color.color_s.full": "0xFFFFFFFF",
                 "args.color.color_e.full": "0xFFFFFFFF",
-                "args.color.filter": "true"
+                "args.color.filter":       "true"
             }
         },
         {
-            "class": "scui_widget_type_symbol",
+            "class":   "scui_widget_type_inchar",
             "default": {
-                "widget.type": "scui_widget_type_symbol",
-                "widget.clip.w": "SCUI_WIDGET_AUTO_W",
-                "widget.clip.h": "SCUI_WIDGET_AUTO_H",
+                "widget.type":                    "scui_widget_type_inchar",
+                "string.args.align_ver":          "2",
+                "string.args.color.color_s.full": "0xFFFFFFFF",
+                "string.args.color.color_e.full": "0xFFFFFFFF",
+                "string.args.color.filter":       "true"
+            }
+        },
+        {
+            "class":   "scui_widget_type_symbol",
+            "default": {
+                "widget.type":      "scui_widget_type_symbol",
+                "widget.clip.w":    "SCUI_WIDGET_AUTO_W",
+                "widget.clip.h":    "SCUI_WIDGET_AUTO_H",
                 "color.color.full": "0xFFFFFFFF"
             }
         },
         {
-            "class": "scui_widget_type_roller",
+            "class":   "scui_widget_type_roller",
             "default": {
-                "widget.type": "scui_widget_type_roller",
+                "widget.type":      "scui_widget_type_roller",
                 "widget.child_num": "60",
-                "scroll.pos": "scui_opt_pos_c",
-                "scroll.dir": "scui_opt_dir_ver",
-                "scroll.skip": "scui_opt_pos_none",
-                "scroll.loop": "true"
+                "scroll.pos":       "scui_opt_pos_c",
+                "scroll.dir":       "scui_opt_dir_ver",
+                "scroll.skip":      "scui_opt_pos_none",
+                "scroll.loop":      "true"
             }
         },
         {
-            "class": "scui_widget_type_ximage",
+            "class":   "scui_widget_type_ximage",
             "default": {
-                "widget.type": "scui_widget_type_ximage",
+                "widget.type":   "scui_widget_type_ximage",
                 "widget.clip.w": "SCUI_WIDGET_AUTO_W",
                 "widget.clip.h": "SCUI_WIDGET_AUTO_H"
             }
         },
         {
-            "class": "scui_widget_type_xwatch",
+            "class":   "scui_widget_type_xwatch",
             "default": {
                 "widget.type": "scui_widget_type_xwatch"
             }
         },
         {
-            "class": "scui_widget_type_object",
+            "class":   "scui_widget_type_object",
             "default": {
                 "widget.type": "scui_widget_type_object"
             }
         },
         {
-            "class": "scui_widget_type_obj_btn",
+            "class":   "scui_widget_type_obj_btn",
             "default": {
                 "widget.type": "scui_widget_type_obj_btn"
             }
         },
         {
-            "class": "scui_widget_type_obj_arc",
+            "class":   "scui_widget_type_obj_arc",
             "default": {
                 "widget.type": "scui_widget_type_obj_arc"
             }
         },
         {
-            "class": "scui_widget_type_obj_bar",
+            "class":   "scui_widget_type_obj_bar",
             "default": {
                 "widget.type": "scui_widget_type_obj_bar"
             }
         },
         {
-            "class": "scui_widget_type_obj_chart",
+            "class":   "scui_widget_type_obj_chart",
             "default": {
                 "widget.type": "scui_widget_type_obj_chart"
             }
         },
         {
-            "class": "scui_widget_type_obj_slider",
+            "class":   "scui_widget_type_obj_slider",
             "default": {
                 "widget.type": "scui_widget_type_obj_slider"
             }
         },
         {
-            "class": "scui_widget_type_obj_switch",
+            "class":   "scui_widget_type_obj_switch",
             "default": {
                 "widget.type": "scui_widget_type_obj_switch"
             }
         },
         {
-            "class": "scui_widget_type_obj_spinner",
+            "class":   "scui_widget_type_obj_spinner",
             "default": {
                 "widget.type": "scui_widget_type_obj_spinner"
             }

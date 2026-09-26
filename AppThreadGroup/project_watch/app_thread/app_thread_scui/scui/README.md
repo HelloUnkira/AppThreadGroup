@@ -53,10 +53,6 @@
         重写一下动画语义，外部控制一下fg是否可以显示，用alpha量
         此时的knob就可以控制一个完整radius了
     
-    评估:textarea,还是有很多用处的,有必要实现?,光标移动
-        textarea->inchar控件, 光标直接用填色矩形完事
-        但是为什么不直接用string呢???
-    
     评估:spinbox,文本框,仅仅数字符号显示,从textarea继承
         可以用scui_widget_draw_string,和custom一样的那种
         但是为什么不直接用string呢???
@@ -70,12 +66,19 @@
     
     评估:line,绘制轨迹图,貌似无意义
     
-    评估:msgbox,目前的window支持该效果，是否单独构建?感觉没什么必要性
     
-        
     
+    优先级:低
     将EGUI降档,移植Lvgl后端蒙版
     实现基于蒙版输出的alpha图形
+    
+    优先级:低
+    inchar控件,光标显示位置偏移
+    
+    优先级:低
+    测试layout flex
+    水平内容超出layout宽度时会偏移到首项不显示，后面偏移
+    测试:将inchar测试界面的flex下string改为X32
     
     优先级:低
     给主题界面做一下DIY优化特效

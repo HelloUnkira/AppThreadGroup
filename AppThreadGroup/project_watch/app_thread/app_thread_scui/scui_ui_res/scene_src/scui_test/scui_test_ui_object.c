@@ -1235,6 +1235,7 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
         }
         
         scui_obj_chart_res_t obj_chart_res = {0};
+        obj_chart_res.alpha = scui_alpha_cover;
         obj_chart_res.color.color.full = 0xFFFF0000;
         
         /* 第1行: 柱状/折线 */

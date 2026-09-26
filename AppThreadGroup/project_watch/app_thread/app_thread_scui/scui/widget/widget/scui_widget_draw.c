@@ -203,8 +203,9 @@ void scui_widget_draw_ctx_string(scui_handle_t handle, scui_area_t *target, scui
     
     /* 当前本接口作为控件专用绘制接口: */
     scui_string_args_t *str_args = draw_dsc->str_args;
-    SCUI_ASSERT(widget->type == scui_widget_type_string ||
-                widget->type == scui_widget_type_custom);
+    bool string_type = scui_widget_type_check(handle, scui_widget_type_string);
+    bool custom_type = scui_widget_type_check(handle, scui_widget_type_custom);
+    SCUI_ASSERT(string_type || custom_type);
     
     scui_clip_btra(widget->clip_set, node) {
         scui_clip_unit_t *unit = scui_clip_unit(node);

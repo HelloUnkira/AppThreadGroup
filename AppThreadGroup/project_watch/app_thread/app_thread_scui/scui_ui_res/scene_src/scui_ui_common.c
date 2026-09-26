@@ -85,6 +85,7 @@ bool scui_ui_scene_test(void)
     
     static scui_handle_t test_ui_list[] = {
         SCUI_UI_SCENE_TEST_UI_GRAPH,
+        SCUI_UI_SCENE_TEST_UI_INCHAR,
         SCUI_UI_SCENE_TEST_UI_INDEV_BAR,
         SCUI_UI_SCENE_TEST_UI_INDEV_ENC,
         SCUI_UI_SCENE_TEST_UI_INDEV_KEY,
