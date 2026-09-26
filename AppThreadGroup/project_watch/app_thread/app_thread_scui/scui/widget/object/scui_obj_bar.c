@@ -36,6 +36,7 @@ void scui_obj_bar_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     /* 资源同步与构造 */
     obj_bar->way        = obj_bar_maker->way;
+    obj_bar->rev        = obj_bar_maker->rev;
     obj_bar->value_cur  = obj_bar_maker->value_cur;
     obj_bar->value_lim  = obj_bar_maker->value_lim;
     obj_bar->value_int  = obj_bar_maker->value_int;
@@ -85,13 +86,34 @@ void scui_obj_bar_style(scui_handle_t handle, scui_obj_bar_res_t *res)
     sub.rect.grad_c.color32     = res->color.color_e;
     
     if (res->part == scui_object_part_rect_fg) {
+        /* 反向: 前景对齐翻转(从另一端生长) */
+        if (obj_bar->rev) {
+            scui_opt_pos_t align = scui_opt_pos_none;
+            align |= (res->align & scui_opt_pos_l) ? scui_opt_pos_r : 0;
+            align |= (res->align & scui_opt_pos_r) ? scui_opt_pos_l : 0;
+            align |= (res->align & scui_opt_pos_u) ? scui_opt_pos_d : 0;
+            align |= (res->align & scui_opt_pos_d) ? scui_opt_pos_u : 0;
+            sub.rect.align.align = align;
+        }
         sub.rect.width.number  = obj_bar->way ? area_w : 0;
         sub.rect.height.number = obj_bar->way ? 0 : area_h;
     }
     
     if (res->part == scui_object_part_rect_knob) {
-        sub.rect.width.number  = obj_bar->way ? area_w : 0;
-        sub.rect.height.number = obj_bar->way ? 0 : area_h;
+        /* knob尺寸/端点由update_value统一管理(fg更新时双轴写入), 此处仅同步当前值 */
+        scui_object_prop_t prop_knob = {0};
+        prop_knob.part  = scui_object_part_rect_knob;
+        prop_knob.form  = res->form;
+        prop_knob.state = scui_object_state_def;
+        prop_knob.style = scui_object_style_rect_width;
+        scui_object_prop_sync(handle, &prop_knob);
+        sub.rect.width.number = prop_knob.data.number;
+        prop_knob.style = scui_object_style_rect_height;
+        scui_object_prop_sync(handle, &prop_knob);
+        sub.rect.height.number = prop_knob.data.number;
+        prop_knob.style = scui_object_style_rect_point;
+        scui_object_prop_sync(handle, &prop_knob);
+        sub.rect.point.point = prop_knob.data.point;
     }
     
     sub.state = scui_object_state_def;
@@ -200,15 +222,25 @@ void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool a
         scui_coord_t size_p = scui_min(fg_p, size_knob);
         scui_coord_t size_n = scui_min(fg_n, size_knob);
         
-        /* 左/上边缘贴fg增长端 */
+        /* 左/上边缘贴fg增长端(反向时贴另一端) */
         scui_point_t point_p = {0};
         scui_point_t point_n = {0};
-        if (way) {
-            point_p.x = 0;              point_p.y = fg_p - size_p;
-            point_n.x = 0;              point_n.y = fg_n - size_n;
+        if (obj_bar->rev) {
+            if (way) {
+                point_p.x = 0; point_p.y = dst_part.h - fg_p;
+                point_n.x = 0; point_n.y = dst_part.h - fg_n;
+            } else {
+                point_p.x = dst_part.w - fg_p; point_p.y = 0;
+                point_n.x = dst_part.w - fg_n; point_n.y = 0;
+            }
         } else {
-            point_p.x = fg_p - size_p;  point_p.y = 0;
-            point_n.x = fg_n - size_n;  point_n.y = 0;
+            if (way) {
+                point_p.x = 0; point_p.y = fg_p - size_p;
+                point_n.x = 0; point_n.y = fg_n - size_n;
+            } else {
+                point_p.x = fg_p - size_p; point_p.y = 0;
+                point_n.x = fg_n - size_n; point_n.y = 0;
+            }
         }
         
         tran_knob.part    = scui_object_part_rect_knob;
@@ -269,11 +301,22 @@ void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool a
         if (size_knob > 0) {
             prop_knob.data = tran_knob.data_n;
             scui_object_prop_add(handle, &prop_knob);
-            prop_knob.style = way ? scui_object_style_rect_height
-                                  : scui_object_style_rect_width;
+            
+            if (way) prop_knob.style = scui_object_style_rect_height;
+            else prop_knob.style = scui_object_style_rect_width;
+            
             prop_knob.data = tran_size.data_n;
             scui_object_prop_add(handle, &prop_knob);
         }
+    }
+    
+    /* knob固定轴(直径=轨道厚度): 恒等, 直接写样式 */
+    if (size_knob > 0) {
+        if (way) prop_knob.style = scui_object_style_rect_width;
+        else prop_knob.style = scui_object_style_rect_height;
+        
+        prop_knob.data.number = size_knob;
+        scui_object_prop_add(handle, &prop_knob);
     }
 }
 

@@ -13,17 +13,35 @@ static const char scui_ui_inchar_chars[] = "789/456*123-0.+=";
 
 /* 控制按钮(句柄/文本) */
 static const char * const scui_ui_inchar_btn_text[] = {
-    "next", "prev", "left", "mid", "right", "refr",
-    "del",  "clr",  "end",  "hide",
+    "next", "prev", "L/M/R", "c_p", "c_n", "hide", "ins",
+    "rep",  "del",  "clr",  "head", "tail",
 };
 
 static struct {
-    scui_handle_t box;      /* 输入框 */
-    scui_handle_t out;      /* 输出框 */
-    scui_handle_t btn[10];  /* 控制按钮 */
+    scui_handle_t box;          /* 输入框 */
+    scui_handle_t out;          /* 输出框 */
+    scui_handle_t btn[12];      /* 控制按钮 */
+    bool          mode_rep;     /* 模式状态(替换:真;插入:假) */
 } * scui_ui_res_local = NULL;
 
-/*@brief 字符矩阵条目事件回调(点击输入字符)
+/*@brief 输出框同步(内容变更指令后自动执行)
+ */
+static void scui_test_ui_inchar_refr(void)
+{
+    if (scui_ui_res_local->out == SCUI_HANDLE_INVALID)
+        return;
+    
+    scui_coord_t str_num = 0;
+    scui_inchar_str_num(scui_ui_res_local->box, &str_num);
+    
+    uint8_t *out_text = SCUI_MEM_ZALLOC(scui_mem_type_user, str_num + 5 + 1);
+    memcpy(out_text, "Out: ", 5);
+    scui_inchar_str_utf8(scui_ui_res_local->box, out_text + 5);
+    scui_string_update_str(scui_ui_res_local->out, out_text);
+    SCUI_MEM_FREE(out_text);
+}
+
+/*@brief 字符矩阵条目事件回调(点击自动输入)
  *@param event 事件
  */
 void scui_test_ui_inchar_char_event_proc(scui_event_t *event)
@@ -34,8 +52,17 @@ void scui_test_ui_inchar_char_event_proc(scui_event_t *event)
         if (index < 0 || index >= (scui_coord_t)scui_arr_len(scui_ui_inchar_chars) - 1)
             break;
         
+        /* 自动输入(应用当前模式状态) */
         uint8_t char_text[2] = {(uint8_t)scui_ui_inchar_chars[index], 0};
-        scui_inchar_char_add(scui_ui_res_local->box, char_text, true);
+        if (scui_ui_res_local->mode_rep) {
+            scui_coord_t cursor_idx = 0;
+            scui_inchar_cursor_get(scui_ui_res_local->box, &cursor_idx);
+            scui_inchar_char_rep(scui_ui_res_local->box,
+                cursor_idx, char_text);
+        } else {
+            scui_inchar_char_add(scui_ui_res_local->box, char_text);
+        }
+        scui_test_ui_inchar_refr();
         scui_event_mask_over(event);
         break;
     }
@@ -69,62 +96,60 @@ void scui_test_ui_inchar_btn_event_proc(scui_event_t *event)
             scui_inchar_cursor_set(scui_ui_res_local->box, index - 1);
             break;
         }
-        case 2: {   /* 左对齐 */
+        case 2: {   /* L/M/R: 左/中/右对齐循环切换 */
             scui_string_t *string = (void *)scui_handle_source_check(scui_ui_res_local->box);
-            string->args.align_hor = 0;
+            if (string->args.align_hor == 0)       string->args.align_hor = 2;
+            else if (string->args.align_hor == 2)  string->args.align_hor = 1;
+            else                                    string->args.align_hor = 0;
             string->args.update = true;
             scui_widget_draw(scui_ui_res_local->box, NULL, false, 0);
             break;
         }
-        case 3: {    /* 中对齐 */
-            scui_string_t *string = (void *)scui_handle_source_check(scui_ui_res_local->box);
-            string->args.align_hor = 2;
-            string->args.update = true;
-            scui_widget_draw(scui_ui_res_local->box, NULL, false, 0);
+        case 3: {   /* c_p: 方向标记为光标前 */
+            scui_inchar_char_ins_way(scui_ui_res_local->box, true);
             break;
         }
-        case 4: {   /* 右对齐 */
-            scui_string_t *string = (void *)scui_handle_source_check(scui_ui_res_local->box);
-            string->args.align_hor = 1;
-            string->args.update = true;
-            scui_widget_draw(scui_ui_res_local->box, NULL, false, 0);
+        case 4: {   /* c_n: 方向标记为光标后 */
+            scui_inchar_char_ins_way(scui_ui_res_local->box, false);
             break;
         }
-        case 5: {   /* refr: 更新输出 */
-            if (scui_ui_res_local->out != SCUI_HANDLE_INVALID) {
-                
-                scui_coord_t str_num = 0;
-                scui_inchar_str_num(scui_ui_res_local->box, &str_num);
-                
-                uint8_t *out_text = SCUI_MEM_ZALLOC(scui_mem_type_user, str_num + 5 + 1);
-                scui_inchar_str_utf8(scui_ui_res_local->box, out_text + 5);
-                scui_string_update_str(scui_ui_res_local->out, out_text);
-                SCUI_MEM_FREE(out_text);
-            }
+        case 5: {   /* hide: 光标显示切换 */
+            static bool hide = false;
+            hide = hide ? false : true;
+            scui_inchar_cursor(scui_ui_res_local->box, hide);
             break;
         }
-        case 6:     /* del: 删除光标前 */
-            scui_inchar_char_del(scui_ui_res_local->box, true);
+        case 6: {   /* ins: 模式状态为插入(后续输入自动插入) */
+            scui_ui_res_local->mode_rep = false;
             break;
-        case 7: {   /* clr: 清空 */
+        }
+        case 7: {   /* rep: 模式状态为替换(后续输入自动替换) */
+            scui_ui_res_local->mode_rep = true;
+            break;
+        }
+        case 8: {   /* del: 独立删除光标位置字符 */
+            scui_inchar_char_del(scui_ui_res_local->box);
+            scui_test_ui_inchar_refr();
+            break;
+        }
+        case 9: {   /* clr: 清空 */
             for (scui_coord_t num = 0; true; num) {
                 scui_inchar_char_num(scui_ui_res_local->box, &num);
                 if (num <= 0) break;
                 
-                scui_inchar_char_rem(scui_ui_res_local->box, 0, true);
+                scui_inchar_char_rem(scui_ui_res_local->box, 0);
             }
+            scui_test_ui_inchar_refr();
             break;
         }
-        case 8: {   /* end: 光标末尾 */
+        case 10: {  /* head: 光标头部 */
+            scui_inchar_cursor_set(scui_ui_res_local->box, 0);
+            break;
+        }
+        case 11: {  /* tail: 光标尾部 */
             scui_coord_t num = 0;
             scui_inchar_char_num(scui_ui_res_local->box, &num);
             scui_inchar_cursor_set(scui_ui_res_local->box, num);
-            break;
-        }
-        case 9: {   /* hide: 光标显示切换 */
-            static bool hide = false;
-            hide = hide ? false : true;
-            scui_inchar_cursor(scui_ui_res_local->box, hide);
             break;
         }
         default:
@@ -182,11 +207,12 @@ void scui_test_ui_inchar_event_proc(scui_event_t *event)
             scui_string_update_str(scui_ui_res_local->out, (uint8_t *)"Out: ");
         }
         
-        /* 控制按钮: flex 布局(行1 6个/行2 4个, 水平均分填充) */
+        /* 控制按钮: flex 布局(行1 6个/行2 6个, 水平均分填充) */
         {
             scui_handle_t flex_handle = SCUI_HANDLE_INVALID;
             scui_layout_maker_define(layout_maker);
-            scui_widget_maker_linker(&layout_maker.widget, 10, event->object);
+            scui_widget_maker_linker(&layout_maker.widget,
+                (scui_coord_t)scui_arr_len(scui_ui_inchar_btn_text), event->object);
             layout_maker.widget.clip     = SCUI_AREA_MAKE_BM(0, 124, SCUI_HOR_RES, SCUI_WIDGET_AUTO_H);
             layout_maker.widget.style.fully_bg = true;
             layout_maker.widget.color.color.full = 0xFF1F1F1F;
@@ -205,7 +231,7 @@ void scui_test_ui_inchar_event_proc(scui_event_t *event)
                 btn_maker.widget.style.indev_ptr = true;
                 btn_maker.widget.event_cb     = scui_test_ui_inchar_btn_event_proc;
                 btn_maker.widget.color.color.full = 0xFF2A2A2A;
-                btn_maker.font_idx            = SCUI_FONT_IDX_X24;
+                btn_maker.font_idx            = SCUI_FONT_IDX_X32;
                 btn_maker.args.lang           = scui_lang_type_ascii;
                 btn_maker.args.color.color.full = 0xFFFFFFFF;
                 btn_maker.args.align_hor      = 2;
@@ -223,7 +249,7 @@ void scui_test_ui_inchar_event_proc(scui_event_t *event)
             scui_layout_maker_define(layout_maker);
             scui_widget_maker_linker(&layout_maker.widget,
                 (scui_coord_t)scui_arr_len(scui_ui_inchar_chars) - 1, event->object);
-            layout_maker.widget.clip         = SCUI_AREA_MAKE_BM(0, 206, SCUI_HOR_RES, 246);
+            layout_maker.widget.clip         = SCUI_AREA_MAKE_BM(0, 220, SCUI_HOR_RES, 246);
             layout_maker.widget.style.fully_bg = true;
             layout_maker.widget.color.color.full = 0xFF252525;
             layout_maker.type               = scui_layout_type_grid;

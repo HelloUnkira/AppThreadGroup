@@ -581,12 +581,13 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
         scui_coord_t cell_x[3] = {13, 163, 313};
         scui_coord_t cell_y[3] = {48, 158, 268};
         
-        /* 第1行: 水平条(值30/70/100) */
+        /* 第1行: 水平条(值30/70/100): 一半反向 */
         obj_bar_maker.value_lim = 100;
         obj_bar_maker.way = 0;
         obj_bar_res.radius = 7;
         obj_bar_res.grad = 0;
         for (uint32_t idx = 0; idx < 3; idx++) {
+            obj_bar_maker.rev = (idx == 1);
             obj_bar_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[idx], cell_y[0] + 38, 140, 24);
             scui_widget_create(&obj_bar_maker, &obj_bar_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
@@ -615,6 +616,7 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
                 obj_bar_maker.value_lim = 5;
                 obj_bar_maker.value_int = 1;
             }
+            obj_bar_maker.rev = (idx == 2);
             obj_bar_maker.widget.clip.x = cell_x[idx];
             scui_widget_create(&obj_bar_maker, &obj_bar_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
@@ -641,6 +643,7 @@ void scui_test_ui_object_page_3_event_proc(scui_event_t *event)
                 obj_bar_maker.value_lim = 5;
                 obj_bar_maker.value_int = 1;
             }
+            obj_bar_maker.rev = (idx == 1);
             obj_bar_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[idx] + 58, cell_y[2], 24, 100);
             scui_widget_create(&obj_bar_maker, &obj_bar_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
@@ -731,6 +734,7 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
         obj_bar_res.radius = 7;
         obj_bar_res.grad = 0;
         for (uint32_t idx = 0; idx < 3; idx++) {
+            obj_slider_maker.obj_bar.rev = (idx == 1);
             obj_slider_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[idx], cell_y[0] + 38, 140, 24);
             scui_widget_create(&obj_slider_maker, &obj_slider_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
@@ -759,6 +763,7 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
                 obj_slider_maker.obj_bar.value_lim = 5;
                 obj_slider_maker.obj_bar.value_int = 1;
             }
+            obj_slider_maker.obj_bar.rev = (idx == 2);
             obj_slider_maker.widget.clip.x = cell_x[idx];
             scui_widget_create(&obj_slider_maker, &obj_slider_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
@@ -781,6 +786,7 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
         obj_bar_res.radius = 7;
         for (uint32_t idx = 0; idx < 3; idx++) {
             obj_bar_res.grad = (idx == 1) ? 1 : 0;
+            obj_slider_maker.obj_bar.rev = (idx == 1);
             obj_slider_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[idx] + 58, cell_y[2], 24, 100);
             scui_widget_create(&obj_slider_maker, &obj_slider_handle);
             obj_bar_res.part = scui_object_part_rect_bg;
@@ -861,6 +867,7 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
         obj_bar_res.grad = 0;
         for (uint32_t idx = 0; idx < 3; idx++) {
             obj_bar_res.radius = 10;
+            obj_switch_maker.obj_bar.rev = (idx == 1);
             obj_switch_maker.widget.clip = SCUI_AREA_MAKE_BM(cell_x[idx] + (140 - cell_w[idx]) / 2, cell_y[0] + (100 - cell_h[idx]) / 2, cell_w[idx], cell_h[idx]);
             scui_widget_create(&obj_switch_maker, &obj_switch_handle);
             obj_bar_res.part = scui_object_part_rect_bg;

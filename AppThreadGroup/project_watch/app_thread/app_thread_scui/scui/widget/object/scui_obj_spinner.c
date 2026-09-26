@@ -49,6 +49,7 @@ void scui_obj_spinner_burn(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_spinner));
     scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_obj_arc_t *obj_arc = (void *)widget;
     scui_obj_spinner_t *obj_spinner = (void *)widget;
     
     /* 析构派生控件实例 */
@@ -63,6 +64,7 @@ void scui_obj_spinner_invoke(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_obj_arc_t *obj_arc = (void *)widget;
+    scui_obj_spinner_t *obj_spinner = (void *)widget;
     
     /* 基类处理(绘制/过渡动画推进) */
     scui_obj_arc_invoke(event);

@@ -9,6 +9,7 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_sbitfd_t way:1;            /* 方向(水平:0;垂直:1) */
+    scui_sbitfd_t rev:1;            /* 反向(从另一端生长) */
     scui_coord3_t value_lim;        /* 进度限制(默认:100) */
     scui_coord_t  value_cur;        /* 当前进度 */
     scui_sbitfd_t value_int:1;      /* 进度单元 */
@@ -24,6 +25,7 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_sbitfd_t way:1;            /* 方向(水平:0;垂直:1) */
+    scui_sbitfd_t rev:1;            /* 反向(从另一端生长) */
     scui_coord3_t value_lim;        /* 进度限制(默认:100) */
     scui_coord_t  value_cur;        /* 当前进度 */
     scui_sbitfd_t value_int:1;      /* 进度单元 */

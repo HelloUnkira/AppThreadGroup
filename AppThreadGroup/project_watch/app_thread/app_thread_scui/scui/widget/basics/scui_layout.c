@@ -309,7 +309,11 @@ static void scui_layout_flex_exec(scui_layout_t *layout)
         
         if (main_slots > 0)
             main_gap_extra = main_free / main_slots;
+        
     }
+    
+    /* 整体溢出: 内容放不下layout, 全部轨道贴左(保证首项可见且组间起点一致) */
+    bool over_main = (auto_main > main_extent);
     
     for (group_idx = 0; group_idx < group_cnt; group_idx++) {
         track_main_gap[group_idx] = main_span + main_gap_extra;
@@ -317,13 +321,26 @@ static void scui_layout_flex_exec(scui_layout_t *layout)
         /* 轨道实际主轴宽(含均分增量) → 逐轨道剩余 → 按轨道间对齐定起点 */
         scui_coord_t track_use = track_main_size[group_idx] + main_gap_extra * (track_child_num[group_idx] - 1);
         scui_coord_t track_free = main_extent - track_use;
+        
+        /* 溢出: 压缩轨道内间距收拢内容(间距最小0), 元素本身放不下才右裁 */
+        if (track_free < 0 && track_child_num[group_idx] > 1) {
+            scui_coord_t elem_sum = track_main_size[group_idx] - main_span * (track_child_num[group_idx] - 1);
+            scui_coord_t gap_max = (main_extent - elem_sum) / (track_child_num[group_idx] - 1);
+            if (gap_max < 0) gap_max = 0;
+            if (track_main_gap[group_idx] > gap_max)
+                track_main_gap[group_idx] = gap_max;
+            track_use = elem_sum + track_main_gap[group_idx] * (track_child_num[group_idx] - 1);
+            track_free = main_extent - track_use;
+        }
         if (track_free < 0) track_free = 0;
         
         scui_coord_t main_start = 0;
-        if (align_main == scui_opt_pos_r || align_main == scui_opt_pos_d)
-            main_start = track_free;
-        else if (align_main == scui_opt_pos_hor || align_main == scui_opt_pos_ver)
-            main_start = track_free / 2;
+        if (!over_main) {
+            if (align_main == scui_opt_pos_r || align_main == scui_opt_pos_d)
+                main_start = track_free;
+            else if (align_main == scui_opt_pos_hor || align_main == scui_opt_pos_ver)
+                main_start = track_free / 2;
+        }
         
         track_main_cur[group_idx] = main_start;
     }

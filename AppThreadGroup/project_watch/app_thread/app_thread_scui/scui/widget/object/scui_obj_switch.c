@@ -47,6 +47,7 @@ void scui_obj_switch_burn(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_switch));
     scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_obj_bar_t *obj_bar = (void *)widget;
     scui_obj_switch_t *obj_switch = (void *)widget;
     
     /* 析构派生控件实例 */
@@ -61,6 +62,7 @@ void scui_obj_switch_invoke(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_obj_bar_t *obj_bar = (void *)widget;
+    scui_obj_switch_t *obj_switch = (void *)widget;
     
     /* 基类处理(绘制/过渡动画推进) */
     scui_obj_bar_invoke(event);

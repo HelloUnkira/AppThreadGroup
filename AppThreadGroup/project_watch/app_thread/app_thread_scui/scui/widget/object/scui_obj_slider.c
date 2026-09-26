@@ -47,6 +47,7 @@ void scui_obj_slider_burn(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_slider));
     scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_obj_bar_t *obj_bar = (void *)widget;
     scui_obj_slider_t *obj_slider = (void *)widget;
     
     /* 析构派生控件实例 */
@@ -61,27 +62,31 @@ void scui_obj_slider_invoke(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_obj_bar_t *obj_bar = (void *)widget;
+    scui_obj_slider_t *obj_slider = (void *)widget;
     
     /* 基类处理(绘制/过渡动画推进) */
     scui_obj_bar_invoke(event);
     
     switch (event->type) {
+    case scui_event_ptr_down: {
+        /* 记录按下基准(值/点), 值不变 */
+        scui_point_t ptr_c = event->ptr_c;
+        obj_slider->value_base = obj_bar->value_cur;
+        obj_slider->point_base = obj_bar->way ? ptr_c.y : ptr_c.x;
+        scui_event_mask_over(event);
+        break;
+    }
     case scui_event_ptr_move: {
         
-        scui_point_t ptr_c = event->ptr_e;
-        scui_area_t  dst_part = widget->clip;
-        scui_area_m_to_s(&dst_part, &dst_part);
+        /* 增量跟手: 从按下基准起始, 按位移推进(无跳变) */
+        scui_point_t ptr_e = event->ptr_e;
+        scui_coord_t size_c = obj_bar->way ? widget->clip.h : widget->clip.w;
+        scui_coord_t delta = (obj_bar->way ? ptr_e.y : ptr_e.x) - obj_slider->point_base;
         
-        scui_coord3_t value_c = 0.0f;
-        scui_coord3_t value_d = obj_bar->value_lim;
-        /* 取最后的落点计算百分比值就地更新 */
-        if (obj_bar->way) {
-            value_c = scui_map(ptr_c.y, dst_part.y1, dst_part.y2, 0.0f, value_d);
-            value_c = scui_clamp(value_c, 0.0f, value_d);
-        } else {
-            value_c = scui_map(ptr_c.x, dst_part.x1, dst_part.x2, 0.0f, value_d);
-            value_c = scui_clamp(value_c, 0.0f, value_d);
-        }
+        scui_coord3_t value_c = obj_slider->value_base;
+        if (obj_bar->rev) value_c -= (scui_coord3_t)delta * obj_bar->value_lim / size_c;
+        else value_c += (scui_coord3_t)delta * obj_bar->value_lim / size_c;
+        value_c = scui_clamp(value_c, 0.0f, obj_bar->value_lim);
         
         /* slider无动画跟手 */
         scui_obj_bar_update_value(widget->myself, value_c, false);

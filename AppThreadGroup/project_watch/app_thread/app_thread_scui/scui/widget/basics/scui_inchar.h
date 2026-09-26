@@ -14,7 +14,8 @@ typedef struct {
     scui_color_t    color;      /* 光标颜色 */
     scui_sbitfd_t   hide:1;     /* 光标隐藏 */
     /* 内部域: */
-    scui_coord_t    breath_t;   /* 光标呼吸计时 */
+    scui_sbitfd_t   prev:1;     /* 方向标记(前向:真;后向:假) */
+    scui_coord_t    bre_time;   /* 光标呼吸计时 */
     scui_coord_t    str_num;    /* 当前字符数量 */
     scui_coord_t   *str_width;  /* 字符宽度 */
     scui_coord_t   *ofs_utf8;   /* 字符偏移(utf8) */

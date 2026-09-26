@@ -40,45 +40,31 @@
     让俩个都在一个里面
     
     优先级:高
-    渲染:
-    
     控件:支持lvgl式渲染(有限度)
-    评估:bar支持俩端生长<->是否有必要(s,e)?
-    评估:chart扩充(参考完整效果)
-    评估:checkbox一个框框里面带symbol
-    评估:dropdown折叠效果，这个应该考虑一下升级到外部组件
-    
-    评估:slider扩充<>让knob去捕获，增加press效果
-    评估:switch扩充<>让fg可以不绘制，当距离不够的时候
-        重写一下动画语义，外部控制一下fg是否可以显示，用alpha量
-        此时的knob就可以控制一个完整radius了
-    
-    评估:spinbox,文本框,仅仅数字符号显示,从textarea继承
-        可以用scui_widget_draw_string,和custom一样的那种
-        但是为什么不直接用string呢???
-    
-    评估:led是否需要，可以做着玩，问题倒不大
-    评估:scale是否需要，可以做着玩，问题倒不大
-    评估:btn_mat必要(支持布局, item DIY)(待研究:每一个item都能DIY???)
-         btn_mat其实也可以用layout+btn实现，但这种其实是为了省控件
-             calendar继承的btn_mat，只需要给plug加一个计算万年历的即可
-             剩下的就是简要的布局游戏了，keyboard好像也差不多
-    
-    评估:line,绘制轨迹图,貌似无意义
+        
+        评估:chart扩充(参考完整效果)
+        评估:checkbox一个框框里面带symbol
+        评估:dropdown折叠效果，这个应该考虑一下升级到外部组件
+        
+        评估:slider扩充<>让knob去捕获，增加press效果
+        评估:switch扩充<>让fg可以不绘制，当距离不够的时候
+            重写一下动画语义，外部控制一下fg是否可以显示，用alpha量
+            此时的knob就可以控制一个完整radius了
+        
+        评估:led是否需要，可以做着玩，问题倒不大
+        评估:scale是否需要，可以做着玩，问题倒不大
+        评估:btn_mat必要(支持布局, item DIY)(待研究:每一个item都能DIY???)
+             btn_mat其实也可以用layout+btn实现，但这种其实是为了省控件
+                 calendar继承的btn_mat，只需要给plug加一个计算万年历的即可
+                 剩下的就是简要的布局游戏了，keyboard好像也差不多
+        
+        评估:line,绘制轨迹图,貌似无意义
     
     
     
     优先级:低
     将EGUI降档,移植Lvgl后端蒙版
     实现基于蒙版输出的alpha图形
-    
-    优先级:低
-    inchar控件,光标显示位置偏移
-    
-    优先级:低
-    测试layout flex
-    水平内容超出layout宽度时会偏移到首项不显示，后面偏移
-    测试:将inchar测试界面的flex下string改为X32
     
     优先级:低
     给主题界面做一下DIY优化特效

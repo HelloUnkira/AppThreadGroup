@@ -10,6 +10,8 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     /* 内部域: */
+    scui_coord3_t value_base;   /* 按下基准值 */
+    scui_coord_t  point_base;   /* 按下基准点(沿轴) */
 } scui_obj_slider_t;
 
 #pragma pack(push, 1)

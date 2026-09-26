@@ -78,8 +78,11 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool abs)
     point = &point_c;
     
     if (widget->clip.x == point->x &&
-        widget->clip.y == point->y)
+        widget->clip.y == point->y) {
+        /* 位置未变: 尺寸/父剪切域可能已更新(如AUTO解析后), 刷新剪切域防止过期 */
+        scui_widget_surface_refr(widget, false);
         return;
+    }
     
     /* 控件悬浮, 不响应移动 */
     if (widget->style.fixed)

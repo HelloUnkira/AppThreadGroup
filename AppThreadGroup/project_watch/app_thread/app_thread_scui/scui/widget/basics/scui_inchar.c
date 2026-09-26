@@ -45,6 +45,9 @@ void scui_inchar_make(void *inst, void *inst_maker, scui_handle_t *handle)
     inchar->color = inchar_maker->color;
     inchar->hide  = inchar_maker->hide;
     
+    /* 方向标记(按对齐方向初始化: 右对齐=前向; 左/中对齐=后向) */
+    inchar->prev = (string_maker->args.align_hor == 1);
+    
     /* 资源分配与参数同步(utf8按最大字符宽度构建) */
     inchar->str_utf8  = SCUI_MEM_ZALLOC(scui_mem_type_mix, (inchar->limit + 1) * 4);
     inchar->str_uni   = SCUI_MEM_ZALLOC(scui_mem_type_mix, (inchar->limit + 1) * sizeof(uint32_t));
@@ -72,13 +75,26 @@ void scui_inchar_burn(scui_handle_t handle)
     scui_string_burn(widget->myself);
 }
 
+/*@brief 输入字符控件方向标记
+ *@param handle 输入字符控件句柄
+ *@param prev   方向标记(前向:真;后向:假)
+ */
+void scui_inchar_char_ins_way(scui_handle_t handle, bool prev)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_inchar));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_string_t *string = (void *)widget;
+    scui_inchar_t *inchar = (void *)widget;
+    
+    inchar->prev = prev;
+}
+
 /*@brief 输入字符控件指定位置输入字符
  *@param handle   输入字符控件句柄
  *@param index    字符索引
  *@param str_utf8 字符(utf8字符串)
- *@param prev     光标前(真);光标后(假)
  */
-void scui_inchar_char_ins(scui_handle_t handle, scui_coord_t index, uint8_t *str_utf8, bool prev)
+void scui_inchar_char_ins(scui_handle_t handle, scui_coord_t index, uint8_t *str_utf8)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_inchar));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -132,9 +148,68 @@ void scui_inchar_char_ins(scui_handle_t handle, scui_coord_t index, uint8_t *str
     }
     inchar->str_num += (scui_coord_t)str_num;
     
-    /* 光标(prev:移到新字符后;非prev:保持指向) */
-    if (prev) inchar->index = index + (scui_coord_t)str_num;
-    else if (inchar->index >= index) inchar->index += (scui_coord_t)str_num;
+    /* 光标(插入后到达最新字符索引, 保持稳定顺序序列) */
+    inchar->index = index + (scui_coord_t)str_num - 1;
+    
+    /* 刷新排版(utf8更新) */
+    scui_string_update_str(handle, inchar->str_utf8);
+    /* 刷新光标区域(重算) */
+    scui_inchar_cursor_set(handle, inchar->index);
+}
+
+/*@brief 输入字符控件指定位置替换字符
+ *@param handle   输入字符控件句柄
+ *@param index    字符索引(定点替换本身)
+ *@param str_utf8 字符(utf8字符串)
+ */
+void scui_inchar_char_rep(scui_handle_t handle, scui_coord_t index, uint8_t *str_utf8)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_inchar));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_string_t *string = (void *)widget;
+    scui_inchar_t *inchar = (void *)widget;
+    
+    /* 字符(utf8字符串)长度(定点替换单字符) */
+    uint32_t str_num = scui_utf8_str_num(str_utf8);
+    uint32_t str_bytes = scui_utf8_str_bytes(str_utf8);
+    SCUI_ASSERT(str_num == 1);
+    
+    /* 替换位置(越界夹取/空文本不替换) */
+    if (index < 0) index = 0;
+    if (index >= inchar->str_num)
+        return;
+    
+    /* 替换位置字节偏移与新旧字节差(面向数组) */
+    scui_coord_t ofs_rep = inchar->ofs_utf8[index];
+    uint32_t old_bytes = scui_utf8_bytes(inchar->str_utf8[ofs_rep]);
+    scui_coord_t bytes_diff = (scui_coord_t)str_bytes - (scui_coord_t)old_bytes;
+    if (bytes_diff != 0) {
+        scui_coord_t str_bytes_c = scui_utf8_str_bytes(inchar->str_utf8);
+        memmove(inchar->str_utf8 + ofs_rep + str_bytes,
+            inchar->str_utf8 + ofs_rep + old_bytes, str_bytes_c - ofs_rep - old_bytes + 1);
+    }
+    memcpy(inchar->str_utf8 + ofs_rep, str_utf8, str_bytes);
+    
+    /* 字符数组就地维护(后续偏移随字节差修正) */
+    for (scui_coord_t idx = index + 1; idx <= inchar->str_num; idx++) inchar->ofs_utf8[idx] += bytes_diff;
+    
+    /* 字符信息原位更新(unicode/宽度) */
+    uint32_t unicode = 0;
+    uint32_t utf8_len = scui_utf8_to_uni(str_utf8, &unicode);
+    SCUI_ASSERT(utf8_len != 0);
+    inchar->str_uni[index] = unicode;
+    
+    scui_cache_glyph_unit_t glyph_unit = {0};
+    glyph_unit.size = string->args.size;
+    glyph_unit.name = string->args.name;
+    glyph_unit.glyph.space_width = string->args.gap_none;
+    glyph_unit.glyph.unicode_letter = unicode;
+    scui_cache_glyph_load(&glyph_unit);
+    scui_cache_glyph_unload(&glyph_unit);
+    inchar->str_width[index] = glyph_unit.glyph.bitmap == NULL ? string->args.gap_none : glyph_unit.glyph.adv_w;
+    
+    /* 光标(原地替换, 光标不变, 重算显示区域) */
+    inchar->index = index;
     
     /* 刷新排版(utf8更新) */
     scui_string_update_str(handle, inchar->str_utf8);
@@ -144,10 +219,9 @@ void scui_inchar_char_ins(scui_handle_t handle, scui_coord_t index, uint8_t *str
 
 /*@brief 输入字符控件指定位置删除字符
  *@param handle 输入字符控件句柄
- *@param index  字符索引
- *@param prev   光标前(真);光标后(假)
+ *@param index  字符索引(定点删除本身)
  */
-void scui_inchar_char_rem(scui_handle_t handle, scui_coord_t index, bool prev)
+void scui_inchar_char_rem(scui_handle_t handle, scui_coord_t index)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_inchar));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -172,11 +246,9 @@ void scui_inchar_char_rem(scui_handle_t handle, scui_coord_t index, bool prev)
     memmove(&inchar->str_width[index], &inchar->str_width[index + 1], (inchar->str_num - index - 1) * sizeof(scui_coord_t));
     inchar->str_num--;
     
-    /* 光标修正(prev:光标落到删除位置;非prev:保持指向) */
-    if (inchar->index > index) inchar->index--;
-    else if (prev) inchar->index = index;
-    if (inchar->index > inchar->str_num)
-        inchar->index = inchar->str_num;
+    /* 光标保持原位(和替换一致), 仅端点删除(末尾)收敛到新边界 */
+    if (inchar->str_num > 0 && inchar->index >= inchar->str_num)
+        inchar->index = inchar->str_num - 1;
     
     /* 刷新排版(utf8更新) */
     scui_string_update_str(handle, inchar->str_utf8);
@@ -187,9 +259,8 @@ void scui_inchar_char_rem(scui_handle_t handle, scui_coord_t index, bool prev)
 /*@brief 输入字符控件输入字符(换算为指定位置插入)
  *@param handle   输入字符控件句柄
  *@param str_utf8 字符(utf8字符串)
- *@param prev     光标前(真);光标后(假)
  */
-void scui_inchar_char_add(scui_handle_t handle, uint8_t *str_utf8, bool prev)
+void scui_inchar_char_add(scui_handle_t handle, uint8_t *str_utf8)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_inchar));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -201,33 +272,28 @@ void scui_inchar_char_add(scui_handle_t handle, uint8_t *str_utf8, bool prev)
     if (cursor_idx > inchar->str_num) cursor_idx = inchar->str_num;
     if (cursor_idx < 0) cursor_idx = 0;
     
-    /* 插入位置(prev:光标前;非prev:光标后) */
-    scui_coord_t ins_idx = prev ? cursor_idx : cursor_idx + 1;
+    /* 插入位置(方向标记: 前向;后向) */
+    scui_coord_t ins_idx = inchar->prev ? cursor_idx : cursor_idx + 1;
     if (ins_idx > inchar->str_num) ins_idx = inchar->str_num;
     
-    scui_inchar_char_ins(handle, ins_idx, str_utf8, prev);
+    scui_inchar_char_ins(handle, ins_idx, str_utf8);
 }
 
-/*@brief 输入字符控件删除字符(换算为指定位置删除)
+/*@brief 输入字符控件删除字符
  *@param handle 输入字符控件句柄
- *@param prev   光标前(真);光标后(假)
  */
-void scui_inchar_char_del(scui_handle_t handle, bool prev)
+void scui_inchar_char_del(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_inchar));
     scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_string_t *string = (void *)widget;
     scui_inchar_t *inchar = (void *)widget;
     
-    /* 光标基准(隐藏模式固定末尾) */
-    scui_coord_t cursor_idx = inchar->hide ? inchar->str_num : inchar->index;
-    if (cursor_idx > inchar->str_num) cursor_idx = inchar->str_num;
-    if (cursor_idx < 0) cursor_idx = 0;
+    /* 删除位置(隐藏模式固定末尾, 常规光标位置) */
+    scui_coord_t del_idx = inchar->hide ? inchar->str_num - 1 : inchar->index;
+    if (inchar->str_num <= 0 || del_idx < 0) return;
     
-    /* 删除位置(prev:光标前;非prev:光标后) */
-    scui_coord_t del_idx = prev ? cursor_idx - 1 : cursor_idx;
-    if (del_idx < 0 || del_idx >= inchar->str_num) return;
-    
-    scui_inchar_char_rem(handle, del_idx, prev);
+    scui_inchar_char_rem(handle, del_idx);
 }
 
 /*@brief 输入字符控件字符数量
@@ -298,7 +364,9 @@ void scui_inchar_cursor_set(scui_handle_t handle, scui_coord_t index)
     scui_string_t *string = (void *)widget;
     scui_inchar_t *inchar = (void *)widget;
     
-    inchar->index = scui_clamp(index, 0, inchar->str_num);
+    /* 光标索引(有字符时落在字符索引位, 无字符时0) */
+    if (inchar->str_num > 0) inchar->index = scui_clamp(index, 0, inchar->str_num - 1);
+    else inchar->index = 0;
     
     /* 光标区域计算(排版参数) */
     if (string->args.name != SCUI_HANDLE_INVALID) {
@@ -336,10 +404,12 @@ void scui_inchar_cursor_set(scui_handle_t handle, scui_coord_t index)
             /* 行定位与垂直滚动偏移 */
             cursor_y = line_idx * (line_height + string->args.gap_line) + string->args.offset;
             
-            /* 光标宽度(空文本为字号宽; 末尾取前一字符宽) */
-            cursor_w = inchar->str_num == 0 ? string->args.size :
+            /* 光标宽度(空文本为字号/空格宽; 末尾取前一字符宽) */
+            cursor_w = inchar->str_num == 0 ?
+                (string->args.size > 0 ? string->args.size : string->args.gap_none) :
                 (inchar->index < inchar->str_num ? inchar->str_width[inchar->index] :
-                (inchar->index > 0 ? inchar->str_width[inchar->index - 1] : string->args.size));
+                (inchar->index > 0 ? inchar->str_width[inchar->index - 1] :
+                (string->args.size > 0 ? string->args.size : string->args.gap_none)));
         } else {
             /* 单行: 列宽累加(字符宽度数组) */
             for (scui_coord_t idx = 0; idx < inchar->index; idx++)
@@ -359,10 +429,12 @@ void scui_inchar_cursor_set(scui_handle_t handle, scui_coord_t index)
             if (string->args.align_ver == 1) cursor_y = (widget->clip.h - line_height);
             if (string->args.align_ver == 2) cursor_y = (widget->clip.h - line_height) / 2;
             
-            /* 光标宽度(空文本为字号宽; 末尾取前一字符宽) */
-            cursor_w = inchar->str_num == 0 ? string->args.size :
+            /* 光标宽度(空文本为字号/空格宽; 末尾取前一字符宽) */
+            cursor_w = inchar->str_num == 0 ?
+                (string->args.size > 0 ? string->args.size : string->args.gap_none) :
                 (inchar->index < inchar->str_num ? inchar->str_width[inchar->index] :
-                (inchar->index > 0 ? inchar->str_width[inchar->index - 1] : string->args.size));
+                (inchar->index > 0 ? inchar->str_width[inchar->index - 1] :
+                (string->args.size > 0 ? string->args.size : string->args.gap_none)));
         }
         
         inchar->area.x = cursor_x;
@@ -411,15 +483,15 @@ void scui_inchar_invoke(scui_event_t *event)
         if (string->args.name != SCUI_HANDLE_INVALID) {
             /* 呼吸明暗(三角波: 谷值1/3, 峰值原值) */
             /* 纯色填充只取控件alpha, 呼吸使用RGB明暗而非透明度 */
-            scui_multi_t wave = (scui_multi_t)inchar->breath_t;
+            scui_multi_t wave = (scui_multi_t)inchar->bre_time;
             wave = wave * 100 / SCUI_WIDGET_INCHAR_BREATH_TIME;
             if (wave > 50) wave = 100 - wave;
             
             scui_multi_t factor = 25 + wave;
             scui_color_t color = inchar->color;
-            color.color.ch.r = (uint8_t)((scui_multi_t)color.color.ch.r * factor / 75);
-            color.color.ch.g = (uint8_t)((scui_multi_t)color.color.ch.g * factor / 75);
-            color.color.ch.b = (uint8_t)((scui_multi_t)color.color.ch.b * factor / 75);
+            color.color.ch.r = (uint8_t)(color.color.ch.r * factor / 75);
+            color.color.ch.g = (uint8_t)(color.color.ch.g * factor / 75);
+            color.color.ch.b = (uint8_t)(color.color.ch.b * factor / 75);
             scui_widget_draw_color(widget->myself, &inchar->area, color);
         }
         
@@ -429,8 +501,8 @@ void scui_inchar_invoke(scui_event_t *event)
         if (inchar->hide) break;
         /* 光标呼吸(仅显示时) */
         
-        inchar->breath_t += event->tick;
-        inchar->breath_t %= SCUI_WIDGET_INCHAR_BREATH_TIME;
+        inchar->bre_time += event->tick;
+        inchar->bre_time %= SCUI_WIDGET_INCHAR_BREATH_TIME;
         scui_widget_draw(widget->myself, &inchar->area, false, 0);
         break;
     }

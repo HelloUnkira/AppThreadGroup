@@ -1,33 +1,42 @@
 #ifndef SCUI_INCHAR_INF_H
 #define SCUI_INCHAR_INF_H
 
+/*@brief 输入字符控件方向标记
+ *@param handle 输入字符控件句柄
+ *@param prev   方向标记(前向:真;后向:假)
+ */
+void scui_inchar_char_ins_way(scui_handle_t handle, bool prev);
+
 /*@brief 输入字符控件指定位置输入字符
  *@param handle   输入字符控件句柄
  *@param index    字符索引
  *@param str_utf8 字符(utf8字符串)
- *@param prev     光标前(真);光标后(假)
  */
-void scui_inchar_char_ins(scui_handle_t handle, scui_coord_t index, uint8_t *str_utf8, bool prev);
+void scui_inchar_char_ins(scui_handle_t handle, scui_coord_t index, uint8_t *str_utf8);
+
+/*@brief 输入字符控件指定位置替换字符
+ *@param handle   输入字符控件句柄
+ *@param index    字符索引(定点替换本身)
+ *@param str_utf8 字符(utf8字符串)
+ */
+void scui_inchar_char_rep(scui_handle_t handle, scui_coord_t index, uint8_t *str_utf8);
 
 /*@brief 输入字符控件指定位置删除字符
  *@param handle 输入字符控件句柄
- *@param index  字符索引
- *@param prev   光标前(真);光标后(假)
+ *@param index  字符索引(定点删除本身)
  */
-void scui_inchar_char_rem(scui_handle_t handle, scui_coord_t index, bool prev);
+void scui_inchar_char_rem(scui_handle_t handle, scui_coord_t index);
 
 /*@brief 输入字符控件输入字符
  *@param handle   输入字符控件句柄
  *@param str_utf8 字符(utf8字符串)
- *@param prev     光标前(真);光标后(假)
  */
-void scui_inchar_char_add(scui_handle_t handle, uint8_t *str_utf8, bool prev);
+void scui_inchar_char_add(scui_handle_t handle, uint8_t *str_utf8);
 
 /*@brief 输入字符控件删除字符
  *@param handle 输入字符控件句柄
- *@param prev   光标前(真);光标后(假)
  */
-void scui_inchar_char_del(scui_handle_t handle, bool prev);
+void scui_inchar_char_del(scui_handle_t handle);
 
 /*@brief 输入字符控件字符数量
  *@param handle 输入字符控件句柄
