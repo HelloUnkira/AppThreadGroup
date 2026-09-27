@@ -94,8 +94,20 @@ def scui_cwf_json_parser_preprocess(c_file_list, json_obj):
     for idx, node in enumerate(json_obj['layout']):
         if 'img_res' in node:
             img_res = node['img_res']
-            node['img_res'] = [image_list.index(image) for image in img_res]
-            node['image_num'] = len(img_res)
+            img_idx = [image_list.index(image) for image in img_res]
+            # seq类型: 图集下标对齐seq字符集(前3位符号图; 图集缺符号用哨兵占位)
+            if node.get('type') == 'scui_cwf_json_type_seq' and img_idx:
+                m = re.search(r'(\d+)_(\d+)$', img_res[0])
+                first_seq = int(m.group(2)) if m else -1
+                if first_seq != 0 and m:   # 从数字图开始(未含符号位)
+                    sym = []
+                    prefix = img_res[0][:len(img_res[0]) - len(m.group(0))]
+                    for s in ('01_00', '02_01', '03_02'):
+                        name = prefix + s
+                        sym.append(image_list.index(name) if name in image_list else len(c_file_list))
+                    img_idx = sym + img_idx
+            node['img_res'] = img_idx
+            node['image_num'] = len(img_idx)
     # 清洗font_res字段: 字库名 -> 资源表下标(字体条目在列表尾部)
     for idx, node in enumerate(json_obj['layout']):
         if 'font_res' in node:

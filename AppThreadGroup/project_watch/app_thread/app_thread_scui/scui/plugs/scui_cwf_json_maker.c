@@ -116,7 +116,7 @@ static void scui_cwf_json_item_size(scui_cwf_json_item_res_t *res, scui_handle_t
 static void scui_cwf_json_item_place(scui_cwf_json_parser_t *parser, uint32_t idx, scui_cwf_json_item_res_t *res)
 {
     scui_handle_t handle = parser->list_child[idx];
-    scui_align_t  align  = scui_cwf_json_align(res->align);
+    scui_align_t   align = scui_cwf_json_align(res->align);
     scui_point_t  offset = {0};
     
     if (handle == SCUI_HANDLE_INVALID) return;
@@ -170,8 +170,9 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx, uint3
         if (res->anim_tick < res->anima_ms) return;
         else res->anim_tick -= res->anima_ms;
         
+        res->idx_anim += 1;
         if (res->idx_anim >= res->img_num) res->idx_anim = 0;
-        else res->idx_anim += 1;
+        SCUI_ASSERT(res->idx_anim < res->img_num);
         
         scui_widget_image_set(handle, res->parser->image_hit[res->img_res[res->idx_anim]]);
         scui_widget_draw(handle, NULL, false, 0);
@@ -191,17 +192,31 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx, uint3
             
             /* 值转化为seq图集句柄序列(自然数字) */
             char text[SCUI_CWF_JSON_SEQ_MAX + 2] = {0};
-            snprintf(text, sizeof(text), "%u", (uint32_t)val);
+            /* 负数符号前置, 数字部分按fixed补零(格式串make时构造一次) */
+            if (val < 0) {
+                char digits[SCUI_CWF_JSON_SEQ_MAX + 2] = {0};
+                snprintf(digits, sizeof(digits), res->format, (uint32_t)(0 - val));
+                snprintf(text, sizeof(text), "-%s", digits);
+            } else {
+                snprintf(text, sizeof(text), res->format, (uint32_t)val);
+            }
             
-            /* 协议字符位 -> 图集句柄 */
+            /* 协议字符位 -> 图集句柄(缺位哨兵映射为无效句柄) */
             scui_handle_t map[SCUI_CWF_JSON_SEQ_NUM] = {0};
             uint16_t map_num = scui_min(res->img_num, SCUI_CWF_JSON_SEQ_NUM);
             for (uint16_t idx = 0; idx < map_num; idx++) {
-                map[idx] = res->parser->image_hit[res->img_res[idx]];
+                if (res->img_res[idx] >= res->parser->image_num)
+                    map[idx] = SCUI_HANDLE_INVALID;
+                else
+                    map[idx] = res->parser->image_hit[res->img_res[idx]];
             }
             
             res->idx_num = (uint16_t)scui_image_list_remap(hit, SCUI_CWF_JSON_SEQ_MAX,
                 map, map_num, SCUI_CWF_JSON_SEQ_SET, SCUI_CWF_JSON_SEQ_NUM, text);
+            
+            /* 值未变跳过刷新: 免高频释放重分配+重绘 */
+            if (res->seq_init && res->seq_val_l == val) break;
+            res->seq_val_l = val; res->seq_init = true;
             
             scui_cwf_json_item_size(res, hit, res->idx_num);
             scui_widget_adjust_size(handle, res->area_w, res->area_h);
@@ -287,22 +302,27 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
                              scui_handle_t parent)
 {
     scui_cwf_json_item_res_t *res = SCUI_MEM_ZALLOC(scui_mem_type_user, sizeof(scui_cwf_json_item_res_t));
-    parser->list_src[idx] = res; res->parser = parser; res->list_idx = idx;
+    parser->list_src[idx] = res; res->parser = parser; res->list_idx = (scui_handle_t)idx;
     
     /* 必读: 渲染类别与元素角色(决定后续分支) */
-    res->type = (uint8_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "type"));
-    res->key  = (uint8_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "key"));
+    res->type = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "type"));
+    res->key  = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "key"));
     parser->list_type[idx] = res->type;
     
     /* 预览图不参与绘制(scui_cwf_json_make_pv单独提取) */
     if (res->key == scui_cwf_json_key_preview) return;
     
     /* 通用定位: 所有构造元素共用 */
-    res->span       = (uint16_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "span"));
-    res->align      = ( uint8_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "align"));
-    res->align_ofs  = (  int8_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "align_ofs"));
-    res->area_x = (scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_x"));
-    res->area_y = (scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_y"));
+    res->span       = ( scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "span"));
+    res->align      = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "align"));
+    res->align_ofs  = ( scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "align_ofs"));
+    res->area_x     = ( scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_x"));
+    res->area_y     = ( scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_y"));
+    
+    /* seq固定位数: 构造一次text格式串(0=自然位数, N=数字部分补零到N位) */
+    res->fixed = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "fixed"));
+    if (res->fixed > 0) snprintf(res->format, sizeof(res->format), "%%0%uu", res->fixed);
+    else strcpy(res->format, "%u");
     
     /* 资源装载 */
     switch (res->type) {
@@ -314,16 +334,25 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         cJSON *json_res = cJSON_GetObjectItem(dict, "img_res");
         
         if (cJSON_IsArray(json_res)) {
-            res->img_num = (uint16_t)cJSON_GetArraySize(json_res);
+            res->img_num = (scui_handle_t)cJSON_GetArraySize(json_res);
             res->img_res = SCUI_MEM_ALLOC(scui_mem_type_user, res->img_num * sizeof(uint16_t));
             
             for (uint16_t img_idx = 0; img_idx < res->img_num; img_idx++) {
                 res->img_res[img_idx] = (uint16_t)scui_cwf_json_number(cJSON_GetArrayItem(json_res, img_idx));
-                SCUI_ASSERT(res->img_res[img_idx] < parser->image_num);
+                SCUI_ASSERT(res->img_res[img_idx] <= parser->image_num);
+                /* 缺位哨兵允许取image_num本身(seq字符集对齐用) */
             }
             
-            res->img_w = scui_image_w(parser->image_hit[res->img_res[0]]);
-            res->img_h = scui_image_h(parser->image_hit[res->img_res[0]]);
+            /* 取首个有效图定尺寸(缺位哨兵跳过) */
+            scui_handle_t img_first = SCUI_HANDLE_INVALID;
+            for (uint16_t img_idx = 0; img_idx < res->img_num; img_idx++) {
+                if (res->img_res[img_idx] < parser->image_num) {
+                    img_first = parser->image_hit[res->img_res[img_idx]];
+                    break;
+                }
+            }
+            res->img_w = scui_image_w(img_first);
+            res->img_h = scui_image_h(img_first);
         }
         break;
     }
@@ -332,7 +361,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         cJSON *json_font = cJSON_GetObjectItem(dict, "font_res");
         
         if (cJSON_IsArray(json_font)) {
-            res->font_res = (uint16_t)scui_cwf_json_number(cJSON_GetArrayItem(json_font, 0));
+            res->font_res = (scui_handle_t)scui_cwf_json_number(cJSON_GetArrayItem(json_font, 0));
             SCUI_ASSERT(res->font_res < parser->image_num + parser->font_num);
         }
         break;
@@ -345,7 +374,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
     switch (res->key) {
     case scui_cwf_json_key_layout:
         /* key:layout 容器: 子元素数量(层级栈用) */
-        res->child = (uint16_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "child"));
+        res->child = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "child"));
         break;
 
     case scui_cwf_json_key_watch:{
@@ -399,9 +428,9 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         res->area_w = (scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_w"));
         res->area_h = (scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_h"));
         if (res->type == scui_cwf_json_type_map || res->type == scui_cwf_json_type_group)
-            res->source = (uint8_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "source"));
+            res->source = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "source"));
         if (res->type == scui_cwf_json_type_anim) {
-            res->anima_ms = (uint16_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "anima_ms"));
+            res->anima_ms = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "anima_ms"));
             if (res->anima_ms == 0) res->anima_ms = SCUI_CWF_JSON_ANIMA_DEF;
         }
         
@@ -420,10 +449,10 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
     }
     case scui_cwf_json_type_seq: {
         scui_ximage_maker_define(ximage_maker);
-        res->nums   = (uint16_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "nums"));
-        res->source = ( uint8_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "source"));
-        res->area_w = (scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_w"));
-        res->area_h = (scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_h"));
+        res->nums   = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "nums"));
+        res->source = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "source"));
+        res->area_w = ( scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_w"));
+        res->area_h = ( scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_h"));
         
         SCUI_ASSERT(res->img_num != 0);
         scui_cwf_json_item_size(res, NULL, 0);
@@ -451,11 +480,11 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         break;
     }
     case scui_cwf_json_type_font: {
-        res->source     = ( uint8_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "source"));
-        res->font_type  = ( uint8_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "font"));
-        res->font_size  = (uint16_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "font_size"));
-        res->area_w = (scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_w"));
-        res->area_h = (scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_h"));
+        res->source    = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "source"));
+        res->font_type = (scui_handle_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "font"));
+        res->font_size = ( scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "font_size"));
+        res->area_w    = ( scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_w"));
+        res->area_h    = ( scui_coord_t)scui_cwf_json_number(cJSON_GetObjectItem(dict, "area_h"));
         if (res->area_w == 0) res->area_w = SCUI_WIDGET_AUTO_W;
         if (res->area_h == 0) res->area_h = SCUI_WIDGET_AUTO_H;
         /* 内容自适应: 区域为0时按文本宽度 */

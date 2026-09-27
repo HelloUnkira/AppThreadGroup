@@ -124,7 +124,7 @@ typedef enum {
 
 #define SCUI_CWF_JSON_PIXEL_CF_FONT		(0xFE)
 
-#define SCUI_CWF_JSON_SEQ_SET	"0123456789-+%/:*"
-#define SCUI_CWF_JSON_SEQ_NUM	16
+#define SCUI_CWF_JSON_SEQ_SET	"-./0123456789:"
+#define SCUI_CWF_JSON_SEQ_NUM	14
 
 #endif

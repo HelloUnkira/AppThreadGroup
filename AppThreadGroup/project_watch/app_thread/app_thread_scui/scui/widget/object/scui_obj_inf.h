@@ -112,26 +112,6 @@ void scui_obj_cht_style(scui_handle_t handle, scui_obj_cht_res_t *res);
  */
 void scui_obj_led_style(scui_handle_t handle, scui_obj_led_res_t *res);
 
-/*@brief 控件点亮颜色设置
- *@param handle    控件句柄
- *@param color_on  点亮颜色
- *@param color_off 熄灭颜色
- */
-void scui_obj_led_color(scui_handle_t handle, scui_color32_t color_on, scui_color32_t color_off);
-
-/*@brief 控件亮度设置
- *@param handle 控件句柄
- *@param level  亮度(0-100)
- */
-void scui_obj_led_level(scui_handle_t handle, scui_coord_t level);
-
-/*@brief 控件亮灭设置
- *@param handle 控件句柄
- *@param toggle 切换(亮<->灭)
- *@param onoff  亮灭(非切换时生效)
- */
-void scui_obj_led_onoff(scui_handle_t handle, bool toggle, bool onoff);
-
 /******************************************************************************/
 
 /*@brief 辅助推演矩形样式参数
@@ -196,5 +176,25 @@ void scui_obj_cht_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_
  *@param vlist_dot 数据列表
  */
 void scui_obj_cht_line_data(scui_handle_t handle, scui_coord_t *vlist_dot);
+
+/*@brief 控件点亮颜色设置
+ *@param handle    控件句柄
+ *@param color_on  点亮颜色
+ *@param color_off 熄灭颜色
+ */
+void scui_obj_led_color(scui_handle_t handle, scui_color32_t color_on, scui_color32_t color_off);
+
+/*@brief 控件亮度设置
+ *@param handle 控件句柄
+ *@param level  亮度(0-100)
+ */
+void scui_obj_led_level(scui_handle_t handle, scui_coord_t level);
+
+/*@brief 控件亮灭设置
+ *@param handle 控件句柄
+ *@param toggle 切换(亮<->灭)
+ *@param onoff  亮灭(非切换时生效)
+ */
+void scui_obj_led_onoff(scui_handle_t handle, bool toggle, bool onoff);
 
 #endif

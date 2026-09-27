@@ -24,7 +24,7 @@ void scui_obj_led_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_obj_led_t *obj_led = widget;
     scui_obj_led_maker_t *obj_led_maker = widget_maker;
     
-    /* 必须标记widget事件(自定义update_value派发) */
+    /* 必须标记widget事件 */
     widget_maker->style.sched_widget = true;
     
     /* 构造派生控件实例 */

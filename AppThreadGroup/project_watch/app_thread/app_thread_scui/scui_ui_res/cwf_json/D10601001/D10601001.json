@@ -252,6 +252,7 @@
             "area_h":  37,
             "align":   "scui_cwf_json_align_itl",
             "nums":    2,
+            "fixed":   2,
             "span":    0,
             "img_res": [
                 "cwf_num_time_04_03",
@@ -276,6 +277,7 @@
             "area_h":  37,
             "align":   "scui_cwf_json_align_itl",
             "nums":    2,
+            "fixed":   2,
             "span":    0,
             "img_res": [
                 "cwf_num_time_04_03",

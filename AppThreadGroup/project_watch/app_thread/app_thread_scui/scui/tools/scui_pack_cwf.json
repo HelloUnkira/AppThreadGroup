@@ -157,6 +157,11 @@
         "scui_cwf_json_key_num"
     ],
     
+    "anno": "序列",
+    "anno": "seq 字符集约束",
+    "scui_cwf_json_seq_set": "-./0123456789:",
+    
+    
     
     
     "type":      "scui_cwf_json_type",
@@ -180,18 +185,14 @@
     "anima_ms":  "type:anim帧动画间隔(ms)",
     "nums":      "seq场宽(格数,0=贴内容); 内容在盒内右对齐",
     "span":      "像素间隙: seq的数字间距/layout的子元素间隙/out对齐的外扩间隙",
-    "color":     "通用色字符串, 固定32位16进制字符串, 如: 0xFFFFFFFF",
+    "fixed":     "占位数量: seq的数字固定显示多少位",
+    "color":     "通用色字符串, 如: 0xFFFFFFFF",
+    
+    
     
     "anno": "key:watch 表针字段(x/y成对, 屏幕坐标)",
     "anno": "hx/hy/h_cx/h_cy: 时针锚点/旋转中心",
     "anno": "mx/my/m_cx/m_cy: 分针锚点/旋转中心",
     "anno": "sx/sy/s_cx/s_cy: 秒针锚点/旋转中心",
-    "anno": "旋转中心默认取指针图宽的一半, center_x 如与图宽不符则显式配置",
-    
-    "anno": "seq 字符集约束",
-    "anno": "seq 图集固定 16 张, 下标即字符在下列序列中的位置",
-    "anno": "前11位是不会缺的,剩下的缺位用-代替即可",
-    "scui_cwf_json_seq_set": "0123456789-+%/:*",
-    "anno": "seq 逐位留白一律由盒内右对齐承担, 不再用前导0占位",
-    "anno": ""
+    "anno": "旋转中心默认取指针图宽的一半, center_x 如与图宽不符则显式配置"    
 }
