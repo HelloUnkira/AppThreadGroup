@@ -7,6 +7,28 @@
 
 #include "scui.h"
 
+/* 指示灯流水灯: 赤橙黄绿青蓝紫 */
+static const uint32_t led_color[7] = {
+    0xFFFF0000,
+    0xFFFF8000,
+    0xFFFFFF00,
+    0xFF00FF00,
+    0xFF00FFFF,
+    0xFF0000FF,
+    0xFF8B00FF,
+};
+/* 指示灯熄灭色(淡白) */
+static const uint32_t led_color_off = 0xFFC8C8C8;
+
+#define LED_NUM             (18)
+#define LED_SIZE            (46)
+#define LED_GLOW            (12)
+#define LED_FILL_STEP       (120)   /* 填充拍间隔(ms) */
+#define LED_BREATH_STEP     (800)   /* 呼吸渐变时长(ms) */
+#define LED_BREATH_HOLD     (600)   /* 呼吸保持时长(ms) */
+#define LED_BTN_W           (90)    /* 开关按钮宽 */
+#define LED_BTN_H           (36)    /* 开关按钮高 */
+
 static struct {
     scui_coord_t  obj_arc_w;        /* 圆弧值方向 */
     scui_coord_t  obj_arc_v;        /* 圆弧值 */
@@ -14,6 +36,16 @@ static struct {
     scui_coord_t  obj_bar_w1;       /* 条形值方向 */
     scui_coord_t  obj_bar_v1;       /* 条形值 */
     scui_handle_t obj_bar_anima;    /* 条形动画控件 */
+    scui_handle_t led[LED_NUM];     /* 指示灯控件 */
+    scui_coord_t  led_fill_ms;      /* 填充拍计时 */
+    scui_coord_t  led_fill_idx;     /* 填充进度(0-17) */
+    scui_coord_t  led_color_idx;    /* 当前颜色(填充:0-6; 呼吸:已渐变完成色) */
+    scui_coord_t  led_breath_pct;   /* 呼吸渐变进度(0-100) */
+    scui_coord_t  led_hold_ms;      /* 呼吸保持计时 */
+    scui_handle_t led_btn;          /* 指示灯测试开关按钮 */
+    scui_handle_t led_btn_txt;      /* 开关按钮文本 */
+    scui_sbitfd_t led_on:1;         /* 指示灯动画开关 */
+    scui_sbitfd_t led_breath:1;     /* 呼吸阶段标记 */
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -104,7 +136,7 @@ void scui_test_ui_object_title_event_proc(scui_event_t *event)
             text = "Test Chart";
             break;
         case SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8_TITLE:
-            text = "Test Empty";
+            text = "Test Led";
             break;
         case SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_9_TITLE:
             text = "Test Empty";
@@ -711,7 +743,7 @@ void scui_test_ui_object_page_4_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_obj_slider_maker_define(obj_slider_maker);
+        scui_obj_slr_maker_define(obj_slider_maker);
         obj_slider_maker.widget.color.color.full = 0xFF808080;
         obj_slider_maker.widget.style.fully_bg = 1;
         
@@ -842,7 +874,7 @@ void scui_test_ui_object_page_5_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_obj_switch_maker_define(obj_switch_maker);
+        scui_obj_swt_maker_define(obj_switch_maker);
         obj_switch_maker.widget.color.color.full = 0xFF808080;
         obj_switch_maker.widget.style.fully_bg = 1;
         
@@ -1026,7 +1058,7 @@ void scui_test_ui_object_page_6_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_obj_spinner_maker_define(obj_spinner_maker);
+        scui_obj_spn_maker_define(obj_spinner_maker);
         obj_spinner_maker.widget.color.color.full = 0xFF808080;
         obj_spinner_maker.widget.style.fully_bg = 1;
         
@@ -1223,7 +1255,7 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_obj_chart_maker_define(obj_chart_maker);
+        scui_obj_cht_maker_define(obj_chart_maker);
         obj_chart_maker.widget.color.color.full = 0xFF808080;
         obj_chart_maker.widget.style.fully_bg = 1;
         
@@ -1241,7 +1273,7 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
             vlist[idx] = 60 + (uint32_t)scui_rand(0xFF) % ((220 - 60));
         }
         
-        scui_obj_chart_res_t obj_chart_res = {0};
+        scui_obj_cht_res_t obj_chart_res = {0};
         obj_chart_res.alpha = scui_alpha_cover;
         obj_chart_res.color.color.full = 0xFFFF0000;
         
@@ -1261,8 +1293,8 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
         scui_widget_create(&obj_chart_maker, &obj_chart_handle);
         obj_chart_res.part = scui_object_part_rect_fg;
         obj_chart_res.form = scui_object_form_rect_base;
-        scui_obj_chart_style(obj_chart_handle, &obj_chart_res);
-        scui_obj_chart_hist_data(obj_chart_handle, vlist_min, vlist_max);
+        scui_obj_cht_style(obj_chart_handle, &obj_chart_res);
+        scui_obj_cht_hist_data(obj_chart_handle, vlist_min, vlist_max);
         
         obj_chart_maker.type   = 1;
         obj_chart_maker.number = 30;
@@ -1274,8 +1306,8 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
         scui_widget_create(&obj_chart_maker, &obj_chart_handle);
         obj_chart_res.part = scui_object_part_line_item;
         obj_chart_res.form = 0;
-        scui_obj_chart_style(obj_chart_handle, &obj_chart_res);
-        scui_obj_chart_line_data(obj_chart_handle, vlist);
+        scui_obj_cht_style(obj_chart_handle, &obj_chart_res);
+        scui_obj_cht_line_data(obj_chart_handle, vlist);
         
         /* 第2行: 大柱状/渐变折线 */
         obj_chart_maker.type   = 0;
@@ -1291,8 +1323,8 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
         scui_widget_create(&obj_chart_maker, &obj_chart_handle);
         obj_chart_res.part = scui_object_part_rect_fg;
         obj_chart_res.form = scui_object_form_rect_base;
-        scui_obj_chart_style(obj_chart_handle, &obj_chart_res);
-        scui_obj_chart_hist_data(obj_chart_handle, vlist_min, vlist_max);
+        scui_obj_cht_style(obj_chart_handle, &obj_chart_res);
+        scui_obj_cht_hist_data(obj_chart_handle, vlist_min, vlist_max);
         
         obj_chart_maker.type   = 1;
         obj_chart_maker.number = 50;
@@ -1304,8 +1336,8 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
         scui_widget_create(&obj_chart_maker, &obj_chart_handle);
         obj_chart_res.part = scui_object_part_line_item;
         obj_chart_res.form = 0;
-        scui_obj_chart_style(obj_chart_handle, &obj_chart_res);
-        scui_obj_chart_line_data(obj_chart_handle, vlist);
+        scui_obj_cht_style(obj_chart_handle, &obj_chart_res);
+        scui_obj_cht_line_data(obj_chart_handle, vlist);
         break;
     }
     case scui_event_draw_buffer: {
@@ -1319,12 +1351,185 @@ void scui_test_ui_object_page_7_event_proc(scui_event_t *event)
     }
 }
 
-/*@brief page_8 控件事件响应回调(Test Empty)
+/*@brief LED 测试开关按钮事件响应回调
+ *@param event 事件
+ */
+void scui_test_ui_object_led_btn_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_button_click: {
+        scui_ui_res_local->led_on = !scui_ui_res_local->led_on;
+        if (scui_ui_res_local->led_on) {
+            /* 开启: 重置动画状态, 从头开始填充 */
+            scui_ui_res_local->led_fill_ms    = 0;
+            scui_ui_res_local->led_fill_idx   = 0;
+            scui_ui_res_local->led_color_idx  = 0;
+            scui_ui_res_local->led_breath_pct = 0;
+            scui_ui_res_local->led_hold_ms    = 0;
+            scui_ui_res_local->led_breath     = false;
+            scui_string_update_str(scui_ui_res_local->led_btn_txt, (uint8_t *)"ON");
+        } else {
+            /* 关闭: 全部熄灭 */
+            for (scui_coord_t idx = 0; idx < LED_NUM; idx++)
+                scui_obj_led_onoff(scui_ui_res_local->led[idx], false, false);
+            scui_string_update_str(scui_ui_res_local->led_btn_txt, (uint8_t *)"OFF");
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief page_8 控件事件响应回调(Test Led)
  *@param event 事件
  */
 void scui_test_ui_object_page_8_event_proc(scui_event_t *event)
 {
     switch (event->type) {
+    case scui_event_create: {
+        
+        /* 整体尺寸(灯珠+光晕), 屏幕最大内切圆: 12点钟方向起始, 顺时针均匀排布 */
+        const scui_coord_t  led_size  = LED_SIZE + LED_GLOW * 2;
+        const scui_coord3_t center_x  = SCUI_HOR_RES / 2;
+        const scui_coord3_t center_y  = SCUI_VER_RES / 2;
+        const scui_coord_t  radius    = SCUI_HOR_RES / 2 - led_size / 2 - 10;
+        const scui_coord3_t step      = 360.0f / LED_NUM;
+        
+        for (scui_coord_t idx = 0; idx < LED_NUM; idx++) {
+            scui_obj_led_maker_define(led_maker);
+            scui_handle_t led_handle = SCUI_HANDLE_INVALID;
+            
+            led_maker.widget.parent  = event->object;
+            led_maker.widget.clip    = SCUI_AREA_MAKE_BM(0, 0, LED_SIZE, LED_SIZE);
+            led_maker.color_on       = SCUI_COLOR32_MAKE32(led_color[0]);
+            led_maker.color_off      = SCUI_COLOR32_MAKE32(led_color_off);
+            led_maker.brightness     = 100;
+            scui_widget_create(&led_maker, &led_handle);
+            
+            scui_obj_led_res_t led_res = {
+                .area       = SCUI_AREA_MAKE_BM(0, 0, LED_SIZE, LED_SIZE),
+                .color_on   = SCUI_COLOR_MAKE32(false, 0, led_color[0]),
+                .color_off  = SCUI_COLOR_MAKE32(false, 0, led_color_off),
+                .radius     = -1,                    /* 全圆 */
+                .alpha      = scui_alpha_cover,
+                .align      = scui_opt_pos_c,
+                .glow       = LED_GLOW,
+                .brightness = 100,
+            };
+            scui_obj_led_style(led_handle, &led_res);
+            
+            /* 12点钟(-90度)起始, 顺时针 */
+            scui_coord3_t angle = -90.0f + idx * step;
+            scui_point_t point = {
+                .x = (scui_coord_t)(center_x + radius * scui_cos(SCUI_RAD_BY_A(angle)) - led_size / 2),
+                .y = (scui_coord_t)(center_y + radius * scui_sin(SCUI_RAD_BY_A(angle)) - led_size / 2),
+            };
+            scui_widget_move_pos(led_handle, &point, true);
+            
+            /* 初始全灭 */
+            scui_obj_led_onoff(led_handle, false, false);
+            scui_ui_res_local->led[idx] = led_handle;
+        }
+        
+        /* 居中 ON/OFF 开关按钮(控制测试动画, 默认OFF) */
+        {
+            scui_obj_btn_maker_define(led_btn_maker);
+            led_btn_maker.widget.parent          = event->object;
+            led_btn_maker.widget.event_cb        = scui_test_ui_object_led_btn_event_proc;
+            led_btn_maker.widget.style.indev_ptr = true;
+            led_btn_maker.widget.child_num       = 1;
+            led_btn_maker.widget.clip            = SCUI_AREA_MAKE_BM(SCUI_HOR_RES / 2 - LED_BTN_W / 2,
+                SCUI_VER_RES / 2 - LED_BTN_H / 2, LED_BTN_W, LED_BTN_H);
+            scui_widget_create(&led_btn_maker, &scui_ui_res_local->led_btn);
+            
+            scui_obj_btn_res_t led_btn_res = {0};
+            led_btn_res.alpha  = scui_alpha_cover;
+            led_btn_res.align  = scui_opt_pos_c;
+            led_btn_res.width  = 0;
+            led_btn_res.radius = -1;
+            led_btn_res.color[0].color_s.full = 0xFF2196F3;
+            led_btn_res.color[1].color_s.full = 0xFF1565C0;
+            led_btn_res.color[2].color_s.full = 0xFF2196F3;
+            led_btn_res.color[3].color_s.full = 0xFF1565C0;
+            led_btn_res.part = scui_object_part_rect_bg;
+            led_btn_res.form = scui_object_form_rect_base;
+            scui_obj_btn_style(scui_ui_res_local->led_btn, &led_btn_res);
+            
+            /* 按钮文本(按钮区域内居中) */
+            scui_string_maker_define(led_btn_txt_maker);
+            led_btn_txt_maker.widget.parent         = scui_ui_res_local->led_btn;
+            led_btn_txt_maker.widget.clip           = SCUI_AREA_MAKE_BM(0, 0, LED_BTN_W, LED_BTN_H);
+            led_btn_txt_maker.font_idx              = SCUI_FONT_IDX_X32;
+            led_btn_txt_maker.args.lang             = scui_lang_type_ascii;
+            led_btn_txt_maker.args.color.color.full = 0xFFFFFFFF;
+            led_btn_txt_maker.args.align_hor        = 2;
+            led_btn_txt_maker.args.align_ver        = 2;
+            scui_widget_create(&led_btn_txt_maker, &scui_ui_res_local->led_btn_txt);
+            scui_string_update_str(scui_ui_res_local->led_btn_txt, (uint8_t *)"OFF");
+        }
+        
+        scui_ui_res_local->led_fill_ms    = 0;
+        scui_ui_res_local->led_fill_idx   = 0;
+        scui_ui_res_local->led_color_idx  = 0;
+        scui_ui_res_local->led_breath_pct = 0;
+        scui_ui_res_local->led_hold_ms    = 0;
+        scui_ui_res_local->led_breath     = false;
+        break;
+    }
+    case scui_event_anima_elapse: {
+        if (!scui_ui_res_local->led_on)
+            break;
+        if (!scui_ui_res_local->led_breath) {
+            /* 填充: 每拍点亮一个LED(当前颜色) */
+            scui_ui_res_local->led_fill_ms += event->tick;
+            while (scui_ui_res_local->led_fill_ms >= LED_FILL_STEP) {
+                scui_ui_res_local->led_fill_ms -= LED_FILL_STEP;
+                
+                scui_obj_led_color(scui_ui_res_local->led[scui_ui_res_local->led_fill_idx],
+                    SCUI_COLOR32_MAKE32(led_color[scui_ui_res_local->led_color_idx]),
+                    SCUI_COLOR32_MAKE32(led_color_off));
+                scui_obj_led_onoff(scui_ui_res_local->led[scui_ui_res_local->led_fill_idx], false, true);
+                scui_ui_res_local->led_fill_idx++;
+                
+                if (scui_ui_res_local->led_fill_idx >= LED_NUM) {
+                    scui_ui_res_local->led_fill_idx  = 0;
+                    scui_ui_res_local->led_color_idx++;
+                    if (scui_ui_res_local->led_color_idx >= 7) {
+                        /* 整圈填满: 进入呼吸, 从最后一色渐变回第一色 */
+                        scui_ui_res_local->led_color_idx = 6;
+                        scui_ui_res_local->led_breath    = true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            /* 呼吸: 整圈渐变到目标色, 保持, 再渐变下一色(循环) */
+            if (scui_ui_res_local->led_hold_ms > 0) {
+                scui_ui_res_local->led_hold_ms -= event->tick;
+                break;
+            }
+            
+            scui_ui_res_local->led_breath_pct += event->tick * 100 / LED_BREATH_STEP;
+            if (scui_ui_res_local->led_breath_pct >= 100) {
+                scui_ui_res_local->led_breath_pct = 0;
+                scui_ui_res_local->led_hold_ms    = LED_BREATH_HOLD;
+                scui_ui_res_local->led_color_idx++;
+                if (scui_ui_res_local->led_color_idx >= 7)
+                    scui_ui_res_local->led_color_idx = 0;
+                break;
+            }
+            
+            scui_color32_t color_cur = SCUI_COLOR32_MAKE32(led_color[scui_ui_res_local->led_color_idx]);
+            scui_color32_t color_tar = SCUI_COLOR32_MAKE32(led_color[(scui_ui_res_local->led_color_idx + 1) % 7]);
+            scui_color32_t color     = color_cur;
+            scui_color32_mix_with(&color, &color_cur, &color_tar, 100 - scui_ui_res_local->led_breath_pct);
+            
+            for (scui_coord_t idx = 0; idx < LED_NUM; idx++)
+                scui_obj_led_color(scui_ui_res_local->led[idx], color, SCUI_COLOR32_MAKE32(led_color_off));
+        }
+        break;
+    }
     case scui_event_draw_buffer: {
         /* 独立画布内容合成到父控件画布 */
         scui_handle_t surface_image = scui_widget_surface_image(event->object);

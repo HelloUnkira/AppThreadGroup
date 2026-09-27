@@ -12,7 +12,7 @@
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
  */
-void scui_obj_spinner_make(void *inst, void *inst_maker, scui_handle_t *handle)
+void scui_obj_spn_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
     /* 基类对象 */
     scui_widget_t *widget = inst;
@@ -24,8 +24,8 @@ void scui_obj_spinner_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_obj_arc_t *obj_arc = widget;
     scui_obj_arc_maker_t *obj_arc_maker = widget_maker;
     /* 本类对象 */
-    scui_obj_spinner_t *obj_spinner = widget;
-    scui_obj_spinner_maker_t *obj_spinner_maker = widget_maker;
+    scui_obj_spn_t *obj_spn = widget;
+    scui_obj_spn_maker_t *obj_spinner_maker = widget_maker;
     
     /* 必须标记anima,widget事件 */
     widget_maker->style.sched_anima  = true;
@@ -36,7 +36,7 @@ void scui_obj_spinner_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     /* 构造派生控件实例 */
     scui_obj_arc_make(obj_arc, obj_arc_maker, handle);
-    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_obj_spinner));
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_obj_spn));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     /* 资源同步与构造 */
@@ -45,12 +45,12 @@ void scui_obj_spinner_make(void *inst, void *inst_maker, scui_handle_t *handle)
 /*@brief 控件析构
  *@param handle 控件句柄
  */
-void scui_obj_spinner_burn(scui_handle_t handle)
+void scui_obj_spn_burn(scui_handle_t handle)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_spinner));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_spn));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_obj_arc_t *obj_arc = (void *)widget;
-    scui_obj_spinner_t *obj_spinner = (void *)widget;
+    scui_obj_spn_t *obj_spn = (void *)widget;
     
     /* 析构派生控件实例 */
     scui_obj_arc_burn(widget->myself);
@@ -59,12 +59,12 @@ void scui_obj_spinner_burn(scui_handle_t handle)
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_obj_spinner_invoke(scui_event_t *event)
+void scui_obj_spn_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_obj_arc_t *obj_arc = (void *)widget;
-    scui_obj_spinner_t *obj_spinner = (void *)widget;
+    scui_obj_spn_t *obj_spn = (void *)widget;
     
     /* 基类处理(绘制/过渡动画推进) */
     scui_obj_arc_invoke(event);

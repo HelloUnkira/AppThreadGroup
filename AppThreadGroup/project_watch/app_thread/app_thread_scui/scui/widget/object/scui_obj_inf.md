@@ -11,13 +11,13 @@ scui_object_t(基类: 样式动画系统, 自动执行注册的tran)
 ├── scui_obj_btn    样式(def/pre/chk)  rect(bg部分: base/edge/box/sha)
 │
 ├── scui_obj_arc    样式(def)          arc(bg/fg部分: base) + knob(端点)
-│   └── scui_obj_spinner  样式(def)    arc(bg/fg部分: base)  ← 只加旋转事件
+│   └── scui_obj_spn  样式(def)    arc(bg/fg部分: base)  ← 只加旋转事件
 │
 ├── scui_obj_bar    样式(def)          rect(bg/fg部分: base/edge/box/sha)
-│   ├── scui_obj_slider    ← 继承bar, 只加ptr跟手
-│   └── scui_obj_switch    ← 继承bar, 只加click翻转
+│   ├── scui_obj_slr    ← 继承bar, 只加ptr跟手
+│   └── scui_obj_swt    ← 继承bar, 只加click翻转
 │
-└── scui_obj_chart  样式(def)          rect(fg部分: base) + line(无层级)
+└── scui_obj_cht  样式(def)          rect(fg部分: base) + line(无层级)
 ```
 
 - spinner/slider/switch 是解耦分离：**绘制核心在父类**，子类只加事件或定向参数。
@@ -117,7 +117,7 @@ sub: 0x0000(main) 0x0100(sub1: 全局) 0x0200(sub2: rect) 0x0300(sub3: arc) 0x04
   - `main_time`(动画时间)
 - **tran 过渡**：color / grad_c / width / height（def↔pre, chk↔pre 双向）
 
-### obj_arc / obj_spinner —— 样式(def) · arc_bg/arc_fg × arc_base + arc_knob
+### obj_arc / obj_spn —— 样式(def) · arc_bg/arc_fg × arc_base + arc_knob
 
 - **可 DIY 层级**：bg/fg 两部分各支持 `arc_base / arc_edge / arc_box / arc_sha`（当前绘制核心只用 base，其余层级预留给后续扩充）
 - **part**：`arc_bg`(底弧) / `arc_fg`(动态进度弧) / `arc_knob`(端点)
@@ -133,7 +133,7 @@ sub: 0x0000(main) 0x0100(sub1: 全局) 0x0200(sub2: rect) 0x0300(sub3: arc) 0x04
   - 颜色/透明度/round 用 knob 自身 res（color 取前景槽[1]）
 - **tran 过渡**：fg 的 angle_s/angle_e（值/角动画, 单方向）
 
-### obj_bar / obj_slider / obj_switch —— 样式(def) · rect_bg/rect_fg/rect_knob × rect(base/edge/box/sha)
+### obj_bar / obj_slr / obj_swt —— 样式(def) · rect_bg/rect_fg/rect_knob × rect(base/edge/box/sha)
 
 - **可 DIY 层级**：bg 部分 `rect_sha / rect_box / rect_edge / rect_base`(静态四件套)；fg 部分 `rect_base`(进度条主体)
 - **part**：`rect_bg`(背景) / `rect_fg`(前景进度) / `rect_knob`(端点圆, 可选)
@@ -149,7 +149,7 @@ sub: 0x0000(main) 0x0100(sub1: 全局) 0x0200(sub2: rect) 0x0300(sub3: arc) 0x04
 - **tran 过渡**：fg 的 width/height（值动画, 单方向）
 - slider/switch 仅加事件：slider 拖动跟手(无动画), switch 点击翻转(端点动画); switch 默认启用 rect_knob
 
-### obj_chart —— 样式(def) · rect_fg × rect_base + line_item(无层级)
+### obj_cht —— 样式(def) · rect_fg × rect_base + line_item(无层级)
 
 - **可 DIY part/form**：`rect_fg × rect_base`(直方柱) / `line_item`(折线+渐变面积, form 恒 0)
 - **状态**：仅 def
@@ -199,7 +199,7 @@ sub: 0x0000(main) 0x0100(sub1: 全局) 0x0200(sub2: rect) 0x0300(sub3: arc) 0x04
 | time | 动画时间(ms, 0=默认 SCUI_WIDGET_OBJ_BAR_TIME) |
 | grad/gradw/shadow | 渐变/渐变方向/阴影 |
 
-### scui_obj_chart_res_t
+### scui_obj_cht_res_t
 | 字段 | 说明 |
 |---|---|
 | part | 关键部分(line_item / rect_fg) |

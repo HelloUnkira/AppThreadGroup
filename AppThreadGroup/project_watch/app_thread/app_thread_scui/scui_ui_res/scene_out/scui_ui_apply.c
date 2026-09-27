@@ -62,27 +62,27 @@ void scui_ui_apply(scui_handle_t handle)
         scui_obj_bar_style(handle, &res);
         break;
     }
-    case scui_widget_type_obj_chart: {
+    case scui_widget_type_obj_cht: {
         /* 常规 res: 天蓝 */
-        scui_obj_chart_res_t res = {0};
+        scui_obj_cht_res_t res = {0};
         res.alpha = scui_alpha_cover;
         res.color.color.full = 0xFF2196F3;
         
         scui_coord_t type = 0;
-        scui_obj_chart_type(handle, &type);
+        scui_obj_cht_type(handle, &type);
         
         if (type == 0) {
             res.part = scui_object_part_rect_fg;
             res.form = scui_object_form_rect_base;
-            scui_obj_chart_style(handle, &res);
+            scui_obj_cht_style(handle, &res);
         } else {
             res.part = scui_object_part_line_item;
             res.form = 0;
-            scui_obj_chart_style(handle, &res);
+            scui_obj_cht_style(handle, &res);
         }
         break;
     }
-    case scui_widget_type_obj_slider: {
+    case scui_widget_type_obj_slr: {
         /* 常规 res: 背景浅灰, 前景天蓝 */
         scui_obj_bar_res_t res = {0};
         res.alpha = scui_alpha_cover;
@@ -99,7 +99,7 @@ void scui_ui_apply(scui_handle_t handle)
         scui_obj_bar_style(handle, &res);
         break;
     }
-    case scui_widget_type_obj_switch: {
+    case scui_widget_type_obj_swt: {
         /* 常规 res: 背景浅灰, 前景天蓝, 端点白色 */
         scui_obj_bar_res_t res = {0};
         res.alpha = scui_alpha_cover;
@@ -121,7 +121,7 @@ void scui_ui_apply(scui_handle_t handle)
         scui_obj_bar_style(handle, &res);
         break;
     }
-    case scui_widget_type_obj_spinner: {
+    case scui_widget_type_obj_spn: {
         /* 常规 res: 背景灰, 前景天蓝, 0~360度 */
         scui_obj_arc_res_t res = {0};
         res.alpha = scui_alpha_cover;
@@ -139,6 +139,18 @@ void scui_ui_apply(scui_handle_t handle)
         res.part = scui_object_part_arc_fg;
         res.form = scui_object_form_arc_base;
         scui_obj_arc_style(handle, &res);
+        break;
+    }
+    case scui_widget_type_obj_led: {
+        /* 常规 res: 默认淡白(off), 点亮天蓝(带阴影光晕) */
+        scui_obj_led_res_t res = {0};
+        res.alpha = scui_alpha_cover;
+        res.align = scui_opt_pos_c;
+        res.radius = -1;
+        res.glow   = 12;
+        res.color_on  = SCUI_COLOR_MAKE32(false, 0, 0xFF87CEEB);     /* 天蓝 */
+        res.color_off = SCUI_COLOR_MAKE32(false, 0, 0xFFC8C8C8);     /* 淡白 */
+        scui_obj_led_style(handle, &res);
         break;
     }
     default:

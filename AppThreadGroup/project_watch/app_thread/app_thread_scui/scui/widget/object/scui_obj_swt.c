@@ -12,7 +12,7 @@
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
  */
-void scui_obj_switch_make(void *inst, void *inst_maker, scui_handle_t *handle)
+void scui_obj_swt_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
     /* 基类对象 */
     scui_widget_t *widget = inst;
@@ -24,8 +24,8 @@ void scui_obj_switch_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_obj_bar_t *obj_bar = widget;
     scui_obj_bar_maker_t *obj_bar_maker = widget_maker;
     /* 本类对象 */
-    scui_obj_switch_t *obj_switch = widget;
-    scui_obj_switch_maker_t *obj_switch_maker = widget_maker;
+    scui_obj_swt_t *obj_swt = widget;
+    scui_obj_swt_maker_t *obj_switch_maker = widget_maker;
     
     /* 必须标记ptr,anima,widget事件 */
     widget_maker->style.indev_ptr    = true;
@@ -34,7 +34,7 @@ void scui_obj_switch_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     /* 构造派生控件实例 */
     scui_obj_bar_make(obj_bar, obj_bar_maker, handle);
-    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_obj_switch));
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_obj_swt));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     /* 资源同步与构造 */
@@ -43,12 +43,12 @@ void scui_obj_switch_make(void *inst, void *inst_maker, scui_handle_t *handle)
 /*@brief 控件析构
  *@param handle 控件句柄
  */
-void scui_obj_switch_burn(scui_handle_t handle)
+void scui_obj_swt_burn(scui_handle_t handle)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_switch));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_swt));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_obj_bar_t *obj_bar = (void *)widget;
-    scui_obj_switch_t *obj_switch = (void *)widget;
+    scui_obj_swt_t *obj_swt = (void *)widget;
     
     /* 析构派生控件实例 */
     scui_obj_bar_burn(widget->myself);
@@ -57,12 +57,12 @@ void scui_obj_switch_burn(scui_handle_t handle)
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_obj_switch_invoke(scui_event_t *event)
+void scui_obj_swt_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_obj_bar_t *obj_bar = (void *)widget;
-    scui_obj_switch_t *obj_switch = (void *)widget;
+    scui_obj_swt_t *obj_swt = (void *)widget;
     
     /* 基类处理(绘制/过渡动画推进) */
     scui_obj_bar_invoke(event);

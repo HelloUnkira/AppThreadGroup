@@ -224,10 +224,11 @@ void scui_widget_create(void *maker, scui_handle_t *handle);
 #define scui_obj_btn_maker_define(name)             scui_widget_maker_define(name, obj_btn)
 #define scui_obj_arc_maker_define(name)             scui_widget_maker_define(name, obj_arc)
 #define scui_obj_bar_maker_define(name)             scui_widget_maker_define(name, obj_bar)
-#define scui_obj_chart_maker_define(name)           scui_widget_maker_define(name, obj_chart)
-#define scui_obj_slider_maker_define(name)          scui_widget_maker_define(name, obj_slider)
-#define scui_obj_switch_maker_define(name)          scui_widget_maker_define(name, obj_switch)
-#define scui_obj_spinner_maker_define(name)         scui_widget_maker_define(name, obj_spinner)
+#define scui_obj_cht_maker_define(name)             scui_widget_maker_define(name, obj_cht)
+#define scui_obj_slr_maker_define(name)             scui_widget_maker_define(name, obj_slr)
+#define scui_obj_swt_maker_define(name)             scui_widget_maker_define(name, obj_swt)
+#define scui_obj_spn_maker_define(name)             scui_widget_maker_define(name, obj_spn)
+#define scui_obj_led_maker_define(name)             scui_widget_maker_define(name, obj_led)
 
 /*************************************************************************************************/
 /*************************************************************************************************/

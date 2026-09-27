@@ -346,7 +346,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         // chart hist (obj chart)
-        scui_obj_chart_maker_define(chart_maker);
+        scui_obj_cht_maker_define(chart_maker);
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
         chart_maker.widget.clip = SCUI_AREA_MAKE_BM(0, 100, SCUI_HOR_RES, 86);
@@ -363,13 +363,13 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         chart_maker.space   = 4;
         scui_widget_create(&chart_maker, &chart_handle);
         
-        scui_obj_chart_res_t cht_res = {0};
+        scui_obj_cht_res_t cht_res = {0};
         cht_res.alpha = scui_alpha_cover;
         cht_res.round  = true;
         cht_res.color.color.full = 0xFFF9104F;
         cht_res.part = scui_object_part_rect_fg;
         cht_res.form = scui_object_form_rect_base;
-        scui_obj_chart_style(chart_handle, &cht_res);
+        scui_obj_cht_style(chart_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_kcal_day7_24(scui_presenter.get_week(), day7_24);
@@ -380,7 +380,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
             vlist_min[idx] = 0;
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_kcal_min(), scui_presenter.get_kcal_max(), 0, 100);
         }
-        scui_obj_chart_hist_data(chart_handle, vlist_min, vlist_max);
+        scui_obj_cht_hist_data(chart_handle, vlist_min, vlist_max);
         
         /* 数字改ximage序列(创建子控件) */
         scui_ximage_maker_define(ximage_maker);
@@ -526,7 +526,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         // chart hist (obj chart)
-        scui_obj_chart_maker_define(chart_maker);
+        scui_obj_cht_maker_define(chart_maker);
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
         chart_maker.widget.clip = SCUI_AREA_MAKE_BM(0, 100, SCUI_HOR_RES, 86);
@@ -543,13 +543,13 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         chart_maker.space   = 4;
         scui_widget_create(&chart_maker, &chart_handle);
         
-        scui_obj_chart_res_t cht_res = {0};
+        scui_obj_cht_res_t cht_res = {0};
         cht_res.alpha = scui_alpha_cover;
         cht_res.round  = true;
         cht_res.color.color.full = 0xFFE1CC00;
         cht_res.part = scui_object_part_rect_fg;
         cht_res.form = scui_object_form_rect_base;
-        scui_obj_chart_style(chart_handle, &cht_res);
+        scui_obj_cht_style(chart_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_step_day7_24(scui_presenter.get_week(), day7_24);
@@ -560,7 +560,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
             vlist_min[idx] = 0;
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_step_min(), scui_presenter.get_step_max(), 0, 100);
         }
-        scui_obj_chart_hist_data(chart_handle, vlist_min, vlist_max);
+        scui_obj_cht_hist_data(chart_handle, vlist_min, vlist_max);
         
         /* 数字改ximage序列(创建子控件) */
         scui_ximage_maker_define(ximage_maker);
@@ -707,7 +707,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         // chart hist (obj chart)
-        scui_obj_chart_maker_define(chart_maker);
+        scui_obj_cht_maker_define(chart_maker);
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
         chart_maker.widget.clip = SCUI_AREA_MAKE_BM(0, 100, SCUI_HOR_RES, 86);
@@ -724,13 +724,13 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         chart_maker.space   = 4;
         scui_widget_create(&chart_maker, &chart_handle);
         
-        scui_obj_chart_res_t cht_res = {0};
+        scui_obj_cht_res_t cht_res = {0};
         cht_res.alpha = scui_alpha_cover;
         cht_res.round  = true;
         cht_res.color.color.full = 0xFF00B7FF;
         cht_res.part = scui_object_part_rect_fg;
         cht_res.form = scui_object_form_rect_base;
-        scui_obj_chart_style(chart_handle, &cht_res);
+        scui_obj_cht_style(chart_handle, &cht_res);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_dist_day7_24(scui_presenter.get_week(), day7_24);
@@ -741,7 +741,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
             vlist_min[idx] = 0;
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_dist_min(), scui_presenter.get_dist_max(), 0, 100);
         }
-        scui_obj_chart_hist_data(chart_handle, vlist_min, vlist_max);
+        scui_obj_cht_hist_data(chart_handle, vlist_min, vlist_max);
         
         /* 数字改ximage序列(创建子控件) */
         scui_ximage_maker_define(ximage_maker);

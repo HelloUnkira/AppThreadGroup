@@ -143,28 +143,34 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		obj_bar_maker->widget.type  = scui_widget_type_obj_bar;
 		break;
 	}
-	case scui_widget_type_obj_chart: {
-		scui_obj_chart_maker_t *obj_chart_maker = (scui_obj_chart_maker_t *)maker;
+	case scui_widget_type_obj_cht: {
+		scui_obj_cht_maker_t *obj_cht_maker = (scui_obj_cht_maker_t *)maker;
 		
-		obj_chart_maker->widget.type  = scui_widget_type_obj_chart;
+		obj_cht_maker->widget.type  = scui_widget_type_obj_cht;
 		break;
 	}
-	case scui_widget_type_obj_slider: {
-		scui_obj_slider_maker_t *obj_slider_maker = (scui_obj_slider_maker_t *)maker;
+	case scui_widget_type_obj_slr: {
+		scui_obj_slr_maker_t *obj_slr_maker = (scui_obj_slr_maker_t *)maker;
 		
-		obj_slider_maker->widget.type  = scui_widget_type_obj_slider;
+		obj_slr_maker->widget.type  = scui_widget_type_obj_slr;
 		break;
 	}
-	case scui_widget_type_obj_switch: {
-		scui_obj_switch_maker_t *obj_switch_maker = (scui_obj_switch_maker_t *)maker;
+	case scui_widget_type_obj_swt: {
+		scui_obj_swt_maker_t *obj_swt_maker = (scui_obj_swt_maker_t *)maker;
 		
-		obj_switch_maker->widget.type  = scui_widget_type_obj_switch;
+		obj_swt_maker->widget.type  = scui_widget_type_obj_swt;
 		break;
 	}
-	case scui_widget_type_obj_spinner: {
-		scui_obj_spinner_maker_t *obj_spinner_maker = (scui_obj_spinner_maker_t *)maker;
+	case scui_widget_type_obj_spn: {
+		scui_obj_spn_maker_t *obj_spn_maker = (scui_obj_spn_maker_t *)maker;
 		
-		obj_spinner_maker->widget.type  = scui_widget_type_obj_spinner;
+		obj_spn_maker->widget.type  = scui_widget_type_obj_spn;
+		break;
+	}
+	case scui_widget_type_obj_led: {
+		scui_obj_led_maker_t *obj_led_maker = (scui_obj_led_maker_t *)maker;
+		
+		obj_led_maker->widget.type  = scui_widget_type_obj_led;
 		break;
 	}
 	default:

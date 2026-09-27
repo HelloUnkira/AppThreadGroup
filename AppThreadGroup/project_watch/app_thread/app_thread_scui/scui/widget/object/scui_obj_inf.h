@@ -64,7 +64,23 @@ typedef struct {
     scui_color_t       color;       /* 颜色 */
     scui_coord_t       width;       /* 线宽 */
     scui_alpha_t       alpha;       /* 透明度(默认cover) */
-} scui_obj_chart_res_t;
+} scui_obj_cht_res_t;
+
+/*@brief 样式资源
+ */
+typedef struct {
+    scui_area_t        area;        /* 宽高(部件) */
+    scui_color_t       color_on;    /* 点亮色(状态色->渐变) */
+    scui_color_t       color_off;   /* 熄灭色(淡白) */
+    scui_coord_t       radius;      /* 圆角半径(最大:<0) */
+    scui_alpha_t       alpha;       /* 透明度(默认cover) */
+    scui_opt_pos_t     align;       /* 对齐(默认中心) */
+    scui_coord_t       glow;        /* 光晕扩展(px) */
+    scui_coord_t       brightness;  /* 亮度(0-100, 默认100) */
+    scui_sbitfd_t      shadow:1;    /* 阴影(可选) */
+    scui_sbitfd_t      grad:1;      /* 渐变(可选) */
+    scui_sbitfd_t      gradw:1;     /* 渐变方向(水平:0;垂直:1) */
+} scui_obj_led_res_t;
 
 /*@brief 控件样式应用
  *@param handle 控件句柄
@@ -88,7 +104,33 @@ void scui_obj_bar_style(scui_handle_t handle, scui_obj_bar_res_t *res);
  *@param handle 控件句柄
  *@param res    样式资源
  */
-void scui_obj_chart_style(scui_handle_t handle, scui_obj_chart_res_t *res);
+void scui_obj_cht_style(scui_handle_t handle, scui_obj_cht_res_t *res);
+
+/*@brief 控件样式应用
+ *@param handle 控件句柄
+ *@param res    样式资源
+ */
+void scui_obj_led_style(scui_handle_t handle, scui_obj_led_res_t *res);
+
+/*@brief 控件点亮颜色设置
+ *@param handle    控件句柄
+ *@param color_on  点亮颜色
+ *@param color_off 熄灭颜色
+ */
+void scui_obj_led_color(scui_handle_t handle, scui_color32_t color_on, scui_color32_t color_off);
+
+/*@brief 控件亮度设置
+ *@param handle 控件句柄
+ *@param level  亮度(0-100)
+ */
+void scui_obj_led_level(scui_handle_t handle, scui_coord_t level);
+
+/*@brief 控件亮灭设置
+ *@param handle 控件句柄
+ *@param toggle 切换(亮<->灭)
+ *@param onoff  亮灭(非切换时生效)
+ */
+void scui_obj_led_onoff(scui_handle_t handle, bool toggle, bool onoff);
 
 /******************************************************************************/
 
@@ -140,19 +182,19 @@ void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool a
  *@param handle 控件句柄
  *@param type   子类型
  */
-void scui_obj_chart_type(scui_handle_t handle, scui_coord_t *type);
+void scui_obj_cht_type(scui_handle_t handle, scui_coord_t *type);
 
 /*@brief 控件数据列表更新
  *@param handle    控件句柄
  *@param vlist_min 数据列表
  *@param vlist_max 数据列表
  */
-void scui_obj_chart_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max);
+void scui_obj_cht_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max);
 
 /*@brief 控件数据列表更新
  *@param handle    控件句柄
  *@param vlist_dot 数据列表
  */
-void scui_obj_chart_line_data(scui_handle_t handle, scui_coord_t *vlist_dot);
+void scui_obj_cht_line_data(scui_handle_t handle, scui_coord_t *vlist_dot);
 
 #endif

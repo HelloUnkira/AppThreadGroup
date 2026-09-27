@@ -223,10 +223,11 @@
             "font_idx":         "SCUI_FONT_IDX_32"
         },
         {
-            "annotation":       "page_8: Test Empty",
+            "annotation":       "page_8: Test Led",
             "widget.type":      "scui_widget_type_custom",
             "widget.style.buffer":   "true",
             "widget.style.buffer_d": "true",
+            "widget.style.sched_anima": "true",
             "widget.clip.w":    "SCUI_HOR_RES",
             "widget.clip.h":    "SCUI_VER_RES",
             "widget.myself":    "SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8",

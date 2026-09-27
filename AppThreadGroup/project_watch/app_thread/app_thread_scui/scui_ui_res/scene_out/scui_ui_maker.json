@@ -136,27 +136,33 @@
             }
         },
         {
-            "class":   "scui_widget_type_obj_chart",
+            "class":   "scui_widget_type_obj_cht",
             "default": {
-                "widget.type": "scui_widget_type_obj_chart"
+                "widget.type": "scui_widget_type_obj_cht"
             }
         },
         {
-            "class":   "scui_widget_type_obj_slider",
+            "class":   "scui_widget_type_obj_slr",
             "default": {
-                "widget.type": "scui_widget_type_obj_slider"
+                "widget.type": "scui_widget_type_obj_slr"
             }
         },
         {
-            "class":   "scui_widget_type_obj_switch",
+            "class":   "scui_widget_type_obj_swt",
             "default": {
-                "widget.type": "scui_widget_type_obj_switch"
+                "widget.type": "scui_widget_type_obj_swt"
             }
         },
         {
-            "class":   "scui_widget_type_obj_spinner",
+            "class":   "scui_widget_type_obj_spn",
             "default": {
-                "widget.type": "scui_widget_type_obj_spinner"
+                "widget.type": "scui_widget_type_obj_spn"
+            }
+        },
+        {
+            "class":   "scui_widget_type_obj_led",
+            "default": {
+                "widget.type": "scui_widget_type_obj_led"
             }
         }
     ]

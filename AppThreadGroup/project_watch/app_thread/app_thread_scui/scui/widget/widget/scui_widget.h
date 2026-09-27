@@ -21,10 +21,11 @@ typedef enum {
     scui_widget_type_obj_btn,           /* 对象控件:按钮 */
     scui_widget_type_obj_arc,           /* 对象控件:圆弧 */
     scui_widget_type_obj_bar,           /* 对象控件:条形 */
-    scui_widget_type_obj_chart,         /* 对象控件:图表 */
-    scui_widget_type_obj_slider,        /* 对象控件:滑条 */
-    scui_widget_type_obj_switch,        /* 对象控件:开关 */
-    scui_widget_type_obj_spinner,       /* 对象控件:旋转器 */
+    scui_widget_type_obj_cht,           /* 对象控件:图表 */
+    scui_widget_type_obj_slr,           /* 对象控件:滑条 */
+    scui_widget_type_obj_swt,           /* 对象控件:开关 */
+    scui_widget_type_obj_spn,           /* 对象控件:旋转器 */
+    scui_widget_type_obj_led,           /* 对象控件:指示灯 */
     /* 继续补充... */
     scui_widget_type_num,
 } scui_widget_type_t;

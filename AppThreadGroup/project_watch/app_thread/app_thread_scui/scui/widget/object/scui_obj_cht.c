@@ -12,7 +12,7 @@
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
  */
-void scui_obj_chart_make(void *inst, void *inst_maker, scui_handle_t *handle)
+void scui_obj_cht_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
     /* 基类对象 */
     scui_widget_t *widget = inst;
@@ -21,8 +21,8 @@ void scui_obj_chart_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_object_t *object = widget;
     scui_object_maker_t *object_maker = widget_maker;
     /* 本类对象 */
-    scui_obj_chart_t *obj_chart = widget;
-    scui_obj_chart_maker_t *obj_chart_maker = widget_maker;
+    scui_obj_cht_t *obj_cht = widget;
+    scui_obj_cht_maker_t *obj_chart_maker = widget_maker;
     
     /* 必须标记anima,widget事件 */
     widget_maker->style.sched_anima  = true;
@@ -30,50 +30,50 @@ void scui_obj_chart_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     /* 构造派生控件实例 */
     scui_object_make(object, object_maker, handle);
-    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_obj_chart));
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_obj_cht));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     /* 资源同步与构造 */
-    obj_chart->type      = obj_chart_maker->type;
-    obj_chart->area      = obj_chart_maker->area;
-    obj_chart->value_min = obj_chart_maker->value_min;
-    obj_chart->value_max = obj_chart_maker->value_max;
-    obj_chart->number    = obj_chart_maker->number;
-    obj_chart->space     = obj_chart_maker->space;
-    obj_chart->vlist_min = NULL;
-    obj_chart->vlist_max = NULL;
-    obj_chart->vlist_dot = NULL;
-    obj_chart->vlist_pos = NULL;
+    obj_cht->type      = obj_chart_maker->type;
+    obj_cht->area      = obj_chart_maker->area;
+    obj_cht->value_min = obj_chart_maker->value_min;
+    obj_cht->value_max = obj_chart_maker->value_max;
+    obj_cht->number    = obj_chart_maker->number;
+    obj_cht->space     = obj_chart_maker->space;
+    obj_cht->vlist_min = NULL;
+    obj_cht->vlist_max = NULL;
+    obj_cht->vlist_dot = NULL;
+    obj_cht->vlist_pos = NULL;
     
     /* 运行初值断言 */
-    SCUI_ASSERT(obj_chart->value_min < obj_chart->value_max);
-    SCUI_ASSERT(obj_chart->number != 0);
-    SCUI_ASSERT(obj_chart->area.w != 0);
-    SCUI_ASSERT(obj_chart->area.h != 0);
+    SCUI_ASSERT(obj_cht->value_min < obj_cht->value_max);
+    SCUI_ASSERT(obj_cht->number != 0);
+    SCUI_ASSERT(obj_cht->area.w != 0);
+    SCUI_ASSERT(obj_cht->area.h != 0);
     
     /* 限制(冗余限制) */
-    if (obj_chart->space <= 0) obj_chart->space = 1;
+    if (obj_cht->space <= 0) obj_cht->space = 1;
     
     /* 运行数据缓冲分配(按运行初值) */
-    switch (obj_chart->type) {
+    switch (obj_cht->type) {
     default:SCUI_ASSERT(false);break;
     case 0: {
-        scui_multi_t data_size = obj_chart->number * sizeof(scui_coord_t);
-        obj_chart->vlist_min = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
-        obj_chart->vlist_max = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
-        for (scui_coord_t idx = 0; idx < obj_chart->number; idx++) {
-            obj_chart->vlist_min[idx] = obj_chart->value_min;
-            obj_chart->vlist_max[idx] = obj_chart->value_min;
+        scui_multi_t data_size = obj_cht->number * sizeof(scui_coord_t);
+        obj_cht->vlist_min = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
+        obj_cht->vlist_max = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
+        for (scui_coord_t idx = 0; idx < obj_cht->number; idx++) {
+            obj_cht->vlist_min[idx] = obj_cht->value_min;
+            obj_cht->vlist_max[idx] = obj_cht->value_min;
         }
         break;
     }
     case 1: {
-        scui_multi_t data_size = obj_chart->number * sizeof(scui_coord_t);
-        obj_chart->vlist_dot = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
-        scui_multi_t vpos_size = obj_chart->number * sizeof(scui_point_t);
-        obj_chart->vlist_pos = SCUI_MEM_ALLOC(scui_mem_type_mix, vpos_size);
-        for (scui_coord_t idx = 0; idx < obj_chart->number; idx++) {
-            obj_chart->vlist_dot[idx] = obj_chart->value_min;
+        scui_multi_t data_size = obj_cht->number * sizeof(scui_coord_t);
+        obj_cht->vlist_dot = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
+        scui_multi_t vpos_size = obj_cht->number * sizeof(scui_point_t);
+        obj_cht->vlist_pos = SCUI_MEM_ALLOC(scui_mem_type_mix, vpos_size);
+        for (scui_coord_t idx = 0; idx < obj_cht->number; idx++) {
+            obj_cht->vlist_dot[idx] = obj_cht->value_min;
         }
         break;
     }
@@ -83,23 +83,23 @@ void scui_obj_chart_make(void *inst, void *inst_maker, scui_handle_t *handle)
 /*@brief 控件析构
  *@param handle 控件句柄
  */
-void scui_obj_chart_burn(scui_handle_t handle)
+void scui_obj_cht_burn(scui_handle_t handle)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_chart));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_cht));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_obj_chart_t *obj_chart = (void *)widget;
+    scui_obj_cht_t *obj_cht = (void *)widget;
     
     /* 资源析构 */
-    switch (obj_chart->type) {
+    switch (obj_cht->type) {
     default:SCUI_ASSERT(false);break;
     case 0: {
-        SCUI_MEM_FREE(obj_chart->vlist_min);
-        SCUI_MEM_FREE(obj_chart->vlist_max);
+        SCUI_MEM_FREE(obj_cht->vlist_min);
+        SCUI_MEM_FREE(obj_cht->vlist_max);
         break;
     }
     case 1: {
-        SCUI_MEM_FREE(obj_chart->vlist_dot);
-        SCUI_MEM_FREE(obj_chart->vlist_pos);
+        SCUI_MEM_FREE(obj_cht->vlist_dot);
+        SCUI_MEM_FREE(obj_cht->vlist_pos);
         break;
     }
     }
@@ -112,23 +112,23 @@ void scui_obj_chart_burn(scui_handle_t handle)
  *@param handle 控件句柄
  *@param type   子类型
  */
-void scui_obj_chart_type(scui_handle_t handle, scui_coord_t *type)
+void scui_obj_cht_type(scui_handle_t handle, scui_coord_t *type)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_chart));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_cht));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_obj_chart_t *obj_chart = (void *)widget;
+    scui_obj_cht_t *obj_cht = (void *)widget;
     
-    *type = obj_chart->type;
+    *type = obj_cht->type;
 }
 
 /*@brief 控件样式应用
  *@param handle 控件句柄
  *@param res    样式资源
  */
-void scui_obj_chart_style(scui_handle_t handle, scui_obj_chart_res_t *res)
+void scui_obj_cht_style(scui_handle_t handle, scui_obj_cht_res_t *res)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_obj_chart_t *obj_chart = (void *)widget;
+    scui_obj_cht_t *obj_cht = (void *)widget;
     
     switch (res->part) {
     case scui_object_part_line_item: {
@@ -136,8 +136,8 @@ void scui_obj_chart_style(scui_handle_t handle, scui_obj_chart_res_t *res)
         scui_object_sub_t sub = {0};
         sub.line.alpha.alpha       = res->alpha;
         sub.line.color.color32     = res->color.color;
-        sub.line.area.area         = obj_chart->area;
-        sub.line.vpos_num.number   = obj_chart->number;
+        sub.line.area.area         = obj_cht->area;
+        sub.line.vpos_num.number   = obj_cht->number;
         sub.line.stroke.number     = scui_max(res->width, 1);
         sub.line.multi.multi.round = res->round;
         sub.line.multi.multi.grad  = res->grad;
@@ -171,23 +171,23 @@ void scui_obj_chart_style(scui_handle_t handle, scui_obj_chart_res_t *res)
  *@param vlist_min 数据列表
  *@param vlist_max 数据列表
  */
-void scui_obj_chart_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max)
+void scui_obj_cht_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_chart));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_cht));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_obj_chart_t *obj_chart = (void *)widget;
+    scui_obj_cht_t *obj_cht = (void *)widget;
     
-    SCUI_ASSERT(obj_chart->type == 0);
+    SCUI_ASSERT(obj_cht->type == 0);
     
-    scui_coord_t value_min = obj_chart->value_min;
-    scui_coord_t value_max = obj_chart->value_max;
-    for (scui_coord_t idx = 0; idx < obj_chart->number; idx++) {
+    scui_coord_t value_min = obj_cht->value_min;
+    scui_coord_t value_max = obj_cht->value_max;
+    for (scui_coord_t idx = 0; idx < obj_cht->number; idx++) {
         scui_coord_t min = scui_min(value_max, scui_max(value_min, vlist_min[idx]));
         scui_coord_t max = scui_max(value_min, scui_min(value_max, vlist_max[idx]));
         if (min > max) {scui_coord_t tmp = min; min = max; max = tmp;}
         
-        obj_chart->vlist_min[idx] = min;
-        obj_chart->vlist_max[idx] = max;
+        obj_cht->vlist_min[idx] = min;
+        obj_cht->vlist_max[idx] = max;
     }
 }
 
@@ -195,30 +195,30 @@ void scui_obj_chart_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scu
  *@param handle    控件句柄
  *@param vlist_dot 数据列表
  */
-void scui_obj_chart_line_data(scui_handle_t handle, scui_coord_t *vlist_dot)
+void scui_obj_cht_line_data(scui_handle_t handle, scui_coord_t *vlist_dot)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_chart));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_cht));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_obj_chart_t *obj_chart = (void *)widget;
+    scui_obj_cht_t *obj_cht = (void *)widget;
     
-    SCUI_ASSERT(obj_chart->type == 1);
+    SCUI_ASSERT(obj_cht->type == 1);
     
-    scui_coord_t value_min = obj_chart->value_min;
-    scui_coord_t value_max = obj_chart->value_max;
-    for (scui_coord_t idx = 0; idx < obj_chart->number; idx++) {
+    scui_coord_t value_min = obj_cht->value_min;
+    scui_coord_t value_max = obj_cht->value_max;
+    for (scui_coord_t idx = 0; idx < obj_cht->number; idx++) {
         scui_coord_t val = scui_min(value_max, scui_max(value_min, vlist_dot[idx]));
-        obj_chart->vlist_dot[idx] = val;
+        obj_cht->vlist_dot[idx] = val;
     }
 }
 
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_obj_chart_invoke(scui_event_t *event)
+void scui_obj_cht_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_obj_chart_t *obj_chart = (void *)widget;
+    scui_obj_cht_t *obj_cht = (void *)widget;
     
     /* 基类处理(过渡动画推进) */
     scui_object_invoke(event);
@@ -231,7 +231,7 @@ void scui_obj_chart_invoke(scui_event_t *event)
     }
     case scui_event_draw_graph: {
         
-        switch (obj_chart->type) {
+        switch (obj_cht->type) {
         default:SCUI_ASSERT(false);break;
         case 0: {
             scui_object_data_t width = {0};
@@ -244,15 +244,15 @@ void scui_obj_chart_invoke(scui_event_t *event)
             prop.form = scui_object_form_rect_base;
             scui_object_state_get(event->object, &prop.state);
             
-            scui_point_t offset = obj_chart->area.pos;
-            for (scui_coord_t idx = 0; idx < obj_chart->number; idx++) {
-                scui_coord_t offset_1y = scui_map(obj_chart->vlist_min[idx],
-                    obj_chart->value_min, obj_chart->value_max, obj_chart->area.h, 0);
-                scui_coord_t offset_2y = scui_map(obj_chart->vlist_max[idx],
-                    obj_chart->value_min, obj_chart->value_max, obj_chart->area.h, 0);
+            scui_point_t offset = obj_cht->area.pos;
+            for (scui_coord_t idx = 0; idx < obj_cht->number; idx++) {
+                scui_coord_t offset_1y = scui_map(obj_cht->vlist_min[idx],
+                    obj_cht->value_min, obj_cht->value_max, obj_cht->area.h, 0);
+                scui_coord_t offset_2y = scui_map(obj_cht->vlist_max[idx],
+                    obj_cht->value_min, obj_cht->value_max, obj_cht->area.h, 0);
                 
                 scui_point_t point = offset;
-                offset.x += width.number + obj_chart->space;
+                offset.x += width.number + obj_cht->space;
                 
                 /* 值为0, 不进行绘制 */
                 if (offset_1y - offset_2y < width.number)
@@ -275,27 +275,27 @@ void scui_obj_chart_invoke(scui_event_t *event)
             scui_object_prop_sync_s(event->object, scui_object_part_line_item, 0,
                 scui_object_style_line_stroke, scui_object_state_def, width);
             
-            scui_point_t offset = obj_chart->area.pos;
-            for (scui_coord_t idx = 0; idx + 1 < obj_chart->number; idx++) {
-                scui_coord_t offset_1y = scui_map(obj_chart->vlist_dot[idx + 0],
-                    obj_chart->value_min, obj_chart->value_max, obj_chart->area.h, 0);
-                scui_coord_t offset_2y = scui_map(obj_chart->vlist_dot[idx + 1],
-                    obj_chart->value_min, obj_chart->value_max, obj_chart->area.h, 0);
+            scui_point_t offset = obj_cht->area.pos;
+            for (scui_coord_t idx = 0; idx + 1 < obj_cht->number; idx++) {
+                scui_coord_t offset_1y = scui_map(obj_cht->vlist_dot[idx + 0],
+                    obj_cht->value_min, obj_cht->value_max, obj_cht->area.h, 0);
+                scui_coord_t offset_2y = scui_map(obj_cht->vlist_dot[idx + 1],
+                    obj_cht->value_min, obj_cht->value_max, obj_cht->area.h, 0);
                 
                 scui_point_t offset_1 = {.x = offset.x, .y = offset.y + offset_1y};
-                scui_point_t offset_2 = {.x = offset.x + obj_chart->space, .y = offset.y + offset_2y};
+                scui_point_t offset_2 = {.x = offset.x + obj_cht->space, .y = offset.y + offset_2y};
                 
-                obj_chart->vlist_pos[idx + 0] = offset_1;
-                obj_chart->vlist_pos[idx + 1] = offset_2;
+                obj_cht->vlist_pos[idx + 0] = offset_1;
+                obj_cht->vlist_pos[idx + 1] = offset_2;
                 
-                offset.x += width.number + obj_chart->space;
+                offset.x += width.number + obj_cht->space;
             }
             
             scui_object_prop_t prop = {
                 .part  = scui_object_part_line_item,
                 .state = scui_object_state_def,
                 .style = scui_object_style_line_vpos,
-                .data.pointer = obj_chart->vlist_pos,
+                .data.pointer = obj_cht->vlist_pos,
             };
             scui_object_prop_add(event->object, &prop);
             scui_object_draw_line(event->object, &prop);

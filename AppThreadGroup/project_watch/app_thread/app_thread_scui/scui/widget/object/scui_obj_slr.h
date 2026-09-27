@@ -1,5 +1,5 @@
-#ifndef SCUI_OBJ_SLIDER_H
-#define SCUI_OBJ_SLIDER_H
+#ifndef SCUI_OBJ_SLR_H
+#define SCUI_OBJ_SLR_H
 
 typedef struct {
     /* 继承域: */
@@ -12,7 +12,7 @@ typedef struct {
     /* 内部域: */
     scui_coord3_t value_base;   /* 按下基准值 */
     scui_coord_t  point_base;   /* 按下基准点(沿轴) */
-} scui_obj_slider_t;
+} scui_obj_slr_t;
 
 #pragma pack(push, 1)
 typedef struct {
@@ -22,7 +22,7 @@ typedef struct {
     scui_object_maker_t object;
     scui_obj_bar_maker_t obj_bar;
     SCUI_EXTEND_FIELD_E
-} scui_obj_slider_maker_t;
+} scui_obj_slr_maker_t;
 #pragma pack(pop)
 
 /*@brief 控件构造
@@ -30,16 +30,16 @@ typedef struct {
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
  */
-void scui_obj_slider_make(void *inst, void *inst_maker, scui_handle_t *handle);
+void scui_obj_slr_make(void *inst, void *inst_maker, scui_handle_t *handle);
 
 /*@brief 控件析构
  *@param handle 控件句柄
  */
-void scui_obj_slider_burn(scui_handle_t handle);
+void scui_obj_slr_burn(scui_handle_t handle);
 
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_obj_slider_invoke(scui_event_t *event);
+void scui_obj_slr_invoke(scui_event_t *event);
 
 #endif

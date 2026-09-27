@@ -65,6 +65,11 @@ void scui_obj_btn_style(scui_handle_t handle, scui_obj_btn_res_t *res)
     scui_coord_t area_w = res->area.w ? res->area.w : widget->clip.w;
     scui_coord_t area_h = res->area.h ? res->area.h : widget->clip.h;
     
+    bool shadow = res->shadow;
+    /* 强制语义: sha(阴影)必须支持阴影效果 */
+    if (res->form == scui_object_form_rect_sha)
+        shadow = true;
+    
     /* 几何属性(def<->pre) */
     scui_object_sub_t sub = {.part = res->part, .form = res->form};
     sub.rect.alpha.alpha        = res->alpha;
@@ -75,7 +80,7 @@ void scui_obj_btn_style(scui_handle_t handle, scui_obj_btn_res_t *res)
     sub.rect.stroke.number      = res->width;
     sub.rect.multi.multi.grad   = res->grad;
     sub.rect.multi.multi.grad_w = res->gradw;
-    sub.rect.multi.multi.shadow = res->shadow;
+    sub.rect.multi.multi.shadow = shadow;
     
     sub.state = scui_object_state_def;
     scui_object_prop_rect(handle, &sub);
