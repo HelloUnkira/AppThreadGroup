@@ -272,6 +272,16 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .inherit = true,
             .name    = "obj_led",
         },
+        [scui_widget_type_obj_chk] = {
+            .size    = sizeof(scui_obj_chk_t),
+            .maker   = sizeof(scui_obj_chk_maker_t),
+            .base    = scui_widget_type_obj_btn,
+            .make    = scui_obj_chk_make,
+            .burn    = scui_obj_chk_burn,
+            .invoke  = scui_obj_chk_invoke,
+            .inherit = true,
+            .name    = "obj_chk",
+        },
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);

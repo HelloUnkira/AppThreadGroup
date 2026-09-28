@@ -14,12 +14,12 @@
  */
 void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    /* 基类对象 */
+    /* 对象继承序列 <基类 - 本类> */
     scui_widget_t *widget = inst;
+    scui_window_t *window = (void *)widget;
+    /* 对象构造器继承序列 <基类 - 本类> */
     scui_widget_maker_t *widget_maker = inst_maker;
-    /* 本类对象 */
-    scui_window_t *window = widget;
-    scui_window_maker_t *window_maker = widget_maker;
+    scui_window_maker_t *window_maker = (void *)widget_maker;
     
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle);

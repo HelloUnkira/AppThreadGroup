@@ -164,6 +164,18 @@
             "default": {
                 "widget.type": "scui_widget_type_obj_led"
             }
+        },
+        {
+            "class":   "scui_widget_type_obj_chk",
+            "default": {
+                "widget.type":            "scui_widget_type_obj_chk",
+                "obj_btn.check":          "1",
+                "font":                   "SCUI_FONT_IDX_X24",
+                "lang":                   "scui_lang_type_symbol",
+                "sym_chk":                "\"\\xEF\\x80\\x8C\"",
+                "sym_color.color_s.full": "0xFFFFFFFF",
+                "sym_color.color_e.full": "0xFFFFFFFF"
+            }
         }
     ]
 }

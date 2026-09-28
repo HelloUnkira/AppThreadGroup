@@ -14,15 +14,14 @@
  */
 void scui_obj_arc_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    /* 基类对象 */
-    scui_widget_t *widget = inst;
-    scui_widget_maker_t *widget_maker = inst_maker;
-    /* 继承对象 */
-    scui_object_t *object = widget;
-    scui_object_maker_t *object_maker = widget_maker;
-    /* 本类对象 */
-    scui_obj_arc_t *obj_arc = widget;
-    scui_obj_arc_maker_t *obj_arc_maker = widget_maker;
+    /* 对象继承序列 <基类 - 本类> */
+    scui_widget_t  *widget  = inst;
+    scui_object_t  *object  = (void *)widget;
+    scui_obj_arc_t *obj_arc = (void *)widget;
+    /* 对象构造器继承序列 <基类 - 本类> */
+    scui_widget_maker_t  *widget_maker  = inst_maker;
+    scui_object_maker_t  *object_maker  = (void *)widget_maker;
+    scui_obj_arc_maker_t *obj_arc_maker = (void *)widget_maker;
     
     /* 必须标记ptr,anima,widget事件 */
     widget_maker->style.indev_ptr    = true;
@@ -47,7 +46,8 @@ void scui_obj_arc_make(void *inst, void *inst_maker, scui_handle_t *handle)
 void scui_obj_arc_burn(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_arc));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_arc_t *obj_arc = (void *)widget;
     
     /* 析构派生控件实例 */
@@ -60,7 +60,8 @@ void scui_obj_arc_burn(scui_handle_t handle)
  */
 void scui_obj_arc_style(scui_handle_t handle, scui_obj_arc_res_t *res)
 {
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_arc_t *obj_arc = (void *)widget;
     
     scui_coord3_t angle_s = res->angle_s;
@@ -112,7 +113,8 @@ void scui_obj_arc_style(scui_handle_t handle, scui_obj_arc_res_t *res)
 void scui_obj_arc_current_angle(scui_handle_t handle, scui_coord3_t *angle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_arc));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_arc_t *obj_arc = (void *)widget;
     
     *angle = obj_arc->angle_c;
@@ -126,7 +128,8 @@ void scui_obj_arc_current_angle(scui_handle_t handle, scui_coord3_t *angle)
 void scui_obj_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, bool anim)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_arc));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_arc_t *obj_arc = (void *)widget;
     
     obj_arc->angle_c = angle;
@@ -189,7 +192,8 @@ void scui_obj_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, bool a
 void scui_obj_arc_update_value(scui_handle_t handle, scui_coord3_t value, bool anim)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_arc));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_arc_t *obj_arc = (void *)widget;
     
     /* 端点基准从bg取(稳定), fg为动态进度 */
@@ -213,7 +217,8 @@ void scui_obj_arc_update_value(scui_handle_t handle, scui_coord3_t value, bool a
 void scui_obj_arc_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_widget_t  *widget  = scui_handle_source_check(event->object);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_arc_t *obj_arc = (void *)widget;
     
     /* 基类处理(过渡动画推进) */

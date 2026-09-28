@@ -8,8 +8,8 @@ typedef struct {
     scui_object_t object;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_sbitfd_t fixed:1;  /* 固定标记(无缩放) */
-    scui_sbitfd_t check:1;  /* 选中标记 */
+    scui_sbitfd_t fixed:1;  /* 固定标记(点击不产生缩放动画) */
+    scui_sbitfd_t check:1;  /* 选中标记(是否支持check状态) */
     scui_sbitfd_t click:1;  /* 点击标记 */
     /* 内部域: */
 } scui_obj_btn_t;
@@ -22,8 +22,8 @@ typedef struct {
     scui_object_maker_t object;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_sbitfd_t fixed:1;  /* 固定标记(无缩放) */
-    scui_sbitfd_t check:1;  /* 选中标记 */
+    scui_sbitfd_t fixed:1;  /* 固定标记(点击不产生缩放动画) */
+    scui_sbitfd_t check:1;  /* 选中标记(是否支持check状态) */
 } scui_obj_btn_maker_t;
 #pragma pack(pop)
 

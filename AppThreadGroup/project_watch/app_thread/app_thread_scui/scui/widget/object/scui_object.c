@@ -14,12 +14,12 @@
  */
 void scui_object_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    /* 基类对象 */
+    /* 对象继承序列 <基类 - 本类> */
     scui_widget_t *widget = inst;
+    scui_object_t *object = (void *)widget;
+    /* 对象构造器继承序列 <基类 - 本类> */
     scui_widget_maker_t *widget_maker = inst_maker;
-    /* 本类对象 */
-    scui_object_t *object = widget;
-    scui_object_maker_t *object_maker = widget_maker;
+    scui_object_maker_t *object_maker = (void *)widget_maker;
     
     /* 必须标记anima事件 */
     widget_maker->style.sched_anima = true;
@@ -35,8 +35,6 @@ void scui_object_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(false);
     #endif
     
-    object->press   = false;
-    object->check   = false;
     object->state_l = scui_object_state_def;
     object->state_c = scui_object_state_def;
 }
@@ -405,58 +403,6 @@ bool scui_object_tran_idle(scui_handle_t handle)
     }
     
     return true;
-}
-
-/*@brief 对象控件状态获取
- *@param handle 控件句柄
- *@param press  控件状态
- */
-void scui_object_press_get(scui_handle_t handle, bool *press)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_object_t *object = (void *)widget;
-    
-    *press = object->press;
-}
-
-/*@brief 对象控件状态设置
- *@param handle 控件句柄
- *@param press  控件状态
- */
-void scui_object_press_set(scui_handle_t handle, bool press)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_object_t *object = (void *)widget;
-    
-    object->press = press;
-}
-
-/*@brief 对象控件状态获取
- *@param handle 控件句柄
- *@param check  控件状态
- */
-void scui_object_check_get(scui_handle_t handle, bool *check)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_object_t *object = (void *)widget;
-    
-    *check = object->check;
-}
-
-/*@brief 对象控件状态设置
- *@param handle 控件句柄
- *@param check  控件状态
- */
-void scui_object_check_set(scui_handle_t handle, bool check)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_object_t *object = (void *)widget;
-    
-    object->check = check;
 }
 
 /*@brief 对象控件状态获取

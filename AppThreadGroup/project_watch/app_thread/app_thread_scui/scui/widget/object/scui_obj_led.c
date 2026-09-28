@@ -14,15 +14,14 @@
  */
 void scui_obj_led_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    /* 基类对象 */
-    scui_widget_t *widget = inst;
-    scui_widget_maker_t *widget_maker = inst_maker;
-    /* 继承对象 */
-    scui_object_t *object = widget;
-    scui_object_maker_t *object_maker = widget_maker;
-    /* 本类对象 */
-    scui_obj_led_t *obj_led = widget;
-    scui_obj_led_maker_t *obj_led_maker = widget_maker;
+    /* 对象继承序列 <基类 - 本类> */
+    scui_widget_t  *widget  = inst;
+    scui_object_t  *object  = (void *)widget;
+    scui_obj_led_t *obj_led = (void *)widget;
+    /* 对象构造器继承序列 <基类 - 本类> */
+    scui_widget_maker_t  *widget_maker  = inst_maker;
+    scui_object_maker_t  *object_maker  = (void *)widget_maker;
+    scui_obj_led_maker_t *obj_led_maker = (void *)widget_maker;
     
     /* 必须标记widget事件 */
     widget_maker->style.sched_widget = true;
@@ -46,7 +45,8 @@ void scui_obj_led_make(void *inst, void *inst_maker, scui_handle_t *handle)
 void scui_obj_led_burn(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_led));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_led_t *obj_led = (void *)widget;
     
     /* 析构派生控件实例 */
@@ -59,7 +59,8 @@ void scui_obj_led_burn(scui_handle_t handle)
  */
 void scui_obj_led_style(scui_handle_t handle, scui_obj_led_res_t *res)
 {
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_led_t *obj_led = (void *)widget;
     
     /* 部件宽高 */
@@ -118,7 +119,8 @@ void scui_obj_led_style(scui_handle_t handle, scui_obj_led_res_t *res)
  */
 void scui_obj_led_color(scui_handle_t handle, scui_color32_t color_on, scui_color32_t color_off)
 {
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_led_t *obj_led = (void *)widget;
     
     obj_led->color_on  = color_on;
@@ -135,7 +137,8 @@ void scui_obj_led_color(scui_handle_t handle, scui_color32_t color_on, scui_colo
  */
 void scui_obj_led_level(scui_handle_t handle, scui_coord_t level)
 {
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_led_t *obj_led = (void *)widget;
     
     obj_led->brightness = scui_clamp(level, 0, 100);
@@ -152,7 +155,8 @@ void scui_obj_led_level(scui_handle_t handle, scui_coord_t level)
  */
 void scui_obj_led_onoff(scui_handle_t handle, bool toggle, bool onoff)
 {
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_led_t *obj_led = (void *)widget;
     
     if (toggle) obj_led->on = !obj_led->on;
@@ -169,7 +173,8 @@ void scui_obj_led_onoff(scui_handle_t handle, bool toggle, bool onoff)
 void scui_obj_led_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_widget_t  *widget  = scui_handle_source_check(event->object);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_led_t *obj_led = (void *)widget;
     
     /* 基类处理(过渡动画推进) */

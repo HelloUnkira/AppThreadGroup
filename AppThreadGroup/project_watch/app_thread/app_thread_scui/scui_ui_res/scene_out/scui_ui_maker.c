@@ -173,6 +173,18 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		obj_led_maker->widget.type  = scui_widget_type_obj_led;
 		break;
 	}
+	case scui_widget_type_obj_chk: {
+		scui_obj_chk_maker_t *obj_chk_maker = (scui_obj_chk_maker_t *)maker;
+		
+		obj_chk_maker->widget.type             = scui_widget_type_obj_chk;
+		obj_chk_maker->obj_btn.check           = 1;
+		obj_chk_maker->font                    = SCUI_FONT_IDX_X24;
+		obj_chk_maker->lang                    = scui_lang_type_symbol;
+		obj_chk_maker->sym_chk                 = "\xEF\x80\x8C";
+		obj_chk_maker->sym_color.color_s.full  = 0xFFFFFFFF;
+		obj_chk_maker->sym_color.color_e.full  = 0xFFFFFFFF;
+		break;
+	}
 	default:
 		break;
 	}

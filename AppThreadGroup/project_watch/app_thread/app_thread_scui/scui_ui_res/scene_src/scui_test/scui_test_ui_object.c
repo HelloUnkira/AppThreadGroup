@@ -178,21 +178,28 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         scui_coord_t btn_w = 140;
         scui_coord_t btn_h = 100;
         
-        /* 第1行: 绿/红/蓝 */
+        /* 第1个: 默认(不做任何额外配置, apply默认样式) */
+        obj_btn_maker.widget.clip       = SCUI_AREA_MAKE_BM(13, 48, btn_w, btn_h);
+        scui_widget_create(&obj_btn_maker, &obj_btn_handle);
+        scui_ui_apply(obj_btn_handle);
+        
+        /* 第2个: fixed + check + 上色 */
         obj_btn_maker.fixed = 1;
         obj_btn_maker.check = 1;
         obj_btn_res.color[0].color_s.full = 0xFF00FF00;
         obj_btn_res.color[1].color_s.full = 0xFF008000;
-        obj_btn_res.color[2].color_s.full = 0xFF00FF00;
+        obj_btn_res.color[2].color_s.full = 0xFFFF0000;
         obj_btn_res.color[3].color_s.full = 0xFF008000;
         obj_btn_res.width  = 0;
         obj_btn_res.radius = 20;
-        obj_btn_maker.widget.clip       = SCUI_AREA_MAKE_BM(13, 48, btn_w, btn_h);
+        obj_btn_maker.widget.clip.x = 163;
+        obj_btn_maker.widget.clip.y = 48;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
         obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
+        /* 第3个: 不fixed + check + 上色 */
         obj_btn_maker.fixed = 0;
         obj_btn_maker.check = 1;
         obj_btn_res.color[0].color_s.full = 0xFFFF0000;
@@ -201,21 +208,6 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_res.color[3].color_s.full = 0xFF800000;
         obj_btn_res.width  = 0;
         obj_btn_res.radius = -1;
-        obj_btn_maker.widget.clip.x = 163;
-        obj_btn_maker.widget.clip.y = 48;
-        scui_widget_create(&obj_btn_maker, &obj_btn_handle);
-        obj_btn_res.part = scui_object_part_rect_bg;
-        obj_btn_res.form = scui_object_form_rect_base;
-        scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
-        
-        obj_btn_maker.fixed = 1;
-        obj_btn_maker.check = 0;
-        obj_btn_res.color[0].color_s.full = 0xFF0000FF;
-        obj_btn_res.color[1].color_s.full = 0xFF000080;
-        obj_btn_res.color[2].color_s.full = 0xFF0000FF;
-        obj_btn_res.color[3].color_s.full = 0xFF000080;
-        obj_btn_res.width  = 0;
-        obj_btn_res.radius = 20;
         obj_btn_maker.widget.clip.x = 313;
         obj_btn_maker.widget.clip.y = 48;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
@@ -223,7 +215,7 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
-        /* 第2行: 四样式/渐变/圆头 */
+        /* 第4个: 四样式同显(bg/edge/box/sha) */
         obj_btn_maker.fixed = 0;
         obj_btn_maker.check = 1;
         obj_btn_res.color[0].color_s.full = 0xFF87CEFA;
@@ -236,7 +228,6 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         obj_btn_maker.widget.clip.y = 158;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         
-        /* 四样式同显(bg/edge/box/sha) */
         scui_obj_btn_res_t obj_btn_res4[4] = {0};
         scui_coord_t stroke[4] = {-1, 4, 4, 12};   /* base填充/edge/box/sha */
         scui_obj_aux_res_rect(obj_btn_res4, (scui_point_t){.x = btn_w, .y = btn_h},
@@ -267,81 +258,83 @@ void scui_test_ui_object_page_1_event_proc(scui_event_t *event)
         for (scui_coord_t idx = 0; idx < 4; idx++)
             scui_obj_btn_style(obj_btn_handle, &obj_btn_res4[idx]);
         
-        obj_btn_maker.fixed = 0;
-        obj_btn_maker.check = 0;
-        obj_btn_res.color[0].color_s.full = 0xFFFF8000;
-        obj_btn_res.color[1].color_s.full = 0xFF804000;
-        obj_btn_res.color[2].color_s.full = 0xFFFF8000;
-        obj_btn_res.color[3].color_s.full = 0xFF804000;
-        obj_btn_res.width  = 0;
-        obj_btn_res.radius = 25;
-        obj_btn_maker.widget.clip.x = 163;
-        obj_btn_maker.widget.clip.y = 158;
-        scui_widget_create(&obj_btn_maker, &obj_btn_handle);
-        obj_btn_res.part = scui_object_part_rect_bg;
-        obj_btn_res.form = scui_object_form_rect_base;
-        scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
-        
+        /* 第5个: fixed + 不check */
         obj_btn_maker.fixed = 1;
         obj_btn_maker.check = 0;
-        obj_btn_res.color[0].color_s.full = 0xFF00FFFF;
-        obj_btn_res.color[1].color_s.full = 0xFF008080;
-        obj_btn_res.color[2].color_s.full = 0xFF00FFFF;
-        obj_btn_res.color[3].color_s.full = 0xFF008080;
-        obj_btn_res.width  = 0;
-        obj_btn_res.radius = 50;
-        obj_btn_maker.widget.clip.x = 313;
-        obj_btn_maker.widget.clip.y = 158;
-        scui_widget_create(&obj_btn_maker, &obj_btn_handle);
-        obj_btn_res.part = scui_object_part_rect_bg;
-        obj_btn_res.form = scui_object_form_rect_base;
-        scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
-        
-        /* 第3行: 黄/紫/青 */
-        obj_btn_maker.fixed = 0;
-        obj_btn_maker.check = 0;
-        obj_btn_res.color[0].color_s.full = 0xFFFFFF00;
-        obj_btn_res.color[1].color_s.full = 0xFF808000;
-        obj_btn_res.color[2].color_s.full = 0xFFFFFF00;
-        obj_btn_res.color[3].color_s.full = 0xFF808000;
-        obj_btn_res.width  = 0;
-        obj_btn_res.radius = -1;
-        obj_btn_maker.widget.clip.x = 13;
-        obj_btn_maker.widget.clip.y = 268;
-        scui_widget_create(&obj_btn_maker, &obj_btn_handle);
-        obj_btn_res.part = scui_object_part_rect_bg;
-        obj_btn_res.form = scui_object_form_rect_base;
-        scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
-        
-        obj_btn_maker.fixed = 0;
-        obj_btn_maker.check = 1;
-        obj_btn_res.color[0].color_s.full = 0xFFFF00FF;
-        obj_btn_res.color[1].color_s.full = 0xFF800080;
-        obj_btn_res.color[2].color_s.full = 0xFFFF00FF;
-        obj_btn_res.color[3].color_s.full = 0xFF800080;
+        obj_btn_res.color[0].color_s.full = 0xFF0000FF;
+        obj_btn_res.color[1].color_s.full = 0xFF000080;
+        obj_btn_res.color[2].color_s.full = 0xFF0000FF;
+        obj_btn_res.color[3].color_s.full = 0xFF000080;
         obj_btn_res.width  = 0;
         obj_btn_res.radius = 20;
         obj_btn_maker.widget.clip.x = 163;
-        obj_btn_maker.widget.clip.y = 268;
+        obj_btn_maker.widget.clip.y = 158;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
         obj_btn_res.part = scui_object_part_rect_bg;
         obj_btn_res.form = scui_object_form_rect_base;
         scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
         
-        obj_btn_maker.fixed = 1;
+        /* 第6个: bg+edge+box组合(edge透明隔离bg/box) */
+        obj_btn_maker.fixed = 0;
         obj_btn_maker.check = 1;
-        obj_btn_res.color[0].color_s.full = 0xFF00C8FF;
-        obj_btn_res.color[1].color_s.full = 0xFF006080;
-        obj_btn_res.color[2].color_s.full = 0xFF00C8FF;
-        obj_btn_res.color[3].color_s.full = 0xFF006080;
+        obj_btn_res.color[0].color_s.full = 0xFF87CEFA;
+        obj_btn_res.color[1].color_s.full = 0xFF4682B4;
+        obj_btn_res.color[2].color_s.full = 0xFF87CEFA;
+        obj_btn_res.color[3].color_s.full = 0xFF4682B4;
         obj_btn_res.width  = 0;
-        obj_btn_res.radius = 10;
+        obj_btn_res.radius = 30;
         obj_btn_maker.widget.clip.x = 313;
-        obj_btn_maker.widget.clip.y = 268;
+        obj_btn_maker.widget.clip.y = 158;
         scui_widget_create(&obj_btn_maker, &obj_btn_handle);
-        obj_btn_res.part = scui_object_part_rect_bg;
-        obj_btn_res.form = scui_object_form_rect_base;
-        scui_obj_btn_style(obj_btn_handle, &obj_btn_res);
+        
+        scui_obj_btn_res_t obj_btn_res6[4] = {0};
+        scui_coord_t stroke6[4] = {-1, 4, 8, 0};   /* base填充/edge/box/sha(不绘) */
+        scui_obj_aux_res_rect(obj_btn_res6, (scui_point_t){.x = btn_w, .y = btn_h},
+            stroke6, (scui_point_t){.x = 30});
+        
+        /* base: 天蓝 */
+        obj_btn_res6[0].color[0].color_s.full = 0xFF87CEFA;
+        obj_btn_res6[0].color[1].color_s.full = 0xFF4682B4;
+        obj_btn_res6[0].color[2].color_s.full = 0xFF87CEFA;
+        obj_btn_res6[0].color[3].color_s.full = 0xFF4682B4;
+        /* edge: 透明(alpha=0隔开bg/box) */
+        obj_btn_res6[1].alpha = scui_alpha_trans;
+        /* box: 红色 */
+        obj_btn_res6[2].color[0].color_s.full = 0xFFFF0000;
+        obj_btn_res6[2].color[1].color_s.full = 0xFFFF0000;
+        obj_btn_res6[2].color[2].color_s.full = 0xFFFF0000;
+        obj_btn_res6[2].color[3].color_s.full = 0xFFFF0000;
+        
+        for (scui_coord_t idx = 0; idx < 4; idx++)
+            scui_obj_btn_style(obj_btn_handle, &obj_btn_res6[idx]);
+        
+        /* 第7/8/9个: obj_chk选中器 */
+        scui_obj_chk_maker_define(obj_chk_maker);
+        obj_chk_maker.widget.parent = event->object;
+        obj_chk_maker.widget.event_cb = scui_test_ui_object_btn_event_proc;
+        /* 符号配置: 选中态对勾; def默认空(不绘制) */
+        obj_chk_maker.font      = SCUI_FONT_IDX_X24;
+        obj_chk_maker.lang      = scui_lang_type_symbol;
+        obj_chk_maker.sym_chk   = "\xEF\x80\x8C";
+        obj_chk_maker.sym_color.color_s.full = 0xFFFFFFFF;
+        
+        scui_handle_t obj_chk_handle = SCUI_HANDLE_INVALID;
+        /* 第7个: 默认(apply默认样式, 支持check可点击切换, 初始未选) */
+        obj_btn_maker.check = 1;
+        obj_chk_maker.widget.clip       = SCUI_AREA_MAKE_BM(13, 268, btn_w, btn_h);
+        scui_widget_create(&obj_chk_maker, &obj_chk_handle);
+        
+        /* 第8个: checked(初始选中chk, fixed不响应点击) */
+        obj_chk_maker.fixed = 1;
+        obj_chk_maker.state = scui_object_state_chk;
+        obj_chk_maker.widget.clip.x = 163;
+        scui_widget_create(&obj_chk_maker, &obj_chk_handle);
+        
+        /* 第9个: uncheck(初始未选, fixed不响应点击, 初始def) */
+        obj_chk_maker.fixed = 1;
+        obj_chk_maker.state = scui_object_state_def;
+        obj_chk_maker.widget.clip.x = 313;
+        scui_widget_create(&obj_chk_maker, &obj_chk_handle);
         break;
     }
     case scui_event_draw_buffer: {

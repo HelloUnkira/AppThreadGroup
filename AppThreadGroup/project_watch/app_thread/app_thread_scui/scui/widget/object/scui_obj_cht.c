@@ -14,15 +14,14 @@
  */
 void scui_obj_cht_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    /* 基类对象 */
-    scui_widget_t *widget = inst;
-    scui_widget_maker_t *widget_maker = inst_maker;
-    /* 继承对象 */
-    scui_object_t *object = widget;
-    scui_object_maker_t *object_maker = widget_maker;
-    /* 本类对象 */
-    scui_obj_cht_t *obj_cht = widget;
-    scui_obj_cht_maker_t *obj_chart_maker = widget_maker;
+    /* 对象继承序列 <基类 - 本类> */
+    scui_widget_t  *widget  = inst;
+    scui_object_t  *object  = (void *)widget;
+    scui_obj_cht_t *obj_cht = (void *)widget;
+    /* 对象构造器继承序列 <基类 - 本类> */
+    scui_widget_maker_t  *widget_maker  = inst_maker;
+    scui_object_maker_t  *object_maker  = (void *)widget_maker;
+    scui_obj_cht_maker_t *obj_cht_maker = (void *)widget_maker;
     
     /* 必须标记anima,widget事件 */
     widget_maker->style.sched_anima  = true;
@@ -34,12 +33,12 @@ void scui_obj_cht_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     /* 资源同步与构造 */
-    obj_cht->type      = obj_chart_maker->type;
-    obj_cht->area      = obj_chart_maker->area;
-    obj_cht->value_min = obj_chart_maker->value_min;
-    obj_cht->value_max = obj_chart_maker->value_max;
-    obj_cht->number    = obj_chart_maker->number;
-    obj_cht->space     = obj_chart_maker->space;
+    obj_cht->type      = obj_cht_maker->type;
+    obj_cht->area      = obj_cht_maker->area;
+    obj_cht->value_min = obj_cht_maker->value_min;
+    obj_cht->value_max = obj_cht_maker->value_max;
+    obj_cht->number    = obj_cht_maker->number;
+    obj_cht->space     = obj_cht_maker->space;
     obj_cht->vlist_min = NULL;
     obj_cht->vlist_max = NULL;
     obj_cht->vlist_dot = NULL;
@@ -86,7 +85,8 @@ void scui_obj_cht_make(void *inst, void *inst_maker, scui_handle_t *handle)
 void scui_obj_cht_burn(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_cht));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_cht_t *obj_cht = (void *)widget;
     
     /* 资源析构 */
@@ -115,7 +115,8 @@ void scui_obj_cht_burn(scui_handle_t handle)
 void scui_obj_cht_type(scui_handle_t handle, scui_coord_t *type)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_cht));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_cht_t *obj_cht = (void *)widget;
     
     *type = obj_cht->type;
@@ -127,7 +128,8 @@ void scui_obj_cht_type(scui_handle_t handle, scui_coord_t *type)
  */
 void scui_obj_cht_style(scui_handle_t handle, scui_obj_cht_res_t *res)
 {
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_cht_t *obj_cht = (void *)widget;
     
     switch (res->part) {
@@ -174,7 +176,8 @@ void scui_obj_cht_style(scui_handle_t handle, scui_obj_cht_res_t *res)
 void scui_obj_cht_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_cht));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_cht_t *obj_cht = (void *)widget;
     
     SCUI_ASSERT(obj_cht->type == 0);
@@ -198,7 +201,8 @@ void scui_obj_cht_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_
 void scui_obj_cht_line_data(scui_handle_t handle, scui_coord_t *vlist_dot)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_cht));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_cht_t *obj_cht = (void *)widget;
     
     SCUI_ASSERT(obj_cht->type == 1);
@@ -217,7 +221,8 @@ void scui_obj_cht_line_data(scui_handle_t handle, scui_coord_t *vlist_dot)
 void scui_obj_cht_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_widget_t  *widget  = scui_handle_source_check(event->object);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_cht_t *obj_cht = (void *)widget;
     
     /* 基类处理(过渡动画推进) */

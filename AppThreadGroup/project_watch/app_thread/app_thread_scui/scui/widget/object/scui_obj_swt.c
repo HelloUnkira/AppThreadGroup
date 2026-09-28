@@ -14,18 +14,16 @@
  */
 void scui_obj_swt_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    /* 基类对象 */
-    scui_widget_t *widget = inst;
-    scui_widget_maker_t *widget_maker = inst_maker;
-    /* 继承对象 */
-    scui_object_t *object = widget;
-    scui_object_maker_t *object_maker = widget_maker;
-    /* 继承对象 */
-    scui_obj_bar_t *obj_bar = widget;
-    scui_obj_bar_maker_t *obj_bar_maker = widget_maker;
-    /* 本类对象 */
-    scui_obj_swt_t *obj_swt = widget;
-    scui_obj_swt_maker_t *obj_switch_maker = widget_maker;
+    /* 对象继承序列 <基类 - 本类> */
+    scui_widget_t  *widget  = inst;
+    scui_object_t  *object  = (void *)widget;
+    scui_obj_bar_t *obj_bar = (void *)widget;
+    scui_obj_swt_t *obj_swt = (void *)widget;
+    /* 对象构造器继承序列 <基类 - 本类> */
+    scui_widget_maker_t  *widget_maker  = inst_maker;
+    scui_object_maker_t  *object_maker  = (void *)widget_maker;
+    scui_obj_bar_maker_t *obj_bar_maker = (void *)widget_maker;
+    scui_obj_swt_maker_t *obj_swt_maker = (void *)widget_maker;
     
     /* 必须标记ptr,anima,widget事件 */
     widget_maker->style.indev_ptr    = true;
@@ -46,7 +44,8 @@ void scui_obj_swt_make(void *inst, void *inst_maker, scui_handle_t *handle)
 void scui_obj_swt_burn(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_swt));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_bar_t *obj_bar = (void *)widget;
     scui_obj_swt_t *obj_swt = (void *)widget;
     
@@ -60,7 +59,8 @@ void scui_obj_swt_burn(scui_handle_t handle)
 void scui_obj_swt_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_widget_t  *widget  = scui_handle_source_check(event->object);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_bar_t *obj_bar = (void *)widget;
     scui_obj_swt_t *obj_swt = (void *)widget;
     

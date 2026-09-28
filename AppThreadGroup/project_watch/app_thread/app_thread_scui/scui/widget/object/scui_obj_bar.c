@@ -14,15 +14,14 @@
  */
 void scui_obj_bar_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    /* 基类对象 */
-    scui_widget_t *widget = inst;
-    scui_widget_maker_t *widget_maker = inst_maker;
-    /* 继承对象 */
-    scui_object_t *object = widget;
-    scui_object_maker_t *object_maker = widget_maker;
-    /* 本类对象 */
-    scui_obj_bar_t *obj_bar = widget;
-    scui_obj_bar_maker_t *obj_bar_maker = widget_maker;
+    /* 对象继承序列 <基类 - 本类> */
+    scui_widget_t  *widget  = inst;
+    scui_object_t  *object  = (void *)widget;
+    scui_obj_bar_t *obj_bar = (void *)widget;
+    /* 对象构造器继承序列 <基类 - 本类> */
+    scui_widget_maker_t  *widget_maker  = inst_maker;
+    scui_object_maker_t  *object_maker  = (void *)widget_maker;
+    scui_obj_bar_maker_t *obj_bar_maker = (void *)widget_maker;
     
     /* 必须标记ptr,anima,widget事件 */
     widget_maker->style.indev_ptr    = true;
@@ -52,7 +51,8 @@ void scui_obj_bar_make(void *inst, void *inst_maker, scui_handle_t *handle)
 void scui_obj_bar_burn(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_bar));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_bar_t *obj_bar = (void *)widget;
     
     /* 析构派生控件实例 */
@@ -65,7 +65,8 @@ void scui_obj_bar_burn(scui_handle_t handle)
  */
 void scui_obj_bar_style(scui_handle_t handle, scui_obj_bar_res_t *res)
 {
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_bar_t *obj_bar = (void *)widget;
     
     /* 部件宽高 */
@@ -140,7 +141,8 @@ void scui_obj_bar_style(scui_handle_t handle, scui_obj_bar_res_t *res)
 void scui_obj_bar_current_value(scui_handle_t handle, scui_coord3_t *value)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_bar));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_bar_t *obj_bar = (void *)widget;
     
     *value = obj_bar->value_cur;
@@ -154,7 +156,8 @@ void scui_obj_bar_current_value(scui_handle_t handle, scui_coord3_t *value)
 void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool anim)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_bar));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_bar_t *obj_bar = (void *)widget;
     
     /* 这可以实现丝滑到分段效果 */
@@ -326,7 +329,8 @@ void scui_obj_bar_update_value(scui_handle_t handle, scui_coord3_t value, bool a
 void scui_obj_bar_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_widget_t  *widget  = scui_handle_source_check(event->object);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_bar_t *obj_bar = (void *)widget;
     
     /* 基类处理(过渡动画推进) */

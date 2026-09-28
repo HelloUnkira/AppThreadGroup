@@ -14,15 +14,14 @@
  */
 void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    /* 基类对象 */
+    /* 对象继承序列 <基类 - 本类> */
     scui_widget_t *widget = inst;
+    scui_scroll_t *scroll = (void *)widget;
+    scui_roller_t *roller = (void *)widget;
+    /* 对象构造器继承序列 <基类 - 本类> */
     scui_widget_maker_t *widget_maker = inst_maker;
-    /* 继承对象 */
-    scui_scroll_t *scroll = widget;
-    scui_scroll_maker_t *scroll_maker = widget_maker;
-    /* 本类对象 */
-    scui_roller_t *roller = widget;
-    scui_roller_maker_t *roller_maker = widget_maker;
+    scui_scroll_maker_t *scroll_maker = (void *)widget_maker;
+    scui_roller_maker_t *roller_maker = (void *)widget_maker;
     
     /* 使用滚轮的默认滚动 */
     
@@ -46,6 +45,7 @@ void scui_roller_burn(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_roller));
     scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_scroll_t *scroll = (void *)widget;
     scui_roller_t *roller = (void *)widget;
     
     /* 析构派生控件实例 */
@@ -277,6 +277,7 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_roller));
     scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_scroll_t *scroll = (void *)widget;
     scui_roller_t *roller = (void *)widget;
     
     /* 基类对象同步(同步外界给的部分状态) */
@@ -314,6 +315,7 @@ void scui_roller_center_get(scui_handle_t handle, scui_handle_t *target)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_roller));
     scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_scroll_t *scroll = (void *)widget;
     scui_roller_t *roller = (void *)widget;
     
     *target = roller->center;
@@ -326,6 +328,7 @@ void scui_roller_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_scroll_t *scroll = (void *)widget;
     scui_roller_t *roller = (void *)widget;
     
     /* 事件处理回调 */

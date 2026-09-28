@@ -172,8 +172,6 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     /* 内部域: */
-    scui_sbitfd_t       press:1;        /* 使用pre状态 */
-    scui_sbitfd_t       check:1;        /* 使用chk状态 */
     scui_object_type_t  state_l;        /* 上一状态(last) */
     scui_object_type_t  state_c;        /* 当前状态(curr) */
     scui_object_prop_t *prop_list;      /* 属性列表 */

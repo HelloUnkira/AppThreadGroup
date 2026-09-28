@@ -14,15 +14,14 @@
  */
 void scui_obj_btn_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
-    /* 基类对象 */
-    scui_widget_t *widget = inst;
-    scui_widget_maker_t *widget_maker = inst_maker;
-    /* 继承对象 */
-    scui_object_t *object = widget;
-    scui_object_maker_t *object_maker = widget_maker;
-    /* 本类对象 */
-    scui_obj_btn_t *obj_btn = widget;
-    scui_obj_btn_maker_t *obj_btn_maker = widget_maker;
+    /* 对象继承序列 <基类 - 本类> */
+    scui_widget_t  *widget  = inst;
+    scui_object_t  *object  = (void *)widget;
+    scui_obj_btn_t *obj_btn = (void *)widget;
+    /* 对象构造器继承序列 <基类 - 本类> */
+    scui_widget_maker_t  *widget_maker  = inst_maker;
+    scui_object_maker_t  *object_maker  = (void *)widget_maker;
+    scui_obj_btn_maker_t *obj_btn_maker = (void *)widget_maker;
     
     /* 必须标记ptr,widget事件 */
     widget_maker->style.indev_ptr    = true;
@@ -45,7 +44,8 @@ void scui_obj_btn_make(void *inst, void *inst_maker, scui_handle_t *handle)
 void scui_obj_btn_burn(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_obj_btn));
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_btn_t *obj_btn = (void *)widget;
     
     /* 析构派生控件实例 */
@@ -58,7 +58,8 @@ void scui_obj_btn_burn(scui_handle_t handle)
  */
 void scui_obj_btn_style(scui_handle_t handle, scui_obj_btn_res_t *res)
 {
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_t  *widget  = scui_handle_source_check(handle);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_btn_t *obj_btn = (void *)widget;
     
     /* 部件宽高 */
@@ -227,7 +228,8 @@ void scui_obj_btn_style(scui_handle_t handle, scui_obj_btn_res_t *res)
 void scui_obj_btn_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_widget_t  *widget  = scui_handle_source_check(event->object);
+    scui_object_t  *object  = (void *)widget;
     scui_obj_btn_t *obj_btn = (void *)widget;
     
     /* 基类处理(过渡动画推进) */
@@ -285,14 +287,6 @@ void scui_obj_btn_invoke(scui_event_t *event)
     case scui_event_ptr_click: {
         scui_event_mask_over(event);
         obj_btn->click = true;
-        break;
-    }
-    
-    case scui_event_create: {
-        
-        /* 运行状态初始化(运行时初值已由构造器拷贝) */
-        scui_object_press_set(event->object, true);
-        scui_object_check_set(event->object, obj_btn->check);
         break;
     }
     

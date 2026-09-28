@@ -53,30 +53,6 @@ bool scui_object_tran_work(scui_handle_t handle, scui_object_tran_t *tran);
 bool scui_object_tran_idle(scui_handle_t handle);
 
 /*@brief 对象控件状态获取
- *@param handle 控件句柄
- *@param press  控件状态
- */
-void scui_object_press_get(scui_handle_t handle, bool *press);
-
-/*@brief 对象控件状态设置
- *@param handle 控件句柄
- *@param press  控件状态
- */
-void scui_object_press_set(scui_handle_t handle, bool press);
-
-/*@brief 对象控件状态获取
- *@param handle 控件句柄
- *@param check  控件状态
- */
-void scui_object_check_get(scui_handle_t handle, bool *check);
-
-/*@brief 对象控件状态设置
- *@param handle 控件句柄
- *@param check  控件状态
- */
-void scui_object_check_set(scui_handle_t handle, bool check);
-
-/*@brief 对象控件状态获取
  *@param handle  控件句柄
  *@param state_l 控件状态
  */

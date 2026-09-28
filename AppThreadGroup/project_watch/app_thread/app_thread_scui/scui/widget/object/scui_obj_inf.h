@@ -177,6 +177,18 @@ void scui_obj_cht_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_
  */
 void scui_obj_cht_line_data(scui_handle_t handle, scui_coord_t *vlist_dot);
 
+/*@brief 对象控件标记获取
+ *@param handle 控件句柄
+ *retval 对象控件标记
+ */
+bool scui_obj_chk_fixed(scui_handle_t handle);
+
+/*@brief 对象控件状态获取(特殊语义)
+ *@param handle 控件句柄
+ *@param state  对象控件状态
+ */
+void scui_obj_chk_state(scui_handle_t handle, scui_object_type_t *state);
+
 /*@brief 控件点亮颜色设置
  *@param handle    控件句柄
  *@param color_on  点亮颜色
