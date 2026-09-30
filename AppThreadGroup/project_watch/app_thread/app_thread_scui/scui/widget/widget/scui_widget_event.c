@@ -98,6 +98,8 @@ static bool scui_widget_draw_clip(scui_handle_t handle, scui_area_t *clip, scui_
 void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync, scui_handle_t type)
 {
     SCUI_LOG_INFO("%u", handle);
+    if (handle == SCUI_HANDLE_SYSTEM)
+        return;
     
     /* 尝试为其添加剪切域 */
     if (!scui_widget_draw_clip(handle, clip, type))

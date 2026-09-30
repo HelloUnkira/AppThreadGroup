@@ -35,6 +35,8 @@
 #define SCUI_MEM_RECORD_CHECK_USER                  (0 && !SCUI_MEM_FEAT_MINI)
 /* 内存哨兵监控(内存边界追查) */
 #define SCUI_MEM_SENTRY_CHECK                       (1)
+/* 定长热结构快速分配类型数 */
+#define SCUI_MEM_SIZE_TYPE_NUM                      (7)
 
 #if SCUI_MEM_FEAT_MINI
 /* 小内存方案(开发中......) */

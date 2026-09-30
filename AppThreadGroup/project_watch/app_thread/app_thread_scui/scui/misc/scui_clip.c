@@ -119,7 +119,7 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
     
     scui_clip_unit_t *unit = NULL;
     /* 流程已经终结,将最终的合并结果加入 */
-    unit = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_clip_unit_t));
+    unit = SCUI_MEM_ALLOC(scui_mem_type_size, sizeof(scui_clip_unit_t));
     unit->clip = clip_valid;
     scui_list_dln_reset(&unit->dl_node);
     scui_list_dll_ainsert(&clip_set->dl_list, NULL, &unit->dl_node);

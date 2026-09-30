@@ -12,11 +12,16 @@
  * 3.图形类型
  * 特点:块状化,稳定生存期,大小不限
  * 建议:单独为其开设分配器,唯一化分配
+ * 
+ * 4.定长热结构类型
+ * 特点:定长化,高频使用,快速获取与回收
+ * 建议:使用slab分配器切块分配
  */
 
 typedef enum {
     scui_mem_type_none = 0,
     scui_mem_type_mix,
+    scui_mem_type_size,
     scui_mem_type_font,
     scui_mem_type_graph,
     scui_mem_type_user,
@@ -70,6 +75,21 @@ typedef enum {
     scui_mem_mgr_type_dir,
 } scui_mem_mgr_type_t;
 
+/* 定长热结构快速分配表 */
+typedef struct {
+    uint32_t num;       /* 已注册数量 */
+    struct {
+        uint32_t size;  /* 结构尺寸(字节) */
+        uint32_t num;   /* 结构数量 */
+        uint8_t *mem;   /* 内存资源 */
+        /* 块区地址区间(scui_mem_ready构建时定型, 地址反查复用): */
+        uintptr_t addr_s;
+        uintptr_t addr_e;
+        /* slab分配器: */
+        app_sys_mem_slab_t slab;
+    } item[SCUI_MEM_SIZE_TYPE_NUM];
+} scui_mem_size_t;
+
 typedef struct {
     scui_mutex_t mutex;
     uintptr_t size_total[scui_mem_type_num];
@@ -84,6 +104,9 @@ typedef struct {
     scui_mem_mgr_type_t mem_mgr_type[scui_mem_type_num];
     app_sys_mem_olsf_t *mem_olsf[scui_mem_type_num];
     app_sys_mem_dir_t   mem_dir[scui_mem_type_num];
+    
+    /* 定长热结构快速分配 */
+    scui_mem_size_t size;
     
     #if SCUI_MEM_RECORD_CHECK
     scui_mem_record_t record[scui_mem_type_num];
@@ -160,6 +183,12 @@ void scui_mem_check(scui_mem_type_t type);
  *@param oom_hit OOM命中回调
  */
 void scui_mem_ready(void (*oom_hit)(scui_mem_type_t type, bool invalid));
+
+/*@brief 定长热结构注册
+ *@param size 结构尺寸(字节)
+ *@param num  结构数量
+ */
+void scui_mem_size_register(uint32_t size, uint32_t num);
 
 /* 宏转接,外部使用接口 */
 #define SCUI_MEM_ALLOC(type, size)      scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, true)

@@ -242,18 +242,6 @@ void scui_draw_task_ready(void)
 {
     scui_draw_task_list_t *task_list = &scui_draw_task_list;
     
-    /* 绘制描述符资源锁(单任务无效化) */
-    scui_mutex_process(&task_list->dsc_mutex, scui_mutex_static);
-    
-    /* 绘制描述符资源就绪 */
-    uintptr_t size_mem = sizeof(scui_draw_dsc_t) * SCUI_DRAW_TASK_DSC_NUM;
-    size_mem += sizeof(app_sys_mem_slab_t) + sizeof(uintptr_t) * 4;
-    task_list->slab_mem = SCUI_MEM_ALLOC(scui_mem_type_graph, size_mem);
-    
-    uintptr_t addr_mem = (uintptr_t)task_list->slab_mem;
-    addr_mem += sizeof(app_sys_mem_slab_t) + sizeof(uintptr_t);
-    app_sys_mem_slab_ready(task_list->slab_mem, addr_mem, size_mem, sizeof(scui_draw_dsc_t));
-    
     #if SCUI_DRAW_TASK_SEQ
     /*备注:
      *为快速计算是否产生区域重合
@@ -404,9 +392,7 @@ void scui_draw_dsc_ready(scui_draw_dsc_t **draw_dsc)
     
     /* 全局唯一绘制描述符申请 */
     SCUI_ASSERT(draw_dsc != NULL);
-    scui_mutex_process(&task_list->dsc_mutex, scui_mutex_take);
-    *draw_dsc = app_sys_mem_slab_alloc(task_list->slab_mem);
-    scui_mutex_process(&task_list->dsc_mutex, scui_mutex_give);
+    *draw_dsc = SCUI_MEM_ALLOC(scui_mem_type_size, sizeof(scui_draw_dsc_t));
     SCUI_ASSERT(*draw_dsc != NULL);
     
     /* 此处不使用memset, 使用者需要给定完整参数集, 未给定参数为未知值 */
@@ -431,9 +417,7 @@ void scui_draw_dsc_task(scui_draw_dsc_t *draw_dsc)
              scui_draw_ctx_sched(draw_dsc);
         
         /* 全局唯一绘制描述符释放 */
-        scui_mutex_process(&task_list->dsc_mutex, scui_mutex_take);
-        app_sys_mem_slab_free(task_list->slab_mem, draw_dsc);
-        scui_mutex_process(&task_list->dsc_mutex, scui_mutex_give);
+        SCUI_MEM_FREE(draw_dsc);
         
     } else {
         #if SCUI_DRAW_TASK_SEQ

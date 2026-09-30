@@ -202,6 +202,32 @@ void scui_mem_sentry_check(void)
 
 #endif
 
+/*@brief 定长热结构分配器查找(按块单元尺寸)
+ *@param blk_size 块单元尺寸(含哨兵开销)
+ *@retval 分配器(未找到为NULL)
+ */
+static app_sys_mem_slab_t * scui_mem_size_slab_blk(uint32_t blk_size)
+{
+    for (uint32_t idx = 0; idx < scui_mem.size.num; idx++)
+    if (scui_mem.size.item[idx].slab.blk_size == blk_size)
+        return &scui_mem.size.item[idx].slab;
+    return NULL;
+}
+
+/*@brief 定长热结构分配器查找(按内存地址)
+ *@param ptr  内存地址
+ *@retval 分配器(未找到为NULL)
+ */
+static app_sys_mem_slab_t * scui_mem_size_slab_addr(void *ptr)
+{
+    /* 块区地址区间由scui_mem_ready定型, 此处仅做区间命中 */
+    for (uint32_t idx = 0; idx < scui_mem.size.num; idx++)
+    if ((uintptr_t)ptr >= scui_mem.size.item[idx].addr_s)
+    if ((uintptr_t)ptr <  scui_mem.size.item[idx].addr_e)
+        return &scui_mem.size.item[idx].slab;
+    return NULL;
+}
+
 /*@brief 内存分配(原型)
  *@param type 内存分配类型
  *@param size 内存大小
@@ -211,6 +237,13 @@ void scui_mem_sentry_check(void)
 static void * scui_mem_alloc_raw(scui_mem_type_t type, uint32_t size, bool way)
 {
     SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
+    
+    if (type == scui_mem_type_size) {
+        /* 定长热结构: 命中slab分配器切块分配 */
+        app_sys_mem_slab_t *slab = scui_mem_size_slab_blk(size);
+        SCUI_ASSERT(slab != NULL && slab->blk_num != 0);
+        return app_sys_mem_slab_alloc(slab);
+    }
     
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         return app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
@@ -224,6 +257,13 @@ static void * scui_mem_alloc_raw(scui_mem_type_t type, uint32_t size, bool way)
  */
 static void scui_mem_free_raw(scui_mem_type_t type, void *ptr)
 {
+    if (type == scui_mem_type_size) {
+        /* 定长热结构: 命中slab分配器快速回收 */
+        app_sys_mem_slab_t *slab = scui_mem_size_slab_addr(ptr);
+        SCUI_ASSERT(slab != NULL);
+        app_sys_mem_slab_free(slab, ptr);
+    }
+    
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         app_sys_mem_olsf_free(scui_mem.mem_olsf[type], ptr);
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir) {
@@ -238,6 +278,13 @@ static void scui_mem_free_raw(scui_mem_type_t type, void *ptr)
  */
 static uint32_t scui_mem_size_raw(scui_mem_type_t type, void *ptr)
 {
+    if (type == scui_mem_type_size) {
+        /* 定长热结构: 一个块单元的尺寸 */
+        app_sys_mem_slab_t *slab = scui_mem_size_slab_addr(ptr);
+        SCUI_ASSERT(slab != NULL);
+        return slab->blk_size;
+    }
+    
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         return app_sys_mem_olsf_size(scui_mem.mem_olsf[type], ptr);
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
@@ -259,7 +306,9 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
         return NULL;
     
     #if SCUI_MEM_FEAT_MINI
-    type = scui_mem_type_mix;
+    /* 定长热结构拥有专属分配器, 不受小内存方案影响 */
+    if (type != scui_mem_type_size)
+         type = scui_mem_type_mix;
     #endif
     
     #if SCUI_MEM_SENTRY_CHECK
@@ -369,6 +418,12 @@ void scui_mem_type(void *ptr, scui_mem_type_t *type)
 {
     *type = scui_mem_type_none;
     
+    /* 定长热结构内存从graph内存池切出, 必须优先命中其地址区间 */
+    if (scui_mem_size_slab_addr(ptr) != NULL) {
+       *type = scui_mem_type_size;
+        return;
+    }
+    
     for (uint32_t idx = scui_mem_type_none; idx < scui_mem_type_num; idx++) {
         
         if (scui_mem.mem_mgr_type[idx] == scui_mem_mgr_type_olsf)
@@ -392,6 +447,13 @@ void scui_mem_type(void *ptr, scui_mem_type_t *type)
  */
 void scui_mem_check(scui_mem_type_t type)
 {
+    if (type == scui_mem_type_size) {
+        for (uint32_t idx = 0; idx < scui_mem.size.num; idx++) {
+            app_sys_mem_slab_t *slab = &scui_mem.size.item[idx].slab;
+            SCUI_ASSERT(slab->blk_used <= slab->blk_num);
+        }
+    }
+    
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         app_sys_mem_olsf_check(scui_mem.mem_olsf[type]);
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
@@ -415,6 +477,9 @@ uint32_t scui_mem_size_ptr(void *ptr)
     scui_mem_type_t type = scui_mem_type_none;
     scui_mem_type(ptr, &type);
     
+    if (type == scui_mem_type_size)
+        return scui_mem_size_raw(type, ptr);
+    
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         return app_sys_mem_olsf_size(scui_mem.mem_olsf[type], ptr);
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
@@ -428,6 +493,17 @@ uint32_t scui_mem_size_ptr(void *ptr)
 uint32_t scui_mem_size_frag(scui_mem_type_t type)
 {
     SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
+    
+    if (type == scui_mem_type_size) {
+        /* 定长热结构无碎片, 存在空闲块即可满足一次分配 */
+        uint32_t frag = 0;
+        for (uint32_t idx = 0; idx < scui_mem.size.num; idx++) {
+            app_sys_mem_slab_t *slab = &scui_mem.size.item[idx].slab;
+            if (slab->blk_used < slab->blk_num && frag < slab->blk_size)
+                 frag = slab->blk_size;
+        }
+        return frag;
+    }
     
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         return app_sys_mem_olsf_frag(scui_mem.mem_olsf[type]);
@@ -497,6 +573,8 @@ void scui_mem_ready(void (*oom_hit)(scui_mem_type_t type, bool unsupport))
     scui_mem.size_total[scui_mem_type_font ] = SCUI_MEM_TYPE_SIZE_FONT;
     scui_mem.size_total[scui_mem_type_graph] = SCUI_MEM_TYPE_SIZE_GRAPH;
     scui_mem.size_total[scui_mem_type_user ] = SCUI_MEM_TYPE_SIZE_USER;
+    /* 定长热结构总计值在注册时累加 */
+    scui_mem.size_total[scui_mem_type_size ] = 0;
     
     /* OOM命中回调 */
     scui_mem.oom_hit = oom_hit;
@@ -540,6 +618,27 @@ void scui_mem_ready(void (*oom_hit)(scui_mem_type_t type, bool unsupport))
     if (scui_mem.mem_mgr_type[scui_mem_type_user ] == scui_mem_mgr_type_dir)
         app_sys_mem_dir_ready(&scui_mem.mem_dir[scui_mem_type_user],  (uintptr_t)mem_olsf_buffer_user,  SCUI_MEM_TYPE_SIZE_USER);
     
+    /* 定长热结构分配器构建(须先scui_mem_size_register打好表) */
+    for (uint32_t idx = 0; idx < scui_mem.size.num; idx++) {
+        app_sys_mem_slab_t *slab = &scui_mem.size.item[idx].slab;
+        uint32_t blk_size = slab->blk_size;
+        uint32_t blk_num  = scui_mem.size.item[idx].num;
+        
+        /* 从graph内存池切出块区, 常驻使用不回收 */
+        uint32_t size_blk  = blk_size * blk_num;
+        uint32_t size_head = sizeof(app_sys_mem_slab_t) + sizeof(uintptr_t) * 4;
+        uint8_t *mem = SCUI_MEM_ALLOC(scui_mem_type_graph, size_head + size_blk);
+        
+        scui_mem.size.item[idx].mem = mem;
+        app_sys_mem_slab_ready(slab, (uintptr_t)mem + size_head, size_blk, blk_size);
+        
+        /* 块区地址区间在此定型, 供地址反查快速命中(不随分配状态变化) */
+        scui_mem.size.item[idx].addr_s = slab->addr;
+        scui_mem.size.item[idx].addr_e = slab->addr + (uintptr_t)blk_size * slab->blk_num;
+        
+        scui_mem.size_total[scui_mem_type_size] += size_blk;
+    }
+    
     #if SCUI_MEM_RECORD_CHECK
     bool rcd_flag[scui_mem_type_num] = {
         [scui_mem_type_mix  ] = SCUI_MEM_RECORD_CHECK_MIX,
@@ -575,4 +674,36 @@ void scui_mem_ready(void (*oom_hit)(scui_mem_type_t type, bool unsupport))
         scui_mem.size_used[scui_mem_type_graph] += size;
     }
     #endif
+}
+
+/*@brief 定长热结构注册
+ *@param size 结构尺寸(字节)
+ *@param num  结构数量
+ */
+void scui_mem_size_register(uint32_t size, uint32_t num)
+{
+    SCUI_ASSERT(size != 0 && num != 0);
+    
+    /* 块单元必须与scui_mem_alloc的分配尺寸一致: 结构尺寸 + 哨兵开销 */
+    uint32_t blk_size = size;
+    #if SCUI_MEM_SENTRY_CHECK
+    blk_size += sizeof(uint32_t) * 3;
+    #endif
+    
+    /* 块单元尺寸重复说明为同一热结构, 数量合并(判定条件同scui_mem_size_slab_blk) */
+    for (uint32_t idx = 0; idx < scui_mem.size.num; idx++)
+        if (scui_mem.size.item[idx].slab.blk_size == blk_size) {
+            scui_mem.size.item[idx].num += num;
+            return;
+        }
+    
+    /* 表项不足, 需要调整SCUI_MEM_SIZE_TYPE_NUM */
+    SCUI_ASSERT(scui_mem.size.num < SCUI_MEM_SIZE_TYPE_NUM);
+    
+    /* 此处仅打表, slab分配器由scui_mem_ready统一构建 */
+    uint32_t idx = scui_mem.size.num;
+    scui_mem.size.item[idx].slab.blk_size = blk_size;
+    scui_mem.size.item[idx].size = size;
+    scui_mem.size.item[idx].num  = num;
+    scui_mem.size.num++;
 }

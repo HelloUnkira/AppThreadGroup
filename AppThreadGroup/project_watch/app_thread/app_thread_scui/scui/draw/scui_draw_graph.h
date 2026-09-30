@@ -311,7 +311,6 @@ typedef struct {
 typedef struct {
     /* 多绘制任务异步: */
     scui_list_dll_t  dl_list;
-    scui_mutex_t     dsc_mutex;
     scui_mutex_t     sched_mutex;
     scui_sem_t       sched_sem;
     scui_sem_t       async_sem[SCUI_DRAW_TASK_ASYNC_NUM];
@@ -322,7 +321,6 @@ typedef struct {
     scui_coord_t     hash_size;     /* 绘制区域哈希数组大小 */
     uintptr_t        node_total;    /* 节点数量(总计) */
     uintptr_t        node_frame;    /* 节点数量(当前) */
-    void            *slab_mem;      /* 绘制描述符缓存资源 */
 } scui_draw_task_list_t;
 
 /*@brief 就绪绘制任务序列
