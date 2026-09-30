@@ -29,16 +29,16 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_string));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
-    string->font_idx    = string_maker->font_idx;
-    string->args        = string_maker->args;
-    string->unit_ms     = string_maker->unit_ms;
-    string->unit_dx     = string_maker->unit_dx;
-    string->unit_s      = string_maker->unit_s;
-    string->draw_cache  = string_maker->draw_cache;
-    string->unit_anima  = true;
-    string->unit_abort  = false;
-    string->unit_over   = false;
-    string->unit_way    = 1;
+    string->font_idx   = string_maker->font_idx;
+    string->args       = string_maker->args;
+    string->unit_ms    = string_maker->unit_ms;
+    string->unit_dx    = string_maker->unit_dx;
+    string->unit_s     = string_maker->unit_s;
+    string->draw_cache = string_maker->draw_cache;
+    string->unit_anima = true;
+    string->unit_abort = false;
+    string->unit_over  = false;
+    string->unit_way   = 1;
     
     if (string->args.gap_line == 0)
         string->args.gap_line  = SCUI_WIDGET_STRING_GAP_LINE;
@@ -72,8 +72,8 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
     #if SCUI_MEM_FEAT_MINI
     /* 禁用绘制缓存块 */
     /* 禁用级联色彩渐变 */
-    string->draw_cache  = false;
-    string->args.regrad = false;
+    string->draw_cache    = false;
+    string->args.use_gard = false;
     #endif
     
     /* 让内存画布绑定到句柄 */
@@ -106,12 +106,12 @@ void scui_string_burn(scui_handle_t handle)
     scui_string_update_str(handle, NULL);
     
     /* 回收旧颜色值表 */
-    if (string->args.colors != NULL) {
-        SCUI_MEM_FREE(string->args.colors->index_ls);
-        SCUI_MEM_FREE(string->args.colors->index_le);
-        SCUI_MEM_FREE(string->args.colors->color_ll);
-        SCUI_MEM_FREE(string->args.colors);
-        string->args.colors  = NULL;
+    if (string->args.recs != NULL) {
+        SCUI_MEM_FREE(string->args.recs->index_ls);
+        SCUI_MEM_FREE(string->args.recs->index_le);
+        SCUI_MEM_FREE(string->args.recs->color_ll);
+        SCUI_MEM_FREE(string->args.recs);
+        string->args.recs    = NULL;
     }
     
     /* 回收渐变序列表 */
@@ -141,6 +141,7 @@ void scui_string_text(scui_handle_t handle, scui_handle_t *text)
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
+    
     *text = string->text;
 }
 
@@ -153,6 +154,7 @@ void scui_string_str_utf8(scui_handle_t handle, uint8_t **str_utf8)
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
+    
     *str_utf8 = string->str_utf8;
 }
 
@@ -245,13 +247,13 @@ void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, scui_co
         return;
     
     /* 回收旧颜色值表 */
-    SCUI_ASSERT(string->args.recolor);
-    if (string->args.colors != NULL) {
-        SCUI_MEM_FREE(string->args.colors->index_ls);
-        SCUI_MEM_FREE(string->args.colors->index_le);
-        SCUI_MEM_FREE(string->args.colors->color_ll);
-        SCUI_MEM_FREE(string->args.colors);
-        string->args.colors  = NULL;
+    SCUI_ASSERT(string->args.use_rec);
+    if (string->args.recs != NULL) {
+        SCUI_MEM_FREE(string->args.recs->index_ls);
+        SCUI_MEM_FREE(string->args.recs->index_le);
+        SCUI_MEM_FREE(string->args.recs->color_ll);
+        SCUI_MEM_FREE(string->args.recs);
+        string->args.recs    = NULL;
     }
     
     /* 如果仅回收资源 */
@@ -259,15 +261,15 @@ void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, scui_co
         return;
     
     /* 新建颜色值表 */
-    string->args.colors = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_string_rec_t));
-    string->args.colors->color_num = color_num;
-    string->args.colors->index_ls  = SCUI_MEM_ALLOC(scui_mem_type_mix, color_num * sizeof(scui_coord_t));
-    string->args.colors->index_le  = SCUI_MEM_ALLOC(scui_mem_type_mix, color_num * sizeof(scui_coord_t));
-    string->args.colors->color_ll  = SCUI_MEM_ALLOC(scui_mem_type_mix, color_num * sizeof(scui_color_t));
+    string->args.recs   = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_string_rec_t));
+    string->args.recs->color_num   = color_num;
+    string->args.recs->index_ls    = SCUI_MEM_ALLOC(scui_mem_type_mix, color_num * sizeof(scui_coord_t));
+    string->args.recs->index_le    = SCUI_MEM_ALLOC(scui_mem_type_mix, color_num * sizeof(scui_coord_t));
+    string->args.recs->color_ll    = SCUI_MEM_ALLOC(scui_mem_type_mix, color_num * sizeof(scui_color_t));
     for (uint32_t idx = 0; idx < color_num; idx++) {
-        string->args.colors->index_ls[idx] = -1;
-        string->args.colors->index_le[idx] = -1;
-        string->args.colors->color_ll[idx] = color_ll[idx];
+        string->args.recs->index_ls[idx]   = -1;
+        string->args.recs->index_le[idx]   = -1;
+        string->args.recs->color_ll[idx]   = color_ll[idx];
     }
     
     scui_string_update_str(handle, str_utf8);
@@ -291,7 +293,7 @@ void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, scui_
     #endif
     
     /* 必须要配置绘制缓存块 */
-    SCUI_ASSERT(string->args.regrad);
+    SCUI_ASSERT(string->args.use_gard);
     SCUI_ASSERT(string->draw_cache);
     SCUI_ASSERT(grad_n >= 2);
     
@@ -324,6 +326,7 @@ void scui_string_scroll_abort(scui_handle_t handle, bool abort)
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
+    
     string->unit_abort = abort;
 }
 
@@ -336,6 +339,7 @@ bool scui_string_scroll_over(scui_handle_t handle)
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
+    
     return string->unit_over;
 }
 
@@ -528,14 +532,14 @@ void scui_string_invoke(scui_event_t *event)
                 scui_area_t draw_clip = scui_surface_area(&draw_surface);
                 
                 /* 如果全局渐变 */
-                if (string->args.regrad) {
+                if (string->args.use_gard) {
                     /* 回收旧颜色值表 */
-                    if (string->args.colors != NULL) {
-                        SCUI_MEM_FREE(string->args.colors->index_ls);
-                        SCUI_MEM_FREE(string->args.colors->index_le);
-                        SCUI_MEM_FREE(string->args.colors->color_ll);
-                        SCUI_MEM_FREE(string->args.colors);
-                        string->args.colors  = NULL;
+                    if (string->args.recs != NULL) {
+                        SCUI_MEM_FREE(string->args.recs->index_ls);
+                        SCUI_MEM_FREE(string->args.recs->index_le);
+                        SCUI_MEM_FREE(string->args.recs->color_ll);
+                        SCUI_MEM_FREE(string->args.recs);
+                        string->args.recs    = NULL;
                     }
                     /* 所有颜色统一绘制成白色 */
                     string->args.color = SCUI_COLOR_MAKE32_SE(true, 0x0, 0xFFFFFFFF, 0xFFFFFFFF);
@@ -545,7 +549,7 @@ void scui_string_invoke(scui_event_t *event)
                 scui_draw_string(true, &draw_surface, draw_clip,
                     draw_clip, scui_alpha_cover, &string->args);
                 
-                if (string->args.regrad) {
+                if (string->args.use_gard) {
                     /* 如果需要全局渐变,对绘制画布进行渐变 */
                     scui_draw_area_grads(true, &draw_surface, draw_clip,
                         string->args.grads->grad_s, string->args.grads->grad_n,

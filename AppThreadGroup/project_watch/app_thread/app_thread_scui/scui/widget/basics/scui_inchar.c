@@ -26,12 +26,12 @@ void scui_inchar_make(void *inst, void *inst_maker, scui_handle_t *handle)
     /* 必须标记anima事件 */
     widget_maker->style.sched_anima = true;
     
-    /* 限制: 单色文本输入(禁用绘制缓存/级联上色/复色/划线) */
-    string_maker->draw_cache   = false;
-    string_maker->args.regrad  = false;
-    string_maker->args.recolor = false;
-    string_maker->args.line_under  = false;
-    string_maker->args.line_delete = false;
+    /* 限制: 单色文本输入(禁用绘制缓存/复色/级联上色/划线) */
+    string_maker->draw_cache    = false;
+    string_maker->args.use_rec  = false;
+    string_maker->args.use_gard = false;
+    string_maker->args.stroke_u = false;
+    string_maker->args.stroke_d = false;
     
     /* 构造派生控件实例 */
     scui_string_make(string, string_maker, handle);

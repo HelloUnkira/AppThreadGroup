@@ -60,7 +60,7 @@
                 "widget.type":             "scui_widget_type_string",
                 "widget.clip.w":           "SCUI_WIDGET_AUTO_W",
                 "widget.clip.h":           "SCUI_WIDGET_AUTO_H",
-                "args.line_width":         "2",
+                "args.stroke":             "2",
                 "args.align_ver":          "2",
                 "args.color.color_s.full": "0xFFFFFFFF",
                 "args.color.color_e.full": "0xFFFFFFFF",

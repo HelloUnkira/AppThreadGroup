@@ -230,15 +230,15 @@ void scui_monitor_show(bool buffer)
         string_maker.widget.clip.y              = 0;
         string_maker.widget.clip.w              = SCUI_HOR_RES - 10 * 2;
         string_maker.widget.clip.h              = 20;
-        string_maker.args.recolor               = true;
+        string_maker.args.use_rec               = true;
         string_maker.args.align_hor             = 0;
         string_maker.args.align_ver             = 2;
         string_maker.args.color.color_s.full    = 0xFF404040;
         string_maker.args.color.color_e.full    = 0xFF404040;
         string_maker.args.color.filter          = true;
-        string_maker.args.line_width            = 1;
-        string_maker.args.line_under            = 1;
-        string_maker.args.line_delete           = 1;
+        string_maker.args.stroke                = 1;
+        string_maker.args.stroke_u              = 1;
+        string_maker.args.stroke_d              = 1;
         string_maker.args.lang                  = scui_lang_type_ascii;
         string_maker.font_idx                   = SCUI_FONT_IDX_X16;
         

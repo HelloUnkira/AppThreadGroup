@@ -22,14 +22,13 @@ typedef struct {
 } scui_string_typo_t;
 
 typedef struct {
+    /* 外部域: */
     scui_color_t        color;              /* 字符串颜色 */
-    scui_string_rec_t  *colors;             /* 字符复色序列表 */
-    scui_string_grad_t *grads;              /* 字符渐变序列表 */
-    scui_coord_t        line_width;         /* 宽:下划线/删除线 */
-    scui_sbitfd_t       regrad:1;           /* 字符颜色渐变使能 */
-    scui_sbitfd_t       recolor:1;          /* 字符颜色复色使能 */
-    scui_sbitfd_t       line_under:1;       /* 下划线 */
-    scui_sbitfd_t       line_delete:1;      /* 删除线 */
+    scui_coord_t        stroke;             /* 宽:下划线/删除线 */
+    scui_sbitfd_t       use_rec:1;          /* 字符颜色复色使能 */
+    scui_sbitfd_t       use_gard:1;         /* 字符颜色渐变使能 */
+    scui_sbitfd_t       stroke_u:1;         /* 下划线 */
+    scui_sbitfd_t       stroke_d:1;         /* 删除线 */
     scui_sbitfd_t       gap_line:7;         /* 行间距(<= 127) */
     scui_sbitfd_t       gap_item:7;         /* 字间距(<= 127) */
     scui_sbitfd_t       gap_none:7;         /* 空字符(<= 127) */
@@ -38,12 +37,14 @@ typedef struct {
     scui_sbitfd_t       mode_scroll:2;      /* 滚动模式(0:左右滚动;1:轮转滚动) */
     scui_sbitfd_t       line_multi:1;       /* 多行模式(非默认) */
     scui_coord_t        size;               /* 字库尺寸 */
-    scui_handle_t       name;               /* 字库句柄 */
     scui_handle_t       lang;               /* 语言编号 */
     /* 外部域转内部域: */
+    scui_handle_t       name;               /* 字库句柄 */
     scui_area_t         clip;               /* 绘制剪切域 */
     uint8_t            *utf8;               /* 字符串(utf8) */
     /* 内部域(排版信息): */
+    scui_string_rec_t  *recs;               /* 字符复色序列表 */
+    scui_string_grad_t *grads;              /* 字符渐变序列表 */
     scui_string_typo_t *typo;               /* 多行模式排版信息 */
     scui_coord_t        width;              /* 单行模式宽度 */
     scui_coord_t        height;             /* 多行模式高度 */

@@ -426,8 +426,8 @@ static void scui_string_args_rec(scui_string_args_t *args)
         args->name == SCUI_HANDLE_INVALID)
         return;
     
-    if (!args->recolor) return;
-    if (args->colors == NULL) return;
+    if (!args->use_rec) return;
+    if (args->recs == NULL) return;
     /* 确认unicode编码下的index */
     scui_coord_t idx_colors = 0, key_chars = 0;
     /* 匹配颜色值的起始点和结束点, 记录范围索引值, 同时去除目标点 */
@@ -435,15 +435,15 @@ static void scui_string_args_rec(scui_string_args_t *args)
         /* 匹配到颜色起始点:#- */
         /* 匹配到颜色结束点:-# */
         if (args->unicode[idx] == '#' && args->unicode[idx + 1] == '-') {
-            args->colors->index_ls[idx_colors] = idx - key_chars;
-            SCUI_ASSERT(idx_colors <= args->colors->color_num);
+            args->recs->index_ls[idx_colors] = idx - key_chars;
+            SCUI_ASSERT(idx_colors <= args->recs->color_num);
             key_chars += 2;
             idx++;
             continue;
         }
         if (args->unicode[idx] == '-' && args->unicode[idx + 1] == '#') {
-            args->colors->index_le[idx_colors] = idx - key_chars - 1;
-            SCUI_ASSERT(idx_colors <= args->colors->color_num);
+            args->recs->index_le[idx_colors] = idx - key_chars - 1;
+            SCUI_ASSERT(idx_colors <= args->recs->color_num);
             key_chars += 2;
             idx++;
             
@@ -452,7 +452,7 @@ static void scui_string_args_rec(scui_string_args_t *args)
         }
     }
     /* 规则匹配不上, 断言中止 */
-    SCUI_ASSERT(idx_colors == args->colors->color_num);
+    SCUI_ASSERT(idx_colors == args->recs->color_num);
     
     scui_coord_t idx_unicode = 0;
     scui_coord_t num_unicode = args->number;

@@ -97,7 +97,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     draw_dsc_line.graph.dst_clip    = dst_clip_v;
     draw_dsc_line.graph.src_alpha   = src_alpha;
     draw_dsc_line.graph.src_color   = src_args->color;
-    draw_dsc_line.graph.src_stroke  = src_args->line_width;
+    draw_dsc_line.graph.src_stroke  = src_args->stroke;
     draw_dsc_line.graph.src_pos_1.x = line_multi ? 0 : src_args->offset;
     draw_dsc_line.graph.src_pos_2.x = line_multi ? 0 : src_args->offset;
     draw_dsc_line.graph.src_pos_1.y = line_multi ? src_args->offset : 0;
@@ -106,8 +106,8 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     /* 下划线:基线位置用作下划线 */
     scui_draw_dsc_t draw_dsc_line_d = draw_dsc_line;
     scui_draw_dsc_t draw_dsc_line_u = draw_dsc_line;
-    draw_dsc_line_d.graph.src_pos_1.y += (line_height - src_args->line_width) / 2;
-    draw_dsc_line_d.graph.src_pos_2.y += (line_height - src_args->line_width) / 2;
+    draw_dsc_line_d.graph.src_pos_1.y += (line_height - src_args->stroke) / 2;
+    draw_dsc_line_d.graph.src_pos_2.y += (line_height - src_args->stroke) / 2;
     draw_dsc_line_u.graph.src_pos_1.y += (line_height - base_line);
     draw_dsc_line_u.graph.src_pos_2.y += (line_height - base_line);
     
@@ -209,15 +209,15 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             if (glyph_unit.glyph.bitmap != NULL) {
                 
                 scui_color_t glyph_color = src_args->color;
-                if (src_args->recolor && src_args->colors != NULL)
-                for (scui_coord_t idx_rec = 0; idx_rec < src_args->colors->color_num; idx_rec++) {
-                    if (src_args->colors->index_ls[idx_rec] == -1 ||
-                        src_args->colors->index_le[idx_rec] == -1 ||
-                        src_args->colors->index_ls[idx_rec] > idx ||
-                        src_args->colors->index_le[idx_rec] < idx)
+                if (src_args->use_rec && src_args->recs != NULL)
+                for (scui_coord_t idx_rec = 0; idx_rec < src_args->recs->color_num; idx_rec++) {
+                    if (src_args->recs->index_ls[idx_rec] == -1 ||
+                        src_args->recs->index_le[idx_rec] == -1 ||
+                        src_args->recs->index_ls[idx_rec] > idx ||
+                        src_args->recs->index_le[idx_rec] < idx)
                         continue;
                     
-                    glyph_color = src_args->colors->color_ll[idx_rec];
+                    glyph_color = src_args->recs->color_ll[idx_rec];
                     break;
                 }
                 
@@ -232,13 +232,13 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
         
         /* 下划线和删除线 */
         line_point_e.x += line_w - src_args->gap_item;
-        if (src_args->line_delete || src_args->line_under) {
+        if (src_args->stroke_d || src_args->stroke_u) {
             line_point_s.x += dst_clip->x;
             line_point_s.y += dst_clip->y;
             line_point_e.x += dst_clip->x;
             line_point_e.y += dst_clip->y;
             
-            if (src_args->line_delete) {
+            if (src_args->stroke_d) {
                 scui_draw_dsc_t draw_dsc_loc = draw_dsc_line_d;
                 draw_dsc_loc.graph.src_pos_1.x += line_point_s.x;
                 draw_dsc_loc.graph.src_pos_1.y += line_point_s.y;
@@ -247,7 +247,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 scui_draw_graph(true, dst_surface, *dst_clip,
                     src_alpha, src_args->color, &draw_dsc_loc);
             }
-            if (src_args->line_under) {
+            if (src_args->stroke_u) {
                 scui_draw_dsc_t draw_dsc_loc = draw_dsc_line_u;
                 draw_dsc_loc.graph.src_pos_1.x += line_point_s.x;
                 draw_dsc_loc.graph.src_pos_1.y += line_point_s.y;
