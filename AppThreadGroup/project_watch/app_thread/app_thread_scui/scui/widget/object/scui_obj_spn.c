@@ -79,7 +79,7 @@ void scui_obj_spn_invoke(scui_event_t *event)
         
         /* spinner端点基准固化 */
         scui_coord3_t angle_s = 0.0f;
-        scui_coord3_t angle_e = 360.0f;
+        scui_coord3_t angle_e = 0.0f;
         scui_coord3_t angle_d = 360.0f;
         obj_arc->angle_c += scui_map(event->tick, 0, main_time.number, 0.0f, angle_d);
         if (obj_arc->angle_c > 360) obj_arc->angle_c -= 360;
@@ -92,14 +92,16 @@ void scui_obj_spn_invoke(scui_event_t *event)
         if (scui_mabs(angle_c / 180, 2) == 1)
             path_map = scui_map_ease_in;
         
+        /* 端点半程相错: 前缘线性推进(整圈基准), 后缘缓动追赶(半圈基准)
+           张角恒在半圈附近涨落: ThorVG对|sweep|>=360按整圆处理(旋转将不可见) */
         scui_coord_t  angle_p = scui_mabs(angle_c % 180, 180);
         angle_s += angle_w * path_map(angle_p, 0, 180, 0, angle_d);
-        angle_e += angle_w * scui_map(angle_p, 0, 180, 0, angle_d) + angle_w * angle_d;
+        angle_e += angle_w * scui_map(angle_p, 0, 180, 0, angle_d) + angle_w * angle_d / 2;
         
         /* 加载圆环背景(0, 360) */
         scui_object_prop_t prop_def = {0};
         prop_def.part  = scui_object_part_arc_bg;
-        prop_def.form  = scui_object_form_arc_base;
+        prop_def.form  = scui_object_form_arc_all;
         prop_def.state = scui_object_state_def;
         
         prop_def.data.number = 0;
@@ -112,7 +114,7 @@ void scui_obj_spn_invoke(scui_event_t *event)
         
         /* 加载圆环前景(angle_s, angle_e) */
         prop_def.part  = scui_object_part_arc_fg;
-        prop_def.form  = scui_object_form_arc_base;
+        prop_def.form  = scui_object_form_arc_all;
         prop_def.state = scui_object_state_def;
         
         prop_def.data.number = angle_s;

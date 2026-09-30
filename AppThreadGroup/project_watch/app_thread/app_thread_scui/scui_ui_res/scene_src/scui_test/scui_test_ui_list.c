@@ -27,7 +27,7 @@ void scui_test_ui_list_item_event_proc(scui_event_t *event)
         SCUI_UI_SCENE_TEST_UI_SCROLL,
         SCUI_UI_SCENE_TEST_UI_LAYOUT,
         SCUI_UI_SCENE_TEST_UI_STRING,
-        SCUI_UI_SCENE_TEST_UI_OBJECT,
+        SCUI_UI_SCENE_TEST_UI_OBJ_BTN,
         SCUI_UI_SCENE_TEST_UI_XIMAGE,
         SCUI_UI_SCENE_TEST_UI_INCHAR,
         SCUI_UI_SCENE_TEST_UI_SYMBOL,

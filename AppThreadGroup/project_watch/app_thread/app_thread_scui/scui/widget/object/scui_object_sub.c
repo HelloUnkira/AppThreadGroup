@@ -26,6 +26,9 @@ static void scui_object_tvg_rect_cb(scui_draw_dsc_t *draw_dsc)
     scui_sbitfd_t   src_grad    =  draw_dsc->graph.src_grad;
     /* draw dsc args<e> */
     
+    if (src_stroke < 0) src_stroke = 0;
+    /* 边界语义:实心(<=0)归零, 空心(>0)保持 */
+    
     scui_coord_t src_radius_max = scui_min(dst_part->w, dst_part->h) / 2;
     if (src_radius > src_radius_max || src_radius < 0)
         src_radius = src_radius_max;
@@ -251,8 +254,9 @@ static void scui_object_tvg_arc_cb(scui_draw_dsc_t *draw_dsc)
     scui_sbitfd_t   src_grad    =  draw_dsc->graph.src_grad;
     /* draw dsc args<e> */
     
-    if (src_radius <= 0)
-        return;
+    if (src_radius <= 0) return;
+    if (src_stroke <  0) src_stroke = 0;
+    /* 边界语义:实心(<=0)归零, 空心(>0)保持 */
     
     Tvg_Canvas   *canvas = draw_dsc->graph.src_tvg_canvas;
     scui_point_t  offset = draw_dsc->graph.src_tvg_offset;
@@ -332,11 +336,8 @@ static void scui_object_tvg_line_cb(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    if (src_stroke <= 0)
-        src_stroke  = 1;
-    
-    if (src_vpos_c == 0)
-        return;
+    if (src_stroke <= 0) src_stroke = 1;
+    if (src_vpos_c == 0) return;
     
     Tvg_Canvas   *canvas = draw_dsc->graph.src_tvg_canvas;
     scui_point_t  offset = draw_dsc->graph.src_tvg_offset;
@@ -425,6 +426,113 @@ static bool scui_object_draw_prop_sync(scui_handle_t handle, scui_object_prop_t 
     return true;
 }
 
+/*@brief 对象控件刷新经典矩形属性
+ *@param handle 对象控件句柄
+ *@param sub    矩形属性(part;state)
+ *@retval 成功失败(prop缺失失败)
+ */
+bool scui_object_form_rect(scui_handle_t handle, scui_object_sub_t *sub)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_object_t *object = (void *)widget;
+    
+    scui_object_prop_t prop_all = {0};
+    prop_all.part  = sub->part;
+    prop_all.form  = scui_object_form_rect_all;
+    prop_all.state = sub->state;
+    prop_all.style = scui_object_style_rect_point;
+    if (!scui_object_prop_sync(handle, &prop_all))
+         return false;
+    
+    scui_coord_t width  = 0;
+    scui_coord_t height = 0;
+    scui_coord_t radius = 0;
+    scui_point_t point  = prop_all.data.point;
+    scui_opt_pos_t align = scui_opt_pos_none;
+    /* 基准form: 取几何 */
+    prop_all.style = scui_object_style_rect_width;
+    if (scui_object_prop_sync(handle, &prop_all))
+        width  = prop_all.data.number;
+    prop_all.style = scui_object_style_rect_height;
+    if (scui_object_prop_sync(handle, &prop_all))
+        height = prop_all.data.number;
+    prop_all.style = scui_object_style_rect_radius;
+    if (scui_object_prop_sync(handle, &prop_all))
+        radius = prop_all.data.number;
+    prop_all.style = scui_object_style_rect_align;
+    if (scui_object_prop_sync(handle, &prop_all))
+        align = prop_all.data.align;
+    
+    /* 层级表: base/edge/box/sha, 由内向外 */
+    static const scui_object_type_t form_table[] = {
+        scui_object_form_rect_base,
+        scui_object_form_rect_edge,
+        scui_object_form_rect_box,
+        scui_object_form_rect_sha,
+    };
+    
+    scui_coord_t size_min = scui_min(width, height);
+    scui_coord_t outer = 0;   /* 外圈厚度累计(sha->base) */
+    for (scui_coord_t idx = 3; idx >= 0; idx--) {
+        /* 该层stroke(厚度) */
+        scui_coord_t stroke = 0;
+        scui_object_prop_t prop_stroke = {0};
+        prop_stroke.part  = sub->part;
+        prop_stroke.form  = form_table[idx];
+        prop_stroke.state = sub->state;
+        prop_stroke.style = scui_object_style_rect_stroke;
+        if (scui_object_prop_sync(handle, &prop_stroke))
+            stroke = prop_stroke.data.number;
+        
+        /* 该层区域: 最大尺寸-外圈厚度 */
+        scui_coord_t area_w = width - outer * 2;
+        scui_coord_t area_h = height - outer * 2;
+        if (area_w < 0) area_w = 0;
+        if (area_h < 0) area_h = 0;
+        
+        /* 该层偏移: 按锚点方向补外圈厚度 */
+        scui_point_t point_i = point;
+        if (!scui_opt_bits_equal(align, scui_opt_pos_hor)) {
+            if (scui_opt_bits_equal(align, scui_opt_pos_r))
+                point_i.x = point.x - outer;
+            else point_i.x = point.x + outer;
+        }
+        if (!scui_opt_bits_equal(align, scui_opt_pos_ver)) {
+            if (scui_opt_bits_equal(align, scui_opt_pos_d))
+                point_i.y = point.y - outer;
+            else point_i.y = point.y + outer;
+        }
+        
+        /* 写回该层几何(当前状态) */
+        scui_object_prop_t prop = {0};
+        prop.part  = sub->part;
+        prop.form  = form_table[idx];
+        prop.state = sub->state;
+        prop.style = scui_object_style_rect_point;
+        prop.data.point = point_i;
+        scui_object_prop_add(handle, &prop);
+        prop.style = scui_object_style_rect_align;
+        prop.data.align = align;
+        scui_object_prop_add(handle, &prop);
+        prop.style = scui_object_style_rect_width;
+        prop.data.number = area_w;
+        scui_object_prop_add(handle, &prop);
+        prop.style = scui_object_style_rect_height;
+        prop.data.number = area_h;
+        scui_object_prop_add(handle, &prop);
+        prop.style = scui_object_style_rect_radius;
+        prop.data.number = radius - outer;
+        scui_object_prop_add(handle, &prop);
+        
+        /* 空心描边: 向内推进(实心跳过) */
+        if (stroke > 0 && stroke < size_min / 2)
+            outer += stroke;
+    }
+    
+    return true;
+}
+
 /*@brief 对象控件添加经典矩形属性
  *@param handle 对象控件句柄
  *@param sub    矩形属性
@@ -449,7 +557,7 @@ void scui_object_prop_rect(scui_handle_t handle, scui_object_sub_t *sub)
 /*@brief 对象控件绘制矩形
  *@param handle 对象控件句柄
  *@param prop   属性(part;state)
- *@retval 成功失败
+ *@retval 成功失败(prop缺失失败)
  */
 bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
 {
@@ -524,6 +632,87 @@ bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop)
     return true;
 }
 
+/*@brief 对象控件刷新经典圆弧属性
+ *@param handle 对象控件句柄
+ *@param sub    圆弧属性(part;state)
+ *@retval 成功失败(prop缺失失败)
+ */
+bool scui_object_form_arc(scui_handle_t handle, scui_object_sub_t *sub)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_object));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_object_t *object = (void *)widget;
+    
+    scui_object_prop_t prop_all = {0};
+    prop_all.part  = sub->part;
+    prop_all.form  = scui_object_form_arc_all;
+    prop_all.state = sub->state;
+    prop_all.style = scui_object_style_arc_center;
+    if (!scui_object_prop_sync(handle, &prop_all))
+         return false;
+    
+    scui_point_t center = prop_all.data.point;
+    scui_coord_t radius  = 0;
+    scui_coord_t angle_s = 0;
+    scui_coord_t angle_e = 0;
+    /* 基准form: 取几何 */
+    prop_all.style = scui_object_style_arc_radius;
+    if (scui_object_prop_sync(handle, &prop_all)) radius = prop_all.data.number;
+    prop_all.style = scui_object_style_arc_angle_s;
+    if (scui_object_prop_sync(handle, &prop_all)) angle_s = prop_all.data.number;
+    prop_all.style = scui_object_style_arc_angle_e;
+    if (scui_object_prop_sync(handle, &prop_all)) angle_e = prop_all.data.number;
+    
+    /* 层级表: base/edge/box/sha, 由内向外 */
+    static const scui_object_type_t form_table[] = {
+        scui_object_form_arc_base,
+        scui_object_form_arc_edge,
+        scui_object_form_arc_box,
+        scui_object_form_arc_sha,
+    };
+    
+    scui_coord_t outer = 0;   /* 外圈厚度累计(sha->base) */
+    for (scui_coord_t idx = 3; idx >= 0; idx--) {
+        /* 该层stroke(厚度) */
+        scui_coord_t stroke = 0;
+        scui_object_prop_t prop_stroke = {0};
+        prop_stroke.part  = sub->part;
+        prop_stroke.form  = form_table[idx];
+        prop_stroke.state = sub->state;
+        prop_stroke.style = scui_object_style_arc_stroke;
+        if (scui_object_prop_sync(handle, &prop_stroke))
+            stroke = prop_stroke.data.number;
+        
+        /* 该层半径: 最大半径-外圈厚度 */
+        scui_coord_t radius_i = radius - outer;
+        if (radius_i < 0) radius_i = 0;
+        
+        /* 写回该层几何(当前状态) */
+        scui_object_prop_t prop = {0};
+        prop.part  = sub->part;
+        prop.form  = form_table[idx];
+        prop.state = sub->state;
+        prop.style = scui_object_style_arc_center;
+        prop.data.point = center;
+        scui_object_prop_add(handle, &prop);
+        prop.style = scui_object_style_arc_radius;
+        prop.data.number = radius_i;
+        scui_object_prop_add(handle, &prop);
+        prop.style = scui_object_style_arc_angle_s;
+        prop.data.number = angle_s;
+        scui_object_prop_add(handle, &prop);
+        prop.style = scui_object_style_arc_angle_e;
+        prop.data.number = angle_e;
+        scui_object_prop_add(handle, &prop);
+        
+        /* 空心描边: 向内推进(实心跳过) */
+        if (stroke > 0 && stroke < radius)
+            outer += stroke;
+    }
+    
+    return true;
+}
+
 /*@brief 对象控件添加经典圆弧属性
  *@param handle 对象控件句柄
  *@param sub    圆弧属性
@@ -548,7 +737,7 @@ void scui_object_prop_arc(scui_handle_t handle, scui_object_sub_t *sub)
 /*@brief 对象控件绘制圆弧
  *@param handle 对象控件句柄
  *@param prop   属性(part;state)
- *@retval 成功失败
+ *@retval 成功失败(prop缺失失败)
  */
 bool scui_object_draw_arc(scui_handle_t handle, scui_object_prop_t *prop)
 {
@@ -619,7 +808,7 @@ void scui_object_prop_line(scui_handle_t handle, scui_object_sub_t *sub)
 /*@brief 对象控件绘制线条
  *@param handle 对象控件句柄
  *@param prop   属性(part;state)
- *@retval 成功失败
+ *@retval 成功失败(prop缺失失败)
  */
 bool scui_object_draw_line(scui_handle_t handle, scui_object_prop_t *prop)
 {

@@ -536,7 +536,9 @@ void scui_object_tran_sync(scui_handle_t handle, scui_coord_t tran_idx)
         break;
     }
     case scui_object_style_rect_width:
-    case scui_object_style_rect_height: {
+    case scui_object_style_rect_height:
+    case scui_object_style_arc_angle_s:
+    case scui_object_style_arc_angle_e: {
         scui_multi_t number_p = local_tran->data_p.number;
         scui_multi_t number_n = local_tran->data_n.number;
         prop.data.number = scui_map(pct_c, 0, 100, number_p, number_n);

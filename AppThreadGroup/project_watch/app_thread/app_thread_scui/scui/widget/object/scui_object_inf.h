@@ -190,6 +190,13 @@ typedef struct {
     };
 } scui_object_sub_t;
 
+/*@brief 对象控件刷新经典矩形属性
+ *@param handle 对象控件句柄
+ *@param sub    矩形属性(part;state)
+ *@retval 成功失败(prop缺失失败)
+ */
+bool scui_object_form_rect(scui_handle_t handle, scui_object_sub_t *sub);
+
 /*@brief 对象控件添加经典矩形属性
  *@param handle 对象控件句柄
  *@param sub    矩形属性
@@ -199,9 +206,16 @@ void scui_object_prop_rect(scui_handle_t handle, scui_object_sub_t *sub);
 /*@brief 对象控件绘制矩形
  *@param handle 对象控件句柄
  *@param prop   属性(part;state)
- *@retval 成功失败
+ *@retval 成功失败(prop缺失失败)
  */
 bool scui_object_draw_rect(scui_handle_t handle, scui_object_prop_t *prop);
+
+/*@brief 对象控件刷新经典圆弧属性
+ *@param handle 对象控件句柄
+ *@param sub    圆弧属性(part;state)
+ *@retval 成功失败(prop缺失失败)
+ */
+bool scui_object_form_arc(scui_handle_t handle, scui_object_sub_t *sub);
 
 /*@brief 对象控件添加经典圆弧属性
  *@param handle 对象控件句柄
@@ -212,7 +226,7 @@ void scui_object_prop_arc(scui_handle_t handle, scui_object_sub_t *sub);
 /*@brief 对象控件绘制圆弧
  *@param handle 对象控件句柄
  *@param prop   属性(part;state)
- *@retval 成功失败
+ *@retval 成功失败(prop缺失失败)
  */
 bool scui_object_draw_arc(scui_handle_t handle, scui_object_prop_t *prop);
 
@@ -225,7 +239,7 @@ void scui_object_prop_line(scui_handle_t handle, scui_object_sub_t *sub);
 /*@brief 对象控件绘制线条
  *@param handle 对象控件句柄
  *@param prop   属性(part;state)
- *@retval 成功失败
+ *@retval 成功失败(prop缺失失败)
  */
 bool scui_object_draw_line(scui_handle_t handle, scui_object_prop_t *prop);
 

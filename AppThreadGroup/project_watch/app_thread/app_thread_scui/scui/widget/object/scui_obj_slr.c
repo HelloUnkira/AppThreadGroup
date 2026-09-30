@@ -36,6 +36,9 @@ void scui_obj_slr_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     /* 资源同步与构造 */
+    obj_slr->press = obj_slr_maker->press;
+    /* 端点静止态百分比(与btn同语义) */
+    obj_bar->knob_pct = SCUI_WIDGET_OBJ_BTN_PCT;
 }
 
 /*@brief 控件析构
@@ -71,6 +74,32 @@ void scui_obj_slr_invoke(scui_event_t *event)
     case scui_event_ptr_down: {
         /* 记录按下基准(值/点), 值不变 */
         scui_point_t ptr_c = event->ptr_c;
+        
+        /* 按压: 精确捕获端点区域 */
+        if (obj_slr->press) {
+            scui_point_t point = ptr_c;
+            scui_widget_switch_point(event->object, &point);
+            
+            scui_object_prop_t prop_knob = {0};
+            prop_knob.part  = scui_object_part_rect_knob;
+            prop_knob.form  = scui_object_form_rect_all;
+            prop_knob.state = scui_object_state_def;
+            prop_knob.style = scui_object_style_rect_point;
+            scui_object_prop_sync(event->object, &prop_knob);
+            scui_point_t point_knob = prop_knob.data.point;
+            prop_knob.style = scui_object_style_rect_width;
+            scui_object_prop_sync(event->object, &prop_knob);
+            scui_coord_t size_w = prop_knob.data.number;
+            prop_knob.style = scui_object_style_rect_height;
+            scui_object_prop_sync(event->object, &prop_knob);
+            scui_coord_t size_h = prop_knob.data.number;
+            
+            /* 命中端点: 切按压态 */
+            if (point.x >= point_knob.x && point.x < point_knob.x + size_w &&
+                point.y >= point_knob.y && point.y < point_knob.y + size_h)
+                scui_object_state_set(event->object, scui_object_state_pre);
+        }
+        
         obj_slr->value_base = obj_bar->value_cur;
         obj_slr->point_base = obj_bar->way ? ptr_c.y : ptr_c.x;
         scui_event_mask_over(event);
@@ -88,9 +117,17 @@ void scui_obj_slr_invoke(scui_event_t *event)
         else value_c += (scui_coord3_t)delta * obj_bar->value_lim / size_c;
         value_c = scui_clamp(value_c, 0.0f, obj_bar->value_lim);
         
-        /* slider无动画跟手 */
+        /* 跟手: 直写值(无动画) */
         scui_obj_bar_update_value(widget->myself, value_c, false);
         scui_event_mask_over(event);
+        break;
+    }
+    case scui_event_ptr_up: {
+        scui_object_type_t state = scui_object_type_none;
+        scui_object_state_get(event->object, &state);
+        if (state != scui_object_state_pre) break;
+        
+        scui_object_state_set(event->object, scui_object_state_def);
         break;
     }
     default:

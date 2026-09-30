@@ -36,7 +36,6 @@ void scui_obj_led_make(void *inst, void *inst_maker, scui_handle_t *handle)
     obj_led->color_on    = obj_led_maker->color_on;
     obj_led->color_off   = obj_led_maker->color_off;
     obj_led->brightness  = obj_led_maker->brightness;
-    obj_led->glow_size   = 0;
 }
 
 /*@brief 控件析构
@@ -63,49 +62,34 @@ void scui_obj_led_style(scui_handle_t handle, scui_obj_led_res_t *res)
     scui_object_t  *object  = (void *)widget;
     scui_obj_led_t *obj_led = (void *)widget;
     
-    /* 部件宽高 */
-    scui_coord_t area_w = res->area.w ? res->area.w : widget->clip.w;
-    scui_coord_t area_h = res->area.h ? res->area.h : widget->clip.h;
-    
-    /* 整体尺寸: base与sha取最大(sha外扩glow) */
-    scui_coord_t size_w = area_w + res->glow * 2;
-    scui_coord_t size_h = area_h + res->glow * 2;
-    scui_widget_adjust_size(handle, size_w, size_h);
-    
-    /* 颜色亮度同步 */
-    obj_led->color_on   = res->color_on.color;
-    obj_led->color_off  = res->color_off.color;
-    obj_led->brightness = res->brightness;
-    
-    if (obj_led->brightness == 0)
-        obj_led->brightness  = 100;
-    
-    /* 几何属性(base: 本体, 整体内居中) */
-    scui_object_sub_t sub = {.part = scui_object_part_rect_bg,};
-    sub.form = scui_object_form_rect_base;
-    sub.rect.alpha.alpha   = res->alpha;
-    sub.rect.align.align   = scui_opt_pos_c;
-    sub.rect.width.number  = area_w;
-    sub.rect.height.number = area_h;
-    sub.rect.radius.number = res->radius;
-    sub.rect.stroke.number = 0;
-    sub.rect.multi.multi.grad   = res->grad;
-    sub.rect.multi.multi.grad_w = res->gradw;
-    sub.state = scui_object_state_def;
-    scui_object_prop_rect(handle, &sub);
-    
-    /* 阴影层尺寸(整体): 阴影描边宽=glow, 由灯珠边缘径向渐变淡出 */
-    obj_led->glow_size = area_w + res->glow * 2;
-    
-    /* 几何属性(sha: 阴影, 强制阴影语义, 初始隐藏) */
-    sub.form = scui_object_form_rect_sha;
-    sub.rect.alpha.alpha   = scui_alpha_trans;
-    sub.rect.width.number  = obj_led->glow_size;
-    sub.rect.height.number = obj_led->glow_size;
-    sub.rect.radius.number = -1;
-    sub.rect.stroke.number = res->glow;
-    sub.rect.multi.multi.shadow = true;
-    scui_object_prop_rect(handle, &sub);
+    /* 统一基准(form_rect_all): 几何+亮灭色 */
+    if (res->form == scui_object_form_rect_all) {
+        obj_led->color_on   = res->color_on.color;
+        obj_led->color_off  = res->color_off.color;
+        obj_led->brightness = res->brightness;
+        if (obj_led->brightness == 0)
+            obj_led->brightness  = 100;
+        
+        scui_object_sub_t sub = {.part = res->part, .form = scui_object_form_rect_all};
+        sub.rect.alpha.alpha   = res->alpha;
+        sub.rect.align.align   = res->align;
+        sub.rect.width.number  = widget->clip.w;
+        sub.rect.height.number = widget->clip.h;
+        sub.rect.radius.number = res->radius;
+        sub.state = scui_object_state_def;
+        scui_object_prop_rect(handle, &sub);
+    } else {
+        /* 该层样式: alpha/stroke/grad+阴影(仅sha) */
+        scui_object_sub_t sub = {.part = res->part, .form = res->form};
+        sub.rect.alpha.alpha        = res->alpha;
+        sub.rect.stroke.number      = res->width;
+        sub.rect.multi.multi.grad   = res->grad;
+        sub.rect.multi.multi.grad_w = res->gradw;
+        sub.rect.multi.multi.shadow = (res->form == scui_object_form_rect_sha);
+        sub.rect.color.color32      = res->color_off.color;
+        sub.state = scui_object_state_def;
+        scui_object_prop_rect(handle, &sub);
+    }
     
     /* 亮灭颜色异步刷新 */
     scui_event_define_absorb_none(event, widget->myself, false, scui_event_update_value);
@@ -184,7 +168,7 @@ void scui_obj_led_invoke(scui_event_t *event)
     case scui_event_update_value: {
         /* 亮灭颜色刷新 */
         if (obj_led->on) {
-            /* 亮: base灯珠亮色(按亮度混合), sha阴影同亮色淡出(亮色->透明) */
+            /* 亮: base亮色, sha同色淡出 */
             scui_color32_t color    = obj_led->color_on;
             scui_color32_t color_ed = SCUI_COLOR32_MAKE32(0xFF000000);
             scui_color32_mix_with(&color, &color, &color_ed, obj_led->brightness);
@@ -193,7 +177,7 @@ void scui_obj_led_invoke(scui_event_t *event)
                 scui_object_style_rect_color, scui_object_state_def,
                 scui_object_data_color32(color));
             
-            /* 阴影: 亮色径向渐变淡出到透明 */
+            /* 阴影: 径向渐变淡出 */
             scui_object_prop_add_s(event->object, scui_object_part_rect_bg, scui_object_form_rect_sha,
                 scui_object_style_rect_color, scui_object_state_def,
                 scui_object_data_color32(obj_led->color_on));
@@ -204,7 +188,7 @@ void scui_obj_led_invoke(scui_event_t *event)
                 scui_object_style_rect_alpha, scui_object_state_def,
                 scui_object_data_alpha(scui_alpha_pct(obj_led->brightness)));
         } else {
-            /* 灭: base灯珠淡白, sha阴影隐藏 */
+            /* 灭: base淡白, sha隐藏 */
             scui_object_prop_add_s(event->object, scui_object_part_rect_bg, scui_object_form_rect_base,
                 scui_object_style_rect_color, scui_object_state_def,
                 scui_object_data_color32(obj_led->color_off));
@@ -216,6 +200,16 @@ void scui_obj_led_invoke(scui_event_t *event)
     }
     case scui_event_draw_graph: {
         
+        /* 统一基准: 刷part的form */
+        scui_object_sub_t sub = {.part = scui_object_part_rect_bg};
+        scui_object_state_get(event->object, &sub.state);
+        /* 无基准几何 → 回退def */
+        if (!scui_object_form_rect(event->object, &sub) &&
+            sub.state != scui_object_state_def) {
+            sub.state  = scui_object_state_def;
+            scui_object_form_rect(event->object, &sub);
+        }
+        
         /* 绘制全部层级: 阴影->基础(part_bg) */
         static const scui_object_type_t form_table[] = {
             scui_object_form_rect_sha,
@@ -223,10 +217,14 @@ void scui_obj_led_invoke(scui_event_t *event)
         };
         for (uint8_t idx = 0; idx < scui_arr_len(form_table); idx++) {
             scui_object_prop_t prop = {.form = form_table[idx]};
-            prop.part = scui_object_part_rect_bg;
-            
-            scui_object_state_get(event->object, &prop.state);
-            scui_object_draw_rect(event->object, &prop);
+            prop.part  = scui_object_part_rect_bg;
+            prop.state = sub.state;
+            /* 样式不全 → 回退def */
+            if (!scui_object_draw_rect(event->object, &prop) &&
+                prop.state != scui_object_state_def) {
+                prop.state  = scui_object_state_def;
+                scui_object_draw_rect(event->object, &prop);
+            }
         }
         break;
     }

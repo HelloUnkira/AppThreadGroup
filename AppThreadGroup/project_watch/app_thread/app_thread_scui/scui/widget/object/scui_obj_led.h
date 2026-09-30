@@ -12,7 +12,6 @@ typedef struct {
     scui_color32_t color_on;    /* 点亮颜色 */
     scui_color32_t color_off;   /* 熄灭颜色(淡白) */
     scui_coord_t   brightness;  /* 亮度(0-100) */
-    scui_coord_t   glow_size;   /* 阴影层尺寸(整体) */
     scui_sbitfd_t  on:1;        /* 点亮标记 */
 } scui_obj_led_t;
 

@@ -62,164 +62,120 @@ void scui_obj_btn_style(scui_handle_t handle, scui_obj_btn_res_t *res)
     scui_object_t  *object  = (void *)widget;
     scui_obj_btn_t *obj_btn = (void *)widget;
     
-    /* 部件宽高 */
-    scui_coord_t area_w = res->area.w ? res->area.w : widget->clip.w;
-    scui_coord_t area_h = res->area.h ? res->area.h : widget->clip.h;
+    scui_coord_t time = res->time;
+    if (time == 0) time = SCUI_WIDGET_OBJ_BTN_TIME;
+    scui_coord_t lim = res->lim;
+    if (lim == 0) lim = SCUI_WIDGET_OBJ_BTN_PCT;
     
-    bool shadow = res->shadow;
-    /* 强制语义: sha(阴影)必须支持阴影效果 */
-    if (res->form == scui_object_form_rect_sha)
-        shadow = true;
+    /* 统一基准(form_rect_all): 几何+缩放tran */
+    if (res->form == scui_object_form_rect_all) {
+        /* 部件宽高 */
+        scui_coord_t area_w = widget->clip.w;
+        scui_coord_t area_h = widget->clip.h;
+        scui_multi_t scale_w = (scui_multi_t)area_w * lim / 100;
+        scui_multi_t scale_h = (scui_multi_t)area_h * lim / 100;
+        
+        scui_object_sub_t sub = {.part = res->part, .form = scui_object_form_rect_all};
+        sub.rect.alpha.alpha   = res->alpha;
+        sub.rect.align.align   = res->align;
+        sub.rect.radius.number = res->radius;
+        
+        /* 几何(def=缩放; pre/chk=area; fixed恒等) */
+        sub.state = scui_object_state_def;
+        sub.rect.width.number  = obj_btn->fixed ? area_w : scale_w;
+        sub.rect.height.number = obj_btn->fixed ? area_h : scale_h;
+        scui_object_prop_rect(handle, &sub);
+        sub.state = scui_object_state_pre;
+        sub.rect.width.number  = area_w;
+        sub.rect.height.number = area_h;
+        scui_object_prop_rect(handle, &sub);
+        if (obj_btn->check) {
+            sub.state = scui_object_state_chk;
+            sub.rect.width.number  = obj_btn->fixed ? area_w : scale_w;
+            sub.rect.height.number = obj_btn->fixed ? area_h : scale_h;
+            scui_object_prop_rect(handle, &sub);
+        }
+        
+        /* def<->pre 缩放tran(fixed无) */
+        if (!obj_btn->fixed) {
+            scui_object_tran_add_s2(handle, res->part, scui_object_form_rect_all,
+                scui_object_style_rect_width, scui_object_state_def, scui_object_state_pre,
+                scui_object_data_number(scale_w), scui_object_data_number(area_w), NULL, time, 0);
+            scui_object_tran_add_s2(handle, res->part, scui_object_form_rect_all,
+                scui_object_style_rect_height, scui_object_state_def, scui_object_state_pre,
+                scui_object_data_number(scale_h), scui_object_data_number(area_h), NULL, time, 0);
+        }
+        /* chk<->pre 缩放tran */
+        if (obj_btn->check && !obj_btn->fixed) {
+            scui_object_tran_add_s2(handle, res->part, scui_object_form_rect_all,
+                scui_object_style_rect_width, scui_object_state_chk, scui_object_state_pre,
+                scui_object_data_number(scale_w), scui_object_data_number(area_w), NULL, time, 0);
+            scui_object_tran_add_s2(handle, res->part, scui_object_form_rect_all,
+                scui_object_style_rect_height, scui_object_state_chk, scui_object_state_pre,
+                scui_object_data_number(scale_h), scui_object_data_number(area_h), NULL, time, 0);
+        }
+        
+        /* 同步time属性 */
+        scui_object_prop_add_s(handle, scui_object_part_main, 0,
+            scui_object_style_main_time, scui_object_state_def,
+            scui_object_data_number(time));
+        return;
+    }
     
-    /* 几何属性(def<->pre) */
+    /* 该层样式: alpha/color/stroke/grad+颜色tran(阴影仅sha) */
+    bool shadow = (res->form == scui_object_form_rect_sha);
+    
     scui_object_sub_t sub = {.part = res->part, .form = res->form};
     sub.rect.alpha.alpha        = res->alpha;
-    sub.rect.align.align        = res->align;
-    sub.rect.width.number       = area_w;
-    sub.rect.height.number      = area_h;
-    sub.rect.radius.number      = res->radius;
     sub.rect.stroke.number      = res->width;
     sub.rect.multi.multi.grad   = res->grad;
     sub.rect.multi.multi.grad_w = res->gradw;
     sub.rect.multi.multi.shadow = shadow;
     
+    sub.rect.color.color32  = res->color[0].color_s;
+    sub.rect.grad_c.color32 = res->color[0].color_e;
     sub.state = scui_object_state_def;
     scui_object_prop_rect(handle, &sub);
     sub.state = scui_object_state_pre;
+    sub.rect.color.color32  = res->color[1].color_s;
+    sub.rect.grad_c.color32 = res->color[1].color_e;
     scui_object_prop_rect(handle, &sub);
     
     if (obj_btn->check) {
         sub.state = scui_object_state_chk;
+        sub.rect.color.color32  = res->color[2].color_s;
+        sub.rect.grad_c.color32 = res->color[2].color_e;
+        scui_object_prop_rect(handle, &sub);
+        sub.state = scui_object_state_pre;
+        sub.rect.color.color32  = res->color[3].color_s;
+        sub.rect.grad_c.color32 = res->color[3].color_e;
         scui_object_prop_rect(handle, &sub);
     }
     
-    scui_coord_t time = res->time;
-    if (time == 0) time = SCUI_WIDGET_OBJ_BTN_TIME;
-    
-    scui_coord_t lim = res->lim;
-    if (lim == 0) lim = SCUI_WIDGET_OBJ_BTN_PCT;
-    scui_multi_t scale_w = (scui_multi_t)area_w * lim / 100;
-    scui_multi_t scale_h = (scui_multi_t)area_h * lim / 100;
-    
-    /* def<->pre: 颜色/缩放/动画 */
-    {
-        /* color prop(def<->pre): color_s状态色, color_e渐变 */
-        scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_color,
-            scui_object_state_def, scui_object_data_color32(res->color[0].color_s));
-        scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_color,
-            scui_object_state_pre, scui_object_data_color32(res->color[1].color_s));
-        /* color tran(def<->pre) */
-        scui_object_tran_add_s2(handle, res->part, res->form, scui_object_style_rect_color,
+    /* 颜色tran(def<->pre) */
+    scui_object_tran_add_s2(handle, res->part, res->form, scui_object_style_rect_color,
+        scui_object_state_def, scui_object_state_pre,
+        scui_object_data_color32(res->color[0].color_s),
+        scui_object_data_color32(res->color[1].color_s), NULL, time, 0);
+    if (res->grad) {
+        scui_object_tran_add_s2(handle, res->part, res->form, scui_object_style_rect_grad_c,
             scui_object_state_def, scui_object_state_pre,
-            scui_object_data_color32(res->color[0].color_s),
-            scui_object_data_color32(res->color[1].color_s), NULL, time, 0);
-        
-        if (res->grad) {
-            /* grad_c prop(def<->pre): 渐变终点 */
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_grad_c,
-                scui_object_state_def, scui_object_data_color32(res->color[0].color_e));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_grad_c,
-                scui_object_state_pre, scui_object_data_color32(res->color[1].color_e));
-            /* grad_c tran(def<->pre) */
-            scui_object_tran_add_s2(handle, res->part, res->form, scui_object_style_rect_grad_c,
-                scui_object_state_def, scui_object_state_pre,
-                scui_object_data_color32(res->color[0].color_e),
-                scui_object_data_color32(res->color[1].color_e), NULL, time, 0);
-        }
-        
-        /* width && height prop: fixed=1 尺寸固定(全状态同 area, 无缩放) */
-        if (obj_btn->fixed) {
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_width,
-                scui_object_state_def, scui_object_data_number(area_w));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_width,
-                scui_object_state_pre, scui_object_data_number(area_w));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_height,
-                scui_object_state_def, scui_object_data_number(area_h));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_height,
-                scui_object_state_pre, scui_object_data_number(area_h));
-        } else {
-            /* 按下缩放(def=scale, pre=area) */
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_width,
-                scui_object_state_def, scui_object_data_number(scale_w));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_width,
-                scui_object_state_pre, scui_object_data_number(area_w));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_height,
-                scui_object_state_def, scui_object_data_number(scale_h));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_height,
-                scui_object_state_pre, scui_object_data_number(area_h));
-            
-            /* width && height tran(def<->pre) */
-            scui_object_tran_add_s2(handle, res->part, res->form, scui_object_style_rect_width,
-                scui_object_state_def, scui_object_state_pre, scui_object_data_number(scale_w),
-                scui_object_data_number(area_w), NULL, time, 0);
-            
-            scui_object_tran_add_s2(handle, res->part, res->form, scui_object_style_rect_height,
-                scui_object_state_def, scui_object_state_pre, scui_object_data_number(scale_h),
-                scui_object_data_number(area_h), NULL, time, 0);
-        }
+            scui_object_data_color32(res->color[0].color_e),
+            scui_object_data_color32(res->color[1].color_e), NULL, time, 0);
     }
-    
-    /* chk<->pre: 颜色/缩放/动画(选中时) */
+    /* 颜色tran(chk<->pre) */
     if (obj_btn->check) {
-        /* color prop(chk<->pre): color_s状态色, color_e渐变 */
-        scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_color,
-            scui_object_state_chk, scui_object_data_color32(res->color[2].color_s));
-        scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_color,
-            scui_object_state_pre, scui_object_data_color32(res->color[3].color_s));
-        /* color tran(chk<->pre) */
         scui_object_tran_add_s2(handle, res->part, res->form, scui_object_style_rect_color,
             scui_object_state_chk, scui_object_state_pre,
             scui_object_data_color32(res->color[2].color_s),
             scui_object_data_color32(res->color[3].color_s), NULL, time, 0);
-        
         if (res->grad) {
-            /* grad_c prop(chk<->pre): 渐变终点 */
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_grad_c,
-                scui_object_state_chk, scui_object_data_color32(res->color[2].color_e));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_grad_c,
-                scui_object_state_pre, scui_object_data_color32(res->color[3].color_e));
-            /* grad_c tran(chk<->pre) */
             scui_object_tran_add_s2(handle, res->part, res->form, scui_object_style_rect_grad_c,
-                scui_object_state_chk, scui_object_state_pre, scui_object_data_color32(res->color[2].color_e),
+                scui_object_state_chk, scui_object_state_pre,
+                scui_object_data_color32(res->color[2].color_e),
                 scui_object_data_color32(res->color[3].color_e), NULL, time, 0);
         }
-        
-        /* width && height prop: fixed=1 尺寸固定(全状态同 area, 无缩放) */
-        if (obj_btn->fixed) {
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_width,
-                scui_object_state_chk, scui_object_data_number(area_w));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_width,
-                scui_object_state_pre, scui_object_data_number(area_w));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_height,
-                scui_object_state_chk, scui_object_data_number(area_h));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_height,
-                scui_object_state_pre, scui_object_data_number(area_h));
-        } else {
-            /* 选中缩放(chk=scale, pre=area) */
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_width,
-                scui_object_state_chk, scui_object_data_number(scale_w));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_width,
-                scui_object_state_pre, scui_object_data_number(area_w));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_height,
-                scui_object_state_chk, scui_object_data_number(scale_h));
-            scui_object_prop_add_s(handle, res->part, res->form, scui_object_style_rect_height,
-                scui_object_state_pre, scui_object_data_number(area_h));
-            
-            /* width && height tran(chk<->pre) */
-            scui_object_tran_add_s2(handle, res->part, res->form, scui_object_style_rect_width,
-                scui_object_state_chk, scui_object_state_pre, scui_object_data_number(scale_w),
-                scui_object_data_number(area_w), NULL, time, 0);
-            
-            scui_object_tran_add_s2(handle, res->part, res->form, scui_object_style_rect_height,
-                scui_object_state_chk, scui_object_state_pre, scui_object_data_number(scale_h),
-                scui_object_data_number(area_h), NULL, time, 0);
-        }
     }
-    
-    /* 同步全局time属性(默认值/可覆盖) */
-    scui_object_prop_add_s(handle, scui_object_part_main, 0,
-        scui_object_style_main_time, scui_object_state_def,
-        scui_object_data_number(time));
 }
 
 /*@brief 事件处理回调
@@ -292,6 +248,16 @@ void scui_obj_btn_invoke(scui_event_t *event)
     
     case scui_event_draw_graph: {
         
+        /* 统一基准: 刷part的form */
+        scui_object_sub_t sub = {.part = scui_object_part_rect_bg};
+        scui_object_state_get(event->object, &sub.state);
+        /* 无基准几何 → 回退def */
+        if (!scui_object_form_rect(event->object, &sub) &&
+            sub.state != scui_object_state_def) {
+            sub.state  = scui_object_state_def;
+            scui_object_form_rect(event->object, &sub);
+        }
+        
         /* 默认绘制全部层级: 阴影->基础->边界->盒子 */
         static const scui_object_type_t form_table[] = {
             scui_object_form_rect_sha,
@@ -301,10 +267,14 @@ void scui_obj_btn_invoke(scui_event_t *event)
         };
         for (uint8_t idx = 0; idx < scui_arr_len(form_table); idx++) {
             scui_object_prop_t prop = {.form = form_table[idx]};
-            prop.part = scui_object_part_rect_bg;
-            
-            scui_object_state_get(event->object, &prop.state);
-            scui_object_draw_rect(event->object, &prop);
+            prop.part  = scui_object_part_rect_bg;
+            prop.state = sub.state;
+            /* 样式不全 → 回退def */
+            if (!scui_object_draw_rect(event->object, &prop) &&
+                prop.state != scui_object_state_def) {
+                prop.state  = scui_object_state_def;
+                scui_object_draw_rect(event->object, &prop);
+            }
         }
         break;
     }

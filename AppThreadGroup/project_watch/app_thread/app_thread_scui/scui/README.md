@@ -45,11 +45,6 @@
         评估:chart扩充(参考完整效果)
         评估:dropdown折叠效果，这个应该考虑一下升级到外部组件
         
-        评估:slider扩充<>让knob去捕获，增加press效果
-        评估:switch扩充<>让fg可以不绘制，当距离不够的时候
-            重写一下动画语义，外部控制一下fg是否可以显示，用alpha量
-            此时的knob就可以控制一个完整radius了
-        
         评估:scale是否需要，可以做着玩，问题倒不大
         评估:btn_mat必要(支持布局, item DIY)(待研究:每一个item都能DIY???)
              btn_mat其实也可以用layout+btn实现，但这种其实是为了省控件

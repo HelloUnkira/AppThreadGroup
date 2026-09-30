@@ -226,17 +226,15 @@
 #define SCUI_WIDGET_INCHAR_BREATH_TIME              (1000)
 
 /* object:属性和过渡扩充步进, 主体样式 */
-#define SCUI_WIDGET_OBJECT_PROP_STEP                (3)
-#define SCUI_WIDGET_OBJECT_TRAN_STEP                (6)
-/* obj(btn):缩放限制百分比 */
+#define SCUI_WIDGET_OBJECT_PROP_STEP                (10)
+#define SCUI_WIDGET_OBJECT_TRAN_STEP                (5)
+/* obj(btn):按压缩放(按下=100%, 宏=静止态百分比) */
 #define SCUI_WIDGET_OBJ_BTN_TIME                    (100)
 #define SCUI_WIDGET_OBJ_BTN_PCT                     (90)
 /* obj(arc):进度动画时间(360度) */
 #define SCUI_WIDGET_OBJ_ARC_TIME                    (500)
 /* obj(bar):进度动画时间(100%) */
-#define SCUI_WIDGET_OBJ_BAR_TIME                    (500)
-#define SCUI_WIDGET_OBJ_BAR_EXT_SLIDER_TIME         (500)
-#define SCUI_WIDGET_OBJ_BAR_EXT_SWITCH_TIME         (100)
+#define SCUI_WIDGET_OBJ_BAR_TIME                    (200)
 
 /* button:按钮1缩放限制百分比 */
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)

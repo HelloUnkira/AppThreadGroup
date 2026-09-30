@@ -119,53 +119,45 @@ typedef enum {
 	SCUI_UI_SCENE_TEST_UI_MAIN_MONITOR, // 4207, 0x106f
 	SCUI_UI_SCENE_TEST_UI_MAIN_TEST, // 4208, 0x1070
 	SCUI_UI_SCENE_TEST_UI_MISC, // 4209, 0x1071
-	SCUI_UI_SCENE_TEST_UI_OBJECT, // 4210, 0x1072
-	SCUI_UI_SCENE_TEST_UI_OBJECT_SCROLL, // 4211, 0x1073
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_1, // 4212, 0x1074
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_1_TITLE, // 4213, 0x1075
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_2, // 4214, 0x1076
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_2_TITLE, // 4215, 0x1077
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_3, // 4216, 0x1078
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_3_TITLE, // 4217, 0x1079
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_4, // 4218, 0x107a
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_4_TITLE, // 4219, 0x107b
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_5, // 4220, 0x107c
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_5_TITLE, // 4221, 0x107d
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_6, // 4222, 0x107e
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_6_TITLE, // 4223, 0x107f
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_7, // 4224, 0x1080
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_7_TITLE, // 4225, 0x1081
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8, // 4226, 0x1082
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8_TITLE, // 4227, 0x1083
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_9, // 4228, 0x1084
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_9_TITLE, // 4229, 0x1085
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_10, // 4230, 0x1086
-	SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_10_TITLE, // 4231, 0x1087
-	SCUI_UI_SCENE_TEST_UI_RING, // 4232, 0x1088
-	SCUI_UI_SCENE_TEST_UI_RING_CANVAS, // 4233, 0x1089
-	SCUI_UI_SCENE_TEST_UI_ROLLER, // 4234, 0x108a
-	SCUI_UI_SCENE_TEST_UI_SCROLL, // 4235, 0x108b
-	SCUI_UI_SCENE_TEST_UI_STRING, // 4236, 0x108c
-	SCUI_UI_SCENE_TEST_UI_SYMBOL, // 4237, 0x108d
-	SCUI_UI_SCENE_TEST_UI_SYMBOL_CANVAS, // 4238, 0x108e
-	SCUI_UI_SCENE_TEST_UI_XIMAGE, // 4239, 0x108f
-	SCUI_UI_SCENE_TEST_UI_XIMAGE_BARCODE, // 4240, 0x1090
-	SCUI_UI_SCENE_TEST_UI_XIMAGE_QRCODE, // 4241, 0x1091
-	SCUI_UI_SCENE_TEST_UI_XIMAGE_V1, // 4242, 0x1092
-	SCUI_UI_SCENE_TEST_UI_XIMAGE_V2, // 4243, 0x1093
-	SCUI_UI_SCENE_TEST_UI_XIMAGE_V3, // 4244, 0x1094
-	SCUI_UI_SCENE_TEST_UI_XIMAGE_V4, // 4245, 0x1095
-	SCUI_UI_SCENE_TEST_UI_XIMAGE_REPLACE, // 4246, 0x1096
-	SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE, // 4247, 0x1097
-	SCUI_UI_SCENE_TEST_UI_XIMAGE_INDV, // 4248, 0x1098
-	SCUI_UI_SCENE_TEST_UI_XIMAGE_INDH, // 4249, 0x1099
-	SCUI_UI_SCENE_NONE, // 4250, 0x109a
-	SCUI_UI_SCENE_NOTIFY, // 4251, 0x109b
-	SCUI_UI_SCENE_QUICK_CARD, // 4252, 0x109c
-	SCUI_UI_SCENE_STANDBY, // 4253, 0x109d
+	SCUI_UI_SCENE_TEST_UI_OBJ_BTN, // 4210, 0x1072
+	SCUI_UI_SCENE_TEST_UI_OBJ_BTN_TITLE, // 4211, 0x1073
+	SCUI_UI_SCENE_TEST_UI_OBJ_BAR, // 4212, 0x1074
+	SCUI_UI_SCENE_TEST_UI_OBJ_BAR_TITLE, // 4213, 0x1075
+	SCUI_UI_SCENE_TEST_UI_OBJ_ARC, // 4214, 0x1076
+	SCUI_UI_SCENE_TEST_UI_OBJ_ARC_TITLE, // 4215, 0x1077
+	SCUI_UI_SCENE_TEST_UI_OBJ_CHT, // 4216, 0x1078
+	SCUI_UI_SCENE_TEST_UI_OBJ_CHT_TITLE, // 4217, 0x1079
+	SCUI_UI_SCENE_TEST_UI_OBJ_LED, // 4218, 0x107a
+	SCUI_UI_SCENE_TEST_UI_OBJ_LED_TITLE, // 4219, 0x107b
+	SCUI_UI_SCENE_TEST_UI_OBJ_NONE_1, // 4220, 0x107c
+	SCUI_UI_SCENE_TEST_UI_OBJ_NONE_1_TITLE, // 4221, 0x107d
+	SCUI_UI_SCENE_TEST_UI_OBJ_NONE_2, // 4222, 0x107e
+	SCUI_UI_SCENE_TEST_UI_OBJ_NONE_2_TITLE, // 4223, 0x107f
+	SCUI_UI_SCENE_TEST_UI_RING, // 4224, 0x1080
+	SCUI_UI_SCENE_TEST_UI_RING_CANVAS, // 4225, 0x1081
+	SCUI_UI_SCENE_TEST_UI_ROLLER, // 4226, 0x1082
+	SCUI_UI_SCENE_TEST_UI_SCROLL, // 4227, 0x1083
+	SCUI_UI_SCENE_TEST_UI_STRING, // 4228, 0x1084
+	SCUI_UI_SCENE_TEST_UI_SYMBOL, // 4229, 0x1085
+	SCUI_UI_SCENE_TEST_UI_SYMBOL_CANVAS, // 4230, 0x1086
+	SCUI_UI_SCENE_TEST_UI_XIMAGE, // 4231, 0x1087
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_BARCODE, // 4232, 0x1088
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_QRCODE, // 4233, 0x1089
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_V1, // 4234, 0x108a
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_V2, // 4235, 0x108b
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_V3, // 4236, 0x108c
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_V4, // 4237, 0x108d
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_REPLACE, // 4238, 0x108e
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_SEQUENCE, // 4239, 0x108f
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_INDV, // 4240, 0x1090
+	SCUI_UI_SCENE_TEST_UI_XIMAGE_INDH, // 4241, 0x1091
+	SCUI_UI_SCENE_NONE, // 4242, 0x1092
+	SCUI_UI_SCENE_NOTIFY, // 4243, 0x1093
+	SCUI_UI_SCENE_QUICK_CARD, // 4244, 0x1094
+	SCUI_UI_SCENE_STANDBY, // 4245, 0x1095
 } scui_widget_parser_handle_t;
 
-extern const void * const scui_widget_parser_table[158];
+extern const void * const scui_widget_parser_table[156];
 
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM_key;
@@ -281,28 +273,20 @@ extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_MAIN_MONKE
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_MAIN_MONITOR_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_MAIN_TEST_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_MISC_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_SCROLL_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_1_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_1_TITLE_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_2_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_2_TITLE_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_3_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_3_TITLE_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_4_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_4_TITLE_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_5_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_5_TITLE_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_6_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_6_TITLE_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_7_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_7_TITLE_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_8_TITLE_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_9_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_9_TITLE_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_10_key;
-extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJECT_PAGE_10_TITLE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_BTN_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_BTN_TITLE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_BAR_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_BAR_TITLE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_ARC_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_ARC_TITLE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_CHT_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_CHT_TITLE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_LED_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_LED_TITLE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_NONE_1_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_NONE_1_TITLE_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_NONE_2_key;
+extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_NONE_2_TITLE_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_RING_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_RING_CANVAS_key;
 extern const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_ROLLER_key;

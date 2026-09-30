@@ -64,46 +64,53 @@ void scui_obj_arc_style(scui_handle_t handle, scui_obj_arc_res_t *res)
     scui_object_t  *object  = (void *)widget;
     scui_obj_arc_t *obj_arc = (void *)widget;
     
-    scui_coord3_t angle_s = res->angle_s;
-    scui_coord3_t angle_e = res->angle_e;
-    
-    /* 补充一个容错的默认参数值 */
-    if (SCUI_IS_ZERO_VAL_F(scui_dist(angle_s, angle_e))) {
-        angle_s = 0.0f; angle_e = 360.0f;
+    /* 统一基准(form_arc_all): 几何 */
+    if (res->form == scui_object_form_arc_all) {
+        scui_coord3_t angle_s = res->angle_s;
+        scui_coord3_t angle_e = res->angle_e;
+        
+        /* 容错默认值 */
+        if (SCUI_IS_ZERO_VAL_F(scui_dist(angle_s, angle_e))) {
+            angle_s = 0.0f; angle_e = 360.0f;
+        }
+        
+        scui_object_sub_t sub = {.part = res->part, .form = scui_object_form_arc_all};
+        sub.arc.alpha.alpha        = res->alpha;
+        sub.arc.angle_s.number     = angle_s;
+        sub.arc.angle_e.number     = angle_e;
+        sub.arc.center.point       = res->center;
+        sub.arc.radius.number      = res->radius;
+        sub.state = scui_object_state_def;
+        scui_object_prop_arc(handle, &sub);
+        
+        if (res->part == scui_object_part_arc_fg) {
+            /* 同步time属性 */
+            scui_coord_t time = res->time;
+            if (time == 0) time = SCUI_WIDGET_OBJ_ARC_TIME;
+            scui_coord3_t angle_d = scui_dist(angle_s, angle_e);
+            time = time * angle_d / 360.0f;
+            
+            scui_object_prop_add_s(handle, scui_object_part_main, 0,
+                scui_object_style_main_time, scui_object_state_def,
+                scui_object_data_number(time));
+            
+            /* 进度复位 */
+            scui_obj_arc_update_value(handle, 0.0f, false);
+        }
+        return;
     }
     
+    /* 该层样式: alpha/color/stroke/round/grad */
     scui_object_sub_t sub = {.part = res->part, .form = res->form};
     sub.arc.alpha.alpha        = res->alpha;
-    sub.arc.color.color32      = res->color.color_s;
-    sub.arc.angle_s.number     = angle_s;
-    sub.arc.angle_e.number     = angle_e;
-    sub.arc.center.point       = res->center;
-    sub.arc.radius.number      = res->radius;
     sub.arc.stroke.number      = res->width;
     sub.arc.multi.multi.round  = res->round;
     sub.arc.multi.multi.grad_w = res->gradw;
     sub.arc.multi.multi.grad   = res->grad;
+    sub.arc.color.color32      = res->color.color_s;
     sub.arc.grad_c.color32     = res->color.color_e;
-    
     sub.state = scui_object_state_def;
     scui_object_prop_arc(handle, &sub);
-    
-    if (res->part == scui_object_part_arc_fg &&
-        res->form == scui_object_form_arc_base) {
-        
-        /* 同步全局time属性(默认值/可覆盖) */
-        scui_coord_t time = res->time;
-        if (time == 0) time = SCUI_WIDGET_OBJ_ARC_TIME;
-        scui_coord3_t angle_d = scui_dist(angle_s, angle_e);
-        time = time * angle_d / 360.0f;
-        
-        scui_object_prop_add_s(handle, scui_object_part_main, 0,
-            scui_object_style_main_time, scui_object_state_def,
-            scui_object_data_number(time));
-        
-        /* 样式修改复位到默认值 */
-        scui_obj_arc_update_value(handle, 0.0f, false);
-    }
 }
 
 /*@brief 控件当前值
@@ -140,7 +147,7 @@ void scui_obj_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, bool a
     scui_object_prop_t prop_def = {0};
     scui_object_tran_t tran_def = {0};
     prop_def.part  = scui_object_part_arc_fg;
-    prop_def.form  = scui_object_form_arc_base;
+    prop_def.form  = scui_object_form_arc_all;
     prop_def.state = scui_object_state_def;
     if (anti) prop_def.style = scui_object_style_arc_angle_s;
     else prop_def.style = scui_object_style_arc_angle_e;
@@ -162,9 +169,9 @@ void scui_obj_arc_update_angle(scui_handle_t handle, scui_coord3_t angle, bool a
         
         scui_object_data_t angle_s = {0};
         scui_object_data_t angle_e = {0};
-        scui_object_prop_sync_s(handle, scui_object_part_arc_bg, scui_object_form_arc_base,
+        scui_object_prop_sync_s(handle, scui_object_part_arc_bg, scui_object_form_arc_all,
             scui_object_style_arc_angle_s, scui_object_state_def, angle_s);
-        scui_object_prop_sync_s(handle, scui_object_part_arc_bg, scui_object_form_arc_base,
+        scui_object_prop_sync_s(handle, scui_object_part_arc_bg, scui_object_form_arc_all,
             scui_object_style_arc_angle_e, scui_object_state_def, angle_e);
         
         scui_coord3_t angle_d = scui_dist(angle_s.number, angle_e.number);
@@ -196,12 +203,12 @@ void scui_obj_arc_update_value(scui_handle_t handle, scui_coord3_t value, bool a
     scui_object_t  *object  = (void *)widget;
     scui_obj_arc_t *obj_arc = (void *)widget;
     
-    /* 端点基准从bg取(稳定), fg为动态进度 */
+    /* 基准端点取bg(稳定) */
     scui_object_data_t angle_s = {0};
     scui_object_data_t angle_e = {0};
-    scui_object_prop_sync_s(handle, scui_object_part_arc_bg, scui_object_form_arc_base,
+    scui_object_prop_sync_s(handle, scui_object_part_arc_bg, scui_object_form_arc_all,
         scui_object_style_arc_angle_s, scui_object_state_def, angle_s);
-    scui_object_prop_sync_s(handle, scui_object_part_arc_bg, scui_object_form_arc_base,
+    scui_object_prop_sync_s(handle, scui_object_part_arc_bg, scui_object_form_arc_all,
         scui_object_style_arc_angle_e, scui_object_state_def, angle_e);
     
     value = scui_clamp(value, 0.0f, 100.0f);
@@ -233,7 +240,7 @@ void scui_obj_arc_invoke(scui_event_t *event)
         scui_widget_switch_point(event->object, &point);
         
         scui_object_data_t center = {0};
-        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_base,
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_all,
             scui_object_style_arc_center, scui_object_state_def, center);
         
         scui_coord_t cx = center.point.x;
@@ -245,31 +252,26 @@ void scui_obj_arc_invoke(scui_event_t *event)
         /* 从bg读基准端点(稳定) */
         scui_object_data_t angle_s = {0};
         scui_object_data_t angle_e = {0};
-        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_base,
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_all,
             scui_object_style_arc_angle_s, scui_object_state_def, angle_s);
-        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_base,
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_all,
             scui_object_style_arc_angle_e, scui_object_state_def, angle_e);
         
-        scui_coord_t angle_d = scui_dist(angle_s.number, angle_e.number);
-        scui_coord_t angle = (scui_atan2(x, y) - 90 + 360) % 360;
+        scui_coord_t angle_span = scui_dist(angle_s.number, angle_e.number);
+        scui_coord_t angle_t = scui_mabs((scui_atan2(x, y) - 90 + 360) % 360 - angle_s.number, 360);
         
-        /* 增量累积:与上一次采样角求增量(折返归一化到±180)再累加到当前值
-           旧实现用"落点固定的绝对差",拖动超过180°时增量折返 -> 值被压回0并卡死 */
-        scui_coord_t angle_last = obj_arc->angle_d;
-        scui_coord_t delta = angle - angle_last;
+        /* 累计偏角: 增量累加(折返归一±180) */
+        scui_coord_t delta = angle_t - obj_arc->angle_d;
         if (delta > +180) delta -= 360;
         if (delta < -180) delta += 360;
-        obj_arc->angle_d = angle;
+        obj_arc->angle_d += delta;
         
-        /* 当前值:由angle_c反推(与update_value的映射互逆) */
-        scui_coord3_t value_cur = obj_arc->anti ?
-            (angle_e.number - obj_arc->angle_c) * 100.0f / angle_d :
-            (obj_arc->angle_c - angle_s.number) * 100.0f / angle_d;
+        /* 值 = 累计偏角夹取[0,跨度](anti反向) */
+        scui_coord_t angle_lim = scui_clamp(obj_arc->angle_d, 0, angle_span);
+        scui_coord3_t value = obj_arc->anti ?
+            (angle_span - angle_lim) * 100.0f / angle_span :
+            angle_lim * 100.0f / angle_span;
         
-        scui_coord3_t value = value_cur + (obj_arc->anti ?
-            -delta : delta) * 100.0f / angle_d;
-        
-        value = scui_clamp(value, 0.0f, 100.0f);
         scui_obj_arc_update_value(event->object, value, false);
         scui_event_mask_over(event);
         break;
@@ -282,7 +284,7 @@ void scui_obj_arc_invoke(scui_event_t *event)
         scui_widget_switch_point(event->object, &point);
         
         scui_object_data_t center = {0};
-        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_base,
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_all,
             scui_object_style_arc_center, scui_object_state_def, center);
         
         scui_coord_t cx = center.point.x;
@@ -291,22 +293,22 @@ void scui_obj_arc_invoke(scui_event_t *event)
         scui_coord_t y = -(point.y - cy);
         if (x == 0 && y == 0) break;
         
-        scui_coord_t angle = (scui_atan2(x, y) - 90 + 360) % 360;
-        obj_arc->angle_d = angle;
-        
         scui_object_data_t angle_s = {0};
         scui_object_data_t angle_e = {0};
-        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_base,
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_all,
             scui_object_style_arc_angle_s, scui_object_state_def, angle_s);
-        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_base,
+        scui_object_prop_sync_s(event->object, scui_object_part_arc_bg, scui_object_form_arc_all,
             scui_object_style_arc_angle_e, scui_object_state_def, angle_e);
         
-        /* 落点角映射为值(夹取到弧范围:缺口落点不再越界跳动),作为增量累积的起点 */
-        scui_coord_t angle_d = scui_dist(angle_s.number, angle_e.number);
+        /* 落点偏角作累计基准 */
+        scui_coord_t angle_span = scui_dist(angle_s.number, angle_e.number);
+        scui_coord_t angle_t = scui_mabs((scui_atan2(x, y) - 90 + 360) % 360 - angle_s.number, 360);
+        obj_arc->angle_d = angle_t;
+        
+        scui_coord_t angle_lim = scui_clamp(angle_t, 0, angle_span);
         scui_coord3_t value = obj_arc->anti ?
-            (angle_e.number - angle) * 100.0f / angle_d :
-            (angle - angle_s.number) * 100.0f / angle_d;
-        value = scui_clamp(value, 0.0f, 100.0f);
+            (angle_span - angle_lim) * 100.0f / angle_span :
+            angle_lim * 100.0f / angle_span;
         
         scui_obj_arc_update_value(event->object, value, false);
         break;
@@ -329,13 +331,29 @@ void scui_obj_arc_invoke(scui_event_t *event)
             scui_object_form_arc_box,
         };
         
-        for (uint8_t idx_i = 0; idx_i < scui_arr_len(part_table); idx_i++)
-        for (uint8_t idx_j = 0; idx_j < scui_arr_len(form_table); idx_j++) {
-            scui_object_prop_t prop = {0};
-            prop.part = part_table[idx_i];
-            prop.form = form_table[idx_j];
-            scui_object_state_get(event->object, &prop.state);
-            scui_object_draw_arc(event->object, &prop);
+        /* 逐部件: 先刷基准几何, 再逐层绘制 */
+        for (uint8_t idx_i = 0; idx_i < scui_arr_len(part_table); idx_i++) {
+            scui_object_sub_t sub = {.part = part_table[idx_i]};
+            scui_object_state_get(event->object, &sub.state);
+            /* 无基准几何 → 回退def */
+            if (!scui_object_form_arc(event->object, &sub) &&
+                sub.state != scui_object_state_def) {
+                sub.state  = scui_object_state_def;
+                scui_object_form_arc(event->object, &sub);
+            }
+            
+            for (uint8_t idx_j = 0; idx_j < scui_arr_len(form_table); idx_j++) {
+                scui_object_prop_t prop = {0};
+                prop.part = part_table[idx_i];
+                prop.form = form_table[idx_j];
+                prop.state = sub.state;
+                /* 样式不全 → 回退def */
+                if (!scui_object_draw_arc(event->object, &prop) &&
+                    prop.state != scui_object_state_def) {
+                    prop.state  = scui_object_state_def;
+                    scui_object_draw_arc(event->object, &prop);
+                }
+            }
         }
         break;
     }

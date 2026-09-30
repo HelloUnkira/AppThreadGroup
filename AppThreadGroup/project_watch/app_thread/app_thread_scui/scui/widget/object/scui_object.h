@@ -46,11 +46,13 @@ typedef enum {
     /* 样式层级(挂在关键部分下, 每个部分都有完整的层级套系) */
     scui_object_form_sub = scui_object_type_form + scui_object_type_sub,
     
+    scui_object_form_rect_all,  /* 所有form */
     scui_object_form_rect_base, /* 基础 */
     scui_object_form_rect_edge, /* 边界(可选扩充) */
     scui_object_form_rect_box,  /* 盒子(可选扩充) */
     scui_object_form_rect_sha,  /* 阴影(可选扩充) */
     
+    scui_object_form_arc_all,   /* 所有form */
     scui_object_form_arc_base,  /* 基础 */
     scui_object_form_arc_edge,  /* 边界(可选扩充) */
     scui_object_form_arc_box,   /* 盒子(可选扩充) */

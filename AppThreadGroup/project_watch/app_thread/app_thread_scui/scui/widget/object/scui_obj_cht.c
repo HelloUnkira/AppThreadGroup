@@ -236,6 +236,16 @@ void scui_obj_cht_invoke(scui_event_t *event)
     }
     case scui_event_draw_graph: {
         
+        /* 统一基准: 刷part的form */
+        scui_object_sub_t sub = {.part = scui_object_part_rect_fg};
+        scui_object_state_get(event->object, &sub.state);
+        /* 无基准几何 → 回退def */
+        if (!scui_object_form_rect(event->object, &sub) &&
+            sub.state != scui_object_state_def) {
+            sub.state = scui_object_state_def;
+            scui_object_form_rect(event->object, &sub);
+        }
+        
         switch (obj_cht->type) {
         default:SCUI_ASSERT(false);break;
         case 0: {
@@ -245,9 +255,9 @@ void scui_obj_cht_invoke(scui_event_t *event)
                 scui_object_style_rect_width, scui_object_state_def, width);
             
             scui_object_prop_t prop = {0};
-            prop.part = scui_object_part_rect_fg;
-            prop.form = scui_object_form_rect_base;
-            scui_object_state_get(event->object, &prop.state);
+            prop.part  = scui_object_part_rect_fg;
+            prop.form  = scui_object_form_rect_base;
+            prop.state = sub.state;
             
             scui_point_t offset = obj_cht->area.pos;
             for (scui_coord_t idx = 0; idx < obj_cht->number; idx++) {
@@ -270,7 +280,13 @@ void scui_obj_cht_invoke(scui_event_t *event)
                 prop.data.number = offset_1y - offset_2y;
                 prop.style = scui_object_style_rect_height;
                 scui_object_prop_add(event->object, &prop);
-                scui_object_draw_rect(event->object, &prop);
+                /* 样式不全 → 回退def(副本隔离) */
+                scui_object_prop_t prop_draw = prop;
+                if (!scui_object_draw_rect(event->object, &prop_draw) &&
+                    prop_draw.state != scui_object_state_def) {
+                    prop_draw.state  = scui_object_state_def;
+                    scui_object_draw_rect(event->object, &prop_draw);
+                }
             }
             break;
         }

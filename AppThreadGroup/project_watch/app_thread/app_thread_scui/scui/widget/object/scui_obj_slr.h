@@ -9,6 +9,7 @@ typedef struct {
     scui_obj_bar_t obj_bar;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
+    scui_sbitfd_t press:1;      /* 按压效果 */
     /* 内部域: */
     scui_coord3_t value_base;   /* 按下基准值 */
     scui_coord_t  point_base;   /* 按下基准点(沿轴) */
@@ -22,6 +23,8 @@ typedef struct {
     scui_object_maker_t  object;
     scui_obj_bar_maker_t obj_bar;
     SCUI_EXTEND_FIELD_E
+    /* 外部域: */
+    scui_sbitfd_t press:1;      /* 按压效果 */
 } scui_obj_slr_maker_t;
 #pragma pack(pop)
 

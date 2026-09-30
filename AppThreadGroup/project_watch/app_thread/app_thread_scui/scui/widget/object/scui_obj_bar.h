@@ -14,6 +14,7 @@ typedef struct {
     scui_coord_t  value_cur;        /* 当前进度 */
     scui_sbitfd_t value_int:1;      /* 进度单元 */
     /* 内部域: */
+    scui_coord_t  knob_pct;         /* 端点静止态百分比(pct; 0:100; 按压放大=100) */
 } scui_obj_bar_t;
 
 #pragma pack(push, 1)
