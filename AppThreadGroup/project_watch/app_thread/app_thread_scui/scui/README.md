@@ -44,13 +44,7 @@
         
         评估:chart扩充(参考完整效果)
         评估:dropdown折叠效果，这个应该考虑一下升级到外部组件
-        
         评估:scale是否需要，可以做着玩，问题倒不大
-        评估:btn_mat必要(支持布局, item DIY)(待研究:每一个item都能DIY???)
-             btn_mat其实也可以用layout+btn实现，但这种其实是为了省控件
-                 calendar继承的btn_mat，只需要给plug加一个计算万年历的即可
-                 剩下的就是简要的布局游戏了，keyboard好像也差不多
-        
         评估:line,绘制轨迹图,貌似无意义
     
     
@@ -96,3 +90,7 @@
     
     scroll中触发 -- 目前可能确定是scroll的问题, 修订后继续观察
     表盘切换偶现死机 -- 目前可能确定user太小, 放大后继续观察
+
+    Monkey Test:
+    slab分配器，不能分配clip_unit
+

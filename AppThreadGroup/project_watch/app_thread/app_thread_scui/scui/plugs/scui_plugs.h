@@ -4,6 +4,8 @@
 #include "scui_monkey.h"
 #include "scui_monitor.h"
 #include "scui_overtime.h"
+#include "scui_keyboard.h"
+#include "scui_calendar.h"
 
 /* cwf json */
 #include "scui_cwf_json_proto.h"

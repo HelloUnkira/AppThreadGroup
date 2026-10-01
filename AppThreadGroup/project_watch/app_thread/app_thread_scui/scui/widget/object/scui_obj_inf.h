@@ -78,6 +78,20 @@ typedef struct {
     scui_sbitfd_t      gradw:1;     /* 渐变方向(水平:0;垂直:1) */
 } scui_obj_led_res_t;
 
+/*@brief 样式资源
+ */
+typedef struct {
+    scui_object_type_t part;        /* 关键部分(rect_item) */
+    scui_object_type_t form;        /* 层级(all/base/edge/box/sha) */
+    scui_color_t       color[2];    /* 颜色(def[0]/pre[1]; s状态色->e渐变) */
+    scui_coord_t       width;       /* 边界(实心:<=0;空心:>0; 该层stroke) */
+    scui_coord_t       radius;      /* 圆角半径(最大:<0; 基准all) */
+    scui_alpha_t       alpha;       /* 透明度(默认cover) */
+    scui_opt_pos_t     align;       /* 对齐(默认左上; 基准all) */
+    scui_sbitfd_t      grad:1;      /* 渐变(可选) */
+    scui_sbitfd_t      gradw:1;     /* 渐变方向(水平:0;垂直:1) */
+} scui_obj_bmat_res_t;
+
 /*@brief 控件样式应用
  *@param handle 控件句柄
  *@param res    样式资源
@@ -107,6 +121,12 @@ void scui_obj_cht_style(scui_handle_t handle, scui_obj_cht_res_t *res);
  *@param res    样式资源
  */
 void scui_obj_led_style(scui_handle_t handle, scui_obj_led_res_t *res);
+
+/*@brief 控件样式应用
+ *@param handle 控件句柄
+ *@param res    样式资源
+ */
+void scui_obj_bmat_style(scui_handle_t handle, scui_obj_bmat_res_t *res);
 
 /******************************************************************************/
 
@@ -162,18 +182,6 @@ void scui_obj_cht_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_
  */
 void scui_obj_cht_line_data(scui_handle_t handle, scui_coord_t *vlist_dot);
 
-/*@brief 对象控件标记获取
- *@param handle 控件句柄
- *retval 对象控件标记
- */
-bool scui_obj_chk_fixed(scui_handle_t handle);
-
-/*@brief 对象控件状态获取(特殊语义)
- *@param handle 控件句柄
- *@param state  对象控件状态
- */
-void scui_obj_chk_state(scui_handle_t handle, scui_object_type_t *state);
-
 /*@brief 控件点亮颜色设置
  *@param handle    控件句柄
  *@param color_on  点亮颜色
@@ -193,5 +201,46 @@ void scui_obj_led_level(scui_handle_t handle, scui_coord_t level);
  *@param onoff  亮灭(非切换时生效)
  */
 void scui_obj_led_onoff(scui_handle_t handle, bool toggle, bool onoff);
+
+/*@brief 对象控件标记获取
+ *@param handle 控件句柄
+ *retval 对象控件标记
+ */
+bool scui_obj_chk_fixed(scui_handle_t handle);
+
+/*@brief 对象控件状态获取(特殊语义)
+ *@param handle 控件句柄
+ *@param state  对象控件状态
+ */
+void scui_obj_chk_state(scui_handle_t handle, scui_object_type_t *state);
+
+/*@brief 条目序列设置
+ *@param handle    控件句柄
+ *@param item_num  条目数量(<=构造上限)
+ *@param row_num   轨道数量
+ *@param item_unit 条目宽度(单位数; 空=等分)
+ *@param item_row  条目轨道(升序; 空=单轨)
+ */
+void scui_obj_bmat_item_set(scui_handle_t handle, scui_coord_t item_num, scui_coord_t row_num,
+    scui_coord_t *item_unit, scui_coord_t *item_row);
+
+/*@brief 条目区域
+ *@param handle    控件句柄
+ *@param idx       条目号
+ *@param item_area 条目区域(控件相对)
+ */
+void scui_obj_bmat_item_area(scui_handle_t handle, scui_coord_t idx, scui_area_t *item_area);
+
+/*@brief 最近点击条目
+ *@param handle 控件句柄
+ *@retval 条目号(-1:无)
+ */
+scui_coord_t scui_obj_bmat_click_item(scui_handle_t handle);
+
+/*@brief 按下条目
+ *@param handle 控件句柄
+ *@retval 条目号(-1:无)
+ */
+scui_coord_t scui_obj_bmat_press_item(scui_handle_t handle);
 
 #endif

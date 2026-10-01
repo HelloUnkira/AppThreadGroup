@@ -121,6 +121,69 @@ static struct {
     scui_sbitfd_t led_breath:1;     /* 呼吸阶段标记 */
 } * scui_ui_res_led = NULL;
 
+/* obj_bmat 窗口: 条目数量上限(取用例最大条目数) */
+#define BMAT_ITEM_MAX       (12)
+
+/* 用例1: 3轨4列(等分) */
+static scui_coord_t scui_test_ui_object_bmat_unit_1[12] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+static scui_coord_t scui_test_ui_object_bmat_row_1[12]  = {0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2};
+/* 用例2: 2轨3列(单位1:2:1) */
+static scui_coord_t scui_test_ui_object_bmat_unit_2[6]  = {1, 2, 1, 1, 2, 1};
+static scui_coord_t scui_test_ui_object_bmat_row_2[6]   = {0, 0, 0, 1, 1, 1};
+/* 用例3: 1轨5列(等分) */
+static scui_coord_t scui_test_ui_object_bmat_unit_3[5]  = {1, 1, 1, 1, 1};
+static scui_coord_t scui_test_ui_object_bmat_row_3[5]   = {0, 0, 0, 0, 0};
+
+/* 条目序号 */
+static const char * const scui_test_ui_object_bmat_text[BMAT_ITEM_MAX] = {
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
+};
+
+/* 用例配置(控件区域在构建期现场给出: SCUI_AREA_MAKE_BM不是常量) */
+static const struct {
+    scui_coord_t  item_num;     /* 条目数量 */
+    scui_coord_t  row_num;      /* 轨道数量 */
+    scui_point_t  gap;          /* 条目间距 */
+    scui_coord_t *item_unit;    /* 条目宽度(单位数) */
+    scui_coord_t *item_row;     /* 条目轨道(行号) */
+} scui_test_ui_object_bmat_cfg[3] = {
+    {12, 3, {.x = 4, .y = 4}, scui_test_ui_object_bmat_unit_1, scui_test_ui_object_bmat_row_1},
+    { 6, 2, {.x = 8, .y = 8}, scui_test_ui_object_bmat_unit_2, scui_test_ui_object_bmat_row_2},
+    { 5, 1, {.x = 2, .y = 2}, scui_test_ui_object_bmat_unit_3, scui_test_ui_object_bmat_row_3},
+};
+
+/* obj_bmat 窗口局部资源 */
+static struct {
+    scui_handle_t bmat[3];  /* 矩阵控件 */
+    bool          ready;    /* 条目文本构建标记 */
+} * scui_ui_res_bmat = NULL;
+
+/* obj_bmat_keyboard 窗口: 按键数量上限(取num键盘按键数) */
+#define BMAT_KEYBOARD_ITEM_MAX  (12)
+
+/* obj_bmat_keyboard 窗口局部资源 */
+static struct {
+    scui_handle_t bmat;                                 /* 矩阵控件 */
+    char          text[BMAT_KEYBOARD_ITEM_MAX][2];      /* 键面文本 */
+    bool          ready;                                /* 键面文本构建标记 */
+} * scui_ui_res_bmat_keyboard = NULL;
+
+/* obj_bmat_calendar 窗口: 单元格数量上限(月视图容量) */
+#define BMAT_CALENDAR_ITEM_MAX  (42)
+
+/* 锚定日期与今日(框架无RTC, 由调用方给定) */
+#define BMAT_CALENDAR_YEAR      (2026)
+#define BMAT_CALENDAR_MONTH     (10)
+#define BMAT_CALENDAR_DAY       (1)
+
+/* obj_bmat_calendar 窗口局部资源 */
+static struct {
+    scui_handle_t bmat;                                 /* 矩阵控件 */
+    char          text[BMAT_CALENDAR_ITEM_MAX][3];      /* 单元格文本 */
+    scui_calendar_item_t item[BMAT_CALENDAR_ITEM_MAX];  /* 单元格条目 */
+    bool          ready;                                /* 单元格文本构建标记 */
+} * scui_ui_res_bmat_calendar = NULL;
+
 /*@brief 控件事件响应回调
  *@param event 事件
  */
@@ -195,11 +258,14 @@ void scui_test_ui_object_title_event_proc(scui_event_t *event)
         case SCUI_UI_SCENE_TEST_UI_OBJ_LED_TITLE:
             text = "Test Led";
             break;
-        case SCUI_UI_SCENE_TEST_UI_OBJ_NONE_1_TITLE:
-            text = "Test Empty";
+        case SCUI_UI_SCENE_TEST_UI_OBJ_BMAT_TITLE:
+            text = "Test Bmat";
             break;
-        case SCUI_UI_SCENE_TEST_UI_OBJ_NONE_2_TITLE:
-            text = "Test Empty";
+        case SCUI_UI_SCENE_TEST_UI_OBJ_BMAT_KEYBOARD_TITLE:
+            text = "Test Bmat Keyboard";
+            break;
+        case SCUI_UI_SCENE_TEST_UI_OBJ_BMAT_CALENDAR_TITLE:
+            text = "Test Bmat Calendar";
             break;
         default:
             break;
@@ -1250,23 +1316,273 @@ void scui_test_ui_object_obj_led_event_proc(scui_event_t *event)
     }
 }
 
-/*@brief obj_none_1 控件事件响应回调(Test Empty)
+/*@brief obj_bmat 控件事件响应回调(Test Bmat)
  *@param event 事件
  */
-void scui_test_ui_object_obj_none_1_event_proc(scui_event_t *event)
+void scui_test_ui_object_obj_bmat_event_proc(scui_event_t *event)
 {
     switch (event->type) {
+    case scui_event_create: {
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_bmat));
+        scui_window_local_res_get(event->object, (void **)&scui_ui_res_bmat);
+        scui_ui_res_bmat->ready = false;
+
+        /* 控件区域: 纵向三等分区(避开标题栏) */
+        scui_area_t bmat_clip[3] = {
+            SCUI_AREA_MAKE_BM(10,  50, 446, 130),
+            SCUI_AREA_MAKE_BM(10, 190, 446, 130),
+            SCUI_AREA_MAKE_BM(10, 330, 446, 130),
+        };
+
+        for (scui_coord_t idx = 0; idx < scui_arr_len(scui_test_ui_object_bmat_cfg); idx++) {
+
+            scui_obj_bmat_maker_define(bmat_maker);
+            scui_handle_t bmat_handle = SCUI_HANDLE_INVALID;
+
+            bmat_maker.widget.parent    = event->object;
+            bmat_maker.widget.clip      = bmat_clip[idx];
+            bmat_maker.widget.child_num = scui_test_ui_object_bmat_cfg[idx].item_num;
+            bmat_maker.item_num         = scui_test_ui_object_bmat_cfg[idx].item_num;
+            bmat_maker.row_num          = scui_test_ui_object_bmat_cfg[idx].row_num;
+            bmat_maker.gap              = scui_test_ui_object_bmat_cfg[idx].gap;
+            scui_widget_create(&bmat_maker, &bmat_handle);
+            scui_ui_res_bmat->bmat[idx] = bmat_handle;
+
+            /* 条目序列: 宽度与轨道(内部持有, 区域由bmat布局解析) */
+            scui_obj_bmat_item_set(bmat_handle, scui_test_ui_object_bmat_cfg[idx].item_num,
+                scui_test_ui_object_bmat_cfg[idx].row_num, scui_test_ui_object_bmat_cfg[idx].item_unit,
+                scui_test_ui_object_bmat_cfg[idx].item_row);
+        }
+        break;
+    }
+    case scui_event_anima_elapse: {
+        if (scui_ui_res_bmat->ready)
+            break;
+        /* 条目布局未解析(首帧)时跳过, 待bmat绘制解析出条目区域 */
+        scui_area_t area_first = {0};
+        scui_obj_bmat_item_area(scui_ui_res_bmat->bmat[0], 0, &area_first);
+        if (area_first.w == 0)
+            break;
+        scui_ui_res_bmat->ready = true;
+
+        for (scui_coord_t idx = 0; idx < scui_arr_len(scui_test_ui_object_bmat_cfg); idx++) {
+            scui_coord_t item_num = scui_test_ui_object_bmat_cfg[idx].item_num;
+            SCUI_LOG_INFO("bmat[%d] num:%d row_num:%d gap:%d",
+                idx, item_num, scui_test_ui_object_bmat_cfg[idx].row_num,
+                scui_test_ui_object_bmat_cfg[idx].gap.x);
+
+            for (scui_coord_t item = 0; item < item_num; item++) {
+                scui_area_t area = {0};
+                scui_obj_bmat_item_area(scui_ui_res_bmat->bmat[idx], item, &area);
+                SCUI_LOG_INFO("bmat[%d][%2d] x:%d y:%d w:%d h:%d",
+                    idx, item, area.x, area.y, area.w, area.h);
+
+                /* 条目序号: 条目区域由bmat布局给出(控件相对) */
+                scui_string_maker_define(string_maker);
+                scui_handle_t string_handle = SCUI_HANDLE_INVALID;
+
+                string_maker.widget.parent  = scui_ui_res_bmat->bmat[idx];
+                string_maker.widget.clip    = area;
+                string_maker.font_idx       = SCUI_FONT_IDX_36;
+                string_maker.args.lang      = scui_lang_type_en;
+                string_maker.args.align_hor = 2;
+                string_maker.args.align_ver = 2;
+                string_maker.args.color     = SCUI_COLOR_MAKE32_SE(true, 0, 0xFFFFFFFF, 0xFFFFFFFF);
+                scui_widget_create(&string_maker, &string_handle);
+                scui_string_update_str(string_handle, (uint8_t *)scui_test_ui_object_bmat_text[item]);
+            }
+        }
+        break;
+    }
     default:
         break;
     }
 }
 
-/*@brief obj_none_2 控件事件响应回调(Test Empty)
+/*@brief obj_bmat_keyboard 控件事件响应回调(Test Bmat Keyboard)
  *@param event 事件
  */
-void scui_test_ui_object_obj_none_2_event_proc(scui_event_t *event)
+void scui_test_ui_object_obj_bmat_keyboard_event_proc(scui_event_t *event)
 {
     switch (event->type) {
+    case scui_event_create: {
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_bmat_keyboard));
+        scui_window_local_res_get(event->object, (void **)&scui_ui_res_bmat_keyboard);
+        scui_ui_res_bmat_keyboard->ready = false;
+
+        /* keyboard只输出布局与辅助信息: 单位与轨道直接驱动bmat */
+        scui_keyboard_layout_t layout = {0};
+        scui_keyboard_layout(scui_keyboard_type_num, false, &layout);
+        SCUI_LOG_INFO("keyboard num:%d row_num:%d", layout.num, layout.row_num);
+
+        scui_coord_t unit[BMAT_KEYBOARD_ITEM_MAX] = {0};
+        scui_coord_t row[BMAT_KEYBOARD_ITEM_MAX]  = {0};
+
+        for (scui_coord_t idx = 0; idx < layout.num; idx++) {
+            unit[idx] = layout.item[idx].unit;
+            row[idx]  = layout.item[idx].row;
+            /* 键面: 可打印键取字符本身(键面本地化不属于keyboard职责) */
+            uint32_t code = layout.item[idx].code;
+            scui_ui_res_bmat_keyboard->text[idx][0] = (code >= 0x20 && code <= 0x7e) ? (char)code : '?';
+            scui_ui_res_bmat_keyboard->text[idx][1] = '\0';
+            SCUI_LOG_INFO("keyboard[%2d] code:0x%02X unit:%d row:%d",
+                idx, code, layout.item[idx].unit, layout.item[idx].row);
+        }
+
+        scui_obj_bmat_maker_define(bmat_maker);
+        scui_handle_t bmat_handle = SCUI_HANDLE_INVALID;
+
+        bmat_maker.widget.parent    = event->object;
+        bmat_maker.widget.clip      = SCUI_AREA_MAKE_BM(10, 50, 446, 396);
+        bmat_maker.widget.child_num = layout.num;
+        bmat_maker.item_num         = layout.num;
+        bmat_maker.row_num          = layout.row_num;
+        bmat_maker.gap              = (scui_point_t){.x = 6, .y = 6};
+        scui_widget_create(&bmat_maker, &bmat_handle);
+        scui_ui_res_bmat_keyboard->bmat = bmat_handle;
+
+        /* 条目序列: 宽度与轨道(内部持有, 区域由bmat布局解析) */
+        scui_obj_bmat_item_set(bmat_handle, layout.num, layout.row_num, unit, row);
+        break;
+    }
+    case scui_event_anima_elapse: {
+        if (scui_ui_res_bmat_keyboard->ready)
+            break;
+        /* 条目布局未解析(首帧)时跳过, 待bmat绘制解析出条目区域 */
+        scui_area_t area_first = {0};
+        scui_obj_bmat_item_area(scui_ui_res_bmat_keyboard->bmat, 0, &area_first);
+        if (area_first.w == 0)
+            break;
+        scui_ui_res_bmat_keyboard->ready = true;
+
+        scui_keyboard_layout_t layout = {0};
+        scui_keyboard_layout(scui_keyboard_type_num, false, &layout);
+
+        for (scui_coord_t idx = 0; idx < layout.num; idx++) {
+            scui_area_t area = {0};
+            scui_obj_bmat_item_area(scui_ui_res_bmat_keyboard->bmat, idx, &area);
+            SCUI_LOG_INFO("keyboard[%2d] x:%d y:%d w:%d h:%d",
+                idx, area.x, area.y, area.w, area.h);
+
+            scui_string_maker_define(string_maker);
+            scui_handle_t string_handle = SCUI_HANDLE_INVALID;
+
+            string_maker.widget.parent  = scui_ui_res_bmat_keyboard->bmat;
+            string_maker.widget.clip    = area;
+            string_maker.font_idx       = SCUI_FONT_IDX_36;
+            string_maker.args.lang      = scui_lang_type_en;
+            string_maker.args.align_hor = 2;
+            string_maker.args.align_ver = 2;
+            string_maker.args.color     = SCUI_COLOR_MAKE32_SE(true, 0, 0xFFFFFFFF, 0xFFFFFFFF);
+            scui_widget_create(&string_maker, &string_handle);
+            scui_string_update_str(string_handle, (uint8_t *)scui_ui_res_bmat_keyboard->text[idx]);
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief obj_bmat_calendar 控件事件响应回调(Test Bmat Calendar)
+ *@param event 事件
+ */
+void scui_test_ui_object_obj_bmat_calendar_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_create: {
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_bmat_calendar));
+        scui_window_local_res_get(event->object, (void **)&scui_ui_res_bmat_calendar);
+        scui_ui_res_bmat_calendar->ready = false;
+
+        scui_calendar_date_t date = {0};
+        scui_calendar_date_set(&date, BMAT_CALENDAR_YEAR,
+            BMAT_CALENDAR_MONTH, BMAT_CALENDAR_DAY);
+
+        /* calendar只输出布局与辅助信息: 轨道划分由列数决定 */
+        scui_calendar_layout_t layout = {0};
+        layout.cap  = scui_calendar_caps(scui_calendar_type_month);
+        layout.item = scui_ui_res_bmat_calendar->item;
+        scui_calendar_layout(scui_calendar_type_month, true, &date, &date, &layout);
+        SCUI_LOG_INFO("calendar row_num:%d col_num:%d num:%d",
+            layout.row_num, layout.col_num, layout.num);
+
+        scui_coord_t unit[BMAT_CALENDAR_ITEM_MAX] = {0};
+        scui_coord_t row[BMAT_CALENDAR_ITEM_MAX]  = {0};
+
+        for (scui_coord_t idx = 0; idx < layout.num; idx++) {
+            unit[idx] = 1;
+            row[idx]  = idx / layout.col_num;
+            snprintf(scui_ui_res_bmat_calendar->text[idx], sizeof(scui_ui_res_bmat_calendar->text[idx]),
+                "%d", layout.item[idx].day);
+            SCUI_LOG_INFO("calendar[%2d] %04d-%02d-%02d week:%d cur:%d today:%d rest:%d",
+                idx, layout.item[idx].year, layout.item[idx].month, layout.item[idx].day,
+                layout.item[idx].week, layout.item[idx].cur,
+                layout.item[idx].today, layout.item[idx].rest);
+        }
+
+        scui_obj_bmat_maker_define(bmat_maker);
+        scui_handle_t bmat_handle = SCUI_HANDLE_INVALID;
+
+        bmat_maker.widget.parent    = event->object;
+        bmat_maker.widget.clip      = SCUI_AREA_MAKE_BM(10, 50, 446, 396);
+        bmat_maker.widget.child_num = layout.num;
+        bmat_maker.item_num         = layout.num;
+        bmat_maker.row_num          = layout.row_num;
+        bmat_maker.gap              = (scui_point_t){.x = 4, .y = 4};
+        scui_widget_create(&bmat_maker, &bmat_handle);
+        scui_ui_res_bmat_calendar->bmat = bmat_handle;
+
+        /* 条目序列: 宽度与轨道(内部持有, 区域由bmat布局解析) */
+        scui_obj_bmat_item_set(bmat_handle, layout.num, layout.row_num, unit, row);
+        break;
+    }
+    case scui_event_anima_elapse: {
+        if (scui_ui_res_bmat_calendar->ready)
+            break;
+        /* 条目布局未解析(首帧)时跳过, 待bmat绘制解析出条目区域 */
+        scui_area_t area_first = {0};
+        scui_obj_bmat_item_area(scui_ui_res_bmat_calendar->bmat, 0, &area_first);
+        if (area_first.w == 0)
+            break;
+        scui_ui_res_bmat_calendar->ready = true;
+
+        scui_calendar_layout_t layout = {0};
+        layout.cap  = scui_calendar_caps(scui_calendar_type_month);
+        layout.item = scui_ui_res_bmat_calendar->item;
+        scui_calendar_date_t date = {0};
+        scui_calendar_date_set(&date, BMAT_CALENDAR_YEAR,
+            BMAT_CALENDAR_MONTH, BMAT_CALENDAR_DAY);
+        scui_calendar_layout(scui_calendar_type_month, true, &date, &date, &layout);
+
+        for (scui_coord_t idx = 0; idx < layout.num; idx++) {
+            scui_area_t area = {0};
+            scui_obj_bmat_item_area(scui_ui_res_bmat_calendar->bmat, idx, &area);
+            SCUI_LOG_INFO("calendar[%2d] x:%d y:%d w:%d h:%d",
+                idx, area.x, area.y, area.w, area.h);
+
+            /* 归属当前视图用亮色, 今日用红色, 前后补位用暗色 */
+            uint32_t color = 0xFFFFFFFF;
+            if (layout.item[idx].today)
+                color = 0xFFFF0000;
+            else if (!layout.item[idx].cur)
+                color = 0xFF606060;
+
+            scui_string_maker_define(string_maker);
+            scui_handle_t string_handle = SCUI_HANDLE_INVALID;
+
+            string_maker.widget.parent  = scui_ui_res_bmat_calendar->bmat;
+            string_maker.widget.clip    = area;
+            string_maker.font_idx       = SCUI_FONT_IDX_36;
+            string_maker.args.lang      = scui_lang_type_en;
+            string_maker.args.align_hor = 2;
+            string_maker.args.align_ver = 2;
+            string_maker.args.color     = SCUI_COLOR_MAKE32_SE(true, 0, color, color);
+            scui_widget_create(&string_maker, &string_handle);
+            scui_string_update_str(string_handle, (uint8_t *)scui_ui_res_bmat_calendar->text[idx]);
+        }
+        break;
+    }
     default:
         break;
     }

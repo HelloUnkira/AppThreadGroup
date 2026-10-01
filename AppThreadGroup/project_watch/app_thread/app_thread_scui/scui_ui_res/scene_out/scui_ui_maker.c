@@ -185,6 +185,12 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		obj_chk_maker->sym_color.color_e.full  = 0xFFFFFFFF;
 		break;
 	}
+	case scui_widget_type_obj_bmat: {
+		scui_obj_bmat_maker_t *obj_bmat_maker = (scui_obj_bmat_maker_t *)maker;
+		
+		obj_bmat_maker->widget.type  = scui_widget_type_obj_bmat;
+		break;
+	}
 	default:
 		break;
 	}

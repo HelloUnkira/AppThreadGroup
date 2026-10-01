@@ -222,6 +222,24 @@ void scui_ui_apply(scui_handle_t handle)
         scui_obj_led_style(handle, &res);
         break;
     }
+    case scui_widget_type_obj_bmat: {
+        /* 常规 res: 蓝灰条目+圆角; 按下深亮蓝 */
+        scui_obj_bmat_res_t res = {0};
+        res.alpha  = scui_alpha_cover;
+        res.align  = scui_opt_pos_l | scui_opt_pos_u;
+        res.radius = 6;
+        res.color[0].color_s.full = 0xFF546E7A;     /* def: 蓝灰 */
+        res.color[0].color_e.full = 0xFF546E7A;
+        res.color[1].color_s.full = 0xFF1565C0;     /* pre: 深亮蓝 */
+        res.color[1].color_e.full = 0xFF1565C0;
+        /* 统一基准(几何) + 该层样式 */
+        res.part = scui_object_part_rect_item;
+        res.form = scui_object_form_rect_all;
+        scui_obj_bmat_style(handle, &res);
+        res.form = scui_object_form_rect_base;
+        scui_obj_bmat_style(handle, &res);
+        break;
+    }
     case scui_widget_type_obj_chk: {
         /* 常规 res: 蓝灰底+天蓝edge; 点击后深蓝底+亮蓝edge; 居中 */
         scui_obj_btn_res_t res = {0};

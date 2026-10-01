@@ -230,6 +230,7 @@ void scui_widget_create(void *maker, scui_handle_t *handle);
 #define scui_obj_spn_maker_define(name)             scui_widget_maker_define(name, obj_spn)
 #define scui_obj_led_maker_define(name)             scui_widget_maker_define(name, obj_led)
 #define scui_obj_chk_maker_define(name)             scui_widget_maker_define(name, obj_chk)
+#define scui_obj_bmat_maker_define(name)            scui_widget_maker_define(name, obj_bmat)
 
 /*************************************************************************************************/
 /*************************************************************************************************/

@@ -176,6 +176,12 @@
                 "sym_color.color_s.full": "0xFFFFFFFF",
                 "sym_color.color_e.full": "0xFFFFFFFF"
             }
+        },
+        {
+            "class":   "scui_widget_type_obj_bmat",
+            "default": {
+                "widget.type": "scui_widget_type_obj_bmat"
+            }
         }
     ]
 }

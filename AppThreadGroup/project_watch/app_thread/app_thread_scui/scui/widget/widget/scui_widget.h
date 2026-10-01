@@ -27,6 +27,7 @@ typedef enum {
     scui_widget_type_obj_spn,           /* 对象控件:旋转器 */
     scui_widget_type_obj_led,           /* 对象控件:指示灯 */
     scui_widget_type_obj_chk,           /* 对象控件:选中器 */
+    scui_widget_type_obj_bmat,          /* 对象控件:按钮矩阵 */
     /* 继续补充... */
     scui_widget_type_num,
 } scui_widget_type_t;

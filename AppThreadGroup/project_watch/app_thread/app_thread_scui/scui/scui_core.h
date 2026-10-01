@@ -86,6 +86,7 @@
 #include "scui_obj_spn.h"           /* 控件(对象:旋转器) */
 #include "scui_obj_led.h"           /* 控件(对象:指示灯) */
 #include "scui_obj_chk.h"           /* 控件(对象:选中器) */
+#include "scui_obj_bmat.h"          /* 控件(对象:按钮矩阵) */
 #include "scui_obj_inf.h"           /* 控件(对象:子控件)API */
 
 /* draw,linker: */

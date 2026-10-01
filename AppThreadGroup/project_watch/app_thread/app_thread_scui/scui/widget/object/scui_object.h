@@ -24,46 +24,48 @@ typedef enum {
     
     /*************************************************************************/
     scui_object_state_sub = scui_object_type_state + scui_object_type_sub,
+    /* 状态(决定过渡的切换执行) */
     
     scui_object_state_def,
     scui_object_state_pre,
     scui_object_state_chk,
     
     /*************************************************************************/
-    /* 关键部分(决定绘制类型与样式套系) */
     scui_object_part_sub = scui_object_type_part + scui_object_type_sub,
+    /* 关键部分(决定绘制类型与样式套系) */
     
-    scui_object_part_main,      /* 全局 */
-    scui_object_part_rect_bg,   /* 矩形背景 */
-    scui_object_part_rect_fg,   /* 矩形前景 */
-    scui_object_part_rect_knob, /* 矩形端点(可选扩充) */
-    scui_object_part_line_item, /* 线条部分 */
-    scui_object_part_arc_bg,    /* 弧形背景 */
-    scui_object_part_arc_fg,    /* 弧形前景 */
-    scui_object_part_arc_knob,  /* 弧形端点(可选扩充) */
+    scui_object_part_main,          /* 全局 */
+    scui_object_part_rect_bg,       /* 矩形背景 */
+    scui_object_part_rect_fg,       /* 矩形前景 */
+    scui_object_part_rect_knob,     /* 矩形端点(可选扩充) */
+    scui_object_part_rect_item,     /* 矩形条目(可选扩充) */
+    scui_object_part_line_item,     /* 线条部分 */
+    scui_object_part_arc_bg,        /* 弧形背景 */
+    scui_object_part_arc_fg,        /* 弧形前景 */
+    scui_object_part_arc_knob,      /* 弧形端点(可选扩充) */
     
     /*************************************************************************/
-    /* 样式层级(挂在关键部分下, 每个部分都有完整的层级套系) */
     scui_object_form_sub = scui_object_type_form + scui_object_type_sub,
+    /* 样式层级(挂在关键部分下, 每个部分都有完整的层级套系) */
     
-    scui_object_form_rect_all,  /* 所有form */
-    scui_object_form_rect_base, /* 基础 */
-    scui_object_form_rect_edge, /* 边界(可选扩充) */
-    scui_object_form_rect_box,  /* 盒子(可选扩充) */
-    scui_object_form_rect_sha,  /* 阴影(可选扩充) */
+    scui_object_form_rect_all,      /* 所有form */
+    scui_object_form_rect_base,     /* 基础 */
+    scui_object_form_rect_edge,     /* 边界(可选扩充) */
+    scui_object_form_rect_box,      /* 盒子(可选扩充) */
+    scui_object_form_rect_sha,      /* 阴影(可选扩充) */
     
-    scui_object_form_arc_all,   /* 所有form */
-    scui_object_form_arc_base,  /* 基础 */
-    scui_object_form_arc_edge,  /* 边界(可选扩充) */
-    scui_object_form_arc_box,   /* 盒子(可选扩充) */
-    scui_object_form_arc_sha,   /* 阴影(可选扩充) */
+    scui_object_form_arc_all,       /* 所有form */
+    scui_object_form_arc_base,      /* 基础 */
+    scui_object_form_arc_edge,      /* 边界(可选扩充) */
+    scui_object_form_arc_box,       /* 盒子(可选扩充) */
+    scui_object_form_arc_sha,       /* 阴影(可选扩充) */
     
     /*************************************************************************/
-    scui_object_style_main_time_s = scui_object_type_style + scui_object_type_sub1,
+    scui_object_style_main_s = scui_object_type_style + scui_object_type_sub1,
     
     scui_object_style_main_time,
     
-    scui_object_style_main_time_e,
+    scui_object_style_main_e,
     /*************************************************************************/
     /* 矩形 */
     scui_object_style_rect_s = scui_object_type_style + scui_object_type_sub2,
