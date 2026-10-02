@@ -149,14 +149,28 @@ sub: 0x0000(main) 0x0100(sub1: 全局) 0x0200(sub2: rect) 0x0300(sub3: arc) 0x04
 - **tran 过渡**：fg 的 width/height（值动画, 单方向）
 - slider/switch 仅加事件：slider 拖动跟手(无动画), switch 点击翻转(端点动画); switch 默认启用 rect_knob
 
-### obj_cht —— 样式(def) · rect_fg × rect_base + line_item(无层级)
+### obj_cht —— 样式(def) · rect_fg × 自定层级 + line_item(无层级)
 
-- **可 DIY part/form**：`rect_fg × rect_base`(直方柱) / `line_item`(折线+渐变面积, form 恒 0)
+- **绘制区域 = 控件所在区域**（`widget->clip`）：**无外部 area 参数**；柱高/点高均按 `clip.h` 做值域线性映射
+- **横向布局 = 条目步进**：`x = idx * step`（与柱宽/线宽解耦，`step` = 条目间距）
+- **超界可见 = 横向跟手**：`内容总宽 = (number-1)*step + item_w`（item_w：柱状=柱宽、折线=1）；
+  溢出时 `ptr_down` 记基准 → `ptr_move` 平移 `ofs_cur`（夹取 `[0, 内容宽-clip.w]`，**仅水平方向接管**，纵向让位父级滚动） → 无惯性/回弹
+- **AUTO_W**：`clip.w == SCUI_WIDGET_AUTO_W` 时，`scui_event_layout` 解析为**父级可视宽**（`父clip.x + 父clip.w - 自身clip.x`）；
+  **多列并排时各列须各套一层定宽容器**（否则并排的自动宽控件同取窗口宽而重叠；`scui_custom`(type=none) 可作纯容器，须显式 `child_num`）；
+  **不取内容总宽**——内容超出部转为跟手行程（取内容总宽则 `ofs_max ≡ 0`，跟手失效，二者不可兼得）；
+  AUTO_H 不支持（走 draw_ready 断言）
+- **循环 = 固定槽位 + 滑动 gap**（`loop`）：槽位 x 恒为 `槽位号 * step`（**不随环首移动** ⇒ 旧数据位置不变）；**写头（`ring`）处留白 = gap**，像素宽度由 `gap` 给定（`0: 取 step 为基准`），不绘制任何数据；
+  每写一个样本 `ring` 前进一格 ⇒ **gap 被数据逐格"挤"走**，走到尾槽后回首槽重新循环；`内容宽 = number * step`，故 **数据 + gap = 整个内容宽**；
+  留白按像素相交判定：槽自写头起的偏移 `idx * step < gap` 则不绘制（柱状整柱跳过；折线首点自 `⌈gap/step⌉` 格起笔，接缝断点按数据段首尾槽位重算）；
+  **环宽 = 控件宽**（数据项+gap=整个宽度，不依赖 number*step 凑）：槽位铺满整宽
+  `x = 槽号 * clip.w / (number-1)`（折线；柱状再扣条目自身宽），**末槽贴右边界**，
+  否则右端残留约一格固定空白；step 仅用于非循环布局；内容不超出（无跟手行程）
+- **可 DIY part/form**：`rect_fg × form`(直方柱; form 由 style 录入、绘制期回读) / `line_item`(折线+渐变面积, form 恒 0)
 - **状态**：仅 def
 - **实际用到的 prop**：
-  - rect_fg：`rect_width`(柱宽, draw 前动态读) / `rect_point` / `rect_height`(逐柱动态写)
-  - line_item：`line_stroke`(线宽) / `line_vpos`(折线端点序列, 逐点动态写) / `line_multi`(round/grad)
-  - `line_area`(区域) / `line_color` / `line_alpha`
+  - rect_fg：`rect_width`(柱宽, layout/draw 前动态读) / `rect_point` / `rect_height`(逐柱动态写)
+  - line_item：`line_stroke`(线宽) / `line_vpos`(折线端点序列, 逐点动态写) / `line_vpos_num` / `line_multi`(round/grad)
+  - `line_area`(绘制区域, **绘制期按 clip 同步**——style 期取值会被 AUTO_W 破坏) / `line_color` / `line_alpha`
 - **无 tran**：chart 数据直接 prop_add 后绘制
 
 ## 四、res 结构字段说明（scui_obj_inf.h）
@@ -203,11 +217,11 @@ sub: 0x0000(main) 0x0100(sub1: 全局) 0x0200(sub2: rect) 0x0300(sub3: arc) 0x04
 | 字段 | 说明 |
 |---|---|
 | part | 关键部分(line_item / rect_fg) |
-| form | 层级(base; 线条恒 0) |
-| round | 折线端点圆角 |
+| form | 层级(柱状: style 录入、绘制期回读; 折线恒 0) |
+| round | 端点圆角(柱状=圆角柱; 折线=端点圆) |
 | grad | 折线渐变面积(曲线→底边) |
 | color | 颜色 |
-| width | 线宽 |
+| width | 柱状=柱宽 / 折线=线宽 |
 
 ## 五、注意
 

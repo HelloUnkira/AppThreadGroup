@@ -129,48 +129,71 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		scui_obj_btn_maker_t *obj_btn_maker = (scui_obj_btn_maker_t *)maker;
 		
 		obj_btn_maker->widget.type  = scui_widget_type_obj_btn;
+		obj_btn_maker->fixed        = 0;
+		obj_btn_maker->check        = 0;
 		break;
 	}
 	case scui_widget_type_obj_arc: {
 		scui_obj_arc_maker_t *obj_arc_maker = (scui_obj_arc_maker_t *)maker;
 		
 		obj_arc_maker->widget.type  = scui_widget_type_obj_arc;
+		obj_arc_maker->angle_c      = 0;
+		obj_arc_maker->anti         = 0;
+		obj_arc_maker->touch        = 0;
 		break;
 	}
 	case scui_widget_type_obj_bar: {
 		scui_obj_bar_maker_t *obj_bar_maker = (scui_obj_bar_maker_t *)maker;
 		
 		obj_bar_maker->widget.type  = scui_widget_type_obj_bar;
+		obj_bar_maker->way          = 0;
+		obj_bar_maker->rev          = 0;
+		obj_bar_maker->value_lim    = 100;
+		obj_bar_maker->value_int    = 0;
 		break;
 	}
 	case scui_widget_type_obj_cht: {
 		scui_obj_cht_maker_t *obj_cht_maker = (scui_obj_cht_maker_t *)maker;
 		
 		obj_cht_maker->widget.type  = scui_widget_type_obj_cht;
+		obj_cht_maker->type         = 0;
+		obj_cht_maker->value_min    = 0;
+		obj_cht_maker->value_max    = 100;
+		obj_cht_maker->loop         = 0;
 		break;
 	}
 	case scui_widget_type_obj_slr: {
 		scui_obj_slr_maker_t *obj_slr_maker = (scui_obj_slr_maker_t *)maker;
 		
 		obj_slr_maker->widget.type  = scui_widget_type_obj_slr;
+		obj_slr_maker->press        = 1;
 		break;
 	}
 	case scui_widget_type_obj_swt: {
 		scui_obj_swt_maker_t *obj_swt_maker = (scui_obj_swt_maker_t *)maker;
 		
-		obj_swt_maker->widget.type  = scui_widget_type_obj_swt;
+		obj_swt_maker->widget.type        = scui_widget_type_obj_swt;
+		obj_swt_maker->obj_bar.way        = 0;
+		obj_swt_maker->obj_bar.rev        = 0;
+		obj_swt_maker->obj_bar.value_lim  = 100;
+		obj_swt_maker->obj_bar.value_int  = 0;
 		break;
 	}
 	case scui_widget_type_obj_spn: {
 		scui_obj_spn_maker_t *obj_spn_maker = (scui_obj_spn_maker_t *)maker;
 		
-		obj_spn_maker->widget.type  = scui_widget_type_obj_spn;
+		obj_spn_maker->widget.type      = scui_widget_type_obj_spn;
+		obj_spn_maker->obj_arc.angle_c  = 0;
+		obj_spn_maker->obj_arc.anti     = 0;
+		obj_spn_maker->obj_arc.touch    = 0;
 		break;
 	}
 	case scui_widget_type_obj_led: {
 		scui_obj_led_maker_t *obj_led_maker = (scui_obj_led_maker_t *)maker;
 		
 		obj_led_maker->widget.type  = scui_widget_type_obj_led;
+		obj_led_maker->brightness   = 100;
+		obj_led_maker->on           = 0;
 		break;
 	}
 	case scui_widget_type_obj_chk: {
@@ -189,12 +212,16 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		scui_obj_bmat_maker_t *obj_bmat_maker = (scui_obj_bmat_maker_t *)maker;
 		
 		obj_bmat_maker->widget.type  = scui_widget_type_obj_bmat;
+		obj_bmat_maker->row_num      = 1;
+		obj_bmat_maker->gap.x        = 10;
+		obj_bmat_maker->gap.y        = 10;
 		break;
 	}
 	case scui_widget_type_obj_line: {
 		scui_obj_line_maker_t *obj_line_maker = (scui_obj_line_maker_t *)maker;
 		
 		obj_line_maker->widget.type  = scui_widget_type_obj_line;
+		obj_line_maker->mode         = 0;
 		break;
 	}
 	default:

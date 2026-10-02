@@ -753,12 +753,15 @@ void scui_layout_invoke(scui_event_t *event)
             switch (layout->type) {
             case scui_layout_type_item:
                 scui_layout_item_exec(layout);
+                scui_widget_surface_refr(widget, true);
                 break;
             case scui_layout_type_flex:
                 scui_layout_flex_exec(layout);
+                scui_widget_surface_refr(widget, true);
                 break;
             case scui_layout_type_grid:
                 scui_layout_grid_exec(layout);
+                scui_widget_surface_refr(widget, true);
                 break;
             default:
                 SCUI_ASSERT(false);

@@ -49,6 +49,60 @@ static struct {
     scui_handle_t obj_bar_anima;    /* 条形动画控件 */
 } * scui_ui_res_bar = NULL;
 
+/* obj_cht 窗口: 两行(柱状/折线)x三列(AUTO_W/跟手滚动/循环) */
+#define CHT_ROW_NUM         (2)
+#define CHT_COL_NUM         (3)
+#define CHT_CELL_W          (150)   /* 单元宽(即列宽) */
+#define CHT_CELL_H          (207)   /* 单元高(即行高) */
+#define CHT_CELL_X          (4)     /* 单元起点x */
+#define CHT_CELL_Y          (44)    /* 单元起点y */
+#define CHT_CELL_GAP        (4)     /* 单元间距 */
+
+/* obj_cht 条目数量(环容量)与步进: 内容宽 = CHT_CELL_NUM * CHT_CELL_STEP */
+#define CHT_CELL_NUM        (60)
+#define CHT_CELL_STEP       (10)
+
+/* obj_cht 测试波形: 标准ECG(窦性心律75bpm, RR=800ms)
+ * 高斯合成模型(波中心ms/标准差ms/幅值mV): P150/25/+0.15 Q250/14/-0.12
+ *                                        R300/14/+1.10 S350/14/-0.30 T500/50/+0.35
+ * 按50ms采样(一周期16样本); 映射: 基线45, 1mV≈45单位(value_min..value_max=0..100)
+ */
+#define CHT_ECG_NUM         (16)
+static const scui_coord_t scui_test_ui_object_cht_ecg[CHT_ECG_NUM] = {
+    45, 45, 46, 52, 46, 40, 94, 32, 47, 55, 61, 55, 47, 45, 45, 45,
+};
+
+/* 列: 0=AUTO_W(自动宽, 值只给一次); 1=跟手滚动(值只给一次); 2=循环(每秒推进一格) */
+static const struct {
+    bool         auto_w;    /* 宽度交由AUTO_W解析(撑满父级可视区) */
+    scui_coord_t number;    /* 环容量(条目数): 循环列取"数据+gap=整环宽" */
+    scui_coord_t gap;       /* 写头留白宽度(像素); 0: 取步进为基准 */
+    scui_coord_t feed_ms;   /* 推送节拍(ms); 0: 仅初始给一次值 */
+} scui_test_ui_object_cht_col[CHT_COL_NUM] = {
+    {.auto_w = true,  .number = CHT_CELL_NUM,               .gap = 0,
+        .feed_ms = 0},
+    {.auto_w = false, .number = CHT_CELL_NUM,               .gap = 0,
+        .feed_ms = 0},
+    {.auto_w = false, .number = CHT_CELL_W / CHT_CELL_STEP, .gap = CHT_CELL_STEP * 3 / 2,
+        .feed_ms = 100},   /* 15格x10=150 铺满控件 */
+};
+
+/* 行: 0=柱状(随机数); 1=折线(ECG模拟) */
+static const struct {
+    scui_coord_t type;      /* 0:柱状; 1:折线 */
+    uint32_t     color;     /* 条目颜色 */
+} scui_test_ui_object_cht_row[CHT_ROW_NUM] = {
+    {.type = 0, .color = 0xFFFF0000},
+    {.type = 1, .color = 0xFF2196F3},
+};
+
+/* obj_cht 窗口局部资源 */
+static struct {
+    scui_handle_t list[CHT_ROW_NUM][CHT_COL_NUM];   /* 循环图控件(行:柱状/折线 列:AUTO_W/跟手/循环) */
+    uint32_t      tick[CHT_COL_NUM];                /* 各列推送节拍累积(ms) */
+    scui_coord_t  pos;                              /* 波表相位(0~CHT_ECG_NUM-1) */
+} * scui_ui_res_cht = NULL;
+
 /* obj_bar 窗口单元: 三行(控件)x四列(组合); bar行分两条(密集: 8项) */
 #define BAR_COL_NUM         (4)
 #define BAR_ROW_NUM         (3)
@@ -238,13 +292,6 @@ void scui_test_ui_object_bar_event_proc(scui_event_t *event)
         break;
     }
     }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_test_ui_object_cht_event_proc(scui_event_t *event)
-{
 }
 
 /*@brief 页面标题事件响应回调
@@ -983,7 +1030,6 @@ void scui_test_ui_object_obj_bar_event_proc(scui_event_t *event)
         /* 第2行: slider(按压放大) */
         {
             scui_obj_slr_maker_define(maker);
-            maker.press = 1;
             scui_test_ui_object_bar_cells(&maker, &maker.widget, &maker.obj_bar, event->object,
                 scui_test_ui_object_bar_cell_knob,
                 scui_test_ui_object_bar_cell_y[1], BAR_CELL_H, 1);
@@ -1006,10 +1052,6 @@ void scui_test_ui_object_obj_bar_event_proc(scui_event_t *event)
             maker.widget.parent   = event->object;
             maker.widget.event_cb = scui_test_ui_object_bar_event_proc;
             maker.widget.clip     = SCUI_AREA_MAKE_BM(83, BAR_ANIMA_Y, 300, 30);
-            maker.way       = 0;
-            maker.rev       = 0;
-            maker.value_lim = 100;
-            maker.value_int = 0;
             scui_widget_create(&maker, &handle);
             
             res.alpha  = scui_alpha_cover;
@@ -1046,89 +1088,122 @@ void scui_test_ui_object_obj_cht_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_obj_cht_maker_define(obj_chart_maker);
-        obj_chart_maker.widget.color.color.full = 0xFF808080;
-        obj_chart_maker.widget.style.fully_bg = 1;
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_cht));
+        scui_window_local_res_get(event->object, (void **)&scui_ui_res_cht);
+        scui_ui_res_cht->pos = 0;
         
-        
-        scui_handle_t obj_chart_handle = SCUI_HANDLE_INVALID;
-        obj_chart_maker.widget.parent = event->object;
-        obj_chart_maker.widget.event_cb = scui_test_ui_object_cht_event_proc;
-        
-        scui_coord_t vlist[100] = {0};
-        scui_coord_t vlist_min[100] = {0};
-        scui_coord_t vlist_max[100] = {0};
-        for (uint32_t idx = 0; idx < 100; idx++) {
-            vlist_min[idx] =  60 + (uint32_t)scui_rand(0xFF) % 40;
-            vlist_max[idx] = 220 - (uint32_t)scui_rand(0xFF) % 40;
-            vlist[idx] = 60 + (uint32_t)scui_rand(0xFF) % ((220 - 60));
-        }
-        
+        /* 两行(柱状/折线)x三列(AUTO_W/跟手滚动/循环): 逗号即三个独立控件 */
+        /* AUTO_W = 撑满父级可视宽(内容超出部即跟手行程, 见ofs_max) */
         scui_obj_cht_res_t obj_chart_res = {0};
         obj_chart_res.alpha = scui_alpha_cover;
-        obj_chart_res.color.color.full = 0xFFFF0000;
         
-        /* 第1行: 柱状/折线 */
-        obj_chart_maker.type   = 0;
-        obj_chart_maker.number = 19;
-        obj_chart_maker.space  = 4;
-        obj_chart_maker.value_min = 60;
-        obj_chart_maker.value_max = 220;
-        obj_chart_maker.area.x = 10;
-        obj_chart_maker.area.y = 10;
-        obj_chart_maker.widget.clip = SCUI_AREA_MAKE_BM(13, 50, 210, 180);
-        obj_chart_maker.area.w = obj_chart_maker.widget.clip.w - 10 * 2;
-        obj_chart_maker.area.h = obj_chart_maker.widget.clip.h - 10 * 2;
-        obj_chart_res.width = 6;
-        obj_chart_res.round = true;
-        scui_widget_create(&obj_chart_maker, &obj_chart_handle);
-        obj_chart_res.part = scui_object_part_rect_fg;
-        obj_chart_res.form = scui_object_form_rect_base;
-        scui_obj_cht_style(obj_chart_handle, &obj_chart_res);
-        scui_obj_cht_hist_data(obj_chart_handle, vlist_min, vlist_max);
+        for (scui_coord_t row = 0; row < CHT_ROW_NUM; row++)
+        for (scui_coord_t col = 0; col < CHT_COL_NUM; col++) {
+            scui_handle_t cell_handle = SCUI_HANDLE_INVALID;
+            scui_handle_t handle      = SCUI_HANDLE_INVALID;
+            scui_coord_t  type        = scui_test_ui_object_cht_row[row].type;
+            scui_coord_t  number      = scui_test_ui_object_cht_col[col].number;
+            /* 循环列: 整环(数据+gap)刚好落在格内, 逐格推进 */
+            bool          loop        = scui_test_ui_object_cht_col[col].feed_ms != 0;
+            
+            /* 单元容器: AUTO_W 须按列宽解析(父级可视宽 = 列宽) */
+            scui_custom_maker_define(cell_maker);
+            cell_maker.widget.parent    = event->object;
+            cell_maker.widget.child_num = 1;
+            cell_maker.widget.clip      = SCUI_AREA_MAKE_BM(
+                CHT_CELL_X + col * (CHT_CELL_W + CHT_CELL_GAP),
+                CHT_CELL_Y + row * (CHT_CELL_H + CHT_CELL_GAP),
+                CHT_CELL_W, CHT_CELL_H);
+            scui_widget_create(&cell_maker, &cell_handle);
+            
+            scui_obj_cht_maker_define(obj_chart_maker);
+            obj_chart_maker.widget.color.color.full = 0xFF808080;
+            obj_chart_maker.widget.style.fully_bg = 1;
+            obj_chart_maker.widget.parent = cell_handle;
+            obj_chart_maker.type          = type;
+            obj_chart_maker.step          = CHT_CELL_STEP;
+            obj_chart_maker.number        = number;
+            obj_chart_maker.loop          = loop;
+            /* 循环: 写头留白(像素宽; 0=取步进基准) */
+            obj_chart_maker.gap           = scui_test_ui_object_cht_col[col].gap;
+            /* AUTO_W列: 宽度交由布局解析; 其余列: 显式列宽 */
+            obj_chart_maker.widget.clip   = SCUI_AREA_MAKE_BM(0, 0,
+                scui_test_ui_object_cht_col[col].auto_w ? SCUI_WIDGET_AUTO_W : CHT_CELL_W,
+                CHT_CELL_H);
+            scui_widget_create(&obj_chart_maker, &handle);
+            
+            obj_chart_res.color.color.full = scui_test_ui_object_cht_row[row].color;
+            if (type == 0) {
+                /* 柱状: 条宽<步进 */
+                obj_chart_res.part  = scui_object_part_rect_fg;
+                obj_chart_res.form  = scui_object_form_rect_base;
+                obj_chart_res.width = CHT_CELL_STEP / 2;
+                obj_chart_res.round = true;
+                obj_chart_res.grad  = false;
+            } else {
+                /* 折线: 线宽<<步进 */
+                obj_chart_res.part  = scui_object_part_line_item;
+                obj_chart_res.form  = 0;
+                obj_chart_res.width = 2;
+                obj_chart_res.round = true;
+                obj_chart_res.grad  = true;
+            }
+            scui_obj_cht_style(handle, &obj_chart_res);
+            
+            if (loop) {
+                /* 循环列: 预填整环(此后按节拍逐格推进, 拖动查看超界) */
+                for (scui_coord_t idx = 0; idx < number; idx++)
+                    if (type == 0)
+                        scui_obj_cht_loop_push(handle, 0, scui_rand(100));
+                    else
+                        scui_obj_cht_loop_push(handle,
+                            scui_test_ui_object_cht_ecg[idx % CHT_ECG_NUM], 0);
+            } else {
+                /* 其余列: 只初始给一次值(不参与循环) */
+                scui_coord_t vlist_min[CHT_CELL_NUM] = {0};
+                scui_coord_t vlist_max[CHT_CELL_NUM] = {0};
+                for (scui_coord_t idx = 0; idx < number; idx++) {
+                    if (type == 0)
+                        vlist_max[idx] = scui_rand(100);
+                    else
+                        vlist_min[idx] = scui_test_ui_object_cht_ecg[idx % CHT_ECG_NUM];
+                }
+                if (type == 0)
+                    scui_obj_cht_hist_data(handle, vlist_min, vlist_max);
+                else
+                    scui_obj_cht_line_data(handle, vlist_min);
+            }
+            
+            scui_ui_res_cht->list[row][col] = handle;
+        }
+        break;
+    }
+    case scui_event_anima_elapse: {
         
-        obj_chart_maker.type   = 1;
-        obj_chart_maker.number = 30;
-        obj_chart_maker.space  = 4;
-        obj_chart_maker.widget.clip.x = 243;
-        obj_chart_res.width = 2;
-        obj_chart_res.grad = true;
-        obj_chart_res.color.color.full = 0xFF2196F3;
-        scui_widget_create(&obj_chart_maker, &obj_chart_handle);
-        obj_chart_res.part = scui_object_part_line_item;
-        obj_chart_res.form = 0;
-        scui_obj_cht_style(obj_chart_handle, &obj_chart_res);
-        scui_obj_cht_line_data(obj_chart_handle, vlist);
-        
-        /* 第2行: 大柱状/渐变折线 */
-        obj_chart_maker.type   = 0;
-        obj_chart_maker.number = 8;
-        obj_chart_maker.space  = 8;
-        obj_chart_maker.widget.clip.x = 13;
-        obj_chart_maker.widget.clip.y = 250;
-        obj_chart_maker.area.w = obj_chart_maker.widget.clip.w - 10 * 2;
-        obj_chart_maker.area.h = obj_chart_maker.widget.clip.h - 10 * 2;
-        obj_chart_res.width = 16;
-        obj_chart_res.round = true;
-        obj_chart_res.color.color.full = 0xFF00FF00;
-        scui_widget_create(&obj_chart_maker, &obj_chart_handle);
-        obj_chart_res.part = scui_object_part_rect_fg;
-        obj_chart_res.form = scui_object_form_rect_base;
-        scui_obj_cht_style(obj_chart_handle, &obj_chart_res);
-        scui_obj_cht_hist_data(obj_chart_handle, vlist_min, vlist_max);
-        
-        obj_chart_maker.type   = 1;
-        obj_chart_maker.number = 50;
-        obj_chart_maker.space  = 2;
-        obj_chart_maker.widget.clip.x = 243;
-        obj_chart_res.width = 2;
-        obj_chart_res.grad = true;
-        obj_chart_res.color.color.full = 0xFFFF8000;
-        scui_widget_create(&obj_chart_maker, &obj_chart_handle);
-        obj_chart_res.part = scui_object_part_line_item;
-        obj_chart_res.form = 0;
-        scui_obj_cht_style(obj_chart_handle, &obj_chart_res);
-        scui_obj_cht_line_data(obj_chart_handle, vlist);
+        /* 按列节拍推进(0: 静态列, 不参与) */
+        for (scui_coord_t col = 0; col < CHT_COL_NUM; col++) {
+            if (scui_test_ui_object_cht_col[col].feed_ms == 0)
+                continue;
+            
+            scui_ui_res_cht->tick[col] += event->tick;
+            if (scui_ui_res_cht->tick[col] < scui_test_ui_object_cht_col[col].feed_ms)
+                continue;
+            scui_ui_res_cht->tick[col] = 0;
+            
+            /* 标准ECG: 波表按相位取值 */
+            scui_coord_t ecg = scui_test_ui_object_cht_ecg[scui_ui_res_cht->pos++];
+            if (scui_ui_res_cht->pos >= scui_arr_len(scui_test_ui_object_cht_ecg))
+                scui_ui_res_cht->pos = 0;
+            
+            for (scui_coord_t row = 0; row < CHT_ROW_NUM; row++) {
+                scui_handle_t handle = scui_ui_res_cht->list[row][col];
+                /* 柱状: 随机数(自0生长); 折线: ECG模拟(值即点高) */
+                if (scui_test_ui_object_cht_row[row].type == 0)
+                    scui_obj_cht_loop_push(handle, 0, scui_rand(100));
+                else
+                    scui_obj_cht_loop_push(handle, ecg, 0);
+            }
+        }
         break;
     }
     default:
@@ -1191,7 +1266,6 @@ void scui_test_ui_object_obj_led_event_proc(scui_event_t *event)
             led_maker.widget.clip    = SCUI_AREA_MAKE_BM(0, 0, LED_SIZE, LED_SIZE);
             led_maker.color_on       = SCUI_COLOR32_MAKE32(led_color[0]);
             led_maker.color_off      = SCUI_COLOR32_MAKE32(led_color_off);
-            led_maker.brightness     = 100;
             scui_widget_create(&led_maker, &led_handle);
             
             scui_obj_led_res_t led_res = {
@@ -1670,7 +1744,6 @@ void scui_test_ui_object_obj_line_event_proc(scui_event_t *event)
 
         track_maker.widget.parent = event->object;
         track_maker.widget.clip   = SCUI_AREA_MAKE_BM(10, 50, 446, 190);
-        track_maker.mode          = 0;
         track_maker.seg_num       = LINE_TRACK_SEG_NUM;
         track_maker.dot_num       = LINE_TRACK_DOT_NUM;
         scui_widget_create(&track_maker, &track_handle);

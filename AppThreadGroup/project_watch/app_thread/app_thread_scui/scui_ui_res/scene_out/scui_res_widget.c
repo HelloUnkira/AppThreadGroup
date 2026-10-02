@@ -4782,6 +4782,7 @@ static void (*const scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_CHT_cfg[])(void *maker
 	scui_widget_json_widget_child_num,
 	scui_widget_json_widget_event_cb,
 	scui_widget_json_widget_myself,
+	scui_widget_json_widget_style_sched_anima,
 };
 
 static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_CHT_val[] = {
@@ -4793,6 +4794,7 @@ static const scui_widget_json_val_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_CHT_va
 	{ .handle = 30, },
 	{ .event = scui_test_ui_object_obj_cht_event_proc, },
 	{ .handle = SCUI_UI_SCENE_TEST_UI_OBJ_CHT, },
+	{ .sbitfd = true, },
 };
 
 const scui_widget_json_key_t scui_widget_SCUI_UI_SCENE_TEST_UI_OBJ_CHT_key = {

@@ -120,49 +120,72 @@
         {
             "class":   "scui_widget_type_obj_btn",
             "default": {
-                "widget.type": "scui_widget_type_obj_btn"
+                "widget.type": "scui_widget_type_obj_btn",
+                "fixed":       "0",
+                "check":       "0"
             }
         },
         {
             "class":   "scui_widget_type_obj_arc",
             "default": {
-                "widget.type": "scui_widget_type_obj_arc"
+                "widget.type": "scui_widget_type_obj_arc",
+                "angle_c":     "0",
+                "anti":        "0",
+                "touch":       "0"
             }
         },
         {
             "class":   "scui_widget_type_obj_bar",
             "default": {
-                "widget.type": "scui_widget_type_obj_bar"
+                "widget.type": "scui_widget_type_obj_bar",
+                "way":         "0",
+                "rev":         "0",
+                "value_lim":   "100",
+                "value_int":   "0"
             }
         },
         {
             "class":   "scui_widget_type_obj_cht",
             "default": {
-                "widget.type": "scui_widget_type_obj_cht"
+                "widget.type": "scui_widget_type_obj_cht",
+                "type":        "0",
+                "value_min":   "0",
+                "value_max":   "100",
+                "loop":        "0"
             }
         },
         {
             "class":   "scui_widget_type_obj_slr",
             "default": {
-                "widget.type": "scui_widget_type_obj_slr"
+                "widget.type": "scui_widget_type_obj_slr",
+                "press":       "1"
             }
         },
         {
             "class":   "scui_widget_type_obj_swt",
             "default": {
-                "widget.type": "scui_widget_type_obj_swt"
+                "widget.type":       "scui_widget_type_obj_swt",
+                "obj_bar.way":       "0",
+                "obj_bar.rev":       "0",
+                "obj_bar.value_lim": "100",
+                "obj_bar.value_int": "0"
             }
         },
         {
             "class":   "scui_widget_type_obj_spn",
             "default": {
-                "widget.type": "scui_widget_type_obj_spn"
+                "widget.type":     "scui_widget_type_obj_spn",
+                "obj_arc.angle_c": "0",
+                "obj_arc.anti":    "0",
+                "obj_arc.touch":   "0"
             }
         },
         {
             "class":   "scui_widget_type_obj_led",
             "default": {
-                "widget.type": "scui_widget_type_obj_led"
+                "widget.type": "scui_widget_type_obj_led",
+                "brightness":  "100",
+                "on":          "0"
             }
         },
         {
@@ -180,13 +203,17 @@
         {
             "class":   "scui_widget_type_obj_bmat",
             "default": {
-                "widget.type": "scui_widget_type_obj_bmat"
+                "widget.type": "scui_widget_type_obj_bmat",
+                "row_num":     "1",
+                "gap.x":       "10",
+                "gap.y":       "10"
             }
         },
         {
             "class":   "scui_widget_type_obj_line",
             "default": {
-                "widget.type": "scui_widget_type_obj_line"
+                "widget.type": "scui_widget_type_obj_line",
+                "mode":        "0"
             }
         }
     ]

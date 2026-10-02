@@ -200,8 +200,8 @@ void scui_widget_create(void *maker, scui_handle_t *handle);
  */
 #define SCUI_WIDGET_AUTO_W          ((scui_coord_t)(-1))
 #define SCUI_WIDGET_AUTO_H          ((scui_coord_t)(-1))
-#define SCUI_WIDGET_PCT_H(pct)      ((scui_multi_t)(pct) * 100 / (SCUI_HOR_RES))
-#define SCUI_WIDGET_PCT_V(pct)      ((scui_multi_t)(pct) * 100 / (SCUI_VER_RES))
+#define SCUI_WIDGET_PCT_H(pct)      ((scui_multi_t)(SCUI_HOR_RES) * (pct) / 100)
+#define SCUI_WIDGET_PCT_V(pct)      ((scui_multi_t)(SCUI_VER_RES) * (pct) / 100)
 
 /*@brief 控件构造器实例定义
  */

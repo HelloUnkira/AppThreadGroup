@@ -186,17 +186,11 @@ void scui_widget_burn(scui_widget_t *widget)
     /* 回收用户资源句柄 */
     scui_handle_clear(widget->user_data);
     
-    /* 回收对象动画 */
-    scui_anima_object_recycle(widget->myself);
-    
     /* 回收控件动画 */
     scui_widget_anima_destroy(widget->myself);
     
-    /* 回收独立子画布 */
-    scui_widget_surface_destroy(widget);
-    
-    /* 画布剪切域清除 */
-    scui_clip_clear(&widget->clip_set);
+    /* 回收对象动画 */
+    scui_anima_object_recycle(widget->myself);
     
     /* 清空事件列表 */
     scui_widget_event_clear(widget->myself);
@@ -210,6 +204,12 @@ void scui_widget_burn(scui_widget_t *widget)
         scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
         scui_widget_child_del(widget_p, widget->myself);
     }
+    
+    /* 回收独立子画布 */
+    scui_widget_surface_destroy(widget);
+    
+    /* 画布剪切域清除 */
+    scui_clip_clear(&widget->clip_set);
     
     /* 回收孩子列表 */
     SCUI_MEM_FREE(widget->child_list);

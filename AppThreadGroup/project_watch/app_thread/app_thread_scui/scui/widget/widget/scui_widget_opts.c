@@ -65,24 +65,20 @@ bool scui_widget_indev_hold(scui_handle_t handle, scui_handle_t *handle_h)
 void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool abs)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_point_t  point_c = *point;
+    scui_point_t  point_w = *point;
     
     /* 父相对坐标换算为独立画布绝对坐标 */
     /* 根控件(无父)或父即本控件的独立画布(root)时, 偏置为0 */
     if (!abs && widget->parent != SCUI_HANDLE_INVALID &&
         scui_widget_root(handle) != widget->parent) {
         scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
-        point_c.x += widget_p->clip.x;
-        point_c.y += widget_p->clip.y;
+        point_w.x += widget_p->clip.x;
+        point_w.y += widget_p->clip.y;
     }
-    point = &point_c;
     
-    if (widget->clip.x == point->x &&
-        widget->clip.y == point->y) {
-        /* 位置未变: 尺寸/父剪切域可能已更新(如AUTO解析后), 刷新剪切域防止过期 */
-        scui_widget_surface_refr(widget, false);
+    if (widget->clip.x == point_w.x &&
+        widget->clip.y == point_w.y)
         return;
-    }
     
     /* 控件悬浮, 不响应移动 */
     if (widget->style.fixed)
@@ -91,8 +87,8 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool abs)
     /* 如果移动的是独立画布 */
     /* 只需要改变独立画布位置 */
     if (widget->style.buffer) {
-        widget->clip.x = point->x;
-        widget->clip.y = point->y;
+        widget->clip.x = point_w.x;
+        widget->clip.y = point_w.y;
         
         if (widget->parent == SCUI_HANDLE_INVALID)
             scui_widget_refr(widget->myself, false);
@@ -101,17 +97,17 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool abs)
             scui_widget_draw(widget->parent, NULL, false, 1);
         }
         
-        SCUI_LOG_INFO("<x:%d, y:%d>", point->x, point->y);
+        SCUI_LOG_INFO("<x:%d, y:%d>", point_w.x, point_w.y);
     } else {
         /* 计算移动偏移量 */
         scui_point_t offset = {
-            .x = point->x - widget->clip.x,
-            .y = point->y - widget->clip.y,
+            .x = point_w.x - widget->clip.x,
+            .y = point_w.y - widget->clip.y,
         };
         
         /* 移动自己 */
-        widget->clip.x = point->x;
-        widget->clip.y = point->y;
+        widget->clip.x = point_w.x;
+        widget->clip.y = point_w.y;
         scui_widget_surface_refr(widget, false);
         
         /* 移动孩子,迭代它的孩子列表 */

@@ -190,7 +190,7 @@ static void scui_widget_hide_sched(scui_handle_t handle)
 void scui_widget_show(scui_handle_t handle, bool async)
 {
     if (async) {
-        scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_async, NULL);
+        scui_event_define(event, SCUI_HANDLE_SYSTEM, false, scui_event_sched_async, NULL);
         event.style.prior = scui_event_prior_real;
         event.sched       = scui_widget_show_sched;
         event.handle      = handle;
@@ -207,7 +207,7 @@ void scui_widget_show(scui_handle_t handle, bool async)
 void scui_widget_hide(scui_handle_t handle, bool async)
 {
     if (async) {
-        scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_async, NULL);
+        scui_event_define(event, SCUI_HANDLE_SYSTEM, false, scui_event_sched_async, NULL);
         event.style.prior = scui_event_prior_real;
         event.sched       = scui_widget_hide_sched;
         event.handle      = handle;
@@ -326,7 +326,6 @@ static void scui_widget_event_process(scui_event_t *event)
         
         /* 基础控件绘制布局计算(只解算有背景图资源控件) */
         if (widget->state.layout_w || widget->state.layout_h)
-
         if (widget->style.fully_bg && widget->image != SCUI_HANDLE_INVALID) {
             
             scui_coord_t image_w = scui_image_w(widget->image);

@@ -94,6 +94,7 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
     }
     case scui_event_draw_graph: {
         
+        
         scui_handle_t image_bg   = scui_image_prj_act_ring_b_max_01_bj;
         scui_handle_t image_edge = scui_image_prj_act_ring_b_max_02_bj_00;
         scui_handle_t image_ring = scui_image_prj_act_ring_b_max_03_bj_01;
@@ -349,18 +350,14 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_obj_cht_maker_define(chart_maker);
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
-        chart_maker.widget.clip = SCUI_AREA_MAKE_BM(0, 100, SCUI_HOR_RES, 86);
+        chart_maker.widget.clip = SCUI_AREA_MAKE_BM(42, 100, SCUI_HOR_RES - 42, 86);
         chart_maker.widget.parent = event->object;
         
         chart_maker.type      = 0;
         chart_maker.value_min = 0;
         chart_maker.value_max = 100;
         chart_maker.number    = 24;
-        chart_maker.area.x  = 42;
-        chart_maker.area.y  = 0;
-        chart_maker.area.w  = SCUI_HOR_RES - 42;
-        chart_maker.area.h  = 86;
-        chart_maker.space   = 4;
+        chart_maker.step      = 5;
         scui_widget_create(&chart_maker, &chart_handle);
         
         scui_obj_cht_res_t cht_res = {0};
@@ -529,18 +526,14 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         scui_obj_cht_maker_define(chart_maker);
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
-        chart_maker.widget.clip = SCUI_AREA_MAKE_BM(0, 100, SCUI_HOR_RES, 86);
+        chart_maker.widget.clip = SCUI_AREA_MAKE_BM(42, 100, SCUI_HOR_RES - 42, 86);
         chart_maker.widget.parent = event->object;
         
         chart_maker.type      = 0;
         chart_maker.value_min = 0;
         chart_maker.value_max = 100;
         chart_maker.number    = 24;
-        chart_maker.area.x  = 42;
-        chart_maker.area.y  = 0;
-        chart_maker.area.w  = SCUI_HOR_RES - 42;
-        chart_maker.area.h  = 86;
-        chart_maker.space   = 4;
+        chart_maker.step      = 5;
         scui_widget_create(&chart_maker, &chart_handle);
         
         scui_obj_cht_res_t cht_res = {0};
@@ -710,18 +703,14 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         scui_obj_cht_maker_define(chart_maker);
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         
-        chart_maker.widget.clip = SCUI_AREA_MAKE_BM(0, 100, SCUI_HOR_RES, 86);
+        chart_maker.widget.clip = SCUI_AREA_MAKE_BM(42, 100, SCUI_HOR_RES - 42, 86);
         chart_maker.widget.parent = event->object;
         
         chart_maker.type      = 0;
         chart_maker.value_min = 0;
         chart_maker.value_max = 100;
         chart_maker.number    = 24;
-        chart_maker.area.x  = 42;
-        chart_maker.area.y  = 0;
-        chart_maker.area.w  = SCUI_HOR_RES - 42;
-        chart_maker.area.h  = 86;
-        chart_maker.space   = 4;
+        chart_maker.step      = 5;
         scui_widget_create(&chart_maker, &chart_handle);
         
         scui_obj_cht_res_t cht_res = {0};

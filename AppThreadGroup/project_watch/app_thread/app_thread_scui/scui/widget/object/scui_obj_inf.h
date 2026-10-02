@@ -199,6 +199,13 @@ void scui_obj_cht_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_
  */
 void scui_obj_cht_line_data(scui_handle_t handle, scui_coord_t *vlist_dot);
 
+/*@brief 控件循环推送(环上写入一个样本)
+ *@param handle  控件句柄
+ *@param value_1 数据值(hist:最小值; line:数据值)
+ *@param value_2 数据值(hist:最大值; line:忽略)
+ */
+void scui_obj_cht_loop_push(scui_handle_t handle, scui_coord_t value_1, scui_coord_t value_2);
+
 /*@brief 控件点亮颜色设置
  *@param handle    控件句柄
  *@param color_on  点亮颜色

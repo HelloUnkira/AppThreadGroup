@@ -81,13 +81,14 @@
             "font_idx":                "SCUI_FONT_IDX_32"
         },
         {
-            "annotation":       "obj_cht: Test Chart",
-            "widget.type":      "scui_widget_type_window",
-            "widget.myself":    "SCUI_UI_SCENE_TEST_UI_OBJ_CHT",
-            "widget.event_cb":  "scui_test_ui_object_obj_cht_event_proc",
-            "sibling[0]":       "SCUI_UI_SCENE_TEST_UI_OBJ_ARC",
-            "sibling[1]":       "SCUI_UI_SCENE_TEST_UI_OBJ_LED",
-            "widget.child_num": "30"
+            "annotation":               "obj_cht: Test Chart",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_OBJ_CHT",
+            "widget.event_cb":          "scui_test_ui_object_obj_cht_event_proc",
+            "sibling[0]":               "SCUI_UI_SCENE_TEST_UI_OBJ_ARC",
+            "sibling[1]":               "SCUI_UI_SCENE_TEST_UI_OBJ_LED",
+            "widget.child_num":         "30"
         },
         {
             "annotation":              "obj_cht_title",

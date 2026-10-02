@@ -698,6 +698,8 @@ void scui_window_active(scui_handle_t handle)
     
     /* 切到新窗口时 */
     /* 快速刷新权重淘汰旧资源 */
+    scui_cache_font_rectify();
+    scui_cache_glyph_rectify();
     scui_cache_image_rectify();
 }
 

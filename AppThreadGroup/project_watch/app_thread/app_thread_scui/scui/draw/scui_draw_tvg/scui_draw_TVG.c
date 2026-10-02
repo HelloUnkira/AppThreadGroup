@@ -152,7 +152,7 @@ bool scui_draw_ctx_graph_TVG(scui_draw_dsc_t *draw_dsc)
     if (tvg_line == dst_clip.h) tvg_lines = 1;
     
     for (scui_coord_t idx_line = 0; idx_line < tvg_lines; idx_line++)
-    for (scui_coord_t idx_item = 0; idx_item < tvg_lines; idx_item++) {
+    for (scui_coord_t idx_item = 0; idx_item < tvg_items; idx_item++) {
         draw_dsc->graph.dst_clip.y = dst_clip.y + idx_line * tvg_line;
         draw_dsc->graph.dst_clip.x = dst_clip.x + idx_item * tvg_item;
         
