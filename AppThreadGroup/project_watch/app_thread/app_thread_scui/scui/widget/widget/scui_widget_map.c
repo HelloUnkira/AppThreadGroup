@@ -292,6 +292,16 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .inherit = true,
             .name    = "obj_bmat",
         },
+        [scui_widget_type_obj_line] = {
+            .size    = sizeof(scui_obj_line_t),
+            .maker   = sizeof(scui_obj_line_maker_t),
+            .base    = scui_widget_type_object,
+            .make    = scui_obj_line_make,
+            .burn    = scui_obj_line_burn,
+            .invoke  = scui_obj_line_invoke,
+            .inherit = true,
+            .name    = "obj_line",
+        },
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);

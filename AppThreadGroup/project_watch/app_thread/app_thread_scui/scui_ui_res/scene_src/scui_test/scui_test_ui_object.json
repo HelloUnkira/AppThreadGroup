@@ -166,6 +166,7 @@
             "widget.style.sched_anima": "true",
             "widget.myself":            "SCUI_UI_SCENE_TEST_UI_OBJ_BMAT_KEYBOARD",
             "widget.event_cb":          "scui_test_ui_object_obj_bmat_keyboard_event_proc",
+            "widget.style.indev_key":   "true",
             "sibling[0]":               "SCUI_UI_SCENE_TEST_UI_OBJ_BMAT",
             "sibling[1]":               "SCUI_UI_SCENE_TEST_UI_OBJ_BMAT_CALENDAR",
             "widget.child_num":         "30"
@@ -193,7 +194,9 @@
             "widget.style.sched_anima": "true",
             "widget.myself":            "SCUI_UI_SCENE_TEST_UI_OBJ_BMAT_CALENDAR",
             "widget.event_cb":          "scui_test_ui_object_obj_bmat_calendar_event_proc",
+            "widget.style.indev_key":   "true",
             "sibling[0]":               "SCUI_UI_SCENE_TEST_UI_OBJ_BMAT_KEYBOARD",
+            "sibling[1]":               "SCUI_UI_SCENE_TEST_UI_OBJ_LINE",
             "widget.child_num":         "30"
         },
         {
@@ -205,6 +208,32 @@
             "widget.clip.h":           "40",
             "widget.myself":           "SCUI_UI_SCENE_TEST_UI_OBJ_BMAT_CALENDAR_TITLE",
             "widget.parent":           "SCUI_UI_SCENE_TEST_UI_OBJ_BMAT_CALENDAR",
+            "widget.event_cb":         "scui_test_ui_object_title_event_proc",
+            "args.align_hor":          "2",
+            "args.align_ver":          "2",
+            "args.color.color_s.full": "0xFFFFFFFF",
+            "args.color.color_e.full": "0xFFFFFFFF",
+            "args.color.filter":       "true",
+            "font_idx":                "SCUI_FONT_IDX_32"
+        },
+        {
+            "annotation":               "obj_line: Test Line",
+            "widget.type":              "scui_widget_type_window",
+            "widget.style.sched_anima": "true",
+            "widget.myself":            "SCUI_UI_SCENE_TEST_UI_OBJ_LINE",
+            "widget.event_cb":          "scui_test_ui_object_obj_line_event_proc",
+            "sibling[0]":               "SCUI_UI_SCENE_TEST_UI_OBJ_BMAT_CALENDAR",
+            "widget.child_num":         "30"
+        },
+        {
+            "annotation":              "obj_line_title",
+            "widget.type":             "scui_widget_type_string",
+            "widget.clip.x":           "0",
+            "widget.clip.y":           "0",
+            "widget.clip.w":           "SCUI_HOR_RES",
+            "widget.clip.h":           "40",
+            "widget.myself":           "SCUI_UI_SCENE_TEST_UI_OBJ_LINE_TITLE",
+            "widget.parent":           "SCUI_UI_SCENE_TEST_UI_OBJ_LINE",
             "widget.event_cb":         "scui_test_ui_object_title_event_proc",
             "args.align_hor":          "2",
             "args.align_ver":          "2",

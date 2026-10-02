@@ -92,6 +92,17 @@ typedef struct {
     scui_sbitfd_t      gradw:1;     /* 渐变方向(水平:0;垂直:1) */
 } scui_obj_bmat_res_t;
 
+/*@brief 样式资源
+ */
+typedef struct {
+    scui_object_type_t part;        /* 关键部分(line_item) */
+    scui_sbitfd_t      round:1;     /* 端点圆角 */
+    scui_sbitfd_t      grad:1;      /* 折线阴影 */
+    scui_color_t       color;       /* 颜色 */
+    scui_coord_t       width;       /* 线宽 */
+    scui_alpha_t       alpha;       /* 透明度(默认cover) */
+} scui_obj_line_res_t;
+
 /*@brief 控件样式应用
  *@param handle 控件句柄
  *@param res    样式资源
@@ -127,6 +138,12 @@ void scui_obj_led_style(scui_handle_t handle, scui_obj_led_res_t *res);
  *@param res    样式资源
  */
 void scui_obj_bmat_style(scui_handle_t handle, scui_obj_bmat_res_t *res);
+
+/*@brief 控件样式应用
+ *@param handle 控件句柄
+ *@param res    样式资源
+ */
+void scui_obj_line_style(scui_handle_t handle, scui_obj_line_res_t *res);
 
 /******************************************************************************/
 
@@ -242,5 +259,15 @@ scui_coord_t scui_obj_bmat_click_item(scui_handle_t handle);
  *@retval 条目号(-1:无)
  */
 scui_coord_t scui_obj_bmat_press_item(scui_handle_t handle);
+
+/*@brief 端点序列设置
+ *@param handle  控件句柄
+ *@param seg_num 线段数量(<=构造上限; 1:连续)
+ *@param dot_num 端点数量(<=构造上限)
+ *@param seg_dot 线段端点数(空=等分)
+ *@param vpos    端点序列(坐标:控件相对; 极坐标:角度+半径)
+ */
+void scui_obj_line_data_set(scui_handle_t handle, scui_coord_t seg_num,
+    scui_coord_t dot_num, scui_coord_t *seg_dot, scui_point_t *vpos);
 
 #endif

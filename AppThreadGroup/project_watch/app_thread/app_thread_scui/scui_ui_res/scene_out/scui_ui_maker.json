@@ -182,6 +182,12 @@
             "default": {
                 "widget.type": "scui_widget_type_obj_bmat"
             }
+        },
+        {
+            "class":   "scui_widget_type_obj_line",
+            "default": {
+                "widget.type": "scui_widget_type_obj_line"
+            }
         }
     ]
 }

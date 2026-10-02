@@ -191,6 +191,12 @@ void scui_ui_maker(void *maker, scui_widget_type_t type)
 		obj_bmat_maker->widget.type  = scui_widget_type_obj_bmat;
 		break;
 	}
+	case scui_widget_type_obj_line: {
+		scui_obj_line_maker_t *obj_line_maker = (scui_obj_line_maker_t *)maker;
+		
+		obj_line_maker->widget.type  = scui_widget_type_obj_line;
+		break;
+	}
 	default:
 		break;
 	}

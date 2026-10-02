@@ -145,7 +145,8 @@ void scui_obj_bmat_item_set(scui_handle_t handle, scui_coord_t item_num, scui_co
         obj_bmat->item_row[idx]  = item_row  ? item_row[idx]  : 0;
     }
     
-    scui_widget_draw(widget->myself, NULL, false, 0);
+    /* 条目布局变化: 同步重绘(调用方随即查询条目区域) */
+    scui_widget_draw(widget->myself, NULL, true, 0);
 }
 
 /*@brief 条目区域
