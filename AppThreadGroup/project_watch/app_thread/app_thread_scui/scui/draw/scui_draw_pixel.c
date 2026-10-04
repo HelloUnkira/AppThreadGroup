@@ -331,8 +331,11 @@ void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
     
     /* 外源图形组件 */
     #if SCUI_DRAW_GRAPH_USE_LVGL
-    if (scui_draw_ctx_graph_LVGL(draw_dsc))
+    if (scui_draw_ctx_graph_LVGL(draw_dsc)) {
+        SCUI_LOG_WARN("agent not adapt yet");
+        SCUI_LOG_WARN("we do not need this");
         return;
+    }
     #endif
     
     

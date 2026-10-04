@@ -69,6 +69,7 @@ int32_t scui_sin4096(int32_t angle)
         return +scui_sin_table_0_90[180 - a];
     if (a > 180 && a <= 270)
         return -scui_sin_table_0_90[a - 180];
+    if (a > 270 && a <= 360)
         return -scui_sin_table_0_90[360 - a];
 }
 

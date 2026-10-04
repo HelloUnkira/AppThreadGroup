@@ -138,3 +138,65 @@ void scui_draw_ctx_image_3d(scui_draw_dsc_t *draw_dsc)
     
     scui_cache_image_unload(&image_unit);
 }
+
+/*@brief 区域图像拷贝
+ *@param draw_dsc 绘制描述符实例
+ */
+void scui_draw_ctx_image_copy(scui_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface =  draw_dsc->image.dst_surface;
+    scui_area_t    *dst_clip    = &draw_dsc->image.dst_clip;
+    scui_image_t   *src_image   =  draw_dsc->image.src_image;
+    scui_area_t    *src_clip    = &draw_dsc->image.src_clip;
+    /* draw dsc args<e> */
+    /* */
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(src_image != NULL && src_clip != NULL);
+    
+    scui_cache_image_unit_t image_unit = {.image = src_image,};
+    scui_cache_image_load(&image_unit);
+    SCUI_ASSERT(image_unit.data != NULL);
+    
+    scui_surface_t image_surface = {0};
+    scui_image_to_surface(src_image, &image_surface);
+    image_surface.pixel = image_unit.data;
+    
+    /* 拷贝为裸数据搬运, 双方画布均按全覆盖处理 */
+    dst_surface->alpha  = scui_alpha_cover;
+    image_surface.alpha = scui_alpha_cover;
+    
+    scui_draw_area_copy(true, dst_surface, *dst_clip,
+        &image_surface, *src_clip);
+    
+    scui_cache_image_unload(&image_unit);
+}
+
+/*@brief 区域图像蒙版
+ *@param draw_dsc 绘制描述符实例
+ */
+void scui_draw_ctx_image_mask(scui_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface =  draw_dsc->image_mask.dst_surface;
+    scui_area_t    *dst_clip    = &draw_dsc->image_mask.dst_clip;
+    scui_image_t   *src_image   =  draw_dsc->image_mask.src_image;
+    scui_area_t    *src_clip    = &draw_dsc->image_mask.src_clip;
+    /* draw dsc args<e> */
+    /* */
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(src_image != NULL && src_clip != NULL);
+    
+    scui_cache_image_unit_t image_unit = {.image = src_image,};
+    scui_cache_image_load(&image_unit);
+    SCUI_ASSERT(image_unit.data != NULL);
+    
+    scui_surface_t image_surface = {0};
+    scui_image_to_surface(src_image, &image_surface);
+    image_surface.pixel = image_unit.data;
+    
+    scui_draw_area_mask(true, dst_surface, *dst_clip,
+        &image_surface, *src_clip);
+    
+    scui_cache_image_unload(&image_unit);
+}

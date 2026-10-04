@@ -20,6 +20,7 @@ typedef enum {
     scui_draw_type_area_2d_blend,
     scui_draw_type_area_3d_blend,
     scui_draw_type_area_3d_fill,
+    scui_draw_type_area_mask,
     
     scui_draw_type_area_dither,
     scui_draw_type_area_blur,
@@ -30,6 +31,8 @@ typedef enum {
     scui_draw_type_image,
     scui_draw_type_image_2d,
     scui_draw_type_image_3d,
+    scui_draw_type_image_copy,
+    scui_draw_type_image_mask,
     scui_draw_type_letter,
     scui_draw_type_string,
     scui_draw_type_symbol,
@@ -129,6 +132,12 @@ typedef struct {
         scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
         scui_matrix_t       src_matrix;     /* 源变换矩阵 */
     } area_3d_fill;
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_surface_t     *src_surface;    /* 蒙版画布实例(alpha8) */
+        scui_area_t         src_clip;       /* 蒙版画布绘制区域 */
+    } area_mask;
     /**************************************************************************
      * draw complex(HW ACC Perhaps):
      */
@@ -201,6 +210,12 @@ typedef struct {
         scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
         scui_matrix_t       src_matrix;     /* 源变换矩阵 */
     } image_3d;
+    struct {
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_image_t       *src_image;      /* 蒙版图像源(alpha8) */
+        scui_area_t         src_clip;       /* 蒙版图像源绘制区域 */
+    } image_mask;
     /**************************************************************************
      * draw letter & string & symbol:
      */
@@ -235,8 +250,15 @@ typedef struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
         scui_alpha_t        src_alpha;      /* 全局透明度 */
-        
-        scui_coord_t        src_type;       /* 类型: */
+        scui_sbitfd_t       src_type:3;     /* 蒙版类型(协议:0=直线;1=扇形;2=圆;3=圆角矩形;4=渐变) */
+        scui_point_t        src_pos_1;      /* 直线端点1,扇形顶点,圆心,矩形中心,渐变起始沿 */
+        scui_point_t        src_pos_2;      /* 直线端点2,矩形半宽高,渐变结束沿 */
+        scui_coord_t        src_angle_s;    /* 扇形起始角度(顺时针,0=右) */
+        scui_coord_t        src_angle_e;    /* 扇形结束角度(顺时针,0=右) */
+        scui_coord_t        src_radius;     /* 圆半径,矩形圆角半径 */
+        scui_alpha_t        src_alpha_s;    /* 渐变起始沿透明度 */
+        scui_alpha_t        src_alpha_e;    /* 渐变结束沿透明度 */
+        scui_sbitfd_t       src_invert:1;   /* 保留侧(直线:0=左;1=右;圆/矩形:0=内;1=外) */
     } mask;
     /**************************************************************************
      * draw ring:
@@ -383,6 +405,7 @@ SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_blend);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_2d_blend);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_3d_blend);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_3d_fill);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_mask);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_dither);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_blur);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_grad);
@@ -391,6 +414,8 @@ SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_area_afilter);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_2d);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_3d);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_copy);
+SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_image_mask);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_letter);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_string);
 SCUI_DRAW_CTX_DECLARE(scui_draw_ctx_symbol);
@@ -406,6 +431,7 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_blend);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_2d_blend);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_3d_blend);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_3d_fill);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_mask);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_dither);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_blur);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_grad);
@@ -414,6 +440,8 @@ SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_area_afilter);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_2d);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_3d);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_copy);
+SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_image_mask);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_letter);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_string);
 SCUI_DRAW_CTX_ACC_DECLARE(scui_draw_ctx_acc_symbol);

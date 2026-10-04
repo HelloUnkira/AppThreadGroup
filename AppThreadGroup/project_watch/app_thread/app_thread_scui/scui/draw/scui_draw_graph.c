@@ -25,6 +25,7 @@ bool scui_draw_ctx_acc_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_area_2d_blend] =            scui_draw_ctx_acc_area_2d_blend,
         [scui_draw_type_area_3d_blend] =            scui_draw_ctx_acc_area_3d_blend,
         [scui_draw_type_area_3d_fill] =             scui_draw_ctx_acc_area_3d_fill,
+        [scui_draw_type_area_mask] =                scui_draw_ctx_acc_area_mask,
         
         [scui_draw_type_area_dither] =              scui_draw_ctx_acc_area_dither,
         [scui_draw_type_area_blur] =                scui_draw_ctx_acc_area_blur,
@@ -35,6 +36,8 @@ bool scui_draw_ctx_acc_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_image] =                    scui_draw_ctx_acc_image,
         [scui_draw_type_image_2d] =                 scui_draw_ctx_acc_image_2d,
         [scui_draw_type_image_3d] =                 scui_draw_ctx_acc_image_3d,
+        [scui_draw_type_image_copy] =               scui_draw_ctx_acc_image_copy,
+        [scui_draw_type_image_mask] =               scui_draw_ctx_acc_image_mask,
         [scui_draw_type_letter] =                   scui_draw_ctx_acc_letter,
         [scui_draw_type_string] =                   scui_draw_ctx_acc_string,
         [scui_draw_type_symbol] =                   scui_draw_ctx_acc_symbol,
@@ -71,6 +74,7 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_area_2d_blend] =            scui_draw_ctx_area_2d_blend,
         [scui_draw_type_area_3d_blend] =            scui_draw_ctx_area_3d_blend,
         [scui_draw_type_area_3d_fill] =             scui_draw_ctx_area_3d_fill,
+        [scui_draw_type_area_mask] =                scui_draw_ctx_area_mask,
         
         [scui_draw_type_area_dither] =              scui_draw_ctx_area_dither,
         [scui_draw_type_area_blur] =                scui_draw_ctx_area_blur,
@@ -81,6 +85,8 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_image] =                    scui_draw_ctx_image,
         [scui_draw_type_image_2d] =                 scui_draw_ctx_image_2d,
         [scui_draw_type_image_3d] =                 scui_draw_ctx_image_3d,
+        [scui_draw_type_image_copy] =               scui_draw_ctx_image_copy,
+        [scui_draw_type_image_mask] =               scui_draw_ctx_image_mask,
         [scui_draw_type_letter] =                   scui_draw_ctx_letter,
         [scui_draw_type_string] =                   scui_draw_ctx_string,
         [scui_draw_type_symbol] =                   scui_draw_ctx_symbol,

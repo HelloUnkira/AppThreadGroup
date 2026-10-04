@@ -46,6 +46,31 @@ void scui_image_burn(scui_image_t *image)
     }
 }
 
+/*@brief 图像构建且镜像
+ *@param handle 图像句柄
+ *@param mirror 镜像句柄
+ */
+void scui_image_mirror(scui_handle_t handle, scui_handle_t *mirror)
+{
+    SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(mirror != NULL && *mirror == SCUI_HANDLE_INVALID);
+    
+    /* 镜像实例为内部资源, 只对外暴露句柄 */
+    scui_image_t *image_src = scui_handle_source_check(handle);
+    scui_image_t *image_new = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_image_t));
+    scui_area_t area = {.w = image_src->pixel.width, .h = image_src->pixel.height,};
+    
+    /* 图像到图像的搬运(经绘制层, 可DMA加速) */
+    image_new->format = image_src->format;
+    scui_surface_t surface_new = {0};
+    scui_image_make(image_new, &area);
+    scui_image_to_surface(image_new, &surface_new);
+    scui_draw_image_copy(true, &surface_new, area, image_src, area);
+    
+    *mirror = scui_handle_find();
+    scui_handle_linker(*mirror, image_new);
+}
+
 /*@brief 画布转为图像
  *@param image   图像实例
  *@param surface 画布实例

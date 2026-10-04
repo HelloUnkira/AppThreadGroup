@@ -46,6 +46,12 @@ void scui_image_make(scui_image_t *image, scui_area_t *area);
  */
 void scui_image_burn(scui_image_t *image);
 
+/*@brief 图像构建且镜像
+ *@param handle 图像句柄
+ *@param mirror 镜像句柄
+ */
+void scui_image_mirror(scui_handle_t handle, scui_handle_t *mirror);
+
 /*@brief 画布转为图像
  *@param image   图像实例
  *@param surface 画布实例

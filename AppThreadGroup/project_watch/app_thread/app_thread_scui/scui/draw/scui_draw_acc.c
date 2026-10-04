@@ -128,6 +128,15 @@ bool scui_draw_ctx_acc_area_3d_fill(scui_draw_dsc_t *draw_dsc)
  *@param draw_dsc 绘制描述符实例
  *@retval 支持:true;不支持:false;
  */
+bool scui_draw_ctx_acc_area_mask(scui_draw_dsc_t *draw_dsc)
+{
+    return false;
+}
+
+/*@brief 绘制上下文
+ *@param draw_dsc 绘制描述符实例
+ *@retval 支持:true;不支持:false;
+ */
 bool scui_draw_ctx_acc_area_dither(scui_draw_dsc_t *draw_dsc)
 {
     return false;
@@ -192,6 +201,24 @@ bool scui_draw_ctx_acc_image_2d(scui_draw_dsc_t *draw_dsc)
  *@retval 支持:true;不支持:false;
  */
 bool scui_draw_ctx_acc_image_3d(scui_draw_dsc_t *draw_dsc)
+{
+    return false;
+}
+
+/*@brief 绘制上下文
+ *@param draw_dsc 绘制描述符实例
+ *@retval 支持:true;不支持:false;
+ */
+bool scui_draw_ctx_acc_image_copy(scui_draw_dsc_t *draw_dsc)
+{
+    return false;
+}
+
+/*@brief 绘制上下文
+ *@param draw_dsc 绘制描述符实例
+ *@retval 支持:true;不支持:false;
+ */
+bool scui_draw_ctx_acc_image_mask(scui_draw_dsc_t *draw_dsc)
 {
     return false;
 }

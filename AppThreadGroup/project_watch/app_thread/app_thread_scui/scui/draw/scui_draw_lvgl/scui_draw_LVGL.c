@@ -508,10 +508,12 @@ static lv_draw_mask_res_t lv_draw_line_mask_flat(lv_draw_mask_line_param_t *p,
     if (xef == 0) px_h = 255;
     else px_h = 255 - (((255 - xef) * p->spx) >> 8);
     int32_t k = xei - abs_x;
-    scui_alpha_t m;
+    int32_t m;
     if (xef) {
         if (k >= 0 && k < len) {
             m = 255 - (((255 - xef) * (255 - px_h)) >> 9);
+            if (m < 0) m = 0;
+            if (m > 255) m = 255;
             if (p->inv) m = 255 - m;
             mask_buf[k] = lv_draw_mask_mix(mask_buf[k], m);
         }
@@ -520,6 +522,8 @@ static lv_draw_mask_res_t lv_draw_line_mask_flat(lv_draw_mask_line_param_t *p,
     while (px_h > p->spx) {
         if (k >= 0 && k < len) {
             m = px_h - (p->spx >> 1);
+            if (m < 0) m = 0;
+            if (m > 255) m = 255;
             if (p->inv) m = 255 - m;
             mask_buf[k] = lv_draw_mask_mix(mask_buf[k], m);
         }
@@ -529,8 +533,11 @@ static lv_draw_mask_res_t lv_draw_line_mask_flat(lv_draw_mask_line_param_t *p,
     }
     if (k < len && k >= 0) {
         int32_t x_inters = (px_h * p->xy_steep) >> 10;
+        if (x_inters < 0) x_inters = -x_inters;
         m = (x_inters * px_h) >> 9;
-        if (p->yx_steep < 0) m = 255 - m;
+        if (m < 0) m = 0;
+        if (m > 255) m = 255;
+        if (p->inv) m = 255 - m;
         if (p->inv) m = 255 - m;
         mask_buf[k] = lv_draw_mask_mix(mask_buf[k], m);
     }
@@ -565,7 +572,7 @@ static lv_draw_mask_res_t lv_draw_line_mask_steep(lv_draw_mask_line_param_t *p,
     int32_t xe = (((abs_y + 1) * 256) * p->xy_steep) >> 10;
     int32_t xei = xe >> 8;
     int32_t xef = xe & 0xFF;
-    scui_alpha_t m;
+    int32_t m;
     k = xsi - abs_x;
     if (xsi != xei && (p->xy_steep < 0 && xsf == 0)) {
         xsf = 0xFF; xsi = xei; k--;
@@ -573,6 +580,8 @@ static lv_draw_mask_res_t lv_draw_line_mask_steep(lv_draw_mask_line_param_t *p,
     if (xsi == xei) {
         if (k >= 0 && k < len) {
             m = (xsf + xef) >> 1;
+            if (m < 0) m = 0;
+            if (m > 255) m = 255;
             if (p->inv) m = 255 - m;
             mask_buf[k] = lv_draw_mask_mix(mask_buf[k], m);
         }
@@ -594,6 +603,8 @@ static lv_draw_mask_res_t lv_draw_line_mask_steep(lv_draw_mask_line_param_t *p,
             y_inters = (xsf * (-p->yx_steep)) >> 10;
             if (k >= 0 && k < len) {
                 m = (y_inters * xsf) >> 9;
+                if (m < 0) m = 0;
+                if (m > 255) m = 255;
                 if (p->inv) m = 255 - m;
                 mask_buf[k] = lv_draw_mask_mix(mask_buf[k], m);
             }
@@ -601,6 +612,8 @@ static lv_draw_mask_res_t lv_draw_line_mask_steep(lv_draw_mask_line_param_t *p,
             int32_t x_inters = ((255 - y_inters) * (-p->xy_steep)) >> 10;
             if (k >= 0 && k < len) {
                 m = 255 - (((255 - y_inters) * x_inters) >> 9);
+                if (m < 0) m = 0;
+                if (m > 255) m = 255;
                 if (p->inv) m = 255 - m;
                 mask_buf[k] = lv_draw_mask_mix(mask_buf[k], m);
             }
@@ -620,6 +633,8 @@ static lv_draw_mask_res_t lv_draw_line_mask_steep(lv_draw_mask_line_param_t *p,
             y_inters = ((255 - xsf) * p->yx_steep) >> 10;
             if (k >= 0 && k < len) {
                 m = 255 - ((y_inters * (255 - xsf)) >> 9);
+                if (m < 0) m = 0;
+                if (m > 255) m = 255;
                 if (p->inv) m = 255 - m;
                 mask_buf[k] = lv_draw_mask_mix(mask_buf[k], m);
             }
@@ -627,6 +642,8 @@ static lv_draw_mask_res_t lv_draw_line_mask_steep(lv_draw_mask_line_param_t *p,
             int32_t x_inters = ((255 - y_inters) * p->xy_steep) >> 10;
             if (k >= 0 && k < len) {
                 m = ((255 - y_inters) * x_inters) >> 9;
+                if (m < 0) m = 0;
+                if (m > 255) m = 255;
                 if (p->inv) m = 255 - m;
                 mask_buf[k] = lv_draw_mask_mix(mask_buf[k], m);
             }
@@ -668,9 +685,9 @@ static void lv_draw_mask_angle_init(lv_draw_mask_angle_param_t *param,
     param->dsc.cb = (lv_draw_mask_region_cb_t)lv_draw_mask_angle_region;
     param->dsc.type = LV_DRAW_MASK_TYPE_ANGLE;
     start_side = (start_angle >= 0 && start_angle < 180)
-        ? LV_DRAW_MASK_LINE_SIDE_LEFT : LV_DRAW_MASK_LINE_SIDE_RIGHT;
-    end_side = (end_angle >= 0 && end_angle < 180)
         ? LV_DRAW_MASK_LINE_SIDE_RIGHT : LV_DRAW_MASK_LINE_SIDE_LEFT;
+    end_side = (end_angle >= 0 && end_angle < 180)
+        ? LV_DRAW_MASK_LINE_SIDE_LEFT : LV_DRAW_MASK_LINE_SIDE_RIGHT;
     lv_draw_mask_line_angle_init(&param->start_line, vertex_x, vertex_y, start_angle, start_side);
     lv_draw_mask_line_angle_init(&param->end_line, vertex_x, vertex_y, end_angle, end_side);
 }
@@ -1332,26 +1349,6 @@ static void lv_draw_sw_line(lv_draw_sw_ctx_t *ctx,
     w = (w * lv_draw_line_wcorr[wcorr_i] + 63) >> 7;
     int32_t w_half0 = w >> 1;
     int32_t w_half1 = w_half0 + (w & 0x1);
-    /* 上行 flat 线：直接逐行渲染（mask 精度不足导致锯齿） */
-    if (flat && xdiff < 0) {
-        int32_t step = scui_abs(xdiff) / ydiff;  /* 像素/行 中心位移 */
-        int32_t rw = scui_max(w, step + 2);      /* +2确保step=3时仍有重叠 */
-        scui_coord_t y;
-        for (y = pt1.y; y <= pt2.y; y++) {
-            if (y < ctx->clip_area->y || y > ctx->clip_area->y + ctx->clip_area->h) continue;
-            int32_t cx = pt1.x + (xdiff * (y - pt1.y)) / ydiff;
-            int32_t x0 = cx - (rw >> 1);
-            int32_t x1 = x0 + rw - 1;
-            /* 端点裁剪（不超过 pt1.x / pt2.x） */
-            if (y == pt1.y) x0 = scui_max(x0, pt1.x);
-            if (y == pt2.y) x1 = scui_min(x1, pt2.x);
-            scui_area_t seg = {.x = x0, .y = y, .w = x1 - x0 + 1, .h = 1};
-            scui_area_t clip_seg;
-            if (seg.w > 0 && scui_area_inter(&clip_seg, &seg, ctx->clip_area))
-                lv_draw_sw_blend(ctx, NULL, 0, 0, &clip_seg, ctx->clip_area, color, opa, false);
-        }
-        return;
-    }
     /* Calculate blend area */
     scui_area_t blend_area;
     blend_area.x = scui_min(pt1.x, pt2.x) - w;

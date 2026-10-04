@@ -24,6 +24,7 @@
 #include "scui_handle.h"            /* 泛用句柄 */
 #include "scui_anima.h"             /* 路径动画 */
 #include "scui_image.h"             /* 图像 */
+#include "scui_image_mask.h"        /* 图像蒙版 */
 #include "scui_font.h"              /* 文字 */
 #include "scui_clip.h"              /* 剪切域 */
 #include "scui_event.h"             /* 事件队列 */
