@@ -166,7 +166,7 @@ static void scui_window_switch_finish(scui_handle_t handle)
             continue;
         
         /* 回收无关联性质窗口 */
-        scui_widget_hide(handle_n, true);
+        scui_widget_hide(handle_n, false);
     }
     
     /* 发送预加载事件到达指定窗口 */

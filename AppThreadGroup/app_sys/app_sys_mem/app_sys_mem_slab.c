@@ -18,6 +18,7 @@
 void app_sys_mem_slab_ready(app_sys_mem_slab_t *mem_slab, uintptr_t addr, uintptr_t size, uintptr_t blk_size)
 {
     APP_SYS_ASSERT(size > sizeof(uintptr_t));
+    APP_SYS_ASSERT(blk_size > sizeof(uintptr_t));
 
     uint8_t *ptr = NULL;
     /* 计算分配器单元值 */
@@ -26,6 +27,14 @@ void app_sys_mem_slab_ready(app_sys_mem_slab_t *mem_slab, uintptr_t addr, uintpt
     mem_slab->blk_used = 0;
     mem_slab->blk_size = blk_size;
     mem_slab->blk_num  = mem_slab->size / mem_slab->blk_size;
+    /* 已用块标记集: 自块区尾部切出, 不参与分配(块数量相应削减) */
+    uint32_t mark_size = (mem_slab->blk_num + 7) / 8;
+    uint32_t mark_blk  = (mark_size + mem_slab->blk_size - 1) / mem_slab->blk_size;
+    APP_SYS_ASSERT(mem_slab->blk_num > mark_blk);
+    mem_slab->blk_num -= mark_blk;
+    mem_slab->blk_mark = (uint8_t *)mem_slab->addr + mem_slab->blk_num * mem_slab->blk_size;
+    for (uint32_t idx = 0; idx < mark_size; idx++)
+        mem_slab->blk_mark[idx] = 0;
     mem_slab->blk_list = mem_slab->addr;
     /* 索引回退 */
     mem_slab->blk_list -= mem_slab->blk_size;
@@ -51,6 +60,10 @@ void * app_sys_mem_slab_alloc(app_sys_mem_slab_t *mem_slab)
         /* 从分配器获取首块,块索引移动到下一块,计数器加一 */
         ptr = mem_slab->blk_list;
         mem_slab->blk_list = *((uint8_t **)ptr);
+        uint32_t idx = ((uintptr_t)ptr - mem_slab->addr) / mem_slab->blk_size;
+        /* 空闲块不得被标记为已用(否则空闲链表已被污染) */
+        APP_SYS_ASSERT(!(mem_slab->blk_mark[idx / 8] & (1u << (idx % 8))));
+        mem_slab->blk_mark[idx / 8] |= 1u << (idx % 8);
         mem_slab->blk_used++;
     }
     return ptr;
@@ -62,13 +75,127 @@ void * app_sys_mem_slab_alloc(app_sys_mem_slab_t *mem_slab)
 void app_sys_mem_slab_free(app_sys_mem_slab_t *mem_slab, void *ptr)
 {
     APP_SYS_ASSERT((uintptr_t)ptr >= mem_slab->addr);
-    APP_SYS_ASSERT((uintptr_t)ptr <= mem_slab->addr + mem_slab->size);
+    APP_SYS_ASSERT((uintptr_t)ptr <  mem_slab->addr + (uintptr_t)mem_slab->blk_num * mem_slab->blk_size);
+    uint32_t idx = ((uintptr_t)ptr - mem_slab->addr) / mem_slab->blk_size;
+    /* 块单元必须块对齐 */
+    APP_SYS_ASSERT(((uintptr_t)ptr - mem_slab->addr) % mem_slab->blk_size == 0);
     if (1) {
+        /* 归还的块必须处于已用状态(重复回收与野指针在此拦下) */
+        APP_SYS_ASSERT(mem_slab->blk_mark[idx / 8] & (1u << (idx % 8)));
+        mem_slab->blk_mark[idx / 8] &= ~(1u << (idx % 8));
         /* 从分配器释放首块,块索引移动到下一块,计数器减一 */
         *((uint8_t **)(ptr)) = mem_slab->blk_list;
         mem_slab->blk_list = ptr;
         mem_slab->blk_used --;
     }
+}
+
+/*@brief slab分配器消耗值
+ *@param mem_slab slab分配器实例
+ *@retval 消耗值(字节)
+ */
+uintptr_t app_sys_mem_slab_used(app_sys_mem_slab_t *mem_slab)
+{
+    return (uintptr_t)mem_slab->blk_used * mem_slab->blk_size;
+}
+
+/*@brief slab分配器最大片段
+ *@param mem_slab slab分配器实例
+ *@retval 最大片段(字节)
+ */
+uintptr_t app_sys_mem_slab_frag(app_sys_mem_slab_t *mem_slab)
+{
+    /* 定长热结构无碎片, 存在空闲块即可满足一次分配 */
+    if (mem_slab->blk_used < mem_slab->blk_num)
+        return mem_slab->blk_size;
+    return 0;
+}
+
+/*@brief slab分配器块单元尺寸
+ *@param mem_slab slab分配器实例
+ *@param pointer 块单元
+ *@retval 块单元尺寸(字节)
+ */
+uintptr_t app_sys_mem_slab_size(app_sys_mem_slab_t *mem_slab, void *pointer)
+{
+    return mem_slab->blk_size;
+}
+
+/*@brief slab分配器归属检查
+ *@param mem_slab slab分配器实例
+ *@param pointer 块单元
+ *@retval 是否归属
+ */
+bool app_sys_mem_slab_inside(app_sys_mem_slab_t *mem_slab, void *pointer)
+{
+    if ((uintptr_t)pointer <  mem_slab->addr)
+        return false;
+    if ((uintptr_t)pointer >= mem_slab->addr + (uintptr_t)mem_slab->blk_num * mem_slab->blk_size)
+        return false;
+    return true;
+}
+
+/*@brief slab分配器有效性检查(轻量, 供回收后断言)
+ *@param mem_slab slab分配器实例
+ *@retval 是否有效
+ */
+bool app_sys_mem_slab_valid(app_sys_mem_slab_t *mem_slab)
+{
+    if (mem_slab->blk_used > mem_slab->blk_num)
+        return false;
+    /* 空闲链表首块必须块对齐且落在块区 */
+    if (mem_slab->blk_list != NULL &&
+        !app_sys_mem_slab_inside(mem_slab, mem_slab->blk_list))
+        return false;
+    if (mem_slab->blk_list != NULL &&
+        ((uintptr_t)mem_slab->blk_list - mem_slab->addr) % mem_slab->blk_size != 0)
+        return false;
+    return true;
+}
+
+/*@brief slab分配器完整性检查(已用标记与空闲链表互补)
+ *@param mem_slab slab分配器实例
+ *@retval 是否完整
+ */
+bool app_sys_mem_slab_check(app_sys_mem_slab_t *mem_slab)
+{
+    uint32_t used_num = 0;
+    uint32_t free_num = 0;
+    
+    /* 已用块标记统计 */
+    for (uint32_t idx = 0; idx < mem_slab->blk_num; idx++)
+        if (mem_slab->blk_mark[idx / 8] & (1u << (idx % 8)))
+            used_num++;
+    /* 空闲块链表统计(同时校验块对齐, 归属与标记状态) */
+    for (uint8_t *ptr = mem_slab->blk_list; ptr != NULL; ptr = *((uint8_t **)ptr)) {
+        uint32_t idx = ((uintptr_t)ptr - mem_slab->addr) / mem_slab->blk_size;
+        APP_SYS_ASSERT(((uintptr_t)ptr - mem_slab->addr) % mem_slab->blk_size == 0);
+        APP_SYS_ASSERT(idx < mem_slab->blk_num);
+        APP_SYS_ASSERT(!(mem_slab->blk_mark[idx / 8] & (1u << (idx % 8))));
+        /* 空闲链表成环时数量必然溢出, 就地拦下 */
+        APP_SYS_ASSERT(++free_num <= mem_slab->blk_num);
+    }
+    /* 三个数值必须自洽: 已用 + 空闲 == 总量, 且计数器一致 */
+    APP_SYS_ASSERT(used_num == mem_slab->blk_used);
+    APP_SYS_ASSERT(used_num + free_num == mem_slab->blk_num);
+    return true;
+}
+
+/*@brief slab分配器块遍历
+ *@param mem_slab slab分配器实例
+ *@param invoke   块遍历回调
+ *@retval 遍历是否完整
+ */
+bool app_sys_mem_slab_walk(app_sys_mem_slab_t *mem_slab, void (*invoke)(void *pointer, bool used))
+{
+    APP_SYS_ASSERT(invoke != NULL);
+    
+    for (uint32_t idx = 0; idx < mem_slab->blk_num; idx++) {
+        void *ptr = (void *)(mem_slab->addr + (uintptr_t)idx * mem_slab->blk_size);
+        bool   used = mem_slab->blk_mark[idx / 8] & (1u << (idx % 8)) ? true : false;
+        invoke(ptr, used);
+    }
+    return true;
 }
 
 /*@brief 初始化slab分配器

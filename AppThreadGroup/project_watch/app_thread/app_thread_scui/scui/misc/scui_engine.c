@@ -67,16 +67,19 @@ static void scui_engine_oom_hit(scui_mem_type_t type, bool invalid)
  */
 void scui_engine_ready(void)
 {
-    static const struct {uint32_t size;uint32_t num;} mem_size_table[] = {
+    static const struct {uint32_t size;uint32_t num;} mem_size_t[] = {
         
         {sizeof(scui_draw_dsc_t),  SCUI_DRAW_TASK_DSC_NUM},
-        {sizeof(scui_clip_unit_t), 10240 / sizeof(scui_clip_unit_t)},
-        {sizeof(scui_event_t),     10240 / sizeof(scui_event_t)},
+        {sizeof(scui_clip_unit_t), 15360 / sizeof(scui_clip_unit_t)},
+        {sizeof(scui_event_t),     5120  / sizeof(scui_event_t)},
     };
     
     /* 定长热结构注册表(常用结构快速获取与回收, 数量按内存预算折算) */
-    for (uint32_t idx = 0; idx < scui_arr_len(mem_size_table); idx++)
-    scui_mem_size_register(mem_size_table[idx].size, mem_size_table[idx].num);
+    for (uint32_t idx = 0; idx < scui_arr_len(mem_size_t); idx++) {
+        scui_mem_size_register(mem_size_t[idx].size, mem_size_t[idx].num);
+        SCUI_LOG_WARN("mem_size_t[%u] size:%3u num:%3u", idx,
+            mem_size_t[idx].size, mem_size_t[idx].num);
+    }
     
     scui_mem_ready(scui_engine_oom_hit);
     scui_draw_task_ready();

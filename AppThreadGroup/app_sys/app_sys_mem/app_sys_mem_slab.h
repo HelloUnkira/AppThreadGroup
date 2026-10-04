@@ -5,6 +5,7 @@ typedef struct {
     uintptr_t addr;     /* 内存地址 */
     uintptr_t size;     /* 内存大小(字节) */
     uint8_t  *blk_list; /* 空闲块链表集 */
+    uint8_t  *blk_mark; /* 已用块标记集 */
     uint32_t  blk_size; /* 块单元大小 */
     uint32_t  blk_used; /* 块使用数量 */
     uint32_t  blk_num;  /* 块总计数量 */
@@ -46,6 +47,51 @@ void * app_sys_mem_slab_alloc(app_sys_mem_slab_t *mem_slab);
  *@param ptr 旧的块
  */
 void app_sys_mem_slab_free(app_sys_mem_slab_t *mem_slab, void *ptr);
+
+/*@brief slab分配器消耗值
+ *@param mem_slab slab分配器实例
+ *@retval 消耗值(字节)
+ */
+uintptr_t app_sys_mem_slab_used(app_sys_mem_slab_t *mem_slab);
+
+/*@brief slab分配器最大片段
+ *@param mem_slab slab分配器实例
+ *@retval 最大片段(字节)
+ */
+uintptr_t app_sys_mem_slab_frag(app_sys_mem_slab_t *mem_slab);
+
+/*@brief slab分配器块单元尺寸
+ *@param mem_slab slab分配器实例
+ *@param pointer 块单元
+ *@retval 块单元尺寸(字节)
+ */
+uintptr_t app_sys_mem_slab_size(app_sys_mem_slab_t *mem_slab, void *pointer);
+
+/*@brief slab分配器归属检查
+ *@param mem_slab slab分配器实例
+ *@param pointer 块单元
+ *@retval 是否归属
+ */
+bool app_sys_mem_slab_inside(app_sys_mem_slab_t *mem_slab, void *pointer);
+
+/*@brief slab分配器完整性检查(已用标记与空闲链表互补)
+ *@param mem_slab slab分配器实例
+ *@retval 是否完整
+ */
+bool app_sys_mem_slab_check(app_sys_mem_slab_t *mem_slab);
+
+/*@brief slab分配器有效性检查(轻量, 供回收后断言)
+ *@param mem_slab slab分配器实例
+ *@retval 是否有效
+ */
+bool app_sys_mem_slab_valid(app_sys_mem_slab_t *mem_slab);
+
+/*@brief slab分配器块遍历
+ *@param mem_slab slab分配器实例
+ *@param invoke   块遍历回调
+ *@retval 遍历是否完整
+ */
+bool app_sys_mem_slab_walk(app_sys_mem_slab_t *mem_slab, void (*invoke)(void *pointer, bool used));
 
 /*@brief 初始化slab分配器
  *@param mem_slab_set slab分配器实例

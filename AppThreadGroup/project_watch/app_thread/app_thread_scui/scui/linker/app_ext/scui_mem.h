@@ -82,9 +82,6 @@ typedef struct {
         uint32_t size;  /* 结构尺寸(字节) */
         uint32_t num;   /* 结构数量 */
         uint8_t *mem;   /* 内存资源 */
-        /* 块区地址区间(scui_mem_ready构建时定型, 地址反查复用): */
-        uintptr_t addr_s;
-        uintptr_t addr_e;
         /* slab分配器: */
         app_sys_mem_slab_t slab;
     } item[SCUI_MEM_SIZE_TYPE_NUM];

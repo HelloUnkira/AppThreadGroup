@@ -209,8 +209,8 @@ void scui_mem_sentry_check(void)
 static app_sys_mem_slab_t * scui_mem_size_slab_blk(uint32_t blk_size)
 {
     for (uint32_t idx = 0; idx < scui_mem.size.num; idx++)
-    if (scui_mem.size.item[idx].slab.blk_size == blk_size)
-        return &scui_mem.size.item[idx].slab;
+        if (scui_mem.size.item[idx].slab.blk_size == blk_size)
+            return &scui_mem.size.item[idx].slab;
     return NULL;
 }
 
@@ -221,10 +221,10 @@ static app_sys_mem_slab_t * scui_mem_size_slab_blk(uint32_t blk_size)
 static app_sys_mem_slab_t * scui_mem_size_slab_addr(void *ptr)
 {
     /* 块区地址区间由scui_mem_ready定型, 此处仅做区间命中 */
-    for (uint32_t idx = 0; idx < scui_mem.size.num; idx++)
-    if ((uintptr_t)ptr >= scui_mem.size.item[idx].addr_s)
-    if ((uintptr_t)ptr <  scui_mem.size.item[idx].addr_e)
-        return &scui_mem.size.item[idx].slab;
+    for (uint32_t idx = 0; idx < scui_mem.size.num; idx++) {
+        if (app_sys_mem_slab_inside(&scui_mem.size.item[idx].slab, ptr))
+            return &scui_mem.size.item[idx].slab;
+    }
     return NULL;
 }
 
@@ -494,16 +494,9 @@ uint32_t scui_mem_size_frag(scui_mem_type_t type)
 {
     SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
     
-    if (type == scui_mem_type_size) {
-        /* 定长热结构无碎片, 存在空闲块即可满足一次分配 */
-        uint32_t frag = 0;
-        for (uint32_t idx = 0; idx < scui_mem.size.num; idx++) {
-            app_sys_mem_slab_t *slab = &scui_mem.size.item[idx].slab;
-            if (slab->blk_used < slab->blk_num && frag < slab->blk_size)
-                 frag = slab->blk_size;
-        }
-        return frag;
-    }
+    /* 定长热数据字段:无效 */
+    if (type == scui_mem_type_size)
+        return 0;
     
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         return app_sys_mem_olsf_frag(scui_mem.mem_olsf[type]);
@@ -518,6 +511,15 @@ uint32_t scui_mem_size_frag(scui_mem_type_t type)
 uint32_t scui_mem_size_used(scui_mem_type_t type)
 {
     SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
+    
+    uint32_t used = 0;
+    if (type == scui_mem_type_size) {
+        for (uint32_t idx = 0; idx < scui_mem.size.num; idx++)
+            used += app_sys_mem_slab_used(&scui_mem.size.item[idx].slab);
+        /* 定长热结构: 汇总各slab实际占用, 与olsf/dir一样取自分配器本身 */
+        
+        return used;
+    }
     
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         return app_sys_mem_olsf_used(scui_mem.mem_olsf[type]);
@@ -631,10 +633,6 @@ void scui_mem_ready(void (*oom_hit)(scui_mem_type_t type, bool unsupport))
         
         scui_mem.size.item[idx].mem = mem;
         app_sys_mem_slab_ready(slab, (uintptr_t)mem + size_head, size_blk, blk_size);
-        
-        /* 块区地址区间在此定型, 供地址反查快速命中(不随分配状态变化) */
-        scui_mem.size.item[idx].addr_s = slab->addr;
-        scui_mem.size.item[idx].addr_e = slab->addr + (uintptr_t)blk_size * slab->blk_num;
         
         scui_mem.size_total[scui_mem_type_size] += size_blk;
     }

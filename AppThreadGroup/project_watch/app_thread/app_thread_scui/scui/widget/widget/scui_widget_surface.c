@@ -355,7 +355,7 @@ void scui_widget_clip_draw(scui_widget_t *widget, scui_area_t *clip, scui_handle
     /* 父源剪切域 */
     if (type == 1 || type == 2) {
         
-        if (widget->style.buffer || widget->parent != SCUI_HANDLE_INVALID) {
+        if (widget->style.buffer && widget->parent != SCUI_HANDLE_INVALID) {
             
             scui_area_t clip_p = *clip;
             clip_p.x += widget->clip.x;
