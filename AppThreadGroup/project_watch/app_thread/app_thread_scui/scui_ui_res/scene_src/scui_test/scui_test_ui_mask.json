@@ -35,7 +35,7 @@
             "widget.event_cb":         "scui_test_ui_mask_2_event_proc"
         },
         {
-            "annotation":              "mask_3: 四直线菱形(凸多边形)",
+            "annotation":              "mask_3: 四直线拼装菱形(对照原生多边形)",
             "widget.type":             "scui_widget_type_custom",
             "widget.style.fully_bg":   "true",
             "widget.clip.x":           "SCUI_HOR_RES * 8 / 16",
@@ -228,6 +228,32 @@
             "widget.parent":           "SCUI_UI_SCENE_TEST_UI_MASK",
             "widget.color.color.full": "0xFF000000",
             "widget.event_cb":         "scui_test_ui_mask_17_event_proc"
+        },
+        {
+            "annotation":              "mask_18: 原生多边形(凸六边形, 单次调用)",
+            "widget.type":             "scui_widget_type_custom",
+            "widget.style.fully_bg":   "true",
+            "widget.clip.x":           "SCUI_HOR_RES * 4 / 16",
+            "widget.clip.y":           "SCUI_VER_RES * 16 / 20",
+            "widget.clip.w":           "SCUI_HOR_RES * 4 / 16",
+            "widget.clip.h":           "SCUI_VER_RES * 4 / 20",
+            "widget.myself":           "SCUI_UI_SCENE_TEST_UI_MASK_18",
+            "widget.parent":           "SCUI_UI_SCENE_TEST_UI_MASK",
+            "widget.color.color.full": "0xFF000000",
+            "widget.event_cb":         "scui_test_ui_mask_18_event_proc"
+        },
+        {
+            "annotation":              "mask_19: 原生多边形(保留外部)交圆环",
+            "widget.type":             "scui_widget_type_custom",
+            "widget.style.fully_bg":   "true",
+            "widget.clip.x":           "SCUI_HOR_RES * 8 / 16",
+            "widget.clip.y":           "SCUI_VER_RES * 16 / 20",
+            "widget.clip.w":           "SCUI_HOR_RES * 4 / 16",
+            "widget.clip.h":           "SCUI_VER_RES * 4 / 20",
+            "widget.myself":           "SCUI_UI_SCENE_TEST_UI_MASK_19",
+            "widget.parent":           "SCUI_UI_SCENE_TEST_UI_MASK",
+            "widget.color.color.full": "0xFF000000",
+            "widget.event_cb":         "scui_test_ui_mask_19_event_proc"
         }
     ]
 }

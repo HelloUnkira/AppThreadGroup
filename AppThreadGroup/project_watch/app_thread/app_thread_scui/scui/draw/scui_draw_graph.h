@@ -250,15 +250,17 @@ typedef struct {
         scui_surface_t     *dst_surface;    /* 画布实例 */
         scui_area_t         dst_clip;       /* 画布绘制区域 */
         scui_alpha_t        src_alpha;      /* 全局透明度 */
-        scui_sbitfd_t       src_type:3;     /* 蒙版类型(协议:0=直线;1=扇形;2=圆;3=圆角矩形;4=渐变) */
+        scui_sbitfd_t       src_type:3;     /* 蒙版类型(协议:0=直线;1=扇形;2=圆;3=圆角矩形;4=渐变;5=多边形) */
         scui_point_t        src_pos_1;      /* 直线端点1,扇形顶点,圆心,矩形中心,渐变起始沿 */
         scui_point_t        src_pos_2;      /* 直线端点2,矩形半宽高,渐变结束沿 */
         scui_coord_t        src_angle_s;    /* 扇形起始角度(顺时针,0=右) */
         scui_coord_t        src_angle_e;    /* 扇形结束角度(顺时针,0=右) */
         scui_coord_t        src_radius;     /* 圆半径,矩形圆角半径 */
+        scui_point_t       *src_points;     /* 多边形顶点数组(首尾隐式相连) */
+        scui_coord_t        src_point_cnt;  /* 多边形顶点数量(不小于3) */
         scui_alpha_t        src_alpha_s;    /* 渐变起始沿透明度 */
         scui_alpha_t        src_alpha_e;    /* 渐变结束沿透明度 */
-        scui_sbitfd_t       src_invert:1;   /* 保留侧(直线:0=左;1=右;圆/矩形:0=内;1=外) */
+        scui_sbitfd_t       src_invert:1;   /* 保留侧(直线:0=左;1=右;圆/矩形/多边形:0=内;1=外) */
     } mask;
     /**************************************************************************
      * draw ring:

@@ -754,3 +754,102 @@ void scui_test_ui_mask_17_event_proc(scui_event_t *event)
         break;
     }
 }
+
+/*@brief mask_18 控件事件响应回调(原生多边形(凸六边形, 单次调用))
+ *@param event 事件
+ */
+void scui_test_ui_mask_18_event_proc(scui_event_t *event)
+{
+    static scui_handle_t handle = SCUI_HANDLE_INVALID;
+    
+    switch (event->type) {
+    case scui_event_destroy:
+        if (handle != SCUI_HANDLE_INVALID) {
+            scui_image_mask_burn(handle);
+            handle = SCUI_HANDLE_INVALID;
+        }
+        break;
+    case scui_event_draw_graph: {
+        scui_area_t clip = {
+            .x = 5,
+            .y = 5,
+            .w = scui_widget_area(event->object).w - 5 * 2,
+            .h = scui_widget_area(event->object).h - 5 * 2,
+        };
+        
+        if (handle == SCUI_HANDLE_INVALID) {
+            /* 1.创建alpha格式内存图(只拿句柄) */
+            scui_image_mask_make(&handle, &clip);
+            
+            /* 2.单次调用绘制凸六边形(上下两条水平边, 其余四条斜边) */
+            scui_point_t points[6] = {
+                {.x = clip.w / 4,     .y = 2,},
+                {.x = clip.w * 3 / 4, .y = 2,},
+                {.x = clip.w - 3,     .y = clip.h / 2,},
+                {.x = clip.w * 3 / 4, .y = clip.h - 3,},
+                {.x = clip.w / 4,     .y = clip.h - 3,},
+                {.x = 3,              .y = clip.h / 2,},
+            };
+            scui_image_mask_polygon(handle, NULL, points, 6, 0, scui_alpha_cover);
+        }
+        
+        /* 3.将蒙版图可视化 */
+        scui_widget_draw_image(event->object, &clip, handle, NULL, SCUI_COLOR_WHITE);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief mask_19 控件事件响应回调(原生多边形(保留外部)交圆环)
+ *@param event 事件
+ */
+void scui_test_ui_mask_19_event_proc(scui_event_t *event)
+{
+    static scui_handle_t handle = SCUI_HANDLE_INVALID;
+    
+    switch (event->type) {
+    case scui_event_destroy:
+        if (handle != SCUI_HANDLE_INVALID) {
+            scui_image_mask_burn(handle);
+            handle = SCUI_HANDLE_INVALID;
+        }
+        break;
+    case scui_event_draw_graph: {
+        scui_area_t clip = {
+            .x = 5,
+            .y = 5,
+            .w = scui_widget_area(event->object).w - 5 * 2,
+            .h = scui_widget_area(event->object).h - 5 * 2,
+        };
+        
+        if (handle == SCUI_HANDLE_INVALID) {
+            /* 1.创建alpha格式内存图(只拿句柄) */
+            scui_image_mask_make(&handle, &clip);
+            
+            /* 2.凸六边形保留外部(单次调用取补) */
+            scui_point_t points[6] = {
+                {.x = clip.w / 4,     .y = 2,},
+                {.x = clip.w * 3 / 4, .y = 2,},
+                {.x = clip.w - 3,     .y = clip.h / 2,},
+                {.x = clip.w * 3 / 4, .y = clip.h - 3,},
+                {.x = clip.w / 4,     .y = clip.h - 3,},
+                {.x = 3,              .y = clip.h / 2,},
+            };
+            scui_image_mask_polygon(handle, NULL, points, 6, 1, scui_alpha_cover);
+            
+            /* 3.交圆环(外圆内交内圆外) */
+            scui_point_t center = {.x = clip.w / 2, .y = clip.h / 2,};
+            scui_image_mask_radius(handle, NULL, center, clip.w / 2 - 2, 0, scui_alpha_cover);
+            scui_image_mask_radius(handle, NULL, center, clip.w / 4, 1, scui_alpha_cover);
+        }
+        
+        /* 4.将蒙版图可视化 */
+        scui_widget_draw_image(event->object, &clip, handle, NULL, SCUI_COLOR_WHITE);
+        break;
+    }
+    default:
+        break;
+    }
+}

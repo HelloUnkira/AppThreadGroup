@@ -7,16 +7,6 @@
 
 #include "scui.h"
 
-/* 蒙版类型(内部): 五个类型共用同一套绘制协议字段 */
-typedef enum {
-    scui_image_mask_type_line   = 0,    /* 半平面: 直线两侧保留其一 */
-    scui_image_mask_type_angle  = 1,    /* 扇形: 两射线之间的楔形 */
-    scui_image_mask_type_radius = 2,    /* 圆: 保留圆内或圆外 */
-    scui_image_mask_type_rect   = 3,    /* 圆角矩形: 保留矩形内或矩形外 */
-    scui_image_mask_type_fade   = 4,    /* 渐变: 自起始沿向结束沿的透明度渐变 */
-    scui_image_mask_type_num,
-} scui_image_mask_type_t;
-
 /*@brief 图像蒙版构建
  *@param handle 图像句柄
  *@param area   图像尺寸
@@ -73,33 +63,37 @@ void scui_image_mask_apply(scui_handle_t handle, scui_handle_t mask)
     scui_draw_image_mask(true, &surface_dst, dst_clip, image_mask, dst_clip);
 }
 
-/*@brief 图像蒙版绘制(泛用, 内部: 五个类型共用一套协议字段)
+/*@brief 图像蒙版绘制(泛用, 内部: 六个类型共用一套协议字段)
  *       直线:     取pos_1/pos_2两端点, invert保留侧
  *       扇形:     取pos_1顶点, angle_s/angle_e起止角度
  *       圆:       取pos_1圆心, radius半径, invert保留侧
  *       圆角矩形: 取pos_1中心, pos_2半宽高, radius圆角半径, invert保留侧
  *       渐变:     取pos_1.y起始沿, pos_2.y结束沿, alpha_s/alpha_e两端透明度
+ *       多边形:   取points顶点数组/point_cnt数量, invert保留侧
  *@param handle  图像句柄
  *@param area    绘制区域(NULL:整图)
- *@param type    蒙版类型
+ *@param type    蒙版类型(0:直线;1:扇形;2:圆;3:圆角矩形;4:渐变;5:多边形)
  *@param pos_1   直线端点1 / 扇形顶点 / 圆心 / 矩形中心 / 渐变起始沿
  *@param pos_2   直线端点2 / 矩形半宽高 / 渐变结束沿
  *@param angle_s 扇形起始角度(顺时针,0=右)
  *@param angle_e 扇形结束角度(顺时针,0=右)
  *@param radius  圆半径 / 矩形圆角半径
+ *@param points  多边形顶点数组(首尾隐式相连)
+ *@param point_cnt 多边形顶点数量(不小于3)
  *@param alpha_s 渐变起始沿透明度
  *@param alpha_e 渐变结束沿透明度
  *@param invert  保留侧(直线:0=左;1=右;圆/矩形:0=内;1=外)
  *@param alpha   全局透明度
  */
-static void scui_image_mask_draw(scui_handle_t handle, scui_area_t *area, scui_image_mask_type_t type,
+static void scui_image_mask_draw(scui_handle_t handle, scui_area_t *area, scui_coord_t type,
     scui_point_t pos_1, scui_point_t pos_2, scui_coord_t angle_s, scui_coord_t angle_e,
-    scui_coord_t radius, scui_alpha_t alpha_s, scui_alpha_t alpha_e,
+    scui_coord_t radius, const scui_point_t *points, scui_coord_t point_cnt,
+    scui_alpha_t alpha_s, scui_alpha_t alpha_e,
     scui_coord_t invert, scui_alpha_t alpha)
 {
     scui_image_t *image = scui_handle_source_check(handle);
     SCUI_ASSERT(image->format == scui_pixel_cf_alpha8);
-    SCUI_ASSERT(type < scui_image_mask_type_num);
+    SCUI_ASSERT(scui_betw_lr(type, 0, 5));
     
     scui_surface_t surface = {0};
     scui_image_to_surface(image, &surface);
@@ -112,7 +106,7 @@ static void scui_image_mask_draw(scui_handle_t handle, scui_area_t *area, scui_i
     
     if (area != NULL) dst_clip = *area;
     scui_draw_mask(true, &surface, dst_clip, alpha, type,
-        pos_1, pos_2, angle_s, angle_e, radius,
+        pos_1, pos_2, angle_s, angle_e, radius, points, point_cnt,
         alpha_s, alpha_e, invert);
 }
 
@@ -127,8 +121,8 @@ static void scui_image_mask_draw(scui_handle_t handle, scui_area_t *area, scui_i
 void scui_image_mask_line(scui_handle_t handle, scui_area_t *area,
     scui_point_t pos_1, scui_point_t pos_2, scui_coord_t invert, scui_alpha_t alpha)
 {
-    scui_image_mask_draw(handle, area, scui_image_mask_type_line,
-        pos_1, pos_2, 0, 0, 0, scui_alpha_cover, scui_alpha_cover, invert, alpha);
+    scui_image_mask_draw(handle, area, 0,
+        pos_1, pos_2, 0, 0, 0, NULL, 0, scui_alpha_cover, scui_alpha_cover, invert, alpha);
 }
 
 /*@brief 图像蒙版绘制(扇形)
@@ -143,8 +137,8 @@ void scui_image_mask_angle(scui_handle_t handle, scui_area_t *area,
     scui_point_t vertex, scui_coord_t angle_s, scui_coord_t angle_e, scui_alpha_t alpha)
 {
     /* 扇形不使用pos_2, 仅为协议字段填充 */
-    scui_image_mask_draw(handle, area, scui_image_mask_type_angle,
-        vertex, vertex, angle_s, angle_e, 0, scui_alpha_cover, scui_alpha_cover, 0, alpha);
+    scui_image_mask_draw(handle, area, 1,
+        vertex, vertex, angle_s, angle_e, 0, NULL, 0, scui_alpha_cover, scui_alpha_cover, 0, alpha);
 }
 
 /*@brief 图像蒙版绘制(圆)
@@ -159,8 +153,8 @@ void scui_image_mask_radius(scui_handle_t handle, scui_area_t *area,
     scui_point_t center, scui_coord_t radius, scui_coord_t invert, scui_alpha_t alpha)
 {
     scui_point_t pos_zero = {0};
-    scui_image_mask_draw(handle, area, scui_image_mask_type_radius,
-        center, pos_zero, 0, 0, radius, scui_alpha_cover, scui_alpha_cover, invert, alpha);
+    scui_image_mask_draw(handle, area, 2,
+        center, pos_zero, 0, 0, radius, NULL, 0, scui_alpha_cover, scui_alpha_cover, invert, alpha);
 }
 
 /*@brief 图像蒙版绘制(圆角矩形)
@@ -176,8 +170,8 @@ void scui_image_mask_rect(scui_handle_t handle, scui_area_t *area,
     scui_point_t center, scui_point_t extents, scui_coord_t radius,
     scui_coord_t invert, scui_alpha_t alpha)
 {
-    scui_image_mask_draw(handle, area, scui_image_mask_type_rect,
-        center, extents, 0, 0, radius, scui_alpha_cover, scui_alpha_cover, invert, alpha);
+    scui_image_mask_draw(handle, area, 3,
+        center, extents, 0, 0, radius, NULL, 0, scui_alpha_cover, scui_alpha_cover, invert, alpha);
 }
 
 /*@brief 图像蒙版绘制(渐变)
@@ -194,6 +188,23 @@ void scui_image_mask_fade(scui_handle_t handle, scui_area_t *area, scui_coord_t 
 {
     scui_point_t pos_s = {.y = y_s,};
     scui_point_t pos_e = {.y = y_e,};
-    scui_image_mask_draw(handle, area, scui_image_mask_type_fade,
-        pos_s, pos_e, 0, 0, 0, alpha_s, alpha_e, 0, alpha);
+    scui_image_mask_draw(handle, area, 4,
+        pos_s, pos_e, 0, 0, 0, NULL, 0, alpha_s, alpha_e, 0, alpha);
+}
+
+/*@brief 图像蒙版绘制(多边形:凸多边形)
+ *@param handle    图像句柄
+ *@param area      绘制区域(NULL:整图)
+ *@param points    顶点数组(首尾隐式相连)
+ *@param point_cnt 顶点数量(不小于3)
+ *@param invert    保留侧(0:内;1:外)
+ *@param alpha     全局透明度
+ */
+void scui_image_mask_polygon(scui_handle_t handle, scui_area_t *area,
+    const scui_point_t *points, scui_coord_t point_cnt, scui_coord_t invert, scui_alpha_t alpha)
+{
+    scui_point_t pos_zero = {0};
+    scui_image_mask_draw(handle, area, 5,
+        pos_zero, pos_zero, 0, 0, 0, points, point_cnt,
+        scui_alpha_cover, scui_alpha_cover, invert, alpha);
 }

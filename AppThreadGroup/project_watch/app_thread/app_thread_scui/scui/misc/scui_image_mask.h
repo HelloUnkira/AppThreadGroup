@@ -76,4 +76,15 @@ void scui_image_mask_rect(scui_handle_t handle, scui_area_t *area,
 void scui_image_mask_fade(scui_handle_t handle, scui_area_t *area, scui_coord_t y_s, scui_coord_t y_e,
     scui_alpha_t alpha_s, scui_alpha_t alpha_e, scui_alpha_t alpha);
 
+/*@brief 图像蒙版绘制(多边形:凸多边形)
+ *@param handle    图像句柄
+ *@param area      绘制区域(NULL:整图)
+ *@param points    顶点数组(首尾隐式相连)
+ *@param point_cnt 顶点数量(不小于3)
+ *@param invert    保留侧(0:内;1:外)
+ *@param alpha     全局透明度
+ */
+void scui_image_mask_polygon(scui_handle_t handle, scui_area_t *area,
+    const scui_point_t *points, scui_coord_t point_cnt, scui_coord_t invert, scui_alpha_t alpha);
+
 #endif

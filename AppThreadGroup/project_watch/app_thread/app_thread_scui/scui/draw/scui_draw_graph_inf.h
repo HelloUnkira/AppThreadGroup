@@ -381,24 +381,26 @@ do {                                                                            
 /* scui_draw_type_mask */
 #define scui_draw_mask(sync_v, dst_surface_v, dst_clip_v, src_alpha_v, src_type_v,  \
     src_pos_1_v, src_pos_2_v, src_angle_s_v, src_angle_e_v, src_radius_v,           \
-    src_alpha_s_v, src_alpha_e_v, src_invert_v)                                     \
+    src_points_v, src_point_cnt_v, src_alpha_s_v, src_alpha_e_v, src_invert_v)      \
 do {                                                                                \
     scui_draw_dsc_t *scui_dd_i = NULL;                                              \
     scui_draw_dsc_ready(&scui_dd_i);                                                \
     scui_dd_i->type = scui_draw_type_mask;                                          \
     scui_dd_i->sync = sync_v;                                                       \
-    scui_dd_i->mask.dst_surface = dst_surface_v,                                    \
-    scui_dd_i->mask.dst_clip    = dst_clip_v,                                       \
-    scui_dd_i->mask.src_alpha   = src_alpha_v,                                      \
-    scui_dd_i->mask.src_type    = src_type_v,                                       \
-    scui_dd_i->mask.src_pos_1   = src_pos_1_v,                                      \
-    scui_dd_i->mask.src_pos_2   = src_pos_2_v,                                      \
-    scui_dd_i->mask.src_angle_s = src_angle_s_v,                                    \
-    scui_dd_i->mask.src_angle_e = src_angle_e_v,                                    \
-    scui_dd_i->mask.src_radius  = src_radius_v,                                     \
-    scui_dd_i->mask.src_alpha_s = src_alpha_s_v,                                    \
-    scui_dd_i->mask.src_alpha_e = src_alpha_e_v,                                    \
-    scui_dd_i->mask.src_invert  = src_invert_v,                                     \
+    scui_dd_i->mask.dst_surface   = dst_surface_v,                                  \
+    scui_dd_i->mask.dst_clip      = dst_clip_v,                                     \
+    scui_dd_i->mask.src_alpha     = src_alpha_v,                                    \
+    scui_dd_i->mask.src_type      = src_type_v,                                     \
+    scui_dd_i->mask.src_pos_1     = src_pos_1_v,                                    \
+    scui_dd_i->mask.src_pos_2     = src_pos_2_v,                                    \
+    scui_dd_i->mask.src_angle_s   = src_angle_s_v,                                  \
+    scui_dd_i->mask.src_angle_e   = src_angle_e_v,                                  \
+    scui_dd_i->mask.src_radius    = src_radius_v,                                   \
+    scui_dd_i->mask.src_points    = src_points_v,                                   \
+    scui_dd_i->mask.src_point_cnt = src_point_cnt_v,                                \
+    scui_dd_i->mask.src_alpha_s   = src_alpha_s_v,                                  \
+    scui_dd_i->mask.src_alpha_e   = src_alpha_e_v,                                  \
+    scui_dd_i->mask.src_invert    = src_invert_v,                                   \
     scui_draw_dsc_task(scui_dd_i);                                                  \
 } while (0)                                                                         \
 

@@ -2,6 +2,9 @@
 set(CMAKE_MESSAGE_LOG_LEVEL NONE)
 
 cmake_minimum_required(VERSION 3.14)
+# rlottie 子仓库声明 cmake_minimum_required( VERSION 3.3 ), CMake 4 起 < 3.5 直接报错
+# 这里降级策略版本下限, 以免去改动第三方子仓库
+set(CMAKE_POLICY_VERSION_MINIMUM 3.14)
 
 set(BUILD_SHARED_LIBS OFF)
 set(LOTTIE_MODULE OFF)
