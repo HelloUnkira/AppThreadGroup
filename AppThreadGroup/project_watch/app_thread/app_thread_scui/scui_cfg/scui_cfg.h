@@ -153,18 +153,19 @@
 #define SCUI_FRAME_BUFFER_SEG_LINE                  (SCUI_VER_RES / 3)
 
 /* 绘制任务序列 */
-#define SCUI_DRAW_TASK_SEQ                          (0 && !SCUI_MEM_FEAT_MINI)
+#define SCUI_DRAW_TASK_SEQ                          (1 && !SCUI_MEM_FEAT_MINI)
 #if     SCUI_DRAW_TASK_SEQ
 #define SCUI_DRAW_TASK_SYNC_SEQ                     (0)
 #define SCUI_DRAW_TASK_HASH_HBIT                    (8 * 2)
 #define SCUI_DRAW_TASK_HASH_VBIT                    (8 * 2)
 #define SCUI_DRAW_TASK_HWACC_NUM                    (2) /* 硬件加速器单例数量 */
 #define SCUI_DRAW_TASK_ASYNC_NUM                    (1 + SCUI_DRAW_TASK_HWACC_NUM)
-#define SCUI_DRAW_TASK_DSC_NUM                      (300)
-/* 使用任务序列需增大该目标 */
 #else
-#define SCUI_DRAW_TASK_ASYNC_NUM                    (1)
-#define SCUI_DRAW_TASK_DSC_NUM                      (SCUI_MEM_FEAT_MINI ? 10 : 20)
+#define SCUI_DRAW_TASK_SYNC_SEQ                     (0)
+#define SCUI_DRAW_TASK_HASH_HBIT                    (0)
+#define SCUI_DRAW_TASK_HASH_VBIT                    (0)
+#define SCUI_DRAW_TASK_HWACC_NUM                    (0) /* 硬件加速器单例数量 */
+#define SCUI_DRAW_TASK_ASYNC_NUM                    (1 + SCUI_DRAW_TASK_HWACC_NUM)
 #endif
 
 /* 矢量绘图引擎 */

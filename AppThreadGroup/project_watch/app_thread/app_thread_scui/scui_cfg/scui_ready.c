@@ -27,10 +27,6 @@ static void scui_stat_info(void)
     #endif
     
     SCUI_LOG_INFO("");
-    SCUI_LOG_INFO("scui draw dsc size:%4d",   sizeof(scui_draw_dsc_t));
-    SCUI_LOG_INFO("scui draw dsc occupy:%4d", sizeof(scui_draw_dsc_t) * SCUI_DRAW_TASK_DSC_NUM);
-    
-    SCUI_LOG_INFO("");
     SCUI_LOG_INFO("scui widget occupy:");
     for (scui_widget_type_t type = 1; type < scui_widget_type_num; type++) {
         

@@ -67,18 +67,18 @@ static void scui_engine_oom_hit(scui_mem_type_t type, bool invalid)
  */
 void scui_engine_ready(void)
 {
-    static const struct {uint32_t size;uint32_t num;} mem_size_t[] = {
-        
-        {sizeof(scui_draw_dsc_t),  SCUI_DRAW_TASK_DSC_NUM},
-        {sizeof(scui_clip_unit_t), 15360 / sizeof(scui_clip_unit_t)},
-        {sizeof(scui_event_t),     5120  / sizeof(scui_event_t)},
+    #define SCUI_MEM_SIZE_ITEM(name, size)    {sizeof(name), size / sizeof(name), scui_stringify(name)}
+    static const struct {uint32_t size;uint32_t num;const char *str;} mem_size_t[] = {
+        SCUI_MEM_SIZE_ITEM(scui_draw_dsc_t,  (60 * 1024)),
+        SCUI_MEM_SIZE_ITEM(scui_clip_unit_t, (15 * 1024)),
+        SCUI_MEM_SIZE_ITEM(scui_event_t,      (5 * 1024)),
     };
     
     /* 定长热结构注册表(常用结构快速获取与回收, 数量按内存预算折算) */
     for (uint32_t idx = 0; idx < scui_arr_len(mem_size_t); idx++) {
         scui_mem_size_register(mem_size_t[idx].size, mem_size_t[idx].num);
-        SCUI_LOG_WARN("mem_size_t[%u] size:%3u num:%3u", idx,
-            mem_size_t[idx].size, mem_size_t[idx].num);
+        SCUI_LOG_WARN("mem_size_t[%u] size:%3u num:%3u str:%s", idx,
+            mem_size_t[idx].size, mem_size_t[idx].num, mem_size_t[idx].str);
     }
     
     scui_mem_ready(scui_engine_oom_hit);

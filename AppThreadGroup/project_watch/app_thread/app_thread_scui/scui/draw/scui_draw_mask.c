@@ -88,7 +88,6 @@ static void scui_draw_ctx_mask_angle(scui_surface_t *dst_surface, scui_area_t *d
             scui_multi_t ed = (scui_multi_t)(256 * scui_clamp(ec, -limit, limit) / 4096);
             scui_alpha_t cov_s = (scui_alpha_t)scui_clamp(128 - sd, 0, 255);
             scui_alpha_t cov_e = (scui_alpha_t)scui_clamp(128 + ed, 0, 255);
-            
             scui_alpha_t cov = span > 180 ? scui_max(cov_s, cov_e) : scui_min(cov_s, cov_e);
             
             if (alpha != scui_alpha_cover) cov = scui_alpha_mix(cov, alpha);
